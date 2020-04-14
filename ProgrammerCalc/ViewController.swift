@@ -18,17 +18,16 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         // Do any additional setup after loading the view.
-        let button = CalculatorButton.init(type: .system)
+        let button = CalculatorButton.init(type: .custom)
         button.frame = CGRect( x: 100, y: 100, width: 100.0, height: 100.0)
-        button.setTitle("test", for: .normal)
-        button.backgroundColor = .red
-        
-        /*
-        button.addTarget(self, action: #selector(numButtonAction), for: .touchUpInside)
-        
-        button.addTarget(self, action: #selector(numButtonAnimDown), for: [.touchDown, .touchDragInside])
-        button.addTarget(self, action: #selector(numButtonAnimUpInside), for: [.touchUpInside, .touchUpOutside, .touchDragOutside, .touchDragExit])
-        */
+        button.setTitle("0", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.backgroundColor = .white
+        // set font size, font family
+        button.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 45.0)
+        // set borders
+        button.layer.borderWidth = 0.5
+        button.layer.borderColor = UIColor.black.cgColor
         
         self.view.addSubview(button)
         
@@ -37,18 +36,7 @@ class ViewController: UIViewController {
     @objc func numButtonAction(sender: UIButton!) {
         print("num button tapped")
     }
-    /*
-    @objc func numButtonAnimDown(sender: UIButton!) {
-        UIView.animate(withDuration: 0.1, delay: 0, options: [.curveEaseIn, .beginFromCurrentState, .allowUserInteraction], animations: {
-            sender.backgroundColor = .lightGray
-        }, completion: nil)
-    }
-    @objc func numButtonAnimUpInside(sender: UIButton!) {
-        UIView.transition(with: sender, duration: 0.3, options: [.curveEaseInOut, .beginFromCurrentState, .allowUserInteraction], animations: {
-                sender.backgroundColor = .white
-            }, completion: nil)
-    }
- */
+
     func createButtons() {
         for number  in 1...9 {
             //let button = UIButton.
@@ -85,9 +73,7 @@ class CalculatorButton: UIButton {
                     options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction],
                     animations: { self.backgroundColor = .white },
                     completion: nil)
-            }
-
-            
+            }  
         }
     }
 }
