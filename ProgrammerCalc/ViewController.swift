@@ -9,81 +9,211 @@
 import UIKit
 
 class ViewController: UIViewController {
-
-    var buttons: [UIButton] = []
+    let mainLabel: UILabel = UILabel()
+    let converterLabel: UILabel = UILabel()
     weak var numButtonsView: UICollectionView?
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         self.view.backgroundColor = .white
         // Do any additional setup after loading the view.
-        /*
-        let button = CalculatorButton.init(type: .custom)
-        button.frame = CGRect( x: 90, y: 90, width: 90.0, height: 90.0)
-        // set tag for interation
-        button.tag = 1
-        button.setTitle("0", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.backgroundColor = .white
-        // set font size, font family
-        button.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 45.0)
-        // set borders
-        button.layer.borderWidth = 0.5
-        button.layer.borderColor = UIColor.lightGray.cgColor
-        // round corners
-        button.layer.cornerRadius = 35.0
-        self.view.addSubview(button)
-        */
-        createButtons()
-        //self.view.addSubview(createButtons())
+
+        showInputLabel()
+        showAllButtons()
 
     }
-    @objc func numButtonAction(sender: UIButton!) {
-        print("num button tapped")
-    }
-
-    func createButtons()  {
-        //===========
-        // Properties
-        // ==========
-        var buttonLabel: Int = 9
-        //var buttons: [UIButton] = []
+    
+    // =======
+    // Methods
+    // =======
+    
+    
+    func createButtons() -> [UIButton] {
         
-        for row in 0...2{
-            
+        var buttonLabel: Int = 9
+        var buttons: [UIButton] = []
+        
+        let signs = [ "AC","+/-","","÷","X","-","+","="]
+        
+        // Numeric buttons
+        
+        for row in 0...2 {
             buttonLabel = buttonLabel - 2
-            
             for column  in 0...2 {
                 
                 let button = CalculatorButton.init(type: .custom)
-                button.frame = CGRect( x: Double(100*column + 20), y: Double(100*row + 300), width: 90.0, height: 90.0)
+                button.setFrame(xMult: column, yMult: row, width: 75, height: 75)
                     
-                // set tag for interation
-                button.tag = buttonLabel
-                button.addTarget(self, action: #selector(toucUhpOutsideAction), for: [.touchDragExit, .touchDragOutside])
+                // set actions for button
+                button.setActions(viewcontroller: self, buttonType: .numeric)
+                // set title and style
                 button.setTitle(String(buttonLabel), for: .normal)
-                button.setTitleColor(.black, for: .normal)
-                button.backgroundColor = .white
-                // set font size, font family
-                button.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 45.0)
-                // set borders
-                button.layer.borderWidth = 0.5
-                button.layer.borderColor = UIColor.lightGray.cgColor
-                // round corners
-                button.layer.cornerRadius = 35.0
-                
+                button.applyStyle()
                 buttonLabel += 1
 
-                self.view.addSubview(button)
+                // add element to array
+                buttons.append(button)
             }
             buttonLabel = buttonLabel - 4
         }
-        //return buttons
+        
+        // Zero and point/dot buttons
+        
+        let zeroButton: () -> (UIButton) = {
+            // width multiple 2 + x
+            let button = CalculatorButton.init(type: .custom)
+            button.setFrame(xMult: 0, yMult: 3, width: 165.0, height: 75.0)
+                
+            // set actions for button
+            button.setActions(viewcontroller: self, buttonType: .numeric)
+            // set title and style
+            button.setTitle("0", for: .normal)
+            button.applyStyle()
+            
+            return button
+        }
+        let dotButton: () -> (UIButton) = {
+            // normal width
+            let button = CalculatorButton.init(type: .custom)
+            button.setFrame(xMult: 2, yMult: 3, width: 75, height: 75)
+                
+            // set actions for button
+            button.setActions(viewcontroller: self, buttonType: .numeric)
+            // set title and style
+            button.setTitle(".", for: .normal)
+            button.applyStyle()
+            
+            return button
+        }
+        buttons.append(dotButton())
+        buttons.append(zeroButton())
+        
+        
+        // Sign buttons
+        
+        
+        for row in 0...3 {
+            if row != 3 {
+                let button = CalculatorButton.init(type: .custom)
+                button.setFrame(xMult: row, yMult: -1, width: 75, height: 75)
+                // set actions for button
+                button.setActions(viewcontroller: self, buttonType: .sign)
+                // set title and style
+                button.setTitle(signs[row], for: .normal)
+                button.tag = row
+                button.applyStyle()
+                buttons.append(button)
+            } else {
+                for column in 0...4 {
+                    let button = CalculatorButton.init(type: .custom)
+                    button.setFrame(xMult: row, yMult: -1 + column, width: 75, height: 75)
+                    // set actions for button
+                    button.setActions(viewcontroller: self, buttonType: .sign)
+                    // set title and style
+                    button.setTitle(signs[row+column], for: .normal)
+                    button.tag = row+column
+                    button.applyStyle()
+                    buttons.append(button)
+                }
+            }
+        }
+        //
+        
+        // Logical buttons
+        
+        //
+        
+        return buttons
     }
+    
+    // ============
+    // Label output
+    // ============
+    
+    func showInputLabel() {
+        mainLabel.frame = CGRect( x: Double(0), y: Double(50), width: 372.0, height: 100.0)
+        mainLabel.text = "0"
+        mainLabel.backgroundColor = .white
+        // set font size, font family
+        mainLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 72.0)
+        mainLabel.textAlignment = .right
+        // set borders
+        mainLabel.layer.borderWidth = 0.5
+        mainLabel.layer.borderColor = UIColor.lightGray.cgColor
+        // round corners
+        mainLabel.layer.cornerRadius = 0.0
+        
+        self.view.addSubview(mainLabel)
+    }
+    
+    
+    // =====================
+    // Output of all buttons
+    // =====================
+    
+    func showAllButtons()  {
+        let allButtons = createButtons()
+        for button in allButtons {
+            self.view.addSubview(button)
+        }
+        
+    }
+    
+
+    
     @objc func toucUhpOutsideAction(sender: UIButton) {
         //print("touchUpOutside")
         //sender.isHighlighted = false
+    }
+    
+    @objc func numericButtonTapped(sender: UIButton) {
+        let button = sender
+        let buttonText = button.titleLabel!.text ?? ""
+        let label = mainLabel
+        if let viewBtn = self.view.viewWithTag(0) {
+            
+        }
+        
+        print("Button \(buttonText) touched")
+        
+        switch label.text! {
+        case "0":
+            if buttonText.contains(".") {
+                label.text! += buttonText
+                //button.setTitle("C", for: .normal)
+            } else {
+                label.text! = buttonText
+            }
+
+        default:
+            if label.text!.contains(".") && buttonText == "." {
+                break
+            } else {
+                label.text! += buttonText
+            }
+        }
+    }
+    
+    @objc func signButtonTapped(sender: UIButton) {
+        let button = sender
+        let buttonText = button.titleLabel!.text ?? ""
+        let label = mainLabel
+        
+        print("Button \(buttonText) touched")
+        
+        switch buttonText {
+        case "AC":
+            label.text! = "0"
+        case "C":
+            label.text! = "0"
+            button.setTitle("AC", for: .normal)
+        default:
+            break
+        }
+        
     }
 
 
@@ -117,6 +247,54 @@ class CalculatorButton: UIButton {
                     animations: { self.backgroundColor = .white },
                     completion: nil)
             }
+        }
+    }
+    
+    
+    // ============
+    // Enumerations
+    // ============
+    
+    enum buttonTypes {
+        case numeric
+        case sign
+        case logical
+    }
+    
+    
+    // =======
+    // Methods
+    // =======
+    
+    // Apply Style method to the all buttons
+    // TODO: Style protocol
+    func applyStyle() {
+        // set title and background
+        self.setTitleColor(.black, for: .normal)
+        self.backgroundColor = .white
+        // set font size, font family
+        self.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 45.0)
+        // set borders
+        self.layer.borderWidth = 0.5
+        self.layer.borderColor = UIColor.lightGray.cgColor
+        // round corners
+        self.layer.cornerRadius = 35.0
+    }
+    
+    func setFrame(xMult: Int, yMult: Int, width fWidth: Double, height fHeight: Double) {
+        self.frame = CGRect( x: Double(85*xMult + 20), y: Double(85*yMult + 320), width: fWidth, height: fHeight)
+    }
+    
+    func setActions(viewcontroller: ViewController, buttonType: buttonTypes){
+        self.addTarget(viewcontroller, action: #selector(viewcontroller.toucUhpOutsideAction), for: [.touchDragExit, .touchDragOutside])
+        
+        switch buttonType {
+        case .numeric:
+                self.addTarget(viewcontroller, action: #selector(viewcontroller.numericButtonTapped), for: .touchUpInside)
+        case .sign:
+            self.addTarget(viewcontroller, action: #selector(viewcontroller.signButtonTapped), for: .touchUpInside)
+        default:
+            break
         }
     }
     
