@@ -21,8 +21,9 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
 
         showInputLabel()
+        showConverterLabel()
         showAllButtons()
-        
+        //convertToBinary(decNumStr: "5")
 
         
         
@@ -39,7 +40,7 @@ class ViewController: UIViewController {
         var buttonLabel: Int = 9
         var buttons: [UIButton] = []
         
-        let signs = [ "AC","+/-","","÷","X","-","+","="]
+        let signs = [ "AC","\u{00B1}","%","\u{00f7}","X","-","+","="]
         
         // Numeric buttons
         
@@ -108,6 +109,7 @@ class ViewController: UIViewController {
                 button.setTitle(signs[row], for: .normal)
                 button.tag = 100 + row
                 button.applyStyle()
+                //button.titleLabel?.font = UIFont.systemFont(ofSize: 45.0, weight: UIFont.Weight.light)
                 buttons.append(button)
             } else {
                 for column in 0...4 {
@@ -118,7 +120,9 @@ class ViewController: UIViewController {
                     // set title and style
                     button.setTitle(signs[row+column], for: .normal)
                     button.tag = 100 + row + column
+                    
                     button.applyStyle()
+                    //button.titleLabel?.font = UIFont.systemFont(ofSize: 45.0, weight: UIFont.Weight.thin)
                     buttons.append(button)
                 }
             }
@@ -137,19 +141,43 @@ class ViewController: UIViewController {
     // ============
     
     func showInputLabel() {
-        mainLabel.frame = CGRect( x: Double(0), y: Double(50), width: 372.0, height: 100.0)
+        mainLabel.frame = CGRect( x: Double(0), y: Double(20), width: 372.0, height: 100.0)
         mainLabel.text = "0"
         mainLabel.backgroundColor = .white
         // set font size, font family
-        mainLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 72.0)
+        //mainLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 72.0)
+        mainLabel.font = UIFont.systemFont(ofSize: 72.0, weight: UIFont.Weight.thin)
         mainLabel.textAlignment = .right
         // set borders
         mainLabel.layer.borderWidth = 0.5
         mainLabel.layer.borderColor = UIColor.lightGray.cgColor
         // round corners
         mainLabel.layer.cornerRadius = 0.0
+        // resizeble text
+        mainLabel.minimumScaleFactor = 0.5
+        mainLabel.adjustsFontSizeToFitWidth = true
         
         self.view.addSubview(mainLabel)
+    }
+    
+    func showConverterLabel() {
+        converterLabel.frame = CGRect( x: Double(0), y: Double(120), width: 372.0, height: 100.0)
+        converterLabel.text = "0"
+        converterLabel.backgroundColor = .white
+        // set font size, font family
+        //mainLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 72.0)
+        converterLabel.font = UIFont.systemFont(ofSize: 62.0, weight: UIFont.Weight.thin)
+        converterLabel.textAlignment = .right
+        // set borders
+        converterLabel.layer.borderWidth = 0.5
+        converterLabel.layer.borderColor = UIColor.lightGray.cgColor
+        // round corners
+        converterLabel.layer.cornerRadius = 0.0
+        // resizeble text
+        converterLabel.minimumScaleFactor = 0.5
+        converterLabel.adjustsFontSizeToFitWidth = true
+        
+        self.view.addSubview(converterLabel)
     }
     
     
@@ -165,7 +193,24 @@ class ViewController: UIViewController {
         
     }
     
-
+    // ==========
+    // VC Methods
+    // ==========
+    
+    func convertToBinary( decNumStr: String) -> String {
+        var binaryStr: String = String()
+        let decNumInt: Int = Int(decNumStr) ?? 0
+        
+        binaryStr = String(decNumInt, radix: 2)
+        print(binaryStr)
+        
+        return binaryStr
+    }
+    
+    
+    // =======
+    // Actions
+    // =======
     
     @objc func toucUhpOutsideAction(sender: UIButton) {
         //print("touchUpOutside")
@@ -178,6 +223,7 @@ class ViewController: UIViewController {
         let button = sender
         let buttonText = button.titleLabel!.text ?? ""
         let label = mainLabel
+        let convertLabel = converterLabel
         // tag for AC/C button
         let acButton = self.view.viewWithTag(100) as! UIButton
         print(acButton)
@@ -195,7 +241,7 @@ class ViewController: UIViewController {
                 label.text! = buttonText
                 acButton.setTitle("C", for: .normal)
             }
-            // if 0 pressed then does nothing 
+            // if 0 pressed then does nothing
             
 
         default:
@@ -206,6 +252,10 @@ class ViewController: UIViewController {
             }
             acButton.setTitle("C", for: .normal)
         }
+        
+        
+        // Uptade converter label with converted number
+        convertLabel.text = convertToBinary(decNumStr: label.text!)
     }
     
     // Sign buttons actions
@@ -214,14 +264,18 @@ class ViewController: UIViewController {
         let button = sender
         let buttonText = button.titleLabel!.text ?? ""
         let label = mainLabel
+        let convertLabel = converterLabel
         
         print("Button \(buttonText) touched")
         
         switch buttonText {
         case "AC":
             label.text! = "0"
+            convertLabel.text! = "0"
         case "C":
             label.text! = "0"
+            convertLabel.text! = "0"
+            
             button.setTitle("AC", for: .normal)
         default:
             break
@@ -286,7 +340,8 @@ class CalculatorButton: UIButton {
         self.setTitleColor(.black, for: .normal)
         self.backgroundColor = .white
         // set font size, font family
-        self.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 45.0)
+        //self.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 45.0)
+        self.titleLabel?.font = UIFont.systemFont(ofSize: 45.0, weight: UIFont.Weight.thin)
         // set borders
         self.layer.borderWidth = 0.5
         self.layer.borderColor = UIColor.lightGray.cgColor
