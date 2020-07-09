@@ -76,6 +76,7 @@ class ViewController: UIViewController {
             // set title and style
             button.setTitle("0", for: .normal)
             button.applyStyle()
+            //button.contentHorizontalAlignment = .left
             
             return button
         }
@@ -198,15 +199,52 @@ class ViewController: UIViewController {
     // ==========
     
     func convertToBinary( decNumStr: String) -> String {
-        var binaryStr: String = String()
-        let decNumInt: Int = Int(decNumStr) ?? 0
+        var binaryStr: String
         
-        binaryStr = String(decNumInt, radix: 2)
+        if let decNumInt: Int = Int(decNumStr) {
+            binaryStr = String(decNumInt, radix: 2)
+        } else {
+            
+            decNumStr.divideToFloatInt()
+            //let numberDouble: Double = ( decNumStr as NSString).doubleValue
+            //
+            //doubleToBinary(number: numberDouble)
+            binaryStr = ""
+            
+        }
+        
+        
+        
         print(binaryStr)
         
         return binaryStr
     }
     
+    func doubleToBinary( number: Double) -> Double {
+        let resultBinary: Double
+        var resultStrBinary: String
+        let decNumDouble:Double = number
+        let decNumDouble_Int: Int
+        let decNumDouble_Reminder: () -> (Int)
+        
+        decNumDouble_Int = Int(decNumDouble)
+        decNumDouble_Reminder = {
+            let reminder: Int = 0
+            let dblBuff = decNumDouble - (Double(decNumDouble_Int))
+            
+            print(dblBuff)
+            
+            
+            
+            return reminder
+        }
+        decNumDouble_Reminder()
+        
+        resultStrBinary = String(decNumDouble_Int, radix: 2) + "."
+        
+        
+        return 1.0
+    }
     
     // =======
     // Actions
@@ -226,7 +264,7 @@ class ViewController: UIViewController {
         let convertLabel = converterLabel
         // tag for AC/C button
         let acButton = self.view.viewWithTag(100) as! UIButton
-        print(acButton)
+        //print(acButton)
         
         
         print("Button \(buttonText) touched")
@@ -236,6 +274,7 @@ class ViewController: UIViewController {
             
             if buttonText.contains(".") {
                 label.text! += buttonText
+                convertLabel.text! += buttonText
                 acButton.setTitle("C", for: .normal)
             } else if buttonText != "0" {
                 label.text! = buttonText
@@ -249,13 +288,16 @@ class ViewController: UIViewController {
                 break
             } else {
                 label.text! += buttonText
+                convertLabel.text! += buttonText
             }
             acButton.setTitle("C", for: .normal)
         }
         
-        
+        if buttonText != "." {
+            convertLabel.text = convertToBinary(decNumStr: label.text!)
+        }
         // Uptade converter label with converted number
-        convertLabel.text = convertToBinary(decNumStr: label.text!)
+        
     }
     
     // Sign buttons actions
@@ -266,7 +308,7 @@ class ViewController: UIViewController {
         let label = mainLabel
         let convertLabel = converterLabel
         
-        print("Button \(buttonText) touched")
+        //print("Button \(buttonText) touched")
         
         switch buttonText {
         case "AC":
@@ -282,9 +324,13 @@ class ViewController: UIViewController {
         }
         
     }
+    
+
 
 
 }
+
+
 
 // ==============================
 // Class for calculator's buttons
@@ -364,6 +410,70 @@ class CalculatorButton: UIButton {
         default:
             break
         }
+    }
+    
+}
+
+// ==========
+// Extensions
+// ==========
+
+extension String {
+    
+    // Dividing string variable and converting it to double without loss of precision
+    func divideToFloatInt() -> (Int, Int)? {
+        let str = self
+        var numberInt: Int = 0
+        var numberFract: Int = 0
+        var pointPos: String.Index
+        var counter: Int = 0
+        var iterator: Int = 0
+        var multiplier: Int = 1
+ 
+        // check for floating point
+        guard str.contains(".") else {
+            return nil
+        }
+        
+        // search index of floating pos
+        pointPos = str.firstIndex(of: ".")!
+        
+        // fill numberInt
+        counter = str.distance(from: str.startIndex, to: pointPos)
+        multiplier = 1
+        iterator = -1
+        while counter > 0 {
+            
+            // TODO Erorr handling
+            let newIndex: String.Index = str.index(pointPos, offsetBy: iterator)
+            let strCharInt: String = String(str[newIndex])
+            let num: Int = Int(strCharInt)!
+            numberInt += num  * multiplier
+            multiplier *= 10
+            counter -= 1
+            iterator -= 1
+        }
+        
+        // fill numberFract
+        counter = str.distance(from: str.endIndex, to: pointPos)
+        counter = abs(counter)
+        multiplier = 1
+        iterator = counter - 1
+        while counter > 1 {
+            
+            // TODO Erorr handling
+            let newIndex: String.Index = str.index(pointPos, offsetBy: iterator)
+            let strCharInt: String = String(str[newIndex])
+            let num: Int = Int(strCharInt)!
+            numberFract += num  * multiplier
+            multiplier *= 10
+            counter -= 1
+            iterator -= 1
+        }
+        
+        
+        print(" \(numberInt)...\(numberFract)")
+        return (numberInt, numberFract)
     }
     
 }
