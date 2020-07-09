@@ -12,7 +12,6 @@ class ViewController: UIViewController {
     let mainLabel: UILabel = UILabel()
     let converterLabel: UILabel = UILabel()
     weak var numButtonsView: UICollectionView?
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +22,10 @@ class ViewController: UIViewController {
 
         showInputLabel()
         showAllButtons()
+        
+
+        
+        
 
     }
     
@@ -103,7 +106,7 @@ class ViewController: UIViewController {
                 button.setActions(viewcontroller: self, buttonType: .sign)
                 // set title and style
                 button.setTitle(signs[row], for: .normal)
-                button.tag = row
+                button.tag = 100 + row
                 button.applyStyle()
                 buttons.append(button)
             } else {
@@ -114,7 +117,7 @@ class ViewController: UIViewController {
                     button.setActions(viewcontroller: self, buttonType: .sign)
                     // set title and style
                     button.setTitle(signs[row+column], for: .normal)
-                    button.tag = row+column
+                    button.tag = 100 + row + column
                     button.applyStyle()
                     buttons.append(button)
                 }
@@ -169,24 +172,31 @@ class ViewController: UIViewController {
         //sender.isHighlighted = false
     }
     
+    // Numeric buttons actions
+    
     @objc func numericButtonTapped(sender: UIButton) {
         let button = sender
         let buttonText = button.titleLabel!.text ?? ""
         let label = mainLabel
-        if let viewBtn = self.view.viewWithTag(0) {
-            
-        }
+        // tag for AC/C button
+        let acButton = self.view.viewWithTag(100) as! UIButton
+        print(acButton)
+        
         
         print("Button \(buttonText) touched")
         
         switch label.text! {
         case "0":
+            
             if buttonText.contains(".") {
                 label.text! += buttonText
-                //button.setTitle("C", for: .normal)
-            } else {
+                acButton.setTitle("C", for: .normal)
+            } else if buttonText != "0" {
                 label.text! = buttonText
+                acButton.setTitle("C", for: .normal)
             }
+            // if 0 pressed then does nothing 
+            
 
         default:
             if label.text!.contains(".") && buttonText == "." {
@@ -194,8 +204,11 @@ class ViewController: UIViewController {
             } else {
                 label.text! += buttonText
             }
+            acButton.setTitle("C", for: .normal)
         }
     }
+    
+    // Sign buttons actions
     
     @objc func signButtonTapped(sender: UIButton) {
         let button = sender
@@ -219,9 +232,9 @@ class ViewController: UIViewController {
 
 }
 
-//
+// ==============================
 // Class for calculator's buttons
-//
+// ==============================
 
 class CalculatorButton: UIButton {
     private let _boundsExtension: CGFloat = 0
