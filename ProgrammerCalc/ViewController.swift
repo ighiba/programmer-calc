@@ -199,51 +199,83 @@ class ViewController: UIViewController {
     // ==========
     
     func convertToBinary( decNumStr: String) -> String {
-        var binaryStr: String
+        var binaryStr: String = String()
         
         if let decNumInt: Int = Int(decNumStr) {
-            binaryStr = String(decNumInt, radix: 2)
+            binaryStr = convertIntToBinary(number: decNumInt)
         } else {
-            
-            decNumStr.divideToFloatInt()
-            //let numberDouble: Double = ( decNumStr as NSString).doubleValue
-            //
-            //doubleToBinary(number: numberDouble)
-            binaryStr = ""
+            // TODO move to method not the extension
+            //      Error handling
+            let splittedDouble: (Int, Int) = decNumStr.divideToFloatInt()!
+            binaryStr = convertDoubleToBinary(number: splittedDouble)
             
         }
-        
-        
-        
+   
         print(binaryStr)
         
         return binaryStr
     }
     
-    func doubleToBinary( number: Double) -> Double {
-        let resultBinary: Double
-        var resultStrBinary: String
-        let decNumDouble:Double = number
-        let decNumDouble_Int: Int
-        let decNumDouble_Reminder: () -> (Int)
+    // converter for number before the point
+    
+    func convertIntToBinary(number: Int) -> String {
+        var dividible: Int = number
+        var reminder: Int = 0
+        var resultStr: String = String()
         
-        decNumDouble_Int = Int(decNumDouble)
-        decNumDouble_Reminder = {
-            let reminder: Int = 0
-            let dblBuff = decNumDouble - (Double(decNumDouble_Int))
-            
-            print(dblBuff)
-            
-            
-            
-            return reminder
+        // divide by 2
+        while dividible != 0 && dividible != 1 {
+            reminder = dividible % 2
+            dividible = dividible / 2
+            resultStr.append(contentsOf: String(reminder))
         }
-        decNumDouble_Reminder()
         
-        resultStrBinary = String(decNumDouble_Int, radix: 2) + "."
+        //if no divide
+        if dividible == 0 || dividible == 1 {
+            resultStr.append(contentsOf: String(dividible))
+            resultStr = String(resultStr.reversed())
+        }
+
+        return resultStr
+    }
+    
+    func convertFractToBinary(number: Int) -> String {
+        var buffDouble: Double
+        var buffStr: String = "0."
+        let counter: Int = 8
+        var resultStr: String = String()
+        
+       
+        
+        if number == 0 {
+            resultStr = "0"
+        } else {
+            // form double string
+                   buffStr.append(String(number))
+                   buffDouble = Double(buffStr)!
+                   
+                   for _ in 0..<counter {
+                       buffDouble = buffDouble * 2
+                       if buffDouble > 1 {
+                           resultStr.append("1")
+                           buffDouble = buffDouble - 1
+                       } else {
+                           resultStr.append("0")
+                       }
+                   }
+            // remove ending zeros
+            while resultStr[resultStr.index(before: resultStr.endIndex)] == "0" {
+                resultStr.remove(at: resultStr.index(before: resultStr.endIndex))
+            }
+        }
         
         
-        return 1.0
+        return resultStr
+    }
+    
+    // combine to parts to double string
+    func convertDoubleToBinary(number: (Int,Int)) -> String {
+        return "\(convertIntToBinary(number: number.0)).\(convertFractToBinary(number: number.1))"
     }
     
     // =======
