@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  PCalcViewController.swift
 //  ProgrammerCalc
 //
 //  Created by Ivan Ghiba on 12.04.2020.
@@ -8,9 +8,8 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class PCalcViewController: UIViewController {
 
-    
     let calcView: PCalcView = PCalcView(frame: CGRect(), collectionViewLayout: UICollectionViewLayout())
     lazy var mainLabel: UILabel = calcView.mainLabel
     lazy var converterLabel: UILabel = calcView.converterLabel
@@ -18,7 +17,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         self.view.backgroundColor = .white
         // labels fromPCalcView
@@ -28,8 +26,6 @@ class ViewController: UIViewController {
         for button in allButtons {
             self.view.addSubview(button)
         }
- 
-
     }
     
     // =======

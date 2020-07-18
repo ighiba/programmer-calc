@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		C06B7F072443B12B009642B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F062443B12B009642B9 /* AppDelegate.swift */; };
 		C06B7F092443B12B009642B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F082443B12B009642B9 /* SceneDelegate.swift */; };
-		C06B7F0B2443B12B009642B9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F0A2443B12B009642B9 /* ViewController.swift */; };
+		C06B7F0B2443B12B009642B9 /* PCalcViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F0A2443B12B009642B9 /* PCalcViewController.swift */; };
 		C06B7F0E2443B12B009642B9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C06B7F0C2443B12B009642B9 /* Main.storyboard */; };
 		C06B7F102443B12E009642B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C06B7F0F2443B12E009642B9 /* Assets.xcassets */; };
 		C06B7F132443B12E009642B9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C06B7F112443B12E009642B9 /* LaunchScreen.storyboard */; };
@@ -39,7 +39,7 @@
 		C06B7F032443B12B009642B9 /* ProgrammerCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProgrammerCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C06B7F062443B12B009642B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C06B7F082443B12B009642B9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		C06B7F0A2443B12B009642B9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		C06B7F0A2443B12B009642B9 /* PCalcViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcViewController.swift; sourceTree = "<group>"; };
 		C06B7F0D2443B12B009642B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C06B7F0F2443B12E009642B9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C06B7F122443B12E009642B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -101,10 +101,11 @@
 		C06B7F052443B12B009642B9 /* ProgrammerCalc */ = {
 			isa = PBXGroup;
 			children = (
-				C0E5FC7424BB9B6100BA93CA /* View */,
 				C06B7F062443B12B009642B9 /* AppDelegate.swift */,
 				C06B7F082443B12B009642B9 /* SceneDelegate.swift */,
-				C06B7F0A2443B12B009642B9 /* ViewController.swift */,
+				C0D5BA4C24C340120038A378 /* Model */,
+				C0E5FC7424BB9B6100BA93CA /* View */,
+				C0D5BA4B24C340050038A378 /* Controller */,
 				C06B7F0C2443B12B009642B9 /* Main.storyboard */,
 				C06B7F0F2443B12E009642B9 /* Assets.xcassets */,
 				C06B7F112443B12E009642B9 /* LaunchScreen.storyboard */,
@@ -129,6 +130,21 @@
 				C06B7F2A2443B12E009642B9 /* Info.plist */,
 			);
 			path = ProgrammerCalcUITests;
+			sourceTree = "<group>";
+		};
+		C0D5BA4B24C340050038A378 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				C06B7F0A2443B12B009642B9 /* PCalcViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		C0D5BA4C24C340120038A378 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		C0E5FC7424BB9B6100BA93CA /* View */ = {
@@ -272,7 +288,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C0E5FC7624BB9B8D00BA93CA /* PCalcView.swift in Sources */,
-				C06B7F0B2443B12B009642B9 /* ViewController.swift in Sources */,
+				C06B7F0B2443B12B009642B9 /* PCalcViewController.swift in Sources */,
 				C06B7F072443B12B009642B9 /* AppDelegate.swift in Sources */,
 				C06B7F092443B12B009642B9 /* SceneDelegate.swift in Sources */,
 			);

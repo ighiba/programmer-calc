@@ -73,7 +73,7 @@ class PCalcView: UICollectionView {
          return label
     }()
     
-    func createButtons(vc: ViewController) -> [UIButton] {
+    func createButtons(vc: PCalcViewController) -> [UIButton] {
     
             var buttonLabel: Int = 9
             var buttons: [UIButton] = []
@@ -247,7 +247,7 @@ class CalculatorButton: UIButton {
         self.frame = CGRect( x: Double(85*xMult + 20), y: Double(85*yMult + 320), width: fWidth, height: fHeight)
     }
     
-    func setActions(viewcontroller: ViewController, buttonType: buttonTypes){
+    func setActions(viewcontroller: PCalcViewController, buttonType: buttonTypes){
         self.addTarget(viewcontroller, action: #selector(viewcontroller.toucUhpOutsideAction), for: [.touchDragExit, .touchDragOutside])
         
         switch buttonType {
