@@ -7,22 +7,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "C94E821A-54C6-4267-B277-51E714789B93"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ProgrammerCalc/ViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "47"
-            endingLineNumber = "47"
-            landmarkName = "createButtons()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "E68353EE-4AD4-4157-9288-3DFA213D485A"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -30,26 +14,134 @@
             filePath = "ProgrammerCalc/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "310"
-            endingLineNumber = "310"
-            landmarkName = "numericButtonTapped(sender:)"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
+            landmarkName = "convertFractToBinary(number:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "EA3283CF-CCB9-4725-9F8E-38846929B762"
+            uuid = "2B4CEA57-0CDD-4045-A169-C3CF7FF64406"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ProgrammerCalc/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "499"
-            endingLineNumber = "499"
-            landmarkName = "divideToFloatInt()"
-            landmarkType = "7">
+            startingLineNumber = "18"
+            endingLineNumber = "18"
+            landmarkName = "ViewController"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A0907108-4492-4A65-9A07-C788EE355C27"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ProgrammerCalc/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "17"
+            endingLineNumber = "17"
+            landmarkName = "ViewController"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "A0907108-4492-4A65-9A07-C788EE355C27 - 23415939caabfbb3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ProgrammerCalc.ViewController.allButtons.getter : Swift.Array&lt;__C.UIButton&gt;"
+                  moduleName = "ProgrammerCalc"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ighiba/Documents/xcode_apps/ProgrammerCalc/ProgrammerCalc/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "17"
+                  endingLineNumber = "17"
+                  offsetFromSymbolStart = "216">
+               </Location>
+               <Location
+                  uuid = "A0907108-4492-4A65-9A07-C788EE355C27 - 5f32e28bafc9cfa7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ProgrammerCalc.ViewController.allButtons.setter : Swift.Array&lt;__C.UIButton&gt;"
+                  moduleName = "ProgrammerCalc"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ighiba/Documents/xcode_apps/ProgrammerCalc/ProgrammerCalc/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "17"
+                  endingLineNumber = "17"
+                  offsetFromSymbolStart = "192">
+               </Location>
+               <Location
+                  uuid = "A0907108-4492-4A65-9A07-C788EE355C27 - fb5632c0211616b4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ProgrammerCalc.ViewController.allButtons.modify : Swift.Array&lt;__C.UIButton&gt;"
+                  moduleName = "ProgrammerCalc"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ighiba/Documents/xcode_apps/ProgrammerCalc/ProgrammerCalc/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "24">
+               </Location>
+               <Location
+                  uuid = "A0907108-4492-4A65-9A07-C788EE355C27 - 55b094d57fe3a1bb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ProgrammerCalc.ViewController.allButtons.modify : Swift.Array&lt;__C.UIButton&gt; with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "ProgrammerCalc"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ighiba/Documents/xcode_apps/ProgrammerCalc/ProgrammerCalc/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "17"
+                  endingLineNumber = "17"
+                  offsetFromSymbolStart = "44">
+               </Location>
+               <Location
+                  uuid = "A0907108-4492-4A65-9A07-C788EE355C27 - ae38487e40bfe992"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ProgrammerCalc.ViewController.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; ProgrammerCalc.ViewController"
+                  moduleName = "ProgrammerCalc"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ighiba/Documents/xcode_apps/ProgrammerCalc/ProgrammerCalc/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "17"
+                  endingLineNumber = "17"
+                  offsetFromSymbolStart = "484">
+               </Location>
+               <Location
+                  uuid = "A0907108-4492-4A65-9A07-C788EE355C27 - c8027e1b05787b4e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ProgrammerCalc.ViewController.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;ProgrammerCalc.ViewController&gt;"
+                  moduleName = "ProgrammerCalc"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ighiba/Documents/xcode_apps/ProgrammerCalc/ProgrammerCalc/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "17"
+                  endingLineNumber = "17"
+                  offsetFromSymbolStart = "432">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
