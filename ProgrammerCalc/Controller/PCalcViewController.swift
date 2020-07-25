@@ -9,23 +9,18 @@
 import UIKit
 
 class PCalcViewController: UIViewController {
-
+    
     let calcView: PCalcView = PCalcView(frame: CGRect(), collectionViewLayout: UICollectionViewLayout())
     lazy var mainLabel: UILabel = calcView.mainLabel
     lazy var converterLabel: UILabel = calcView.converterLabel
-    lazy var allButtons: [UIButton] = calcView.createButtons(vc: self)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.view.backgroundColor = .white
-        // labels fromPCalcView
         self.view.addSubview(calcView.allViews)
         
-        // buttons from PCalcView
-        for button in allButtons {
-            self.view.addSubview(button)
-        }
+
     }
     
     // =======
@@ -171,7 +166,7 @@ class PCalcViewController: UIViewController {
     // =======
     
     @objc func toucUhpOutsideAction(sender: UIButton) {
-        //print("touchUpOutside")
+        print("touchUpOutside")
         //sender.isHighlighted = false
     }
     

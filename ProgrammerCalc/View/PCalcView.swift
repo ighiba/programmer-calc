@@ -19,18 +19,44 @@ class PCalcView: UICollectionView {
     
     
     func setViews() {
-
+        allViews.frame = UIScreen.main.bounds
         allViews.addSubview(mainLabel)
         allViews.addSubview(converterLabel)
-
+        
+        // stuff for create buttonStackView
+        var buffStackView: UIStackView = UIStackView()
+        var counter: Int = 0
+        
+        allButtons.forEach { (button) in
+            
+            buffStackView.addArrangedSubview(button)
+            // fill each stack with 4 buttons (the last one with 3)
+            switch counter {
+            case 3,7,11,15,18:
+                buffStackView.axis = .horizontal
+                buffStackView.alignment = .fill
+                buffStackView.distribution = .equalSpacing
+                buttonsStackView.addArrangedSubview(buffStackView)
+                buffStackView = UIStackView()
+                break
+            default:
+                break
+            }
+            counter += 1
+        }
+        
+        allViews.addSubview(buttonsStackView)
+        setupLayout()
     }
     
     let allViews: UIView = UIView()
+    let buttonsStackView: UIStackView = UIStackView()
     
     
-    // main label
+    // Label wich shows user input
     lazy var mainLabel: UILabel = {
         let label = UILabel()
+        
         label.frame = CGRect( x: Double(0), y: Double(20), width: 372.0, height: 100.0)
         label.text = "0"
         label.backgroundColor = .white
@@ -50,130 +76,136 @@ class PCalcView: UICollectionView {
         return label
     }()
     
-    // converter label
+    // Label wich shows converted values from user input
     lazy var converterLabel: UILabel = {
+        
         let label = UILabel()
         
-         label.frame = CGRect( x: Double(0), y: Double(120), width: 372.0, height: 100.0)
-         label.text = "0"
-         label.backgroundColor = .white
-         // set font size, font family
-         //mainLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 72.0)
-         label.font = UIFont.systemFont(ofSize: 62.0, weight: UIFont.Weight.thin)
-         label.textAlignment = .right
-         // set borders
-         label.layer.borderWidth = 0.5
-         label.layer.borderColor = UIColor.lightGray.cgColor
-         // round corners
-         label.layer.cornerRadius = 0.0
-         // resizeble text
-         label.minimumScaleFactor = 0.5
-         label.adjustsFontSizeToFitWidth = true
+        label.frame = CGRect( x: Double(0), y: Double(120), width: 372.0, height: 100.0)
+        label.text = "0"
+        label.backgroundColor = .white
+        // set font size, font family
+        //mainLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 72.0)
+        label.font = UIFont.systemFont(ofSize: 62.0, weight: UIFont.Weight.thin)
+        label.textAlignment = .right
+        // set borders
+        label.layer.borderWidth = 0.5
+        label.layer.borderColor = UIColor.lightGray.cgColor
+        // round corners
+        label.layer.cornerRadius = 0.0
+        // resizeble text
+        label.minimumScaleFactor = 0.5
+        label.adjustsFontSizeToFitWidth = true
          
          return label
     }()
     
-    func createButtons(vc: PCalcViewController) -> [UIButton] {
-    
-            var buttonLabel: Int = 9
-            var buttons: [UIButton] = []
-    
-            let signs = [ "AC","\u{00B1}","%","\u{00f7}","X","-","+","="]
-    
-            // Numeric buttons
-    
-            for row in 0...2 {
-                buttonLabel = buttonLabel - 2
-                for column  in 0...2 {
-    
-                    let button = CalculatorButton.init(type: .custom)
-                    button.setFrame(xMult: column, yMult: row, width: 75, height: 75)
-    
-                    // set actions for button
-                    button.setActions(viewcontroller: vc, buttonType: .numeric)
-                    // set title and style
-                    button.setTitle(String(buttonLabel), for: .normal)
-                    button.applyStyle()
-                    buttonLabel += 1
-    
-                    // add element to array
-                    buttons.append(button)
-                }
-                buttonLabel = buttonLabel - 4
+    // Standart calculator buttons
+    let allButtons: [UIButton] = {
+        
+        let allTitles = ["AC","\u{00B1}","%","\u{00f7}",
+                         "7", "8", "9", "X",
+                         "4", "5", "6", "-",
+                         "1", "2", "3", "+",
+                         "0", ".", "="]
+                         
+        
+        var buttonLabel: Int = 9
+        var buttonTag: Int = 100
+        var buttons: [UIButton] = []
+        
+        allTitles.forEach { (title) in
+            let button = CalculatorButton.init(type: .custom)
+            button.setFrame(xMult: 0, yMult: 0, width: 75, height: 75)
+
+            // set actions for button
+            switch title{
+            case "0"..."9",".":
+                button.setActions(for: .numeric)
+                break
+            default:
+                button.setActions(for: .sign)
+                break
             }
-    
-            // Zero and point/dot buttons
-    
-            let zeroButton: () -> (UIButton) = {
-                // width multiple 2 + x
-                let button = CalculatorButton.init(type: .custom)
-                button.setFrame(xMult: 0, yMult: 3, width: 165.0, height: 75.0)
-    
-                // set actions for button
-                button.setActions(viewcontroller: vc, buttonType: .numeric)
-                // set title and style
-                button.setTitle("0", for: .normal)
-                button.applyStyle()
-                //button.contentHorizontalAlignment = .left
-    
-                return button
+            
+            // set title and style
+            button.setTitle(title, for: .normal)
+            button.applyStyle()
+            
+            // set width and height by constraints
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.heightAnchor.constraint(greaterThanOrEqualToConstant: button.buttonWidth()).isActive = true
+            // special width for zero
+            if title == "0" {
+                button.widthAnchor.constraint(greaterThanOrEqualToConstant: button.buttonWidth() * 2 + 15).isActive = true
+            } else {
+                // width for default
+                button.widthAnchor.constraint(greaterThanOrEqualToConstant: button.buttonWidth()).isActive = true
             }
-            let dotButton: () -> (UIButton) = {
-                // normal width
-                let button = CalculatorButton.init(type: .custom)
-                button.setFrame(xMult: 2, yMult: 3, width: 75, height: 75)
-    
-                // set actions for button
-                button.setActions(viewcontroller: vc, buttonType: .numeric)
-                // set title and style
-                button.setTitle(".", for: .normal)
-                button.applyStyle()
-    
-                return button
-            }
-            buttons.append(dotButton())
-            buttons.append(zeroButton())
-    
-    
-            // Sign buttons
-    
-    
-            for row in 0...3 {
-                if row != 3 {
-                    let button = CalculatorButton.init(type: .custom)
-                    button.setFrame(xMult: row, yMult: -1, width: 75, height: 75)
-                    // set actions for button
-                    button.setActions(viewcontroller: vc, buttonType: .sign)
-                    // set title and style
-                    button.setTitle(signs[row], for: .normal)
-                    button.tag = 100 + row
-                    button.applyStyle()
-                    //button.titleLabel?.font = UIFont.systemFont(ofSize: 45.0, weight: UIFont.Weight.light)
-                    buttons.append(button)
-                } else {
-                    for column in 0...4 {
-                        let button = CalculatorButton.init(type: .custom)
-                        button.setFrame(xMult: row, yMult: -1 + column, width: 75, height: 75)
-                        // set actions for button
-                        button.setActions(viewcontroller: vc, buttonType: .sign)
-                        // set title and style
-                        button.setTitle(signs[row+column], for: .normal)
-                        button.tag = 100 + row + column
-    
-                        button.applyStyle()
-                        //button.titleLabel?.font = UIFont.systemFont(ofSize: 45.0, weight: UIFont.Weight.thin)
-                        buttons.append(button)
-                    }
-                }
-            }
-            //
-    
-            // Logical buttons
-    
-            //
-    
-            return buttons
+            // button tags start from 100 to 118
+            button.tag = buttonTag
+            buttonTag += 1
+            // add element to array
+            buttons.append(button)
+            
         }
+    
+        // TODO: Logical buttons
+        
+        //
+        // Logical buttons
+        //
+
+        return buttons
+    }()
+    
+    
+    private func setupLayout() {
+        // Constraints for main label
+        mainLabel.translatesAutoresizingMaskIntoConstraints = false
+        // width and height anchors
+        mainLabel.widthAnchor.constraint(equalTo: allViews.widthAnchor).isActive = true
+        mainLabel.heightAnchor.constraint(equalToConstant: labelHeight()).isActive = true
+        // ridght and left anchors
+        mainLabel.rightAnchor.constraint(equalTo: allViews.rightAnchor).isActive = true
+        mainLabel.leftAnchor.constraint(equalTo: allViews.leftAnchor).isActive = true
+        // top anchor with safe area
+        mainLabel.topAnchor.constraint(equalTo: allViews.safeAreaLayoutGuide.topAnchor).isActive = true
+        
+        // Constraints for converter label
+        converterLabel.translatesAutoresizingMaskIntoConstraints = false
+        // width and height anchors
+        converterLabel.widthAnchor.constraint(equalTo: allViews.widthAnchor).isActive = true
+        converterLabel.heightAnchor.constraint(equalToConstant: labelHeight()).isActive = true
+        // ridght and left anchors
+        converterLabel.rightAnchor.constraint(equalTo: allViews.rightAnchor).isActive = true
+        converterLabel.leftAnchor.constraint(equalTo: allViews.leftAnchor).isActive = true
+        // top anchor to main label
+        converterLabel.topAnchor.constraint(equalTo: mainLabel.bottomAnchor).isActive = true
+        
+        
+        // Display settings for buttons UIStackView
+        buttonsStackView.axis = .vertical
+        buttonsStackView.alignment = .fill
+        buttonsStackView.distribution = .equalSpacing
+        
+        // Constraints for buttons (Main)
+        buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
+        // width = main view width - spacing * 2
+        buttonsStackView.widthAnchor.constraint(equalToConstant: allViews.frame.width - 30).isActive = true
+        // left anchor == spacing
+        buttonsStackView.leadingAnchor.constraint(lessThanOrEqualTo: allViews.safeAreaLayoutGuide.leadingAnchor, constant: 15).isActive = true
+        // top anchor == spacing
+        buttonsStackView.topAnchor.constraint(lessThanOrEqualTo: converterLabel.bottomAnchor, constant: 15).isActive = true
+        // bottom anchor === spacing
+        buttonsStackView.bottomAnchor.constraint(greaterThanOrEqualTo: allViews.safeAreaLayoutGuide.bottomAnchor, constant: -15).isActive = true
+    }
+    
+    // Dynamic label height for autolayout
+    // the labels must fill 1/3 part of screen
+    func labelHeight() -> CGFloat {
+        return (UIScreen.main.bounds.height / 3) / 2
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -247,17 +279,26 @@ class CalculatorButton: UIButton {
         self.frame = CGRect( x: Double(85*xMult + 20), y: Double(85*yMult + 320), width: fWidth, height: fHeight)
     }
     
-    func setActions(viewcontroller: PCalcViewController, buttonType: buttonTypes){
-        self.addTarget(viewcontroller, action: #selector(viewcontroller.toucUhpOutsideAction), for: [.touchDragExit, .touchDragOutside])
+    func setActions(for buttonType: buttonTypes){
+        
+        self.addTarget(nil, action: #selector(PCalcViewController.toucUhpOutsideAction), for: [.touchDragExit, .touchDragOutside])
         
         switch buttonType {
         case .numeric:
-                self.addTarget(viewcontroller, action: #selector(viewcontroller.numericButtonTapped), for: .touchUpInside)
+                self.addTarget(nil, action: #selector(PCalcViewController.numericButtonTapped), for: .touchUpInside)
         case .sign:
-            self.addTarget(viewcontroller, action: #selector(viewcontroller.signButtonTapped), for: .touchUpInside)
+            self.addTarget(nil, action: #selector(PCalcViewController.signButtonTapped), for: .touchUpInside)
         default:
             break
         }
+    }
+    
+    // Dynamic button width (except zero button) and height for autolayout
+    //  5  - number of spacings
+    //  15 - spacing width
+    //  4  - number of buttons
+    func buttonWidth() -> CGFloat {
+        return (UIScreen.main.bounds.width - 5 * 15) / 4
     }
     
 }
