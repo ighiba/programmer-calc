@@ -224,6 +224,7 @@ class CalculatorButton: UIButton {
         // change background color for calulator buttons while they pressed
         didSet {
             if isHighlighted {
+                print("HIGHLIGHT - ON")
                 // create button animation when button pressed
                 UIView.transition(
                     with: self,
@@ -232,6 +233,7 @@ class CalculatorButton: UIButton {
                     animations: { self.backgroundColor = .lightGray },
                     completion: nil)
             } else {
+                print("HIGHLIGHT - OFF")
                 // create button animation when button unpressed
                 UIView.transition(
                     with: self,
@@ -281,7 +283,7 @@ class CalculatorButton: UIButton {
     
     func setActions(for buttonType: buttonTypes){
         
-        self.addTarget(nil, action: #selector(PCalcViewController.toucUhpOutsideAction), for: [.touchDragExit, .touchDragOutside])
+        self.addTarget(nil, action: #selector(PCalcViewController.toucUpOutsideAction), for: [.touchDragExit, .touchDragOutside])
         
         switch buttonType {
         case .numeric:
@@ -299,6 +301,61 @@ class CalculatorButton: UIButton {
     //  4  - number of buttons
     func buttonWidth() -> CGFloat {
         return (UIScreen.main.bounds.width - 5 * 15) / 4
+    }
+    
+    // override for decrease control bounds of button
+    // and for correct highlight animation
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch: UITouch = touches.first!
+        let outerBounds: CGRect = bounds.insetBy(dx: -1 * _boundsExtension, dy: -1 * _boundsExtension)
+        let currentLocation: CGPoint = touch.location(in: self)
+        let previousLocation: CGPoint = touch.previousLocation(in: self)
+        
+        let touchOutside: Bool = !outerBounds.contains(currentLocation)
+        
+        if touchOutside {
+            let previousTouchInside: Bool = outerBounds.contains(previousLocation)
+            if previousTouchInside {
+                sendActions(for: .touchDragExit)
+                self.isHighlighted = false
+                print("touchDragExit")
+            } else {
+                sendActions(for: .touchDragOutside)
+                self.isHighlighted = false
+                print("touchDragOutside")
+            }
+        } else {
+            let previousTouchOutside: Bool = !outerBounds.contains(previousLocation)
+            if previousTouchOutside {
+                sendActions(for: .touchDragEnter)
+                self.isHighlighted = true
+                print("touchDragEnter")
+            } else {
+                sendActions(for: .touchDragInside)
+                self.isHighlighted = true
+                print("touchDragInside")
+            }
+        }
+        
+        
+    }
+    
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch: UITouch = touches.first!
+        let outerBounds: CGRect = bounds.insetBy(dx: -1 * _boundsExtension, dy: -1 * _boundsExtension)
+        let currentLocation: CGPoint = touch.location(in: self)
+        
+        let touchInside: Bool = outerBounds.contains(currentLocation)
+        if touchInside {
+            self.isHighlighted = false
+            print("touchUpInside")
+            return sendActions(for: .touchUpInside)
+        } else {
+            self.isHighlighted = false
+            print("touchUpOutside")
+            return sendActions(for: .touchUpOutside)
+        }
     }
     
 }

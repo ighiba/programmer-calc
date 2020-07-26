@@ -14,6 +14,8 @@ class PCalcViewController: UIViewController {
     lazy var mainLabel: UILabel = calcView.mainLabel
     lazy var converterLabel: UILabel = calcView.converterLabel
     
+    var mainLabelBuffer: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -165,8 +167,9 @@ class PCalcViewController: UIViewController {
     // Actions
     // =======
     
-    @objc func toucUhpOutsideAction(sender: UIButton) {
-        print("touchUpOutside")
+    @objc func toucUpOutsideAction(sender: UIButton) {
+        //print("touchUpOutside")
+        //sender.backgroundColor = .red
         //sender.isHighlighted = false
     }
     
@@ -223,22 +226,31 @@ class PCalcViewController: UIViewController {
         let label = mainLabel
         let convertLabel = converterLabel
         
-        //print("Button \(buttonText) touched")
+        print("Button \(buttonText) touched")
         
         switch buttonText {
         case "AC":
             label.text! = "0"
             convertLabel.text! = "0"
+            mainLabelBuffer = nil
+            break
         case "C":
             label.text! = "0"
             convertLabel.text! = "0"
-            
             button.setTitle("AC", for: .normal)
+            mainLabelBuffer = nil
+            break
+        case "+":
+            mainLabelBuffer = label.text
+            print(mainLabelBuffer)
+            break
         default:
             break
         }
         
     }
+    
+    
 
 }
 
