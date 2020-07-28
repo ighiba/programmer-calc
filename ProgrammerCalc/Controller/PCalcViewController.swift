@@ -10,6 +10,7 @@ import UIKit
 
 class PCalcViewController: UIViewController {
     
+    var calcState: CalcState?
     let calcView: PCalcView = PCalcView(frame: CGRect(), collectionViewLayout: UICollectionViewLayout())
     lazy var mainLabel: UILabel = calcView.mainLabel
     lazy var converterLabel: UILabel = calcView.converterLabel
@@ -25,9 +26,16 @@ class PCalcViewController: UIViewController {
 
     }
     
+    
+    
     // =======
     // Methods
     // =======
+    
+    func updateConverterLabel() {
+        // Uptade converter label with converted number
+            converterLabel.text = convertToBinary(decNumStr: mainLabel.text!)
+    }
     
     func convertToBinary( decNumStr: String) -> String {
         var binaryStr: String = String()
@@ -161,7 +169,28 @@ class PCalcViewController: UIViewController {
            
            print(" \(numberInt)...\(numberFract)")
            return (numberInt, numberFract)
-       }
+    }
+    
+    // Addition of 2 decimal numbers
+    func calculateDecNumbers(firstNum: String, secondNum: String, operation: CalcState.mathOperation) -> String? {
+        var resultStr: String?
+        
+        switch operation {
+        case .add:
+            if let firstInt = Int(firstNum), let secondNum = Int(secondNum) {
+                resultStr = String( firstInt + secondNum )
+            } else {
+                // TODO: float number addition
+            }
+            break
+            
+        case .sub:
+            break
+    
+        }
+        
+        return resultStr
+    }
     
     // =======
     // Actions
@@ -187,34 +216,76 @@ class PCalcViewController: UIViewController {
         
         print("Button \(buttonText) touched")
         
-        switch label.text! {
-        case "0":
-            
-            if buttonText.contains(".") {
-                label.text! += buttonText
-                convertLabel.text! += buttonText
-                acButton.setTitle("C", for: .normal)
-            } else if buttonText != "0" {
-                label.text! = buttonText
-                acButton.setTitle("C", for: .normal)
-            }
-            // if 0 pressed then does nothing
-            
-
-        default:
-            if label.text!.contains(".") && buttonText == "." {
-                break
+        
+        if calcState != nil {
+            // if new value not inputed
+            if !calcState!.inputStart {
+                
+                switch buttonText {
+                case ".":
+                    label.text = "0."
+                    break
+                default:
+                    label.text = buttonText
+                    break
+                }
+                calcState!.inputStart = true
             } else {
-                label.text! += buttonText
-                convertLabel.text! += buttonText
+                switch label.text! {
+                case "0":
+                    if buttonText.contains(".") {
+                        label.text! += buttonText
+                        convertLabel.text! += buttonText
+                        acButton.setTitle("C", for: .normal)
+                    } else if buttonText != "0" {
+                         // if 0 pressed then do nothing
+                        label.text! = buttonText
+                        acButton.setTitle("C", for: .normal)
+                    }
+                    break
+                default:
+                    if label.text!.contains(".") && buttonText == "." {
+                        break
+                    } else {
+                        label.text! += buttonText
+                        convertLabel.text! += buttonText
+                    }
+                    acButton.setTitle("C", for: .normal)
+                    break
+                }
             }
-            acButton.setTitle("C", for: .normal)
+            
+        } else {
+            switch label.text! {
+            case "0":
+                if buttonText.contains(".") {
+                    label.text! += buttonText
+                    convertLabel.text! += buttonText
+                    acButton.setTitle("C", for: .normal)
+                } else if buttonText != "0" {
+                     // if 0 pressed then do nothing
+                    label.text! = buttonText
+                    acButton.setTitle("C", for: .normal)
+                }
+                break
+            default:
+                if label.text!.contains(".") && buttonText == "." {
+                    break
+                } else {
+                    label.text! += buttonText
+                    convertLabel.text! += buttonText
+                }
+                acButton.setTitle("C", for: .normal)
+                break
+            }
         }
         
+        
+        // Update value in converter label
+        
         if buttonText != "." {
-            convertLabel.text = convertToBinary(decNumStr: label.text!)
+            updateConverterLabel()
         }
-        // Uptade converter label with converted number
         
     }
     
@@ -232,25 +303,48 @@ class PCalcViewController: UIViewController {
         case "AC":
             label.text! = "0"
             convertLabel.text! = "0"
-            mainLabelBuffer = nil
+            calcState = nil
             break
         case "C":
             label.text! = "0"
             convertLabel.text! = "0"
             button.setTitle("AC", for: .normal)
-            mainLabelBuffer = nil
+            calcState = nil
             break
         case "+":
-            mainLabelBuffer = label.text
-            print(mainLabelBuffer)
+            // calc results
+            if calcState != nil {
+                print("calculation")
+                if let result = calculateDecNumbers(firstNum: calcState!.buffValue, secondNum: label.text!, operation: calcState!.operation) {
+                    label.text = result
+                    updateConverterLabel()
+                    calcState = nil
+                    calcState = CalcState(buffValue: label.text!, operation: .add)
+                    calcState?.lastResult = result
+                }
+            } else {
+                calcState = CalcState(buffValue: label.text!, operation: .add)
+            }
+            break
+        case "=":
+            if calcState != nil {
+                print("calculation")
+                if let result = calculateDecNumbers(firstNum: calcState!.buffValue, secondNum: label.text!, operation: calcState!.operation) {
+                    label.text = result
+                    updateConverterLabel()
+                }
+                // reset state
+                calcState = nil
+            } else {
+                print("do nothing")
+            }
             break
         default:
             break
         }
         
+        print(calcState)
     }
-    
-    
 
 }
 

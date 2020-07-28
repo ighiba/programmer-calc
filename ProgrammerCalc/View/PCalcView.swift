@@ -224,7 +224,7 @@ class CalculatorButton: UIButton {
         // change background color for calulator buttons while they pressed
         didSet {
             if isHighlighted {
-                print("HIGHLIGHT - ON")
+                //print("HIGHLIGHT - ON")
                 // create button animation when button pressed
                 UIView.transition(
                     with: self,
@@ -233,7 +233,7 @@ class CalculatorButton: UIButton {
                     animations: { self.backgroundColor = .lightGray },
                     completion: nil)
             } else {
-                print("HIGHLIGHT - OFF")
+                //print("HIGHLIGHT - OFF")
                 // create button animation when button unpressed
                 UIView.transition(
                     with: self,
@@ -318,22 +318,22 @@ class CalculatorButton: UIButton {
             if previousTouchInside {
                 sendActions(for: .touchDragExit)
                 self.isHighlighted = false
-                print("touchDragExit")
+                //print("touchDragExit")
             } else {
                 sendActions(for: .touchDragOutside)
                 self.isHighlighted = false
-                print("touchDragOutside")
+                //print("touchDragOutside")
             }
         } else {
             let previousTouchOutside: Bool = !outerBounds.contains(previousLocation)
             if previousTouchOutside {
                 sendActions(for: .touchDragEnter)
                 self.isHighlighted = true
-                print("touchDragEnter")
+                //print("touchDragEnter")
             } else {
                 sendActions(for: .touchDragInside)
                 self.isHighlighted = true
-                print("touchDragInside")
+                //print("touchDragInside")
             }
         }
         
@@ -349,11 +349,11 @@ class CalculatorButton: UIButton {
         let touchInside: Bool = outerBounds.contains(currentLocation)
         if touchInside {
             self.isHighlighted = false
-            print("touchUpInside")
+            //print("touchUpInside")
             return sendActions(for: .touchUpInside)
         } else {
             self.isHighlighted = false
-            print("touchUpOutside")
+            //print("touchUpOutside")
             return sendActions(for: .touchUpOutside)
         }
     }
