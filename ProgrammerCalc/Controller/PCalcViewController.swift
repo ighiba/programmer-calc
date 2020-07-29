@@ -22,7 +22,6 @@ class PCalcViewController: UIViewController {
         
         self.view.backgroundColor = .white
         self.view.addSubview(calcView.allViews)
-        
 
     }
     
@@ -84,23 +83,25 @@ class PCalcViewController: UIViewController {
         var resultStr: String = String()
         
        
-        
+        // if 0 then dont calculate
         if number == 0 {
             resultStr = "0"
         } else {
             // form double string
-                   buffStr.append(String(number))
-                   buffDouble = Double(buffStr)!
+            buffStr.append(String(number))
+            buffDouble = Double(buffStr)!
                    
-                   for _ in 0..<counter {
-                       buffDouble = buffDouble * 2
-                       if buffDouble > 1 {
-                           resultStr.append("1")
-                           buffDouble = buffDouble - 1
-                       } else {
-                           resultStr.append("0")
-                       }
-                   }
+            // convert fract part of number
+            // multiply by 2, if bigger then 1 then = 1, else 0
+            for _ in 0..<counter {
+                buffDouble = buffDouble * 2
+                if buffDouble > 1 {
+                    resultStr.append("1")
+                    buffDouble = buffDouble - 1
+                } else {
+                    resultStr.append("0")
+                }
+             }
             // remove ending zeros
             while resultStr[resultStr.index(before: resultStr.endIndex)] == "0" {
                 resultStr.remove(at: resultStr.index(before: resultStr.endIndex))
@@ -171,21 +172,40 @@ class PCalcViewController: UIViewController {
            return (numberInt, numberFract)
     }
     
-    // Addition of 2 decimal numbers
+    // Calculation of 2 decimal numbers by .operation
     func calculateDecNumbers(firstNum: String, secondNum: String, operation: CalcState.mathOperation) -> String? {
         var resultStr: String?
         
         switch operation {
+        // Addition
         case .add:
             if let firstInt = Int(firstNum), let secondNum = Int(secondNum) {
+                // addition for ints
                 resultStr = String( firstInt + secondNum )
-            } else {
+            } else if firstNum.contains(".") || secondNum.contains(".") {
+                // addition for floats
+                let firstFloat = Double(firstNum)
+                let secondFloat = Double(secondNum)
+                
+                resultStr = String( round((firstFloat! + secondFloat!) * 1000)/1000 )
                 // TODO: float number addition
             }
             break
             
+        // Subtraction
         case .sub:
-            break
+             if let firstInt = Int(firstNum), let secondNum = Int(secondNum) {
+                           // subtraction for ints
+                           resultStr = String( firstInt - secondNum )
+                       } else if firstNum.contains(".") || secondNum.contains(".") {
+                           // subtraction for floats
+                           let firstFloat = Double(firstNum)
+                           let secondFloat = Double(secondNum)
+                           
+                           resultStr = String( round((firstFloat! - secondFloat!) * 1000)/1000 )
+                           // TODO: float number subtraction
+                       }
+                       break
     
         }
         
@@ -215,7 +235,6 @@ class PCalcViewController: UIViewController {
         
         
         print("Button \(buttonText) touched")
-        
         
         if calcState != nil {
             // if new value not inputed
@@ -310,6 +329,21 @@ class PCalcViewController: UIViewController {
             convertLabel.text! = "0"
             button.setTitle("AC", for: .normal)
             calcState = nil
+            break
+        case "-":
+            // calc results
+            if calcState != nil {
+                print("calculation")
+                if let result = calculateDecNumbers(firstNum: calcState!.buffValue, secondNum: label.text!, operation: calcState!.operation) {
+                    label.text = result
+                    updateConverterLabel()
+                    calcState = nil
+                    calcState = CalcState(buffValue: label.text!, operation: .sub)
+                    calcState?.lastResult = result
+                }
+            } else {
+                calcState = CalcState(buffValue: label.text!, operation: .sub)
+            }
             break
         case "+":
             // calc results
