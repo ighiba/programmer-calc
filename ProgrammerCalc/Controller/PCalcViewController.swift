@@ -33,21 +33,56 @@ class PCalcViewController: UIViewController {
     
     func updateConverterLabel() {
         // Uptade converter label with converted number
-            converterLabel.text = convertToBinary(decNumStr: mainLabel.text!)
+        converterLabel.text = convertToBinary(decNumStr: mainLabel.text!)
     }
     
     func convertToBinary( decNumStr: String) -> String {
-        var binaryStr: String = String()
+        var decNumStrBuff = decNumStr
+        var isSigned: Bool = false
+        var binaryStr: String
         
-        if let decNumInt: Int = Int(decNumStr) {
+        
+        // if number is signed
+        if decNumStr.contains("-") {
+            let minusIndex = decNumStr.firstIndex(of: "-")
+            decNumStrBuff.remove(at: minusIndex!)
+            isSigned = true
+        }
+        
+        if let decNumInt: Int = Int(decNumStrBuff) {
             binaryStr = convertIntToBinary(number: decNumInt)
         } else {
             // TODO   Error handling
-            let splittedDouble: (Int, Int) = divideToFloatInt(str: decNumStr)!
+            let splittedDouble: (Int, Int) = divideToFloatInt(str: decNumStrBuff)!
             binaryStr = convertDoubleToBinary(number: splittedDouble)
             
         }
-   
+        
+        // handle minus sign and invert value
+        if isSigned {
+            // reverse 1 and 0 values
+            var binaryStrBuff: String = String()
+            binaryStr.forEach { (char) in
+                switch char {
+                case "0":
+                    binaryStrBuff.append("1")
+                    break
+                case "1":
+                    binaryStrBuff.append("0")
+                    break
+                default:
+                    binaryStrBuff.append(char)
+                    break
+                }
+            }
+            
+            // add 1 to beginning and replace binaryStr
+            binaryStrBuff = "1" + binaryStrBuff
+            binaryStr = binaryStrBuff
+            
+            // TODO: Delete end zeros for float binary nums
+        }
+        
         print(binaryStr)
         
         return binaryStr
@@ -56,20 +91,20 @@ class PCalcViewController: UIViewController {
     // converter for number before the point
     
     func convertIntToBinary(number: Int) -> String {
-        var dividible: Int = number
+        var divisible: Int = number
         var reminder: Int = 0
         var resultStr: String = String()
         
         // divide by 2
-        while dividible != 0 && dividible != 1 {
-            reminder = dividible % 2
-            dividible = dividible / 2
+        while divisible != 0 && divisible != 1 {
+            reminder = divisible % 2
+            divisible = divisible / 2
             resultStr.append(contentsOf: String(reminder))
         }
         
         //if no divide
-        if dividible == 0 || dividible == 1 {
-            resultStr.append(contentsOf: String(dividible))
+        if divisible == 0 || divisible == 1 {
+            resultStr.append(contentsOf: String(divisible))
             resultStr = String(resultStr.reversed())
         }
 
@@ -319,6 +354,7 @@ class PCalcViewController: UIViewController {
         print("Button \(buttonText) touched")
         
         switch buttonText {
+        // clear buttons
         case "AC":
             label.text! = "0"
             convertLabel.text! = "0"
@@ -330,6 +366,22 @@ class PCalcViewController: UIViewController {
             button.setTitle("AC", for: .normal)
             calcState = nil
             break
+        // invert button
+        case "\u{00B1}":
+            if label.text != "0" {
+                // if number is already signed
+                // TODO: Error handling
+                if label.text!.contains("-") {
+                    let minusIndex = label.text!.firstIndex(of: "-")
+                    label.text!.remove(at: minusIndex!)
+                } else {
+                    // just add minus
+                    label.text = "-" + label.text!
+                }
+            }
+            updateConverterLabel()
+            break
+        // minus button
         case "-":
             // calc results
             if calcState != nil {

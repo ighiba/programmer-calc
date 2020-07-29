@@ -7,49 +7,49 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E68353EE-4AD4-4157-9288-3DFA213D485A"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ProgrammerCalc/ViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "108"
-            endingLineNumber = "108"
-            landmarkName = "convertFractToBinary(number:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "915B18A1-3A6C-44DA-80DC-C7B964463E57"
+            uuid = "731CBBA0-2992-472B-8B8D-58F7A6FF3150"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ProgrammerCalc/Controller/PCalcViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "190"
-            endingLineNumber = "190"
-            landmarkName = "calculateDecNumbers(firstNum:secondNum:operation:)"
+            startingLineNumber = "65"
+            endingLineNumber = "65"
+            landmarkName = "convertToBinary(decNumStr:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "1030EDF3-956C-4526-B6AA-F214CCC14A9F"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ProgrammerCalc/Controller/PCalcViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "188"
-            endingLineNumber = "188"
-            landmarkName = "calculateDecNumbers(firstNum:secondNum:operation:)"
-            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "731CBBA0-2992-472B-8B8D-58F7A6FF3150 - d8aba6aa029ca6d5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ProgrammerCalc.PCalcViewController.convertToBinary(decNumStr: Swift.String) -&gt; Swift.String"
+                  moduleName = "ProgrammerCalc"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ighiba/Documents/xcode_apps/ProgrammerCalc/ProgrammerCalc/Controller/PCalcViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "65"
+                  endingLineNumber = "65"
+                  offsetFromSymbolStart = "1396">
+               </Location>
+               <Location
+                  uuid = "731CBBA0-2992-472B-8B8D-58F7A6FF3150 - ee288cb43d29f911"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Character) -&gt; () in ProgrammerCalc.PCalcViewController.convertToBinary(decNumStr: Swift.String) -&gt; Swift.String"
+                  moduleName = "ProgrammerCalc"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ighiba/Documents/xcode_apps/ProgrammerCalc/ProgrammerCalc/Controller/PCalcViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "66"
+                  endingLineNumber = "66"
+                  offsetFromSymbolStart = "96">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
