@@ -15,6 +15,7 @@ class PCalcViewController: UIViewController {
     lazy var mainLabel: UILabel = calcView.mainLabel
     lazy var converterLabel: UILabel = calcView.converterLabel
     
+    
     var mainLabelBuffer: String?
     
     override func viewDidLoad() {
@@ -208,6 +209,7 @@ class PCalcViewController: UIViewController {
     }
     
     // Calculation of 2 decimal numbers by .operation
+    // TODO: Make error handling for overflow
     func calculateDecNumbers(firstNum: String, secondNum: String, operation: CalcState.mathOperation) -> String? {
         var resultStr: String?
         
@@ -266,8 +268,6 @@ class PCalcViewController: UIViewController {
         let convertLabel = converterLabel
         // tag for AC/C button
         let acButton = self.view.viewWithTag(100) as! UIButton
-        //print(acButton)
-        
         
         print("Button \(buttonText) touched")
         
@@ -285,6 +285,11 @@ class PCalcViewController: UIViewController {
                 }
                 calcState!.inputStart = true
             } else {
+                // handle for number of digits in mainLabel
+                if label.text!.count > 11 {
+                    print("too much digits")
+                    return
+                }
                 switch label.text! {
                 case "0":
                     if buttonText.contains(".") {
@@ -310,6 +315,11 @@ class PCalcViewController: UIViewController {
             }
             
         } else {
+            // handle for number of digits in mainLabel
+            if label.text!.count > 11 {
+                print("too much digits")
+                return
+            }
             switch label.text! {
             case "0":
                 if buttonText.contains(".") {

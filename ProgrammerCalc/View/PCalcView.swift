@@ -217,12 +217,27 @@ class PCalcView: UICollectionView {
 // ==============================
 
 class CalculatorButton: UIButton {
+    // ============
+    // Enumerations
+    // ============
+    
+    enum buttonTypes {
+        case numeric
+        case sign
+        case logical
+    }
+    
+    // ==========
+    // Properties
+    // ==========
+    
+    
     private let _boundsExtension: CGFloat = 0
     // override isHighlighted for calculator buttons
     override open var isHighlighted: Bool {
         // if variable state changed
         // change background color for calulator buttons while they pressed
-        didSet {
+        didSet { 
             if isHighlighted {
                 //print("HIGHLIGHT - ON")
                 // create button animation when button pressed
@@ -243,17 +258,6 @@ class CalculatorButton: UIButton {
                     completion: nil)
             }
         }
-    }
-    
-    
-    // ============
-    // Enumerations
-    // ============
-    
-    enum buttonTypes {
-        case numeric
-        case sign
-        case logical
     }
     
     
