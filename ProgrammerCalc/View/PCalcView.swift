@@ -8,8 +8,6 @@
 
 import UIKit
 
-
-
 class PCalcView: UICollectionView {
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -239,7 +237,6 @@ class CalculatorButton: UIButton {
         // change background color for calulator buttons while they pressed
         didSet { 
             if isHighlighted {
-                //print("HIGHLIGHT - ON")
                 // create button animation when button pressed
                 UIView.transition(
                     with: self,
@@ -248,7 +245,6 @@ class CalculatorButton: UIButton {
                     animations: { self.backgroundColor = .lightGray },
                     completion: nil)
             } else {
-                //print("HIGHLIGHT - OFF")
                 // create button animation when button unpressed
                 UIView.transition(
                     with: self,

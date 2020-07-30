@@ -16,8 +16,6 @@ class PCalcViewController: UIViewController {
     lazy var converterLabel: UILabel = calcView.converterLabel
     
     
-    var mainLabelBuffer: String?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -271,6 +269,29 @@ class PCalcViewController: UIViewController {
         
         print("Button \(buttonText) touched")
         
+        // bool calculates overflowing of mainLabel number for int and float value
+        let isOverflowed: Bool = {
+            let str = label.text!
+            // handle for ints
+            if Int(str) != nil {
+                if str.count > 11 {
+                    // if already overflowing, but point button is touched
+                    guard buttonText != "." else {return false}
+                    return true
+                }
+            // handle for floats
+            } else if str.contains(".") {
+                // search index of floating pos
+                let pointPos: String.Index = str.firstIndex(of: ".")!
+                let numsAfterPoint: Int = str.distance(from: str.endIndex, to: pointPos)
+                
+                if abs(numsAfterPoint) > 12 {
+                    return true
+                }
+            }
+            return false
+        }()
+        
         if calcState != nil {
             // if new value not inputed
             if !calcState!.inputStart {
@@ -286,7 +307,7 @@ class PCalcViewController: UIViewController {
                 calcState!.inputStart = true
             } else {
                 // handle for number of digits in mainLabel
-                if label.text!.count > 11 {
+                if isOverflowed {
                     print("too much digits")
                     return
                 }
@@ -315,8 +336,8 @@ class PCalcViewController: UIViewController {
             }
             
         } else {
-            // handle for number of digits in mainLabel
-            if label.text!.count > 11 {
+
+            if isOverflowed {
                 print("too much digits")
                 return
             }
