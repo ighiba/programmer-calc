@@ -52,8 +52,8 @@ class PCalcViewController: UIViewController {
             binaryStr = convertIntToBinary(number: decNumInt)
         } else {
             // TODO   Error handling
-            let splittedDouble: (Int, Int) = divideToFloatInt(str: decNumStrBuff)!
-            binaryStr = convertDoubleToBinary(number: splittedDouble)
+            let splittedDoubleStr: (String, String) = divideToDoubleInt(str: decNumStrBuff)!
+            binaryStr = convertDoubleToBinaryStr(numberStr: splittedDoubleStr)
             
         }
         
@@ -110,7 +110,7 @@ class PCalcViewController: UIViewController {
         return resultStr
     }
     
-    func convertFractToBinary(number: Int) -> String {
+    func convertFractToBinary(numberStr: String) -> String {
         var buffDouble: Double
         var buffStr: String = "0."
         let counter: Int = 8
@@ -118,11 +118,11 @@ class PCalcViewController: UIViewController {
         
        
         // if 0 then dont calculate
-        if number == 0 {
+        if Int(numberStr) == 0 {
             resultStr = "0"
         } else {
             // form double string
-            buffStr.append(String(number))
+            buffStr.append(numberStr)
             buffDouble = Double(buffStr)!
                    
             // convert fract part of number
@@ -137,7 +137,7 @@ class PCalcViewController: UIViewController {
                 }
              }
             // remove ending zeros
-            while resultStr[resultStr.index(before: resultStr.endIndex)] == "0" {
+            while resultStr[resultStr.index(before: resultStr.endIndex)] == "0" && resultStr.count > 1 {
                 resultStr.remove(at: resultStr.index(before: resultStr.endIndex))
             }
         }
@@ -147,63 +147,38 @@ class PCalcViewController: UIViewController {
     }
     
     // Combine to parts to double string
-    func convertDoubleToBinary(number: (Int,Int)) -> String {
-        return "\(convertIntToBinary(number: number.0)).\(convertFractToBinary(number: number.1))"
+    func convertDoubleToBinaryStr(numberStr: (String,String)) -> String {
+        let intNumber = Int(numberStr.0)!
+        
+        return "\(convertIntToBinary(number: intNumber)).\(convertFractToBinary(numberStr: numberStr.1))"
     }
     
     // Dividing string variable and converting it to double without loss of precision
-    func divideToFloatInt(str: String) -> (Int, Int)? {
-           var numberInt: Int = 0
-           var numberFract: Int = 0
-           var pointPos: String.Index
-           var counter: Int = 0
-           var iterator: Int = 0
-           var multiplier: Int = 1
-    
-           // check for floating point
-           guard str.contains(".") else {
-               return nil
-           }
+    func divideToDoubleInt(str: String) -> (String, String)? {
+        
+        var strInt: String
+        var strFract: String
+        var pointPos: String.Index
+
+        // check for floating point
+        guard str.contains(".") else {
+            return nil
+        }
            
-           // search index of floating pos
-           pointPos = str.firstIndex(of: ".")!
+        // search index of floating pos
+        pointPos = str.firstIndex(of: ".")!
            
-           // fill numberInt
-           counter = str.distance(from: str.startIndex, to: pointPos)
-           multiplier = 1
-           iterator = -1
-           while counter > 0 {
-               
-               // TODO Erorr handling
-               let newIndex: String.Index = str.index(pointPos, offsetBy: iterator)
-               let strCharInt: String = String(str[newIndex])
-               let num: Int = Int(strCharInt)!
-               numberInt += num  * multiplier
-               multiplier *= 10
-               counter -= 1
-               iterator -= 1
-           }
+        // fill strInt
+        strInt = String(str[str.startIndex..<pointPos])
            
-           // fill numberFract
-           counter = str.distance(from: str.endIndex, to: pointPos)
-           counter = abs(counter)
-           multiplier = 1
-           iterator = counter - 1
-           while counter > 1 {
-               
-               // TODO Erorr handling
-               let newIndex: String.Index = str.index(pointPos, offsetBy: iterator)
-               let strCharInt: String = String(str[newIndex])
-               let num: Int = Int(strCharInt)!
-               numberFract += num  * multiplier
-               multiplier *= 10
-               counter -= 1
-               iterator -= 1
-           }
+        // fill strFract
+        strFract = String(str[pointPos..<str.endIndex])
+        // delete .
+        strFract.remove(at: strFract.startIndex)
            
            
-           print(" \(numberInt)...\(numberFract)")
-           return (numberInt, numberFract)
+        print(" \(strInt)...\(strFract)")
+        return (strInt, strFract)
     }
     
     // Calculation of 2 decimal numbers by .operation
