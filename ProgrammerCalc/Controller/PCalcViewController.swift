@@ -192,66 +192,32 @@ class PCalcViewController: UIViewController {
     func calculateDecNumbers(firstNum: String, secondNum: String, operation: CalcState.mathOperation) -> String? {
         var resultStr: String = String()
         
+        let firstDecimal = Decimal(string: firstNum)
+        let secondDecimal = Decimal(string: secondNum)
+        
         switch operation {
         // Addition
         case .add:
-            if let firstInt = Int(firstNum), let secondNum = Int(secondNum) {
-                // addition for ints
-                resultStr = String( firstInt + secondNum )
-            } else if firstNum.contains(".") || secondNum.contains(".") {
-                // addition for floating values
-                let firstDecimal = Decimal(string: firstNum)
-                let secondDecimal = Decimal(string: secondNum)
-                
-                resultStr = "\(firstDecimal! + secondDecimal!)"
-            }
+            resultStr = "\(firstDecimal! + secondDecimal!)"
             break
-            
         // Subtraction
         case .sub:
-            if let firstInt = Int(firstNum), let secondNum = Int(secondNum) {
-                // subtraction for ints
-                resultStr = String( firstInt - secondNum )
-            } else if firstNum.contains(".") || secondNum.contains(".") {
-                // subtraction for floating values
-                let firstDecimal = Decimal(string: firstNum)
-                let secondDecimal = Decimal(string: secondNum)
-                               
-                resultStr = "\(firstDecimal! - secondDecimal!)"
-            }
+            resultStr = "\(firstDecimal! - secondDecimal!)"
             break
         // Multiplication
         case .mul:
-            if let firstInt = Int(firstNum), let secondNum = Int(secondNum) {
-                // multiplication for ints
-                resultStr = String( firstInt * secondNum )
-            } else if firstNum.contains(".") || secondNum.contains(".") {
-                // multiplication for floating values
-                let firstDecimal = Decimal(string: firstNum)
-                let secondDecimal = Decimal(string: secondNum)
-                                   
-                resultStr = "\(firstDecimal! * secondDecimal!)"
-            }
+            resultStr = "\(firstDecimal! * secondDecimal!)"
             break
         // Division
         case .div:
-            guard secondNum != "0" else {
+            // if dvision by zero
+            guard secondDecimal != 0 else {
                 return "Division by zero"
             }
-            if let firstInt = Int(firstNum), let secondNum = Int(secondNum) {
-                // multiplication for ints
-                resultStr = String( firstInt / secondNum )
-            } else if firstNum.contains(".") || secondNum.contains(".") {
-                // multiplication for floating values
-                let firstDecimal = Decimal(string: firstNum)
-                let secondDecimal = Decimal(string: secondNum)
-                                   
-                resultStr = "\(firstDecimal! / secondDecimal!)"
-            }
+            resultStr = "\(firstDecimal! / secondDecimal!)"
             break
     
         }
-
         
         return resultStr
     }
@@ -281,7 +247,11 @@ class PCalcViewController: UIViewController {
         // if error mesage in label
         // TODO: Better Error handling
         if Double(label.text!) == nil {
-            label.text = buttonText
+            if buttonText == "." {
+                label.text = "0."
+            } else {
+                label.text = buttonText
+            }
             updateConverterLabel()
             return
         }
@@ -398,8 +368,19 @@ class PCalcViewController: UIViewController {
         let buttonText = button.titleLabel!.text ?? ""
         let label = mainLabel
         let convertLabel = converterLabel
+        // tag for AC/C button
+        let acButton = self.view.viewWithTag(100) as! UIButton
         
         print("Button \(buttonText) touched")
+        
+        // if error mesage in label
+        // TODO: Better Error handling
+        if Double(label.text!) == nil {
+            label.text! = "0"
+            convertLabel.text! = "0"
+            acButton.setTitle("AC", for: .normal)
+            calcState = nil
+        }
         
         switch buttonText {
         // Clear buttons
