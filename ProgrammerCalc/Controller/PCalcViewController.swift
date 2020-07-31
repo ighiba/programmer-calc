@@ -31,8 +31,14 @@ class PCalcViewController: UIViewController {
     // =======
     
     func updateConverterLabel() {
-        // Uptade converter label with converted number
-        converterLabel.text = convertToBinary(decNumStr: mainLabel.text!)
+        print(mainLabel.text!.contains("A...Z"))
+        print(mainLabel.text!)
+        if Double(mainLabel.text!) == nil {
+            converterLabel.text = mainLabel.text
+        } else {
+            // Uptade converter label with converted number
+            converterLabel.text = convertToBinary(decNumStr: mainLabel.text!)
+        }
     }
     
     func convertToBinary( decNumStr: String) -> String {
@@ -193,7 +199,7 @@ class PCalcViewController: UIViewController {
                 // addition for ints
                 resultStr = String( firstInt + secondNum )
             } else if firstNum.contains(".") || secondNum.contains(".") {
-                // addition for floats
+                // addition for floating values
                 let firstDecimal = Decimal(string: firstNum)
                 let secondDecimal = Decimal(string: secondNum)
                 
@@ -203,19 +209,49 @@ class PCalcViewController: UIViewController {
             
         // Subtraction
         case .sub:
-             if let firstInt = Int(firstNum), let secondNum = Int(secondNum) {
-                           // subtraction for ints
-                           resultStr = String( firstInt - secondNum )
-                       } else if firstNum.contains(".") || secondNum.contains(".") {
-                           // subtraction for floats
-                           let firstDecimal = Decimal(string: firstNum)
-                           let secondDecimal = Decimal(string: secondNum)
-                           
-                           resultStr = "\(firstDecimal! - secondDecimal!)"
-                       }
-                       break
+            if let firstInt = Int(firstNum), let secondNum = Int(secondNum) {
+                // subtraction for ints
+                resultStr = String( firstInt - secondNum )
+            } else if firstNum.contains(".") || secondNum.contains(".") {
+                // subtraction for floating values
+                let firstDecimal = Decimal(string: firstNum)
+                let secondDecimal = Decimal(string: secondNum)
+                               
+                resultStr = "\(firstDecimal! - secondDecimal!)"
+            }
+            break
+        // Multiplication
+        case .mul:
+            if let firstInt = Int(firstNum), let secondNum = Int(secondNum) {
+                // multiplication for ints
+                resultStr = String( firstInt * secondNum )
+            } else if firstNum.contains(".") || secondNum.contains(".") {
+                // multiplication for floating values
+                let firstDecimal = Decimal(string: firstNum)
+                let secondDecimal = Decimal(string: secondNum)
+                                   
+                resultStr = "\(firstDecimal! * secondDecimal!)"
+            }
+            break
+        // Division
+        case .div:
+            guard secondNum != "0" else {
+                return "Division by zero"
+            }
+            if let firstInt = Int(firstNum), let secondNum = Int(secondNum) {
+                // multiplication for ints
+                resultStr = String( firstInt / secondNum )
+            } else if firstNum.contains(".") || secondNum.contains(".") {
+                // multiplication for floating values
+                let firstDecimal = Decimal(string: firstNum)
+                let secondDecimal = Decimal(string: secondNum)
+                                   
+                resultStr = "\(firstDecimal! / secondDecimal!)"
+            }
+            break
     
         }
+
         
         return resultStr
     }
@@ -241,6 +277,14 @@ class PCalcViewController: UIViewController {
         let acButton = self.view.viewWithTag(100) as! UIButton
         
         print("Button \(buttonText) touched")
+        
+        // if error mesage in label
+        // TODO: Better Error handling
+        if Double(label.text!) == nil {
+            label.text = buttonText
+            updateConverterLabel()
+            return
+        }
         
         // bool calculates overflowing of mainLabel number for int and float value
         let isOverflowed: Bool = {
@@ -358,7 +402,7 @@ class PCalcViewController: UIViewController {
         print("Button \(buttonText) touched")
         
         switch buttonText {
-        // clear buttons
+        // Clear buttons
         case "AC":
             label.text! = "0"
             convertLabel.text! = "0"
@@ -370,7 +414,7 @@ class PCalcViewController: UIViewController {
             button.setTitle("AC", for: .normal)
             calcState = nil
             break
-        // invert button
+        // Invert button
         case "\u{00B1}":
             if label.text != "0" {
                 // if number is already signed
@@ -385,7 +429,39 @@ class PCalcViewController: UIViewController {
             }
             updateConverterLabel()
             break
-        // minus button
+        // Subtraction button
+        case "\u{00f7}":
+            // calc results
+            if calcState != nil {
+                print("calculation")
+                if let result = calculateDecNumbers(firstNum: calcState!.buffValue, secondNum: label.text!, operation: calcState!.operation) {
+                    label.text = result
+                    updateConverterLabel()
+                    calcState = nil
+                    calcState = CalcState(buffValue: label.text!, operation: .div)
+                    calcState?.lastResult = result
+                }
+            } else {
+                calcState = CalcState(buffValue: label.text!, operation: .div)
+            }
+            break
+        // Multiplication button
+        case "X":
+            // calc results
+            if calcState != nil {
+                print("calculation")
+                if let result = calculateDecNumbers(firstNum: calcState!.buffValue, secondNum: label.text!, operation: calcState!.operation) {
+                    label.text = result
+                    updateConverterLabel()
+                    calcState = nil
+                    calcState = CalcState(buffValue: label.text!, operation: .mul)
+                    calcState?.lastResult = result
+                }
+            } else {
+                calcState = CalcState(buffValue: label.text!, operation: .mul)
+            }
+            break
+        // Multiplication button
         case "-":
             // calc results
             if calcState != nil {
@@ -401,6 +477,7 @@ class PCalcViewController: UIViewController {
                 calcState = CalcState(buffValue: label.text!, operation: .sub)
             }
             break
+        // Addition button
         case "+":
             // calc results
             if calcState != nil {

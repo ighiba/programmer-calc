@@ -13,6 +13,8 @@ struct CalcState {
     enum mathOperation {
         case add
         case sub
+        case mul
+        case div
     }
     
     var buffValue: String
