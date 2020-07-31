@@ -184,7 +184,7 @@ class PCalcViewController: UIViewController {
     // Calculation of 2 decimal numbers by .operation
     // TODO: Make error handling for overflow
     func calculateDecNumbers(firstNum: String, secondNum: String, operation: CalcState.mathOperation) -> String? {
-        var resultStr: String?
+        var resultStr: String = String()
         
         switch operation {
         // Addition
@@ -194,11 +194,10 @@ class PCalcViewController: UIViewController {
                 resultStr = String( firstInt + secondNum )
             } else if firstNum.contains(".") || secondNum.contains(".") {
                 // addition for floats
-                let firstFloat = Double(firstNum)
-                let secondFloat = Double(secondNum)
+                let firstDecimal = Decimal(string: firstNum)
+                let secondDecimal = Decimal(string: secondNum)
                 
-                resultStr = String( round((firstFloat! + secondFloat!) * 1000)/1000 )
-                // TODO: float number addition
+                resultStr = "\(firstDecimal! + secondDecimal!)"
             }
             break
             
@@ -209,11 +208,10 @@ class PCalcViewController: UIViewController {
                            resultStr = String( firstInt - secondNum )
                        } else if firstNum.contains(".") || secondNum.contains(".") {
                            // subtraction for floats
-                           let firstFloat = Double(firstNum)
-                           let secondFloat = Double(secondNum)
+                           let firstDecimal = Decimal(string: firstNum)
+                           let secondDecimal = Decimal(string: secondNum)
                            
-                           resultStr = String( round((firstFloat! - secondFloat!) * 1000)/1000 )
-                           // TODO: float number subtraction
+                           resultStr = "\(firstDecimal! - secondDecimal!)"
                        }
                        break
     
