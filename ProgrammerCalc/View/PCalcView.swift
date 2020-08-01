@@ -44,6 +44,7 @@ class PCalcView: UICollectionView {
         }
         
         allViews.addSubview(buttonsStackView)
+        allViews.addSubview(converterInfo)
         setupLayout()
     }
     
@@ -158,6 +159,58 @@ class PCalcView: UICollectionView {
         return buttons
     }()
     
+    // View for converting information
+    
+    lazy var converterInfo: UIView = {
+        let view = UIView()
+        
+        view.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+        
+        view.addSubview(self.arrow)
+        view.addSubview(self.numNotation)
+        view.addSubview(self.numNotationConverted)
+        
+        return view
+    }()
+    
+    lazy var arrow: UILabel = {
+        let label = UILabel()
+        
+        label.frame = CGRect( x: 370, y: 165, width: 50, height: 50)
+        label.text = "↓"
+        // set font size, font family
+        label.font = UIFont(name: "HelveticaNeue-Thin", size: 32.0)
+        label.textAlignment = .right
+        
+        return label
+    }()
+    
+    lazy var numNotation: UILabel = {
+
+        let label = UILabel()
+        
+        label.frame = CGRect( x: 345, y: 165, width: 25, height: 25)
+        label.text = "10"
+        // set font size, font family
+        label.font = UIFont(name: "HelveticaNeue-Thin", size: 12.0)
+        label.textAlignment = .right
+        
+        return label
+
+    }()
+    
+    lazy var numNotationConverted: UILabel = {
+        let label = UILabel()
+        
+        label.frame = CGRect( x: 345, y: 185, width: 25, height: 25)
+        label.text = "2"
+        // set font size, font family
+        label.font = UIFont(name: "HelveticaNeue-Thin", size: 12.0)
+        label.textAlignment = .right
+        
+        return label
+    }()
+    
     
     private func setupLayout() {
         // Constraints for main label
@@ -165,6 +218,7 @@ class PCalcView: UICollectionView {
         // width and height anchors
         mainLabel.widthAnchor.constraint(equalTo: allViews.widthAnchor).isActive = true
         mainLabel.heightAnchor.constraint(equalToConstant: labelHeight()).isActive = true
+        //mainLabel.heightAnchor.constraint(equalToConstant: labelHeight() * 2 * (3/7)).isActive = true
         // ridght and left anchors
         mainLabel.rightAnchor.constraint(equalTo: allViews.rightAnchor).isActive = true
         mainLabel.leftAnchor.constraint(equalTo: allViews.leftAnchor).isActive = true
@@ -176,6 +230,7 @@ class PCalcView: UICollectionView {
         // width and height anchors
         converterLabel.widthAnchor.constraint(equalTo: allViews.widthAnchor).isActive = true
         converterLabel.heightAnchor.constraint(equalToConstant: labelHeight()).isActive = true
+        //converterLabel.heightAnchor.constraint(equalToConstant: labelHeight() * 2 * (4/7)).isActive = true
         // ridght and left anchors
         converterLabel.rightAnchor.constraint(equalTo: allViews.rightAnchor).isActive = true
         converterLabel.leftAnchor.constraint(equalTo: allViews.leftAnchor).isActive = true
@@ -198,6 +253,30 @@ class PCalcView: UICollectionView {
         buttonsStackView.topAnchor.constraint(lessThanOrEqualTo: converterLabel.bottomAnchor, constant: 15).isActive = true
         // bottom anchor === spacing
         buttonsStackView.bottomAnchor.constraint(greaterThanOrEqualTo: allViews.safeAreaLayoutGuide.bottomAnchor, constant: -15).isActive = true
+        
+        // Contraints for converter information
+        converterInfo.translatesAutoresizingMaskIntoConstraints = false
+        // width and height anchors
+        converterInfo.widthAnchor.constraint(equalToConstant: 35).isActive = true
+        converterInfo.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        // ridght and left anchors
+        converterInfo.trailingAnchor.constraint(equalTo: allViews.trailingAnchor).isActive = true
+        converterInfo.centerYAnchor.constraint(equalTo: mainLabel.bottomAnchor).isActive = true
+        
+        // contraints for down arrow
+        arrow.translatesAutoresizingMaskIntoConstraints = false
+        arrow.trailingAnchor.constraint(equalTo: converterInfo.trailingAnchor).isActive = true
+        
+        // contraints for input value notation
+        numNotation.translatesAutoresizingMaskIntoConstraints = false
+        numNotation.trailingAnchor.constraint(equalTo: arrow.leadingAnchor, constant: 5).isActive = true
+        numNotation.topAnchor.constraint(equalTo: converterInfo.topAnchor).isActive = true
+        
+        // contraints for output value notation
+        numNotationConverted.translatesAutoresizingMaskIntoConstraints = false
+        numNotationConverted.trailingAnchor.constraint(equalTo: arrow.leadingAnchor, constant: 5).isActive = true
+        numNotationConverted.bottomAnchor.constraint(equalTo: converterInfo.bottomAnchor).isActive = true
+        
     }
     
     // Dynamic label height for autolayout

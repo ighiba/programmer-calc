@@ -543,7 +543,6 @@ class PCalcViewController: UIViewController {
             break
         }
         
-        print(calcState)
     }
 
 }
