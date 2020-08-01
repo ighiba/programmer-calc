@@ -31,8 +31,6 @@ class PCalcViewController: UIViewController {
     // =======
     
     func updateConverterLabel() {
-        print(mainLabel.text!.contains("A...Z"))
-        print(mainLabel.text!)
         if Double(mainLabel.text!) == nil {
             converterLabel.text = mainLabel.text
         } else {
@@ -88,6 +86,7 @@ class PCalcViewController: UIViewController {
             // TODO: Delete end zeros for float binary nums
         }
         
+        
         print(binaryStr)
         
         return binaryStr
@@ -107,10 +106,37 @@ class PCalcViewController: UIViewController {
             resultStr.append(contentsOf: String(reminder))
         }
         
-        //if no divide
+        // if no divide
         if divisible == 0 || divisible == 1 {
             resultStr.append(contentsOf: String(divisible))
             resultStr = String(resultStr.reversed())
+        }
+        
+        // Divide number by discharges
+        // if count of digits more than or equal to 1 AND number not 0
+        if resultStr.count >= 1 && resultStr != "0" {
+            var counter: Int = 0
+            var buffStr: String = String()
+            
+            resultStr = String(resultStr.reversed())
+            
+            resultStr.forEach { (char) in
+                if counter == 3 {
+                    buffStr.append("\(char) ")
+                    counter = 0
+                } else {
+                    buffStr.append(char)
+                    counter += 1
+                }
+            }
+            
+            // add zeroes before for filling th discharges
+            if counter > 0 {
+                for _ in 0...3-counter {
+                    buffStr.append("0")
+                }
+            }
+            resultStr = String(buffStr.reversed())
         }
 
         return resultStr
@@ -119,7 +145,6 @@ class PCalcViewController: UIViewController {
     func convertFractToBinary(numberStr: String) -> String {
         var buffDouble: Double
         var buffStr: String = "0."
-        let counter: Int = 8
         var resultStr: String = String()
         
        
@@ -127,6 +152,7 @@ class PCalcViewController: UIViewController {
         if Int(numberStr) == 0 {
             resultStr = "0"
         } else {
+            let counter: Int = 8
             // form double string
             buffStr.append(numberStr)
             buffDouble = Double(buffStr)!
@@ -143,12 +169,37 @@ class PCalcViewController: UIViewController {
                 }
              }
             // remove ending zeros
-            while resultStr[resultStr.index(before: resultStr.endIndex)] == "0" && resultStr.count > 1 {
-                resultStr.remove(at: resultStr.index(before: resultStr.endIndex))
+//            while resultStr[resultStr.index(before: resultStr.endIndex)] == "0" && resultStr.count > 1 {
+//                resultStr.remove(at: resultStr.index(before: resultStr.endIndex))
+//            }
+        }
+        
+        // Divide number by discharges
+        // if count of digits more than or equal to 1 AND number not 0
+        if resultStr.count >= 1 && resultStr != "0" {
+            var counter: Int = 0
+            buffStr = String()
+            
+            resultStr.forEach { (char) in
+                if counter == 3 {
+                    buffStr.append("\(char) ")
+                    counter = 0
+                } else {
+                    buffStr.append(char)
+                    counter += 1
+                }
+            }
+            
+            // add zeroes after for filling th discharges
+            if counter > 0 {
+                for _ in 0...3-counter {
+                    buffStr.append("0")
+                }
             }
         }
         
-        
+        resultStr = buffStr
+        print(resultStr)
         return resultStr
     }
     
@@ -212,6 +263,7 @@ class PCalcViewController: UIViewController {
         case .div:
             // if dvision by zero
             guard secondDecimal != 0 else {
+                // TODO Make error code and replace hardcode
                 return "Division by zero"
             }
             resultStr = "\(firstDecimal! / secondDecimal!)"

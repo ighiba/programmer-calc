@@ -59,8 +59,8 @@ class PCalcView: UICollectionView {
         label.text = "0"
         label.backgroundColor = .white
         // set font size, font family
-        //mainLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 72.0)
-        label.font = UIFont.systemFont(ofSize: 72.0, weight: UIFont.Weight.thin)
+        label.font = UIFont(name: "HelveticaNeue-Thin", size: 72.0)
+        //label.font = UIFont.systemFont(ofSize: 72.0, weight: UIFont.Weight.thin)
         label.textAlignment = .right
         // set borders
         label.layer.borderWidth = 0.5
@@ -68,8 +68,8 @@ class PCalcView: UICollectionView {
         // round corners
         label.layer.cornerRadius = 0.0
         // resizeble text
-        label.minimumScaleFactor = 0.5
         label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
         
         return label
     }()
@@ -81,10 +81,11 @@ class PCalcView: UICollectionView {
         
         label.frame = CGRect( x: Double(0), y: Double(120), width: 372.0, height: 100.0)
         label.text = "0"
+        label.numberOfLines = 2
         label.backgroundColor = .white
         // set font size, font family
-        //mainLabel.font = UIFont(name: "HelveticaNeue-Thin", size: 72.0)
-        label.font = UIFont.systemFont(ofSize: 62.0, weight: UIFont.Weight.thin)
+        label.font = UIFont(name: "HelveticaNeue-Thin", size: 62.0)
+        //label.font = UIFont.systemFont(ofSize: 62.0, weight: UIFont.Weight.thin)
         label.textAlignment = .right
         // set borders
         label.layer.borderWidth = 0.5
@@ -92,8 +93,8 @@ class PCalcView: UICollectionView {
         // round corners
         label.layer.cornerRadius = 0.0
         // resizeble text
-        label.minimumScaleFactor = 0.5
         label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.25
          
          return label
     }()

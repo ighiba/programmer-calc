@@ -3,4 +3,86 @@
    uuid = "CAAFD87C-E96C-4E19-B19A-E9B8F96B0521"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F1CA1135-E346-46ED-9997-5F666543CED4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ProgrammerCalc/Controller/PCalcViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "179"
+            endingLineNumber = "179"
+            landmarkName = "convertFractToBinary(numberStr:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0D661EE2-53E9-4864-985F-1ED3A74D2EF2"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ProgrammerCalc/Controller/PCalcViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "183"
+            endingLineNumber = "183"
+            landmarkName = "convertFractToBinary(numberStr:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "0D661EE2-53E9-4864-985F-1ED3A74D2EF2 - 6b6ebed3064a6f51"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "ProgrammerCalc.PCalcViewController.convertFractToBinary(numberStr: Swift.String) -&gt; Swift.String"
+                  moduleName = "ProgrammerCalc"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ighiba/Documents/xcode_apps/ProgrammerCalc/ProgrammerCalc/Controller/PCalcViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "183"
+                  endingLineNumber = "183"
+                  offsetFromSymbolStart = "1667">
+               </Location>
+               <Location
+                  uuid = "0D661EE2-53E9-4864-985F-1ED3A74D2EF2 - 1402ab2e4e76e22f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Character) -&gt; () in ProgrammerCalc.PCalcViewController.convertFractToBinary(numberStr: Swift.String) -&gt; Swift.String"
+                  moduleName = "ProgrammerCalc"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ighiba/Documents/xcode_apps/ProgrammerCalc/ProgrammerCalc/Controller/PCalcViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "184"
+                  endingLineNumber = "184"
+                  offsetFromSymbolStart = "158">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9D6FB40B-A9BD-482A-84CC-BBE9D82D9964"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ProgrammerCalc/Controller/PCalcViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "194"
+            endingLineNumber = "194"
+            landmarkName = "convertFractToBinary(numberStr:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
