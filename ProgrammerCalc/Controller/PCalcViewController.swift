@@ -11,7 +11,7 @@ import UIKit
 class PCalcViewController: UIViewController {
     
     var calcState: CalcState?
-    let calcView: PCalcView = PCalcView(frame: CGRect(), collectionViewLayout: UICollectionViewLayout())
+    let calcView: PCalcView = PCalcView()
     lazy var mainLabel: UILabel = calcView.mainLabel
     lazy var converterLabel: UILabel = calcView.converterLabel
     
@@ -19,8 +19,8 @@ class PCalcViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = .white
-        self.view.addSubview(calcView.allViews)
+        // set view from PCalcView
+        self.view = calcView
 
     }
     

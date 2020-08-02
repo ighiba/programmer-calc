@@ -8,18 +8,22 @@
 
 import UIKit
 
-class PCalcView: UICollectionView {
-    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
-        super.init(frame: frame, collectionViewLayout: layout)
+class PCalcView: UIView {
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         
         setViews()
     }
     
     
     func setViews() {
-        allViews.frame = UIScreen.main.bounds
-        allViews.addSubview(mainLabel)
-        allViews.addSubview(converterLabel)
+        self.backgroundColor = .white
+        self.frame = UIScreen.main.bounds
+        
+        // add labels
+        self.addSubview(mainLabel)
+        self.addSubview(converterLabel)
         
         // stuff for create buttonStackView
         var buffStackView: UIStackView = UIStackView()
@@ -43,15 +47,14 @@ class PCalcView: UICollectionView {
             counter += 1
         }
         
-        allViews.addSubview(buttonsStackView)
-        allViews.addSubview(converterInfo)
-        allViews.addSubview(changeConversion)
+        self.addSubview(buttonsStackView)
+        self.addSubview(converterInfo)
+        self.addSubview(changeConversion)
         setupLayout()
     }
     
-    let allViews: UIView = UIView()
+    // Horizontal main calc buttons stack
     let buttonsStackView: UIStackView = UIStackView()
-    
     
     // Label wich shows user input
     lazy var mainLabel: UILabel = {
@@ -242,24 +245,24 @@ class PCalcView: UICollectionView {
         // Constraints for main label
         mainLabel.translatesAutoresizingMaskIntoConstraints = false
         // width and height anchors
-        mainLabel.widthAnchor.constraint(equalTo: allViews.widthAnchor).isActive = true
+        mainLabel.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
         //mainLabel.heightAnchor.constraint(equalToConstant: labelHeight()).isActive = true
         mainLabel.heightAnchor.constraint(equalToConstant: labelHeight() * 2 * (5/11)).isActive = true
         // ridght and left anchors
-        mainLabel.rightAnchor.constraint(equalTo: allViews.rightAnchor).isActive = true
-        mainLabel.leftAnchor.constraint(equalTo: allViews.leftAnchor).isActive = true
+        mainLabel.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
+        mainLabel.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
         // top anchor with safe area
-        mainLabel.topAnchor.constraint(equalTo: allViews.safeAreaLayoutGuide.topAnchor).isActive = true
+        mainLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor).isActive = true
         
         // Constraints for converter label
         converterLabel.translatesAutoresizingMaskIntoConstraints = false
         // width and height anchors
-        converterLabel.widthAnchor.constraint(equalTo: allViews.widthAnchor).isActive = true
+        converterLabel.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
         //converterLabel.heightAnchor.constraint(equalToConstant: labelHeight()).isActive = true
         converterLabel.heightAnchor.constraint(equalToConstant: labelHeight() * 2 * (5/11)).isActive = true
         // ridght and left anchors
-        converterLabel.rightAnchor.constraint(equalTo: allViews.rightAnchor).isActive = true
-        converterLabel.leftAnchor.constraint(equalTo: allViews.leftAnchor).isActive = true
+        converterLabel.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
+        converterLabel.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
         // top anchor to main label
         converterLabel.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 15).isActive = true
         
@@ -272,13 +275,13 @@ class PCalcView: UICollectionView {
         // Constraints for buttons (Main)
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
         // width = main view width - spacing * 2
-        buttonsStackView.widthAnchor.constraint(equalToConstant: allViews.frame.width - 30).isActive = true
+        buttonsStackView.widthAnchor.constraint(equalToConstant: self.frame.width - 30).isActive = true
         // left anchor == spacing
-        buttonsStackView.leadingAnchor.constraint(lessThanOrEqualTo: allViews.safeAreaLayoutGuide.leadingAnchor, constant: 15).isActive = true
+        buttonsStackView.leadingAnchor.constraint(lessThanOrEqualTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 15).isActive = true
         // top anchor == spacing
         buttonsStackView.topAnchor.constraint(lessThanOrEqualTo: converterLabel.bottomAnchor, constant: 10).isActive = true
         // bottom anchor === spacing
-        buttonsStackView.bottomAnchor.constraint(greaterThanOrEqualTo: allViews.safeAreaLayoutGuide.bottomAnchor, constant: -15).isActive = true
+        buttonsStackView.bottomAnchor.constraint(greaterThanOrEqualTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -15).isActive = true
         
         // Contraints for converter information
         converterInfo.translatesAutoresizingMaskIntoConstraints = false
@@ -286,7 +289,7 @@ class PCalcView: UICollectionView {
         converterInfo.widthAnchor.constraint(equalToConstant: 35).isActive = true
         converterInfo.heightAnchor.constraint(equalToConstant: 35).isActive = true
         // ridght and left anchors
-        converterInfo.trailingAnchor.constraint(equalTo: allViews.trailingAnchor).isActive = true
+        converterInfo.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
         converterInfo.centerYAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 5).isActive = true
         
         // contraints for down arrow
@@ -310,7 +313,7 @@ class PCalcView: UICollectionView {
         changeConversion.widthAnchor.constraint(equalToConstant: 163).isActive = true
         changeConversion.heightAnchor.constraint(equalToConstant: 25).isActive = true
         // ridght and left anchors
-        changeConversion.leadingAnchor.constraint(equalTo: allViews.leadingAnchor, constant: 10).isActive = true
+        changeConversion.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
         changeConversion.centerYAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 10).isActive = true
         
     }
