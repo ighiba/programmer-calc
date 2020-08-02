@@ -196,9 +196,10 @@ class PCalcViewController: UIViewController {
                     buffStr.append("0")
                 }
             }
+            resultStr = buffStr
         }
         
-        resultStr = buffStr
+        
         print(resultStr)
         return resultStr
     }

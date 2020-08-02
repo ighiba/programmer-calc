@@ -64,13 +64,13 @@ class PCalcView: UICollectionView {
         //label.font = UIFont.systemFont(ofSize: 72.0, weight: UIFont.Weight.thin)
         label.textAlignment = .right
         // set borders
-        label.layer.borderWidth = 0.5
-        label.layer.borderColor = UIColor.lightGray.cgColor
+        //label.layer.borderWidth = 0.5
+        //label.layer.borderColor = UIColor.lightGray.cgColor
         // round corners
         label.layer.cornerRadius = 0.0
         // resizeble text
         label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.5
+        label.minimumScaleFactor = 0.4
         
         return label
     }()
@@ -89,8 +89,8 @@ class PCalcView: UICollectionView {
         //label.font = UIFont.systemFont(ofSize: 62.0, weight: UIFont.Weight.thin)
         label.textAlignment = .right
         // set borders
-        label.layer.borderWidth = 0.5
-        label.layer.borderColor = UIColor.lightGray.cgColor
+        //label.layer.borderWidth = 0.5
+        //label.layer.borderColor = UIColor.lightGray.cgColor
         // round corners
         label.layer.cornerRadius = 0.0
         // resizeble text
@@ -178,8 +178,9 @@ class PCalcView: UICollectionView {
         
         label.frame = CGRect( x: 370, y: 165, width: 50, height: 50)
         label.text = "↓"
-        // set font size, font family
+        // set font size, font family, color, alligment
         label.font = UIFont(name: "HelveticaNeue-Thin", size: 32.0)
+        label.textColor = .lightGray
         label.textAlignment = .right
         
         return label
@@ -191,8 +192,9 @@ class PCalcView: UICollectionView {
         
         label.frame = CGRect( x: 345, y: 165, width: 25, height: 25)
         label.text = "10"
-        // set font size, font family
+        // set font size, font family, color, alligment
         label.font = UIFont(name: "HelveticaNeue-Thin", size: 12.0)
+        label.textColor = .lightGray
         label.textAlignment = .right
         
         return label
@@ -204,8 +206,9 @@ class PCalcView: UICollectionView {
         
         label.frame = CGRect( x: 345, y: 185, width: 25, height: 25)
         label.text = "2"
-        // set font size, font family
+        // set font size, font family, color, alligment
         label.font = UIFont(name: "HelveticaNeue-Thin", size: 12.0)
+        label.textColor = .lightGray
         label.textAlignment = .right
         
         return label
@@ -217,8 +220,8 @@ class PCalcView: UICollectionView {
         mainLabel.translatesAutoresizingMaskIntoConstraints = false
         // width and height anchors
         mainLabel.widthAnchor.constraint(equalTo: allViews.widthAnchor).isActive = true
-        mainLabel.heightAnchor.constraint(equalToConstant: labelHeight()).isActive = true
-        //mainLabel.heightAnchor.constraint(equalToConstant: labelHeight() * 2 * (3/7)).isActive = true
+        //mainLabel.heightAnchor.constraint(equalToConstant: labelHeight()).isActive = true
+        mainLabel.heightAnchor.constraint(equalToConstant: labelHeight() * 2 * (5/11)).isActive = true
         // ridght and left anchors
         mainLabel.rightAnchor.constraint(equalTo: allViews.rightAnchor).isActive = true
         mainLabel.leftAnchor.constraint(equalTo: allViews.leftAnchor).isActive = true
@@ -229,13 +232,13 @@ class PCalcView: UICollectionView {
         converterLabel.translatesAutoresizingMaskIntoConstraints = false
         // width and height anchors
         converterLabel.widthAnchor.constraint(equalTo: allViews.widthAnchor).isActive = true
-        converterLabel.heightAnchor.constraint(equalToConstant: labelHeight()).isActive = true
-        //converterLabel.heightAnchor.constraint(equalToConstant: labelHeight() * 2 * (4/7)).isActive = true
+        //converterLabel.heightAnchor.constraint(equalToConstant: labelHeight()).isActive = true
+        converterLabel.heightAnchor.constraint(equalToConstant: labelHeight() * 2 * (5/11)).isActive = true
         // ridght and left anchors
         converterLabel.rightAnchor.constraint(equalTo: allViews.rightAnchor).isActive = true
         converterLabel.leftAnchor.constraint(equalTo: allViews.leftAnchor).isActive = true
         // top anchor to main label
-        converterLabel.topAnchor.constraint(equalTo: mainLabel.bottomAnchor).isActive = true
+        converterLabel.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 15).isActive = true
         
         
         // Display settings for buttons UIStackView
@@ -250,7 +253,7 @@ class PCalcView: UICollectionView {
         // left anchor == spacing
         buttonsStackView.leadingAnchor.constraint(lessThanOrEqualTo: allViews.safeAreaLayoutGuide.leadingAnchor, constant: 15).isActive = true
         // top anchor == spacing
-        buttonsStackView.topAnchor.constraint(lessThanOrEqualTo: converterLabel.bottomAnchor, constant: 15).isActive = true
+        buttonsStackView.topAnchor.constraint(lessThanOrEqualTo: converterLabel.bottomAnchor, constant: 10).isActive = true
         // bottom anchor === spacing
         buttonsStackView.bottomAnchor.constraint(greaterThanOrEqualTo: allViews.safeAreaLayoutGuide.bottomAnchor, constant: -15).isActive = true
         
@@ -261,7 +264,7 @@ class PCalcView: UICollectionView {
         converterInfo.heightAnchor.constraint(equalToConstant: 35).isActive = true
         // ridght and left anchors
         converterInfo.trailingAnchor.constraint(equalTo: allViews.trailingAnchor).isActive = true
-        converterInfo.centerYAnchor.constraint(equalTo: mainLabel.bottomAnchor).isActive = true
+        converterInfo.centerYAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 5).isActive = true
         
         // contraints for down arrow
         arrow.translatesAutoresizingMaskIntoConstraints = false
@@ -269,7 +272,7 @@ class PCalcView: UICollectionView {
         
         // contraints for input value notation
         numNotation.translatesAutoresizingMaskIntoConstraints = false
-        numNotation.trailingAnchor.constraint(equalTo: arrow.leadingAnchor, constant: 5).isActive = true
+        numNotation.trailingAnchor.constraint(equalTo: arrow.leadingAnchor, constant: 8).isActive = true
         numNotation.topAnchor.constraint(equalTo: converterInfo.topAnchor).isActive = true
         
         // contraints for output value notation
