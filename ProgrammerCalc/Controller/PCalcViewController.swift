@@ -94,7 +94,7 @@ class PCalcViewController: UIViewController {
     
     // converter for number before the point
     
-    func convertIntToBinary(number: Int) -> String {
+    func convertIntToBinary( number: Int) -> String {
         var divisible: Int = number
         var reminder: Int = 0
         var resultStr: String = String()
@@ -142,7 +142,7 @@ class PCalcViewController: UIViewController {
         return resultStr
     }
     
-    func convertFractToBinary(numberStr: String) -> String {
+    func convertFractToBinary( numberStr: String) -> String {
         var buffDouble: Double
         var buffStr: String = "0."
         var resultStr: String = String()
@@ -205,14 +205,14 @@ class PCalcViewController: UIViewController {
     }
     
     // Combine to parts to double string
-    func convertDoubleToBinaryStr(numberStr: (String,String)) -> String {
+    func convertDoubleToBinaryStr( numberStr: (String,String)) -> String {
         let intNumber = Int(numberStr.0)!
         
         return "\(convertIntToBinary(number: intNumber)).\(convertFractToBinary(numberStr: numberStr.1))"
     }
     
     // Dividing string variable and converting it to double without loss of precision
-    func divideToDoubleInt(str: String) -> (String, String)? {
+    func divideToDoubleInt( str: String) -> (String, String)? {
         
         var strInt: String
         var strFract: String
@@ -241,7 +241,7 @@ class PCalcViewController: UIViewController {
     
     // Calculation of 2 decimal numbers by .operation
     // TODO: Make error handling for overflow
-    func calculateDecNumbers(firstNum: String, secondNum: String, operation: CalcState.mathOperation) -> String? {
+    func calculateDecNumbers( firstNum: String, secondNum: String, operation: CalcState.mathOperation) -> String? {
         var resultStr: String = String()
         
         let firstDecimal = Decimal(string: firstNum)
@@ -279,7 +279,7 @@ class PCalcViewController: UIViewController {
     // Actions
     // =======
     
-    @objc func toucUpOutsideAction(sender: UIButton) {
+    @objc func toucUpOutsideAction( sender: UIButton) {
         //print("touchUpOutside")
         //sender.backgroundColor = .red
         //sender.isHighlighted = false
@@ -287,7 +287,7 @@ class PCalcViewController: UIViewController {
     
     // Numeric buttons actions
     
-    @objc func numericButtonTapped(sender: UIButton) {
+    @objc func numericButtonTapped( sender: UIButton) {
         let button = sender
         let buttonText = button.titleLabel!.text ?? ""
         let label = mainLabel
@@ -416,7 +416,7 @@ class PCalcViewController: UIViewController {
     
     // Sign buttons actions
     
-    @objc func signButtonTapped(sender: UIButton) {
+    @objc func signButtonTapped( sender: UIButton) {
         let button = sender
         let buttonText = button.titleLabel!.text ?? ""
         let label = mainLabel
@@ -544,6 +544,20 @@ class PCalcViewController: UIViewController {
             break
         }
         
+    }
+    
+    // Change conversion button tapped
+    @objc func changeButtonTapped( sender: UIButton) {
+        print("Start changing conversion")
+        // initialize vc popover
+        let vc = ConversionViewController()
+        
+        // present settings
+        vc.modalTransitionStyle = .coverVertical
+        vc.modalPresentationStyle = .popover
+        
+        // show popover
+        self.present(vc, animated: true, completion: nil)
     }
 
 }

@@ -45,6 +45,7 @@ class PCalcView: UICollectionView {
         
         allViews.addSubview(buttonsStackView)
         allViews.addSubview(converterInfo)
+        allViews.addSubview(changeConversion)
         setupLayout()
     }
     
@@ -98,6 +99,28 @@ class PCalcView: UICollectionView {
         label.minimumScaleFactor = 0.25
          
          return label
+    }()
+    
+    // Change conversion button
+    let changeConversion: UIButton = {
+        let button = UIButton()
+        
+        button.frame = CGRect(x: 0, y: 0, width: 200, height: 25)
+        
+        button.setTitle("Change conversion ▾", for: .normal)
+        button.titleLabel!.font = UIFont(name: "HelveticaNeue-Thin", size: 16.0)
+        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(.lightGray, for: .highlighted)
+        button.addTarget(nil, action: #selector(PCalcViewController.changeButtonTapped), for: .touchUpInside)
+        
+//        // set borders
+//        button.layer.borderWidth = 0.5
+//        button.layer.borderColor = UIColor.lightGray.cgColor
+//
+//        // round corners
+//        button.layer.cornerRadius = 25/2
+        
+        return button
     }()
     
     // Standart calculator buttons
@@ -180,7 +203,7 @@ class PCalcView: UICollectionView {
         label.text = "↓"
         // set font size, font family, color, alligment
         label.font = UIFont(name: "HelveticaNeue-Thin", size: 32.0)
-        label.textColor = .lightGray
+        //label.textColor = .lightGray
         label.textAlignment = .right
         
         return label
@@ -194,7 +217,7 @@ class PCalcView: UICollectionView {
         label.text = "10"
         // set font size, font family, color, alligment
         label.font = UIFont(name: "HelveticaNeue-Thin", size: 12.0)
-        label.textColor = .lightGray
+        //label.textColor = .lightGray
         label.textAlignment = .right
         
         return label
@@ -208,7 +231,7 @@ class PCalcView: UICollectionView {
         label.text = "2"
         // set font size, font family, color, alligment
         label.font = UIFont(name: "HelveticaNeue-Thin", size: 12.0)
-        label.textColor = .lightGray
+        //label.textColor = .lightGray
         label.textAlignment = .right
         
         return label
@@ -279,6 +302,16 @@ class PCalcView: UICollectionView {
         numNotationConverted.translatesAutoresizingMaskIntoConstraints = false
         numNotationConverted.trailingAnchor.constraint(equalTo: arrow.leadingAnchor, constant: 5).isActive = true
         numNotationConverted.bottomAnchor.constraint(equalTo: converterInfo.bottomAnchor).isActive = true
+        
+        
+        // Constraints for conversion button
+        changeConversion.translatesAutoresizingMaskIntoConstraints = false
+        // width and height anchors
+        changeConversion.widthAnchor.constraint(equalToConstant: 163).isActive = true
+        changeConversion.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        // ridght and left anchors
+        changeConversion.leadingAnchor.constraint(equalTo: allViews.leadingAnchor, constant: 10).isActive = true
+        changeConversion.centerYAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 10).isActive = true
         
     }
     
@@ -357,7 +390,7 @@ class CalculatorButton: UIButton {
         self.layer.borderWidth = 0.5
         self.layer.borderColor = UIColor.lightGray.cgColor
         // round corners
-        self.layer.cornerRadius = 35.0
+        self.layer.cornerRadius = buttonWidth() / 2
     }
     
     func setFrame(xMult: Int, yMult: Int, width fWidth: Double, height fHeight: Double) {
