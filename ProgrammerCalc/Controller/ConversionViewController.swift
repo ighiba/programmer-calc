@@ -9,11 +9,18 @@
 import UIKit
 
 class ConversionViewController: UIViewController {
+    let conv = ConversionView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view = ConversionView()
+        self.view = conv
         print("did loaded popover")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        conv.animateIn()
     }
     
     
@@ -21,10 +28,17 @@ class ConversionViewController: UIViewController {
     // Actions
     // =======
     
-    @objc func doneButtonTapped( sender: UIButton) {
+    @objc func doneButtonTapped2( sender: UIButton) {
         print("done")
         
         // save conversion settings and close popover
-        self.dismiss(animated: true, completion: nil)
+        conv.animateOut {
+            self.dismiss(animated: false, completion: nil)
+        }
+        
+        
     }
+    
+    
+    
 }
