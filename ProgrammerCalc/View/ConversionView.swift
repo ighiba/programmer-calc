@@ -31,6 +31,12 @@ class ConversionView: UIView {
         setupLayout()
     }
     
+    // Update values for picker, label and slider
+    func updateValues() {
+        
+    }
+    
+    // Setup layout
     func setupLayout() {
         //let screenWidth = UIScreen.main.bounds.width
         

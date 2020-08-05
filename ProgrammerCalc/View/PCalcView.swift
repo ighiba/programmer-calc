@@ -21,6 +21,9 @@ class PCalcView: UIView {
         self.backgroundColor = .white
         self.frame = UIScreen.main.bounds
         
+        // add navigation bar
+        self.addSubview(navigationBar)
+        
         // add labels
         self.addSubview(mainLabel)
         self.addSubview(converterLabel)
@@ -48,14 +51,33 @@ class PCalcView: UIView {
         }
         
         self.addSubview(buttonsStackView)
-        self.addSubview(converterInfo)
-        self.addSubview(changeConversion)
+        //self.addSubview(converterInfo)
+        //self.addSubview(changeConversion)
         setupLayout()
     }
     
     // Horizontal main calc buttons stack
     let buttonsStackView: UIStackView = UIStackView()
     
+    
+    // Set navigation bar
+    fileprivate let navigationBar: UINavigationBar = {
+        // Set navigation bar
+        let navBar = UINavigationBar(frame: CGRect())
+        let navItem = UINavigationItem()
+        let changeItem = UIBarButtonItem(title: "Change conversion", style: .plain, target: self, action: #selector(PCalcViewController.changeButtonTapped))
+        // add done button to navigation item
+        navItem.leftBarButtonItem = changeItem
+        // set navigation items
+        navBar.setItems([navItem], animated: false)
+        // set transparent
+        navBar.backgroundColor = UIColor.white.withAlphaComponent(0)
+        navBar.barTintColor = UIColor.white.withAlphaComponent(0)
+        // TODO: Theme color for buttons
+        
+        return navBar
+    }()
+   
     // Label wich shows user input
     lazy var mainLabel: UILabel = {
         let label = UILabel()
@@ -242,29 +264,35 @@ class PCalcView: UIView {
     
     
     private func setupLayout() {
+        // Constraints for navigation bar
+        navigationBar.translatesAutoresizingMaskIntoConstraints = false
+        navigationBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor).isActive = true
+        navigationBar.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
+        navigationBar.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        
         // Constraints for main label
         mainLabel.translatesAutoresizingMaskIntoConstraints = false
         // width and height anchors
         mainLabel.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
         //mainLabel.heightAnchor.constraint(equalToConstant: labelHeight()).isActive = true
-        mainLabel.heightAnchor.constraint(equalToConstant: labelHeight() * 2 * (5/11)).isActive = true
+        mainLabel.heightAnchor.constraint(equalToConstant: labelHeight() - 33).isActive = true
         // ridght and left anchors
         mainLabel.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
         mainLabel.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
         // top anchor with safe area
-        mainLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor).isActive = true
+        mainLabel.topAnchor.constraint(equalTo: navigationBar.bottomAnchor).isActive = true
         
         // Constraints for converter label
         converterLabel.translatesAutoresizingMaskIntoConstraints = false
         // width and height anchors
         converterLabel.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
         //converterLabel.heightAnchor.constraint(equalToConstant: labelHeight()).isActive = true
-        converterLabel.heightAnchor.constraint(equalToConstant: labelHeight() * 2 * (5/11)).isActive = true
+        converterLabel.heightAnchor.constraint(equalToConstant: labelHeight() - 11).isActive = true
         // ridght and left anchors
         converterLabel.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
         converterLabel.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
         // top anchor to main label
-        converterLabel.topAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 15).isActive = true
+        converterLabel.topAnchor.constraint(equalTo: mainLabel.bottomAnchor).isActive = true
         
         
         // Display settings for buttons UIStackView
@@ -283,38 +311,38 @@ class PCalcView: UIView {
         // bottom anchor === spacing
         buttonsStackView.bottomAnchor.constraint(greaterThanOrEqualTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -15).isActive = true
         
-        // Contraints for converter information
-        converterInfo.translatesAutoresizingMaskIntoConstraints = false
-        // width and height anchors
-        converterInfo.widthAnchor.constraint(equalToConstant: 35).isActive = true
-        converterInfo.heightAnchor.constraint(equalToConstant: 35).isActive = true
-        // ridght and left anchors
-        converterInfo.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-        converterInfo.centerYAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 5).isActive = true
-        
-        // contraints for down arrow
-        arrow.translatesAutoresizingMaskIntoConstraints = false
-        arrow.trailingAnchor.constraint(equalTo: converterInfo.trailingAnchor).isActive = true
-        
-        // contraints for input value notation
-        numNotation.translatesAutoresizingMaskIntoConstraints = false
-        numNotation.trailingAnchor.constraint(equalTo: arrow.leadingAnchor, constant: 8).isActive = true
-        numNotation.topAnchor.constraint(equalTo: converterInfo.topAnchor).isActive = true
-        
-        // contraints for output value notation
-        numNotationConverted.translatesAutoresizingMaskIntoConstraints = false
-        numNotationConverted.trailingAnchor.constraint(equalTo: arrow.leadingAnchor, constant: 5).isActive = true
-        numNotationConverted.bottomAnchor.constraint(equalTo: converterInfo.bottomAnchor).isActive = true
-        
-        
-        // Constraints for conversion button
-        changeConversion.translatesAutoresizingMaskIntoConstraints = false
-        // width and height anchors
-        changeConversion.widthAnchor.constraint(equalToConstant: 163).isActive = true
-        changeConversion.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        // ridght and left anchors
-        changeConversion.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
-        changeConversion.centerYAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 10).isActive = true
+//        // Contraints for converter information
+//        converterInfo.translatesAutoresizingMaskIntoConstraints = false
+//        // width and height anchors
+//        converterInfo.widthAnchor.constraint(equalToConstant: 35).isActive = true
+//        converterInfo.heightAnchor.constraint(equalToConstant: 35).isActive = true
+//        // ridght and left anchors
+//        converterInfo.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+//        converterInfo.centerYAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 5).isActive = true
+//
+//        // contraints for down arrow
+//        arrow.translatesAutoresizingMaskIntoConstraints = false
+//        arrow.trailingAnchor.constraint(equalTo: converterInfo.trailingAnchor).isActive = true
+//
+//        // contraints for input value notation
+//        numNotation.translatesAutoresizingMaskIntoConstraints = false
+//        numNotation.trailingAnchor.constraint(equalTo: arrow.leadingAnchor, constant: 8).isActive = true
+//        numNotation.topAnchor.constraint(equalTo: converterInfo.topAnchor).isActive = true
+//
+//        // contraints for output value notation
+//        numNotationConverted.translatesAutoresizingMaskIntoConstraints = false
+//        numNotationConverted.trailingAnchor.constraint(equalTo: arrow.leadingAnchor, constant: 5).isActive = true
+//        numNotationConverted.bottomAnchor.constraint(equalTo: converterInfo.bottomAnchor).isActive = true
+//
+//
+//        // Constraints for conversion button
+//        changeConversion.translatesAutoresizingMaskIntoConstraints = false
+//        // width and height anchors
+//        changeConversion.widthAnchor.constraint(equalToConstant: 163).isActive = true
+//        changeConversion.heightAnchor.constraint(equalToConstant: 25).isActive = true
+//        // ridght and left anchors
+//        changeConversion.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
+//        changeConversion.centerYAnchor.constraint(equalTo: mainLabel.bottomAnchor, constant: 10).isActive = true
         
     }
     
