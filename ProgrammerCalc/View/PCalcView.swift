@@ -66,8 +66,14 @@ class PCalcView: UIView {
         let navBar = UINavigationBar(frame: CGRect())
         let navItem = UINavigationItem()
         let changeItem = UIBarButtonItem(title: "Change conversion", style: .plain, target: self, action: #selector(PCalcViewController.changeButtonTapped))
-        // add done button to navigation item
+        let settingsItem = UIBarButtonItem(title: "⚙\u{0000FE0E}", style: .plain, target: self, action: #selector(PCalcViewController.settingsButtonTapped))
+        let font = UIFont.systemFont(ofSize: 42.0)
+        settingsItem.setTitleTextAttributes([NSAttributedString.Key.font: font], for: .normal)
+
+        
+        // add buttons to navigation item
         navItem.leftBarButtonItem = changeItem
+        navItem.rightBarButtonItem = settingsItem
         // set navigation items
         navBar.setItems([navItem], animated: false)
         // set transparent

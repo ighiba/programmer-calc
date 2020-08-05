@@ -556,7 +556,20 @@ class PCalcViewController: UIViewController {
         //vc.modalTransitionStyle = .coverVertical
         vc.modalPresentationStyle = .overFullScreen
         
-
+        // show popover
+        self.present(vc, animated: false, completion: nil)
+    }
+    
+    // Settings button tapped
+    @objc func settingsButtonTapped( sender: UIButton) {
+        print("Open settings")
+        // initialize vc popover
+        let vc = SettingsViewController()
+        
+        // present settings
+        //vc.modalTransitionStyle = .coverVertical
+        vc.modalPresentationStyle = .overFullScreen
+        
         // show popover
         self.present(vc, animated: false, completion: nil)
     }
