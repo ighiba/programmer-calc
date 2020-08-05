@@ -553,7 +553,9 @@ class PCalcViewController: UIViewController {
         let vc = ConversionViewController()
         
         // present settings
+        //vc.modalTransitionStyle = .coverVertical
         vc.modalPresentationStyle = .overFullScreen
+        
 
         // show popover
         self.present(vc, animated: false, completion: nil)

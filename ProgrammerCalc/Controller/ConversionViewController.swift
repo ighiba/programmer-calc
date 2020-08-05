@@ -10,6 +10,7 @@ import UIKit
 
 class ConversionViewController: UIViewController {
     let conv = ConversionView()
+    var oldSliderValue:Float?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +21,7 @@ class ConversionViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         conv.animateIn()
     }
     
@@ -28,17 +30,21 @@ class ConversionViewController: UIViewController {
     // Actions
     // =======
     
-    @objc func doneButtonTapped2( sender: UIButton) {
+    @objc func doneButtonTapped( sender: UIButton) {
         print("done")
         
+        // taptic feedback
+//        let generator = UIImpactFeedbackGenerator(style: .medium)
+//        generator.impactOccurred()
         // save conversion settings and close popover
         conv.animateOut {
             self.dismiss(animated: false, completion: nil)
         }
-        
-        
     }
     
-    
+    @objc func sliderValueChanged( sender: UISlider) {
+        print("slider changing   \(sender.value.rounded())")
+    }
+   
     
 }
