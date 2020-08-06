@@ -566,15 +566,20 @@ class PCalcViewController: UIViewController {
         // initialize vc popover
         let vc = SettingsViewController()
         
+        //vc.navigationController?.show(vc, sender: self)
         // present settings
-        //vc.modalTransitionStyle = .coverVertical
-        vc.modalPresentationStyle = .overFullScreen
+        vc.modalPresentationStyle = .pageSheet
+        //self.present(vc, animated: true, completion: nil)
         
-        // show popover
-        self.present(vc, animated: false, completion: nil)
+        let navigationController = UINavigationController()
+        navigationController.setViewControllers([vc], animated: false)
+        //navigationController.navigationBar.setItems([], animated: false)
+        self.present(navigationController, animated: true)
     }
 
 }
+
+
 
 
 

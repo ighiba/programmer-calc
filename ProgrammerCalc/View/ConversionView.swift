@@ -205,7 +205,7 @@ class ConversionView: UIView {
         self.container.transform = transform
         self.alpha = 0
         
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
+        UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
             self.container.transform = .identity
             self.alpha = 1
         }, completion: nil)
