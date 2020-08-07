@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C05A169B24DD7B0D007B7FB8 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05A169A24DD7B0D007B7FB8 /* Settings.swift */; };
 		C0619AC224D71227008A7291 /* ConversionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0619AC124D71227008A7291 /* ConversionView.swift */; };
 		C0619AC424D71240008A7291 /* ConversionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0619AC324D71240008A7291 /* ConversionViewController.swift */; };
 		C0635A7924D9E0F6003855A9 /* ConversionPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */; };
@@ -44,6 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C05A169A24DD7B0D007B7FB8 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		C0619AC124D71227008A7291 /* ConversionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionView.swift; sourceTree = "<group>"; };
 		C0619AC324D71240008A7291 /* ConversionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionViewController.swift; sourceTree = "<group>"; };
 		C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionPicker.swift; sourceTree = "<group>"; };
@@ -94,6 +96,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C05A169924DD7AF7007B7FB8 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				C05A169A24DD7B0D007B7FB8 /* Settings.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		C06B7EFA2443B12B009642B9 = {
 			isa = PBXGroup;
 			children = (
@@ -119,6 +129,7 @@
 			children = (
 				C06B7F062443B12B009642B9 /* AppDelegate.swift */,
 				C06B7F082443B12B009642B9 /* SceneDelegate.swift */,
+				C05A169924DD7AF7007B7FB8 /* Helpers */,
 				C0D5BA4C24C340120038A378 /* Model */,
 				C0E5FC7424BB9B6100BA93CA /* View */,
 				C0D5BA4B24C340050038A378 /* Controller */,
@@ -314,6 +325,7 @@
 				C0619AC224D71227008A7291 /* ConversionView.swift in Sources */,
 				C0635A7B24D9E2AA003855A9 /* ConversionModel.swift in Sources */,
 				C077CF6F24DC8DEE008E5F0F /* SettingsCell.swift in Sources */,
+				C05A169B24DD7B0D007B7FB8 /* Settings.swift in Sources */,
 				C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */,
 				C0BCA63724CCDCCD006A814B /* PCalcModel.swift in Sources */,
 				C0E5FC7624BB9B8D00BA93CA /* PCalcView.swift in Sources */,
