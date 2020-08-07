@@ -113,18 +113,12 @@ class ConversionView: UIView {
     }()
     
     // Picker for mainLabel
-    fileprivate let mainPicker: ConversionPicker = {
+    let mainPicker: ConversionPicker = {
         let picker = ConversionPicker()
         
-        var model = [ConversionModel]()
+        var model = ConversionModel()
         
-        // Add to picker all systems
-        // TODO: Refactor this for multiple systems
-        model.append(ConversionModel(system: .bin))
-        model.append(ConversionModel(system: .oct))
-        model.append(ConversionModel(system: .dec))
-        model.append(ConversionModel(system: .hex))
-        
+        // TODO: Add to picker all systems
         picker.systemsModel = model
         
         picker.delegate = picker
@@ -159,7 +153,7 @@ class ConversionView: UIView {
     }()
     
     // Slider for changing number of digits after point
-    fileprivate let digitsAfterSlider: UISlider = {
+    let digitsAfterSlider: UISlider = {
         let slider = UISlider()
         
         // TODO: Multiple values up to 32

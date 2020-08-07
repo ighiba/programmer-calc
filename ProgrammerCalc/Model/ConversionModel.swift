@@ -9,18 +9,28 @@
 import Foundation
 
 class ConversionModel {
-    enum ConversionSystems: String {
+   public enum ConversionSystemsEnum: String {
         case bin = "Binary"
         case dec = "Decimal"
         case oct = "Octal"
         case hex = "Hexadecimal"
     }
     
-    var selectedSystem: ConversionSystems
-    var systemDescription: String
+    var conversionSystems = ["Binary", "Decimal", "Octal", "Hexadecimal"]
     
-    init( system: ConversionSystems) {
-        self.selectedSystem = system
-        self.systemDescription = system.rawValue
+}
+
+class ConversionSettingsModel:  Decodable, Encodable {
+    
+    var systemMain: String
+    var systemConverter: String
+    var numbersAfterPoint: Float
+    
+    
+    init(systMain: String, systConverter: String, number: Float) {
+        self.systemMain = systMain
+        self.systemConverter = systConverter
+        self.numbersAfterPoint = number
     }
+    
 }
