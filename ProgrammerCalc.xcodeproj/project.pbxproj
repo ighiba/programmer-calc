@@ -20,7 +20,6 @@
 		C06B7F292443B12E009642B9 /* ProgrammerCalcUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F282443B12E009642B9 /* ProgrammerCalcUITests.swift */; };
 		C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C070ED2324DB0EC800A04463 /* SettingsViewController.swift */; };
 		C070ED2624DB0ED400A04463 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C070ED2524DB0ED400A04463 /* SettingsView.swift */; };
-		C077CF6D24DC69B3008E5F0F /* SettingsTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C077CF6C24DC69B3008E5F0F /* SettingsTable.swift */; };
 		C077CF6F24DC8DEE008E5F0F /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C077CF6E24DC8DEE008E5F0F /* SettingsCell.swift */; };
 		C077CF7124DC987B008E5F0F /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C077CF7024DC987B008E5F0F /* SettingsModel.swift */; };
 		C0BCA63724CCDCCD006A814B /* PCalcModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BCA63624CCDCCD006A814B /* PCalcModel.swift */; };
@@ -64,7 +63,6 @@
 		C06B7F2A2443B12E009642B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C070ED2324DB0EC800A04463 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		C070ED2524DB0ED400A04463 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		C077CF6C24DC69B3008E5F0F /* SettingsTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTable.swift; sourceTree = "<group>"; };
 		C077CF6E24DC8DEE008E5F0F /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
 		C077CF7024DC987B008E5F0F /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		C0BCA63624CCDCCD006A814B /* PCalcModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcModel.swift; sourceTree = "<group>"; };
@@ -166,7 +164,6 @@
 				C0635A7A24D9E2AA003855A9 /* ConversionModel.swift */,
 				C077CF7024DC987B008E5F0F /* SettingsModel.swift */,
 				C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */,
-				C077CF6C24DC69B3008E5F0F /* SettingsTable.swift */,
 				C077CF6E24DC8DEE008E5F0F /* SettingsCell.swift */,
 			);
 			path = Model;
@@ -316,7 +313,6 @@
 				C0635A7924D9E0F6003855A9 /* ConversionPicker.swift in Sources */,
 				C0619AC224D71227008A7291 /* ConversionView.swift in Sources */,
 				C0635A7B24D9E2AA003855A9 /* ConversionModel.swift in Sources */,
-				C077CF6D24DC69B3008E5F0F /* SettingsTable.swift in Sources */,
 				C077CF6F24DC8DEE008E5F0F /* SettingsCell.swift in Sources */,
 				C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */,
 				C0BCA63724CCDCCD006A814B /* PCalcModel.swift in Sources */,

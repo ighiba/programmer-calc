@@ -9,16 +9,16 @@
 import UIKit
 
 class SettingsViewController: UITableViewController {
-    lazy var settingsView = SettingsView()
+    lazy var settingsView = SettingsView(frame: CGRect(), style: .grouped)
     lazy var doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(SettingsViewController.closeButtonTapped))
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         self.tableView = settingsView
-        // Done button to navigation bar
+        // Setup navigation items
         self.navigationController?.navigationBar.topItem?.rightBarButtonItem = doneItem
+        self.navigationController?.navigationBar.topItem?.title = "Settings"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -38,7 +38,7 @@ class SettingsViewController: UITableViewController {
     
     // Switcher handler
     @objc func switcherToggled( sender: UISwitch) {
-
+        print("test")
         if let cell = sender.superview as? SettingsCell {
             let title = cell.textLabel?.text
             
