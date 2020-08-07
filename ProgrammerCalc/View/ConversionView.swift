@@ -45,7 +45,7 @@ class ConversionView: UIView {
         container.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         container.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9).isActive = true
-        container.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.55).isActive = true
+        container.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.57).isActive = true
         
         // Set constraints for done button
         containerStack.translatesAutoresizingMaskIntoConstraints = false
@@ -57,7 +57,6 @@ class ConversionView: UIView {
         
         // Set constraints for picker
         mainPicker.translatesAutoresizingMaskIntoConstraints = false
-        //mainPicker.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9).isActive = true
         mainPicker.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.25).isActive = true
         
         // Set contraints for picker's arrow
@@ -102,11 +101,20 @@ class ConversionView: UIView {
         return button
     }()
     
+    // Popover title
+    fileprivate let popoverTitle: UILabel = {
+        let label = UILabel()
+        
+        label.text = "Conversion settings"
+        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        label.textAlignment = .center
+        
+        return label
+    }()
+    
     // Picker for mainLabel
     fileprivate let mainPicker: ConversionPicker = {
         let picker = ConversionPicker()
-        
-        //picker.frame = CGRect(x: 0, y: 0, width: 414, height: 250)
         
         var model = [ConversionModel]()
         
@@ -123,14 +131,6 @@ class ConversionView: UIView {
         picker.dataSource = picker
         
         let selected = picker.selectedRow(inComponent: 0)
-        //print(picker.pickerView(picker, titleForRow: selected, forComponent: 0))
-        
-        return picker
-    }()
-    
-    // Picker for converterLabel
-    fileprivate let converterPicker: ConversionPicker = {
-        let picker = ConversionPicker()
         
         return picker
     }()
@@ -179,7 +179,7 @@ class ConversionView: UIView {
     
     // stack with pickers, slider and button
     fileprivate lazy var containerStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [mainPicker,digitsAfterLabel,digitsAfterSlider,doneButton])
+        let stack = UIStackView(arrangedSubviews: [popoverTitle,mainPicker,digitsAfterLabel,digitsAfterSlider,doneButton])
         
         stack.axis = .vertical
         stack.alignment = .fill
@@ -187,8 +187,12 @@ class ConversionView: UIView {
         
         let containerStackHeight = ((UIScreen.main.bounds.height * 0.55) * 0.9) * 0.9
         
-        // spacings after picker and before button
-        stack.setCustomSpacing(containerStackHeight * 0.1, after: self.mainPicker)
+        // Custom spacings
+        // after picker
+        stack.setCustomSpacing(containerStackHeight * 0.05, after: self.mainPicker)
+        // after slider label
+        stack.setCustomSpacing(containerStackHeight * 0.05, after: self.digitsAfterLabel)
+        // after slider
         stack.setCustomSpacing(containerStackHeight * 0.1, after: self.digitsAfterSlider)
         
         return stack
