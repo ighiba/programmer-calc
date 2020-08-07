@@ -144,13 +144,6 @@ class PCalcView: UIView {
         button.setTitleColor(.lightGray, for: .highlighted)
         button.addTarget(nil, action: #selector(PCalcViewController.changeButtonTapped), for: .touchUpInside)
         
-//        // set borders
-//        button.layer.borderWidth = 0.5
-//        button.layer.borderColor = UIColor.lightGray.cgColor
-//
-//        // round corners
-//        button.layer.cornerRadius = 25/2
-        
         return button
     }()
     
@@ -215,58 +208,58 @@ class PCalcView: UIView {
     
     // View for converting information
     
-    lazy var converterInfo: UIView = {
-        let view = UIView()
-        
-        view.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
-        
-        view.addSubview(self.arrow)
-        view.addSubview(self.numNotation)
-        view.addSubview(self.numNotationConverted)
-        
-        return view
-    }()
-    
-    lazy var arrow: UILabel = {
-        let label = UILabel()
-        
-        label.frame = CGRect( x: 370, y: 165, width: 50, height: 50)
-        label.text = "↓"
-        // set font size, font family, color, alligment
-        label.font = UIFont(name: "HelveticaNeue-Thin", size: 32.0)
-        //label.textColor = .lightGray
-        label.textAlignment = .right
-        
-        return label
-    }()
-    
-    lazy var numNotation: UILabel = {
-
-        let label = UILabel()
-        
-        label.frame = CGRect( x: 345, y: 165, width: 25, height: 25)
-        label.text = "10"
-        // set font size, font family, color, alligment
-        label.font = UIFont(name: "HelveticaNeue-Thin", size: 12.0)
-        //label.textColor = .lightGray
-        label.textAlignment = .right
-        
-        return label
-
-    }()
-    
-    lazy var numNotationConverted: UILabel = {
-        let label = UILabel()
-        
-        label.frame = CGRect( x: 345, y: 185, width: 25, height: 25)
-        label.text = "2"
-        // set font size, font family, color, alligment
-        label.font = UIFont(name: "HelveticaNeue-Thin", size: 12.0)
-        //label.textColor = .lightGray
-        label.textAlignment = .right
-        
-        return label
-    }()
+//    lazy var converterInfo: UIView = {
+//        let view = UIView()
+//        
+//        view.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+//        
+//        view.addSubview(self.arrow)
+//        view.addSubview(self.numNotation)
+//        view.addSubview(self.numNotationConverted)
+//        
+//        return view
+//    }()
+//    
+//    lazy var arrow: UILabel = {
+//        let label = UILabel()
+//        
+//        label.frame = CGRect( x: 370, y: 165, width: 50, height: 50)
+//        label.text = "↓"
+//        // set font size, font family, color, alligment
+//        label.font = UIFont(name: "HelveticaNeue-Thin", size: 32.0)
+//        //label.textColor = .lightGray
+//        label.textAlignment = .right
+//        
+//        return label
+//    }()
+//    
+//    lazy var numNotation: UILabel = {
+//
+//        let label = UILabel()
+//        
+//        label.frame = CGRect( x: 345, y: 165, width: 25, height: 25)
+//        label.text = "10"
+//        // set font size, font family, color, alligment
+//        label.font = UIFont(name: "HelveticaNeue-Thin", size: 12.0)
+//        //label.textColor = .lightGray
+//        label.textAlignment = .right
+//        
+//        return label
+//
+//    }()
+//    
+//    lazy var numNotationConverted: UILabel = {
+//        let label = UILabel()
+//        
+//        label.frame = CGRect( x: 345, y: 185, width: 25, height: 25)
+//        label.text = "2"
+//        // set font size, font family, color, alligment
+//        label.font = UIFont(name: "HelveticaNeue-Thin", size: 12.0)
+//
+//        label.textAlignment = .right
+//        
+//        return label
+//    }()
     
     
     private func setupLayout() {
@@ -471,26 +464,21 @@ class CalculatorButton: UIButton {
             if previousTouchInside {
                 sendActions(for: .touchDragExit)
                 self.isHighlighted = false
-                //print("touchDragExit")
             } else {
                 sendActions(for: .touchDragOutside)
                 self.isHighlighted = false
-                //print("touchDragOutside")
             }
         } else {
             let previousTouchOutside: Bool = !outerBounds.contains(previousLocation)
             if previousTouchOutside {
                 sendActions(for: .touchDragEnter)
                 self.isHighlighted = true
-                //print("touchDragEnter")
             } else {
                 sendActions(for: .touchDragInside)
                 self.isHighlighted = true
-                //print("touchDragInside")
             }
         }
-        
-        
+
     }
     
     
@@ -502,11 +490,9 @@ class CalculatorButton: UIButton {
         let touchInside: Bool = outerBounds.contains(currentLocation)
         if touchInside {
             self.isHighlighted = false
-            //print("touchUpInside")
             return sendActions(for: .touchUpInside)
         } else {
             self.isHighlighted = false
-            //print("touchUpOutside")
             return sendActions(for: .touchUpOutside)
         }
     }
