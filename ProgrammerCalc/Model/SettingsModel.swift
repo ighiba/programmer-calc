@@ -8,7 +8,7 @@
 
 import Foundation
 
-class SettingsModel {
+class SettingsModel: Codable {
     var darkMode: Bool
     var tappingSounds: Bool
     var hapticFeedback: Bool

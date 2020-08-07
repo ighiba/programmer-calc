@@ -41,7 +41,6 @@ extension SettingsView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: SettingsCell
         let title = indexPath.section == 0 ? firstSection[indexPath.row] : otherSection[indexPath.row]
-        
         if indexPath.section == 0 {
             cell = SettingsCell(style: .default, reuseIdentifier: "cellId", label: title, switcher: true)
         } else {
@@ -74,11 +73,10 @@ extension SettingsView: UITableViewDataSource {
         // Handle deselection of row
         tableView.deselectRow(at: indexPath, animated: true)
     }
- 
+    
 }
 
 extension SettingsView: UITableViewDelegate {
-    
 
 }
 

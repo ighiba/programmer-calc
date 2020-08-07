@@ -20,17 +20,15 @@ class SettingsCell: UITableViewCell {
         
         // switchers for first section
         if switcher {
-
             let switcher = UISwitch(frame: CGRect(x: 0, y: 0, width: 20, height: 10))
             switcher.addTarget(nil, action: #selector(SettingsViewController.switcherToggled), for: .valueChanged)
+            // default state true
+            switcher.isOn = true
             self.accessoryView = switcher
             // disable selection style
             self.selectionStyle = .none
         }
-    
-      self.textLabel?.text = label
-        
-        
+        self.textLabel?.text = label
     }
     
     required init?(coder: NSCoder) {
