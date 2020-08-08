@@ -88,7 +88,7 @@ class PCalcView: UIView {
     lazy var mainLabel: UILabel = {
         let label = UILabel()
         
-        label.frame = CGRect( x: Double(0), y: Double(20), width: 372.0, height: 100.0)
+        label.frame = CGRect()
         label.text = "0"
         label.backgroundColor = .white
         // set font size, font family
@@ -112,7 +112,7 @@ class PCalcView: UIView {
         
         let label = UILabel()
         
-        label.frame = CGRect( x: Double(0), y: Double(120), width: 372.0, height: 100.0)
+        label.frame = CGRect()
         label.text = "0"
         label.numberOfLines = 2
         label.backgroundColor = .white
@@ -268,28 +268,25 @@ class PCalcView: UIView {
         navigationBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor).isActive = true
         navigationBar.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
         navigationBar.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        navigationBar.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         
         // Constraints for main label
         mainLabel.translatesAutoresizingMaskIntoConstraints = false
         // width and height anchors
-        mainLabel.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
-        //mainLabel.heightAnchor.constraint(equalToConstant: labelHeight()).isActive = true
+        mainLabel.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.95).isActive = true
         mainLabel.heightAnchor.constraint(equalToConstant: labelHeight() - 33).isActive = true
-        // ridght and left anchors
-        mainLabel.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
-        mainLabel.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
+        // centering
+        mainLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         // top anchor with safe area
         mainLabel.topAnchor.constraint(equalTo: navigationBar.bottomAnchor).isActive = true
         
         // Constraints for converter label
         converterLabel.translatesAutoresizingMaskIntoConstraints = false
         // width and height anchors
-        converterLabel.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
-        //converterLabel.heightAnchor.constraint(equalToConstant: labelHeight()).isActive = true
+        converterLabel.widthAnchor.constraint(equalTo: mainLabel.widthAnchor).isActive = true
         converterLabel.heightAnchor.constraint(equalToConstant: labelHeight() - 11).isActive = true
-        // ridght and left anchors
-        converterLabel.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
-        converterLabel.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
+        // centering
+        converterLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         // top anchor to main label
         converterLabel.topAnchor.constraint(equalTo: mainLabel.bottomAnchor).isActive = true
         
@@ -302,9 +299,9 @@ class PCalcView: UIView {
         // Constraints for buttons (Main)
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
         // width = main view width - spacing * 2
-        buttonsStackView.widthAnchor.constraint(equalToConstant: self.frame.width - 30).isActive = true
-        // left anchor == spacing
-        buttonsStackView.leadingAnchor.constraint(lessThanOrEqualTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 15).isActive = true
+        buttonsStackView.widthAnchor.constraint(equalTo: mainLabel.widthAnchor).isActive = true
+        // centering
+        buttonsStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         // top anchor == spacing
         buttonsStackView.topAnchor.constraint(lessThanOrEqualTo: converterLabel.bottomAnchor, constant: 10).isActive = true
         // bottom anchor === spacing
