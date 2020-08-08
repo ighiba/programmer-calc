@@ -188,7 +188,7 @@ class PCalcViewController: UIViewController {
             return "Error"
         }
         
-        binIntStrBuff = String(describing: binIntStrBuff?.reversed())
+        binIntStrBuff = String((binIntStrBuff?.reversed())!)
         
         // First: converting int part
         // constructing decimal
@@ -445,6 +445,77 @@ class PCalcViewController: UIViewController {
             return (str, nil)
         }
 
+    }
+    // =====
+    // Octal
+    // =====
+    
+    // BIN -> OCT
+    func convertBinToOct( binNumStr: String) -> String {
+        var resultStr: String
+        
+        // if zero
+        guard binNumStr != "0" else {
+            return "0"
+        }
+     
+        // Dividing to int and fract parts
+        let buffDividedStr = divideToDoubleInt(str: binNumStr)
+        var binIntStrBuff = buffDividedStr.0
+        
+        var buffInt = 0
+        var buffDecimal: Decimal = 0.0
+        var counter = 0
+       
+        guard binIntStrBuff != nil else {
+            return "Error"
+        }
+        
+        binIntStrBuff = String(describing: binIntStrBuff?.reversed())
+        
+        // First: converting int part
+        // constructing decimal
+        binIntStrBuff?.forEach { (num) in
+            // TODO: Error handling
+            let buffNum = Float(String(num))!
+            // 1 * 2^n
+            let buffValue = Int(buffNum * pow(2, Float(counter)))
+            
+            buffInt += buffValue
+            
+            counter += 1
+        }
+        
+        // Second: converting fract part
+        if let binFractStrBuff = buffDividedStr.1 {
+            // if fract == 0 then dont calc it
+            guard Int(binFractStrBuff) != 0 else {
+                resultStr = "\(buffInt).0"
+                return resultStr
+            }
+            
+            counter = 1
+            
+            binFractStrBuff.forEach { (num) in
+                // TODO: Error handling
+                let buffInt = Int("\(num)")!
+                let buffIntDecimal = Decimal(integerLiteral: buffInt)
+                // 1 * 2^-n
+                let buffValue: Decimal = buffIntDecimal *  ( 1.0 / pow(2 as Decimal, counter))
+                
+                buffDecimal += buffValue
+                
+                counter += 1
+            }
+            // return decimal if second value after dividing is nil
+            resultStr = "\(Decimal(buffInt) + buffDecimal)"
+            return resultStr
+            
+        } else {
+            // return int
+            resultStr = "\(buffInt)"
+            return resultStr
+        }
     }
     
     // Calculation of 2 decimal numbers by .operation
