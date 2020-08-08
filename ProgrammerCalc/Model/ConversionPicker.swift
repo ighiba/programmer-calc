@@ -34,7 +34,6 @@ extension ConversionPicker: UIPickerViewDelegate {
     
     // Picker row width
     func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
-        print((screenWidth * 0.95) / 2 - 30)
         return (screenWidth * 0.95) / 2 - 30
     }
     

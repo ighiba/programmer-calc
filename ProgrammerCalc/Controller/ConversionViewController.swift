@@ -43,7 +43,6 @@ class ConversionViewController: UIViewController {
     // Update conversion values
     fileprivate func getConversionSettings() {
         // get data from UserDefaults
-        print(picker.selectedRow(inComponent: 1))
         if let settings = Settings.conversionSettings {
             // TODO: Error handling
             let mainRow: Int = picker.systemsModel.conversionSystems.firstIndex(of: settings.systemMain)!
@@ -98,7 +97,7 @@ class ConversionViewController: UIViewController {
 
     // Changing value of slider
     @objc func sliderValueChanged( sender: UISlider) {
-        let sliderNewValue = sender.value.rounded()  
+        let sliderNewValue = sender.value.rounded()
 
         if sliderOldValue == sliderNewValue {
             // do nothing

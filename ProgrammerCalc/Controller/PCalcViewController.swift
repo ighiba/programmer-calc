@@ -24,6 +24,13 @@ class PCalcViewController: UIViewController {
 
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // get settings
+        
+    }
+    
     
     
     // =======
@@ -31,15 +38,190 @@ class PCalcViewController: UIViewController {
     // =======
     
     func updateConverterLabel() {
+        // TODO: Refator hadling for Hexadecimal values
         if Double(mainLabel.text!) == nil {
             converterLabel.text = mainLabel.text
         } else {
             // Uptade converter label with converted number
-            converterLabel.text = convertToBinary(decNumStr: mainLabel.text!)
+            // TODO: Error handling
+            if let settings = Settings.conversionSettings {
+                let fromSystem = settings.systemMain
+                let toSystem = settings.systemConverter
+                converterLabel.text = convertValue(value: mainLabel.text!, from: fromSystem, to: toSystem)
+            }
         }
     }
     
-    func convertToBinary( decNumStr: String) -> String {
+    // Main function for conversion values
+    func convertValue(value valueStr: String, from mainSystem: String, to converterSystem: String) -> String? {
+        // exit if systems are equal
+        guard mainSystem != converterSystem else {
+            return valueStr
+        }
+        
+        // =======================================
+        // First step: convert any value to binary
+        // =======================================
+        let binaryStr = convertAnyToBinary(anyStr: valueStr, anySystem: mainSystem)
+        
+        // ==================================================
+        // Second step: convert binary value to needed system
+        // ==================================================
+        
+        let resultStr = convertBinaryToAny(binaryStr: binaryStr, targetSystem: converterSystem)
+        
+        return resultStr
+    }
+    
+    // Converter from any to binary system
+    func convertAnyToBinary( anyStr: String, anySystem: String) -> String {
+        var binaryStr: String
+        
+            switch anySystem {
+            case "Binary":
+                // if already binary
+                binaryStr = anyStr
+                break
+            case "Octal":
+                // convert oct to binary
+                binaryStr = "0"
+                break
+            case "Decimal":
+                // convert dec to binary
+                binaryStr = self.convertDecToBinary(decNumStr: anyStr)
+                break
+            case "Hexadecimal":
+                // convert hex to binary
+                binaryStr = "0"
+                break
+            default:
+                // do nothing
+                // TODO: Error handling
+                binaryStr = "0"
+                break
+            }
+
+        return binaryStr
+    }
+    
+    // Converter from binary to any system
+    func convertBinaryToAny( binaryStr: String, targetSystem: String) -> String {
+        var targetStr: String
+        
+            switch targetSystem {
+            case "Binary":
+                // convert binary to binary
+                targetStr = binaryStr
+                break
+            case "Octal":
+                // convert binary to oct
+                targetStr = "Octal"
+                break
+            case "Decimal":
+                // convert binary to dec
+                targetStr = "0"
+                targetStr = self.convertBinToDec(binNumStr: binaryStr)
+                break
+            case "Hexadecimal":
+                // convert binary to hex
+                targetStr = "Hexadecimal"
+                break
+            default:
+                // do nothing
+                // TODO: Error handling
+                targetStr = "err"
+                break
+            }
+        
+        return targetStr
+    }
+    
+    // BIN -> DEC
+    func convertBinToDec( binNumStr: String) -> String {
+        var resultStr: String
+        
+        // if zero
+        guard binNumStr != "0" else {
+            return "0"
+        }
+        
+        if Int(binNumStr) != nil {
+            var binIntStrBuff = binNumStr
+            // converting just int part
+            var buffInt = 0
+            var counter = 0
+            binIntStrBuff = String(binIntStrBuff.reversed())
+            
+            // constructing decimal
+            binIntStrBuff.forEach { (num) in
+                // TODO: Error handling
+                let buffNum = Float(String(num))
+                // 1 * 2^n
+                let buffValue = Int(buffNum! * pow(2,Float(counter)))
+                
+                buffInt += buffValue
+                
+                counter += 1
+            }
+            
+            resultStr = String(buffInt)
+            
+        } else {
+            // Dividing to int and fract parts
+            // TODO: Error handling
+            let buffDividedStr = divideToDoubleInt(str: binNumStr)
+            var binIntStrBuff = buffDividedStr!.0
+            
+            var buffInt = 0
+            var buffDecimal: Decimal = 0.0
+            var counter = 0
+            binIntStrBuff = String(binIntStrBuff.reversed())
+            
+            // TODO: DRY
+            // First: converting int part
+            // constructing decimal
+            binIntStrBuff.forEach { (num) in
+                // TODO: Error handling
+                let buffNum = Float(String(num))!
+                // 1 * 2^n
+                let buffValue = Int(buffNum * pow(2, Float(counter)))
+                
+                buffInt += buffValue
+                
+                counter += 1
+            }
+            
+            // Second: converting fract part
+            let binFractStrBuff = buffDividedStr!.1
+            
+            // if fract == 0 then dont calc it
+            guard Int(binFractStrBuff) != 0 else {
+                resultStr = "\(buffInt).0"
+                return resultStr
+            }
+            
+            counter = 1
+            
+            binFractStrBuff.forEach { (num) in
+                // TODO: Error handling
+                let buffInt = Int("\(num)")!
+                let buffIntDecimal = Decimal(integerLiteral: buffInt)
+                // 1 * 2^-n
+                let buffValue: Decimal = buffIntDecimal *  ( 1.0 / pow(2 as Decimal, counter))
+                
+                buffDecimal += buffValue
+                
+                counter += 1
+            }
+            resultStr = "\(Decimal(buffInt) + buffDecimal)"
+            
+        }
+        
+        return resultStr
+    }
+    
+    // DEC -> BIN
+    func convertDecToBinary( decNumStr: String) -> String {
         var decNumStrBuff = decNumStr
         var isSigned: Bool = false
         var binaryStr: String
@@ -161,7 +343,7 @@ class PCalcViewController: UIViewController {
             // multiply by 2, if bigger then 1 then = 1, else 0
             for _ in 0..<counter {
                 buffDouble = buffDouble * 2
-                if buffDouble > 1 {
+                if buffDouble >= 1 {
                     resultStr.append("1")
                     buffDouble = buffDouble - 1
                 } else {

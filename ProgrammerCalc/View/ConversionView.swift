@@ -31,10 +31,6 @@ class ConversionView: UIView {
         setupLayout()
     }
     
-    // Update values for picker, label and slider
-    func updateValues() {
-        
-    }
     
     // Setup layout
     func setupLayout() {
@@ -249,7 +245,7 @@ class ConversionView: UIView {
             self.container.alpha = 0.01
             self.alpha = 0
         }, completion: { (completed) in
-            print("completed")
+            //print("completed")
             // dismiss vc
             finished()
         })
