@@ -147,7 +147,21 @@ class ConversionView: UIView {
         
         label.frame = CGRect(x: 0, y: 0, width: 100, height: 30)
         label.text = "Number of digits after point: "
-        label.font = UIFont(name: "HelveticaNeue-Thin", size: 18.0)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .light)
+        //label.font = UIFont(name: "HelveticaNeue-Thin", size: 18.0)
+        
+        return label
+    }()
+    
+    // Label for showing current value of the slider
+    let sliderValueDigit: UILabel = {
+        let label = UILabel()
+        
+        label.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        // default value
+        label.text = "8"
+        label.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
+        //label.font = UIFont(name: "HelveticaNeue-Thin", size: 18.0)
         
         return label
     }()
@@ -156,12 +170,12 @@ class ConversionView: UIView {
     let digitsAfterSlider: UISlider = {
         let slider = UISlider()
         
-        // TODO: Multiple values up to 32
-        slider.minimumValue = 0
-        slider.maximumValue = 16
+        // TODO: Multiple values up to 32 ( 1 * 4 = 4 digits after point etc)
+        slider.minimumValue = 1
+        slider.maximumValue = 5
         
         // Initial value
-        slider.value = 8
+        slider.value = 3
         
         // TODO: Theme
         slider.tintColor = .systemGreen
@@ -171,9 +185,21 @@ class ConversionView: UIView {
         return slider
     }()
     
+    // stack for info labels
+    fileprivate lazy var horizontalInfoStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [digitsAfterLabel,sliderValueDigit])
+        
+        stack.axis = .horizontal
+        stack.alignment = .fill
+        stack.distribution = .fill
+        
+        return stack
+    }()
+    
     // stack with pickers, slider and button
     fileprivate lazy var containerStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [popoverTitle,mainPicker,digitsAfterLabel,digitsAfterSlider,doneButton])
+        // form stack with views
+        let stack = UIStackView(arrangedSubviews: [popoverTitle,mainPicker,horizontalInfoStack,digitsAfterSlider,doneButton])
         
         stack.axis = .vertical
         stack.alignment = .fill
@@ -185,7 +211,7 @@ class ConversionView: UIView {
         // after picker
         stack.setCustomSpacing(containerStackHeight * 0.05, after: self.mainPicker)
         // after slider label
-        stack.setCustomSpacing(containerStackHeight * 0.05, after: self.digitsAfterLabel)
+        stack.setCustomSpacing(containerStackHeight * 0.05, after: self.horizontalInfoStack)
         // after slider
         stack.setCustomSpacing(containerStackHeight * 0.1, after: self.digitsAfterSlider)
         

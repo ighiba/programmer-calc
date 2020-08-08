@@ -12,6 +12,8 @@ class ConversionViewController: UIViewController {
     lazy var conv = ConversionView()
     lazy var picker: ConversionPicker = conv.mainPicker
     lazy var slider: UISlider = conv.digitsAfterSlider
+    lazy var labelValue: UILabel = conv.sliderValueDigit
+    var sliderOldValue: Float = 2.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,13 +54,17 @@ class ConversionViewController: UIViewController {
             picker.selectRow(mainRow, inComponent: 0, animated: false)
             picker.selectRow(converterRow, inComponent: 1, animated: false)
             
+            // Slider label
+            labelValue.text = String(Int(settings.numbersAfterPoint) * 4)
+            
             // Slider
             slider.value = settings.numbersAfterPoint
+            sliderOldValue = settings.numbersAfterPoint
         }  else {
             print("no settings")
             // Save default settings (all true)
             let systems = ConversionModel.ConversionSystemsEnum.self
-            Settings.conversionSettings = ConversionSettingsModel(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 8.0)
+            Settings.conversionSettings = ConversionSettingsModel(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 2.0)
         }
     }
     
@@ -81,20 +87,33 @@ class ConversionViewController: UIViewController {
     // Actions
     // =======
     
+    // Done button / Exit button
     @objc func doneButtonTapped( sender: UIButton) {
         print("done")
-        // taptic feedback
-//        let generator = UIImpactFeedbackGenerator(style: .medium)
-//        generator.impactOccurred()
-        // save conversion settings and close popover
         conv.animateOut {
             self.dismiss(animated: false, completion: nil)
         }
     }
     
+
+    // Changing value of slider
     @objc func sliderValueChanged( sender: UISlider) {
-        print("slider changing   \(sender.value.rounded())")
+        let sliderNewValue = sender.value.rounded()  
+
+        if sliderOldValue == sliderNewValue {
+            // do nothing
+        } else {
+            // taptic feedback generator
+            if (Settings.appSettings?.hapticFeedback ?? false) {
+                let generator = UIImpactFeedbackGenerator(style: .medium)
+                generator.prepare()
+                // impact
+                generator.impactOccurred()
+            }
+            // show new value in label
+            labelValue.text = String(Int(sliderNewValue) * 4)
+            // update old value
+            sliderOldValue = sliderNewValue
+        }
     }
-   
-    
 }
