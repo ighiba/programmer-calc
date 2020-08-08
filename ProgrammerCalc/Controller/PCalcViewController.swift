@@ -21,48 +21,47 @@ class PCalcViewController: UIViewController {
         
         // set view from PCalcView
         self.view = calcView
+        // get state from UserDefaults
+        getCalcState()
 
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         
-        // get settings
-        
+        // set state to UserDefaults
+        print("main dissapear")
+        saveCalcState()
     }
-    
-    
     
     // =======
     // Methods
     // =======
     
     // Update conversion values
-//    fileprivate func getConversionSettings() {
-//        // get data from UserDefaults
-//        if let settings = SavedData.conversionSettings {
-//            // TODO: Error handling
-//            let mainRow: Int = picker.systemsModel.conversionSystems.firstIndex(of: settings.systemMain)!
-//            let converterRow: Int = picker.systemsModel.conversionSystems.firstIndex(of: settings.systemConverter)!
-//            // Picker component
-//            // 0 - main
-//            // 1 - converter
-//            picker.selectRow(mainRow, inComponent: 0, animated: false)
-//            picker.selectRow(converterRow, inComponent: 1, animated: false)
-//
-//            // Slider label
-//            labelValue.text = String(Int(settings.numbersAfterPoint) * 4)
-//
-//            // Slider
-//            slider.value = settings.numbersAfterPoint
-//            sliderOldValue = settings.numbersAfterPoint
-//        }  else {
-//            print("no settings")
-//            // Save default settings (all true)
-//            let systems = ConversionModel.ConversionSystemsEnum.self
-//            SavedData.conversionSettings = ConversionSettingsModel(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 2.0)
-//        }
-//    }
+    fileprivate func getCalcState() {
+        // get data from UserDefaults
+        if let data = SavedData.calcState {
+            // TODO: Error handling
+            mainLabel.text = data.mainLabelState
+            converterLabel.text = data.converterLabelState
+
+        }  else {
+            print("no settings")
+            // Save default settings (all zero)
+            SavedData.calcState = CalcState(mainState: "0", convertState: "0")
+        }
+    }
+    
+    public func saveCalcState() {
+        // TODO: Error handling
+        let mainState = mainLabel.text ?? "0"
+        let convertState = converterLabel.text ?? "0"
+        
+        // set data to UserDefaults
+        SavedData.calcState = CalcState(mainState: mainState, convertState: convertState)
+    }
     
     func updateConverterLabel() {
         // TODO: Refator hadling for Hexadecimal values
@@ -75,6 +74,7 @@ class PCalcViewController: UIViewController {
                 let fromSystem = settings.systemMain
                 let toSystem = settings.systemConverter
                 converterLabel.text = convertValue(value: mainLabel.text!, from: fromSystem, to: toSystem)
+                //saveCalcState()
             }
         }
     }

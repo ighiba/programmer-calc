@@ -43,10 +43,10 @@ class ConversionViewController: UIViewController {
     // Update conversion values
     fileprivate func getConversionSettings() {
         // get data from UserDefaults
-        if let settings = SavedData.conversionSettings {
+        if let data = SavedData.conversionSettings {
             // TODO: Error handling
-            let mainRow: Int = picker.systemsModel.conversionSystems.firstIndex(of: settings.systemMain)!
-            let converterRow: Int = picker.systemsModel.conversionSystems.firstIndex(of: settings.systemConverter)!
+            let mainRow: Int = picker.systemsModel.conversionSystems.firstIndex(of: data.systemMain)!
+            let converterRow: Int = picker.systemsModel.conversionSystems.firstIndex(of: data.systemConverter)!
             // Picker component
             // 0 - main
             // 1 - converter
@@ -54,11 +54,11 @@ class ConversionViewController: UIViewController {
             picker.selectRow(converterRow, inComponent: 1, animated: false)
             
             // Slider label
-            labelValue.text = String(Int(settings.numbersAfterPoint) * 4)
+            labelValue.text = String(Int(data.numbersAfterPoint) * 4)
             
             // Slider
-            slider.value = settings.numbersAfterPoint
-            sliderOldValue = settings.numbersAfterPoint
+            slider.value = data.numbersAfterPoint
+            sliderOldValue = data.numbersAfterPoint
         }  else {
             print("no settings")
             // Save default settings (all true)

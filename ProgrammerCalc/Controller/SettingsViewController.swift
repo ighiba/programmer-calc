@@ -43,7 +43,7 @@ class SettingsViewController: UITableViewController {
     // Update settings values
     fileprivate func getSettings() {
         // get data from UserDefaults
-        if let settings = SavedData.appSettings {
+        if let data = SavedData.appSettings {
             // loop table cells
             for cell in self.tableView.visibleCells as! [SettingsCell] {
                 if let switcher = cell.accessoryView as? UISwitch {
@@ -52,13 +52,13 @@ class SettingsViewController: UITableViewController {
                     // set switcher to userdefault state
                     switch title {
                     case "Dark mode":
-                        switcher.setOn(settings.darkMode, animated: false)
+                        switcher.setOn(data.darkMode, animated: false)
                         break
                     case "Tapping sounds":
-                        switcher.setOn(settings.tappingSounds, animated: false)
+                        switcher.setOn(data.tappingSounds, animated: false)
                         break
                     case "Haptic feedback":
-                        switcher.setOn(settings.hapticFeedback, animated: false)
+                        switcher.setOn(data.hapticFeedback, animated: false)
                         break
                     default:
                         // TODO: Handle
@@ -75,7 +75,7 @@ class SettingsViewController: UITableViewController {
     
     fileprivate func saveSettings() {
         // set data to UserDefaults
-        if let settings = SavedData.appSettings {
+        if let data = SavedData.appSettings {
             // loop table cells
             for cell in self.tableView.visibleCells as! [SettingsCell] {
                 if let switcher = cell.accessoryView as? UISwitch {
@@ -84,13 +84,13 @@ class SettingsViewController: UITableViewController {
                     // get from switcher state and set to local userdefaults
                     switch title {
                     case "Dark mode":
-                        settings.darkMode = switcher.isOn
+                        data.darkMode = switcher.isOn
                         break
                     case "Tapping sounds":
-                        settings.tappingSounds = switcher.isOn
+                        data.tappingSounds = switcher.isOn
                         break
                     case "Haptic feedback":
-                        settings.hapticFeedback = switcher.isOn
+                        data.hapticFeedback = switcher.isOn
                         break
                     default:
                         // TODO: Handle
@@ -99,7 +99,7 @@ class SettingsViewController: UITableViewController {
                 }
             }
             // Apply settings
-            SavedData.appSettings = SettingsModel(darkMode: settings.darkMode, tappingSounds: settings.tappingSounds, hapticFeedback: settings.hapticFeedback)
+            SavedData.appSettings = SettingsModel(darkMode: data.darkMode, tappingSounds: data.tappingSounds, hapticFeedback: data.hapticFeedback)
             
         } else {
             print("no settings")
