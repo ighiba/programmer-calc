@@ -74,7 +74,6 @@ class PCalcViewController: UIViewController {
                 let fromSystem = settings.systemMain
                 let toSystem = settings.systemConverter
                 converterLabel.text = convertValue(value: mainLabel.text!, from: fromSystem, to: toSystem)
-                //saveCalcState()
             }
         }
     }
@@ -142,6 +141,7 @@ class PCalcViewController: UIViewController {
                 break
             case "Octal":
                 // convert binary to oct
+                //targetStr = self.convertBinToOct(binNumStr: binaryStr)
                 targetStr = "Octal"
                 break
             case "Decimal":
@@ -163,6 +163,10 @@ class PCalcViewController: UIViewController {
         return targetStr
     }
     
+    // ======
+    // Binary
+    // ======
+    
     // BIN -> DEC
     func convertBinToDec( binNumStr: String) -> String {
         var resultStr: String
@@ -171,56 +175,36 @@ class PCalcViewController: UIViewController {
         guard binNumStr != "0" else {
             return "0"
         }
+     
+        // Dividing to int and fract parts
+        let buffDividedStr = divideToDoubleInt(str: binNumStr)
+        var binIntStrBuff = buffDividedStr.0
         
-        if Int(binNumStr) != nil {
-            var binIntStrBuff = binNumStr
-            // converting just int part
-            var buffInt = 0
-            var counter = 0
-            binIntStrBuff = String(binIntStrBuff.reversed())
-            
-            // constructing decimal
-            binIntStrBuff.forEach { (num) in
-                // TODO: Error handling
-                let buffNum = Float(String(num))
-                // 1 * 2^n
-                let buffValue = Int(buffNum! * pow(2,Float(counter)))
-                
-                buffInt += buffValue
-                
-                counter += 1
-            }
-            
-            resultStr = String(buffInt)
-            
-        } else {
-            // Dividing to int and fract parts
+        var buffInt = 0
+        var buffDecimal: Decimal = 0.0
+        var counter = 0
+       
+        guard binIntStrBuff != nil else {
+            return "Error"
+        }
+        
+        binIntStrBuff = String(describing: binIntStrBuff?.reversed())
+        
+        // First: converting int part
+        // constructing decimal
+        binIntStrBuff?.forEach { (num) in
             // TODO: Error handling
-            let buffDividedStr = divideToDoubleInt(str: binNumStr)
-            var binIntStrBuff = buffDividedStr!.0
+            let buffNum = Float(String(num))!
+            // 1 * 2^n
+            let buffValue = Int(buffNum * pow(2, Float(counter)))
             
-            var buffInt = 0
-            var buffDecimal: Decimal = 0.0
-            var counter = 0
-            binIntStrBuff = String(binIntStrBuff.reversed())
+            buffInt += buffValue
             
-            // TODO: DRY
-            // First: converting int part
-            // constructing decimal
-            binIntStrBuff.forEach { (num) in
-                // TODO: Error handling
-                let buffNum = Float(String(num))!
-                // 1 * 2^n
-                let buffValue = Int(buffNum * pow(2, Float(counter)))
-                
-                buffInt += buffValue
-                
-                counter += 1
-            }
-            
-            // Second: converting fract part
-            let binFractStrBuff = buffDividedStr!.1
-            
+            counter += 1
+        }
+        
+        // Second: converting fract part
+        if let binFractStrBuff = buffDividedStr.1 {
             // if fract == 0 then dont calc it
             guard Int(binFractStrBuff) != 0 else {
                 resultStr = "\(buffInt).0"
@@ -240,11 +224,15 @@ class PCalcViewController: UIViewController {
                 
                 counter += 1
             }
+            // return decimal if second value after dividing is nil
             resultStr = "\(Decimal(buffInt) + buffDecimal)"
+            return resultStr
             
+        } else {
+            // return int
+            resultStr = "\(buffInt)"
+            return resultStr
         }
-        
-        return resultStr
     }
     
     // DEC -> BIN
@@ -265,7 +253,7 @@ class PCalcViewController: UIViewController {
             binaryStr = convertIntToBinary(number: decNumInt)
         } else {
             // TODO   Error handling
-            let splittedDoubleStr: (String, String) = divideToDoubleInt(str: decNumStrBuff)!
+            let splittedDoubleStr: (String?, String?) = divideToDoubleInt(str: decNumStrBuff)
             binaryStr = convertDoubleToBinaryStr(numberStr: splittedDoubleStr)
             
         }
@@ -414,38 +402,49 @@ class PCalcViewController: UIViewController {
     }
     
     // Combine to parts to double string
-    func convertDoubleToBinaryStr( numberStr: (String,String)) -> String {
-        let intNumber = Int(numberStr.0)!
+    func convertDoubleToBinaryStr( numberStr: (String?, String?)) -> String {
+        // Error handling
+        guard numberStr.0 != nil else {
+            return "Error"
+        }
+        guard numberStr.1 != nil else {
+            return "Error"
+        }
+        let intNumber = Int(numberStr.0!)!
         
-        return "\(convertIntToBinary(number: intNumber)).\(convertFractToBinary(numberStr: numberStr.1))"
+        return "\(convertIntToBinary(number: intNumber)).\(convertFractToBinary(numberStr: numberStr.1!))"
     }
     
     // Dividing string variable and converting it to double without loss of precision
-    func divideToDoubleInt( str: String) -> (String, String)? {
+    func divideToDoubleInt( str: String) -> (String?, String?) {
         
         var strInt: String
         var strFract: String
-        var pointPos: String.Index
 
         // check for floating point
-        guard str.contains(".") else {
-            return nil
-        }
+//        guard str.contains(".") else {
+//            return nil
+//        }
            
         // search index of floating pos
-        pointPos = str.firstIndex(of: ".")!
-           
-        // fill strInt
-        strInt = String(str[str.startIndex..<pointPos])
-           
-        // fill strFract
-        strFract = String(str[pointPos..<str.endIndex])
-        // delete .
-        strFract.remove(at: strFract.startIndex)
-           
-           
-        print(" \(strInt)...\(strFract)")
-        return (strInt, strFract)
+        if let pointPos = str.firstIndex(of: ".") {
+            // fill strInt
+            strInt = String(str[str.startIndex..<pointPos])
+               
+            // fill strFract
+            strFract = String(str[pointPos..<str.endIndex])
+            // delete .
+            strFract.remove(at: strFract.startIndex)
+            
+            print(" \(strInt)...\(strFract)")
+            return (strInt, strFract)
+ 
+        } else {
+            // if is int
+            print("no float, return int and nil")
+            return (str, nil)
+        }
+
     }
     
     // Calculation of 2 decimal numbers by .operation
