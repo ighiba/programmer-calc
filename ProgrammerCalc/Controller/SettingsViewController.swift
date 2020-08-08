@@ -43,7 +43,7 @@ class SettingsViewController: UITableViewController {
     // Update settings values
     fileprivate func getSettings() {
         // get data from UserDefaults
-        if let settings = Settings.appSettings {
+        if let settings = SavedData.appSettings {
             // loop table cells
             for cell in self.tableView.visibleCells as! [SettingsCell] {
                 if let switcher = cell.accessoryView as? UISwitch {
@@ -69,13 +69,13 @@ class SettingsViewController: UITableViewController {
         } else {
             print("no settings")
             // Save default settings (all true)
-            Settings.appSettings = SettingsModel(darkMode: true, tappingSounds: true, hapticFeedback: true)
+            SavedData.appSettings = SettingsModel(darkMode: true, tappingSounds: true, hapticFeedback: true)
         }
     }
     
     fileprivate func saveSettings() {
         // set data to UserDefaults
-        if let settings = Settings.appSettings {
+        if let settings = SavedData.appSettings {
             // loop table cells
             for cell in self.tableView.visibleCells as! [SettingsCell] {
                 if let switcher = cell.accessoryView as? UISwitch {
@@ -99,12 +99,12 @@ class SettingsViewController: UITableViewController {
                 }
             }
             // Apply settings
-            Settings.appSettings = SettingsModel(darkMode: settings.darkMode, tappingSounds: settings.tappingSounds, hapticFeedback: settings.hapticFeedback)
+            SavedData.appSettings = SettingsModel(darkMode: settings.darkMode, tappingSounds: settings.tappingSounds, hapticFeedback: settings.hapticFeedback)
             
         } else {
             print("no settings")
             // Save default settings (all true)
-            Settings.appSettings = SettingsModel(darkMode: true, tappingSounds: true, hapticFeedback: true)
+            SavedData.appSettings = SettingsModel(darkMode: true, tappingSounds: true, hapticFeedback: true)
         }
         
     }

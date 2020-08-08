@@ -8,12 +8,13 @@
 
 import Foundation
 
-final class Settings {
+final class SavedData {
     
     // keys enumeration of settigs that stored in UserDefaults
     private enum Keys: String {
         case appSettings = "appSettings"
         case conversionSettings = "conversionSettings"
+        case calcState = "calcState"
     }
     
     // For storing app setings
@@ -53,6 +54,27 @@ final class Settings {
             } else {
                 // delete data if doesn't encode
                 UserDefaults.standard.removeObject(forKey: Keys.conversionSettings.rawValue)
+            }
+            UserDefaults.standard.synchronize()
+        }
+    }
+    
+    // For storing labels state
+    static var calcState: CalcState? {
+        get {
+            guard let data = UserDefaults.standard.data(forKey: Keys.calcState.rawValue) else {
+                // if data doesn't exists
+                return nil
+            }
+            // if data (stored value) exists
+            return try? JSONDecoder().decode(CalcState.self, from: data)
+        }
+        set {
+            if let data = try? JSONEncoder().encode(newValue) {
+                UserDefaults.standard.set(data, forKey: Keys.calcState.rawValue)
+            } else {
+                // delete data if doesn't encode
+                UserDefaults.standard.removeObject(forKey: Keys.calcState.rawValue)
             }
             UserDefaults.standard.synchronize()
         }

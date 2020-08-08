@@ -10,7 +10,7 @@ import UIKit
 
 class PCalcViewController: UIViewController {
     
-    var calcState: CalcState?
+    var mathState: MathState?
     let calcView: PCalcView = PCalcView()
     lazy var mainLabel: UILabel = calcView.mainLabel
     lazy var converterLabel: UILabel = calcView.converterLabel
@@ -37,6 +37,33 @@ class PCalcViewController: UIViewController {
     // Methods
     // =======
     
+    // Update conversion values
+//    fileprivate func getConversionSettings() {
+//        // get data from UserDefaults
+//        if let settings = SavedData.conversionSettings {
+//            // TODO: Error handling
+//            let mainRow: Int = picker.systemsModel.conversionSystems.firstIndex(of: settings.systemMain)!
+//            let converterRow: Int = picker.systemsModel.conversionSystems.firstIndex(of: settings.systemConverter)!
+//            // Picker component
+//            // 0 - main
+//            // 1 - converter
+//            picker.selectRow(mainRow, inComponent: 0, animated: false)
+//            picker.selectRow(converterRow, inComponent: 1, animated: false)
+//
+//            // Slider label
+//            labelValue.text = String(Int(settings.numbersAfterPoint) * 4)
+//
+//            // Slider
+//            slider.value = settings.numbersAfterPoint
+//            sliderOldValue = settings.numbersAfterPoint
+//        }  else {
+//            print("no settings")
+//            // Save default settings (all true)
+//            let systems = ConversionModel.ConversionSystemsEnum.self
+//            SavedData.conversionSettings = ConversionSettingsModel(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 2.0)
+//        }
+//    }
+    
     func updateConverterLabel() {
         // TODO: Refator hadling for Hexadecimal values
         if Double(mainLabel.text!) == nil {
@@ -44,7 +71,7 @@ class PCalcViewController: UIViewController {
         } else {
             // Uptade converter label with converted number
             // TODO: Error handling
-            if let settings = Settings.conversionSettings {
+            if let settings = SavedData.conversionSettings {
                 let fromSystem = settings.systemMain
                 let toSystem = settings.systemConverter
                 converterLabel.text = convertValue(value: mainLabel.text!, from: fromSystem, to: toSystem)
@@ -423,7 +450,7 @@ class PCalcViewController: UIViewController {
     
     // Calculation of 2 decimal numbers by .operation
     // TODO: Make error handling for overflow
-    func calculateDecNumbers( firstNum: String, secondNum: String, operation: CalcState.mathOperation) -> String? {
+    func calculateDecNumbers( firstNum: String, secondNum: String, operation: MathState.mathOperation) -> String? {
         var resultStr: String = String()
         
         let firstDecimal = Decimal(string: firstNum)
@@ -514,9 +541,9 @@ class PCalcViewController: UIViewController {
             return false
         }()
         
-        if calcState != nil {
+        if mathState != nil {
             // if new value not inputed
-            if !calcState!.inputStart {
+            if !mathState!.inputStart {
                 
                 switch buttonText {
                 case ".":
@@ -526,7 +553,7 @@ class PCalcViewController: UIViewController {
                     label.text = buttonText
                     break
                 }
-                calcState!.inputStart = true
+                mathState!.inputStart = true
             } else {
                 // handle for number of digits in mainLabel
                 if isOverflowed {
@@ -614,7 +641,7 @@ class PCalcViewController: UIViewController {
             label.text! = "0"
             convertLabel.text! = "0"
             acButton.setTitle("AC", for: .normal)
-            calcState = nil
+            mathState = nil
         }
         
         switch buttonText {
@@ -622,13 +649,13 @@ class PCalcViewController: UIViewController {
         case "AC":
             label.text! = "0"
             convertLabel.text! = "0"
-            calcState = nil
+            mathState = nil
             break
         case "C":
             label.text! = "0"
             convertLabel.text! = "0"
             button.setTitle("AC", for: .normal)
-            calcState = nil
+            mathState = nil
             break
         // Invert button
         case "\u{00B1}":
@@ -648,76 +675,76 @@ class PCalcViewController: UIViewController {
         // Subtraction button
         case "\u{00f7}":
             // calc results
-            if calcState != nil {
+            if mathState != nil {
                 print("calculation")
-                if let result = calculateDecNumbers(firstNum: calcState!.buffValue, secondNum: label.text!, operation: calcState!.operation) {
+                if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
                     updateConverterLabel()
-                    calcState = nil
-                    calcState = CalcState(buffValue: label.text!, operation: .div)
-                    calcState?.lastResult = result
+                    mathState = nil
+                    mathState = MathState(buffValue: label.text!, operation: .div)
+                    mathState?.lastResult = result
                 }
             } else {
-                calcState = CalcState(buffValue: label.text!, operation: .div)
+                mathState = MathState(buffValue: label.text!, operation: .div)
             }
             break
         // Multiplication button
         case "X":
             // calc results
-            if calcState != nil {
+            if mathState != nil {
                 print("calculation")
-                if let result = calculateDecNumbers(firstNum: calcState!.buffValue, secondNum: label.text!, operation: calcState!.operation) {
+                if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
                     updateConverterLabel()
-                    calcState = nil
-                    calcState = CalcState(buffValue: label.text!, operation: .mul)
-                    calcState?.lastResult = result
+                    mathState = nil
+                    mathState = MathState(buffValue: label.text!, operation: .mul)
+                    mathState?.lastResult = result
                 }
             } else {
-                calcState = CalcState(buffValue: label.text!, operation: .mul)
+                mathState = MathState(buffValue: label.text!, operation: .mul)
             }
             break
         // Multiplication button
         case "-":
             // calc results
-            if calcState != nil {
+            if mathState != nil {
                 print("calculation")
-                if let result = calculateDecNumbers(firstNum: calcState!.buffValue, secondNum: label.text!, operation: calcState!.operation) {
+                if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
                     updateConverterLabel()
-                    calcState = nil
-                    calcState = CalcState(buffValue: label.text!, operation: .sub)
-                    calcState?.lastResult = result
+                    mathState = nil
+                    mathState = MathState(buffValue: label.text!, operation: .sub)
+                    mathState?.lastResult = result
                 }
             } else {
-                calcState = CalcState(buffValue: label.text!, operation: .sub)
+                mathState = MathState(buffValue: label.text!, operation: .sub)
             }
             break
         // Addition button
         case "+":
             // calc results
-            if calcState != nil {
+            if mathState != nil {
                 print("calculation")
-                if let result = calculateDecNumbers(firstNum: calcState!.buffValue, secondNum: label.text!, operation: calcState!.operation) {
+                if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
                     updateConverterLabel()
-                    calcState = nil
-                    calcState = CalcState(buffValue: label.text!, operation: .add)
-                    calcState?.lastResult = result
+                    mathState = nil
+                    mathState = MathState(buffValue: label.text!, operation: .add)
+                    mathState?.lastResult = result
                 }
             } else {
-                calcState = CalcState(buffValue: label.text!, operation: .add)
+                mathState = MathState(buffValue: label.text!, operation: .add)
             }
             break
         case "=":
-            if calcState != nil {
+            if mathState != nil {
                 print("calculation")
-                if let result = calculateDecNumbers(firstNum: calcState!.buffValue, secondNum: label.text!, operation: calcState!.operation) {
+                if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
                     updateConverterLabel()
                 }
                 // reset state
-                calcState = nil
+                mathState = nil
             } else {
                 print("do nothing")
             }

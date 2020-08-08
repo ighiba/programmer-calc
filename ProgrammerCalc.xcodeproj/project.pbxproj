@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C05A169B24DD7B0D007B7FB8 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05A169A24DD7B0D007B7FB8 /* Settings.swift */; };
+		C05A169B24DD7B0D007B7FB8 /* SavedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05A169A24DD7B0D007B7FB8 /* SavedData.swift */; };
 		C0619AC224D71227008A7291 /* ConversionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0619AC124D71227008A7291 /* ConversionView.swift */; };
 		C0619AC424D71240008A7291 /* ConversionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0619AC324D71240008A7291 /* ConversionViewController.swift */; };
 		C0635A7924D9E0F6003855A9 /* ConversionPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */; };
@@ -45,7 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		C05A169A24DD7B0D007B7FB8 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		C05A169A24DD7B0D007B7FB8 /* SavedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedData.swift; sourceTree = "<group>"; };
 		C0619AC124D71227008A7291 /* ConversionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionView.swift; sourceTree = "<group>"; };
 		C0619AC324D71240008A7291 /* ConversionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionViewController.swift; sourceTree = "<group>"; };
 		C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionPicker.swift; sourceTree = "<group>"; };
@@ -99,7 +99,7 @@
 		C05A169924DD7AF7007B7FB8 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				C05A169A24DD7B0D007B7FB8 /* Settings.swift */,
+				C05A169A24DD7B0D007B7FB8 /* SavedData.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -325,7 +325,7 @@
 				C0619AC224D71227008A7291 /* ConversionView.swift in Sources */,
 				C0635A7B24D9E2AA003855A9 /* ConversionModel.swift in Sources */,
 				C077CF6F24DC8DEE008E5F0F /* SettingsCell.swift in Sources */,
-				C05A169B24DD7B0D007B7FB8 /* Settings.swift in Sources */,
+				C05A169B24DD7B0D007B7FB8 /* SavedData.swift in Sources */,
 				C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */,
 				C0BCA63724CCDCCD006A814B /* PCalcModel.swift in Sources */,
 				C0E5FC7624BB9B8D00BA93CA /* PCalcView.swift in Sources */,

@@ -43,7 +43,7 @@ class ConversionViewController: UIViewController {
     // Update conversion values
     fileprivate func getConversionSettings() {
         // get data from UserDefaults
-        if let settings = Settings.conversionSettings {
+        if let settings = SavedData.conversionSettings {
             // TODO: Error handling
             let mainRow: Int = picker.systemsModel.conversionSystems.firstIndex(of: settings.systemMain)!
             let converterRow: Int = picker.systemsModel.conversionSystems.firstIndex(of: settings.systemConverter)!
@@ -63,7 +63,7 @@ class ConversionViewController: UIViewController {
             print("no settings")
             // Save default settings (all true)
             let systems = ConversionModel.ConversionSystemsEnum.self
-            Settings.conversionSettings = ConversionSettingsModel(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 2.0)
+            SavedData.conversionSettings = ConversionSettingsModel(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 2.0)
         }
     }
     
@@ -79,7 +79,7 @@ class ConversionViewController: UIViewController {
         // Slider
         let sliderValue = slider.value.rounded()
         // set data to UserDefaults
-        Settings.conversionSettings = ConversionSettingsModel(systMain: mainSelectedString!, systConverter: converterSelectedString!, number: sliderValue)
+        SavedData.conversionSettings = ConversionSettingsModel(systMain: mainSelectedString!, systConverter: converterSelectedString!, number: sliderValue)
     }
     
     // =======
@@ -103,7 +103,7 @@ class ConversionViewController: UIViewController {
             // do nothing
         } else {
             // taptic feedback generator
-            if (Settings.appSettings?.hapticFeedback ?? false) {
+            if (SavedData.appSettings?.hapticFeedback ?? false) {
                 let generator = UIImpactFeedbackGenerator(style: .medium)
                 generator.prepare()
                 // impact
