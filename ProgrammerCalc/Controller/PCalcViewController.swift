@@ -141,8 +141,8 @@ class PCalcViewController: UIViewController {
                 break
             case "Octal":
                 // convert binary to oct
-                //targetStr = self.convertBinToOct(binNumStr: binaryStr)
-                targetStr = "Octal"
+                targetStr = self.convertBinToOct(binNumStr: binaryStr)
+                //targetStr = "Octal"
                 break
             case "Decimal":
                 // convert binary to dec
@@ -327,7 +327,7 @@ class PCalcViewController: UIViewController {
                 }
             }
             
-            // add zeroes before for filling th discharges
+            // add zeros before for filling th discharges
             if counter > 0 {
                 for _ in 0...3-counter {
                     buffStr.append("0")
@@ -349,6 +349,7 @@ class PCalcViewController: UIViewController {
         if Int(numberStr) == 0 {
             resultStr = "0"
         } else {
+            // number of digits after point
             let counter: Int = 8
             // form double string
             buffStr.append(numberStr)
@@ -387,7 +388,7 @@ class PCalcViewController: UIViewController {
                 }
             }
             
-            // add zeroes after for filling th discharges
+            // add zeros after for filling th discharges
             if counter > 0 {
                 for _ in 0...3-counter {
                     buffStr.append("0")
@@ -446,9 +447,88 @@ class PCalcViewController: UIViewController {
         }
 
     }
+    
+    // filling up number with zeros by num of zeros in 1 discharge
+    func fillUpDischarges(by fillNum: Int , _ str: String) -> String {
+        
+        if str == "0" {
+            return str
+        }
+        // remove all spaces
+        var buffStr = ""
+        str.forEach { (char) in
+            // if char != space then ok
+            if char != " " {
+                buffStr.append(char)
+            }
+        }
+        
+        // remove all zeros at beginning of string
+        while buffStr.first == "0" {
+            buffStr.removeFirst(1)
+        }
+        
+        var counter = 0
+        // count how much 0 is need for filling
+        buffStr.forEach({ (num) in
+            if counter == fillNum - 1 {
+                    counter = 0
+                } else {
+                    counter += 1
+                }
+            })
+        
+        // reverse string
+        buffStr = String(buffStr.reversed())
+        // add zeros after for filling th discharges
+        if counter > 0 {
+            for _ in 0...fillNum-counter-1 {
+                buffStr.append("0")
+            }
+        }
+        // reverse again for result
+        buffStr = String(buffStr.reversed())
+        
+        return buffStr
+    }
+    
     // =====
     // Octal
     // =====
+    
+    // Convert from table helper
+    fileprivate func convertFromOctTable(str: String) -> String {
+        var binStrBuff = str
+        var buffResultStr = String()
+        
+        // octal table
+        // from 0 to 7
+        let table = ["000", "001", "010", "011", "100", "101", "110", "111"]
+
+        let intDischarges = Int(binStrBuff.count / 3)
+        // process each dischagre
+        for _ in 0..<intDischarges {
+            var dischCounter = 0
+            var buffDischarge = String()
+            // get first 3 chars
+            while dischCounter < 3 {
+                buffDischarge.append(binStrBuff.first!)
+                // delete first char
+                binStrBuff.remove(at: binStrBuff.startIndex)
+                
+                dischCounter += 1
+            }
+            
+            // convert these 3 chars (discharge) into Octal by using table
+            for (index, value) in table.enumerated() {
+                if buffDischarge == value {
+                    buffResultStr.append(String(index))
+                    break
+                }
+            }
+        }
+        return buffResultStr
+    }
     
     // BIN -> OCT
     func convertBinToOct( binNumStr: String) -> String {
@@ -463,57 +543,57 @@ class PCalcViewController: UIViewController {
         let buffDividedStr = divideToDoubleInt(str: binNumStr)
         var binIntStrBuff = buffDividedStr.0
         
-        var buffInt = 0
-        var buffDecimal: Decimal = 0.0
-        var counter = 0
+        var resultIntStr = String()
+        var resultFractStr = String()
+        
        
         guard binIntStrBuff != nil else {
             return "Error"
         }
         
-        binIntStrBuff = String(describing: binIntStrBuff?.reversed())
+        // delete zeros from discharges by 4 and filling up by 3
+        binIntStrBuff = fillUpDischarges(by: 3, binIntStrBuff!)
         
         // First: converting int part
-        // constructing decimal
-        binIntStrBuff?.forEach { (num) in
-            // TODO: Error handling
-            let buffNum = Float(String(num))!
-            // 1 * 2^n
-            let buffValue = Int(buffNum * pow(2, Float(counter)))
-            
-            buffInt += buffValue
-            
-            counter += 1
+        // dont count if zero
+        if binIntStrBuff == "0" {
+            resultIntStr = "0"
+        } else {
+            // First: converting int part
+           resultIntStr = convertFromOctTable(str: binIntStrBuff!)
         }
+        
+        
         
         // Second: converting fract part
         if let binFractStrBuff = buffDividedStr.1 {
-            // if fract == 0 then dont calc it
-            guard Int(binFractStrBuff) != 0 else {
-                resultStr = "\(buffInt).0"
-                return resultStr
+            // Check for zero in fract
+            guard binFractStrBuff != "0" else {
+                return "\(resultIntStr).\(binFractStrBuff)"
             }
             
-            counter = 1
+            var strBuff = binFractStrBuff
+            // reverse for conversion
+            strBuff = String(strBuff.reversed())
+            // delete zeros from discharges by 4 and filling up by 3
+            strBuff = fillUpDischarges(by: 3, strBuff)
+            // reverse back
+            strBuff = String(strBuff.reversed())
+            // add zeros to end
+            resultFractStr = convertFromOctTable(str: strBuff)
             
-            binFractStrBuff.forEach { (num) in
-                // TODO: Error handling
-                let buffInt = Int("\(num)")!
-                let buffIntDecimal = Decimal(integerLiteral: buffInt)
-                // 1 * 2^-n
-                let buffValue: Decimal = buffIntDecimal *  ( 1.0 / pow(2 as Decimal, counter))
-                
-                buffDecimal += buffValue
-                
-                counter += 1
+            // if low precise
+            // TODO: Make advice to slider with number of digits
+            if resultFractStr == "" {
+                resultFractStr = "0"
             }
-            // return decimal if second value after dividing is nil
-            resultStr = "\(Decimal(buffInt) + buffDecimal)"
+            
+            resultStr = "\(resultIntStr).\(resultFractStr)"
             return resultStr
             
         } else {
             // return int
-            resultStr = "\(buffInt)"
+            resultStr = "\(resultIntStr)"
             return resultStr
         }
     }
