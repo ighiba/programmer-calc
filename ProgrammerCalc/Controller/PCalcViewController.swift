@@ -110,7 +110,7 @@ class PCalcViewController: UIViewController {
                 break
             case "Octal":
                 // convert oct to binary
-                binaryStr = "0"
+                binaryStr = self.convertOctToBinary(octNumStr: anyStr)
                 break
             case "Decimal":
                 // convert dec to binary
@@ -493,41 +493,67 @@ class PCalcViewController: UIViewController {
     // Octal
     // =====
     
-    // Convert from table helper
-    fileprivate func convertFromOctTable(str: String) -> String {
-        var binStrBuff = str
+    // Convert form oct with table helper
+    // Convert to oct with table helper
+    fileprivate func convertOctTable(str: String, toBinary: Bool) -> String {
+        var buffStr = str
         var buffResultStr = String()
         
         // octal table
         // from 0 to 7
         let table = ["000", "001", "010", "011", "100", "101", "110", "111"]
-
-        let intParts = Int(binStrBuff.count / 3)
-        // process each part
-        // part is 3 digits
-        for _ in 0..<intParts {
-            var partCounter = 0
-            var buffPart = String()
-            // get first 3 chars
-            while partCounter < 3 {
-                buffPart.append(binStrBuff.first!)
-                // delete first char
-                binStrBuff.remove(at: binStrBuff.startIndex)
-                
-                partCounter += 1
+        
+        if toBinary {
+            // from octal to binary
+            // process each number and form parts
+            buffStr.forEach { (num) in
+                if num != "." {
+                    for (index, value) in table.enumerated() {
+                        if Int("\(num)") == index {
+                            // append balue from table
+                            buffResultStr.append(value)
+                        }
+                    }
+                } else {
+                    // append .
+                    buffResultStr.append(num)
+                }
             }
-            
-            // convert these 3 chars (part) into Octal by using table
-            for (index, value) in table.enumerated() {
-                if buffPart == value {
-                    buffResultStr.append(String(index))
-                    break
+        } else {
+            // from binary to octal
+            let intParts = Int(buffStr.count / 3)
+            // process each part
+            // part is 3 digits
+            for _ in 0..<intParts {
+                var partCounter = 0
+                var buffPart = String()
+                // get first 3 chars
+                while partCounter < 3 {
+                    buffPart.append(buffStr.first!)
+                    // delete first char
+                    buffStr.remove(at: buffStr.startIndex)
+                    
+                    partCounter += 1
+                }
+                // convert these 3 chars (part) into Octal by using table
+                for (index, value) in table.enumerated() {
+                    if buffPart == value {
+                        // append index from table
+                        buffResultStr.append(String(index))
+                        break
+                    }
                 }
             }
         }
         return buffResultStr
     }
     
+    // OCT -> BIN
+    fileprivate func convertOctToBinary(octNumStr: String) -> String {
+        return convertOctTable(str: octNumStr, toBinary: true)
+    }
+    
+    // TODO: Refactor to table
     // BIN -> OCT
     fileprivate func convertBinToOct( binNumStr: String) -> String {
         var resultStr: String
@@ -558,7 +584,7 @@ class PCalcViewController: UIViewController {
             resultIntStr = "0"
         } else {
             // First: converting int part
-           resultIntStr = convertFromOctTable(str: binIntStrBuff!)
+           resultIntStr = convertOctTable(str: binIntStrBuff!, toBinary: true)
         }
         
         
@@ -578,7 +604,7 @@ class PCalcViewController: UIViewController {
             // reverse back
             strBuff = String(strBuff.reversed())
             // add zeros to end
-            resultFractStr = convertFromOctTable(str: strBuff)
+            resultFractStr = convertOctTable(str: strBuff, toBinary: true)
             
             // if low precise
             // TODO: Make advice to slider with number of digits
