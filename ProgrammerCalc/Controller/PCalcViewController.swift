@@ -306,7 +306,13 @@ class PCalcViewController: UIViewController {
             resultStr = String(resultStr.reversed())
         }
         
-        resultStr = divideStr(str: resultStr, by: 4)
+        // divide it by parts with 4 digits each
+        if resultStr.count >= 1 && resultStr != "0" {
+            resultStr = String(resultStr.reversed())
+            resultStr = divideStr(str: resultStr, by: 4)
+            resultStr = String(resultStr.reversed())
+        }
+
         return resultStr
     }
     
@@ -425,6 +431,7 @@ class PCalcViewController: UIViewController {
             // delete space before and after .
             if buffStr.contains(".") {
                 var pointPos = buffStr.firstIndex(of: ".")!
+                
                 var pointBuff = buffStr.index(before: pointPos)
                 
                 // delete space before if exists
@@ -910,6 +917,7 @@ class PCalcViewController: UIViewController {
             if label.text != "0" {
                 // if number is already signed
                 // TODO: Error handling
+                // TODO: Various sytems handling
                 if label.text!.contains("-") {
                     let minusIndex = label.text!.firstIndex(of: "-")
                     label.text!.remove(at: minusIndex!)
