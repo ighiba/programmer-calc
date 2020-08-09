@@ -110,7 +110,7 @@ class PCalcViewController: UIViewController {
                 break
             case "Octal":
                 // convert oct to binary
-                binaryStr = self.convertOctToBinary(octNumStr: anyStr)
+                binaryStr = self.convertOctToBin(octNumStr: anyStr)
                 break
             case "Decimal":
                 // convert dec to binary
@@ -118,7 +118,7 @@ class PCalcViewController: UIViewController {
                 break
             case "Hexadecimal":
                 // convert hex to binary
-                binaryStr = "0"
+                binaryStr = self.convertHexToBin(hexNumStr: anyStr)
                 break
             default:
                 // do nothing
@@ -141,7 +141,7 @@ class PCalcViewController: UIViewController {
                 break
             case "Octal":
                 // convert binary to oct
-                targetStr = self.convertBinToOct(binNumStr: binaryStr)
+                targetStr = self.convertBinToOctHex(binNumStr: binaryStr, targetSystem: .oct)
                 break
             case "Decimal":
                 // convert binary to dec
@@ -150,7 +150,7 @@ class PCalcViewController: UIViewController {
                 break
             case "Hexadecimal":
                 // convert binary to hex
-                targetStr = "Hexadecimal"
+                targetStr = self.convertBinToOctHex(binNumStr: binaryStr, targetSystem: .hex)
                 break
             default:
                 // do nothing
@@ -384,7 +384,7 @@ class PCalcViewController: UIViewController {
                 }
             }
             
-            // add zeros after for filling th parts
+            // add zeros after for filling the parts
             if counter > 0 {
                 for _ in 0...3-counter {
                     buffStr.append("0")
@@ -445,13 +445,8 @@ class PCalcViewController: UIViewController {
 
     }
     
-    // filling up number with zeros by num of zeros in 1 part
-    fileprivate func fillUpParts(by fillNum: Int , _ str: String) -> String {
-        
-        if str == "0" {
-            return str
-        }
-        // remove all spaces
+    // remove all spaces
+    fileprivate func removeAllSpaces(str: String) -> String{
         var buffStr = ""
         str.forEach { (char) in
             // if char != space then ok
@@ -459,6 +454,18 @@ class PCalcViewController: UIViewController {
                 buffStr.append(char)
             }
         }
+        return buffStr
+    }
+    
+    // filling up number with zeros by num of zeros in 1 part
+    fileprivate func fillUpParts(by fillNum: Int , _ str: String) -> String {
+        
+        if str == "0" {
+            return str
+        }
+        
+        // remove spaces
+        var buffStr = removeAllSpaces(str: str)
         
         // remove all zeros at beginning of string
         while buffStr.first == "0" {
@@ -493,25 +500,63 @@ class PCalcViewController: UIViewController {
     // Octal
     // =====
     
-    // Convert form oct with table helper
-    // Convert to oct with table helper
-    fileprivate func convertOctTable(str: String, toBinary: Bool) -> String {
-        var buffStr = str
+    // Convert form oct or hex with table helper
+    // Convert to oct or hex with table helper
+    fileprivate func convertOctHexTable(str: String, system: ConversionModel.ConversionSystemsEnum, toBinary: Bool) -> String {
+        // remove all spaces
+        var buffStr = removeAllSpaces(str: str)
         var buffResultStr = String()
         
-        // octal table
-        // from 0 to 7
-        let table = ["000", "001", "010", "011", "100", "101", "110", "111"]
+        let partition: Int
+        
+        // octal or hex table
+        // from 0 to 7 or from 0 to 16
+        var table = ["":""]
+        
+        if system == .hex {
+            // partititon set to 4
+            partition = 4
+            // hex table
+            table = [   "0000":"0",
+                        "0001":"1",
+                        "0010":"2",
+                        "0011":"3",
+                        "0100":"4",
+                        "0101":"5",
+                        "0110":"6",
+                        "0111":"7",
+                        "1000":"8",
+                        "1001":"9",
+                        "1010":"A",
+                        "1011":"B",
+                        "1100":"C",
+                        "1101":"D",
+                        "1110":"E",
+                        "1111":"F",]
+            
+        } else {
+            // partittion set to 3
+            partition = 3
+            // octal table
+            table = [   "000":"0",
+                        "001":"1",
+                        "010":"2",
+                        "011":"3",
+                        "100":"4",
+                        "101":"5",
+                        "110":"6",
+                        "111":"7",]
+        }
         
         if toBinary {
-            // from octal to binary
+            // from octal or hex to binary
             // process each number and form parts
             buffStr.forEach { (num) in
                 if num != "." {
-                    for (index, value) in table.enumerated() {
-                        if Int("\(num)") == index {
+                    for (key, value) in table {
+                        if "\(num)" == value {
                             // append balue from table
-                            buffResultStr.append(value)
+                            buffResultStr.append("\(key)")
                         }
                     }
                 } else {
@@ -520,26 +565,27 @@ class PCalcViewController: UIViewController {
                 }
             }
         } else {
-            // from binary to octal
-            let intParts = Int(buffStr.count / 3)
+            // from binary to octal or hex
+            // divide by part
+            let intParts = Int(buffStr.count / partition)
             // process each part
-            // part is 3 digits
+            // part is 3 or 4 digits
             for _ in 0..<intParts {
                 var partCounter = 0
                 var buffPart = String()
                 // get first 3 chars
-                while partCounter < 3 {
+                while partCounter < partition {
                     buffPart.append(buffStr.first!)
                     // delete first char
                     buffStr.remove(at: buffStr.startIndex)
                     
                     partCounter += 1
                 }
-                // convert these 3 chars (part) into Octal by using table
-                for (index, value) in table.enumerated() {
-                    if buffPart == value {
+                // convert these part into Octal or Hexadeicaml by using table
+                for (key, value) in table {
+                    if buffPart == key {
                         // append index from table
-                        buffResultStr.append(String(index))
+                        buffResultStr.append(value)
                         break
                     }
                 }
@@ -549,19 +595,28 @@ class PCalcViewController: UIViewController {
     }
     
     // OCT -> BIN
-    fileprivate func convertOctToBinary(octNumStr: String) -> String {
-        return convertOctTable(str: octNumStr, toBinary: true)
+    fileprivate func convertOctToBin( octNumStr: String) -> String {
+        return convertOctHexTable(str: octNumStr, system: .oct, toBinary: true)
     }
     
     // TODO: Refactor to table
-    // BIN -> OCT
-    fileprivate func convertBinToOct( binNumStr: String) -> String {
+    // BIN -> OCT/HEX
+    fileprivate func convertBinToOctHex( binNumStr: String, targetSystem: ConversionModel.ConversionSystemsEnum) -> String {
         var resultStr: String
         
         // if zero
         guard binNumStr != "0" else {
             return "0"
         }
+        
+        // set partition
+        let partition: Int = {
+            if targetSystem == .hex {
+                return 4
+            } else {
+                return 3
+            }
+        }()
      
         // Dividing to int and fract parts
         let buffDividedStr = divideToDoubleInt(str: binNumStr)
@@ -576,7 +631,7 @@ class PCalcViewController: UIViewController {
         }
         
         // delete zeros from parts by 4 and filling up by 3
-        binIntStrBuff = fillUpParts(by: 3, binIntStrBuff!)
+        binIntStrBuff = fillUpParts(by: partition, binIntStrBuff!)
         
         // First: converting int part
         // dont count if zero
@@ -584,7 +639,7 @@ class PCalcViewController: UIViewController {
             resultIntStr = "0"
         } else {
             // First: converting int part
-           resultIntStr = convertOctTable(str: binIntStrBuff!, toBinary: true)
+            resultIntStr = convertOctHexTable(str: binIntStrBuff!, system: targetSystem, toBinary: false)
         }
         
         
@@ -600,11 +655,11 @@ class PCalcViewController: UIViewController {
             // reverse for conversion
             strBuff = String(strBuff.reversed())
             // delete zeros from parts by 4 and filling up by 3
-            strBuff = fillUpParts(by: 3, strBuff)
+            strBuff = fillUpParts(by: partition, strBuff)
             // reverse back
             strBuff = String(strBuff.reversed())
             // add zeros to end
-            resultFractStr = convertOctTable(str: strBuff, toBinary: true)
+            resultFractStr = convertOctHexTable(str: strBuff, system: targetSystem, toBinary: false)
             
             // if low precise
             // TODO: Make advice to slider with number of digits
@@ -622,6 +677,15 @@ class PCalcViewController: UIViewController {
         }
     }
     
+    // ===========
+    // Hexadecimal
+    // ===========
+    
+    // HEX -> BIN
+    fileprivate func convertHexToBin(hexNumStr: String) -> String {
+        return convertOctHexTable(str: hexNumStr, system: .hex, toBinary: true)
+    }
+   
     // Calculation of 2 decimal numbers by .operation
     // TODO: Make error handling for overflow
     fileprivate func calculateDecNumbers( firstNum: String, secondNum: String, operation: MathState.mathOperation) -> String? {
