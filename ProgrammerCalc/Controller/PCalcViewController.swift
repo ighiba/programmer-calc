@@ -15,7 +15,6 @@ class PCalcViewController: UIViewController {
     lazy var mainLabel: UILabel = calcView.mainLabel
     lazy var converterLabel: UILabel = calcView.converterLabel
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -25,7 +24,6 @@ class PCalcViewController: UIViewController {
         getCalcState()
 
     }
-    
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -174,9 +172,12 @@ class PCalcViewController: UIViewController {
         guard binNumStr != "0" else {
             return "0"
         }
+        
+        // remove all spaces
+        let str = removeAllSpaces(str: binNumStr)
      
         // Dividing to int and fract parts
-        let buffDividedStr = divideToDoubleInt(str: binNumStr)
+        let buffDividedStr = divideToDoubleInt(str: str)
         var binIntStrBuff = buffDividedStr.0
         
         var buffInt = 0
@@ -192,14 +193,14 @@ class PCalcViewController: UIViewController {
         // First: converting int part
         // constructing decimal
         binIntStrBuff?.forEach { (num) in
-            // TODO: Error handling
-            let buffNum = Float(String(num))!
-            // 1 * 2^n
-            let buffValue = Int(buffNum * pow(2, Float(counter)))
-            
-            buffInt += buffValue
-            
-            counter += 1
+            if let buffNum = Float("\(num)") {
+                // 1 * 2^n
+                let buffValue = Int(buffNum * pow(2, Float(counter)))
+                
+                buffInt += buffValue
+                
+                counter += 1
+            }
         }
         
         // Second: converting fract part
@@ -239,7 +240,6 @@ class PCalcViewController: UIViewController {
         var decNumStrBuff = decNumStr
         var isSigned: Bool = false
         var binaryStr: String
-        
         
         // if number is signed
         if decNumStr.contains("-") {
@@ -281,15 +281,13 @@ class PCalcViewController: UIViewController {
             
             // TODO: Delete end zeros for float binary nums
         }
-        
-        
+      
         print(binaryStr)
         
         return binaryStr
     }
     
-    // converter for number before the point
-    
+    // Converter for number before the point
     fileprivate func convertIntToBinary( number: Int) -> String {
         var divisible: Int = number
         var reminder: Int = 0
@@ -308,31 +306,7 @@ class PCalcViewController: UIViewController {
             resultStr = String(resultStr.reversed())
         }
         
-        // Divide number by parts
-        // if count of digits more than or equal to 1 AND number not 0
-        if resultStr.count >= 1 && resultStr != "0" {
-            var counter: Int = 0
-            var buffStr: String = String()
-            
-            resultStr = String(resultStr.reversed())
-            
-            resultStr.forEach { (char) in
-                if counter == 3 {
-                    buffStr.append("\(char) ")
-                    counter = 0
-                } else {
-                    buffStr.append(char)
-                    counter += 1
-                }
-            }
-            // add zeros before for filling th parts
-            if counter > 0 {
-                for _ in 0...3-counter {
-                    buffStr.append("0")
-                }
-            }
-            resultStr = String(buffStr.reversed())
-        }
+        resultStr = divideStr(str: resultStr, by: 4)
         return resultStr
     }
     
@@ -368,31 +342,7 @@ class PCalcViewController: UIViewController {
 //            }
         }
         
-        // Divide number by parts
-        // if count of digits more than or equal to 1 AND number not 0
-        if resultStr.count >= 1 && resultStr != "0" {
-            var counter: Int = 0
-            buffStr = String()
-            
-            resultStr.forEach { (char) in
-                if counter == 3 {
-                    buffStr.append("\(char) ")
-                    counter = 0
-                } else {
-                    buffStr.append(char)
-                    counter += 1
-                }
-            }
-            
-            // add zeros after for filling the parts
-            if counter > 0 {
-                for _ in 0...3-counter {
-                    buffStr.append("0")
-                }
-            }
-            resultStr = buffStr
-        }
-        
+        resultStr = divideStr(str: resultStr, by: 4)
         
         print(resultStr)
         return resultStr
@@ -409,7 +359,6 @@ class PCalcViewController: UIViewController {
         }
         let intNumber = Int(numberStr.0!)!
         
-
         return "\(convertIntToBinary(number: intNumber)).\(convertFractToBinary(numberStr: numberStr.1!, precision: Int(SavedData.conversionSettings?.numbersAfterPoint ?? 8)))"
     }
     
@@ -419,11 +368,6 @@ class PCalcViewController: UIViewController {
         var strInt: String
         var strFract: String
 
-        // check for floating point
-//        guard str.contains(".") else {
-//            return nil
-//        }
-           
         // search index of floating pos
         if let pointPos = str.firstIndex(of: ".") {
             // fill strInt
@@ -445,6 +389,71 @@ class PCalcViewController: UIViewController {
 
     }
     
+    // Divide number by parts
+    fileprivate func divideStr( str: String, by partition: Int) -> String {
+        var resultStr = str
+        var buffStr = String()
+
+        // if count of digits more than or equal to 1 AND number not 0
+        if str.count >= 1 && str != "0" {
+            var counter: Int = 0
+       
+            for char in resultStr {
+                // check if already point
+                if char == "." {
+                    counter = 0
+                    buffStr.append(char)
+                    continue
+                }
+                // if ok
+                if counter == partition-1 {
+                    buffStr.append("\(char) ")
+                    counter = 0
+                } else {
+                    buffStr.append(char)
+                    counter += 1
+                }
+            }
+            
+            // add zeros after for filling the parts
+            if counter > 0 {
+                for _ in 0...partition-counter-1 {
+                    buffStr.append("0")
+                }
+            }
+            
+            // delete space before and after .
+            if buffStr.contains(".") {
+                var pointPos = buffStr.firstIndex(of: ".")!
+                var pointBuff = buffStr.index(before: pointPos)
+                
+                // delete space before if exists
+                if buffStr[pointBuff] == " " {
+                    buffStr.remove(at: pointBuff)
+                }
+                // update indexes
+                pointPos = buffStr.firstIndex(of: ".")!
+                pointBuff = buffStr.index(after: pointPos)
+                
+                // delete space after if exists
+                if buffStr[pointBuff] == " " {
+                    buffStr.remove(at: pointBuff)
+                }
+            }
+            resultStr = buffStr
+        }
+        
+        // remove first and last spaces
+        if resultStr.first == " " {
+            resultStr.remove(at: resultStr.startIndex)
+        }
+        if resultStr.last == " " {
+            resultStr.remove(at: resultStr.index(before: resultStr.endIndex))
+        }
+        
+        return resultStr
+    }
+    
     // remove all spaces
     fileprivate func removeAllSpaces(str: String) -> String{
         var buffStr = ""
@@ -459,17 +468,14 @@ class PCalcViewController: UIViewController {
     
     // filling up number with zeros by num of zeros in 1 part
     fileprivate func fillUpParts(by fillNum: Int , _ str: String) -> String {
-        
-        if str == "0" {
-            return str
-        }
-        
         // remove spaces
         var buffStr = removeAllSpaces(str: str)
         
-        // remove all zeros at beginning of string
-        while buffStr.first == "0" {
-            buffStr.removeFirst(1)
+        if Int(str) != 0 {
+            // remove all zeros at beginning of string
+            while buffStr.first == "0" {
+                buffStr.removeFirst(1)
+            }
         }
         
         var counter = 0
@@ -596,7 +602,9 @@ class PCalcViewController: UIViewController {
     
     // OCT -> BIN
     fileprivate func convertOctToBin( octNumStr: String) -> String {
-        return convertOctHexTable(str: octNumStr, system: .oct, toBinary: true)
+        let str = convertOctHexTable(str: octNumStr, system: .oct, toBinary: true)
+        
+        return divideStr(str: str, by: 3)
     }
     
     // TODO: Refactor to table
@@ -683,7 +691,9 @@ class PCalcViewController: UIViewController {
     
     // HEX -> BIN
     fileprivate func convertHexToBin(hexNumStr: String) -> String {
-        return convertOctHexTable(str: hexNumStr, system: .hex, toBinary: true)
+        let str = convertOctHexTable(str: hexNumStr, system: .hex, toBinary: true)
+        
+        return divideStr(str: str, by: 4)
     }
    
     // Calculation of 2 decimal numbers by .operation
@@ -1010,17 +1020,14 @@ class PCalcViewController: UIViewController {
     // Settings button tapped
     @objc func settingsButtonTapped( sender: UIButton) {
         print("Open settings")
-        // initialize vc popover
+        // initialize vc popover and nav vc
         let vc = SettingsViewController()
+        let navigationController = UINavigationController()
         
-        //vc.navigationController?.show(vc, sender: self)
         // present settings
         vc.modalPresentationStyle = .pageSheet
-        //self.present(vc, animated: true, completion: nil)
         
-        let navigationController = UINavigationController()
         navigationController.setViewControllers([vc], animated: false)
-        //navigationController.navigationBar.setItems([], animated: false)
         self.present(navigationController, animated: true)
     }
 
