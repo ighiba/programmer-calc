@@ -63,7 +63,7 @@ class PCalcViewController: UIViewController {
         SavedData.calcState = CalcState(mainState: mainState, convertState: convertState)
     }
     
-    func updateConverterLabel() {
+    fileprivate func updateConverterLabel() {
         // TODO: Refator hadling for Hexadecimal values
         if Double(mainLabel.text!) == nil {
             converterLabel.text = mainLabel.text
@@ -79,7 +79,7 @@ class PCalcViewController: UIViewController {
     }
     
     // Main function for conversion values
-    func convertValue(value valueStr: String, from mainSystem: String, to converterSystem: String) -> String? {
+    fileprivate func convertValue(value valueStr: String, from mainSystem: String, to converterSystem: String) -> String? {
         // exit if systems are equal
         guard mainSystem != converterSystem else {
             return valueStr
@@ -100,7 +100,7 @@ class PCalcViewController: UIViewController {
     }
     
     // Converter from any to binary system
-    func convertAnyToBinary( anyStr: String, anySystem: String) -> String {
+    fileprivate func convertAnyToBinary( anyStr: String, anySystem: String) -> String {
         var binaryStr: String
         
             switch anySystem {
@@ -131,7 +131,7 @@ class PCalcViewController: UIViewController {
     }
     
     // Converter from binary to any system
-    func convertBinaryToAny( binaryStr: String, targetSystem: String) -> String {
+    fileprivate func convertBinaryToAny( binaryStr: String, targetSystem: String) -> String {
         var targetStr: String
         
             switch targetSystem {
@@ -142,7 +142,6 @@ class PCalcViewController: UIViewController {
             case "Octal":
                 // convert binary to oct
                 targetStr = self.convertBinToOct(binNumStr: binaryStr)
-                //targetStr = "Octal"
                 break
             case "Decimal":
                 // convert binary to dec
@@ -168,7 +167,7 @@ class PCalcViewController: UIViewController {
     // ======
     
     // BIN -> DEC
-    func convertBinToDec( binNumStr: String) -> String {
+    fileprivate func convertBinToDec( binNumStr: String) -> String {
         var resultStr: String
         
         // if zero
@@ -236,7 +235,7 @@ class PCalcViewController: UIViewController {
     }
     
     // DEC -> BIN
-    func convertDecToBinary( decNumStr: String) -> String {
+    fileprivate func convertDecToBinary( decNumStr: String) -> String {
         var decNumStrBuff = decNumStr
         var isSigned: Bool = false
         var binaryStr: String
@@ -291,7 +290,7 @@ class PCalcViewController: UIViewController {
     
     // converter for number before the point
     
-    func convertIntToBinary( number: Int) -> String {
+    fileprivate func convertIntToBinary( number: Int) -> String {
         var divisible: Int = number
         var reminder: Int = 0
         var resultStr: String = String()
@@ -309,7 +308,7 @@ class PCalcViewController: UIViewController {
             resultStr = String(resultStr.reversed())
         }
         
-        // Divide number by discharges
+        // Divide number by parts
         // if count of digits more than or equal to 1 AND number not 0
         if resultStr.count >= 1 && resultStr != "0" {
             var counter: Int = 0
@@ -326,8 +325,7 @@ class PCalcViewController: UIViewController {
                     counter += 1
                 }
             }
-            
-            // add zeros before for filling th discharges
+            // add zeros before for filling th parts
             if counter > 0 {
                 for _ in 0...3-counter {
                     buffStr.append("0")
@@ -335,22 +333,20 @@ class PCalcViewController: UIViewController {
             }
             resultStr = String(buffStr.reversed())
         }
-
         return resultStr
     }
     
-    func convertFractToBinary( numberStr: String) -> String {
+    fileprivate func convertFractToBinary( numberStr: String, precision: Int) -> String {
         var buffDouble: Double
         var buffStr: String = "0."
         var resultStr: String = String()
-        
        
         // if 0 then dont calculate
         if Int(numberStr) == 0 {
             resultStr = "0"
         } else {
             // number of digits after point
-            let counter: Int = 8
+            let counter: Int = precision
             // form double string
             buffStr.append(numberStr)
             buffDouble = Double(buffStr)!
@@ -372,7 +368,7 @@ class PCalcViewController: UIViewController {
 //            }
         }
         
-        // Divide number by discharges
+        // Divide number by parts
         // if count of digits more than or equal to 1 AND number not 0
         if resultStr.count >= 1 && resultStr != "0" {
             var counter: Int = 0
@@ -388,7 +384,7 @@ class PCalcViewController: UIViewController {
                 }
             }
             
-            // add zeros after for filling th discharges
+            // add zeros after for filling th parts
             if counter > 0 {
                 for _ in 0...3-counter {
                     buffStr.append("0")
@@ -403,7 +399,7 @@ class PCalcViewController: UIViewController {
     }
     
     // Combine to parts to double string
-    func convertDoubleToBinaryStr( numberStr: (String?, String?)) -> String {
+    fileprivate func convertDoubleToBinaryStr( numberStr: (String?, String?)) -> String {
         // Error handling
         guard numberStr.0 != nil else {
             return "Error"
@@ -413,11 +409,12 @@ class PCalcViewController: UIViewController {
         }
         let intNumber = Int(numberStr.0!)!
         
-        return "\(convertIntToBinary(number: intNumber)).\(convertFractToBinary(numberStr: numberStr.1!))"
+
+        return "\(convertIntToBinary(number: intNumber)).\(convertFractToBinary(numberStr: numberStr.1!, precision: Int(SavedData.conversionSettings?.numbersAfterPoint ?? 8)))"
     }
     
     // Dividing string variable and converting it to double without loss of precision
-    func divideToDoubleInt( str: String) -> (String?, String?) {
+    fileprivate func divideToDoubleInt( str: String) -> (String?, String?) {
         
         var strInt: String
         var strFract: String
@@ -448,8 +445,8 @@ class PCalcViewController: UIViewController {
 
     }
     
-    // filling up number with zeros by num of zeros in 1 discharge
-    func fillUpDischarges(by fillNum: Int , _ str: String) -> String {
+    // filling up number with zeros by num of zeros in 1 part
+    fileprivate func fillUpParts(by fillNum: Int , _ str: String) -> String {
         
         if str == "0" {
             return str
@@ -480,7 +477,7 @@ class PCalcViewController: UIViewController {
         
         // reverse string
         buffStr = String(buffStr.reversed())
-        // add zeros after for filling th discharges
+        // add zeros after for filling th parts
         if counter > 0 {
             for _ in 0...fillNum-counter-1 {
                 buffStr.append("0")
@@ -505,23 +502,24 @@ class PCalcViewController: UIViewController {
         // from 0 to 7
         let table = ["000", "001", "010", "011", "100", "101", "110", "111"]
 
-        let intDischarges = Int(binStrBuff.count / 3)
-        // process each dischagre
-        for _ in 0..<intDischarges {
-            var dischCounter = 0
-            var buffDischarge = String()
+        let intParts = Int(binStrBuff.count / 3)
+        // process each part
+        // part is 3 digits
+        for _ in 0..<intParts {
+            var partCounter = 0
+            var buffPart = String()
             // get first 3 chars
-            while dischCounter < 3 {
-                buffDischarge.append(binStrBuff.first!)
+            while partCounter < 3 {
+                buffPart.append(binStrBuff.first!)
                 // delete first char
                 binStrBuff.remove(at: binStrBuff.startIndex)
                 
-                dischCounter += 1
+                partCounter += 1
             }
             
-            // convert these 3 chars (discharge) into Octal by using table
+            // convert these 3 chars (part) into Octal by using table
             for (index, value) in table.enumerated() {
-                if buffDischarge == value {
+                if buffPart == value {
                     buffResultStr.append(String(index))
                     break
                 }
@@ -531,7 +529,7 @@ class PCalcViewController: UIViewController {
     }
     
     // BIN -> OCT
-    func convertBinToOct( binNumStr: String) -> String {
+    fileprivate func convertBinToOct( binNumStr: String) -> String {
         var resultStr: String
         
         // if zero
@@ -551,8 +549,8 @@ class PCalcViewController: UIViewController {
             return "Error"
         }
         
-        // delete zeros from discharges by 4 and filling up by 3
-        binIntStrBuff = fillUpDischarges(by: 3, binIntStrBuff!)
+        // delete zeros from parts by 4 and filling up by 3
+        binIntStrBuff = fillUpParts(by: 3, binIntStrBuff!)
         
         // First: converting int part
         // dont count if zero
@@ -575,8 +573,8 @@ class PCalcViewController: UIViewController {
             var strBuff = binFractStrBuff
             // reverse for conversion
             strBuff = String(strBuff.reversed())
-            // delete zeros from discharges by 4 and filling up by 3
-            strBuff = fillUpDischarges(by: 3, strBuff)
+            // delete zeros from parts by 4 and filling up by 3
+            strBuff = fillUpParts(by: 3, strBuff)
             // reverse back
             strBuff = String(strBuff.reversed())
             // add zeros to end
@@ -600,7 +598,7 @@ class PCalcViewController: UIViewController {
     
     // Calculation of 2 decimal numbers by .operation
     // TODO: Make error handling for overflow
-    func calculateDecNumbers( firstNum: String, secondNum: String, operation: MathState.mathOperation) -> String? {
+    fileprivate func calculateDecNumbers( firstNum: String, secondNum: String, operation: MathState.mathOperation) -> String? {
         var resultStr: String = String()
         
         let firstDecimal = Decimal(string: firstNum)

@@ -142,7 +142,7 @@ class ConversionView: UIView {
         let label = UILabel()
         
         label.frame = CGRect(x: 0, y: 0, width: 100, height: 30)
-        label.text = "Number of digits after point: "
+        label.text = "Max number of digits after point: "
         label.font = UIFont.systemFont(ofSize: 18, weight: .light)
         //label.font = UIFont(name: "HelveticaNeue-Thin", size: 18.0)
         

@@ -54,16 +54,16 @@ class ConversionViewController: UIViewController {
             picker.selectRow(converterRow, inComponent: 1, animated: false)
             
             // Slider label
-            labelValue.text = String(Int(data.numbersAfterPoint) * 4)
+            labelValue.text = "\(Int(data.numbersAfterPoint))"
             
             // Slider
-            slider.value = data.numbersAfterPoint
-            sliderOldValue = data.numbersAfterPoint
+            slider.value = data.numbersAfterPoint / 4
+            sliderOldValue = slider.value
         }  else {
             print("no settings")
             // Save default settings (all true)
             let systems = ConversionModel.ConversionSystemsEnum.self
-            SavedData.conversionSettings = ConversionSettingsModel(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 2.0)
+            SavedData.conversionSettings = ConversionSettingsModel(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 8.0)
         }
     }
     
@@ -79,7 +79,7 @@ class ConversionViewController: UIViewController {
         // Slider
         let sliderValue = slider.value.rounded()
         // set data to UserDefaults
-        SavedData.conversionSettings = ConversionSettingsModel(systMain: mainSelectedString!, systConverter: converterSelectedString!, number: sliderValue)
+        SavedData.conversionSettings = ConversionSettingsModel(systMain: mainSelectedString!, systConverter: converterSelectedString!, number: sliderValue * 4)
     }
     
     // =======
