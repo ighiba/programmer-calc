@@ -61,7 +61,13 @@ class PCalcViewController: UIViewController {
         SavedData.calcState = CalcState(mainState: mainState, convertState: convertState)
     }
     
-    fileprivate func updateConverterLabel() {
+    // reset all labels after Conversion
+    public func resetAllLabels() {
+        mainLabel.text = "0"
+        converterLabel.text = "0"
+    }
+   
+    public func updateConverterLabel() {
         // TODO: Refator hadling for Hexadecimal values
         if Double(mainLabel.text!) == nil {
             converterLabel.text = mainLabel.text

@@ -31,7 +31,6 @@ class ConversionViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
         // save conversion data to UserDefaults
         saveConversionSettings()
     }
@@ -78,8 +77,28 @@ class ConversionViewController: UIViewController {
         let converterSelectedString = picker.pickerView(picker, titleForRow: converterSelectedRow, forComponent: 1)
         // Slider
         let sliderValue = slider.value.rounded()
+        
+        // root vc fo handling changing of mainSystem
+        let rootVC = UIApplication.shared.windows.first?.rootViewController as? PCalcViewController
+        guard rootVC != nil else {
+            // set data to UserDefaults
+            SavedData.conversionSettings = ConversionSettingsModel(systMain: mainSelectedString!, systConverter: converterSelectedString!, number: sliderValue * 4)
+            return
+        }
+        
+        // set last mainLabel system buffer
+        let buffSavedMainLabel = SavedData.conversionSettings?.systemMain
         // set data to UserDefaults
         SavedData.conversionSettings = ConversionSettingsModel(systMain: mainSelectedString!, systConverter: converterSelectedString!, number: sliderValue * 4)
+        // Handle changing of systems
+        // TODO: Error handling
+        if buffSavedMainLabel != mainSelectedString! {
+            // set labels to 0 and update
+            rootVC!.resetAllLabels()
+        } else {
+            // if systemMain == last vaulue of systemMain then just update values
+            rootVC!.updateConverterLabel()
+        }
     }
     
     // =======
