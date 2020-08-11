@@ -22,6 +22,7 @@ class PCalcViewController: UIViewController {
         self.view = calcView
         // get state from UserDefaults
         getCalcState()
+        handleConversion()
 
     }
     
@@ -31,6 +32,7 @@ class PCalcViewController: UIViewController {
         // set state to UserDefaults
         print("main dissapear")
         saveCalcState()
+        
     }
     
     // =======
@@ -61,10 +63,25 @@ class PCalcViewController: UIViewController {
         SavedData.calcState = CalcState(mainState: mainState, convertState: convertState)
     }
     
-    // reset all labels after Conversion
+    // Reset all labels after Conversion
     public func resetAllLabels() {
         mainLabel.text = "0"
         converterLabel.text = "0"
+    }
+    
+    // Handle conversion issues
+    public func handleConversion() {
+        let labelText = mainLabel.text
+        let systemMain = SavedData.conversionSettings?.systemMain ?? "Decimal" // default value
+        let forbidden = ConversionValues().forbidden
+        
+        if forbidden[systemMain]!.contains(where: labelText!.contains) {
+            print("Forbidden values at input")
+            print("Reseting input")
+            resetAllLabels()
+        } else {
+            // do nothing
+        }
     }
    
     public func updateConverterLabel() {
@@ -74,9 +91,9 @@ class PCalcViewController: UIViewController {
         } else {
             // Uptade converter label with converted number
             // TODO: Error handling
-            if let settings = SavedData.conversionSettings {
-                let fromSystem = settings.systemMain
-                let toSystem = settings.systemConverter
+            if let data = SavedData.conversionSettings {
+                let fromSystem = data.systemMain
+                let toSystem = data.systemConverter
                 converterLabel.text = convertValue(value: mainLabel.text!, from: fromSystem, to: toSystem)
             }
         }
@@ -576,6 +593,7 @@ class PCalcViewController: UIViewController {
                         if "\(num)" == value {
                             // append balue from table
                             buffResultStr.append("\(key)")
+                            break
                         }
                     }
                 } else {

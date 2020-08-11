@@ -96,7 +96,8 @@ class ConversionViewController: UIViewController {
             // set labels to 0 and update
             rootVC!.resetAllLabels()
         } else {
-            // if systemMain == last vaulue of systemMain then just update values
+            // if systemMain == last value of systemMain then just update values
+            rootVC!.handleConversion()
             rootVC!.updateConverterLabel()
         }
     }
