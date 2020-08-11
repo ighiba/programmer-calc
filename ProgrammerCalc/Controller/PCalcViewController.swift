@@ -461,13 +461,16 @@ class PCalcViewController: UIViewController {
                 if buffStr[pointBuff] == " " {
                     buffStr.remove(at: pointBuff)
                 }
-                // update indexes
-                pointPos = buffStr.firstIndex(of: ".")!
-                pointBuff = buffStr.index(after: pointPos)
                 
-                // delete space after if exists
-                if buffStr[pointBuff] == " " {
-                    buffStr.remove(at: pointBuff)
+                // if . isn't last element
+                if buffStr.last != "." {
+                    // update indexes
+                    pointPos = buffStr.firstIndex(of: ".")!
+                    pointBuff = buffStr.index(after: pointPos)
+                        // delete space after if exists
+                    if buffStr[pointBuff] == " " {
+                        buffStr.remove(at: pointBuff)
+                    }
                 }
             }
             resultStr = buffStr
@@ -506,6 +509,14 @@ class PCalcViewController: UIViewController {
             while buffStr.first == "0" {
                 buffStr.removeFirst(1)
             }
+        } else {
+            // if zero then return fillNum zeros
+            buffStr = ""
+            for _ in 1...fillNum {
+                buffStr.append("0")
+            }
+            
+            return buffStr
         }
         
         var counter = 0
