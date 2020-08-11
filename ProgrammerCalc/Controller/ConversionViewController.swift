@@ -19,6 +19,12 @@ class ConversionViewController: UIViewController {
         super.viewDidLoad()
         
         self.view = conv
+        
+        // tap outside popup(container)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tappedOutside))
+        tap.numberOfTapsRequired = 1
+        self.view.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(tap)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -102,18 +108,38 @@ class ConversionViewController: UIViewController {
         }
     }
     
+    // ViewConvtroller dismissing
+    fileprivate func dismissVC() {
+        // anation
+        conv.animateOut {
+            self.dismiss(animated: false, completion: nil)
+        }
+    }
+    
     // =======
     // Actions
     // =======
     
     // Done button / Exit button
     @objc func doneButtonTapped( sender: UIButton) {
-        print("done")
-        conv.animateOut {
-            self.dismiss(animated: false, completion: nil)
-        }
+        dismissVC()
     }
     
+    @objc func tappedOutside( touch: UITouch) {
+        conv.container.updateConstraints()
+        let currentLocation: CGPoint = touch.location(in: conv.container)
+        let containerBounds: CGRect = conv.container.bounds
+        let inContainer: Bool = containerBounds.contains(currentLocation)
+        
+        if inContainer {
+            // contains
+            // do nothing
+        } else {
+            // contains
+            // dismiss vc
+            dismissVC()
+        }
+    }
 
     // Changing value of slider
     @objc func sliderValueChanged( sender: UISlider) {

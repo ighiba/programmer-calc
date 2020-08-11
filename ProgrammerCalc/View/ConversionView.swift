@@ -72,7 +72,7 @@ class ConversionView: UIView {
         doneButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
-    fileprivate let container: UIView = {
+    let container: UIView = {
         let view = UIView()
 
         view.backgroundColor = .white
