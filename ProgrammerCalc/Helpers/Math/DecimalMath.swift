@@ -15,7 +15,7 @@ extension CalcMath {
     
     // Calculation of 2 decimal numbers by .operation
     // TODO: Make error handling for overflow
-    static func calculateDecNumbers( firstNum: String, secondNum: String, operation: CalcMath.mathOperation) -> String? {
+    internal func calculateDecNumbers( firstNum: String, secondNum: String, operation: CalcMath.mathOperation) -> String? {
         var resultStr: String = String()
 
         let firstDecimal = Decimal(string: firstNum)
@@ -45,8 +45,6 @@ extension CalcMath {
             break
 
         }
-
         return resultStr
-
-        }
+    }
 }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class CalcMath {
+final class CalcMath {
     
     enum mathOperation {
         case add
@@ -34,7 +34,7 @@ class CalcMath {
     // Methods
     // =======
     
-    static func calculate( firstValue: String, operation: mathOperation ,secondValue: String, for system: String) -> String? {
+    func calculate( firstValue: String, operation: mathOperation ,secondValue: String, for system: String) -> String? {
         var resultStr: String?
         
         // Convert sytem string to enum
@@ -55,10 +55,10 @@ class CalcMath {
             
         }()
         
-        
         // Pick system
         switch enumSystem {
         case .bin:
+            resultStr = calculateBinNumbers(firstNum: firstValue, secondNum: secondValue, operation: operation)
             break
         case .dec:
             resultStr = calculateDecNumbers(firstNum: firstValue, secondNum: secondValue, operation: operation)
@@ -100,7 +100,7 @@ class CalcMath {
         resultStr.1.append(secondInt)
         
         // Check for fract part
-        guard firstFract != nil && secondFract != nil else {
+        if firstFract == nil && secondFract == nil {
             // if no fract
             return resultStr
         }

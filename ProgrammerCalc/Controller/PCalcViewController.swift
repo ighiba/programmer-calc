@@ -10,6 +10,7 @@ import UIKit
 
 class PCalcViewController: UIViewController {
     
+    let calcMath: CalcMath = CalcMath()
     var mathState: CalcMath.MathState?
     let calcView: PCalcView = PCalcView()
     lazy var mainLabel: UILabel = calcView.mainLabel
@@ -298,7 +299,7 @@ class PCalcViewController: UIViewController {
             // calc results
             if mathState != nil {
                 print("calculation")
-                if let result = CalcMath.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
+                if let result = calcMath.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
                 
                     //calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
@@ -316,7 +317,7 @@ class PCalcViewController: UIViewController {
             // calc results
             if mathState != nil {
                 print("calculation")
-                if let result = CalcMath.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
+                if let result = calcMath.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
                 //if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
                     updateConverterLabel()
@@ -333,7 +334,7 @@ class PCalcViewController: UIViewController {
             // calc results
             if mathState != nil {
                 print("calculation")
-                if let result = CalcMath.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
+                if let result = calcMath.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
                 //if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
                     updateConverterLabel()
@@ -350,7 +351,7 @@ class PCalcViewController: UIViewController {
             // calc results
             if mathState != nil {
                 print("calculation")
-                if let result = CalcMath.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
+                if let result = calcMath.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
                 //if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
                     updateConverterLabel()
@@ -365,7 +366,7 @@ class PCalcViewController: UIViewController {
         case "=":
             if mathState != nil {
                 print("calculation")
-                if let result = CalcMath.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
+                if let result = calcMath.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
                 //if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
                     updateConverterLabel()
