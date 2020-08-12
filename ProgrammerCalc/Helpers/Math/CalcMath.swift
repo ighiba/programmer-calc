@@ -34,8 +34,40 @@ class CalcMath {
     // Methods
     // =======
     
-    public func calculate( firstValue: String, operation: mathOperation ,secondValue: String) -> String {
-        var resultStr = String()
+    static func calculate( firstValue: String, operation: mathOperation ,secondValue: String, for system: String) -> String? {
+        var resultStr: String?
+        
+        // Convert sytem string to enum
+        let enumSystem: ConversionModel.ConversionSystemsEnum = {
+            switch system {
+            case "Binary":
+                return .bin
+            case "Decimal":
+                return .dec
+            case "Octal":
+                return .oct
+            case "Hexadecimal":
+                return .hex
+            default:
+                // TODO: Error handling
+                return .dec
+            }
+            
+        }()
+        
+        
+        // Pick system
+        switch enumSystem {
+        case .bin:
+            break
+        case .dec:
+            resultStr = calculateDecNumbers(firstNum: firstValue, secondNum: secondValue, operation: operation)
+            break
+        case .oct:
+            break
+        case .hex:
+            break
+        }
         
         return resultStr
     }

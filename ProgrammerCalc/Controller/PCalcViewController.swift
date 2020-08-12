@@ -23,6 +23,8 @@ class PCalcViewController: UIViewController {
         // get state from UserDefaults
         getCalcState()
         handleConversion()
+        //print(CalcMath().addBinary("1100.10111", "11011.11001"))
+        //print(CalcMath.inverBinary(binary: "1100"))
 
     }
     
@@ -100,41 +102,7 @@ class PCalcViewController: UIViewController {
     }
     
  
-    // Calculation of 2 decimal numbers by .operation
-    // TODO: Make error handling for overflow
-    fileprivate func calculateDecNumbers( firstNum: String, secondNum: String, operation: CalcMath.mathOperation) -> String? {
-        var resultStr: String = String()
 
-        let firstDecimal = Decimal(string: firstNum)
-        let secondDecimal = Decimal(string: secondNum)
-
-        switch operation {
-        // Addition
-        case .add:
-            resultStr = "\(firstDecimal! + secondDecimal!)"
-            break
-        // Subtraction
-        case .sub:
-            resultStr = "\(firstDecimal! - secondDecimal!)"
-            break
-        // Multiplication
-        case .mul:
-            resultStr = "\(firstDecimal! * secondDecimal!)"
-            break
-        // Division
-        case .div:
-            // if dvision by zero
-            guard secondDecimal != 0 else {
-                // TODO Make error code and replace hardcode
-                return "Division by zero"
-            }
-            resultStr = "\(firstDecimal! / secondDecimal!)"
-            break
-
-        }
-
-        return resultStr
-    }
     
     // =======
     // Actions
@@ -330,7 +298,9 @@ class PCalcViewController: UIViewController {
             // calc results
             if mathState != nil {
                 print("calculation")
-                if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
+                if let result = CalcMath.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
+                
+                    //calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
                     updateConverterLabel()
                     mathState = nil
@@ -346,7 +316,8 @@ class PCalcViewController: UIViewController {
             // calc results
             if mathState != nil {
                 print("calculation")
-                if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
+                if let result = CalcMath.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
+                //if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
                     updateConverterLabel()
                     mathState = nil
@@ -362,7 +333,8 @@ class PCalcViewController: UIViewController {
             // calc results
             if mathState != nil {
                 print("calculation")
-                if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
+                if let result = CalcMath.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
+                //if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
                     updateConverterLabel()
                     mathState = nil
@@ -378,7 +350,8 @@ class PCalcViewController: UIViewController {
             // calc results
             if mathState != nil {
                 print("calculation")
-                if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
+                if let result = CalcMath.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
+                //if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
                     updateConverterLabel()
                     mathState = nil
@@ -392,7 +365,8 @@ class PCalcViewController: UIViewController {
         case "=":
             if mathState != nil {
                 print("calculation")
-                if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
+                if let result = CalcMath.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
+                //if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
                     updateConverterLabel()
                 }

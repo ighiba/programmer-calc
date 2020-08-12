@@ -15,6 +15,7 @@
 		C065DB3A24E3C8BE0059B38D /* BinaryMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C065DB3924E3C8BE0059B38D /* BinaryMath.swift */; };
 		C065DB3C24E3DC4F0059B38D /* CalcMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C065DB3B24E3DC4F0059B38D /* CalcMath.swift */; };
 		C065DB3E24E41E610059B38D /* CalcState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C065DB3D24E41E610059B38D /* CalcState.swift */; };
+		C065DB4024E428550059B38D /* DecimalMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C065DB3F24E428550059B38D /* DecimalMath.swift */; };
 		C066756924E27AE700F832F9 /* ConversionValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = C066756824E27AE700F832F9 /* ConversionValues.swift */; };
 		C066756E24E2D83300F832F9 /* MainConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C066756D24E2D83300F832F9 /* MainConverter.swift */; };
 		C066757024E2DCC500F832F9 /* Binary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C066756F24E2DCC500F832F9 /* Binary.swift */; };
@@ -60,6 +61,7 @@
 		C065DB3924E3C8BE0059B38D /* BinaryMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryMath.swift; sourceTree = "<group>"; };
 		C065DB3B24E3DC4F0059B38D /* CalcMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcMath.swift; sourceTree = "<group>"; };
 		C065DB3D24E41E610059B38D /* CalcState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcState.swift; sourceTree = "<group>"; };
+		C065DB3F24E428550059B38D /* DecimalMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalMath.swift; sourceTree = "<group>"; };
 		C066756824E27AE700F832F9 /* ConversionValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionValues.swift; sourceTree = "<group>"; };
 		C066756D24E2D83300F832F9 /* MainConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainConverter.swift; sourceTree = "<group>"; };
 		C066756F24E2DCC500F832F9 /* Binary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binary.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				C065DB3B24E3DC4F0059B38D /* CalcMath.swift */,
+				C065DB3F24E428550059B38D /* DecimalMath.swift */,
 				C065DB3924E3C8BE0059B38D /* BinaryMath.swift */,
 			);
 			path = Math;
@@ -373,6 +376,7 @@
 				C066757024E2DCC500F832F9 /* Binary.swift in Sources */,
 				C0619AC424D71240008A7291 /* ConversionViewController.swift in Sources */,
 				C066756E24E2D83300F832F9 /* MainConverter.swift in Sources */,
+				C065DB4024E428550059B38D /* DecimalMath.swift in Sources */,
 				C065DB3A24E3C8BE0059B38D /* BinaryMath.swift in Sources */,
 				C066757224E2E9EA00F832F9 /* HelpersConverter.swift in Sources */,
 				C06B7F072443B12B009642B9 /* AppDelegate.swift in Sources */,

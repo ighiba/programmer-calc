@@ -70,9 +70,21 @@ extension CalcMath {
         return resultStr
     }
     
-    // inverting value
-    func inverBinary(binary: String) -> String {
+    // inverting value 1 -> 0; 0 -> 1
+    static func inverBinary(binary: String) -> String {
         var resultStr = String()
+        
+        binary.forEach { (num) in
+            switch num {
+            case "0":
+                resultStr.append("1")
+            case "1":
+                resultStr.append("0")
+            default:
+                resultStr.append(num)
+                break
+            }
+        }
         
         return resultStr
     }
