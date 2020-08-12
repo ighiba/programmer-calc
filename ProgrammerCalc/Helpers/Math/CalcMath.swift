@@ -8,7 +8,37 @@
 
 import Foundation
 
-extension BinaryMath {
+class CalcMath {
+    
+    enum mathOperation {
+        case add
+        case sub
+        case mul
+        case div
+    }
+    
+    struct MathState {
+        
+        var buffValue: String
+        var operation: mathOperation
+        var lastResult: String?
+        var inputStart: Bool = false
+        
+        init(buffValue:String, operation: mathOperation) {
+            self.buffValue = buffValue
+            self.operation = operation
+        }
+    }
+    
+    // =======
+    // Methods
+    // =======
+    
+    public func calculate( firstValue: String, operation: mathOperation ,secondValue: String) -> String {
+        var resultStr = String()
+        
+        return resultStr
+    }
     
     // For equaling count of digits by adding zeros before and after the number
     func numberOfDigitsEqual( firstValue: String, secondValue: String) -> (String, String) {

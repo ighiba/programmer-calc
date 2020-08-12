@@ -10,7 +10,7 @@ import UIKit
 
 class PCalcViewController: UIViewController {
     
-    var mathState: MathState?
+    var mathState: CalcMath.MathState?
     let calcView: PCalcView = PCalcView()
     lazy var mainLabel: UILabel = calcView.mainLabel
     lazy var converterLabel: UILabel = calcView.converterLabel
@@ -102,7 +102,7 @@ class PCalcViewController: UIViewController {
  
     // Calculation of 2 decimal numbers by .operation
     // TODO: Make error handling for overflow
-    fileprivate func calculateDecNumbers( firstNum: String, secondNum: String, operation: MathState.mathOperation) -> String? {
+    fileprivate func calculateDecNumbers( firstNum: String, secondNum: String, operation: CalcMath.mathOperation) -> String? {
         var resultStr: String = String()
 
         let firstDecimal = Decimal(string: firstNum)
@@ -334,11 +334,11 @@ class PCalcViewController: UIViewController {
                     label.text = result
                     updateConverterLabel()
                     mathState = nil
-                    mathState = MathState(buffValue: label.text!, operation: .div)
+                    mathState = CalcMath.MathState(buffValue: label.text!, operation: .div)
                     mathState?.lastResult = result
                 }
             } else {
-                mathState = MathState(buffValue: label.text!, operation: .div)
+                mathState = CalcMath.MathState(buffValue: label.text!, operation: .div)
             }
             break
         // Multiplication button
@@ -350,11 +350,11 @@ class PCalcViewController: UIViewController {
                     label.text = result
                     updateConverterLabel()
                     mathState = nil
-                    mathState = MathState(buffValue: label.text!, operation: .mul)
+                    mathState = CalcMath.MathState(buffValue: label.text!, operation: .mul)
                     mathState?.lastResult = result
                 }
             } else {
-                mathState = MathState(buffValue: label.text!, operation: .mul)
+                mathState = CalcMath.MathState(buffValue: label.text!, operation: .mul)
             }
             break
         // Multiplication button
@@ -366,11 +366,11 @@ class PCalcViewController: UIViewController {
                     label.text = result
                     updateConverterLabel()
                     mathState = nil
-                    mathState = MathState(buffValue: label.text!, operation: .sub)
+                    mathState = CalcMath.MathState(buffValue: label.text!, operation: .sub)
                     mathState?.lastResult = result
                 }
             } else {
-                mathState = MathState(buffValue: label.text!, operation: .sub)
+                mathState = CalcMath.MathState(buffValue: label.text!, operation: .sub)
             }
             break
         // Addition button
@@ -382,11 +382,11 @@ class PCalcViewController: UIViewController {
                     label.text = result
                     updateConverterLabel()
                     mathState = nil
-                    mathState = MathState(buffValue: label.text!, operation: .add)
+                    mathState = CalcMath.MathState(buffValue: label.text!, operation: .add)
                     mathState?.lastResult = result
                 }
             } else {
-                mathState = MathState(buffValue: label.text!, operation: .add)
+                mathState = CalcMath.MathState(buffValue: label.text!, operation: .add)
             }
             break
         case "=":
@@ -437,10 +437,3 @@ class PCalcViewController: UIViewController {
     }
 
 }
-
-
-
-
-
-
-

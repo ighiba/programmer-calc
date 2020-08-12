@@ -13,7 +13,8 @@
 		C0635A7924D9E0F6003855A9 /* ConversionPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */; };
 		C0635A7B24D9E2AA003855A9 /* ConversionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0635A7A24D9E2AA003855A9 /* ConversionModel.swift */; };
 		C065DB3A24E3C8BE0059B38D /* BinaryMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C065DB3924E3C8BE0059B38D /* BinaryMath.swift */; };
-		C065DB3C24E3DC4F0059B38D /* HelpersMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C065DB3B24E3DC4F0059B38D /* HelpersMath.swift */; };
+		C065DB3C24E3DC4F0059B38D /* CalcMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C065DB3B24E3DC4F0059B38D /* CalcMath.swift */; };
+		C065DB3E24E41E610059B38D /* CalcState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C065DB3D24E41E610059B38D /* CalcState.swift */; };
 		C066756924E27AE700F832F9 /* ConversionValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = C066756824E27AE700F832F9 /* ConversionValues.swift */; };
 		C066756E24E2D83300F832F9 /* MainConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C066756D24E2D83300F832F9 /* MainConverter.swift */; };
 		C066757024E2DCC500F832F9 /* Binary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C066756F24E2DCC500F832F9 /* Binary.swift */; };
@@ -30,7 +31,6 @@
 		C070ED2624DB0ED400A04463 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C070ED2524DB0ED400A04463 /* SettingsView.swift */; };
 		C077CF6F24DC8DEE008E5F0F /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C077CF6E24DC8DEE008E5F0F /* SettingsCell.swift */; };
 		C077CF7124DC987B008E5F0F /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C077CF7024DC987B008E5F0F /* SettingsModel.swift */; };
-		C0BCA63724CCDCCD006A814B /* PCalcModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0BCA63624CCDCCD006A814B /* PCalcModel.swift */; };
 		C0E5FC7624BB9B8D00BA93CA /* PCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */; };
 /* End PBXBuildFile section */
 
@@ -58,7 +58,8 @@
 		C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionPicker.swift; sourceTree = "<group>"; };
 		C0635A7A24D9E2AA003855A9 /* ConversionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionModel.swift; sourceTree = "<group>"; };
 		C065DB3924E3C8BE0059B38D /* BinaryMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryMath.swift; sourceTree = "<group>"; };
-		C065DB3B24E3DC4F0059B38D /* HelpersMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpersMath.swift; sourceTree = "<group>"; };
+		C065DB3B24E3DC4F0059B38D /* CalcMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcMath.swift; sourceTree = "<group>"; };
+		C065DB3D24E41E610059B38D /* CalcState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcState.swift; sourceTree = "<group>"; };
 		C066756824E27AE700F832F9 /* ConversionValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionValues.swift; sourceTree = "<group>"; };
 		C066756D24E2D83300F832F9 /* MainConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainConverter.swift; sourceTree = "<group>"; };
 		C066756F24E2DCC500F832F9 /* Binary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binary.swift; sourceTree = "<group>"; };
@@ -81,7 +82,6 @@
 		C070ED2524DB0ED400A04463 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		C077CF6E24DC8DEE008E5F0F /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
 		C077CF7024DC987B008E5F0F /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
-		C0BCA63624CCDCCD006A814B /* PCalcModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcModel.swift; sourceTree = "<group>"; };
 		C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -114,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				C05A169A24DD7B0D007B7FB8 /* SavedData.swift */,
+				C065DB3D24E41E610059B38D /* CalcState.swift */,
 				C065DB3824E3C89B0059B38D /* Math */,
 				C066756C24E2D6FC00F832F9 /* Converters */,
 			);
@@ -123,7 +124,7 @@
 		C065DB3824E3C89B0059B38D /* Math */ = {
 			isa = PBXGroup;
 			children = (
-				C065DB3B24E3DC4F0059B38D /* HelpersMath.swift */,
+				C065DB3B24E3DC4F0059B38D /* CalcMath.swift */,
 				C065DB3924E3C8BE0059B38D /* BinaryMath.swift */,
 			);
 			path = Math;
@@ -207,7 +208,6 @@
 		C0D5BA4C24C340120038A378 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				C0BCA63624CCDCCD006A814B /* PCalcModel.swift */,
 				C0635A7A24D9E2AA003855A9 /* ConversionModel.swift */,
 				C077CF7024DC987B008E5F0F /* SettingsModel.swift */,
 				C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */,
@@ -359,15 +359,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				C0635A7924D9E0F6003855A9 /* ConversionPicker.swift in Sources */,
-				C065DB3C24E3DC4F0059B38D /* HelpersMath.swift in Sources */,
+				C065DB3C24E3DC4F0059B38D /* CalcMath.swift in Sources */,
 				C0619AC224D71227008A7291 /* ConversionView.swift in Sources */,
 				C0635A7B24D9E2AA003855A9 /* ConversionModel.swift in Sources */,
+				C065DB3E24E41E610059B38D /* CalcState.swift in Sources */,
 				C077CF6F24DC8DEE008E5F0F /* SettingsCell.swift in Sources */,
 				C066756924E27AE700F832F9 /* ConversionValues.swift in Sources */,
 				C066757424E2EAA300F832F9 /* Octal + Hexadecimal.swift in Sources */,
 				C05A169B24DD7B0D007B7FB8 /* SavedData.swift in Sources */,
 				C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */,
-				C0BCA63724CCDCCD006A814B /* PCalcModel.swift in Sources */,
 				C0E5FC7624BB9B8D00BA93CA /* PCalcView.swift in Sources */,
 				C06B7F0B2443B12B009642B9 /* PCalcViewController.swift in Sources */,
 				C066757024E2DCC500F832F9 /* Binary.swift in Sources */,

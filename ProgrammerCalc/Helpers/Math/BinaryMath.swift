@@ -8,9 +8,9 @@
 
 import Foundation
 
-public class BinaryMath {
+extension CalcMath {
     
-    public func addition(_ firstValue: String, _ secondValue: String) -> String {
+    public func addBinary(_ firstValue: String, _ secondValue: String) -> String {
         var resultStr = String()
         
         // TODO: Check for binary
