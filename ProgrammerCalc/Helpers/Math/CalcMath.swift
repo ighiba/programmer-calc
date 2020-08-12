@@ -144,4 +144,20 @@ final class CalcMath {
         
         return String(repeating: "0", count: diffInt) + str
     }
+    
+    // Filling binary number by 8, 16, 32, 64
+    func fillUpBits( str: String) -> String {
+        var resultStr = str
+        // brute force powers of 2; from 8 to 64
+        // number of bits in binary number
+        for power in 3...6 {
+            let bits = powf(2, Float(power))
+            if resultStr.count < Int(bits) {
+                resultStr = fillUpZeros(str: resultStr, to: Int(bits))
+                return resultStr
+            }
+        }
+        
+        return resultStr
+    }
 }

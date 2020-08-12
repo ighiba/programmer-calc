@@ -26,6 +26,7 @@ extension CalcMath {
             break
         // Subtraction
         case .sub:
+            resultStr = subBinary(firstNum, secondNum)
             break
         // Multiplication
         case .mul:
@@ -102,8 +103,39 @@ extension CalcMath {
         return resultStr
     }
     
+    // Subtraction of binary numbers
+    public func subBinary(_ firstValue: String, _ secondValue: String) -> String {
+        var resultStr = String()
+        
+        var firstBinary = firstValue
+        var secondBinary = secondValue
+        
+        // TODO: Check for binary
+        
+        // Filling up values to needed bits
+        firstBinary = fillUpBits(str: firstBinary)
+        secondBinary = fillUpBits(str: secondBinary)
+        // Inverting second value
+        secondBinary = invertBinary(binary: secondBinary)
+        
+        // Subtracting secondValue from firstValue
+        // Add first value + inverterd second value
+        resultStr = addBinary(firstBinary, secondBinary)
+        // Add + 1 for additional code
+        resultStr = addBinary(resultStr, "1")
+        // Delete left bit
+        if resultStr.count % 2 != 0 {
+            resultStr.removeFirst()
+        }
+        
+        // TODO: Handle signed and unsigned numbers
+        //       Add custom type for binary
+        
+        return resultStr
+    }
+    
     // inverting value 1 -> 0; 0 -> 1
-    static func invertBinary(binary: String) -> String {
+    func invertBinary(binary: String) -> String {
         var resultStr = String()
         
         binary.forEach { (num) in
