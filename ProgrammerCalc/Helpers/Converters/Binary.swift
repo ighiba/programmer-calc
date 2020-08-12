@@ -193,10 +193,6 @@ extension MainConverter {
                     resultStr.append("0")
                 }
              }
-            // remove ending zeros
-//            while resultStr[resultStr.index(before: resultStr.endIndex)] == "0" && resultStr.count > 1 {
-//                resultStr.remove(at: resultStr.index(before: resultStr.endIndex))
-//            }
         }
         
         resultStr = divideStr(str: resultStr, by: 4)

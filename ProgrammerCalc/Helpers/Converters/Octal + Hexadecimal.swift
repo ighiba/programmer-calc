@@ -91,7 +91,7 @@ extension MainConverter {
                 while partCounter < partition {
                     buffPart.append(buffStr.first!)
                     // delete first char
-                    buffStr.remove(at: buffStr.startIndex)
+                    buffStr.removeFirst()
                     
                     partCounter += 1
                 }

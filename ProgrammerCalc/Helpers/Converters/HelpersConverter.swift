@@ -1,5 +1,5 @@
 //
-//  Helpers.swift
+//  HelpersConverter.swift
 //  ProgrammerCalc
 //
 //  Created by Ivan Ghiba on 11.08.2020.
@@ -69,10 +69,10 @@ extension MainConverter {
         
         // remove first and last spaces
         if resultStr.first == " " {
-            resultStr.remove(at: resultStr.startIndex)
+            resultStr.removeFirst()
         }
         if resultStr.last == " " {
-            resultStr.remove(at: resultStr.index(before: resultStr.endIndex))
+            resultStr.removeLast()
         }
         
         return resultStr
@@ -120,17 +120,13 @@ extension MainConverter {
                 }
             })
         
-        // reverse string
-        buffStr = String(buffStr.reversed())
-        // add zeros after for filling th parts
+        // add zeros after for filling the parts
         if counter > 0 {
             for _ in 0...fillNum-counter-1 {
-                buffStr.append("0")
+                buffStr = "0" + buffStr
             }
         }
-        // reverse again for result
-        buffStr = String(buffStr.reversed())
-        
+
         return buffStr
     }
 }
