@@ -46,15 +46,18 @@ import Foundation
                 break
             case "Octal":
                 // convert oct to binary
-                binaryStr = self.convertOctToBin(octNumStr: anyStr)
+                let oct = Octal(stringLiteral: anyStr)
+                binaryStr = Binary(oct).value
                 break
             case "Decimal":
                 // convert dec to binary
-                binaryStr = self.convertDecToBinary(decNumStr: anyStr)
+                //binaryStr = self.convertDecToBinary(decNumStr: anyStr)
+                binaryStr = Binary(Decimal(string: anyStr)!).value
                 break
             case "Hexadecimal":
                 // convert hex to binary
-                binaryStr = self.convertHexToBin(hexNumStr: anyStr)
+                let hex = Hexadecimal(stringLiteral: anyStr)
+                binaryStr = Binary(hex).value
                 break
             default:
                 // do nothing
@@ -77,16 +80,22 @@ import Foundation
                 break
             case "Octal":
                 // convert binary to oct
-                targetStr = self.convertBinToOctHex(binNumStr: binaryStr, targetSystem: .oct)
+                let bin = Binary(stringLiteral: binaryStr)
+                targetStr = Octal(bin).value
+                //targetStr = self.convertBinToOctHex(binNumStr: binaryStr, targetSystem: .oct)
                 break
             case "Decimal":
                 // convert binary to dec
-                targetStr = "0"
-                targetStr = self.convertBinToDec(binNumStr: binaryStr)
+                //targetStr = "0"
+                //targetStr = self.convertBinToDec(binNumStr: binaryStr)
+                let bin = Binary(stringLiteral: binaryStr)
+                targetStr = "\(Decimal(bin))"
                 break
             case "Hexadecimal":
                 // convert binary to hex
-                targetStr = self.convertBinToOctHex(binNumStr: binaryStr, targetSystem: .hex)
+                //targetStr = self.convertBinToOctHex(binNumStr: binaryStr, targetSystem: .hex)
+                let bin = Binary(stringLiteral: binaryStr)
+                targetStr = Hexadecimal(bin).value
                 break
             default:
                 // do nothing

@@ -24,8 +24,6 @@ class PCalcViewController: UIViewController {
         // get state from UserDefaults
         getCalcState()
         handleConversion()
-        //print(CalcMath().addBinary("1100.10111", "11011.11001"))
-        //print(CalcMath.inverBinary(binary: "1100"))
 
     }
     

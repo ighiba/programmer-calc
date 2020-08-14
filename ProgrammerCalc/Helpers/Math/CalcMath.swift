@@ -76,8 +76,8 @@ final class CalcMath {
     func numberOfDigitsEqual( firstValue: String, secondValue: String) -> (String, String) {
         var resultStr = (String(), String())
         
-        let firstDivided = MainConverter().divideToDoubleInt(str: firstValue)
-        let secondDivided = MainConverter().divideToDoubleInt(str: secondValue)
+        let firstDivided = NumberSystem().divideIntFract(value: firstValue)
+        let secondDivided = NumberSystem().divideIntFract(value: secondValue)
         
         var firstInt = firstDivided.0!
         var secondInt = secondDivided.0!
