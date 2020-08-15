@@ -50,7 +50,7 @@ class Octal: NumberSystem {
         
         // TODO: Remove spaces
 
-        // from hex to binary
+        // from oct to binary
         // process each number and form parts
         binary.value = tableOctHexToBin(valueOctHex: octal, table: table)
         

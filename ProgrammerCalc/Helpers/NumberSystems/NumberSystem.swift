@@ -37,34 +37,32 @@ class NumberSystem: ExpressibleByStringLiteral {
     // Methods
     // =======
     
-   // Dividing string variable and converting it to double without loss of precision
-   func divideIntFract( value: Any) -> (IntPart?, FractPart?) {
+    // Dividing string variable and converting it to double without loss of precision
+    func divideIntFract( value: Any) -> (IntPart?, FractPart?) {
+        let str = String(describing: value)
+        var strInt: String
+        var strFract: String
         
-    let str = String(describing: value)
-       var strInt: String
-       var strFract: String
-
-       // search index of floating pos
-       if let pointPos = str.firstIndex(of: ".") {
-           // fill strInt
-           strInt = String(str[str.startIndex..<pointPos])
-              
-           // fill strFract
-           strFract = String(str[pointPos..<str.endIndex])
-           // delete .
-           strFract.remove(at: strFract.startIndex)
+        // search index of floating pos
+        if let pointPos = str.firstIndex(of: ".") {
+            // fill strInt
+            strInt = String(str[str.startIndex..<pointPos])
+            
+            // fill strFract
+            strFract = String(str[pointPos..<str.endIndex])
+            
+            // delete .
+            strFract.remove(at: strFract.startIndex)
            
-           print(" \(strInt)...\(strFract)")
-           return (strInt, strFract)
-
-       } else {
-           // if is int
-           print("no float, return int and nil")
-           return (str, nil)
-       }
-
-   }
-    
+            print(" \(strInt)...\(strFract)")
+            return (strInt, strFract)
+            
+        } else {
+            // if is int
+            print("no float, return int and nil")
+            return (str, nil)
+        }
+    }
     
     // ====================
     // Hexadecimal // Octal
@@ -98,6 +96,8 @@ class NumberSystem: ExpressibleByStringLiteral {
     func tableOctHexFromBin( valueBin: String, partition: Int, table: [String : String]) -> String {
         var resultStr = String()
         var buffStr = valueBin
+        
+        buffStr = removeAllSpaces(str: buffStr)
         
         // from binary to octal or hex
         // divide by part

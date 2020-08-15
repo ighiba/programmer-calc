@@ -26,7 +26,8 @@ class Binary: NumberSystem {
     /// Creates an instance initialized to the Int value
     init(_ valueInt: Int) {
         super.init()
-        super.value = String(valueInt, radix: 2)
+        self.value = String(valueInt, radix: 2)
+        self.value = fillUpParts(str: self.value, by: 4)
     }
     
     /// Creates an instance initialized to the Decimal value
@@ -192,7 +193,10 @@ class Binary: NumberSystem {
     
     // Converting IntPart of Floating point binary
     func convertIntToBinary(_ valueInt: Int) -> IntPart {
-        return String(valueInt, radix: 2)
+        var binaryStr = String(valueInt, radix: 2)
+        binaryStr = fillUpParts(str: binaryStr, by: 4)
+        
+        return binaryStr
     }
     
     // Converting FractPart of Floating point binary
@@ -241,10 +245,11 @@ class Binary: NumberSystem {
         
         let intNumber = Int(numberStr.0!)!
         let precision = Int(SavedData.conversionSettings?.numbersAfterPoint ?? 8)
+        let intPart = convertIntToBinary(intNumber)
+        let fractPart = convertFractToBinary(numberStr: numberStr.1!, precision: precision)
         
-        let binaryStr = "\(convertIntToBinary(intNumber)).\(convertFractToBinary(numberStr: numberStr.1!, precision: precision))"
         
-        return binaryStr
+        return "\(intPart).\(fractPart)"
     }
     
     // filling up BINARY number with zeros by num of zeros in 1 part
@@ -255,7 +260,7 @@ class Binary: NumberSystem {
         if Int(buffStr) != 0 {
             // remove all zeros at beginning of string
             while buffStr.first == "0" {
-                buffStr.removeFirst(1)
+                buffStr.removeFirst()
             }
         } else {
             // if zero then return fillNum zeros
@@ -287,6 +292,74 @@ class Binary: NumberSystem {
         return buffStr
     }
     
+    // Divide number by parts
+    func divideBinary( by partition: Int) -> Binary {
+        let binary = self
+        var buffStr = String()
+
+        // if count of digits more than or equal to 1 AND number not 0
+        if binary.value.count >= 1 && binary.value != "0" {
+            var counter: Int = 0
+
+            for char in binary.value {
+                // check if already point
+                if char == "." {
+                    counter = 0
+                    buffStr.append(char)
+                    continue
+                }
+                // if ok
+                if counter == partition-1 {
+                    buffStr.append("\(char) ")
+                    counter = 0
+                } else {
+                    buffStr.append(char)
+                    counter += 1
+                }
+            }
+
+            // add zeros after for filling the parts
+            if counter > 0 {
+                for _ in 0...partition-counter-1 {
+                    buffStr.append("0")
+                }
+            }
+
+            // delete space before and after .
+            if buffStr.contains(".") {
+                var pointPos = buffStr.firstIndex(of: ".")!
+
+                var pointBuff = buffStr.index(before: pointPos)
+
+                // delete space before if exists
+                if buffStr[pointBuff] == " " {
+                    buffStr.remove(at: pointBuff)
+                }
+
+                // if . isn't last element
+                if buffStr.last != "." {
+                    // update indexes
+                    pointPos = buffStr.firstIndex(of: ".")!
+                    pointBuff = buffStr.index(after: pointPos)
+                        // delete space after if exists
+                    if buffStr[pointBuff] == " " {
+                        buffStr.remove(at: pointBuff)
+                    }
+                }
+            }
+            binary.value = buffStr
+        }
+
+        // remove first and last spaces
+        if binary.value.first == " " {
+            binary.value.remove(at: binary.value.startIndex)
+        }
+        if binary.value.last == " " {
+            binary.value.remove(at: binary.value.index(before: binary.value.endIndex))
+        }
+
+        return binary
+    }
     
     
 }
