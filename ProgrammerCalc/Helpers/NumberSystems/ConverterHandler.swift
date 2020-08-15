@@ -8,7 +8,7 @@
 
 import Foundation
 
- class MainConverter {
+ class ConverterHandler {
     
     // =======
     // Methods
@@ -24,53 +24,54 @@ import Foundation
         // =======================================
         // First step: convert any value to binary
         // =======================================
-        let binaryStr = convertAnyToBinary(anyStr: valueStr, anySystem: mainSystem)
+        let binary = convertAnyToBinary(anyStr: valueStr, anySystem: mainSystem)
         
         // ==================================================
         // Second step: convert binary value to needed system
         // ==================================================
         
-        let resultStr = convertBinaryToAny(binaryStr: binaryStr, targetSystem: converterSystem)
+        let resultStr = convertBinaryToAny(binary: binary, targetSystem: converterSystem)
         
         return resultStr
     }
     
     // Converter from any to binary system
-    fileprivate func convertAnyToBinary( anyStr: String, anySystem: String) -> String {
-        var binaryStr: String
+    fileprivate func convertAnyToBinary( anyStr: String, anySystem: String) -> Binary {
+        var binary: Binary
         
             switch anySystem {
             case "Binary":
                 // if already binary
-                binaryStr = anyStr
+                binary = Binary(stringLiteral: anyStr)
                 break
             case "Octal":
                 // convert oct to binary
                 let oct = Octal(stringLiteral: anyStr)
-                binaryStr = Binary(oct).value
+                binary = Binary(oct)
                 break
             case "Decimal":
                 // convert dec to binary
-                //binaryStr = self.convertDecToBinary(decNumStr: anyStr)
-                binaryStr = Binary(Decimal(string: anyStr)!).value
+                let dec = Decimal(string: anyStr)!
+                binary = Binary(dec)
                 break
             case "Hexadecimal":
                 // convert hex to binary
                 let hex = Hexadecimal(stringLiteral: anyStr)
-                binaryStr = Binary(hex).value
+                binary = Binary(hex)
                 break
             default:
                 // do nothing
                 // TODO: Error handling
-                binaryStr = "0"
+                binary = "0"
                 break
             }
 
-        return binaryStr
+        return binary
     }
     
     // Converter from binary to any system
-    fileprivate func convertBinaryToAny( binaryStr: String, targetSystem: String) -> String {
+    fileprivate func convertBinaryToAny( binary: Binary, targetSystem: String) -> String {
+        let binaryStr = binary.value
         var targetStr: String
         
             switch targetSystem {
@@ -80,22 +81,15 @@ import Foundation
                 break
             case "Octal":
                 // convert binary to oct
-                let bin = Binary(stringLiteral: binaryStr)
-                targetStr = Octal(bin).value
-                //targetStr = self.convertBinToOctHex(binNumStr: binaryStr, targetSystem: .oct)
+                targetStr = Octal(binary).value
                 break
             case "Decimal":
                 // convert binary to dec
-                //targetStr = "0"
-                //targetStr = self.convertBinToDec(binNumStr: binaryStr)
-                let bin = Binary(stringLiteral: binaryStr)
-                targetStr = "\(Decimal(bin))"
+                targetStr = "\(Decimal(binary))"
                 break
             case "Hexadecimal":
                 // convert binary to hex
-                //targetStr = self.convertBinToOctHex(binNumStr: binaryStr, targetSystem: .hex)
-                let bin = Binary(stringLiteral: binaryStr)
-                targetStr = Hexadecimal(bin).value
+                targetStr = Hexadecimal(binary).value
                 break
             default:
                 // do nothing

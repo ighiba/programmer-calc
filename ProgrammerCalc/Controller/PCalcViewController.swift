@@ -8,7 +8,9 @@
 
 import UIKit
 
-class PCalcViewController: UIViewController {
+class PCalcViewController: UIViewController{   
+    // Converter
+    var converterHandler: ConverterHandler = ConverterHandler()
     
     let calcMath: CalcMath = CalcMath()
     var mathState: CalcMath.MathState?
@@ -24,6 +26,7 @@ class PCalcViewController: UIViewController {
         // get state from UserDefaults
         getCalcState()
         handleConversion()
+
 
     }
     
@@ -95,13 +98,10 @@ class PCalcViewController: UIViewController {
             if let data = SavedData.conversionSettings {
                 let fromSystem = data.systemMain
                 let toSystem = data.systemConverter
-                converterLabel.text = MainConverter().convertValue(value: mainLabel.text!, from: fromSystem, to: toSystem)
+                converterLabel.text = converterHandler.convertValue(value: mainLabel.text!, from: fromSystem, to: toSystem)
             }
         }
     }
-    
- 
-
     
     // =======
     // Actions

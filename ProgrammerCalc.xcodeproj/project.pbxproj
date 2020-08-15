@@ -21,7 +21,7 @@
 		C065DB3E24E41E610059B38D /* CalcState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C065DB3D24E41E610059B38D /* CalcState.swift */; };
 		C065DB4024E428550059B38D /* DecimalMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C065DB3F24E428550059B38D /* DecimalMath.swift */; };
 		C066756924E27AE700F832F9 /* ConversionValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = C066756824E27AE700F832F9 /* ConversionValues.swift */; };
-		C066756E24E2D83300F832F9 /* MainConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C066756D24E2D83300F832F9 /* MainConverter.swift */; };
+		C066756E24E2D83300F832F9 /* ConverterHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C066756D24E2D83300F832F9 /* ConverterHandler.swift */; };
 		C06B7F072443B12B009642B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F062443B12B009642B9 /* AppDelegate.swift */; };
 		C06B7F092443B12B009642B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F082443B12B009642B9 /* SceneDelegate.swift */; };
 		C06B7F0B2443B12B009642B9 /* PCalcViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F0A2443B12B009642B9 /* PCalcViewController.swift */; };
@@ -69,7 +69,7 @@
 		C065DB3D24E41E610059B38D /* CalcState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcState.swift; sourceTree = "<group>"; };
 		C065DB3F24E428550059B38D /* DecimalMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalMath.swift; sourceTree = "<group>"; };
 		C066756824E27AE700F832F9 /* ConversionValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionValues.swift; sourceTree = "<group>"; };
-		C066756D24E2D83300F832F9 /* MainConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainConverter.swift; sourceTree = "<group>"; };
+		C066756D24E2D83300F832F9 /* ConverterHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterHandler.swift; sourceTree = "<group>"; };
 		C06B7F032443B12B009642B9 /* ProgrammerCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProgrammerCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C06B7F062443B12B009642B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C06B7F082443B12B009642B9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -121,7 +121,6 @@
 			children = (
 				C05A169A24DD7B0D007B7FB8 /* SavedData.swift */,
 				C065DB3D24E41E610059B38D /* CalcState.swift */,
-				C066756C24E2D6FC00F832F9 /* Converters */,
 				C05B008A24E6B0F100F8A5E0 /* NumberSystems */,
 				C065DB3824E3C89B0059B38D /* Math */,
 			);
@@ -136,6 +135,7 @@
 				C07267DC24E5ACB300D4B4A2 /* Binary.swift */,
 				C05B008B24E6E0E100F8A5E0 /* Hexadecimal.swift */,
 				C05B008D24E701ED00F8A5E0 /* Octal.swift */,
+				C066756D24E2D83300F832F9 /* ConverterHandler.swift */,
 			);
 			path = NumberSystems;
 			sourceTree = "<group>";
@@ -156,14 +156,6 @@
 				C065DB3924E3C8BE0059B38D /* BinaryMath.swift */,
 			);
 			path = Math;
-			sourceTree = "<group>";
-		};
-		C066756C24E2D6FC00F832F9 /* Converters */ = {
-			isa = PBXGroup;
-			children = (
-				C066756D24E2D83300F832F9 /* MainConverter.swift */,
-			);
-			path = Converters;
 			sourceTree = "<group>";
 		};
 		C06B7EFA2443B12B009642B9 = {
@@ -398,7 +390,7 @@
 				C0E5FC7624BB9B8D00BA93CA /* PCalcView.swift in Sources */,
 				C06B7F0B2443B12B009642B9 /* PCalcViewController.swift in Sources */,
 				C0619AC424D71240008A7291 /* ConversionViewController.swift in Sources */,
-				C066756E24E2D83300F832F9 /* MainConverter.swift in Sources */,
+				C066756E24E2D83300F832F9 /* ConverterHandler.swift in Sources */,
 				C065DB4024E428550059B38D /* DecimalMath.swift in Sources */,
 				C065DB3A24E3C8BE0059B38D /* BinaryMath.swift in Sources */,
 				C05B009124E71B6E00F8A5E0 /* DecimalExt.swift in Sources */,
