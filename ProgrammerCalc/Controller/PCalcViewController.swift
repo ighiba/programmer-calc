@@ -18,11 +18,7 @@ class PCalcViewController: UIViewController{
     lazy var mainLabel: UILabel = calcView.mainLabel
     lazy var converterLabel: UILabel = calcView.converterLabel
     // State for processign signed values
-    private var processSigned = false {
-        didSet{
-            print(processSigned)
-        }
-    } // default value
+    private var processSigned = false // default value
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,7 +55,10 @@ class PCalcViewController: UIViewController{
             self.processSigned = data.processSigned
             // update button value
             updateIsSignedButton()
-
+            // update converter and main labels
+            updateConverterLabel()
+            // update plusminus button state
+            changeStatePlusMinus()
         }  else {
             print("no settings")
             // Save default settings (all zero)
@@ -126,6 +125,13 @@ class PCalcViewController: UIViewController{
         } else {
             // if OFF then enable
             isSignedButton.setTitle("Signed\nOFF", for: .normal)
+        }
+    }
+    
+    // Change state of plusminus button
+    private func changeStatePlusMinus() {
+        if let plusMinusButton = self.view.viewWithTag(101) as? UIButton {
+            plusMinusButton.isEnabled = self.processSigned
         }
     }
     
@@ -440,6 +446,8 @@ class PCalcViewController: UIViewController{
         print("Signed - \(self.processSigned)")
         // update converter and main labels
         updateConverterLabel()
+        // toggle plusminus button
+        changeStatePlusMinus()
     }
     
     // Change conversion button tapped

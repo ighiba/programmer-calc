@@ -180,6 +180,8 @@ class PCalcView: UIView {
             
             // set title and style
             button.setTitle(title, for: .normal)
+            // TODO: Themes
+            button.setTitleColor(.lightGray, for: .disabled)
             button.applyStyle()
             // apply style for signed button
             // TODO: Remove hardcode
