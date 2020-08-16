@@ -150,7 +150,7 @@ class PCalcView: UIView {
     // Standart calculator buttons
     let allButtons: [UIButton] = {
         
-        let allTitles = ["AC","\u{00B1}","%","\u{00f7}",
+        let allTitles = ["AC","\u{00B1}","Signed\nOFF","\u{00f7}",
                          "7", "8", "9", "X",
                          "4", "5", "6", "-",
                          "1", "2", "3", "+",
@@ -170,6 +170,9 @@ class PCalcView: UIView {
             case "0"..."9",".":
                 button.setActions(for: .numeric)
                 break
+            case "Signed\nOFF":
+                button.addTarget(nil, action: #selector(PCalcViewController.toggleIsSigned), for: .touchUpInside)
+                break
             default:
                 button.setActions(for: .sign)
                 break
@@ -178,6 +181,13 @@ class PCalcView: UIView {
             // set title and style
             button.setTitle(title, for: .normal)
             button.applyStyle()
+            // apply style for signed button
+            // TODO: Remove hardcode
+            if button.titleLabel?.text == "Signed\nOFF" {
+                button.titleLabel?.numberOfLines = 2
+                button.titleLabel?.textAlignment = .center
+                button.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 18.0)
+            }
             
             // set width and height by constraints
             button.translatesAutoresizingMaskIntoConstraints = false
@@ -192,6 +202,7 @@ class PCalcView: UIView {
             // button tags start from 100 to 118
             button.tag = buttonTag
             buttonTag += 1
+            
             // add element to array
             buttons.append(button)
             

@@ -10,13 +10,19 @@ import UIKit
 
 class PCalcViewController: UIViewController{   
     // Converter
-    var converterHandler: ConverterHandler = ConverterHandler()
-    
-    let calcMath: CalcMath = CalcMath()
+    let converterHandler: ConverterHandler = ConverterHandler()
+    // Calculation
+    let calculationHandler: CalcMath = CalcMath()
     var mathState: CalcMath.MathState?
     let calcView: PCalcView = PCalcView()
     lazy var mainLabel: UILabel = calcView.mainLabel
     lazy var converterLabel: UILabel = calcView.converterLabel
+    // State for processign signed values
+    private var processSigned = false {
+        didSet{
+            print(processSigned)
+        }
+    } // default value
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,11 +56,14 @@ class PCalcViewController: UIViewController{
             // TODO: Error handling
             mainLabel.text = data.mainLabelState
             converterLabel.text = data.converterLabelState
+            self.processSigned = data.processSigned
+            // update button value
+            updateIsSignedButton()
 
         }  else {
             print("no settings")
             // Save default settings (all zero)
-            SavedData.calcState = CalcState(mainState: "0", convertState: "0")
+            SavedData.calcState = CalcState(mainState: "0", convertState: "0", processSigned: false)
         }
     }
     
@@ -62,9 +71,10 @@ class PCalcViewController: UIViewController{
         // TODO: Error handling
         let mainState = mainLabel.text ?? "0"
         let convertState = converterLabel.text ?? "0"
+        let processSigned = self.processSigned
         
         // set data to UserDefaults
-        SavedData.calcState = CalcState(mainState: mainState, convertState: convertState)
+        SavedData.calcState = CalcState(mainState: mainState, convertState: convertState, processSigned: processSigned)
     }
     
     // Reset all labels after Conversion
@@ -103,6 +113,42 @@ class PCalcViewController: UIViewController{
         }
     }
     
+    // Update signed button
+    private func updateIsSignedButton() {
+        // get button by tag 102
+        // TODO: Refactor hardcode
+        let isSignedButton = self.view.viewWithTag(102) as! UIButton
+        
+        if self.processSigned {
+            // if ON then disable
+            // TODO: Localization
+            isSignedButton.setTitle("Signed\nON", for: .normal)
+        } else {
+            // if OFF then enable
+            isSignedButton.setTitle("Signed\nOFF", for: .normal)
+        }
+    }
+    
+    private func invertLabelsValue() {
+        let mainLabelText = mainLabel.text!
+        let convertLabelText = converterLabel.text!
+        let mainSystem = SavedData.conversionSettings?.systemMain ?? "Decimal"
+        
+        switch mainSystem {
+        case "Binary":
+            break
+        case "Decimal":
+            break
+        case "Octal":
+            break
+        case "Hexadecimal":
+            break
+        default:
+            break
+        }
+        
+    }
+
     // =======
     // Actions
     // =======
@@ -251,6 +297,7 @@ class PCalcViewController: UIViewController{
         let convertLabel = converterLabel
         // tag for AC/C button
         let acButton = self.view.viewWithTag(100) as! UIButton
+        // tag for Signed ON/Off button
         
         print("Button \(buttonText) touched")
         
@@ -297,7 +344,7 @@ class PCalcViewController: UIViewController{
             // calc results
             if mathState != nil {
                 print("calculation")
-                if let result = calcMath.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
+                if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
                 
                     //calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
@@ -315,7 +362,7 @@ class PCalcViewController: UIViewController{
             // calc results
             if mathState != nil {
                 print("calculation")
-                if let result = calcMath.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
+                if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
                 //if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
                     updateConverterLabel()
@@ -332,7 +379,7 @@ class PCalcViewController: UIViewController{
             // calc results
             if mathState != nil {
                 print("calculation")
-                if let result = calcMath.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
+                if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
                 //if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
                     updateConverterLabel()
@@ -349,7 +396,7 @@ class PCalcViewController: UIViewController{
             // calc results
             if mathState != nil {
                 print("calculation")
-                if let result = calcMath.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
+                if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
                 //if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
                     updateConverterLabel()
@@ -364,7 +411,7 @@ class PCalcViewController: UIViewController{
         case "=":
             if mathState != nil {
                 print("calculation")
-                if let result = calcMath.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
+                if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
                 //if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
                     updateConverterLabel()
@@ -379,6 +426,19 @@ class PCalcViewController: UIViewController{
             break
         }
         
+    }
+    
+    // Signed OFF/ON button
+    @objc func toggleIsSigned( sender: UIButton) {
+        // invert value
+        self.processSigned = !self.processSigned
+        // update value
+        updateIsSignedButton()
+        // update converter and main labels
+        
+        // save state to UserDefaults
+        saveCalcState()
+        print("Signed - \(self.processSigned)")
     }
     
     // Change conversion button tapped

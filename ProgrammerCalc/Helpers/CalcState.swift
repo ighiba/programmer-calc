@@ -14,10 +14,12 @@ import Foundation
 class CalcState: Codable {
     var mainLabelState: String
     var converterLabelState: String
+    var processSigned: Bool
     
-    init(mainState:String, convertState: String) {
+    init(mainState:String, convertState: String, processSigned: Bool) {
         self.mainLabelState = mainState
         self.converterLabelState = convertState
+        self.processSigned = processSigned
     }
     
 }
