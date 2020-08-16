@@ -194,7 +194,33 @@ class Binary: NumberSystem {
     // Converting IntPart of Floating point binary
     func convertIntToBinary(_ valueInt: Int) -> IntPart {
         var binaryStr = String(valueInt, radix: 2)
-        binaryStr = fillUpParts(str: binaryStr, by: 4)
+        // get processSigned state 
+        if let data = SavedData.calcState?.processSigned {
+            if data {
+                // count how much zeros need to fill
+                let neededCount: Int = {
+                    var maxBits: Int = 8 // default
+                    for power in 3...6 {
+                        let bits = Int(pow(2, Float(power)))
+                        // set maximum lenght for binary str
+                        if binaryStr.count < bits {
+                            maxBits = bits
+                            return maxBits
+                        }
+                    }
+                    return maxBits
+                }()
+                // set binary lenght
+                binaryStr = fillUpZeros(str: binaryStr, to: neededCount)
+            } else {
+                // just make binary code pretty
+                binaryStr = fillUpParts(str: binaryStr, by: 4)
+            }
+        } else {
+            // just make binary code pretty
+            binaryStr = fillUpParts(str: binaryStr, by: 4)
+        }
+        
         
         return binaryStr
     }
@@ -319,11 +345,11 @@ class Binary: NumberSystem {
             }
 
             // add zeros after for filling the parts
-            if counter > 0 {
-                for _ in 0...partition-counter-1 {
-                    buffStr.append("0")
-                }
-            }
+//            if counter > 0 {
+//                for _ in 0...partition-counter-1 {
+//                    buffStr.append("0")
+//                }
+//            }
 
             // delete space before and after .
             if buffStr.contains(".") {
@@ -359,6 +385,17 @@ class Binary: NumberSystem {
         }
 
         return binary
+    }
+    
+    // Filling up zeros to needed count
+    func fillUpZeros( str: String, to num: Int) -> String {
+        let diffInt = num - str.count
+        
+        return String(repeating: "0", count: diffInt) + str
+    }
+    
+    func handleSigned() {
+        self.value.removeFirst()
     }
     
     

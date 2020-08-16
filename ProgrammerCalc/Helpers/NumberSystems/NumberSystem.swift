@@ -16,6 +16,7 @@ class NumberSystem: ExpressibleByStringLiteral {
     
     // raw value
     var value: String
+    var isSigned: Bool = false
 
     required public init(stringLiteral value: String) {
         self.value = value

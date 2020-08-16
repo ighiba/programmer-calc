@@ -434,11 +434,12 @@ class PCalcViewController: UIViewController{
         self.processSigned = !self.processSigned
         // update value
         updateIsSignedButton()
-        // update converter and main labels
-        
+        // TODO: Main label
         // save state to UserDefaults
         saveCalcState()
         print("Signed - \(self.processSigned)")
+        // update converter and main labels
+        updateConverterLabel()
     }
     
     // Change conversion button tapped
