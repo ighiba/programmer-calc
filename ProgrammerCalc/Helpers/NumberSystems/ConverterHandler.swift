@@ -16,10 +16,10 @@ import Foundation
     
     // Main function for conversion values
     func convertValue(value valueStr: String, from mainSystem: String, to converterSystem: String) -> String? {
-        // exit if systems are equal
-        guard mainSystem != converterSystem else {
-            return valueStr
-        }
+        // exit if systems are equal except binary
+//        guard mainSystem != converterSystem && mainSystem != "Binary" else {
+//            return valueStr
+//        }
         
         // =======================================
         // First step: convert any value to binary

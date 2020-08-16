@@ -16,6 +16,9 @@ class Binary: NumberSystem {
     
     required public init(stringLiteral value: String) {
         super.init(stringLiteral: value)
+        
+        // process string input and apply style for output
+        self.value = processStringInput(str: value)
     }
     
     /// Creates an empty instance
@@ -194,34 +197,9 @@ class Binary: NumberSystem {
     // Converting IntPart of Floating point binary
     func convertIntToBinary(_ valueInt: Int) -> IntPart {
         var binaryStr = String(valueInt, radix: 2)
-        // get processSigned state 
-        if let data = SavedData.calcState?.processSigned {
-            if data {
-                // count how much zeros need to fill
-                let neededCount: Int = {
-                    var maxBits: Int = 8 // default
-                    for power in 3...6 {
-                        let bits = Int(pow(2, Float(power)))
-                        // set maximum lenght for binary str
-                        if binaryStr.count < bits {
-                            maxBits = bits
-                            return maxBits
-                        }
-                    }
-                    return maxBits
-                }()
-                // set binary lenght
-                binaryStr = fillUpZeros(str: binaryStr, to: neededCount)
-            } else {
-                // just make binary code pretty
-                binaryStr = fillUpParts(str: binaryStr, by: 4)
-            }
-        } else {
-            // just make binary code pretty
-            binaryStr = fillUpParts(str: binaryStr, by: 4)
-        }
         
-        
+        binaryStr = fillingStyleResult(for: binaryStr)
+
         return binaryStr
     }
     
@@ -388,15 +366,68 @@ class Binary: NumberSystem {
     }
     
     // Filling up zeros to needed count
-    func fillUpZeros( str: String, to num: Int) -> String {
+    private func fillUpZeros( str: String, to num: Int) -> String {
         let diffInt = num - str.count
         
         return String(repeating: "0", count: diffInt) + str
+    }
+    
+    // Set fillig style for binary string
+    private func fillingStyleResult(for str: String) -> String {
+        var binaryStr = str
+        // get saved data
+        if let data = SavedData.calcState?.processSigned {
+            if data {
+                // count how much zeros need to fill
+                let neededCount: Int = {
+                    var maxBits: Int = 8 // default
+                    for power in 3...6 {
+                        let bits = Int(pow(2, Float(power)))
+                        // set maximum lenght for binary str
+                        if binaryStr.count < bits {
+                            maxBits = bits
+                            return maxBits
+                        }
+                    }
+                    return maxBits
+                }()
+                // set binary lenght
+                binaryStr = fillUpZeros(str: binaryStr, to: neededCount)
+            } else {
+                // just make binary code pretty
+                binaryStr = fillUpParts(str: binaryStr, by: 4)
+            }
+        } else {
+            // just make binary code pretty
+            binaryStr = fillUpParts(str: binaryStr, by: 4)
+        }
+        
+        return binaryStr
     }
     
     func handleSigned() {
         self.value.removeFirst()
     }
     
+    
+    // Processing strings that initialized from stringLiteral
+    fileprivate func processStringInput( str: String) -> String {
+        let binaryDivided = self.divideIntFract(value: str)
+        var resultStr = String()
+        
+        // process int part
+        if let intPart = binaryDivided.0 {
+            // apply style to input
+            // signed or not
+            resultStr += fillingStyleResult(for: intPart)
+        }
+        
+        // process fract part
+        if let fractPart = binaryDivided.1 {
+            resultStr = "." + fractPart
+        }
+        
+        return resultStr
+    }
     
 }
