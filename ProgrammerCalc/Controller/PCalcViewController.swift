@@ -28,7 +28,9 @@ class PCalcViewController: UIViewController{
         // get state from UserDefaults
         getCalcState()
         handleConversion()
-
+        
+        // update layout (handle button state and etc)
+        updateAllLayout()
 
     }
     
@@ -53,12 +55,8 @@ class PCalcViewController: UIViewController{
             mainLabel.text = data.mainLabelState
             converterLabel.text = data.converterLabelState
             self.processSigned = data.processSigned
-            // update button value
-            updateIsSignedButton()
-            // update converter and main labels
-            updateConverterLabel()
-            // update plusminus button state
-            changeStatePlusMinus()
+            // Update layout
+            //updateAllLayout()
         }  else {
             print("no settings")
             // Save default settings (all zero)
@@ -126,6 +124,15 @@ class PCalcViewController: UIViewController{
             // if OFF then enable
             isSignedButton.setTitle("Signed\nOFF", for: .normal)
         }
+    }
+    
+    private func updateAllLayout() {
+        // update button value
+        updateIsSignedButton()
+        // update converter and main labels
+        updateConverterLabel()
+        // update plusminus button state
+        changeStatePlusMinus()
     }
     
     // Change state of plusminus button

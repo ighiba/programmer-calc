@@ -377,11 +377,13 @@ class Binary: NumberSystem {
         var binaryStr = str
         // get saved data
         if let data = SavedData.calcState?.processSigned {
+            // if .processSigned == true
             if data {
                 // count how much zeros need to fill
                 let neededCount: Int = {
                     var maxBits: Int = 8 // default
                     for power in 3...6 {
+                        // 2^3, 2^4 ....calculating bits
                         let bits = Int(pow(2, Float(power)))
                         // set maximum lenght for binary str
                         if binaryStr.count < bits {
@@ -391,7 +393,7 @@ class Binary: NumberSystem {
                     }
                     return maxBits
                 }()
-                // set binary lenght
+                // fill up with zeros to needed bit position
                 binaryStr = fillUpZeros(str: binaryStr, to: neededCount)
             } else {
                 // just make binary code pretty
