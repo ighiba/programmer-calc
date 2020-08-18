@@ -66,7 +66,7 @@ class ConversionViewController: UIViewController {
             sliderOldValue = slider.value
         }  else {
             print("no settings")
-            // Save default settings (all true)
+            // Save default settings 
             let systems = ConversionModel.ConversionSystemsEnum.self
             SavedData.conversionSettings = ConversionSettingsModel(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 8.0)
         }

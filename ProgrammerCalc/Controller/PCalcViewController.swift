@@ -77,10 +77,27 @@ class PCalcViewController: UIViewController{
         }  else {
             // if no settings
             print("no settings")
+            // default values
             let newCalcState = CalcState(mainState: "0", convertState: "0", processSigned: false)
             SavedData.calcState = newCalcState
             
             return newCalcState
+        }
+    }
+    
+    // just return conversionSettings data from UserDefauls
+    private func returnConversionSettings() -> ConversionSettingsModel {
+        if let data = SavedData.conversionSettings {
+            return data
+        }  else {
+            // if no settings
+            print("no settings")
+            // Save default settings
+            let systems = ConversionModel.ConversionSystemsEnum.self
+            // From DEC to BIN
+            let newConversionSettings = ConversionSettingsModel(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 8.0)
+            
+            return newConversionSettings
         }
     }
     
@@ -120,12 +137,8 @@ class PCalcViewController: UIViewController{
             converterLabel.text = mainLabel.text
         } else {
             // Uptade converter label with converted number
-            // TODO: Error handling
-            if let data = SavedData.conversionSettings {
-                let fromSystem = data.systemMain
-                let toSystem = data.systemConverter
-                converterLabel.text = converterHandler.convertValue(value: mainLabel.text!, from: fromSystem, to: toSystem)
-            }
+            let data = returnConversionSettings()
+            converterLabel.text = converterHandler.convertValue(value: mainLabel.text!, from: data.systemMain, to: data.systemConverter)
         }
     }
     
@@ -157,25 +170,25 @@ class PCalcViewController: UIViewController{
         }
     }
     
-    private func invertLabelsValue() {
-        let mainLabelText = mainLabel.text!
-        let convertLabelText = converterLabel.text!
-        let mainSystem = SavedData.conversionSettings?.systemMain ?? "Decimal"
-        
-        switch mainSystem {
-        case "Binary":
-            break
-        case "Decimal":
-            break
-        case "Octal":
-            break
-        case "Hexadecimal":
-            break
-        default:
-            break
-        }
-        
-    }
+//    private func invertLabelsValue() {
+//        let mainLabelText = mainLabel.text!
+//        let convertLabelText = converterLabel.text!
+//        let mainSystem = SavedData.conversionSettings?.systemMain ?? "Decimal"
+//        
+//        switch mainSystem {
+//        case "Binary":
+//            break
+//        case "Decimal":
+//            break
+//        case "Octal":
+//            break
+//        case "Hexadecimal":
+//            break
+//        default:
+//            break
+//        }
+//        
+//    }
 
     // =======
     // Actions
