@@ -122,13 +122,15 @@ class PCalcViewController: UIViewController{
         }
     }
     
-    private func updateAllLayout() {
+    public func updateAllLayout() {
         // update button value
         updateIsSignedButton()
         // update converter and main labels
         updateConverterLabel()
         // update plusminus button state
         changeStatePlusMinus()
+        // update displayeing of mainLabel
+        handleDisplayingMainLabel()
     }
    
     public func updateConverterLabel() {
@@ -142,9 +144,19 @@ class PCalcViewController: UIViewController{
         }
     }
     
-    // Handle display of mainLabel
-    // IF System == System then hide label
-    private func handleDisplayMainLabel() {
+    // Handle displaying of mainLabel
+    public func handleDisplayingMainLabel() {
+        let data = returnConversionSettings()
+        // IF System == System then hide label
+        if data.systemMain == data.systemConverter {
+            mainLabel.isHidden = true
+            print("Converter label hidden")
+            // TODO: Animation
+            
+        } else {
+            mainLabel.isHidden = false
+            // TODO: Animation
+        }
     }
     
     // Update signed button

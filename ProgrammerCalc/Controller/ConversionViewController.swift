@@ -103,8 +103,8 @@ class ConversionViewController: UIViewController {
             rootVC!.clearLabels()
         } else {
             // if systemMain == last value of systemMain then just update values
-            rootVC!.handleConversion()
-            rootVC!.updateConverterLabel()
+            // update layout
+            rootVC!.updateAllLayout()
         }
     }
     
