@@ -100,7 +100,7 @@ class ConversionViewController: UIViewController {
         // TODO: Error handling
         if buffSavedMainLabel != mainSelectedString! {
             // set labels to 0 and update
-            rootVC!.resetAllLabels()
+            rootVC!.clearLabels()
         } else {
             // if systemMain == last value of systemMain then just update values
             rootVC!.handleConversion()

@@ -74,10 +74,10 @@ class PCalcViewController: UIViewController{
         SavedData.calcState = CalcState(mainState: mainState, convertState: convertState, processSigned: processSigned)
     }
     
-    // Reset all labels after Conversion
-    public func resetAllLabels() {
+    // Clear mainLabel and update value in converter label
+    public func clearLabels() {
         mainLabel.text = "0"
-        converterLabel.text = "0"
+        updateConverterLabel()
     }
     
     // Handle conversion issues
@@ -89,7 +89,7 @@ class PCalcViewController: UIViewController{
         if forbidden[systemMain]!.contains(where: labelText!.contains) {
             print("Forbidden values at input")
             print("Reseting input")
-            resetAllLabels()
+            clearLabels()
         } else {
             // do nothing
         }
@@ -326,13 +326,11 @@ class PCalcViewController: UIViewController{
         switch buttonText {
         // Clear buttons
         case "AC":
-            label.text! = "0"
-            convertLabel.text! = "0"
+            clearLabels()
             mathState = nil
             break
         case "C":
-            label.text! = "0"
-            convertLabel.text! = "0"
+            clearLabels()
             button.setTitle("AC", for: .normal)
             mathState = nil
             break
