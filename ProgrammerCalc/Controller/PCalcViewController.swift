@@ -50,18 +50,14 @@ class PCalcViewController: UIViewController{
     // Update conversion values
     fileprivate func getCalcState() {
         // get data from UserDefaults
-        if let data = SavedData.calcState {
-            // TODO: Error handling
-            mainLabel.text = data.mainLabelState
-            converterLabel.text = data.converterLabelState
-            self.processSigned = data.processSigned
-            // Update layout
-            //updateAllLayout()
-        }  else {
-            print("no settings")
-            // Save default settings (all zero)
-            SavedData.calcState = CalcState(mainState: "0", convertState: "0", processSigned: false)
-        }
+        let data = returnCalcState()
+        // apply data to view
+        mainLabel.text = data.mainLabelState
+        converterLabel.text = data.converterLabelState
+        self.processSigned = data.processSigned
+        
+        // Update layout
+        //updateAllLayout()
     }
     
     public func saveCalcState() {
@@ -72,6 +68,20 @@ class PCalcViewController: UIViewController{
         
         // set data to UserDefaults
         SavedData.calcState = CalcState(mainState: mainState, convertState: convertState, processSigned: processSigned)
+    }
+    
+    // just return calcState data from UserDefauls
+    private func returnCalcState() -> CalcState {
+        if let data = SavedData.calcState {
+            return data
+        }  else {
+            // if no settings
+            print("no settings")
+            let newCalcState = CalcState(mainState: "0", convertState: "0", processSigned: false)
+            SavedData.calcState = newCalcState
+            
+            return newCalcState
+        }
     }
     
     // Clear mainLabel and update value in converter label
@@ -94,6 +104,15 @@ class PCalcViewController: UIViewController{
             // do nothing
         }
     }
+    
+    private func updateAllLayout() {
+        // update button value
+        updateIsSignedButton()
+        // update converter and main labels
+        updateConverterLabel()
+        // update plusminus button state
+        changeStatePlusMinus()
+    }
    
     public func updateConverterLabel() {
         // TODO: Refator hadling for Hexadecimal values
@@ -110,6 +129,11 @@ class PCalcViewController: UIViewController{
         }
     }
     
+    // Handle display of mainLabel
+    // IF System == System then hide label
+    private func handleDisplayMainLabel() {
+    }
+    
     // Update signed button
     private func updateIsSignedButton() {
         // get button by tag 102
@@ -124,15 +148,6 @@ class PCalcViewController: UIViewController{
             // if OFF then enable
             isSignedButton.setTitle("Signed\nOFF", for: .normal)
         }
-    }
-    
-    private func updateAllLayout() {
-        // update button value
-        updateIsSignedButton()
-        // update converter and main labels
-        updateConverterLabel()
-        // update plusminus button state
-        changeStatePlusMinus()
     }
     
     // Change state of plusminus button
