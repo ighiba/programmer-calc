@@ -88,8 +88,7 @@ import Foundation
         switch targetSystem {
         case "Binary":
             // convert binary to binary
-            targetStr = binaryStr
-            break
+            return binaryStr
         case "Octal":
             // convert binary to oct
             targetStr = Octal(binary).value

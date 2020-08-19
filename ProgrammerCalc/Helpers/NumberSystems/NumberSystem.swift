@@ -60,7 +60,6 @@ class NumberSystem: ExpressibleByStringLiteral {
             
         } else {
             // if is int
-            print("no float, return int and nil")
             return (str, nil)
         }
     }

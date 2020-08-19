@@ -196,11 +196,11 @@ class Binary: NumberSystem {
     
     // Converting IntPart of Floating point binary
     func convertIntToBinary(_ valueInt: Int) -> IntPart {
-        var binaryStr = String(valueInt, radix: 2)
+        //var binaryStr = String(valueInt, radix: 2)
         
-        binaryStr = fillingStyleResult(for: binaryStr)
+        //binaryStr = fillingStyleResult(for: binaryStr)
 
-        return binaryStr
+        return String(valueInt, radix: 2)
     }
     
     // Converting FractPart of Floating point binary

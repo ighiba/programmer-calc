@@ -166,10 +166,6 @@ class PCalcViewController: UIViewController{
         }
     }
     
-    public func toggleMainLabel() {
-        self.mainLabel.isHidden = !self.mainLabel.isHidden
-    }
-    
     // Update signed button
     private func updateIsSignedButton() {
         // get button by tag 102
