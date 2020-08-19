@@ -155,7 +155,7 @@ class PCalcViewController: UIViewController{
             // hide
             self.mainLabel.isHidden = true
             // bigger font for converterLabel +20
-            self.converterLabel.font = UIFont(name: fontName, size: 82.0)
+            self.converterLabel.font = UIFont(name: fontName, size: 72.0)
             self.converterLabel.numberOfLines = 4
         } else {
             // unhide

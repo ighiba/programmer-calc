@@ -344,7 +344,7 @@ class Binary: NumberSystem {
                 if buffStr.last != "." {
                     // update indexes
                     pointPos = buffStr.firstIndex(of: ".")!
-                    pointBuff = buffStr.index(after: pointPos)
+                    let pointBuff = buffStr.index(after: pointPos)
                         // delete space after if exists
                     if buffStr[pointBuff] == " " {
                         buffStr.remove(at: pointBuff)
@@ -426,7 +426,7 @@ class Binary: NumberSystem {
         
         // process fract part
         if let fractPart = binaryDivided.1 {
-            resultStr = "." + fractPart
+            resultStr = resultStr + "." + fractPart
         }
         
         return resultStr

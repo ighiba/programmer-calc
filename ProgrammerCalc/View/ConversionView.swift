@@ -50,7 +50,6 @@ class ConversionView: UIView {
         containerStack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.90).isActive = true
         containerStack.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.90).isActive = true
         
-        
         // Set constraints for picker
         mainPicker.translatesAutoresizingMaskIntoConstraints = false
         mainPicker.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.25).isActive = true
@@ -66,7 +65,6 @@ class ConversionView: UIView {
         digitsAfterLabel.translatesAutoresizingMaskIntoConstraints = false
         digitsAfterLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
 
-        
         // Set contraints for done button
         doneButton.translatesAutoresizingMaskIntoConstraints = false
         doneButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
