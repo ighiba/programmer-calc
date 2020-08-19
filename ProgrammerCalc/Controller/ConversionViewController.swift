@@ -95,7 +95,8 @@ class ConversionViewController: UIViewController {
         // set last mainLabel system buffer
         let buffSavedMainLabel = SavedData.conversionSettings?.systemMain
         // set data to UserDefaults
-        SavedData.conversionSettings = ConversionSettingsModel(systMain: mainSelectedString!, systConverter: converterSelectedString!, number: sliderValue * 4)
+        let newConversionSettings = ConversionSettingsModel(systMain: mainSelectedString!, systConverter: converterSelectedString!, number: sliderValue * 4)
+        SavedData.conversionSettings = newConversionSettings
         // Handle changing of systems
         // TODO: Error handling
         if buffSavedMainLabel != mainSelectedString! {
@@ -106,6 +107,9 @@ class ConversionViewController: UIViewController {
             // update layout
             rootVC!.updateAllLayout()
         }
+        
+        rootVC!.handleDisplayingMainLabel(data: newConversionSettings)
+        
     }
     
     // ViewConvtroller dismissing

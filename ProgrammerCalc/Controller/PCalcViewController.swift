@@ -31,6 +31,9 @@ class PCalcViewController: UIViewController{
         
         // update layout (handle button state and etc)
         updateAllLayout()
+        // update displaying of mainLabel
+        let data = returnConversionSettings()
+        handleDisplayingMainLabel(data: data)
 
     }
     
@@ -129,8 +132,7 @@ class PCalcViewController: UIViewController{
         updateConverterLabel()
         // update plusminus button state
         changeStatePlusMinus()
-        // update displayeing of mainLabel
-        handleDisplayingMainLabel()
+        
     }
    
     public func updateConverterLabel() {
@@ -145,18 +147,20 @@ class PCalcViewController: UIViewController{
     }
     
     // Handle displaying of mainLabel
-    public func handleDisplayingMainLabel() {
-        let data = returnConversionSettings()
+    public func handleDisplayingMainLabel( data: ConversionSettingsModel ) {
+        
         // IF System == System then hide label
         if data.systemMain == data.systemConverter {
-            mainLabel.isHidden = true
-            print("Converter label hidden")
-            // TODO: Animation
+            
+            self.mainLabel.isHidden = true
             
         } else {
-            mainLabel.isHidden = false
-            // TODO: Animation
+            self.mainLabel.isHidden = false
         }
+    }
+    
+    public func toggleMainLabel() {
+        self.mainLabel.isHidden = !self.mainLabel.isHidden
     }
     
     // Update signed button

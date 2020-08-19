@@ -25,8 +25,9 @@ class PCalcView: UIView {
         self.addSubview(navigationBar)
         
         // add labels
-        self.addSubview(mainLabel)
-        self.addSubview(converterLabel)
+        //self.addSubview(mainLabel)
+        //self.addSubview(converterLabel)
+        self.addSubview(labelsStack)
         
         // stuff for create buttonStackView
         var buffStackView: UIStackView = UIStackView()
@@ -130,6 +131,15 @@ class PCalcView: UIView {
         label.minimumScaleFactor = 0.25
          
          return label
+    }()
+    
+    lazy var labelsStack: UIStackView = {
+        let labels = UIStackView(arrangedSubviews: [self.mainLabel, self.converterLabel])
+        
+        labels.alignment = .fill
+        labels.axis = .vertical
+        
+        return labels
     }()
     
     // Change conversion button
@@ -282,6 +292,12 @@ class PCalcView: UIView {
         navigationBar.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width).isActive = true
         navigationBar.heightAnchor.constraint(equalToConstant: 44).isActive = true
         navigationBar.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        
+        // Constraints for labelStack
+        labelsStack.translatesAutoresizingMaskIntoConstraints = false
+        labelsStack.topAnchor.constraint(equalTo: navigationBar.bottomAnchor).isActive = true
+        labelsStack.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.95).isActive = true
+        labelsStack.heightAnchor.constraint(equalToConstant: labelHeight() * 2 - 44).isActive = true
         
         // Constraints for main label
         mainLabel.translatesAutoresizingMaskIntoConstraints = false
