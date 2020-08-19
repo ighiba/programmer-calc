@@ -148,14 +148,21 @@ class PCalcViewController: UIViewController{
     
     // Handle displaying of mainLabel
     public func handleDisplayingMainLabel( data: ConversionSettingsModel ) {
+        let fontName = self.converterLabel.font.fontName
         
         // IF System == System then hide label
         if data.systemMain == data.systemConverter {
-            
+            // hide
             self.mainLabel.isHidden = true
-            
+            // bigger font for converterLabel +20
+            self.converterLabel.font = UIFont(name: fontName, size: 82.0)
+            self.converterLabel.numberOfLines = 4
         } else {
+            // unhide
             self.mainLabel.isHidden = false
+            // default font for converterLabel
+            self.converterLabel.font = UIFont(name: fontName, size: 62.0)
+            self.converterLabel.numberOfLines = 2
         }
     }
     
