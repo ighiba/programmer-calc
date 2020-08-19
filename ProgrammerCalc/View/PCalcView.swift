@@ -298,26 +298,27 @@ class PCalcView: UIView {
         labelsStack.topAnchor.constraint(equalTo: navigationBar.bottomAnchor).isActive = true
         labelsStack.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.95).isActive = true
         labelsStack.heightAnchor.constraint(equalToConstant: labelHeight() * 2 - 44).isActive = true
+        labelsStack.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         
         // Constraints for main label
         mainLabel.translatesAutoresizingMaskIntoConstraints = false
         // width and height anchors
-        mainLabel.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.95).isActive = true
+        mainLabel.widthAnchor.constraint(equalTo: labelsStack.widthAnchor).isActive = true
         mainLabel.heightAnchor.constraint(equalToConstant: labelHeight() - 33).isActive = true
         // centering
-        mainLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        //mainLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         // top anchor with safe area
-        mainLabel.topAnchor.constraint(equalTo: navigationBar.bottomAnchor).isActive = true
+        //mainLabel.topAnchor.constraint(equalTo: navigationBar.bottomAnchor).isActive = true
         
         // Constraints for converter label
         converterLabel.translatesAutoresizingMaskIntoConstraints = false
         // width and height anchors
-        converterLabel.widthAnchor.constraint(equalTo: mainLabel.widthAnchor).isActive = true
-        converterLabel.heightAnchor.constraint(equalToConstant: labelHeight() - 11).isActive = true
+        converterLabel.widthAnchor.constraint(equalTo: labelsStack.widthAnchor).isActive = true
+        converterLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: labelHeight() - 11).isActive = true
         // centering
-        converterLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        //converterLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         // top anchor to main label
-        converterLabel.topAnchor.constraint(equalTo: mainLabel.bottomAnchor).isActive = true
+        //converterLabel.topAnchor.constraint(equalTo: mainLabel.bottomAnchor).isActive = true
         
         
         // Display settings for buttons UIStackView
@@ -328,7 +329,7 @@ class PCalcView: UIView {
         // Constraints for buttons (Main)
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
         // width = main view width - spacing * 2
-        buttonsStackView.widthAnchor.constraint(equalTo: mainLabel.widthAnchor).isActive = true
+        buttonsStackView.widthAnchor.constraint(equalTo: labelsStack.widthAnchor).isActive = true
         // centering
         buttonsStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         // top anchor == spacing
