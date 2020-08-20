@@ -344,7 +344,7 @@ class Binary: NumberSystem {
                 if buffStr.last != "." {
                     // update indexes
                     pointPos = buffStr.firstIndex(of: ".")!
-                    let pointBuff = buffStr.index(after: pointPos)
+                    pointBuff = buffStr.index(after: pointPos)
                         // delete space after if exists
                     if buffStr[pointBuff] == " " {
                         buffStr.remove(at: pointBuff)

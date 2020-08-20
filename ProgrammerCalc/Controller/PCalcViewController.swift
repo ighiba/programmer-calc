@@ -8,17 +8,26 @@
 
 import UIKit
 
-class PCalcViewController: UIViewController{   
-    // Converter
+class PCalcViewController: UIViewController {
+    
+    // ==========
+    // Properties
+    // ==========
+    
+    // Handlers
     let converterHandler: ConverterHandler = ConverterHandler()
-    // Calculation
     let calculationHandler: CalcMath = CalcMath()
-    var mathState: CalcMath.MathState?
+    // views
     let calcView: PCalcView = PCalcView()
     lazy var mainLabel: UILabel = calcView.mainLabel
     lazy var converterLabel: UILabel = calcView.converterLabel
     // State for processign signed values
     private var processSigned = false // default value
+    // State for calculating numbers
+    private var mathState: CalcMath.MathState?
+    // State for conversion systems
+    var systemMain: String?
+    var systemConverter: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +36,8 @@ class PCalcViewController: UIViewController{
         self.view = calcView
         // get state from UserDefaults
         getCalcState()
+        
+        updateConversionState()
         handleConversion()
         
         // update layout (handle button state and etc)
@@ -71,6 +82,14 @@ class PCalcViewController: UIViewController{
         
         // set data to UserDefaults
         SavedData.calcState = CalcState(mainState: mainState, convertState: convertState, processSigned: processSigned)
+    }
+    
+    fileprivate func updateConversionState() {
+        // get data from UserDefaults
+        let data = returnConversionSettings()
+        
+        self.systemMain = data.systemMain
+        self.systemConverter = data.systemConverter
     }
     
     // just return calcState data from UserDefauls
@@ -141,8 +160,8 @@ class PCalcViewController: UIViewController{
             converterLabel.text = mainLabel.text
         } else {
             // Uptade converter label with converted number
-            let data = returnConversionSettings()
-            converterLabel.text = converterHandler.convertValue(value: mainLabel.text!, from: data.systemMain, to: data.systemConverter)
+            // TODO: Error handling
+            converterLabel.text = converterHandler.convertValue(value: mainLabel.text!, from: self.systemMain!, to: self.systemConverter!)
         }
     }
     
@@ -239,6 +258,8 @@ class PCalcViewController: UIViewController{
             } else {
                 label.text = buttonText
             }
+            
+            // update converter label
             updateConverterLabel()
             return
         }
@@ -259,9 +280,7 @@ class PCalcViewController: UIViewController{
                 let pointPos: String.Index = str.firstIndex(of: ".")!
                 let numsAfterPoint: Int = str.distance(from: str.endIndex, to: pointPos)
                 
-                if abs(numsAfterPoint) > 12 {
-                    return true
-                }
+                if abs(numsAfterPoint) > 12 {return true}
             }
             return false
         }()

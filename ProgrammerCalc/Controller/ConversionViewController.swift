@@ -79,8 +79,8 @@ class ConversionViewController: UIViewController {
         // 1 - converter
         let mainSelectedRow = picker.selectedRow(inComponent: 0)
         let converterSelectedRow = picker.selectedRow(inComponent: 1)
-        let mainSelectedString = picker.pickerView(picker, titleForRow: mainSelectedRow, forComponent: 0)
-        let converterSelectedString = picker.pickerView(picker, titleForRow: converterSelectedRow, forComponent: 1)
+        let systemMainNew = picker.pickerView(picker, titleForRow: mainSelectedRow, forComponent: 0)
+        let systemConverterNew = picker.pickerView(picker, titleForRow: converterSelectedRow, forComponent: 1)
         // Slider
         let sliderValue = slider.value.rounded()
         
@@ -88,18 +88,21 @@ class ConversionViewController: UIViewController {
         let rootVC = UIApplication.shared.windows.first?.rootViewController as? PCalcViewController
         guard rootVC != nil else {
             // set data to UserDefaults
-            SavedData.conversionSettings = ConversionSettingsModel(systMain: mainSelectedString!, systConverter: converterSelectedString!, number: sliderValue * 4)
+            SavedData.conversionSettings = ConversionSettingsModel(systMain: systemMainNew!, systConverter: systemConverterNew!, number: sliderValue * 4)
             return
         }
         
         // set last mainLabel system buffer
         let buffSavedMainLabel = SavedData.conversionSettings?.systemMain
         // set data to UserDefaults
-        let newConversionSettings = ConversionSettingsModel(systMain: mainSelectedString!, systConverter: converterSelectedString!, number: sliderValue * 4)
+        let newConversionSettings = ConversionSettingsModel(systMain: systemMainNew!, systConverter: systemConverterNew!, number: sliderValue * 4)
         SavedData.conversionSettings = newConversionSettings
+        // set data to rootVC state vars
+        rootVC?.systemMain = systemMainNew
+        rootVC?.systemConverter = systemConverterNew
         // Handle changing of systems
         // TODO: Error handling
-        if buffSavedMainLabel != mainSelectedString! {
+        if buffSavedMainLabel != systemMainNew! {
             // set labels to 0 and update
             rootVC!.clearLabels()
         } else {

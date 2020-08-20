@@ -129,6 +129,8 @@ class PCalcView: UIView {
         // resizeble text
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.25
+        
+        label.backgroundColor = .red
          
          return label
     }()
