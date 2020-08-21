@@ -126,6 +126,8 @@ class PCalcViewController: UIViewController {
     // Clear mainLabel and update value in converter label
     public func clearLabels() {
         mainLabel.text = "0"
+
+        updateMainLabel()
         updateConverterLabel()
     }
     
@@ -147,10 +149,10 @@ class PCalcViewController: UIViewController {
     public func updateAllLayout() {
         // update button value
         updateIsSignedButton()
-        // update converter label
-        updateConverterLabel()
         // update main label
         updateMainLabel()
+        // update converter label
+        updateConverterLabel()
         // update plusminus button state
         changeStatePlusMinus()
         
@@ -181,12 +183,18 @@ class PCalcViewController: UIViewController {
     }
     
     public func updateMainLabel() {
-        var binary = Binary(stringLiteral: mainLabel.text!)
-         
-         // divide binary by parts
-        binary = binary.divideBinary(by: 4)
+        if self.systemMain == "Binary" {
+            var binary = Binary(stringLiteral: mainLabel.text!)
+             
+             // divide binary by parts
+            binary = binary.divideBinary(by: 4)
+            
+            mainLabel.text! = binary.value
+        } else {
+            // do nothing
+        }
         
-        mainLabel.text! = binary.value
+
     }
     
     // add digit to end of main label

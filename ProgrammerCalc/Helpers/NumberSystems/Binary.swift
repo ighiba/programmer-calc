@@ -407,11 +407,12 @@ class Binary: NumberSystem {
         return binaryStr
     }
     
+    // only for int or fract part of binary
     func removeZerosBefore( str: String) -> String {
         var resultStr = str
         
         // delete first zero
-        while resultStr.first == "0" {
+        while resultStr.first == "0" && resultStr.count != 1 {
             resultStr.removeFirst()
         }
         
