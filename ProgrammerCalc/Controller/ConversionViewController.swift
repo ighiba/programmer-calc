@@ -111,7 +111,7 @@ class ConversionViewController: UIViewController {
             rootVC!.updateAllLayout()
         }
         
-        rootVC!.handleDisplayingMainLabel(data: newConversionSettings)
+        rootVC!.handleDisplayingMainLabel()
         
     }
     

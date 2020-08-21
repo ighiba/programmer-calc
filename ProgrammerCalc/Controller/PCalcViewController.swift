@@ -43,8 +43,7 @@ class PCalcViewController: UIViewController {
         // update layout (handle button state and etc)
         updateAllLayout()
         // update displaying of mainLabel
-        let data = returnConversionSettings()
-        handleDisplayingMainLabel(data: data)
+        handleDisplayingMainLabel()
 
     }
     
@@ -205,23 +204,6 @@ class PCalcViewController: UIViewController {
             //var buffStr = String()
             var buffStr = labelText
             
-//            // delete spaces
-//            labelText.forEach { (num) in
-//                if num != " " {
-//                    buffStr.append(num)
-//                }
-//            }
-//            
-//            // delete zeroes before
-//            while buffStr.first == "0" {
-//                buffStr.removeFirst()
-//            }
-//            
-//            // add zero if .
-//            if buffStr.first == "." {
-//                buffStr = "0" + buffStr
-//            }
-            
             // append input digit
             buffStr.append(digit)
             
@@ -239,22 +221,31 @@ class PCalcViewController: UIViewController {
     }
     
     // Handle displaying of mainLabel
-    public func handleDisplayingMainLabel( data: ConversionSettingsModel ) {
-        let fontName = self.converterLabel.font.fontName
+    public func handleDisplayingMainLabel() {
+        let fontName = self.mainLabel.font.fontName
         
         // IF System == System then hide label
-        if data.systemMain == data.systemConverter {
+        if self.systemMain == self.systemConverter {
             // hide
-            self.mainLabel.isHidden = true
+            self.mainLabel.isHidden = false
+            self.converterLabel.isHidden = true
             // bigger font for converterLabel +20
-            self.converterLabel.font = UIFont(name: fontName, size: 72.0)
-            self.converterLabel.numberOfLines = 4
+            self.mainLabel.font = UIFont(name: fontName, size: 82.0)
+            self.mainLabel.numberOfLines = 2
         } else {
             // unhide
             self.mainLabel.isHidden = false
+            self.converterLabel.isHidden = false
             // default font for converterLabel
-            self.converterLabel.font = UIFont(name: fontName, size: 62.0)
-            self.converterLabel.numberOfLines = 2
+            self.mainLabel.font = UIFont(name: fontName, size: 72.0)
+            
+            // lines for binary
+            if self.systemMain == "Binary" {
+                self.mainLabel.numberOfLines = 2
+            } else {
+                self.mainLabel.numberOfLines = 1
+            }
+            
         }
     }
     
