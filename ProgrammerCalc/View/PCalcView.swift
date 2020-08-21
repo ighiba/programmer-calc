@@ -111,7 +111,7 @@ class PCalcView: UIView {
         label.layer.cornerRadius = 0.0
         // resizeble text
         label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.4
+        label.minimumScaleFactor = 0.25
         
         return label
     }()
@@ -316,21 +316,12 @@ class PCalcView: UIView {
         // width and height anchors
         mainLabel.widthAnchor.constraint(equalTo: labelsStack.widthAnchor).isActive = true
         mainLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: labelHeight() - 33).isActive = true
-        // centering
-        //mainLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        // top anchor with safe area
-        //mainLabel.topAnchor.constraint(equalTo: navigationBar.bottomAnchor).isActive = true
         
         // Constraints for converter label
         converterLabel.translatesAutoresizingMaskIntoConstraints = false
         // width and height anchors
         converterLabel.widthAnchor.constraint(equalTo: labelsStack.widthAnchor).isActive = true
         converterLabel.heightAnchor.constraint(equalToConstant: labelHeight() - 11).isActive = true
-        // centering
-        //converterLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        // top anchor to main label
-        //converterLabel.topAnchor.constraint(equalTo: mainLabel.bottomAnchor).isActive = true
-        
         
         // Constraints for buttons (Main)
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
