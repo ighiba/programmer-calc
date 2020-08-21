@@ -407,8 +407,15 @@ class Binary: NumberSystem {
         return binaryStr
     }
     
-    func handleSigned() {
-        self.value.removeFirst()
+    func removeZerosBefore( str: String) -> String {
+        var resultStr = str
+        
+        // delete first zero
+        while resultStr.first == "0" {
+            resultStr.removeFirst()
+        }
+        
+        return resultStr
     }
     
     
@@ -421,12 +428,17 @@ class Binary: NumberSystem {
         if let intPart = binaryDivided.0 {
             // apply style to input
             // signed or not
-            resultStr += fillingStyleResult(for: intPart)
+            var buffStr = removeAllSpaces(str: intPart)
+            buffStr = removeZerosBefore(str: buffStr)
+            
+            resultStr += fillingStyleResult(for: buffStr)
         }
         
         // process fract part
         if let fractPart = binaryDivided.1 {
-            resultStr = resultStr + "." + fractPart
+            let buffStr = removeAllSpaces(str: fractPart)
+            
+            resultStr = resultStr + "." + buffStr
         }
         
         return resultStr

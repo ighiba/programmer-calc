@@ -147,22 +147,87 @@ class PCalcViewController: UIViewController {
     public func updateAllLayout() {
         // update button value
         updateIsSignedButton()
-        // update converter and main labels
+        // update converter label
         updateConverterLabel()
+        // update main label
+        updateMainLabel()
         // update plusminus button state
         changeStatePlusMinus()
         
     }
    
     public func updateConverterLabel() {
+        // remove spaces mainLabel
+        let labelText: String = {
+            var buffStr = String()
+            
+            mainLabel.text!.forEach { (num) in
+                if num != " " {
+                    buffStr.append(num)
+                }
+            }
+            
+            return buffStr
+        }()
+        
         // TODO: Refator hadling for Hexadecimal values
-        if Double(mainLabel.text!) == nil {
+        if Double(labelText) == nil {
             converterLabel.text = mainLabel.text
         } else {
             // Uptade converter label with converted number
             // TODO: Error handling
-            converterLabel.text = converterHandler.convertValue(value: mainLabel.text!, from: self.systemMain!, to: self.systemConverter!)
+            converterLabel.text = converterHandler.convertValue(value: labelText, from: self.systemMain!, to: self.systemConverter!)
         }
+    }
+    
+    public func updateMainLabel() {
+        var binary = Binary(stringLiteral: mainLabel.text!)
+         
+         // divide binary by parts
+        binary = binary.divideBinary(by: 4)
+        
+        mainLabel.text! = binary.value
+    }
+    
+    // add digit to end of main label
+    // special formatting for binary
+    private func addDigitToMainLabel( labelText: String, digit: String) -> String {
+        
+        if self.systemMain == "Binary" {
+            //var buffStr = String()
+            var buffStr = labelText
+            
+//            // delete spaces
+//            labelText.forEach { (num) in
+//                if num != " " {
+//                    buffStr.append(num)
+//                }
+//            }
+//            
+//            // delete zeroes before
+//            while buffStr.first == "0" {
+//                buffStr.removeFirst()
+//            }
+//            
+//            // add zero if .
+//            if buffStr.first == "." {
+//                buffStr = "0" + buffStr
+//            }
+            
+            // append input digit
+            buffStr.append(digit)
+            
+            var binary = Binary(stringLiteral: buffStr)
+            
+            // divide binary by parts
+            binary = binary.divideBinary(by: 4)
+            
+            return binary.value
+        } else {
+            // if other systems
+            return labelText + digit
+        }
+        
     }
     
     // Handle displaying of mainLabel
@@ -252,17 +317,17 @@ class PCalcViewController: UIViewController {
         
         // if error mesage in label
         // TODO: Better Error handling
-        if Double(label.text!) == nil {
-            if buttonText == "." {
-                label.text = "0."
-            } else {
-                label.text = buttonText
-            }
-            
-            // update converter label
-            updateConverterLabel()
-            return
-        }
+//        if Double(label.text!) == nil {
+//            if buttonText == "." {
+//                label.text = "0."
+//            } else {
+//                label.text = buttonText
+//            }
+//
+//            // update converter label
+//            updateConverterLabel()
+//            return
+//        }
         
         // bool calculates overflowing of mainLabel number for int and float value
         let isOverflowed: Bool = {
@@ -307,7 +372,8 @@ class PCalcViewController: UIViewController {
                 switch label.text! {
                 case "0":
                     if buttonText.contains(".") {
-                        label.text! += buttonText
+                        //label.text! += buttonText
+                        label.text! = addDigitToMainLabel(labelText: label.text!, digit: buttonText)
                         convertLabel.text! += buttonText
                         acButton.setTitle("C", for: .normal)
                     } else if buttonText != "0" {
@@ -320,7 +386,8 @@ class PCalcViewController: UIViewController {
                     if label.text!.contains(".") && buttonText == "." {
                         break
                     } else {
-                        label.text! += buttonText
+                        //label.text! += buttonText
+                        label.text! = addDigitToMainLabel(labelText: label.text!, digit: buttonText)
                         convertLabel.text! += buttonText
                     }
                     acButton.setTitle("C", for: .normal)
@@ -337,7 +404,8 @@ class PCalcViewController: UIViewController {
             switch label.text! {
             case "0":
                 if buttonText.contains(".") {
-                    label.text! += buttonText
+                    //label.text! += buttonText
+                    label.text! = addDigitToMainLabel(labelText: label.text!, digit: buttonText)
                     convertLabel.text! += buttonText
                     acButton.setTitle("C", for: .normal)
                 } else if buttonText != "0" {
@@ -350,7 +418,8 @@ class PCalcViewController: UIViewController {
                 if label.text!.contains(".") && buttonText == "." {
                     break
                 } else {
-                    label.text! += buttonText
+                    //label.text! += buttonText
+                    label.text! = addDigitToMainLabel(labelText: label.text!, digit: buttonText)
                     convertLabel.text! += buttonText
                 }
                 acButton.setTitle("C", for: .normal)
@@ -517,6 +586,7 @@ class PCalcViewController: UIViewController {
         print("Signed - \(self.processSigned)")
         // update converter and main labels
         updateConverterLabel()
+        updateMainLabel()
         // toggle plusminus button
         changeStatePlusMinus()
     }

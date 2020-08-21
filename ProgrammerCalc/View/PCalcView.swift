@@ -130,9 +130,10 @@ class PCalcView: UIView {
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.25
         
-        label.backgroundColor = .red
+        //label.backgroundColor = .red
+        
          
-         return label
+        return label
     }()
     
     lazy var labelsStack: UIStackView = {
