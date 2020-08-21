@@ -17,16 +17,22 @@ extension CalcMath {
     // Calculation of 2 binary numbers by .operation
     // TODO: Make error handling for overflow
     func calculateBinNumbers( firstNum: String, secondNum: String, operation: CalcMath.mathOperation) -> String? {
-        var resultStr: String = String()
+        var resultBin = Binary()
+        
+        let firstBin = Binary()
+        let secondBin = Binary()
 
+        firstBin.value = firstBin.removeAllSpaces(str: firstNum)
+        secondBin.value = secondBin.removeAllSpaces(str: secondNum)
+        
         switch operation {
         // Addition
         case .add:
-            resultStr = addBinary(firstNum, secondNum)
+            resultBin = addBinary(firstBin, secondBin)
             break
         // Subtraction
         case .sub:
-            resultStr = subBinary(firstNum, secondNum)
+            resultBin = subBinary(firstBin, secondBin)
             break
         // Multiplication
         case .mul:
@@ -40,17 +46,17 @@ extension CalcMath {
             }
             break
         }
-        return resultStr
+        return resultBin.value
     }
     
     // Addition of binary numbers
-    public func addBinary(_ firstValue: String, _ secondValue: String) -> String {
-        var resultStr = String()
+    public func addBinary(_ firstValue: Binary, _ secondValue: Binary) -> Binary {
+        let resultBin = Binary()
         
         // TODO: Check for binary
 
         // Make values equal (by lenght)
-        let equaled = numberOfDigitsEqual(firstValue: firstValue, secondValue: secondValue)
+        let equaled = numberOfDigitsEqual(firstValue: firstValue.value, secondValue: secondValue.value)
         
         var firstBinary = equaled.0
         var secondBinary = equaled.1
@@ -64,7 +70,7 @@ extension CalcMath {
             
             // if point then new iteration
             guard firstLast != "." && secondLast != "." else {
-                resultStr = "." + resultStr
+                resultBin.value = "." + resultBin.value
                 firstBinary.removeLast()
                 secondBinary.removeLast()
                 continue
@@ -74,18 +80,18 @@ extension CalcMath {
             // process calculation result
             switch intBuff {
             case 0:
-                resultStr = "0" + resultStr
+                resultBin.value = "0" + resultBin.value
                 break
             case 1:
-                resultStr = "1" + resultStr
+                resultBin.value = "1" + resultBin.value
                 reminder = 0
                 break
             case 2:
-                resultStr = "0" + resultStr
+                resultBin.value = "0" + resultBin.value
                 reminder = 1
                 break
             case 3:
-                resultStr = "1" + resultStr
+                resultBin.value = "1" + resultBin.value
                 reminder = 1
             default:
                 break
@@ -97,41 +103,37 @@ extension CalcMath {
         
         // add last reminder if not 0
         if reminder == 1 {
-            resultStr = "1" + resultStr
+            resultBin.value = "1" + resultBin.value
         }
 
-        return resultStr
+        return resultBin
     }
     
     // Subtraction of binary numbers
-    public func subBinary(_ firstValue: String, _ secondValue: String) -> String {
-        var resultStr = String()
-        
-        var firstBinary = firstValue
-        var secondBinary = secondValue
+    public func subBinary(_ firstValue: Binary, _ secondValue: Binary) -> Binary {
+        var resultBin = Binary()
         
         // TODO: Check for binary
         
         // Filling up values to needed bits
-        firstBinary = fillUpBits(str: firstBinary)
-        secondBinary = fillUpBits(str: secondBinary)
+        firstValue.value = fillUpBits(str: firstValue.value)
+        secondValue.value = fillUpBits(str: secondValue.value)
         // Inverting second value
-        secondBinary = invertBinary(binary: secondBinary)
+        secondValue.value = invertBinary(binary: secondValue.value)
         
         // Subtracting secondValue from firstValue
         // Add first value + inverterd second value
-        resultStr = addBinary(firstBinary, secondBinary)
+        resultBin = addBinary(firstValue, secondValue)
         // Add + 1 for additional code
-        resultStr = addBinary(resultStr, "1")
+        resultBin = addBinary(resultBin, "1")
         // Delete left bit
-        if resultStr.count % 2 != 0 {
-            resultStr.removeFirst()
+        if resultBin.value.count % 2 != 0 {
+            resultBin.value.removeFirst()
         }
         
         // TODO: Handle signed and unsigned numbers
-        //       Add custom type for binary
         
-        return resultStr
+        return resultBin
     }
     
     // inverting value 1 -> 0; 0 -> 1
