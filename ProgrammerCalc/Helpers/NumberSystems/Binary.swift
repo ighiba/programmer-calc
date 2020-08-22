@@ -400,6 +400,28 @@ class Binary: NumberSystem {
         return String(repeating: "0", count: diffInt) + str
     }
     
+    // 1100 -> 00001100
+    // 10011000 -> 0000000010011000
+    private func fillToSignedFormat() {
+        let binary = self
+        
+        let neededCount: Int = {
+            var maxBits: Int = 8 // default
+            for power in 3...6 {
+                // 2^3, 2^4 ....calculating bits
+                let bits = Int(pow(2, Float(power)))
+                // set maximum lenght for binary str
+                if binary.value.count <= bits {
+                    maxBits = bits
+                    return maxBits
+                }
+            }
+            return maxBits
+        }()
+        // fill up with zeros to needed bit position
+        binary.value = fillUpZeros(str: binary.value, to: neededCount)
+    }
+    
     // Set fillig style for binary string
     private func fillingStyleResult(for str: String) -> String {
         let binary = self
@@ -413,6 +435,9 @@ class Binary: NumberSystem {
         if let data = SavedData.calcState?.processSigned {
             // if .processSigned == true
             if data {
+                // fill if needed to
+                fillToSignedFormat()
+                
                 // calcualte signed state
                 updateSignedState(for: binary) // changes binary.isSigned state to true of false
                 
