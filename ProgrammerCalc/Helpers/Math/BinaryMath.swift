@@ -116,8 +116,8 @@ extension CalcMath {
         // TODO: Check for binary
         
         // Filling up values to needed bits
-        firstValue.value = fillUpBits(str: firstValue.value)
-        secondValue.value = fillUpBits(str: secondValue.value)
+        //firstValue.value = fillUpBits(str: firstValue.value)
+        //secondValue.value = fillUpBits(str: secondValue.value)
         // Inverting second value
         secondValue.value = invertBinary(binary: secondValue.value)
         

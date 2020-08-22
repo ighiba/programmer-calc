@@ -192,8 +192,6 @@ class PCalcViewController: UIViewController {
         } else {
             // do nothing
         }
-        
-
     }
     
     // add digit to end of main label
@@ -201,14 +199,13 @@ class PCalcViewController: UIViewController {
     private func addDigitToMainLabel( labelText: String, digit: String) -> String {
         
         if self.systemMain == "Binary" {
-            //var buffStr = String()
-            var buffStr = labelText
+            var binary = Binary()
+            
+            binary.value = labelText
             
             // append input digit
-            buffStr.append(digit)
-            
-            var binary = Binary(stringLiteral: buffStr)
-            
+            binary.appendDigit(digit)
+
             // divide binary by parts
             binary = binary.divideBinary(by: 4)
             
@@ -270,26 +267,6 @@ class PCalcViewController: UIViewController {
             plusMinusButton.isEnabled = self.processSigned
         }
     }
-    
-//    private func invertLabelsValue() {
-//        let mainLabelText = mainLabel.text!
-//        let convertLabelText = converterLabel.text!
-//        let mainSystem = SavedData.conversionSettings?.systemMain ?? "Decimal"
-//        
-//        switch mainSystem {
-//        case "Binary":
-//            break
-//        case "Decimal":
-//            break
-//        case "Octal":
-//            break
-//        case "Hexadecimal":
-//            break
-//        default:
-//            break
-//        }
-//        
-//    }
 
     // =======
     // Actions
@@ -475,12 +452,24 @@ class PCalcViewController: UIViewController {
                 // if number is already signed
                 // TODO: Error handling
                 // TODO: Various sytems handling
-                if label.text!.contains("-") {
-                    let minusIndex = label.text!.firstIndex(of: "-")
-                    label.text!.remove(at: minusIndex!)
+                if self.systemMain == "Binary" {
+                    // change left bit 1 to 0, 0 to 1
+                    if label.text!.first == "0" {
+                        label.text!.removeFirst()
+                        label.text = "1" + label.text!
+                    } else {
+                        label.text!.removeFirst()
+                        label.text = "0" + label.text!
+                    }
                 } else {
-                    // just add minus
-                    label.text = "-" + label.text!
+                    // For other systems
+                    if label.text!.contains("-") {
+                        let minusIndex = label.text!.firstIndex(of: "-")
+                        label.text!.remove(at: minusIndex!)
+                    } else {
+                        // just add minus
+                        label.text = "-" + label.text!
+                    }
                 }
             }
             updateConverterLabel()
@@ -491,8 +480,7 @@ class PCalcViewController: UIViewController {
             if mathState != nil {
                 print("calculation")
                 if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
-                
-                    //calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
+
                     label.text = result
                     updateMainLabel()
                     updateConverterLabel()
@@ -510,7 +498,7 @@ class PCalcViewController: UIViewController {
             if mathState != nil {
                 print("calculation")
                 if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
-                //if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
+                    
                     label.text = result
                     updateMainLabel()
                     updateConverterLabel()
@@ -528,7 +516,7 @@ class PCalcViewController: UIViewController {
             if mathState != nil {
                 print("calculation")
                 if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
-                //if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
+
                     label.text = result
                     updateMainLabel()
                     updateConverterLabel()
@@ -546,7 +534,7 @@ class PCalcViewController: UIViewController {
             if mathState != nil {
                 print("calculation")
                 if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
-                //if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
+
                     label.text = result
                     updateMainLabel()
                     updateConverterLabel()
