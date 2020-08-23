@@ -198,6 +198,12 @@ class PCalcViewController: UIViewController {
     // special formatting for binary
     private func addDigitToMainLabel( labelText: String, digit: String) -> String {
         
+        if digit == "." && !labelText.contains(".") {
+            return labelText + digit
+        } else if digit == "." && labelText.contains(".") {
+            return labelText
+        }
+        
         if self.systemMain == "Binary" {
             var binary = Binary()
             

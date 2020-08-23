@@ -294,6 +294,12 @@ class Binary: NumberSystem {
             while buffStr.first == "0" {
                 buffStr.removeFirst()
             }
+            
+            // if all zeros deleted
+            if buffStr.first == "." {
+                buffStr = str
+            }
+            
         } else {
             // if zero then return fillNum zeros
             buffStr = ""
@@ -332,6 +338,8 @@ class Binary: NumberSystem {
         // if count of digits more than or equal to 1 AND number not 0
         if binary.value.count >= 1 && binary.value != "0" {
             var counter: Int = 0
+            
+            binary.value = removeAllSpaces(str: binary.value)
 
             for char in binary.value {
                 // check if already point
@@ -528,7 +536,7 @@ class Binary: NumberSystem {
         let binary = self
         
         // just add digit if point exits
-        guard binary.value != "." else {
+        guard digit != "." && !binary.value.contains(".") else {
             binary.value.append(digit)
             return
         }
