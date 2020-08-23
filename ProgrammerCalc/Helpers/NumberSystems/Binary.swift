@@ -116,7 +116,7 @@ class Binary: NumberSystem {
         }
         
         if let number = Int(binIntStrBuff!, radix: 2) {
-            result += Decimal(integerLiteral: number) * signedMultipler
+            result += Decimal(integerLiteral: number)
         } else {
             result = 0.0
         }
@@ -144,11 +144,11 @@ class Binary: NumberSystem {
             }
             // return decimal if second value after dividing is nil
             result += buffDecimal
-            return result
+            return result * signedMultipler
             
         }
         
-        return result
+        return result * signedMultipler
     }
     
     // BIN -> HEX
