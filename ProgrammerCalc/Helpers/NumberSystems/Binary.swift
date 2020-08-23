@@ -495,7 +495,7 @@ class Binary: NumberSystem {
     }
     
     // filling up signed binary to power 2^3, 2^4 .. etc
-    private func fillUpSignedToNeededCount() {
+    func fillUpSignedToNeededCount() {
         let binary = self
         
         // count how much zeros need to fill

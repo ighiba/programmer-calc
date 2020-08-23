@@ -25,6 +25,16 @@ extension CalcMath {
         firstBin.value = firstBin.removeAllSpaces(str: firstNum)
         secondBin.value = secondBin.removeAllSpaces(str: secondNum)
         
+        // process signed numbers
+        if let data = SavedData.calcState?.processSigned {
+            // if .processSigned == true
+            if data {
+                // calcualte signed state
+                firstBin.updateSignedState(for: firstBin)
+                secondBin.updateSignedState(for: secondBin) 
+            }
+        }
+        
         switch operation {
         // Addition
         case .add:
@@ -53,7 +63,23 @@ extension CalcMath {
     public func addBinary(_ firstValue: Binary, _ secondValue: Binary) -> Binary {
         let resultBin = Binary()
         
-        // TODO: Check for binary
+        var firstBinBit = String()
+        var secondBinBit = String()
+        
+        // TODO: Refactor to closure?
+        // Remove signed bits if processing signed values
+        if let data = SavedData.calcState?.processSigned {
+            if data {
+                // replace to zeros
+                firstBinBit = String(firstValue.value.first!)
+                firstValue.value.removeFirst()
+                firstValue.value = "0" + firstValue.value
+                
+                secondBinBit = String(secondValue.value.first!)
+                secondValue.value.removeFirst()
+                secondValue.value = "0" + secondValue.value
+            }
+        }
 
         // Make values equal (by lenght)
         let equaled = numberOfDigitsEqual(firstValue: firstValue.value, secondValue: secondValue.value)
@@ -61,7 +87,82 @@ extension CalcMath {
         var firstBinary = equaled.0
         var secondBinary = equaled.1
         
+        // Return signed bits after equaling by lenght
+        if let data = SavedData.calcState?.processSigned {
+            if data {
+                firstBinary.removeFirst()
+                firstBinary = firstBinBit + firstBinary
+                
+                secondBinary.removeFirst()
+                secondBinary = secondBinBit + secondBinary
+            }
+        }
+        
+        // Preprocessing
+        // Switch cases of addition
+        switch (firstValue.isSigned, secondValue.isSigned) {
+        // Case -x + y
+        case (true, false):
+            firstBinary = invertBinary(binary: firstBinary)
+        // Case x + (-y)
+        case (false, true):
+            secondBinary = invertBinary(binary: secondBinary)
+        // Case -x + (-y)
+        case (true, true):
+            firstBinary = invertBinary(binary: firstBinary)
+            secondBinary = invertBinary(binary: secondBinary)
+        default:
+            break
+        }
+        
+        // Calculation
+        // Do addition
+        resultBin.value = doSimpleAddition(firstValue: firstBinary, secondValue: secondBinary)
+        // update value
+        resultBin.updateSignedState(for: resultBin)
+        
+        // Postprocessing
+        // Switch cases of addition
+        switch (firstValue.isSigned, secondValue.isSigned) {
+        // Case -x + y
+        // Case x + (-y)
+        case (true, false), (false, true):
+            if resultBin.isSigned {
+                let oneBit = resultBin.fillUpParts(str: "1", by: resultBin.value.count)
+                resultBin.value = doSimpleAddition(firstValue: resultBin.value, secondValue: oneBit)
+                
+                resultBin.value.removeFirst()
+                resultBin.value = "0" + resultBin.value
+            } else {
+                resultBin.value = invertBinary(binary: resultBin.value)
+            }
+            return resultBin
+        // Case -x + (-y)
+        case (true, true):
+            if resultBin.isSigned {
+                let oneBit = resultBin.fillUpParts(str: "1", by: resultBin.value.count)
+                resultBin.value = doSimpleAddition(firstValue: resultBin.value, secondValue: oneBit)
+                
+                resultBin.value = invertBinary(binary: resultBin.value)
+                resultBin.value.removeFirst()
+                resultBin.value = "1" + resultBin.value
+            } else {
+                resultBin.value = invertBinary(binary: resultBin.value)
+            }
+            return resultBin
+        default:
+            break
+        }
+        
+        return resultBin
+    }
+    
+    fileprivate func doSimpleAddition( firstValue: String, secondValue: String) -> String {
+        var result = String()
         var reminder = 0
+        
+        var firstBinary = firstValue
+        var secondBinary = secondValue
         
         // Do addition
         while firstBinary != "" {
@@ -70,7 +171,7 @@ extension CalcMath {
             
             // if point then new iteration
             guard firstLast != "." && secondLast != "." else {
-                resultBin.value = "." + resultBin.value
+                result = "." + result
                 firstBinary.removeLast()
                 secondBinary.removeLast()
                 continue
@@ -80,18 +181,18 @@ extension CalcMath {
             // process calculation result
             switch intBuff {
             case 0:
-                resultBin.value = "0" + resultBin.value
+                result = "0" + result
                 break
             case 1:
-                resultBin.value = "1" + resultBin.value
+                result = "1" + result
                 reminder = 0
                 break
             case 2:
-                resultBin.value = "0" + resultBin.value
+                result = "0" + result
                 reminder = 1
                 break
             case 3:
-                resultBin.value = "1" + resultBin.value
+                result = "1" + result
                 reminder = 1
             default:
                 break
@@ -103,36 +204,119 @@ extension CalcMath {
         
         // add last reminder if not 0
         if reminder == 1 {
-            resultBin.value = "1" + resultBin.value
+            result = "1" + result
         }
-
-        return resultBin
+        
+        return result
     }
     
     // Subtraction of binary numbers
     public func subBinary(_ firstValue: Binary, _ secondValue: Binary) -> Binary {
         var resultBin = Binary()
         
-        // TODO: Check for binary
-        
-        // Filling up values to needed bits
-        //firstValue.value = fillUpBits(str: firstValue.value)
-        //secondValue.value = fillUpBits(str: secondValue.value)
-        // Inverting second value
-        secondValue.value = invertBinary(binary: secondValue.value)
-        
-        // Subtracting secondValue from firstValue
-        // Add first value + inverterd second value
-        resultBin = addBinary(firstValue, secondValue)
-        // Add + 1 for additional code
-        resultBin = addBinary(resultBin, "1")
-        // Delete left bit
-        if resultBin.value.count % 2 != 0 {
+        // Switch cases of subtraction
+        switch (firstValue.isSigned, secondValue.isSigned) {
+        // Case -x - y
+        case (true, false):
+            //remove signed bit
+            firstValue.value.removeFirst()
+            firstValue.value = "0" + firstValue.value
+            firstValue.updateSignedState(for: firstValue)
+            resultBin = addBinary(firstValue, secondValue)
+            resultBin.isSigned = firstValue.isSigned
+            // fill up if need
+            resultBin.fillUpSignedToNeededCount()
+            // make negative
             resultBin.value.removeFirst()
+            resultBin.value = "1" + resultBin.value
+            resultBin.updateSignedState(for: resultBin)
+
+            return resultBin
+        // Case x - (-y)
+        case (false, true):
+            //remove signed bit
+            secondValue.value.removeFirst()
+            secondValue.value = "0" + secondValue.value
+            secondValue.updateSignedState(for: secondValue)
+            resultBin = addBinary(firstValue, secondValue)
+            resultBin.isSigned = firstValue.isSigned
+            // fill up if need
+            resultBin.fillUpSignedToNeededCount()
+
+            return resultBin
+        // Case -x - (-y)
+        case (true, true):
+            // change signed bit to 0 for second value -(-y) == +y
+            firstValue.value.removeFirst()
+            firstValue.value = "1" + firstValue.value
+            secondValue.value.removeFirst()
+            secondValue.value = "0" + secondValue.value
+            
+            // fill up if need
+            if secondValue.value.count < firstValue.value.count {
+                // remove signed bit
+                secondValue.value.removeFirst()
+                secondValue.value = secondValue.fillUpParts(str: secondValue.value, by: firstValue.value.count)
+                // remove left dummy signed bit
+                secondValue.value.removeFirst()
+                // return sign bit from beginning
+                secondValue.value = "0" + secondValue.value
+            } else {
+                // remove signed bit
+                firstValue.value.removeFirst()
+                firstValue.value = firstValue.fillUpParts(str: firstValue.value, by: secondValue.value.count)
+                // remove left dummy signed bit
+                firstValue.value.removeFirst()
+                // return sign bit from beginning
+                firstValue.value = "1" + firstValue.value
+            }
+            
+            firstValue.updateSignedState(for: firstValue)
+            secondValue.updateSignedState(for: secondValue)
+            // add like - x = y
+            resultBin = addBinary(firstValue, secondValue)
+            
+            resultBin.updateSignedState(for: resultBin)
+            
+            return resultBin
+
+        // Default case x - y
+        case (false, false):
+            // Inverting second value
+            secondValue.value = invertBinary(binary: secondValue.value)
+            
+            // Subtracting secondValue from firstValue
+            // Add first value + inverterd second value
+            resultBin = addBinary(firstValue, secondValue)
+            
+            // Delete left bit
+            if resultBin.value.count > firstValue.value.count {
+                // unsigned
+                resultBin.value.removeFirst()
+                // Add + 1 for additional code
+                let oneBit = resultBin.fillUpParts(str: "1", by: resultBin.value.count)
+                resultBin.value = doSimpleAddition(firstValue: resultBin.value, secondValue: oneBit)
+            } else {
+                // signed
+                // update signed status
+                resultBin.updateSignedState(for: resultBin)
+                
+                // delete signed bit
+                resultBin.value.removeFirst()
+                
+                // invert from reverse code to normal
+                resultBin.value = invertBinary(binary: resultBin.value)
+                
+                // add signed bit
+                if resultBin.isSigned {
+                    resultBin.value = "1" + resultBin.value
+                } else {
+                    resultBin.value = "0" + resultBin.value
+                }
+            }
         }
         
-        // TODO: Handle signed and unsigned numbers
-        
+        // returns in normal code
         return resultBin
     }
     
