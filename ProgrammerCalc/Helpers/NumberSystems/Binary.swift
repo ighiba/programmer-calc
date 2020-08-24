@@ -73,6 +73,24 @@ class Binary: NumberSystem {
         return resultStr
     }
     
+    // remove zeros after until point and deletes point if no more digits after it
+    func removeZerosAfter( str: String) -> String {
+        var resultStr = str
+        
+        if resultStr.contains(".") && resultStr.last != "." {
+            // delete zeros
+            while resultStr.last == "0" && resultStr.last != "." {
+                resultStr.removeLast()
+            }
+            // delete point if last
+            if resultStr.last == "." {
+                resultStr.removeLast()
+            }
+        }
+        
+        return resultStr
+    }
+    
     // BIN -> DEC
     func convertBinaryToDec() -> Decimal {
         let binary = self

@@ -53,9 +53,8 @@ class NumberSystem: ExpressibleByStringLiteral {
             strFract = String(str[pointPos..<str.endIndex])
             
             // delete .
-            strFract.remove(at: strFract.startIndex)
+            strFract.removeFirst()
            
-            print(" \(strInt)...\(strFract)")
             return (strInt, strFract)
             
         } else {

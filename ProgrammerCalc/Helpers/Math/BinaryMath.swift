@@ -79,6 +79,7 @@ extension CalcMath {
             break
         // Multiplication
         case .mul:
+            resultBin = mulBinary(firstBin, secondBin)
             break
         // Division
         case .div:
@@ -166,6 +167,7 @@ extension CalcMath {
         var secondBinary = secondValue
         
         // Do addition
+        // TODO: Error handling
         while firstBinary != "" {
             let firstLast = String(firstBinary.last!)
             let secondLast = String(secondBinary.last!)
@@ -313,6 +315,141 @@ extension CalcMath {
                     resultBin.value = "0" + resultBin.value
                 }
             }
+        }
+        
+        // returns in normal code
+        return resultBin
+    }
+    
+    // Multiplication of binary numbers
+    public func mulBinary(_ firstValue: Binary, _ secondValue: Binary) -> Binary {
+        let buffBin = Binary()
+        let resultBin = Binary()
+        
+        // Delete zeros after for fract part
+        firstValue.value = firstValue.removeZerosAfter(str: firstValue.value)
+        secondValue.value = secondValue.removeZerosAfter(str: secondValue.value)
+        
+        // count digits after point each value if . exists
+        let firstDigitsAfter: Int = {
+            let divided = firstValue.divideIntFract(value: firstValue.value)
+            // if value is float
+            if let fract = divided.1 {
+                return fract.count
+            } else {
+                return 0
+            }
+        }()
+        let secondDigitsAfter: Int = {
+            let divided = secondValue.divideIntFract(value: secondValue.value)
+            // if value is float
+            if let fract = divided.1 {
+                return fract.count
+            } else {
+                return 0
+            }
+        }()
+        let resultDigitsAfter: Int = firstDigitsAfter + secondDigitsAfter
+        // delete points if exists
+        if let firstPointIndex = firstValue.value.firstIndex(of: ".") {
+            firstValue.value.remove(at: firstPointIndex)
+        }
+        if let secondPointIndex = secondValue.value.firstIndex(of: ".") {
+            secondValue.value.remove(at: secondPointIndex)
+        }
+        
+        //  x *  y =  xy
+        // -x * -y =  xy
+        // -x *  y = -xy
+        //  x * -y = -xy
+        let isResultSigned: Bool = {
+            // update signed states for values
+            firstValue.updateSignedState(for: firstValue)
+            secondValue.updateSignedState(for: secondValue)
+            
+            // calculate result sign
+            if firstValue.isSigned || secondValue.isSigned {
+                return true
+            } else {
+                return false
+            }
+        }()
+        
+        // delete signed bits if processing signed values
+        // and set to 0
+        if let data = SavedData.calcState?.processSigned {
+            if data {
+                firstValue.value = changeSignedBit(binary: firstValue, to: "0")
+                secondValue.value = changeSignedBit(binary: secondValue, to: "0")
+                firstValue.updateSignedState(for: firstValue)
+                secondValue.updateSignedState(for: secondValue)
+            }
+        }
+        
+        // Do multiplication
+        
+        var buffStrCounter: Int = 0
+        
+        secondValue.value.reversed().forEach { (secondDigit) in
+            // reset buffBin
+            buffBin.value = ""
+            // fill buffBin.value
+            firstValue.value.reversed().forEach { (firstDigit) in
+                // 1 * 0 etc
+                let digitResult = Int("\(secondDigit)")! * Int("\(firstDigit)")!
+                
+                buffBin.value = String(digitResult) + buffBin.value
+            }
+            // if first buffStr processed then do nothing
+            if buffStrCounter != 0 {
+                // shift left to buffStrCounter bits
+                buffBin.value = buffBin.value + String(repeating: "0", count: buffStrCounter)
+                // add bit to left
+                resultBin.value = "0" + resultBin.value
+                
+                if buffBin.value.count < resultBin.value.count {
+                    let difference = resultBin.value.count - buffBin.value.count
+                    buffBin.value = String(repeating: "0", count: difference) + buffBin.value
+                }
+                
+                // add bins
+                resultBin.value = doSimpleAddition(firstValue: resultBin.value, secondValue: buffBin.value)
+            } else {
+                resultBin.value = buffBin.value
+            }
+            buffStrCounter += 1
+        }
+        
+        // Delete fract part from result if exists
+        var buffFract = String()
+        
+        if resultDigitsAfter > 0 {
+            let neededDroping = resultBin.value.count - resultDigitsAfter
+            
+            if neededDroping > 0 {
+                // set fract buffer
+                buffFract = String(resultBin.value.dropFirst(neededDroping))
+                // remove fract part
+                resultBin.value.removeLast(resultDigitsAfter)
+            }
+        }
+        
+        // add sign bit if need
+        if let data = SavedData.calcState?.processSigned {
+            if data {
+                if isResultSigned {
+                    // Fill up to default bit count
+                    resultBin.fillUpSignedToNeededCount()
+                    
+                    resultBin.value = changeSignedBit(binary: resultBin, to: "1")
+                    resultBin.updateSignedState(for: resultBin)
+                }
+            }
+        }
+        
+        // Add fract part if exists
+        if resultDigitsAfter > 0 && buffFract != "" {
+            resultBin.value = resultBin.value + "." + buffFract
         }
         
         // returns in normal code
