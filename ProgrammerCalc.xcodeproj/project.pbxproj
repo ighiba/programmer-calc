@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		C05A169B24DD7B0D007B7FB8 /* SavedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05A169A24DD7B0D007B7FB8 /* SavedData.swift */; };
-		C05B008924E6AD3400F8A5E0 /* NumberSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B008824E6AD3400F8A5E0 /* NumberSystem.swift */; };
 		C05B008C24E6E0E100F8A5E0 /* Hexadecimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B008B24E6E0E100F8A5E0 /* Hexadecimal.swift */; };
 		C05B008E24E701ED00F8A5E0 /* Octal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B008D24E701ED00F8A5E0 /* Octal.swift */; };
 		C05B009124E71B6E00F8A5E0 /* DecimalExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B009024E71B6E00F8A5E0 /* DecimalExt.swift */; };
@@ -32,6 +31,7 @@
 		C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C070ED2324DB0EC800A04463 /* SettingsViewController.swift */; };
 		C070ED2624DB0ED400A04463 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C070ED2524DB0ED400A04463 /* SettingsView.swift */; };
 		C07267DD24E5ACB300D4B4A2 /* Binary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07267DC24E5ACB300D4B4A2 /* Binary.swift */; };
+		C0746E0E24F45C6000A0BDF9 /* NumberSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0746E0D24F45C5F00A0BDF9 /* NumberSystem.swift */; };
 		C077CF6F24DC8DEE008E5F0F /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C077CF6E24DC8DEE008E5F0F /* SettingsCell.swift */; };
 		C077CF7124DC987B008E5F0F /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C077CF7024DC987B008E5F0F /* SettingsModel.swift */; };
 		C0E5FC7624BB9B8D00BA93CA /* PCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */; };
@@ -56,7 +56,6 @@
 
 /* Begin PBXFileReference section */
 		C05A169A24DD7B0D007B7FB8 /* SavedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedData.swift; sourceTree = "<group>"; };
-		C05B008824E6AD3400F8A5E0 /* NumberSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberSystem.swift; sourceTree = "<group>"; };
 		C05B008B24E6E0E100F8A5E0 /* Hexadecimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hexadecimal.swift; sourceTree = "<group>"; };
 		C05B008D24E701ED00F8A5E0 /* Octal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Octal.swift; sourceTree = "<group>"; };
 		C05B009024E71B6E00F8A5E0 /* DecimalExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalExt.swift; sourceTree = "<group>"; };
@@ -86,6 +85,7 @@
 		C070ED2324DB0EC800A04463 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		C070ED2524DB0ED400A04463 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		C07267DC24E5ACB300D4B4A2 /* Binary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binary.swift; sourceTree = "<group>"; };
+		C0746E0D24F45C5F00A0BDF9 /* NumberSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberSystem.swift; sourceTree = "<group>"; };
 		C077CF6E24DC8DEE008E5F0F /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
 		C077CF7024DC987B008E5F0F /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcView.swift; sourceTree = "<group>"; };
@@ -131,7 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				C05B008F24E71B5100F8A5E0 /* Extensions */,
-				C05B008824E6AD3400F8A5E0 /* NumberSystem.swift */,
+				C0746E0D24F45C5F00A0BDF9 /* NumberSystem.swift */,
 				C07267DC24E5ACB300D4B4A2 /* Binary.swift */,
 				C05B008B24E6E0E100F8A5E0 /* Hexadecimal.swift */,
 				C05B008D24E701ED00F8A5E0 /* Octal.swift */,
@@ -378,8 +378,8 @@
 				C0635A7924D9E0F6003855A9 /* ConversionPicker.swift in Sources */,
 				C065DB3C24E3DC4F0059B38D /* CalcMath.swift in Sources */,
 				C0619AC224D71227008A7291 /* ConversionView.swift in Sources */,
+				C0746E0E24F45C6000A0BDF9 /* NumberSystem.swift in Sources */,
 				C05B008E24E701ED00F8A5E0 /* Octal.swift in Sources */,
-				C05B008924E6AD3400F8A5E0 /* NumberSystem.swift in Sources */,
 				C0635A7B24D9E2AA003855A9 /* ConversionModel.swift in Sources */,
 				C065DB3E24E41E610059B38D /* CalcState.swift in Sources */,
 				C077CF6F24DC8DEE008E5F0F /* SettingsCell.swift in Sources */,
