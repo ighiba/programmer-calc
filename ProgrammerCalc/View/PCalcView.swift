@@ -303,6 +303,7 @@ class PCalcView: UIView {
         converterLabel.translatesAutoresizingMaskIntoConstraints = false
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
         
+        // Activate constraints
         NSLayoutConstraint.activate([
             // Constraints for navigation bar
             navigationBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),

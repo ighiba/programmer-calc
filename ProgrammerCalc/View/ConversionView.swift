@@ -35,39 +35,42 @@ class ConversionView: UIView {
     // Setup layout
     func setupLayout() {
         //let screenWidth = UIScreen.main.bounds.width
-        
-        // Set constraints for main container
         container.translatesAutoresizingMaskIntoConstraints = false
-        container.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        container.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9).isActive = true
-        container.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.57).isActive = true
-        
-        // Set constraints for done button
         containerStack.translatesAutoresizingMaskIntoConstraints = false
-        containerStack.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
-        containerStack.centerYAnchor.constraint(equalTo: container.centerYAnchor).isActive = true
-        containerStack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.90).isActive = true
-        containerStack.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.90).isActive = true
-        
-        // Set constraints for picker
         mainPicker.translatesAutoresizingMaskIntoConstraints = false
-        mainPicker.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.25).isActive = true
-        
-        // Set contraints for picker's arrow
         arrow.translatesAutoresizingMaskIntoConstraints = false
-        arrow.centerYAnchor.constraint(equalTo: mainPicker.centerYAnchor).isActive = true
-        arrow.centerXAnchor.constraint(equalTo: mainPicker.centerXAnchor).isActive = true
-        arrow.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        arrow.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        // Set constraints for digitsAfterLabel
         digitsAfterLabel.translatesAutoresizingMaskIntoConstraints = false
-        digitsAfterLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
-
-        // Set contraints for done button
         doneButton.translatesAutoresizingMaskIntoConstraints = false
-        doneButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        // Activate constraints
+        NSLayoutConstraint.activate([
+            // Set constraints for main container
+            container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9),
+            container.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.57),
+            
+            // Set constraints for done button
+            containerStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            containerStack.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+            containerStack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.90),
+            containerStack.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.90),
+            
+            // Set constraints for picker
+            mainPicker.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.25),
+            
+            // Set contraints for picker's arrow
+            arrow.centerYAnchor.constraint(equalTo: mainPicker.centerYAnchor),
+            arrow.centerXAnchor.constraint(equalTo: mainPicker.centerXAnchor),
+            arrow.widthAnchor.constraint(equalToConstant: 30),
+            arrow.heightAnchor.constraint(equalToConstant: 30),
+            
+            // Set constraints for digitsAfterLabel
+            digitsAfterLabel.heightAnchor.constraint(equalToConstant: 30),
+
+            // Set contraints for done button
+            doneButton.heightAnchor.constraint(equalToConstant: 50),
+        ])
     }
     
     let container: UIView = {
