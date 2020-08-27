@@ -38,29 +38,37 @@ final class CalcMath {
     // =======
     
     func calculate( firstValue: String, operation: mathOperation ,secondValue: String, for system: String) -> String? {
-        var resultStr: String?
   
         // ======================
         // Convert Any to Decimal
         // ======================
         
-        let firstConvertedStr = converterHandler.convertValue(value: firstValue, from: system, to: "Decimal")
-        let secondConvertedStr = converterHandler.convertValue(value: secondValue, from: system, to: "Decimal")
+        let firstConvertedStr: String
+        let secondConvertedStr: String
         
-    
+        if system != "Decimal" {
+            firstConvertedStr = converterHandler.convertValue(value: firstValue, from: system, to: "Decimal")!
+            secondConvertedStr = converterHandler.convertValue(value: secondValue, from: system, to: "Decimal")!
+        } else {
+            firstConvertedStr = firstValue
+            secondConvertedStr = secondValue
+        }
+        
         // ========================
         // Calculate Decimal values
         // ========================
-        resultStr = calculateDecNumbers(firstNum: firstConvertedStr!, secondNum: secondConvertedStr!, operation: operation)
+        let decimalStr = calculateDecNumbers(firstNum: firstConvertedStr, secondNum: secondConvertedStr, operation: operation)
         
         // ======================
         // Convert Decimal to Any
         // ======================
         
-        resultStr = converterHandler.convertValue(value: resultStr!, from: "Decimal", to: system)
-        
-        
-        return resultStr
+        if system != "Decimal" {
+            return converterHandler.convertValue(value: decimalStr!, from: "Decimal", to: system)
+        } else {
+            return decimalStr
+        }
+   
     }
     
     // Calculation of 2 decimal numbers by .operation
