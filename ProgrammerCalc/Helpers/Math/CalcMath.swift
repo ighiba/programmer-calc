@@ -10,6 +10,9 @@ import Foundation
 
 final class CalcMath {
     
+    // Handlers
+    let converterHandler: ConverterHandler = ConverterHandler()
+    
     enum mathOperation {
         case add
         case sub
@@ -36,39 +39,62 @@ final class CalcMath {
     
     func calculate( firstValue: String, operation: mathOperation ,secondValue: String, for system: String) -> String? {
         var resultStr: String?
+  
+        // ======================
+        // Convert Any to Decimal
+        // ======================
         
-        // Convert sytem string to enum
-        let enumSystem: ConversionModel.ConversionSystemsEnum = {
-            switch system {
-            case "Binary":
-                return .bin
-            case "Decimal":
-                return .dec
-            case "Octal":
-                return .oct
-            case "Hexadecimal":
-                return .hex
-            default:
-                // TODO: Error handling
-                return .dec
+        let firstConvertedStr = converterHandler.convertValue(value: firstValue, from: system, to: "Decimal")
+        let secondConvertedStr = converterHandler.convertValue(value: secondValue, from: system, to: "Decimal")
+        
+    
+        // ========================
+        // Calculate Decimal values
+        // ========================
+        resultStr = calculateDecNumbers(firstNum: firstConvertedStr!, secondNum: secondConvertedStr!, operation: operation)
+        
+        // ======================
+        // Convert Decimal to Any
+        // ======================
+        
+        resultStr = converterHandler.convertValue(value: resultStr!, from: "Decimal", to: system)
+        
+        
+        return resultStr
+    }
+    
+    // Calculation of 2 decimal numbers by .operation
+    // TODO: Make error handling for overflow
+    fileprivate func calculateDecNumbers( firstNum: String, secondNum: String, operation: CalcMath.mathOperation) -> String? {
+        var resultStr: String = String()
+
+        let firstDecimal = Decimal(string: firstNum)
+        let secondDecimal = Decimal(string: secondNum)
+
+        switch operation {
+        // Addition
+        case .add:
+            resultStr = "\(firstDecimal! + secondDecimal!)"
+            break
+        // Subtraction
+        case .sub:
+            resultStr = "\(firstDecimal! - secondDecimal!)"
+            break
+        // Multiplication
+        case .mul:
+            resultStr = "\(firstDecimal! * secondDecimal!)"
+            break
+        // Division
+        case .div:
+            // if dvision by zero
+            guard secondDecimal != 0 else {
+                // TODO Make error code and replace hardcode
+                return "Division by zero"
             }
-            
-        }()
-        
-        // Pick system
-        switch enumSystem {
-        case .bin:
-            resultStr = calculateBinNumbers(firstNum: firstValue, secondNum: secondValue, operation: operation)
+            resultStr = "\(firstDecimal! / secondDecimal!)"
             break
-        case .dec:
-            resultStr = calculateDecNumbers(firstNum: firstValue, secondNum: secondValue, operation: operation)
-            break
-        case .oct:
-            break
-        case .hex:
-            break
+
         }
-        
         return resultStr
     }
     

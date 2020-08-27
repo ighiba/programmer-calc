@@ -56,7 +56,10 @@ import Foundation
             // convert dec to binary
             partition = 4
             
+            
             let dec = Decimal(string: anyStr)!
+            
+            
             binary = Binary(dec)
             break
         case "Hexadecimal":
