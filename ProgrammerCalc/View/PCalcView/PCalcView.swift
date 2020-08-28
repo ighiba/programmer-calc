@@ -19,7 +19,10 @@ class PCalcView: UIView {
     
     func setViews() {
         self.backgroundColor = .white
-        self.frame = UIScreen.main.bounds
+//        self.frame = UIScreen.main.bounds
+        
+        self.frame = CGRect( x: 0, y: 0, width: UIScreen.main.bounds.width, height: labelHeight() * 2 + 44)
+        
         
         // add navigation bar
         self.addSubview(navigationBar)
@@ -51,7 +54,7 @@ class PCalcView: UIView {
             counter += 1
         }
         
-        self.addSubview(buttonsStackView)
+        //self.addSubview(buttonsStackView)
         //self.addSubview(converterInfo)
         //self.addSubview(changeConversion)
         setupLayout()
@@ -329,13 +332,13 @@ class PCalcView: UIView {
             
             // Constraints for buttons (Main)
             // width = main view width - spacing * 2
-            buttonsStackView.widthAnchor.constraint(equalTo: labelsStack.widthAnchor),
-            // centering
-            buttonsStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            // top anchor == spacing
-            buttonsStackView.topAnchor.constraint(lessThanOrEqualTo: labelsStack.bottomAnchor, constant: 10),
-            // bottom anchor === spacing
-            buttonsStackView.bottomAnchor.constraint(greaterThanOrEqualTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -15),
+//            buttonsStackView.widthAnchor.constraint(equalTo: labelsStack.widthAnchor),
+//            // centering
+//            buttonsStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+//            // top anchor == spacing
+//            buttonsStackView.topAnchor.constraint(lessThanOrEqualTo: labelsStack.bottomAnchor, constant: 10),
+//            // bottom anchor === spacing
+//            buttonsStackView.bottomAnchor.constraint(greaterThanOrEqualTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -15),
         ])
         
         

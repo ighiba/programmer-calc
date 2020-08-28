@@ -8,12 +8,21 @@
 
 import UIKit
 
-class PCalcViewController: UIViewController {
+class PCalcViewController: UIPageViewController {
     
     // ==================
     // MARK: - Properties
     // ==================
     
+    var arrayButtonsStack = [UIStackView]()
+    // array of button pages
+    lazy var arrayCalcButtonsViewController: [CalcButtonsViewController] = {
+       var buttonsVC = [CalcButtonsViewController]()
+        for buttonStack in arrayButtonsStack {
+            buttonsVC.append(CalcButtonsViewController(buttonsStack: buttonStack))
+        }
+        return buttonsVC
+    }()
     // Handlers
     let converterHandler: ConverterHandler = ConverterHandler()
     let calculationHandler: CalcMath = CalcMath()
@@ -32,14 +41,23 @@ class PCalcViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        let mainButtons = CalcButtonsMain(frame: CGRect())
+        let additionalButtons = CalcButtonsAdditional(frame: CGRect())
+        
+        
+        arrayButtonsStack.append(additionalButtons)
+        arrayButtonsStack.append(mainButtons)
+        
         // set view from PCalcView
-        self.view = calcView
+        self.view.addSubview(calcView)
+        //self.view = calcView
         // get state from UserDefaults
         getCalcState()
-        
+
         updateConversionState()
         handleConversion()
-        
+
         // update layout (handle button state and etc)
         updateAllLayout()
         // update displaying of mainLabel
@@ -54,6 +72,22 @@ class PCalcViewController: UIViewController {
         print("main dissapear")
         saveCalcState()
         
+    }
+    
+
+    
+    override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) {
+        super.init(transitionStyle: .scroll, navigationOrientation: navigationOrientation, options: nil)
+        self.view.backgroundColor = .blue
+        
+        self.delegate = self
+        self.dataSource = self
+        self.delaysContentTouches = false
+        setViewControllers([arrayCalcButtonsViewController[1]], direction: .forward, animated: false, completion: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     // ===============
@@ -255,7 +289,7 @@ class PCalcViewController: UIViewController {
     private func updateIsSignedButton() {
         // get button by tag 102
         // TODO: Refactor hardcode
-        let isSignedButton = self.view.viewWithTag(102) as! UIButton
+        let isSignedButton = self.view.viewWithTag(102) as? UIButton ?? UIButton()
         
         if self.processSigned {
             // if ON then disable
@@ -618,4 +652,63 @@ class PCalcViewController: UIViewController {
         self.present(navigationController, animated: true)
     }
 
+}
+
+extension PCalcViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        guard let viewController = viewController as? CalcButtonsViewController else {return nil}
+        if let index = arrayCalcButtonsViewController.firstIndex(of: viewController) {
+            if index > 0 {
+                return arrayCalcButtonsViewController[index - 1]
+            }
+        }
+        
+        return nil
+    }
+    
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        guard let viewController = viewController as? CalcButtonsViewController else {return nil}
+        if let index = arrayCalcButtonsViewController.firstIndex(of: viewController) {
+            if index < arrayButtonsStack.count - 1 {
+                return arrayCalcButtonsViewController[index + 1]
+            }
+        }
+        
+        return nil
+    }
+    
+    func presentationCount(for pageViewController: UIPageViewController) -> Int {
+        return arrayButtonsStack.count
+    }
+    
+    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
+        return 0
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch: UITouch = touches.first!
+        print(self.view.subviews[0].subviews)
+
+    }
+    
+}
+extension UIPageViewController {
+    var delaysContentTouches: Bool {
+        get {
+            var isEnabled: Bool = true
+            for view in view.subviews {
+                if let subView = view as? UIScrollView {
+                    isEnabled = subView.delaysContentTouches
+                }
+            }
+            return isEnabled
+        }
+        set {
+            for view in view.subviews {
+                if let subView = view as? UIScrollView {
+                    subView.delaysContentTouches = newValue
+                }
+            }
+        }
+    }
 }
