@@ -41,9 +41,9 @@ class ConversionViewController: UIViewController {
         saveConversionSettings()
     }
     
-    // =======
-    // Methods
-    // =======
+    // ===============
+    // MARK: - Methods
+    // ===============
     
     // Update conversion values
     fileprivate func getConversionSettings() {
@@ -123,9 +123,9 @@ class ConversionViewController: UIViewController {
         }
     }
     
-    // =======
-    // Actions
-    // =======
+    // ===============
+    // MARK: - Actions
+    // ===============
     
     // Done button / Exit button
     @objc func doneButtonTapped( sender: UIButton) {

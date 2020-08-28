@@ -36,9 +36,9 @@ class SettingsViewController: UITableViewController {
         saveSettings()
     }
     
-    // =======
-    // Methods
-    // =======
+    // ===============
+    // MARK: - Methods
+    // ===============
     
     // Update settings values
     fileprivate func getSettings() {
@@ -109,9 +109,9 @@ class SettingsViewController: UITableViewController {
         
     }
     
-    // =======
-    // Actions
-    // =======
+    // ===============
+    // MARK: - Actions
+    // ===============
     
     // Close settings popover
     @objc func closeButtonTapped( sender: UIButton) {

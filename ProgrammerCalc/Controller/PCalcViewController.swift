@@ -10,9 +10,9 @@ import UIKit
 
 class PCalcViewController: UIViewController {
     
-    // ==========
-    // Properties
-    // ==========
+    // ==================
+    // MARK: - Properties
+    // ==================
     
     // Handlers
     let converterHandler: ConverterHandler = ConverterHandler()
@@ -56,9 +56,9 @@ class PCalcViewController: UIViewController {
         
     }
     
-    // =======
-    // Methods
-    // =======
+    // ===============
+    // MARK: - Methods
+    // ===============
     
     // Update conversion values
     fileprivate func getCalcState() {
@@ -274,9 +274,9 @@ class PCalcViewController: UIViewController {
         }
     }
 
-    // =======
-    // Actions
-    // =======
+    // ===============
+    // MARK: - Actions
+    // ===============
     
     @objc func toucUpOutsideAction( sender: UIButton) {
         //print("touchUpOutside")

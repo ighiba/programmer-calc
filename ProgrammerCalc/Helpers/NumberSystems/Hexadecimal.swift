@@ -45,9 +45,9 @@ class Hexadecimal: NumberSystem {
         self.value = hexadecimal.value
     }
     
-    // =======
-    // Methods
-    // =======
+    // ===============
+    // MARK: - Methods
+    // ===============
     
     // HEX -> BIN
     // Convert form hex to binary with table helper

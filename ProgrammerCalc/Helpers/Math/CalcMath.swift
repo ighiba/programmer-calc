@@ -33,9 +33,9 @@ final class CalcMath {
         }
     }
     
-    // =======
-    // Methods
-    // =======
+    // ===============
+    // MARK: - Methods
+    // ===============
     
     func calculate( firstValue: String, operation: mathOperation ,secondValue: String, for system: String) -> String? {
   

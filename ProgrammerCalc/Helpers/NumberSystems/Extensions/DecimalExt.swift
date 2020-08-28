@@ -17,9 +17,9 @@ extension Decimal {
     }
     
     
-    // =======
-    // Methods
-    // =======
+    // ===============
+    // MARK: - Methods
+    // ===============
     
     // Handle converting values NumberSystem
     

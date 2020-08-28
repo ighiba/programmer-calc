@@ -10,9 +10,9 @@ import Foundation
 
  class ConverterHandler {
     
-    // =======
-    // Methods
-    // =======
+    // ===============
+    // MARK: - Methods
+    // ===============
     
     // Main function for conversion values
     func convertValue(value valueStr: String, from mainSystem: String, to converterSystem: String) -> String? {

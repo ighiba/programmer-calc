@@ -36,9 +36,9 @@ class Octal: NumberSystem {
         self.value = octal.value
     }
     
-    // =======
-    // Methods
-    // =======
+    // ===============
+    // MARK: - Methods
+    // ===============
     
     // OCT -> BIN
     // Convert from oct to binary with table helper
@@ -56,7 +56,5 @@ class Octal: NumberSystem {
         
         return binary
     }
-    
-    
     
 }

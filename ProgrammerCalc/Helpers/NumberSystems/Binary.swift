@@ -8,10 +8,6 @@
 
 import Foundation
 
-// ======
-// Binary
-// ======
-
 class Binary: NumberSystem {
     
     required public init(stringLiteral value: String) {
@@ -57,9 +53,9 @@ class Binary: NumberSystem {
     }
 
     
-    // =======
-    // Methods
-    // =======
+    // ===============
+    // MARK: - Methods
+    // ===============
     
     // only for int or fract part of binary
     func removeZerosBefore( str: String) -> String {

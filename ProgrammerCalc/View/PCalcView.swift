@@ -385,9 +385,9 @@ class PCalcView: UIView {
     }
 }
 
-// ==============================
-// Class for calculator's buttons
-// ==============================
+// ===========================
+// MARK: -  Calculator buttons
+// ===========================
 
 class CalculatorButton: UIButton {
     // ============

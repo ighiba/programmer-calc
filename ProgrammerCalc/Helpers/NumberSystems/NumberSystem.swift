@@ -34,9 +34,9 @@ class NumberSystem: ExpressibleByStringLiteral {
     }
     
     
-    // =======
-    // Methods
-    // =======
+    // ===============
+    // MARK: - Methods
+    // ===============
     
     // Dividing string variable and converting it to double without loss of precision
     func divideIntFract( value: Any) -> (IntPart?, FractPart?) {
@@ -63,9 +63,9 @@ class NumberSystem: ExpressibleByStringLiteral {
         }
     }
     
-    // ====================
-    // Hexadecimal // Octal
-    // ====================
+    // ==================================
+    // MARK: - Hexadecimal / Octal Table
+    // ==================================
     
     // Parsing tables dictionary hex or oct for converting to bin
     func tableOctHexToBin( valueOctHex: String, table: [String : String]) -> String {
