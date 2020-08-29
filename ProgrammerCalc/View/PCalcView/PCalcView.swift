@@ -18,7 +18,7 @@ class PCalcView: UIView {
     
     
     func setViews() {
-        self.backgroundColor = .white
+        self.backgroundColor = .clear
 //        self.frame = UIScreen.main.bounds
         
         self.frame = CGRect( x: 0, y: 0, width: UIScreen.main.bounds.width, height: labelHeight() * 2 + 44)
@@ -304,7 +304,7 @@ class PCalcView: UIView {
         labelsStack.translatesAutoresizingMaskIntoConstraints = false
         mainLabel.translatesAutoresizingMaskIntoConstraints = false
         converterLabel.translatesAutoresizingMaskIntoConstraints = false
-        buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
+        //buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
         
         // Activate constraints
         NSLayoutConstraint.activate([
@@ -388,147 +388,6 @@ class PCalcView: UIView {
     }
 }
 
-// ===========================
-// MARK: -  Calculator buttons
-// ===========================
 
-class CalculatorButton: UIButton {
-    // ============
-    // Enumerations
-    // ============
-    
-    enum buttonTypes {
-        case numeric
-        case sign
-        case logical
-    }
-    
-    // ==========
-    // Properties
-    // ==========
-    
-    
-    private let _boundsExtension: CGFloat = 0
-    // override isHighlighted for calculator buttons
-    override open var isHighlighted: Bool {
-        // if variable state changed
-        // change background color for calulator buttons while they pressed
-        didSet { 
-            if isHighlighted {
-                // create button animation when button pressed
-                UIView.transition(
-                    with: self,
-                    duration: 0.1,
-                    options: [.curveEaseIn, .beginFromCurrentState, .allowUserInteraction],
-                    animations: { self.backgroundColor = .lightGray },
-                    completion: nil)
-            } else {
-                // create button animation when button unpressed
-                UIView.transition(
-                    with: self,
-                    duration: 0.3,
-                    options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction],
-                    animations: { self.backgroundColor = .white },
-                    completion: nil)
-            }
-        }
-    }
-    
-    
-    // =======
-    // Methods
-    // =======
-    
-    // Apply Style method to the all buttons
-    // TODO: Style protocol
-    func applyStyle() {
-        // set title and background
-        self.setTitleColor(.black, for: .normal)
-        self.backgroundColor = .white
-        // set font size, font family
-        //self.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 45.0)
-        self.titleLabel?.font = UIFont.systemFont(ofSize: 45.0, weight: UIFont.Weight.thin)
-        // set borders
-        self.layer.borderWidth = 0.5
-        self.layer.borderColor = UIColor.lightGray.cgColor
-        // round corners
-        self.layer.cornerRadius = buttonWidth() / 2
-    }
-    
-    func setFrame(xMult: Int, yMult: Int, width fWidth: Double, height fHeight: Double) {
-        self.frame = CGRect( x: Double(85*xMult + 20), y: Double(85*yMult + 320), width: fWidth, height: fHeight)
-    }
-    
-    func setActions(for buttonType: buttonTypes){
-        
-        self.addTarget(nil, action: #selector(PCalcViewController.toucUpOutsideAction), for: [.touchDragExit, .touchDragOutside])
-        
-        switch buttonType {
-        case .numeric:
-                self.addTarget(nil, action: #selector(PCalcViewController.numericButtonTapped), for: .touchUpInside)
-        case .sign:
-            self.addTarget(nil, action: #selector(PCalcViewController.signButtonTapped), for: .touchUpInside)
-        default:
-            break
-        }
-    }
-    
-    // Dynamic button width (except zero button) and height for autolayout
-    //  5  - number of spacings
-    //  15 - spacing width
-    //  4  - number of buttons
-    func buttonWidth() -> CGFloat {
-        return (UIScreen.main.bounds.width - 5 * 15) / 4
-    }
-    
-    // override for decrease control bounds of button
-    // and for correct highlight animation
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch: UITouch = touches.first!
-        let outerBounds: CGRect = bounds.insetBy(dx: -1 * _boundsExtension, dy: -1 * _boundsExtension)
-        let currentLocation: CGPoint = touch.location(in: self)
-        let previousLocation: CGPoint = touch.previousLocation(in: self)
-        
-        let touchOutside: Bool = !outerBounds.contains(currentLocation)
-        
-        if touchOutside {
-            let previousTouchInside: Bool = outerBounds.contains(previousLocation)
-            if previousTouchInside {
-                sendActions(for: .touchDragExit)
-                self.isHighlighted = false
-            } else {
-                sendActions(for: .touchDragOutside)
-                self.isHighlighted = false
-            }
-        } else {
-            let previousTouchOutside: Bool = !outerBounds.contains(previousLocation)
-            if previousTouchOutside {
-                sendActions(for: .touchDragEnter)
-                self.isHighlighted = true
-            } else {
-                sendActions(for: .touchDragInside)
-                self.isHighlighted = true
-            }
-        }
-
-    }
-    
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch: UITouch = touches.first!
-        let outerBounds: CGRect = bounds.insetBy(dx: -1 * _boundsExtension, dy: -1 * _boundsExtension)
-        let currentLocation: CGPoint = touch.location(in: self)
-        
-        let touchInside: Bool = outerBounds.contains(currentLocation)
-        if touchInside {
-            self.isHighlighted = false
-            return sendActions(for: .touchUpInside)
-        } else {
-            self.isHighlighted = false
-            return sendActions(for: .touchUpOutside)
-        }
-    }
-    
-}
 
 

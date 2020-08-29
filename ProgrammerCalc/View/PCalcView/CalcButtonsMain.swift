@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CalcButtonsMain: UIStackView {
+class CalcButtonsMain: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -51,13 +51,13 @@ class CalcButtonsMain: UIStackView {
         NSLayoutConstraint.activate([
             // Constraints for buttons (Main)
             // width = main view width - spacing * 2
-            buttonsStackView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.95),
+            buttonsStackView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.90),
             // centering
             buttonsStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             // top anchor == spacing
-            buttonsStackView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: buttonsStackHeight() / 2),
+            buttonsStackView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: buttonsStackHeight() / 2 + 5),
             // bottom anchor === spacing
-            buttonsStackView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: 20),
+            buttonsStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0),
         ])
     }
     
@@ -107,20 +107,19 @@ class CalcButtonsMain: UIStackView {
             // TODO: Themes
             button.setTitleColor(.lightGray, for: .disabled)
             button.applyStyle()
-            // apply style for signed button
-            // TODO: Remove hardcode
-            if button.titleLabel?.text == "Signed\nOFF" {
-                button.titleLabel?.numberOfLines = 2
-                button.titleLabel?.textAlignment = .center
-                button.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 18.0)
+            
+            // apply font style for AC button
+            if title == "AC" {
+                button.titleLabel?.font = UIFont.systemFont(ofSize: 45.0, weight: UIFont.Weight.thin) // default
             }
+            
             
             // set width and height by constraints
             button.translatesAutoresizingMaskIntoConstraints = false
             button.heightAnchor.constraint(greaterThanOrEqualToConstant: button.buttonWidth()).isActive = true
             // special width for zero
             if title == "0" {
-                button.widthAnchor.constraint(greaterThanOrEqualToConstant: button.buttonWidth() * 2 + 15).isActive = true
+                button.widthAnchor.constraint(greaterThanOrEqualToConstant: button.buttonWidth() * 2 + 17).isActive = true
             } else {
                 // width for default
                 button.widthAnchor.constraint(greaterThanOrEqualToConstant: button.buttonWidth()).isActive = true

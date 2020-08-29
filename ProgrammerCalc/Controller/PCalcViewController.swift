@@ -14,15 +14,7 @@ class PCalcViewController: UIPageViewController {
     // MARK: - Properties
     // ==================
     
-    var arrayButtonsStack = [UIStackView]()
-    // array of button pages
-    lazy var arrayCalcButtonsViewController: [CalcButtonsViewController] = {
-       var buttonsVC = [CalcButtonsViewController]()
-        for buttonStack in arrayButtonsStack {
-            buttonsVC.append(CalcButtonsViewController(buttonsStack: buttonStack))
-        }
-        return buttonsVC
-    }()
+    var arrayButtonsStack = [UIView]()
     // Handlers
     let converterHandler: ConverterHandler = ConverterHandler()
     let calculationHandler: CalcMath = CalcMath()
@@ -38,6 +30,47 @@ class PCalcViewController: UIPageViewController {
     var systemMain: String?
     var systemConverter: String?
     
+    // ======================
+    // MARK: - Initialization
+    // ======================
+    
+    // array of button pages
+    lazy var arrayCalcButtonsViewController: [CalcButtonsViewController] = {
+       var buttonsVC = [CalcButtonsViewController]()
+        for buttonStack in arrayButtonsStack {
+            buttonsVC.append(CalcButtonsViewController(buttonsStack: buttonStack))
+        }
+        return buttonsVC
+    }()
+    
+
+    override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) {
+        super.init(transitionStyle: .scroll, navigationOrientation: navigationOrientation, options: nil)
+        
+        // TODO: Themes
+        self.view.backgroundColor = .white
+
+        let pageControl = UIPageControl.appearance()
+        pageControl.pageIndicatorTintColor = .lightGray
+        pageControl.currentPageIndicatorTintColor = .darkGray
+        
+        self.delegate = self
+        self.dataSource = self
+        // allow interaction with content without delay
+        self.delaysContentTouches = false
+        
+        // set start vc
+        setViewControllers([arrayCalcButtonsViewController[1]], direction: .forward, animated: false, completion: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // ===================
+    // MARK: - ViewDidLoad
+    // ===================
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -45,13 +78,14 @@ class PCalcViewController: UIPageViewController {
         let mainButtons = CalcButtonsMain(frame: CGRect())
         let additionalButtons = CalcButtonsAdditional(frame: CGRect())
         
-        
+        // apend StackViews to array
         arrayButtonsStack.append(additionalButtons)
         arrayButtonsStack.append(mainButtons)
         
         // set view from PCalcView
         self.view.addSubview(calcView)
         //self.view = calcView
+        
         // get state from UserDefaults
         getCalcState()
 
@@ -72,22 +106,6 @@ class PCalcViewController: UIPageViewController {
         print("main dissapear")
         saveCalcState()
         
-    }
-    
-
-    
-    override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) {
-        super.init(transitionStyle: .scroll, navigationOrientation: navigationOrientation, options: nil)
-        self.view.backgroundColor = .blue
-        
-        self.delegate = self
-        self.dataSource = self
-        self.delaysContentTouches = false
-        setViewControllers([arrayCalcButtonsViewController[1]], direction: .forward, animated: false, completion: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     // ===============
@@ -654,7 +672,13 @@ class PCalcViewController: UIPageViewController {
 
 }
 
+// =================
+// MARK: - Extension
+// =================
+
 extension PCalcViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+    
+    // load vc before
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let viewController = viewController as? CalcButtonsViewController else {return nil}
         if let index = arrayCalcButtonsViewController.firstIndex(of: viewController) {
@@ -666,6 +690,7 @@ extension PCalcViewController: UIPageViewControllerDataSource, UIPageViewControl
         return nil
     }
     
+    // load vc after
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let viewController = viewController as? CalcButtonsViewController else {return nil}
         if let index = arrayCalcButtonsViewController.firstIndex(of: viewController) {
@@ -677,38 +702,14 @@ extension PCalcViewController: UIPageViewControllerDataSource, UIPageViewControl
         return nil
     }
     
+    // how much pages will be
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
         return arrayButtonsStack.count
     }
     
+    // starting index for dots
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-        return 0
+        return 1
     }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch: UITouch = touches.first!
-        print(self.view.subviews[0].subviews)
-
-    }
-    
-}
-extension UIPageViewController {
-    var delaysContentTouches: Bool {
-        get {
-            var isEnabled: Bool = true
-            for view in view.subviews {
-                if let subView = view as? UIScrollView {
-                    isEnabled = subView.delaysContentTouches
-                }
-            }
-            return isEnabled
-        }
-        set {
-            for view in view.subviews {
-                if let subView = view as? UIScrollView {
-                    subView.delaysContentTouches = newValue
-                }
-            }
-        }
-    }
+ 
 }

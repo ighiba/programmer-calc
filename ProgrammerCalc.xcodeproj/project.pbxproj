@@ -22,6 +22,8 @@
 		C0666EBC24F97855004809EF /* CalcButtonsAdditional.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0666EBB24F97855004809EF /* CalcButtonsAdditional.swift */; };
 		C066756924E27AE700F832F9 /* ConversionValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = C066756824E27AE700F832F9 /* ConversionValues.swift */; };
 		C066756E24E2D83300F832F9 /* ConverterHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C066756D24E2D83300F832F9 /* ConverterHandler.swift */; };
+		C068AFAA24FA40B900BFE754 /* UIPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C068AFA924FA40B900BFE754 /* UIPageViewController.swift */; };
+		C068AFAC24FA605800BFE754 /* CalculatorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C068AFAB24FA605800BFE754 /* CalculatorButton.swift */; };
 		C06B7F072443B12B009642B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F062443B12B009642B9 /* AppDelegate.swift */; };
 		C06B7F092443B12B009642B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F082443B12B009642B9 /* SceneDelegate.swift */; };
 		C06B7F0B2443B12B009642B9 /* PCalcViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F0A2443B12B009642B9 /* PCalcViewController.swift */; };
@@ -71,6 +73,8 @@
 		C0666EBB24F97855004809EF /* CalcButtonsAdditional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcButtonsAdditional.swift; sourceTree = "<group>"; };
 		C066756824E27AE700F832F9 /* ConversionValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionValues.swift; sourceTree = "<group>"; };
 		C066756D24E2D83300F832F9 /* ConverterHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterHandler.swift; sourceTree = "<group>"; };
+		C068AFA924FA40B900BFE754 /* UIPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPageViewController.swift; sourceTree = "<group>"; };
+		C068AFAB24FA605800BFE754 /* CalculatorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorButton.swift; sourceTree = "<group>"; };
 		C06B7F032443B12B009642B9 /* ProgrammerCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProgrammerCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C06B7F062443B12B009642B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C06B7F082443B12B009642B9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -123,6 +127,7 @@
 			children = (
 				C05A169A24DD7B0D007B7FB8 /* SavedData.swift */,
 				C065DB3D24E41E610059B38D /* CalcState.swift */,
+				C068AFAB24FA605800BFE754 /* CalculatorButton.swift */,
 				C05B008A24E6B0F100F8A5E0 /* NumberSystems */,
 				C065DB3824E3C89B0059B38D /* Math */,
 			);
@@ -168,6 +173,14 @@
 			path = PCalcView;
 			sourceTree = "<group>";
 		};
+		C068AFA824FA409200BFE754 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C068AFA924FA40B900BFE754 /* UIPageViewController.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		C06B7EFA2443B12B009642B9 = {
 			isa = PBXGroup;
 			children = (
@@ -197,6 +210,7 @@
 				C0D5BA4C24C340120038A378 /* Model */,
 				C0E5FC7424BB9B6100BA93CA /* View */,
 				C0D5BA4B24C340050038A378 /* Controller */,
+				C068AFA824FA409200BFE754 /* Extensions */,
 				C06B7F0F2443B12E009642B9 /* Assets.xcassets */,
 				C06B7F112443B12E009642B9 /* LaunchScreen.storyboard */,
 				C06B7F142443B12E009642B9 /* Info.plist */,
@@ -396,11 +410,13 @@
 				C065DB3E24E41E610059B38D /* CalcState.swift in Sources */,
 				C077CF6F24DC8DEE008E5F0F /* SettingsCell.swift in Sources */,
 				C066756924E27AE700F832F9 /* ConversionValues.swift in Sources */,
+				C068AFAC24FA605800BFE754 /* CalculatorButton.swift in Sources */,
 				C05B008C24E6E0E100F8A5E0 /* Hexadecimal.swift in Sources */,
 				C05A169B24DD7B0D007B7FB8 /* SavedData.swift in Sources */,
 				C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */,
 				C0E5FC7624BB9B8D00BA93CA /* PCalcView.swift in Sources */,
 				C06B7F0B2443B12B009642B9 /* PCalcViewController.swift in Sources */,
+				C068AFAA24FA40B900BFE754 /* UIPageViewController.swift in Sources */,
 				C0619AC424D71240008A7291 /* ConversionViewController.swift in Sources */,
 				C066756E24E2D83300F832F9 /* ConverterHandler.swift in Sources */,
 				C05B009124E71B6E00F8A5E0 /* DecimalExt.swift in Sources */,
