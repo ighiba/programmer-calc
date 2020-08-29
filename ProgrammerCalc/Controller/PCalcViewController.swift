@@ -37,8 +37,9 @@ class PCalcViewController: UIPageViewController {
     // array of button pages
     lazy var arrayCalcButtonsViewController: [CalcButtonsViewController] = {
        var buttonsVC = [CalcButtonsViewController]()
-        for buttonStack in arrayButtonsStack {
+        arrayButtonsStack.forEach { (buttonStack) in
             buttonsVC.append(CalcButtonsViewController(buttonsStack: buttonStack))
+            
         }
         return buttonsVC
     }()
@@ -119,7 +120,7 @@ class PCalcViewController: UIPageViewController {
         // apply data to view
         mainLabel.text = data.mainLabelState
         converterLabel.text = data.converterLabelState
-        self.processSigned = data.processSigned
+        processSigned = data.processSigned
         
         // Update layout
         //updateAllLayout()
@@ -139,8 +140,8 @@ class PCalcViewController: UIPageViewController {
         // get data from UserDefaults
         let data = returnConversionSettings()
         
-        self.systemMain = data.systemMain
-        self.systemConverter = data.systemConverter
+        systemMain = data.systemMain
+        systemConverter = data.systemConverter
     }
     
     // just return calcState data from UserDefauls
@@ -234,7 +235,7 @@ class PCalcViewController: UIPageViewController {
     }
     
     public func updateMainLabel() {
-        if self.systemMain == "Binary" {
+        if systemMain == "Binary" {
             var binary = Binary(stringLiteral: mainLabel.text!)
              
              // divide binary by parts
@@ -256,7 +257,7 @@ class PCalcViewController: UIPageViewController {
             return labelText
         }
         
-        if self.systemMain == "Binary" {
+        if systemMain == "Binary" {
             var binary = Binary()
             
             binary.value = labelText
@@ -277,28 +278,28 @@ class PCalcViewController: UIPageViewController {
     
     // Handle displaying of mainLabel
     public func handleDisplayingMainLabel() {
-        let fontName = self.mainLabel.font.fontName
+        let fontName = mainLabel.font.fontName
         
         // IF System == System then hide label
-        if self.systemMain == self.systemConverter {
+        if systemMain == systemConverter {
             // hide
-            self.mainLabel.isHidden = false
-            self.converterLabel.isHidden = true
+            mainLabel.isHidden = false
+            converterLabel.isHidden = true
             // bigger font for converterLabel +20
-            self.mainLabel.font = UIFont(name: fontName, size: 82.0)
-            self.mainLabel.numberOfLines = 2
+            mainLabel.font = UIFont(name: fontName, size: 82.0)
+            mainLabel.numberOfLines = 2
         } else {
             // unhide
-            self.mainLabel.isHidden = false
-            self.converterLabel.isHidden = false
+            mainLabel.isHidden = false
+            converterLabel.isHidden = false
             // default font for converterLabel
-            self.mainLabel.font = UIFont(name: fontName, size: 72.0)
+            mainLabel.font = UIFont(name: fontName, size: 72.0)
             
             // lines for binary
-            if self.systemMain == "Binary" {
-                self.mainLabel.numberOfLines = 2
+            if systemMain == "Binary" {
+                mainLabel.numberOfLines = 2
             } else {
-                self.mainLabel.numberOfLines = 1
+                mainLabel.numberOfLines = 1
             }
         }
     }
@@ -309,7 +310,7 @@ class PCalcViewController: UIPageViewController {
         // TODO: Refactor hardcode
         let isSignedButton = self.view.viewWithTag(102) as? UIButton ?? UIButton()
         
-        if self.processSigned {
+        if processSigned {
             // if ON then disable
             // TODO: Localization
             isSignedButton.setTitle("Signed\nON", for: .normal)
@@ -322,7 +323,23 @@ class PCalcViewController: UIPageViewController {
     // Change state of plusminus button
     private func changeStatePlusMinus() {
         if let plusMinusButton = self.view.viewWithTag(101) as? UIButton {
-            plusMinusButton.isEnabled = self.processSigned
+            plusMinusButton.isEnabled = processSigned
+        }
+    }
+    
+    fileprivate func calculateResultAndUpdateLabels( inputValue: String, operation: CalcMath.mathOperation) {
+        if mathState != nil {
+            print("calculation")
+            if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: mainLabel.text!, for: SavedData.conversionSettings!.systemMain) {
+                mainLabel.text = result
+                updateMainLabel()
+                updateConverterLabel()
+                mathState = nil
+                mathState = CalcMath.MathState(buffValue: mainLabel.text!, operation: operation)
+                mathState?.lastResult = result
+            }
+        } else {
+            mathState = CalcMath.MathState(buffValue: mainLabel.text!, operation: operation)
         }
     }
 
@@ -510,7 +527,7 @@ class PCalcViewController: UIPageViewController {
                 // if number is already signed
                 // TODO: Error handling
                 // TODO: Various sytems handling
-                if self.systemMain == "Binary" {
+                if systemMain == "Binary" {
                     // change left bit 1 to 0, 0 to 1
                     if label.text!.first == "0" {
                         label.text!.removeFirst()
@@ -535,80 +552,27 @@ class PCalcViewController: UIPageViewController {
         // Subtraction button
         case "\u{00f7}":
             // calc results
-            if mathState != nil {
-                print("calculation")
-                if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
-
-                    label.text = result
-                    updateMainLabel()
-                    updateConverterLabel()
-                    mathState = nil
-                    mathState = CalcMath.MathState(buffValue: label.text!, operation: .div)
-                    mathState?.lastResult = result
-                }
-            } else {
-                mathState = CalcMath.MathState(buffValue: label.text!, operation: .div)
-            }
+            calculateResultAndUpdateLabels(inputValue: label.text!, operation: .div)
             break
         // Multiplication button
         case "X":
             // calc results
-            if mathState != nil {
-                print("calculation")
-                if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
-                    
-                    label.text = result
-                    updateMainLabel()
-                    updateConverterLabel()
-                    mathState = nil
-                    mathState = CalcMath.MathState(buffValue: label.text!, operation: .mul)
-                    mathState?.lastResult = result
-                }
-            } else {
-                mathState = CalcMath.MathState(buffValue: label.text!, operation: .mul)
-            }
+            calculateResultAndUpdateLabels(inputValue: label.text!, operation: .mul)
             break
         // Multiplication button
         case "-":
             // calc results
-            if mathState != nil {
-                print("calculation")
-                if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
-
-                    label.text = result
-                    updateMainLabel()
-                    updateConverterLabel()
-                    mathState = nil
-                    mathState = CalcMath.MathState(buffValue: label.text!, operation: .sub)
-                    mathState?.lastResult = result
-                }
-            } else {
-                mathState = CalcMath.MathState(buffValue: label.text!, operation: .sub)
-            }
+            calculateResultAndUpdateLabels(inputValue: label.text!, operation: .sub)
             break
         // Addition button
         case "+":
             // calc results
-            if mathState != nil {
-                print("calculation")
-                if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
-
-                    label.text = result
-                    updateMainLabel()
-                    updateConverterLabel()
-                    mathState = nil
-                    mathState = CalcMath.MathState(buffValue: label.text!, operation: .add)
-                    mathState?.lastResult = result
-                }
-            } else {
-                mathState = CalcMath.MathState(buffValue: label.text!, operation: .add)
-            }
+            calculateResultAndUpdateLabels(inputValue: label.text!, operation: .add)
             break
         case "=":
             if mathState != nil {
                 print("calculation")
                 if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
-                //if let result = calculateDecNumbers(firstNum: mathState!.buffValue, secondNum: label.text!, operation: mathState!.operation) {
                     label.text = result
                     updateMainLabel()
                     updateConverterLabel()
