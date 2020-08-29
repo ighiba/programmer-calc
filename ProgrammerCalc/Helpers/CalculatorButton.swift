@@ -93,10 +93,6 @@ class CalculatorButton: UIButton {
         
     }
     
-    func setFrame(xMult: Int, yMult: Int, width fWidth: Double, height fHeight: Double) {
-        self.frame = CGRect( x: Double(85*xMult + 20), y: Double(85*yMult + 320), width: fWidth, height: fHeight)
-    }
-    
     func setActions(for buttonType: buttonTypes){
         
         self.addTarget(nil, action: #selector(PCalcViewController.toucUpOutsideAction), for: [.touchDragExit, .touchDragOutside])

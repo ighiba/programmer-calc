@@ -85,12 +85,11 @@ class CalcButtonsAdditional: UIView {
         var buttons: [UIButton] = []
         
         allTitles.forEach { (title) in
-            let button = CalculatorButton.init(type: .custom)
-            button.setFrame(xMult: 0, yMult: 0, width: 75, height: 75)
+            let button = CalculatorButton(frame: CGRect())
 
             // set actions for button
             switch title{
-            case "A"..."D","00","FF":
+            case "A","B","C","D","E","F","00","FF":
                 button.setActions(for: .numeric)
                 break
             default:
@@ -123,12 +122,6 @@ class CalcButtonsAdditional: UIView {
             buttons.append(button)
             
         }
-    
-        // TODO: Logical buttons
-        
-        //
-        // Logical buttons
-        //
 
         return buttons
     }()

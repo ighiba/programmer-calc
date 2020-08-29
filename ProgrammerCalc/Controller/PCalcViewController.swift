@@ -225,7 +225,7 @@ class PCalcViewController: UIPageViewController {
         }()
         
         // TODO: Refator hadling for Hexadecimal values
-        if Double(labelText) == nil {
+        if Double(labelText) == nil && ( self.systemMain != "Hexadecimal") {
             converterLabel.text = mainLabel.text
         } else {
             // Uptade converter label with converted number
@@ -592,13 +592,13 @@ class PCalcViewController: UIPageViewController {
     // Signed OFF/ON button
     @objc func toggleIsSigned( sender: UIButton) {
         // invert value
-        self.processSigned = !self.processSigned
+        processSigned = !processSigned
         // update value
         updateIsSignedButton()
         // TODO: Main label
         // save state to UserDefaults
         saveCalcState()
-        print("Signed - \(self.processSigned)")
+        print("Signed - \(processSigned)")
         // update converter and main labels
         updateConverterLabel()
         updateMainLabel()

@@ -23,54 +23,17 @@ class PCalcView: UIView {
         
         self.frame = CGRect( x: 0, y: 0, width: UIScreen.main.bounds.width, height: labelHeight() * 2 + 44)
         
-        
         // add navigation bar
         self.addSubview(navigationBar)
         
         // add labels
-        //self.addSubview(mainLabel)
-        //self.addSubview(converterLabel)
         self.addSubview(labelsStack)
-        
-        // stuff for create buttonStackView
-        var buffStackView: UIStackView = UIStackView()
-        var counter: Int = 0
-        
-        allButtons.forEach { (button) in
-            
-            buffStackView.addArrangedSubview(button)
-            // fill each stack with 4 buttons (the last one with 3)
-            switch counter {
-            case 3,7,11,15,18:
-                buffStackView.axis = .horizontal
-                buffStackView.alignment = .fill
-                buffStackView.distribution = .equalSpacing
-                buttonsStackView.addArrangedSubview(buffStackView)
-                buffStackView = UIStackView()
-                break
-            default:
-                break
-            }
-            counter += 1
-        }
         
         //self.addSubview(buttonsStackView)
         //self.addSubview(converterInfo)
         //self.addSubview(changeConversion)
         setupLayout()
     }
-    
-    // Horizontal main calc buttons stack
-    let buttonsStackView: UIStackView = {
-        let stackView = UIStackView()
-        // Display settings for buttons UIStackView
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .equalSpacing
-        
-        return stackView
-    }()
-    
     
     // Set navigation bar
     fileprivate let navigationBar: UINavigationBar = {
@@ -156,92 +119,21 @@ class PCalcView: UIView {
         return labels
     }()
     
-    // Change conversion button
-    let changeConversion: UIButton = {
-        let button = UIButton()
-        
-        button.frame = CGRect(x: 0, y: 0, width: 200, height: 25)
-        
-        button.setTitle("Change conversion ▾", for: .normal)
-        button.titleLabel!.font = UIFont(name: "HelveticaNeue-Thin", size: 16.0)
-        button.setTitleColor(.black, for: .normal)
-        button.setTitleColor(.lightGray, for: .highlighted)
-        button.addTarget(nil, action: #selector(PCalcViewController.changeButtonTapped), for: .touchUpInside)
-        
-        return button
-    }()
+//    // Change conversion button
+//    let changeConversion: UIButton = {
+//        let button = UIButton()
+//        
+//        button.frame = CGRect(x: 0, y: 0, width: 200, height: 25)
+//        
+//        button.setTitle("Change conversion ▾", for: .normal)
+//        button.titleLabel!.font = UIFont(name: "HelveticaNeue-Thin", size: 16.0)
+//        button.setTitleColor(.black, for: .normal)
+//        button.setTitleColor(.lightGray, for: .highlighted)
+//        button.addTarget(nil, action: #selector(PCalcViewController.changeButtonTapped), for: .touchUpInside)
+//        
+//        return button
+//    }()
     
-    // Standart calculator buttons
-    let allButtons: [UIButton] = {
-        
-        let allTitles = ["AC","\u{00B1}","Signed\nOFF","\u{00f7}",
-                         "7", "8", "9", "X",
-                         "4", "5", "6", "-",
-                         "1", "2", "3", "+",
-                         "0", ".", "="]
-                         
-        
-        var buttonLabel: Int = 9
-        var buttonTag: Int = 100
-        var buttons: [UIButton] = []
-        
-        allTitles.forEach { (title) in
-            let button = CalculatorButton.init(type: .custom)
-            button.setFrame(xMult: 0, yMult: 0, width: 75, height: 75)
-
-            // set actions for button
-            switch title{
-            case "0"..."9",".":
-                button.setActions(for: .numeric)
-                break
-            case "Signed\nOFF":
-                button.addTarget(nil, action: #selector(PCalcViewController.toggleIsSigned), for: .touchUpInside)
-                break
-            default:
-                button.setActions(for: .sign)
-                break
-            }
-            
-            // set title and style
-            button.setTitle(title, for: .normal)
-            // TODO: Themes
-            button.setTitleColor(.lightGray, for: .disabled)
-            button.applyStyle()
-            // apply style for signed button
-            // TODO: Remove hardcode
-            if button.titleLabel?.text == "Signed\nOFF" {
-                button.titleLabel?.numberOfLines = 2
-                button.titleLabel?.textAlignment = .center
-                button.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 18.0)
-            }
-            
-            // set width and height by constraints
-            button.translatesAutoresizingMaskIntoConstraints = false
-            button.heightAnchor.constraint(greaterThanOrEqualToConstant: button.buttonWidth()).isActive = true
-            // special width for zero
-            if title == "0" {
-                button.widthAnchor.constraint(greaterThanOrEqualToConstant: button.buttonWidth() * 2 + 15).isActive = true
-            } else {
-                // width for default
-                button.widthAnchor.constraint(greaterThanOrEqualToConstant: button.buttonWidth()).isActive = true
-            }
-            // button tags start from 100 to 118
-            button.tag = buttonTag
-            buttonTag += 1
-            
-            // add element to array
-            buttons.append(button)
-            
-        }
-    
-        // TODO: Logical buttons
-        
-        //
-        // Logical buttons
-        //
-
-        return buttons
-    }()
     
     // View for converting information
     
@@ -304,7 +196,6 @@ class PCalcView: UIView {
         labelsStack.translatesAutoresizingMaskIntoConstraints = false
         mainLabel.translatesAutoresizingMaskIntoConstraints = false
         converterLabel.translatesAutoresizingMaskIntoConstraints = false
-        //buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
         
         // Activate constraints
         NSLayoutConstraint.activate([
@@ -329,16 +220,6 @@ class PCalcView: UIView {
             // width and height anchors
             converterLabel.widthAnchor.constraint(equalTo: labelsStack.widthAnchor),
             converterLabel.heightAnchor.constraint(equalToConstant: labelHeight() - 11),
-            
-            // Constraints for buttons (Main)
-            // width = main view width - spacing * 2
-//            buttonsStackView.widthAnchor.constraint(equalTo: labelsStack.widthAnchor),
-//            // centering
-//            buttonsStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-//            // top anchor == spacing
-//            buttonsStackView.topAnchor.constraint(lessThanOrEqualTo: labelsStack.bottomAnchor, constant: 10),
-//            // bottom anchor === spacing
-//            buttonsStackView.bottomAnchor.constraint(greaterThanOrEqualTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -15),
         ])
         
         

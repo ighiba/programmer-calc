@@ -85,8 +85,7 @@ class CalcButtonsMain: UIView {
         var buttons: [UIButton] = []
         
         allTitles.forEach { (title) in
-            let button = CalculatorButton.init(type: .custom)
-            button.setFrame(xMult: 0, yMult: 0, width: 75, height: 75)
+            let button = CalculatorButton(frame: CGRect())
 
             // set actions for button
             switch title{
@@ -111,8 +110,7 @@ class CalcButtonsMain: UIView {
             if title == "AC" {
                 button.titleLabel?.font = UIFont.systemFont(ofSize: 45.0, weight: UIFont.Weight.thin) // default
             }
-            
-            
+                    
             // set width and height by constraints
             button.translatesAutoresizingMaskIntoConstraints = false
             button.heightAnchor.constraint(greaterThanOrEqualToConstant: button.buttonWidth()).isActive = true
@@ -129,18 +127,10 @@ class CalcButtonsMain: UIView {
             
             // add element to array
             buttons.append(button)
-            
         }
-    
-        // TODO: Logical buttons
-        
-        //
-        // Logical buttons
-        //
 
         return buttons
     }()
-    
     
     // Dynamic butons stack height for autolayout
     func buttonsStackHeight() -> CGFloat {
