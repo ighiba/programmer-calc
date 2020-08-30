@@ -175,11 +175,12 @@ class Binary: NumberSystem {
         // TODO: Refactor to closure
         if let data = SavedData.calcState?.processSigned {
             if data {
+                // update signed state and change signed bit to 0
+                binary.updateSignedState()
                 binary.changeSignedBit(to: "0")
             }
         }
-        
-        
+   
         let partition: Int = 4
         
         // TODO: Remove spaces
@@ -355,7 +356,7 @@ class Binary: NumberSystem {
                 buffStr = "0" + buffStr
             }
         }
-
+        
         return buffStr
     }
     
@@ -476,9 +477,6 @@ class Binary: NumberSystem {
         
     }
     
-
-
-    
     // Set fillig style for binary string
     private func fillingStyleResult(for str: String) -> String {
         let binary = self
@@ -518,8 +516,6 @@ class Binary: NumberSystem {
         return binary.value
     }
     
-  
-    
     // Processing strings that initialized from stringLiteral
     fileprivate func processStringInput( str: String) -> String {
         let binaryDivided = self.divideIntFract(value: str)
@@ -542,7 +538,7 @@ class Binary: NumberSystem {
         return resultStr
     }
     
-    // updating is signed state of binary
+    // Updating is signed state of binary
     func updateSignedState() {
         let binary = self
         if binary.value.first == "1" {
@@ -552,7 +548,7 @@ class Binary: NumberSystem {
         }
     }
     
-    // change leftiest bit (signed) to needed value and update state
+    // Change leftiest bit (signed) to needed value and update state
     func changeSignedBit(to bit: Character) {
         let binary = self
         
@@ -566,7 +562,7 @@ class Binary: NumberSystem {
         
     }
     
-    // filling up signed binary to power 2^3, 2^4 .. etc
+    // Filling up signed binary to power 2^3, 2^4 .. etc
     func fillUpSignedToNeededCount() {
         let binary = self
         
@@ -595,7 +591,7 @@ class Binary: NumberSystem {
         }
     }
     
-    // appending digit to end
+    // Appending digit to end
     func appendDigit(_ digit: String) {
         let binary = self
         
