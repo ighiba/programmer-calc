@@ -173,5 +173,29 @@ class BinaryTests: XCTestCase {
         // 3. then
         XCTAssertEqual(decValue, -12, "Wrong conversion")
     }
+    
+    func testBinaryToDecUnsignedPlus() throws {
+        // 1. given
+        SavedData.calcState = unsignedData
+        binaryTest = Binary(stringLiteral: binaryStrInput)
+        
+        // 2. when
+        let decValue = Decimal(binaryTest)
+        
+        // 3. then
+        XCTAssertEqual(decValue, 12, "Wrong conversion")
+    }
+
+    func testBinaryToDecUnsignedMinus() throws {
+        // 1. given
+        SavedData.calcState = unsignedData
+        binaryTest = Binary(stringLiteral: "1000\(binaryStrInput)")
+        
+        // 2. when
+        let decValue = Decimal(binaryTest)
+        
+        // 3. then
+        XCTAssertEqual(decValue, 140, "Wrong conversion")
+    }
 
 }
