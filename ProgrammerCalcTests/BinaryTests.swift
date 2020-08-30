@@ -193,9 +193,22 @@ class BinaryTests: XCTestCase {
         
         // 2. when
         let decValue = Decimal(binaryTest)
-        
         // 3. then
         XCTAssertEqual(decValue, 140, "Wrong conversion")
     }
+    
+    func testBinaryConvertDoubleTo() throws {
+        // 1. given
+        SavedData.calcState = unsignedData
+        let binaryInt: Binary.IntPart = "12"
+        let binaryFract: Binary.FractPart = "25"
+
+        // 2. when
+        binaryTest.value = binaryTest.convertDoubleToBinaryStr(numberStr: (binaryInt, binaryFract))
+        // 3. then
+        XCTAssertEqual(binaryTest.value, "1100.01000000", "Wrong conversion")
+    }
+    
+
 
 }

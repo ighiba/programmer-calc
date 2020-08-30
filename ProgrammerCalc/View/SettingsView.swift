@@ -58,7 +58,7 @@ extension SettingsView: UITableViewDataSource {
         if section == 1 {
             let label = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 50))
             // Version label
-            label.text = "Programmer Calc 0.6.7"
+            label.text = "Programmer Calc 0.6.8"
             label.font = UIFont.systemFont(ofSize: 16, weight: .thin)
             label.textAlignment = .center
             
