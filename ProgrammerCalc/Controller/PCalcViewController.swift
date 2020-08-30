@@ -62,6 +62,16 @@ class PCalcViewController: UIPageViewController {
         
         // set start vc
         setViewControllers([arrayCalcButtonsViewController[1]], direction: .forward, animated: false, completion: nil)
+        
+        // Update states and layout
+        
+        updateConversionState()
+        handleConversion()
+
+        // update layout (handle button state and etc)
+        updateAllLayout()
+        // update displaying of mainLabel
+        handleDisplayingMainLabel()
     }
     
     required init?(coder: NSCoder) {
@@ -83,20 +93,11 @@ class PCalcViewController: UIPageViewController {
         arrayButtonsStack.append(additionalButtons)
         arrayButtonsStack.append(mainButtons)
         
-        // set view from PCalcView
+        // add view from PCalcView
         self.view.addSubview(calcView)
-        //self.view = calcView
         
         // get state from UserDefaults
         getCalcState()
-
-        updateConversionState()
-        handleConversion()
-
-        // update layout (handle button state and etc)
-        updateAllLayout()
-        // update displaying of mainLabel
-        handleDisplayingMainLabel()
 
     }
     
