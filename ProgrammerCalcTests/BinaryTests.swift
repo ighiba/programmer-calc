@@ -200,6 +200,7 @@ class BinaryTests: XCTestCase {
     func testBinaryConvertDoubleTo() throws {
         // 1. given
         SavedData.calcState = unsignedData
+        SavedData.conversionSettings = ConversionSettingsModel(systMain: "Decimal", systConverter: "binary", number: 8.0)
         let binaryInt: Binary.IntPart = "12"
         let binaryFract: Binary.FractPart = "25"
 

@@ -51,6 +51,21 @@ class ProgrammerCalcUITests: XCTestCase {
         XCTAssertTrue(aboutAppRow.exists)
         XCTAssertTrue(contactUsRow.exists)
     }
+    
+    func testConversionSettingsButton() throws {
+        // 1. given
+        let changeConversionButton = app.navigationBars.buttons["Change conversion"]
+        let maxNumberOfDigitsAfterPointStaticText = app.staticTexts["Max number of digits after point: "]
+        let containerHeader = app.staticTexts["Conversion settings"]
+        let doneButton = app.buttons["Done"]
+        
+        // 2. then
+        changeConversionButton.tap()
+        XCTAssertTrue(maxNumberOfDigitsAfterPointStaticText.exists)
+        XCTAssertTrue(containerHeader.exists)
+        XCTAssertTrue(doneButton.exists)
+        doneButton.tap()
+    }
 
     func testLaunchPerformance() throws {
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, *) {
