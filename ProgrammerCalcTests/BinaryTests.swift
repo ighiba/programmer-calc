@@ -56,7 +56,6 @@ class BinaryTests: XCTestCase {
         SavedData.calcState = signedData
         
         // 2. when
-        
         binaryTest = Binary(stringLiteral: binaryStrInput)
         
         // 3. then
@@ -147,6 +146,32 @@ class BinaryTests: XCTestCase {
 
         // 3. then
         XCTAssertEqual(binaryTest.value, "0000000010011001", "Digit not appended")
+    }
+    
+    func testBinaryToDecSignedPlus() throws {
+        // 1. given
+        SavedData.calcState = signedData
+        binaryTest = Binary(stringLiteral: binaryStrInput)
+        
+        // 2. when
+        let decValue = Decimal(binaryTest)
+        
+        // 3. then
+        XCTAssertEqual(decValue, 12, "Wrong conversion")
+    }
+
+    func testBinaryToDecSignedMinus() throws {
+        // 1. given
+        SavedData.calcState = signedData
+        binaryTest = Binary(stringLiteral: binaryStrInput)
+        binaryTest.changeSignedBit(to: "1")
+        binaryTest.updateSignedState()
+        
+        // 2. when
+        let decValue = Decimal(binaryTest)
+        
+        // 3. then
+        XCTAssertEqual(decValue, -12, "Wrong conversion")
     }
 
 }
