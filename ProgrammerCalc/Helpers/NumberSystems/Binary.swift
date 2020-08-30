@@ -116,7 +116,7 @@ class Binary: NumberSystem {
             // if .processSigned == true
             if data {
                 // calcualte signed state
-                updateSignedState(for: binary) // changes binary.isSigned state to true of false
+                binary.updateSignedState() // changes binary.isSigned state to true of false
                 
                 // remove signed bit
                 binIntStrBuff?.removeFirst()
@@ -171,6 +171,14 @@ class Binary: NumberSystem {
         let binary = self
         let hexadecimal = Hexadecimal()
         
+        // handle signed values
+        // TODO: Refactor to closure
+        if let data = SavedData.calcState?.processSigned {
+            if data {
+                binary.changeSignedBit(to: "0")
+            }
+        }
+        
         
         let partition: Int = 4
         
@@ -178,12 +186,19 @@ class Binary: NumberSystem {
         
         var dividedBinary = divideIntFract(value: binary.value)
         
-        // fill up to 3 digit in int part
+        // fill up to 3 or 4 digit in int part
         dividedBinary.0 = fillUpParts(str: dividedBinary.0!, by: partition)
         
         // from binary to oct
         // process each number and form parts
         hexadecimal.value = tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: hexTable)
+        
+        // add minus if signed
+        if let data = SavedData.calcState?.processSigned {
+            if data && binary.isSigned {
+                hexadecimal.value = "-" + hexadecimal.value
+            }
+        }
         
         guard dividedBinary.1 != nil else {
             
@@ -481,7 +496,7 @@ class Binary: NumberSystem {
                 binary.fillToFormat(upToZeros: true)
                 
                 // calcualte signed state
-                updateSignedState(for: binary) // changes binary.isSigned state to true of false
+                binary.updateSignedState() // changes binary.isSigned state to true of false
                 
                 // remove signed bit
                 binary.value.removeFirst()
@@ -528,12 +543,27 @@ class Binary: NumberSystem {
     }
     
     // updating is signed state of binary
-    func updateSignedState(for binary: Binary) {
+    func updateSignedState() {
+        let binary = self
         if binary.value.first == "1" {
             binary.isSigned = true
         } else {
             binary.isSigned = false
         }
+    }
+    
+    // change leftiest bit (signed) to needed value and update state
+    func changeSignedBit(to bit: Character) {
+        let binary = self
+        
+        // if invalid input then do nothing
+        guard (bit == "0") || (bit == "1") else {return}
+        
+        // remove leftiest bit
+        binary.value.removeFirst()
+        // add left bit
+        binary.value = "\(bit)\(binary.value)"
+        
     }
     
     // filling up signed binary to power 2^3, 2^4 .. etc
@@ -583,7 +613,7 @@ class Binary: NumberSystem {
             // if .processSigned == true
             if data {
                 // calcualte signed state
-                updateSignedState(for: binary) // changes binary.isSigned state to true of false
+                binary.updateSignedState() // changes binary.isSigned state to true of false
                 
                 // remove signed bit
                 binary.value.removeFirst()

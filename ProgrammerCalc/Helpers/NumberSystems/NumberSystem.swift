@@ -69,7 +69,7 @@ class NumberSystem: ExpressibleByStringLiteral {
     
     // Parsing tables dictionary hex or oct for converting to bin
     func tableOctHexToBin( valueOctHex: String, table: [String : String]) -> String {
-        var resultStr = String()
+        let resultBin = Binary()
         
         // from hex or oct to binary
         // process each number and form parts
@@ -78,17 +78,25 @@ class NumberSystem: ExpressibleByStringLiteral {
                 for (key, value) in table {
                     if "\(num)" == value {
                         // append balue from table
-                        resultStr.append("\(key)")
+                        resultBin.value.append("\(key)")
                         break
                     }
                 }
             } else {
                 // append .
-                resultStr.append(num)
+                resultBin.value.append(num)
+            }
+        }
+       
+        // process signed values
+        if let data = SavedData.calcState?.processSigned {
+            if data {
+                // add zeros before to fill 8, 16, 32, 64 bits
+                resultBin.fillUpSignedToNeededCount()
             }
         }
         
-        return resultStr
+        return resultBin.value
     }
     
     // Parsing tables dictionary bin for converting to hex or oct

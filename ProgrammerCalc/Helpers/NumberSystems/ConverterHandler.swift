@@ -16,10 +16,6 @@ import Foundation
     
     // Main function for conversion values
     func convertValue(value valueStr: String, from mainSystem: String, to converterSystem: String) -> String? {
-        // exit if systems are equal except binary
-//        guard mainSystem != converterSystem && mainSystem != "Binary" else {
-//            return valueStr
-//        }
         
         // =======================================
         // First step: convert any value to binary
@@ -55,17 +51,12 @@ import Foundation
         case "Decimal":
             // convert dec to binary
             partition = 4
-            
-            
             let dec = Decimal(string: anyStr)!
-            
-            
             binary = Binary(dec)
             break
         case "Hexadecimal":
             // convert hex to binary
             partition = 4
-            
             let hex = Hexadecimal(stringLiteral: anyStr)
             binary = Binary(hex)
             break
