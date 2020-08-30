@@ -31,6 +31,7 @@
 		C06B7F132443B12E009642B9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C06B7F112443B12E009642B9 /* LaunchScreen.storyboard */; };
 		C06B7F1E2443B12E009642B9 /* ProgrammerCalcTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F1D2443B12E009642B9 /* ProgrammerCalcTests.swift */; };
 		C06B7F292443B12E009642B9 /* ProgrammerCalcUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F282443B12E009642B9 /* ProgrammerCalcUITests.swift */; };
+		C06DFD5D24FC22C600255646 /* BinaryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06DFD5C24FC22C600255646 /* BinaryTests.swift */; };
 		C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C070ED2324DB0EC800A04463 /* SettingsViewController.swift */; };
 		C070ED2624DB0ED400A04463 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C070ED2524DB0ED400A04463 /* SettingsView.swift */; };
 		C07267DD24E5ACB300D4B4A2 /* Binary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07267DC24E5ACB300D4B4A2 /* Binary.swift */; };
@@ -88,6 +89,7 @@
 		C06B7F242443B12E009642B9 /* ProgrammerCalcUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ProgrammerCalcUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C06B7F282443B12E009642B9 /* ProgrammerCalcUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerCalcUITests.swift; sourceTree = "<group>"; };
 		C06B7F2A2443B12E009642B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C06DFD5C24FC22C600255646 /* BinaryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryTests.swift; sourceTree = "<group>"; };
 		C070ED2324DB0EC800A04463 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		C070ED2524DB0ED400A04463 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		C07267DC24E5ACB300D4B4A2 /* Binary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binary.swift; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				C06B7F1D2443B12E009642B9 /* ProgrammerCalcTests.swift */,
+				C06DFD5C24FC22C600255646 /* BinaryTests.swift */,
 				C06B7F1F2443B12E009642B9 /* Info.plist */,
 			);
 			path = ProgrammerCalcTests;
@@ -434,6 +437,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C06DFD5D24FC22C600255646 /* BinaryTests.swift in Sources */,
 				C06B7F1E2443B12E009642B9 /* ProgrammerCalcTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

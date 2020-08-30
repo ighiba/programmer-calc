@@ -480,9 +480,7 @@ class PCalcViewController: UIPageViewController {
             }
         }
         
-        
         // Update value in converter label
-        
         if buttonText != "." {
             updateConverterLabel()
         }
