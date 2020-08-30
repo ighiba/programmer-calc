@@ -112,20 +112,17 @@ class Binary: NumberSystem {
         var signedMultipler: Decimal = 1 // default is unsigned value
         
         // First: converting int part
-        if let data = SavedData.calcState?.processSigned {
-            // if .processSigned == true
-            if data {
-                // calcualte signed state
-                binary.updateSignedState() // changes binary.isSigned state to true of false
-                
-                // remove signed bit
-                binIntStrBuff?.removeFirst()
-                // set multipler to -1 or 1 for inverting value
-                if binary.isSigned {
-                    signedMultipler = -1
-                } else {
-                    signedMultipler = 1
-                }
+        ifProcessSigned {
+            // calcualte signed state
+            binary.updateSignedState() // changes binary.isSigned state to true of false
+            
+            // remove signed bit
+            binIntStrBuff?.removeFirst()
+            // set multipler to -1 or 1 for inverting value
+            if binary.isSigned {
+                signedMultipler = -1
+            } else {
+                signedMultipler = 1
             }
         }
         
@@ -172,13 +169,10 @@ class Binary: NumberSystem {
         let hexadecimal = Hexadecimal()
         
         // handle signed values
-        // TODO: Refactor to closure
-        if let data = SavedData.calcState?.processSigned {
-            if data {
-                // update signed state and change signed bit to 0
-                binary.updateSignedState()
-                binary.changeSignedBit(to: "0")
-            }
+        ifProcessSigned {
+            // update signed state and change signed bit to 0
+            binary.updateSignedState()
+            binary.changeSignedBit(to: "0")
         }
    
         let partition: Int = 4
@@ -195,8 +189,8 @@ class Binary: NumberSystem {
         hexadecimal.value = tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: hexTable)
         
         // add minus if signed
-        if let data = SavedData.calcState?.processSigned {
-            if data && binary.isSigned {
+        ifProcessSigned {
+            if binary.isSigned {
                 hexadecimal.value = "-" + hexadecimal.value
             }
         }
@@ -236,10 +230,7 @@ class Binary: NumberSystem {
         // process each number and form parts
         octal.value = tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: octTable)
         
-        guard dividedBinary.1 != nil else {
-            
-            return octal
-        }
+        guard dividedBinary.1 != nil else { return octal }
         
         // fill up to 3 digit in fract part
         dividedBinary.1 = String(dividedBinary.1!.reversed())
@@ -293,7 +284,6 @@ class Binary: NumberSystem {
         return resultStr
     }
     
-    
     // Combine to parts to double string
     func convertDoubleToBinaryStr( numberStr: (IntPart?, FractPart?)) -> String {
         
@@ -314,7 +304,7 @@ class Binary: NumberSystem {
         return "\(intPart).\(fractPart)"
     }
     
-    // filling up BINARY number with zeros by num of zeros in 1 part
+    // Filling up BINARY number with zeros by num of zeros in 1 part
     func fillUpParts( str: String, by fillNum: Int) -> String {
         // remove all spaces
         var buffStr = removeAllSpaces(str: str)
@@ -446,7 +436,7 @@ class Binary: NumberSystem {
     }
     
     
-    // fill up to needed format
+    // Fill up to needed format
     func fillToFormat( upToZeros signed:Bool) {
         let binary = self
         

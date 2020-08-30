@@ -57,26 +57,24 @@ extension Decimal {
 
         }
         
-        if let data = SavedData.calcState?.processSigned {
-            if data {
-                let splittedBinaryStr = binary.divideIntFract(value: binary.value)
-                
-                if let intPart = splittedBinaryStr.0 {
-                    binary.value = intPart
-                    // remove zeros
-                    binary.value = binary.removeZerosBefore(str: binary.value)
-                    // set signed state to binary
-                    binary.isSigned = isDecSigned
-                    // fill up to signed binary style
-                    binary.fillUpSignedToNeededCount()
-                }
-                
-                // add fract part if exists
-                if let fractPart = splittedBinaryStr.1 {
-                    binary.value = "\(binary.value).\(fractPart)"
-                }
-
-            } 
+        // process signed from UserDefaults
+        binary.ifProcessSigned {
+            let splittedBinaryStr = binary.divideIntFract(value: binary.value)
+            
+            if let intPart = splittedBinaryStr.0 {
+                binary.value = intPart
+                // remove zeros
+                binary.value = binary.removeZerosBefore(str: binary.value)
+                // set signed state to binary
+                binary.isSigned = isDecSigned
+                // fill up to signed binary style
+                binary.fillUpSignedToNeededCount()
+            }
+            
+            // add fract part if exists
+            if let fractPart = splittedBinaryStr.1 {
+                binary.value = "\(binary.value).\(fractPart)"
+            }
         }
         
         return binary

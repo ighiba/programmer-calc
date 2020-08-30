@@ -89,11 +89,10 @@ class NumberSystem: ExpressibleByStringLiteral {
         }
        
         // process signed values
-        if let data = SavedData.calcState?.processSigned {
-            if data {
-                // add zeros before to fill 8, 16, 32, 64 bits
-                resultBin.fillUpSignedToNeededCount()
-            }
+        ifProcessSigned {
+            // add zeros before to fill 8, 16, 32, 64 bits
+            resultBin.fillUpSignedToNeededCount()
+            
         }
         
         return resultBin.value
@@ -145,5 +144,14 @@ class NumberSystem: ExpressibleByStringLiteral {
             }
         }
         return buffStr
+    }
+    
+    func ifProcessSigned(closure: () -> Void) {
+        // process signed
+        if let data = SavedData.calcState?.processSigned {
+            if data{
+                closure()
+            }
+        }
     }
 }
