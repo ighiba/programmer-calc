@@ -33,7 +33,6 @@ class ProgrammerCalcUITests: XCTestCase {
     }
 
     func testSettingsButton() throws {
-
         // 1. given
         let settingsButton = app.navigationBars.buttons["⚙︎"]
         let tablesQuery = app.tables
@@ -52,7 +51,7 @@ class ProgrammerCalcUITests: XCTestCase {
         XCTAssertTrue(contactUsRow.exists)
     }
     
-    func testConversionSettingsButton() throws {
+    func testChangeConversionButton() throws {
         // 1. given
         let changeConversionButton = app.navigationBars.buttons["Change conversion"]
         let maxNumberOfDigitsAfterPointStaticText = app.staticTexts["Max number of digits after point: "]
