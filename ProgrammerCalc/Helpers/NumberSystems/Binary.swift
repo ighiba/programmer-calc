@@ -195,10 +195,7 @@ class Binary: NumberSystem {
             }
         }
         
-        guard dividedBinary.1 != nil else {
-            
-            return hexadecimal
-        }
+        guard dividedBinary.1 != nil else { return hexadecimal }
         
         // fill up to 3 digit in fract part
         dividedBinary.1 = String(dividedBinary.1!.reversed())
@@ -219,7 +216,12 @@ class Binary: NumberSystem {
          
         let partition: Int = 3
          
-        // TODO: Remove spaces
+        // handle signed values
+        ifProcessSigned {
+            // update signed state and change signed bit to 0
+            binary.updateSignedState()
+            binary.changeSignedBit(to: "0")
+        }
         
         var dividedBinary = divideIntFract(value: binary.value)
         
@@ -229,6 +231,13 @@ class Binary: NumberSystem {
         // from binary to oct
         // process each number and form parts
         octal.value = tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: octTable)
+        
+        // add minus if signed
+        ifProcessSigned {
+            if binary.isSigned {
+                octal.value = "-" + octal.value
+            }
+        }
         
         guard dividedBinary.1 != nil else { return octal }
         

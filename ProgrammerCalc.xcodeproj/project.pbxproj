@@ -16,6 +16,7 @@
 		C0635A7924D9E0F6003855A9 /* ConversionPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */; };
 		C0635A7B24D9E2AA003855A9 /* ConversionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0635A7A24D9E2AA003855A9 /* ConversionModel.swift */; };
 		C064A3AA24FD55B8003DE683 /* HexadecimalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C064A3A924FD55B8003DE683 /* HexadecimalTests.swift */; };
+		C064A3AE24FD5B13003DE683 /* OctalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C064A3AD24FD5B13003DE683 /* OctalTests.swift */; };
 		C065DB3C24E3DC4F0059B38D /* CalcMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C065DB3B24E3DC4F0059B38D /* CalcMath.swift */; };
 		C065DB3E24E41E610059B38D /* CalcState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C065DB3D24E41E610059B38D /* CalcState.swift */; };
 		C0666EB824F97774004809EF /* CalcButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0666EB724F97774004809EF /* CalcButtonsViewController.swift */; };
@@ -69,6 +70,7 @@
 		C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionPicker.swift; sourceTree = "<group>"; };
 		C0635A7A24D9E2AA003855A9 /* ConversionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionModel.swift; sourceTree = "<group>"; };
 		C064A3A924FD55B8003DE683 /* HexadecimalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexadecimalTests.swift; sourceTree = "<group>"; };
+		C064A3AD24FD5B13003DE683 /* OctalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OctalTests.swift; sourceTree = "<group>"; };
 		C065DB3B24E3DC4F0059B38D /* CalcMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcMath.swift; sourceTree = "<group>"; };
 		C065DB3D24E41E610059B38D /* CalcState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcState.swift; sourceTree = "<group>"; };
 		C0666EB724F97774004809EF /* CalcButtonsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcButtonsViewController.swift; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 				C06B7F1D2443B12E009642B9 /* ProgrammerCalcTests.swift */,
 				C06DFD5C24FC22C600255646 /* BinaryTests.swift */,
 				C064A3A924FD55B8003DE683 /* HexadecimalTests.swift */,
+				C064A3AD24FD5B13003DE683 /* OctalTests.swift */,
 				C06B7F1F2443B12E009642B9 /* Info.plist */,
 			);
 			path = ProgrammerCalcTests;
@@ -441,6 +444,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C06DFD5D24FC22C600255646 /* BinaryTests.swift in Sources */,
+				C064A3AE24FD5B13003DE683 /* OctalTests.swift in Sources */,
 				C064A3AA24FD55B8003DE683 /* HexadecimalTests.swift in Sources */,
 				C06B7F1E2443B12E009642B9 /* ProgrammerCalcTests.swift in Sources */,
 			);
