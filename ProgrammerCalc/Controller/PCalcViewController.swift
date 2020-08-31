@@ -355,7 +355,6 @@ class PCalcViewController: UIPageViewController {
     }
     
     // Numeric buttons actions
-    
     @objc func numericButtonTapped( sender: UIButton) {
         let button = sender
         let buttonText = button.titleLabel!.text ?? ""
@@ -447,7 +446,6 @@ class PCalcViewController: UIPageViewController {
                     break
                 }
             }
-            
         } else {
 
             if isOverflowed {
@@ -479,7 +477,6 @@ class PCalcViewController: UIPageViewController {
                 break
             }
         }
-        
         // Update value in converter label
         if buttonText != "." {
             updateConverterLabel()
@@ -584,7 +581,6 @@ class PCalcViewController: UIPageViewController {
         default:
             break
         }
-        
     }
     
     // Signed OFF/ON button
@@ -648,7 +644,6 @@ class PCalcViewController: UIPageViewController {
         default:
             break
         }
-        
         // update all labels
         updateMainLabel()
         updateConverterLabel()

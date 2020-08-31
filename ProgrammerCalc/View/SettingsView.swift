@@ -26,7 +26,7 @@ class SettingsView: UITableView {
     
 }
 
-extension SettingsView: UITableViewDataSource {
+extension SettingsView: UITableViewDataSource, UITableViewDelegate {
     
     // Number of sections
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -74,9 +74,5 @@ extension SettingsView: UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-}
-
-extension SettingsView: UITableViewDelegate {
-
 }
 

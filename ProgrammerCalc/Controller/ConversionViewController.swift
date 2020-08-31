@@ -9,16 +9,16 @@
 import UIKit
 
 class ConversionViewController: UIViewController {
-    lazy var conv = ConversionView()
-    lazy var picker: ConversionPicker = conv.mainPicker
-    lazy var slider: UISlider = conv.digitsAfterSlider
-    lazy var labelValue: UILabel = conv.sliderValueDigit
+    lazy var conversionView = ConversionView()
+    lazy var picker: ConversionPicker = conversionView.mainPicker
+    lazy var slider: UISlider = conversionView.digitsAfterSlider
+    lazy var labelValue: UILabel = conversionView.sliderValueDigit
     var sliderOldValue: Float = 2.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view = conv
+        self.view = conversionView
         
         // tap outside popup(container)
         let tap = UITapGestureRecognizer(target: self, action: #selector(tappedOutside))
@@ -32,7 +32,7 @@ class ConversionViewController: UIViewController {
         // load data from UserDefaults to picker and slider
         getConversionSettings()
         // animate popover
-        conv.animateIn()
+        conversionView.animateIn()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -118,7 +118,7 @@ class ConversionViewController: UIViewController {
     // ViewConvtroller dismissing
     fileprivate func dismissVC() {
         // anation
-        conv.animateOut {
+        conversionView.animateOut {
             self.dismiss(animated: false, completion: nil)
         }
     }
@@ -133,9 +133,9 @@ class ConversionViewController: UIViewController {
     }
     
     @objc func tappedOutside( touch: UITouch) {
-        conv.container.updateConstraints()
-        let currentLocation: CGPoint = touch.location(in: conv.container)
-        let containerBounds: CGRect = conv.container.bounds
+        conversionView.container.updateConstraints()
+        let currentLocation: CGPoint = touch.location(in: conversionView.container)
+        let containerBounds: CGRect = conversionView.container.bounds
         let inContainer: Bool = containerBounds.contains(currentLocation)
         
         if inContainer {
