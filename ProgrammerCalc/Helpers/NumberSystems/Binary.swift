@@ -643,4 +643,26 @@ class Binary: NumberSystem {
         }  
     }
     
+    // inverting binary
+    func invert() {
+        let binary = self
+        var buffStr = String()
+        
+        // process each bit
+        binary.value.forEach { (bit) in
+            switch bit {
+            case "0":
+                buffStr.append("1")
+                break
+            case "1":
+                buffStr.append("0")
+                break
+            default:
+                buffStr.append(bit)
+                break
+            }
+        }
+        // apply inversion
+        binary.value = buffStr
+    }
 }
