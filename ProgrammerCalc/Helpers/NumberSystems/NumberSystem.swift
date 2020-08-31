@@ -90,6 +90,11 @@ class NumberSystem: ExpressibleByStringLiteral {
        
         // process signed values
         ifProcessSigned {
+            // if octhex is negative
+            if valueOctHex.contains("-") {
+                resultBin.isSigned = true
+            }
+            
             // add zeros before to fill 8, 16, 32, 64 bits
             resultBin.fillUpSignedToNeededCount()
             
