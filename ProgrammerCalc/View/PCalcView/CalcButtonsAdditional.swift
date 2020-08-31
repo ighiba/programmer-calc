@@ -76,8 +76,8 @@ class CalcButtonsAdditional: UIView {
         
         let allTitles = ["AND","OR","XOR","NOR",
                          "X<<Y", "X>>Y", "<<", ">>",
-                         "D", "E", "F", "Adt.\ncode",
-                         "A", "B", "C", "Rev.\ncode",
+                         "D", "E", "F", "1's",
+                         "A", "B", "C", "2's",
                          "00", "FF"]
                     
         var buttonLabel: Int = 9
@@ -92,8 +92,12 @@ class CalcButtonsAdditional: UIView {
             case "A","B","C","D","E","F","00","FF":
                 button.setActions(for: .numeric)
                 break
+            // TODO: Localization
+            case "1's", "2's":
+                button.setActions(for: .complement)
+                break
             default:
-                button.setActions(for: .sign)
+                button.setActions(for: .logical)
                 break
             }
             

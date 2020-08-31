@@ -17,6 +17,7 @@ class CalculatorButton: UIButton {
         case numeric
         case sign
         case logical
+        case complement
     }
     
     // ==================
@@ -102,6 +103,8 @@ class CalculatorButton: UIButton {
                 self.addTarget(nil, action: #selector(PCalcViewController.numericButtonTapped), for: .touchUpInside)
         case .sign:
             self.addTarget(nil, action: #selector(PCalcViewController.signButtonTapped), for: .touchUpInside)
+        case .complement:
+            self.addTarget(nil, action: #selector(PCalcViewController.complementButtonTapped), for: .touchUpInside)
         default:
             break
         }
