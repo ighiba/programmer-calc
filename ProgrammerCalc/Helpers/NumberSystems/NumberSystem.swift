@@ -48,10 +48,8 @@ class NumberSystem: ExpressibleByStringLiteral {
         if let pointPos = str.firstIndex(of: ".") {
             // fill strInt
             strInt = String(str[str.startIndex..<pointPos])
-            
             // fill strFract
             strFract = String(str[pointPos..<str.endIndex])
-            
             // delete .
             strFract.removeFirst()
            
@@ -94,10 +92,8 @@ class NumberSystem: ExpressibleByStringLiteral {
             if valueOctHex.contains("-") {
                 resultBin.isSigned = true
             }
-            
             // add zeros before to fill 8, 16, 32, 64 bits
             resultBin.fillUpSignedToNeededCount()
-            
         }
         
         return resultBin.value

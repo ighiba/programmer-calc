@@ -15,7 +15,7 @@ import Foundation
     // ===============
     
     // Main function for conversion values
-    func convertValue(value valueStr: String, from mainSystem: String, to converterSystem: String) -> String? {
+    public func convertValue(value valueStr: String, from mainSystem: String, to converterSystem: String) -> String? {
         
         // =======================================
         // First step: convert any value to binary
@@ -103,5 +103,33 @@ import Foundation
         }
         
         return targetStr
+    }
+    
+    // Convert value to one's complement
+    public func toOnesComplement( valueStr: String, mainSystem: String) -> String {
+        var resultStr = String()
+        let binary = Binary()
+        var signedBit = String()
+        
+        // convert to Binary
+        binary.value = convertValue(value: valueStr, from: mainSystem, to: "Binary") ?? "0"
+        // delete signed bit if exist
+        binary.ifProcessSigned {
+            signedBit = String(binary.value.first!)
+            binary.value.removeFirst()
+        }
+        // invert binary
+        binary.invert()
+        // return signed bit if exists
+        binary.value = signedBit + binary.value
+        // convert to mainSystem
+        resultStr = convertValue(value: binary.value, from: "Binary", to: mainSystem) ?? "0"
+    
+        return resultStr
+    }
+    
+    // Convert value to two's complement
+    public func toTwosComplement( valueStr: String) -> String {
+        return ""
     }
 }

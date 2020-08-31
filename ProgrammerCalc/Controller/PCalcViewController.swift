@@ -488,7 +488,6 @@ class PCalcViewController: UIPageViewController {
     }
     
     // Sign buttons actions
-    
     @objc func signButtonTapped( sender: UIButton) {
         let button = sender
         let buttonText = button.titleLabel!.text ?? ""
@@ -632,8 +631,30 @@ class PCalcViewController: UIPageViewController {
         navigationController.setViewControllers([vc], animated: false)
         self.present(navigationController, animated: true)
     }
-
+    
+    // 1's or 2's button tapped
+    @objc func complementButtonTapped( sender: UIButton) {
+        let buttonLabel = sender.titleLabel?.text
+        // switch complements
+        switch buttonLabel {
+        case "1's":
+            // TODO: Error handling
+            mainLabel.text = converterHandler.toOnesComplement(valueStr: mainLabel.text!, mainSystem: systemMain!)
+            break
+        case "2's":
+            //converterHandler.toTwosComplement()
+            break
+        default:
+            break
+        }
+        
+        // update all labels
+        updateMainLabel()
+        updateConverterLabel()
+    }
 }
+
+
 
 // =================
 // MARK: - Extension
