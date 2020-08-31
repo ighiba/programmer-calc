@@ -220,6 +220,18 @@ class BinaryTests: XCTestCase {
         XCTAssertEqual(binaryTest.value, "1100", "Wrong conversion")
     }
     
+    func testBinaryInvert() throws {
+        // 1. given
+        SavedData.calcState = signedData
+        binaryTest = Binary(stringLiteral: binaryStrInput)
+        
+        // 2. when
+        binaryTest.invert()
+        
+        // 3. then
+        XCTAssertEqual(binaryTest.value, "11110011", "Wrong inversion")
+    }
+    
 
 
 }
