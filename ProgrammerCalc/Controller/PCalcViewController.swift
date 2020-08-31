@@ -642,7 +642,8 @@ class PCalcViewController: UIPageViewController {
             mainLabel.text = converterHandler.toOnesComplement(valueStr: mainLabel.text!, mainSystem: systemMain!)
             break
         case "2's":
-            //converterHandler.toTwosComplement()
+            // TODO: Error handling
+            mainLabel.text = converterHandler.toTwosComplement(valueStr: mainLabel.text!, mainSystem: systemMain!)
             break
         default:
             break
