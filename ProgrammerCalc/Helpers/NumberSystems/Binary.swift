@@ -425,12 +425,16 @@ class Binary: NumberSystem {
     private func fillUpZeros( str: String, to num: Int) -> String {
         let diffInt = num - str.count
         
+        guard diffInt > 0 else {return str}
+        
         return String(repeating: "0", count: diffInt) + str
     }
     
     // Filling up zeros to needed count
     private func fillUpOne( str: String, to num: Int) -> String {
         let diffInt = num - str.count
+        
+        guard diffInt > 0 else {return str}
         
         return String(repeating: "1", count: diffInt) + str
     }
