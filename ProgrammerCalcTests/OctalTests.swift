@@ -1,5 +1,5 @@
 //
-//  HexadecimalTests.swift
+//  OctalTests.swift
 //  ProgrammerCalcTests
 //
 //  Created by Ivan Ghiba on 31.08.2020.
