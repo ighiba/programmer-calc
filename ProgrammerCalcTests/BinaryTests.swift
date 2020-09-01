@@ -206,7 +206,7 @@ class BinaryTests: XCTestCase {
         // 2. when
         binaryTest.value = binaryTest.convertDoubleToBinaryStr(numberStr: (binaryInt, binaryFract))
         // 3. then
-        XCTAssertEqual(binaryTest.value, "1100.01000000", "Wrong conversion")
+        XCTAssertEqual(binaryTest.value, "01100.01000000", "Wrong conversion")
     }
     
     func testConvertIntToBinary() throws {
@@ -217,7 +217,7 @@ class BinaryTests: XCTestCase {
         // 2. when
         binaryTest.value = binaryTest.convertIntToBinary(intValue)
         // 3. then
-        XCTAssertEqual(binaryTest.value, "1100", "Wrong conversion")
+        XCTAssertEqual(binaryTest.value, "01100", "Wrong conversion")
     }
     
     func testBinaryInvert() throws {
