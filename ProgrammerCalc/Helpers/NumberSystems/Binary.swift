@@ -258,7 +258,7 @@ class Binary: NumberSystem {
         
         //binaryStr = fillingStyleResult(for: binaryStr)
 
-        return String(valueInt, radix: 2)
+        return "0" + String(valueInt, radix: 2)
     }
     
     // Converting FractPart of Floating point binary
