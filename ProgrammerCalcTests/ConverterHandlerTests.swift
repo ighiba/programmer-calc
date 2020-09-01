@@ -121,7 +121,7 @@ class ConverterHandlerTests: XCTestCase {
         let convertedStr = converterHandlerTest.shiftBits(value: binary.value, mainSystem: "Binary", shiftOperation: >>, shiftCount: 1)
         
         // 3. then
-        XCTAssertEqual(convertedStr, "0110", "Failed shifting left")
+        XCTAssertEqual(convertedStr, "0110", "Failed shifting right")
     }
     
     func testBitwiseShiftRightSigned() throws {
@@ -133,6 +133,54 @@ class ConverterHandlerTests: XCTestCase {
         let convertedStr = converterHandlerTest.shiftBits(value: binary.value, mainSystem: "Binary", shiftOperation: >>, shiftCount: 1)
         
         // 3. then
-        XCTAssertEqual(convertedStr, "1000 0110", "Failed shifting left")
+        XCTAssertEqual(convertedStr, "1000 0110", "Failed shifting right")
+    }
+    
+    func testBitwiseShiftTwelveRightUnsigned() throws {
+        // 1. given
+        SavedData.calcState = unsignedData
+        let binary = Binary(stringLiteral: binaryStrInput) // 12
+        
+        // 2. when
+        let convertedStr = converterHandlerTest.shiftBits(value: binary.value, mainSystem: "Binary", shiftOperation: <<, shiftCount: 12)
+        
+        // 3. then
+        XCTAssertEqual(convertedStr, "1100 0000 0000 0000", "Failed shifting 12 left")
+    }
+    
+    func testBitwiseShiftTwoRightUnsigned() throws {
+        // 1. given
+        SavedData.calcState = unsignedData
+        let binary = Binary(stringLiteral: binaryStrInput) // 12
+        
+        // 2. when
+        let convertedStr = converterHandlerTest.shiftBits(value: binary.value, mainSystem: "Binary", shiftOperation: >>, shiftCount: 2)
+        
+        // 3. then
+        XCTAssertEqual(convertedStr, "0011", "Failed shifting 2 right")
+    }
+    
+    func testBitwiseShiftTwelveLeftSigned() throws {
+        // 1. given
+        SavedData.calcState = signedData
+        let binary = Binary(stringLiteral: binaryStrInput) // 12
+        
+        // 2. when
+        let convertedStr = converterHandlerTest.shiftBits(value: binary.value, mainSystem: "Binary", shiftOperation: <<, shiftCount: 12)
+        
+        // 3. then
+        XCTAssertEqual(convertedStr, "0000 0000 0000 0000 1100 0000 0000 0000", "Failed shifting 12 left")
+    }
+    
+    func testBitwiseShiftTwoRightSigned() throws {
+        // 1. given
+        SavedData.calcState = signedData
+        let binary = Binary(stringLiteral: binaryStrInput) // 12
+        
+        // 2. when
+        let convertedStr = converterHandlerTest.shiftBits(value: binary.value, mainSystem: "Binary", shiftOperation: >>, shiftCount: 2)
+        
+        // 3. then
+        XCTAssertEqual(convertedStr, "0000 0011", "Failed shifting 2 right")
     }
 }
