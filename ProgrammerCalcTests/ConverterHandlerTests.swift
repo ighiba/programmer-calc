@@ -111,4 +111,28 @@ class ConverterHandlerTests: XCTestCase {
         // 3. then
         XCTAssertEqual(convertedStr, "1001 1000", "Failed shifting left")
     }
+    
+    func testBitwiseShiftRightUnsigned() throws {
+        // 1. given
+        SavedData.calcState = unsignedData
+        let binary = Binary(stringLiteral: binaryStrInput)
+        
+        // 2. when
+        let convertedStr = converterHandlerTest.shiftBits(value: binary.value, mainSystem: "Binary", shiftOperation: >>, shiftCount: 1)
+        
+        // 3. then
+        XCTAssertEqual(convertedStr, "0110", "Failed shifting left")
+    }
+    
+    func testBitwiseShiftRightSigned() throws {
+        // 1. given
+        SavedData.calcState = signedData
+        let binary = Binary(stringLiteral: "10001100") // -12
+        
+        // 2. when
+        let convertedStr = converterHandlerTest.shiftBits(value: binary.value, mainSystem: "Binary", shiftOperation: >>, shiftCount: 1)
+        
+        // 3. then
+        XCTAssertEqual(convertedStr, "1000 0110", "Failed shifting left")
+    }
 }
