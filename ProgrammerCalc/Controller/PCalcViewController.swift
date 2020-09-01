@@ -648,6 +648,33 @@ class PCalcViewController: UIPageViewController {
         updateMainLabel()
         updateConverterLabel()
     }
+    
+    // Bitwise operations
+    @objc func bitwiseButtonTapped( sender: UIButton) {
+        let buttonLabel = sender.titleLabel?.text
+        
+        // if float then exit
+        guard !mainLabel.text!.contains(".") else {return}
+        
+        // swtch binary operation cases
+        switch buttonLabel {
+        case "X<<Y":
+            break
+        case "X>>Y":
+            break
+        case "<<":
+            // TODO: Error handling
+            mainLabel.text = converterHandler.shiftLeft(valueStr: mainLabel.text!, mainSystem: systemMain!)
+            break
+        case ">>":
+            break
+        default:
+            break
+        }
+        // update all labels
+        updateMainLabel()
+        updateConverterLabel()
+    }
 }
 
 

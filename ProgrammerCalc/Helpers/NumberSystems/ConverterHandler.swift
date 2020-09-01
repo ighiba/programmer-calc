@@ -159,4 +159,21 @@ import Foundation
     
         return resultStr
     }
+    
+    
+    // Shift left 1 bit
+    public func shiftLeft( valueStr: String, mainSystem: String) -> String {
+        // convert to Decimal
+        let decimalStr = convertValue(value: valueStr, from: mainSystem, to: "Decimal") ?? "0"
+        // TODO: Error handling
+        let decimal = Int(decimalStr) ?? 0
+        
+        // shift left by 1 bit
+        var resultStr = String(decimal << 1)
+        
+        // convert to mainSystem
+        resultStr = convertValue(value: resultStr, from: "Decimal", to: mainSystem) ?? "0"
+    
+        return resultStr
+    }
 }

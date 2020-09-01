@@ -18,6 +18,7 @@ class CalculatorButton: UIButton {
         case sign
         case logical
         case complement
+        case bitwise
     }
     
     // ==================
@@ -101,18 +102,24 @@ class CalculatorButton: UIButton {
         switch buttonType {
         case .numeric:
                 self.addTarget(nil, action: #selector(PCalcViewController.numericButtonTapped), for: .touchUpInside)
+            break
         case .sign:
             self.addTarget(nil, action: #selector(PCalcViewController.signButtonTapped), for: .touchUpInside)
+            break
         case .complement:
             self.addTarget(nil, action: #selector(PCalcViewController.complementButtonTapped), for: .touchUpInside)
-        default:
+            break
+        case .logical:
+            break
+        case .bitwise:
+            self.addTarget(nil, action: #selector(PCalcViewController.bitwiseButtonTapped), for: .touchUpInside)
             break
         }
     }
     
     // Dynamic button width (except zero button) and height for autolayout
     //  5  - number of spacings
-    //  15 - spacing width
+    //  17 - spacing width
     //  4  - number of buttons
     func buttonWidth() -> CGFloat {
         // TODO: Spacing width by uiscreen width
