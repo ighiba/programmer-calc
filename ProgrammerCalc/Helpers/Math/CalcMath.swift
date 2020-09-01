@@ -18,6 +18,8 @@ final class CalcMath {
         case sub
         case mul
         case div
+        case shiftLeft //  X << Y
+        case shiftRight // X >> Y
     }
     
     struct MathState {
@@ -101,7 +103,16 @@ final class CalcMath {
             }
             resultStr = "\(firstDecimal! / secondDecimal!)"
             break
-
+        // Bitwise shift left
+        case .shiftLeft:
+            // TODO: Error handling
+            resultStr = converterHandler.shiftBits(value: firstNum, mainSystem: "Decimal", shiftOperation: <<, shiftCount: Int(secondNum)!)
+            break
+        // Bitwise shift right
+        case .shiftRight:
+            // TODO: Error handling
+            resultStr = converterHandler.shiftBits(value: firstNum, mainSystem: "Decimal", shiftOperation: >>, shiftCount: Int(secondNum)!)
+            break
         }
         return resultStr
     }

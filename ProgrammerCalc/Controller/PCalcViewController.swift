@@ -659,8 +659,10 @@ class PCalcViewController: UIPageViewController {
         // swtch binary operation cases
         switch buttonLabel {
         case "X<<Y":
+            calculateResultAndUpdateLabels(inputValue: mainLabel.text!, operation: .shiftLeft)
             break
         case "X>>Y":
+            calculateResultAndUpdateLabels(inputValue: mainLabel.text!, operation: .shiftRight)
             break
         case "<<":
             // TODO: Error handling
