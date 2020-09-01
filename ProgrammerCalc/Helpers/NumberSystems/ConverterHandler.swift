@@ -161,19 +161,19 @@ import Foundation
     }
     
     
-    // Shift left 1 bit
-    public func shiftLeft( valueStr: String, mainSystem: String) -> String {
+    // Shift to needed bit count
+    public func shiftBits( value valueStr: String, mainSystem: String, shiftOperation: (Int,Int)->Int, shiftCount: Int ) -> String {
         // convert to Decimal
         let decimalStr = convertValue(value: valueStr, from: mainSystem, to: "Decimal") ?? "0"
         // TODO: Error handling
         let decimal = Int(decimalStr) ?? 0
         
         // shift left by 1 bit
-        var resultStr = String(decimal << 1)
+        var resultStr = String(shiftOperation(decimal,shiftCount))
         
         // convert to mainSystem
+        
         resultStr = convertValue(value: resultStr, from: "Decimal", to: mainSystem) ?? "0"
-    
         return resultStr
     }
 }

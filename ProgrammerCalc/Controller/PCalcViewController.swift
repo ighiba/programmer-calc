@@ -664,7 +664,7 @@ class PCalcViewController: UIPageViewController {
             break
         case "<<":
             // TODO: Error handling
-            mainLabel.text = converterHandler.shiftLeft(valueStr: mainLabel.text!, mainSystem: systemMain!)
+            mainLabel.text = converterHandler.shiftBits(value: mainLabel.text!, mainSystem: systemMain!, shiftOperation: <<, shiftCount: 1)
             break
         case ">>":
             break
