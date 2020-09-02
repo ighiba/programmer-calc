@@ -109,6 +109,30 @@ class HexadecimalTests: XCTestCase {
         XCTAssertEqual(hexadecimalTest.value, "8AF0", "Converted values are wrong")
     }
     
+    func testHexadecimalCovnertToBinaryUnsigned() throws {
+        // 1. given
+        SavedData.calcState = unsignedData
+        hexadecimalTest = Hexadecimal(stringLiteral: hexadecimalStrInput)
+        
+        // 2. when
+        let binary = hexadecimalTest.convertHexToBinary()
+        
+        // 3. then
+        XCTAssertEqual(binary.value, "101011110000", "Converted values are wrong")
+    }
+    
+    func testHexadecimalCovnertToBinarySigned() throws {
+        // 1. given
+        SavedData.calcState = signedData
+        hexadecimalTest = Hexadecimal(stringLiteral: hexadecimalStrInput)
+        
+        // 2. when
+        let binary = hexadecimalTest.convertHexToBinary()
+        
+        // 3. then
+        XCTAssertEqual(binary.value, "0000101011110000", "Converted values are wrong")
+    }
+    
     
     
 }
