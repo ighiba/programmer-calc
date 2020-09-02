@@ -105,11 +105,19 @@ final class CalcMath {
             break
         // Bitwise shift left
         case .shiftLeft:
+
+            guard !firstNum.contains(".") && !secondNum.contains(".") else {
+                return secondNum
+            }
             // TODO: Error handling
             resultStr = converterHandler.shiftBits(value: firstNum, mainSystem: "Decimal", shiftOperation: <<, shiftCount: Int(secondNum)!)
             break
         // Bitwise shift right
         case .shiftRight:
+            
+            guard !firstNum.contains(".") && !secondNum.contains(".") else {
+                return secondNum
+            }
             // TODO: Error handling
             resultStr = converterHandler.shiftBits(value: firstNum, mainSystem: "Decimal", shiftOperation: >>, shiftCount: Int(secondNum)!)
             break
