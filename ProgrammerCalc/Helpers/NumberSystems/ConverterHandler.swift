@@ -70,7 +70,6 @@ import Foundation
         // divide binary by parts
         binary = binary.divideBinary(by: partition)
 
-
         return binary
     }
     

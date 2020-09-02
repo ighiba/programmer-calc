@@ -92,6 +92,7 @@ class NumberSystem: ExpressibleByStringLiteral {
             if valueOctHex.contains("-") {
                 resultBin.isSigned = true
             }
+            resultBin.value = resultBin.removeZerosBefore(str: resultBin.value)
             // add zeros before to fill 8, 16, 32, 64 bits
             resultBin.fillUpSignedToNeededCount()
         }
