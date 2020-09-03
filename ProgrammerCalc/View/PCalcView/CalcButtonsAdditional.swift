@@ -96,11 +96,11 @@ class CalcButtonsAdditional: UIView {
             case "1's", "2's":
                 button.setActions(for: .complement)
                 break
-            case "X<<Y", "X>>Y", "<<", ">>":
+            case "X<<Y", "X>>Y", "<<", ">>", "AND", "OR", "XOR", "NOR":
                 button.setActions(for: .bitwise)
                 break
             default:
-                button.setActions(for: .logical)
+                button.setActions(for: .numeric)
                 break
             }
             

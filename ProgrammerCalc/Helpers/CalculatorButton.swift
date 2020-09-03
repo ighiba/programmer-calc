@@ -16,7 +16,6 @@ class CalculatorButton: UIButton {
     enum buttonTypes {
         case numeric
         case sign
-        case logical
         case complement
         case bitwise
     }
@@ -101,15 +100,13 @@ class CalculatorButton: UIButton {
         
         switch buttonType {
         case .numeric:
-                self.addTarget(nil, action: #selector(PCalcViewController.numericButtonTapped), for: .touchUpInside)
+            self.addTarget(nil, action: #selector(PCalcViewController.numericButtonTapped), for: .touchUpInside)
             break
         case .sign:
             self.addTarget(nil, action: #selector(PCalcViewController.signButtonTapped), for: .touchUpInside)
             break
         case .complement:
             self.addTarget(nil, action: #selector(PCalcViewController.complementButtonTapped), for: .touchUpInside)
-            break
-        case .logical:
             break
         case .bitwise:
             self.addTarget(nil, action: #selector(PCalcViewController.bitwiseButtonTapped), for: .touchUpInside)

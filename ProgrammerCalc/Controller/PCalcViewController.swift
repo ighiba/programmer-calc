@@ -98,7 +98,6 @@ class PCalcViewController: UIPageViewController {
         
         // get state from UserDefaults
         getCalcState()
-
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -675,6 +674,18 @@ class PCalcViewController: UIPageViewController {
         case ">>":
             // TODO: Error handling
             mainLabel.text = converterHandler.shiftBits(value: mainLabel.text!, mainSystem: systemMain!, shiftOperation: >>, shiftCount: 1)
+            break
+        case "AND":
+            mainLabel.text = calculateResult(inputValue: mainLabel.text!, operation: .and)
+            break
+        case "OR":
+            mainLabel.text = calculateResult(inputValue: mainLabel.text!, operation: .or)
+            break
+        case "XOR":
+            mainLabel.text = calculateResult(inputValue: mainLabel.text!, operation: .xor)
+            break
+        case "NOR":
+            mainLabel.text = calculateResult(inputValue: mainLabel.text!, operation: .nor)
             break
         default:
             break
