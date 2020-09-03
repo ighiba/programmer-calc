@@ -38,6 +38,18 @@ class CalcMathTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
+    func testFillUpBits() throws {
+        // 1. given
+        SavedData.calcState = unsignedData
+        let testValue = "10001100"
+        
+        // 2. when
+        let result = calcMathTest.fillUpBits(str: testValue)
+        
+        // 3. then
+        XCTAssertEqual(result, "0000000010001100", "Claculation failure")
+    }
+    
     // XCTAssert to test model
     func testCalcDecAdd() throws {
         // 1. given
