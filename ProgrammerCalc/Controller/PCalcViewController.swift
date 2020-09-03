@@ -328,20 +328,23 @@ class PCalcViewController: UIPageViewController {
         }
     }
     
-    fileprivate func calculateResultAndUpdateLabels( inputValue: String, operation: CalcMath.mathOperation) {
+    fileprivate func calculateResult( inputValue: String, operation: CalcMath.mathOperation) -> String {
+        var resultStr = String()
+        // process claculation buff values and previous operations
         if mathState != nil {
             print("calculation")
             if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: mainLabel.text!, for: SavedData.conversionSettings!.systemMain) {
-                mainLabel.text = result
-                updateMainLabel()
-                updateConverterLabel()
                 mathState = nil
                 mathState = CalcMath.MathState(buffValue: mainLabel.text!, operation: operation)
                 mathState?.lastResult = result
+                resultStr = result
             }
         } else {
             mathState = CalcMath.MathState(buffValue: mainLabel.text!, operation: operation)
+            resultStr = mainLabel.text!
         }
+        
+        return resultStr
     }
 
     // ===============
@@ -547,30 +550,28 @@ class PCalcViewController: UIPageViewController {
         // Subtraction button
         case "\u{00f7}":
             // calc results
-            calculateResultAndUpdateLabels(inputValue: label.text!, operation: .div)
+            label.text = calculateResult(inputValue: label.text!, operation: .div)
             break
         // Multiplication button
         case "X":
             // calc results
-            calculateResultAndUpdateLabels(inputValue: label.text!, operation: .mul)
+            label.text = calculateResult(inputValue: label.text!, operation: .mul)
             break
         // Multiplication button
         case "-":
             // calc results
-            calculateResultAndUpdateLabels(inputValue: label.text!, operation: .sub)
+            label.text = calculateResult(inputValue: label.text!, operation: .sub)
             break
         // Addition button
         case "+":
             // calc results
-            calculateResultAndUpdateLabels(inputValue: label.text!, operation: .add)
+            label.text = calculateResult(inputValue: label.text!, operation: .add)
             break
         case "=":
             if mathState != nil {
                 print("calculation")
                 if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
                     label.text = result
-                    updateMainLabel()
-                    updateConverterLabel()
                 }
                 // reset state
                 mathState = nil
@@ -581,6 +582,9 @@ class PCalcViewController: UIPageViewController {
         default:
             break
         }
+        // update all labels
+        updateMainLabel()
+        updateConverterLabel()
     }
     
     // Signed OFF/ON button
@@ -659,10 +663,10 @@ class PCalcViewController: UIPageViewController {
         // swtch binary operation cases
         switch buttonLabel {
         case "X<<Y":
-            calculateResultAndUpdateLabels(inputValue: mainLabel.text!, operation: .shiftLeft)
+            mainLabel.text = calculateResult(inputValue: mainLabel.text!, operation: .shiftLeft)
             break
         case "X>>Y":
-            calculateResultAndUpdateLabels(inputValue: mainLabel.text!, operation: .shiftRight)
+            mainLabel.text = calculateResult(inputValue: mainLabel.text!, operation: .shiftRight)
             break
         case "<<":
             // TODO: Error handling
