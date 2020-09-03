@@ -11,6 +11,7 @@
 		C05B008C24E6E0E100F8A5E0 /* Hexadecimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B008B24E6E0E100F8A5E0 /* Hexadecimal.swift */; };
 		C05B008E24E701ED00F8A5E0 /* Octal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B008D24E701ED00F8A5E0 /* Octal.swift */; };
 		C05B009124E71B6E00F8A5E0 /* DecimalExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B009024E71B6E00F8A5E0 /* DecimalExt.swift */; };
+		C06072B12501567E004CF6AA /* CalcMathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06072B02501567E004CF6AA /* CalcMathTests.swift */; };
 		C0619AC224D71227008A7291 /* ConversionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0619AC124D71227008A7291 /* ConversionView.swift */; };
 		C0619AC424D71240008A7291 /* ConversionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0619AC324D71240008A7291 /* ConversionViewController.swift */; };
 		C0635A7924D9E0F6003855A9 /* ConversionPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */; };
@@ -66,6 +67,7 @@
 		C05B008B24E6E0E100F8A5E0 /* Hexadecimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hexadecimal.swift; sourceTree = "<group>"; };
 		C05B008D24E701ED00F8A5E0 /* Octal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Octal.swift; sourceTree = "<group>"; };
 		C05B009024E71B6E00F8A5E0 /* DecimalExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalExt.swift; sourceTree = "<group>"; };
+		C06072B02501567E004CF6AA /* CalcMathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcMathTests.swift; sourceTree = "<group>"; };
 		C0619AC124D71227008A7291 /* ConversionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionView.swift; sourceTree = "<group>"; };
 		C0619AC324D71240008A7291 /* ConversionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionViewController.swift; sourceTree = "<group>"; };
 		C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionPicker.swift; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 				C064A3A924FD55B8003DE683 /* HexadecimalTests.swift */,
 				C064A3AD24FD5B13003DE683 /* OctalTests.swift */,
 				C064A3AF24FD847B003DE683 /* ConverterHandlerTests.swift */,
+				C06072B02501567E004CF6AA /* CalcMathTests.swift */,
 				C06B7F1F2443B12E009642B9 /* Info.plist */,
 			);
 			path = ProgrammerCalcTests;
@@ -446,6 +449,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C06072B12501567E004CF6AA /* CalcMathTests.swift in Sources */,
 				C06DFD5D24FC22C600255646 /* BinaryTests.swift in Sources */,
 				C064A3AE24FD5B13003DE683 /* OctalTests.swift in Sources */,
 				C064A3AA24FD55B8003DE683 /* HexadecimalTests.swift in Sources */,
