@@ -110,6 +110,7 @@ final class CalcMath {
             break
         // Bitwise shift left
         case .shiftLeft:
+            // TODO: Refactor
             guard !firstNum.contains(".") && !secondNum.contains(".") else {
                 return secondNum
             }

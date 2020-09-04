@@ -232,11 +232,11 @@
 			isa = PBXGroup;
 			children = (
 				C06B7F1D2443B12E009642B9 /* ProgrammerCalcTests.swift */,
+				C06072B02501567E004CF6AA /* CalcMathTests.swift */,
+				C064A3AF24FD847B003DE683 /* ConverterHandlerTests.swift */,
 				C06DFD5C24FC22C600255646 /* BinaryTests.swift */,
 				C064A3A924FD55B8003DE683 /* HexadecimalTests.swift */,
 				C064A3AD24FD5B13003DE683 /* OctalTests.swift */,
-				C064A3AF24FD847B003DE683 /* ConverterHandlerTests.swift */,
-				C06072B02501567E004CF6AA /* CalcMathTests.swift */,
 				C06B7F1F2443B12E009642B9 /* Info.plist */,
 			);
 			path = ProgrammerCalcTests;
