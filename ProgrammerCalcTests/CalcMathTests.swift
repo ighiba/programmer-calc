@@ -50,6 +50,8 @@ class CalcMathTests: XCTestCase {
         XCTAssertEqual(result, "0000000010001100", "Claculation failure")
     }
     
+    // MARK: - ADD
+    
     // XCTAssert to test model
     func testCalcDecAdd() throws {
         // 1. given
@@ -64,6 +66,8 @@ class CalcMathTests: XCTestCase {
         XCTAssertEqual(result, "22", "Claculation failure")
     }
     
+    // MARK: - SUB
+    
     func testCalcDecSub() throws {
         // 1. given
         SavedData.calcState = unsignedData
@@ -76,6 +80,8 @@ class CalcMathTests: XCTestCase {
         // 3. then
         XCTAssertEqual(result, "2", "Claculation failure")
     }
+    
+    // MARK: - MUL
     
     func testCalcDecMul() throws {
         // 1. given
@@ -90,6 +96,8 @@ class CalcMathTests: XCTestCase {
         XCTAssertEqual(result, "120", "Claculation failure")
     }
     
+    // MARK: - DIV
+    
     func testCalcDecDiv() throws {
         // 1. given
         SavedData.calcState = unsignedData
@@ -102,6 +110,8 @@ class CalcMathTests: XCTestCase {
         // 3. then
         XCTAssertEqual(result, "1.2", "Claculation failure")
     }
+    
+    // MARK: - AND
     
     func testCalcDecUnsignedAND() throws {
         // 1. given
@@ -146,6 +156,58 @@ class CalcMathTests: XCTestCase {
         // 1. given
         SavedData.calcState = unsignedData
         let octFirst = "357"
+        let octSecond = "123"
+        
+        // 2. when
+        let result = calcMathTest.calculate(firstValue: octFirst, operation: .and, secondValue: octSecond, for: "Octal")
+        
+        // 3. then
+        XCTAssertEqual(result, "103", "Claculation failure")
+    }
+    
+    func testCalcDecSignedAND() throws {
+        // 1. given
+        SavedData.calcState = unsignedData
+        let decFirst = "-12"
+        let decSecond = "4"
+        
+        // 2. when
+        let result = calcMathTest.calculate(firstValue: decFirst, operation: .and, secondValue: decSecond, for: "Decimal")
+        
+        // 3. then
+        XCTAssertEqual(result, "4", "Claculation failure")
+    }
+    
+    func testCalcBinSignedAND() throws {
+        // 1. given
+        SavedData.calcState = unsignedData
+        let binFirst = "00110001"
+        let binSecond = "10101010"
+        
+        // 2. when
+        let result = calcMathTest.calculate(firstValue: binFirst, operation: .and, secondValue: binSecond, for: "Binary")
+        
+        // 3. then
+        XCTAssertEqual(result, "0010 0000", "Claculation failure")
+    }
+    
+    func testCalcHexSignedAND() throws {
+        // 1. given
+        SavedData.calcState = unsignedData
+        let hexFirst = "FEED"
+        let hexSecond = "BECA"
+        
+        // 2. when
+        let result = calcMathTest.calculate(firstValue: hexFirst, operation: .and, secondValue: hexSecond, for: "Hexadecimal")
+        
+        // 3. then
+        XCTAssertEqual(result, "BEC8", "Claculation failure")
+    }
+    
+    func testCalcOctSignedAND() throws {
+        // 1. given
+        SavedData.calcState = unsignedData
+        let octFirst = "-357"
         let octSecond = "123"
         
         // 2. when
