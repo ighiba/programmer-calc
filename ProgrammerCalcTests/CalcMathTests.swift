@@ -429,4 +429,58 @@ class CalcMathTests: XCTestCase {
         XCTAssertEqual(result, "-276", "Calaculation failure")
     }
    
+   // MARK: - XOR
+   
+   func testCalcDecUnsignedNOR() throws {
+       // 1. given
+       SavedData.calcState = unsignedData
+       let decFirst =  "12"
+       let decSecond = "10"
+       
+       // 2. when
+       let result = calcMathTest.calculate(firstValue: decFirst, operation: .nor, secondValue: decSecond, for: "Decimal")
+       
+       // 3. then
+       XCTAssertEqual(result, "1", "Calaculation failure")
+   }
+   
+   func testCalcBinUnsignedNOR() throws {
+       // 1. given
+       SavedData.calcState = unsignedData
+       let binFirst =  "110001"
+       let binSecond = "101010"
+       
+       // 2. when
+       let result = calcMathTest.calculate(firstValue: binFirst, operation: .nor, secondValue: binSecond, for: "Binary")
+       
+       // 3. then
+       XCTAssertEqual(result, "0100", "Calaculation failure")
+   }
+   
+   func testCalcHexUnsignedNOR() throws {
+       // 1. given
+       SavedData.calcState = unsignedData
+       let hexFirst =  "FEED"
+       let hexSecond = "BECA"
+       
+       // 2. when
+       let result = calcMathTest.calculate(firstValue: hexFirst, operation: .nor, secondValue: hexSecond, for: "Hexadecimal")
+       
+       // 3. then
+       XCTAssertEqual(result, "110", "Calaculation failure")
+   }
+   
+   func testCalcOctUnsignedNOR() throws {
+       // 1. given
+       SavedData.calcState = unsignedData
+       let octFirst =  "327"
+       let octSecond = "123"
+       
+       // 2. when
+       let result = calcMathTest.calculate(firstValue: octFirst, operation: .nor, secondValue: octSecond, for: "Octal")
+       
+       // 3. then
+       XCTAssertEqual(result, "50", "Calaculation failure")
+   }
+
 }
