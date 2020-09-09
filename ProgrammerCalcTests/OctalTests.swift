@@ -94,7 +94,7 @@ class OctalTests: XCTestCase {
         octalTest = Octal(binary)
         
         // 3. then
-        XCTAssertEqual(octalTest.value, "-357", "Converted values are wrong")
+        XCTAssertEqual(octalTest.value, "100357", "Converted values are wrong")
     }
     
     func testOctalBinaryUnsignedInitWithMinus() throws {

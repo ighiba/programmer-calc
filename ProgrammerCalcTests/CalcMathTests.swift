@@ -199,7 +199,6 @@ class CalcMathTests: XCTestCase {
         
         // 2. when
         let result = calcMathTest.calculate(firstValue: hexFirst, operation: .and, secondValue: hexSecond, for: "Hexadecimal")
-        
         // 3. then
         XCTAssertEqual(result, "BEC8", "Calaculation failure")
     }
@@ -207,14 +206,14 @@ class CalcMathTests: XCTestCase {
     func testCalcOctSignedAND() throws {
         // 1. given
         SavedData.calcState = signedData
-        let octFirst = "-357"
+        let octFirst = "357"
         let octSecond = "123"
         
         // 2. when
         let result = calcMathTest.calculate(firstValue: octFirst, operation: .and, secondValue: octSecond, for: "Octal")
         
         // 3. then
-        XCTAssertEqual(result, "21", "Calaculation failure")
+        XCTAssertEqual(result, "103", "Calaculation failure")
     }
     
     // MARK: - OR
@@ -292,7 +291,7 @@ class CalcMathTests: XCTestCase {
 
         // 2. when
         let result = calcMathTest.calculate(firstValue: binFirst, operation: .or, secondValue: binSecond, for: "Binary")
-        
+
         // 3. then
         XCTAssertEqual(result, "1000 1101", "Calaculation failure")
     }
@@ -313,14 +312,14 @@ class CalcMathTests: XCTestCase {
     func testCalcOctSignedOR() throws {
         // 1. given
         SavedData.calcState = signedData
-        let octFirst = "-357"
-        let octSecond = "123"
+        let octFirst = "207" // -121
+        let octSecond = "12" // 10
 
         // 2. when
         let result = calcMathTest.calculate(firstValue: octFirst, operation: .or, secondValue: octSecond, for: "Octal")
         
         // 3. then
-        XCTAssertEqual(result, "-255", "Calaculation failure")
+        XCTAssertEqual(result, "217", "Calaculation failure")
     }
     
     // MARK: - XOR
@@ -419,17 +418,17 @@ class CalcMathTests: XCTestCase {
     func testCalcOctSignedXOR() throws {
         // 1. given
         SavedData.calcState = signedData
-        let octFirst = "-357"
-        let octSecond = "123"
+        let octFirst = "357" // -17
+        let octSecond = "123" // 83
 
         // 2. when
         let result = calcMathTest.calculate(firstValue: octFirst, operation: .xor, secondValue: octSecond, for: "Octal")
         
         // 3. then
-        XCTAssertEqual(result, "-276", "Calaculation failure")
+        XCTAssertEqual(result, "274", "Calaculation failure")
     }
    
-   // MARK: - XOR
+   // MARK: - NOR
    
    func testCalcDecUnsignedNOR() throws {
        // 1. given
@@ -482,5 +481,55 @@ class CalcMathTests: XCTestCase {
        // 3. then
        XCTAssertEqual(result, "50", "Calaculation failure")
    }
+    func testCalcDecSignedNOR() throws {
+        // 1. given
+        SavedData.calcState = signedData
+        let decFirst = "-16"
+        let decSecond = "99"
+        
+        // 2. when
+        let result = calcMathTest.calculate(firstValue: decFirst, operation: .nor, secondValue: decSecond, for: "Decimal")
+        
+        // 3. then
+        XCTAssertEqual(result, "12", "Calaculation failure")
+    }
+    
+    func testCalcBinSignedNOR() throws {
+        // 1. given
+        SavedData.calcState = signedData
+        let binFirst =  "10010000" // -16 dec
+        let binSecond = "01100011" // 99 dec
 
+        // 2. when
+        let result = calcMathTest.calculate(firstValue: binFirst, operation: .nor, secondValue: binSecond, for: "Binary")
+        
+        // 3. then
+        XCTAssertEqual(result, "0000 1100", "Calaculation failure")
+    }
+    
+    func testCalcHexSignedNOR() throws {
+        // 1. given
+        SavedData.calcState = signedData
+        let hexFirst =  "FEED"
+        let hexSecond = "BECA"
+        
+        // 2. when
+        let result = calcMathTest.calculate(firstValue: hexFirst, operation: .nor, secondValue: hexSecond, for: "Hexadecimal")
+        
+        // 3. then
+        XCTAssertEqual(result, "110", "Calaculation failure")
+    }
+    
+    func testCalcOctSignedNOR() throws {
+        // 1. given
+        SavedData.calcState = signedData
+        let octFirst = "357"
+        let octSecond = "123"
+
+        // 2. when
+        let result = calcMathTest.calculate(firstValue: octFirst, operation: .nor, secondValue: octSecond, for: "Octal")
+        
+        // 3. then
+        XCTAssertEqual(result, "0", "Calaculation failure")
+    }
 }

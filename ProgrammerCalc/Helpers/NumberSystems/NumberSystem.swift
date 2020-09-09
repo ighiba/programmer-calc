@@ -88,13 +88,25 @@ class NumberSystem: ExpressibleByStringLiteral {
        
         // process signed values
         ifProcessSigned {
-            // if octhex is negative
-            if valueOctHex.contains("-") {
-                resultBin.isSigned = true
-            }
+            // remove zeros
             resultBin.value = resultBin.removeZerosBefore(str: resultBin.value)
-            // add zeros before to fill 8, 16, 32, 64 bits
-            resultBin.fillUpSignedToNeededCount()
+            // if octhex is negative
+            // check value for bits count
+            // TODO: for floating point
+            switch resultBin.value.count {
+            case 8,16,32,64:
+                // if already filled to needed bit
+                resultBin.updateSignedState()
+                if resultBin.isSigned {
+                    // convert binary to twos complenment
+                    resultBin.twosComplement()
+                }
+                break
+            default:
+                // add zeros before to fill 8, 16, 32, 64 bits
+                resultBin.fillUpSignedToNeededCount()
+                break
+            }
         }
         
         return resultBin.value

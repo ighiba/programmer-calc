@@ -24,6 +24,7 @@ class Binary: NumberSystem {
     
     /// Creates an instance initialized to the Int value
     init(_ valueInt: Int) {
+        // TODO: Handle signed 
         super.init()
         self.value = String(valueInt, radix: 2)
         self.value = fillUpParts(str: self.value, by: 4)
@@ -172,7 +173,11 @@ class Binary: NumberSystem {
         ifProcessSigned {
             // update signed state and change signed bit to 0
             binary.updateSignedState()
-            binary.changeSignedBit(to: "0")
+            //binary.changeSignedBit(to: "0")
+            if binary.isSigned {
+                // convert binary to twos complenment
+                binary.twosComplement()
+            }
         }
    
         let partition: Int = 4
@@ -187,13 +192,6 @@ class Binary: NumberSystem {
         // from binary to oct
         // process each number and form parts
         hexadecimal.value = tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: hexTable)
-        
-        // add minus if signed
-        ifProcessSigned {
-            if binary.isSigned {
-                hexadecimal.value = "-" + hexadecimal.value
-            }
-        }
         
         guard dividedBinary.1 != nil else { return hexadecimal }
         
@@ -213,6 +211,7 @@ class Binary: NumberSystem {
     func convertBinaryToOct( octTable: [String : String]) -> Octal {
         let binary = self
         let octal = Octal()
+        let converterHandler = ConverterHandler()
          
         let partition: Int = 3
          
@@ -220,7 +219,10 @@ class Binary: NumberSystem {
         ifProcessSigned {
             // update signed state and change signed bit to 0
             binary.updateSignedState()
-            binary.changeSignedBit(to: "0")
+            //binary.changeSignedBit(to: "0")
+            if binary.isSigned {
+                binary.value = converterHandler.toTwosComplement(valueStr: binary.value, mainSystem: "Binary")
+            }
         }
         
         var dividedBinary = divideIntFract(value: binary.value)
@@ -231,13 +233,6 @@ class Binary: NumberSystem {
         // from binary to oct
         // process each number and form parts
         octal.value = tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: octTable)
-        
-        // add minus if signed
-        ifProcessSigned {
-            if binary.isSigned {
-                octal.value = "-" + octal.value
-            }
-        }
         
         guard dividedBinary.1 != nil else { return octal }
         

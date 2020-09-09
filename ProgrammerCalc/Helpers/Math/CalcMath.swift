@@ -155,11 +155,15 @@ final class CalcMath {
                 return secondNum
             }
             // x or y
-            let buffResult = (Int(firstNum)! | Int(secondNum)!)
+            let buffResult = Decimal(Int(firstNum)! | Int(secondNum)!)
             // convert to binary
             let binary = Binary(buffResult)
             // delete zeros before for binary
             binary.value = binary.removeZerosBefore(str: binary.value)
+            
+            if buffResult < 0 {
+                binary.twosComplement()
+            }
             // not result (invert binary)
             binary.invert()
             // convert to decimal

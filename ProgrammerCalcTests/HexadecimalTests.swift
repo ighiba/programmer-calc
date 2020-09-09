@@ -94,7 +94,7 @@ class HexadecimalTests: XCTestCase {
         hexadecimalTest = Hexadecimal(binary)
         
         // 3. then
-        XCTAssertEqual(hexadecimalTest.value, "-AF0", "Converted values are wrong")
+        XCTAssertEqual(hexadecimalTest.value, "8AF0", "Converted values are wrong")
     }
     
     func testHexadecimalBinaryUnsignedInitWithMinus() throws {
