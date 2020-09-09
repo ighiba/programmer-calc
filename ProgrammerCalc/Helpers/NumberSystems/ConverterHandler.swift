@@ -108,20 +108,14 @@ import Foundation
     public func toOnesComplement( valueStr: String, mainSystem: String) -> String {
         var resultStr = String()
         let binary = Binary()
-        var signedBit = String()
         
         // convert to Binary
         binary.value = convertValue(value: valueStr, from: mainSystem, to: "Binary") ?? "0"
-        // delete signed bit if exist
-        binary.ifProcessSigned {
-            signedBit = String(binary.value.first!)
-            binary.value.removeFirst()
-        }
-        // invert binary
-        binary.invert()
-        // return signed bit if exists
-        binary.value = signedBit + binary.value
-        // convert to mainSystem
+        
+        // convert binary to one's complement
+        binary.onesComplement()
+
+        // convert to binary input system (mainSystem)
         resultStr = convertValue(value: binary.value, from: "Binary", to: mainSystem) ?? "0"
     
         return resultStr
@@ -131,29 +125,14 @@ import Foundation
     public func toTwosComplement( valueStr: String, mainSystem: String) -> String {
         var resultStr = String()
         let binary = Binary()
-        var signedBit = String()
         
         // convert to Binary
         binary.value = convertValue(value: valueStr, from: mainSystem, to: "Binary") ?? "0"
-        // convert to 1's complement
-        binary.value = toOnesComplement(valueStr: binary.value, mainSystem: "Binary")
-        // save signed bit and change to 0
-        binary.ifProcessSigned {
-            signedBit = String(binary.value.first!)
-            binary.updateSignedState()
-            binary.changeSignedBit(to: "0")
-        }
-
-        // +1 for 2's complement
-        let oneBit = Binary(stringLiteral: "1")
-        binary.value = CalcMath().calculate(firstValue: binary.value, operation: .add, secondValue: oneBit.value, for: "Binary")!
         
-        // return signed bit if exists
-        if signedBit != "" {
-            binary.changeSignedBit(to: Character(signedBit))
-        }
+        // convert binary to 2's complement
+        binary.twosComplement()
         
-        // convert to mainSystem
+        // convert to binary input system (mainSystem)
         resultStr = convertValue(value: binary.value, from: "Binary", to: mainSystem) ?? "0"
     
         return resultStr
