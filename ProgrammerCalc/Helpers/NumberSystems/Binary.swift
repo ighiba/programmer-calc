@@ -680,6 +680,9 @@ class Binary: NumberSystem {
         let binary = self
         var signedBit = String()
         
+        // remove spaces
+        binary.value = removeAllSpaces(str: binary.value)
+        
         // convert to 1's complement
         binary.onesComplement()
         // save signed bit and change to 0
@@ -689,9 +692,20 @@ class Binary: NumberSystem {
             binary.changeSignedBit(to: "0")
         }
 
-        // +1 for 2's complement
-        let oneBit = Binary(stringLiteral: "1")
-        binary.value = CalcMath().calculate(firstValue: binary.value, operation: .add, secondValue: oneBit.value, for: "Binary")!
+        // get the int part of binary
+        let divided = divideIntFract(value: binary.value)
+        
+        if divided.0 != nil {
+            // fill up with zeros one bit
+            let oneBit = fillUpZeros(str: "1", to: divided.0!.count)
+            // do simple addition
+            binary.value = doSimpleBinaryAddition(firstValue: binary.value, secondValue: oneBit)
+        }
+        
+        // add fract part to int part if exists
+        if divided.1 != nil && divided.1!.count > 0 {
+            binary.value = binary.value + "." + divided.1!
+        }
         
         // return signed bit if exists
         if signedBit != "" {
