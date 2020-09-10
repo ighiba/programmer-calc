@@ -130,7 +130,7 @@ class OctalTests: XCTestCase {
         let binary = octalTest.convertOctToBinary()
         
         // 3. then
-        XCTAssertEqual(binary.value, "0000000011101111", "Converted values are wrong")
+        XCTAssertEqual(binary.value, "11101111", "Converted values are wrong")
     }
     
     

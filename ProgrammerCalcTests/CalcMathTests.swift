@@ -181,7 +181,7 @@ class CalcMathTests: XCTestCase {
     func testCalcBinSignedAND() throws {
         // 1. given
         SavedData.calcState = signedData
-        let binFirst =  "10010000" // -16 dec
+        let binFirst =  "11110000" // -16 dec
         let binSecond = "01100011" // 99 dec
         
         // 2. when
@@ -286,14 +286,14 @@ class CalcMathTests: XCTestCase {
     func testCalcBinSignedOR() throws {
         // 1. given
         SavedData.calcState = signedData
-        let binFirst =  "10010000" // -16 dec
+        let binFirst =  "11110000" // -16 dec
         let binSecond = "01100011" // 99 dec
 
         // 2. when
         let result = calcMathTest.calculate(firstValue: binFirst, operation: .or, secondValue: binSecond, for: "Binary")
 
         // 3. then
-        XCTAssertEqual(result, "1000 1101", "Calaculation failure")
+        XCTAssertEqual(result, "1111 0011", "Calaculation failure") // -13
     }
     
     func testCalcHexSignedOR() throws {
@@ -392,14 +392,14 @@ class CalcMathTests: XCTestCase {
     func testCalcBinSignedXOR() throws {
         // 1. given
         SavedData.calcState = signedData
-        let binFirst =  "10010000" // -16 dec
+        let binFirst =  "11110000" // -16 dec
         let binSecond = "01100011" // 99 dec
 
         // 2. when
         let result = calcMathTest.calculate(firstValue: binFirst, operation: .xor, secondValue: binSecond, for: "Binary")
         
         // 3. then
-        XCTAssertEqual(result, "1110 1101", "Calaculation failure")
+        XCTAssertEqual(result, "1001 0011", "Calaculation failure") // -109
     }
     
     func testCalcHexSignedXOR() throws {
@@ -497,7 +497,7 @@ class CalcMathTests: XCTestCase {
     func testCalcBinSignedNOR() throws {
         // 1. given
         SavedData.calcState = signedData
-        let binFirst =  "10010000" // -16 dec
+        let binFirst =  "11110000" // -16 dec
         let binSecond = "01100011" // 99 dec
 
         // 2. when
