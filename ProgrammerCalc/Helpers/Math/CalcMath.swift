@@ -90,15 +90,12 @@ final class CalcMath {
         // Addition
         case .add:
             resultStr = "\(firstDecimal! + secondDecimal!)"
-            break
         // Subtraction
         case .sub:
             resultStr = "\(firstDecimal! - secondDecimal!)"
-            break
         // Multiplication
         case .mul:
             resultStr = "\(firstDecimal! * secondDecimal!)"
-            break
         // Division
         case .div:
             // if dvision by zero
@@ -107,7 +104,6 @@ final class CalcMath {
                 return "Division by zero"
             }
             resultStr = "\(firstDecimal! / secondDecimal!)"
-            break
         // Bitwise shift left
         case .shiftLeft:
             // TODO: Refactor
@@ -116,7 +112,6 @@ final class CalcMath {
             }
             // TODO: Error handling
             resultStr = converterHandler.shiftBits(value: firstNum, mainSystem: "Decimal", shiftOperation: <<, shiftCount: Int(secondNum)!)
-            break
         // Bitwise shift right
         case .shiftRight:
             guard !firstNum.contains(".") && !secondNum.contains(".") else {
@@ -124,7 +119,6 @@ final class CalcMath {
             }
             // TODO: Error handling
             resultStr = converterHandler.shiftBits(value: firstNum, mainSystem: "Decimal", shiftOperation: >>, shiftCount: Int(secondNum)!)
-            break
         // bitwise and
         case .and:
             guard !firstNum.contains(".") && !secondNum.contains(".") else {
@@ -132,7 +126,6 @@ final class CalcMath {
             }
             // x and y
             resultStr = "\(Int(firstNum)! & Int(secondNum)!)"
-            break
         // bitwise or
         case .or:
             guard !firstNum.contains(".") && !secondNum.contains(".") else {
@@ -140,7 +133,6 @@ final class CalcMath {
             }
             // x or y
             resultStr = "\(Int(firstNum)! | Int(secondNum)!)"
-            break
         // bitwise xor
         case .xor:
             guard !firstNum.contains(".") && !secondNum.contains(".") else {
@@ -148,7 +140,6 @@ final class CalcMath {
             }
             // x xor y
             resultStr = "\(Int(firstNum)! ^ Int(secondNum)!)"
-            break
         // bitwise nor
         case .nor:
             guard !firstNum.contains(".") && !secondNum.contains(".") else {
@@ -167,8 +158,6 @@ final class CalcMath {
             let decimal = Decimal(binary)
             
             resultStr = "\(decimal)"
-            
-            break
         }
         return resultStr
     }

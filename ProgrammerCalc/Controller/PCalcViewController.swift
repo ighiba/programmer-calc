@@ -512,12 +512,10 @@ class PCalcViewController: UIPageViewController {
         case "AC":
             clearLabels()
             mathState = nil
-            break
         case "C":
             clearLabels()
             button.setTitle("AC", for: .normal)
             mathState = nil
-            break
         // Invert button
         case "\u{00B1}":
             if label.text != "0" {
@@ -545,27 +543,22 @@ class PCalcViewController: UIPageViewController {
                 }
             }
             updateConverterLabel()
-            break
         // Subtraction button
         case "\u{00f7}":
             // calc results
             label.text = calculateResult(inputValue: label.text!, operation: .div)
-            break
         // Multiplication button
         case "X":
             // calc results
             label.text = calculateResult(inputValue: label.text!, operation: .mul)
-            break
         // Multiplication button
         case "-":
             // calc results
             label.text = calculateResult(inputValue: label.text!, operation: .sub)
-            break
         // Addition button
         case "+":
             // calc results
             label.text = calculateResult(inputValue: label.text!, operation: .add)
-            break
         case "=":
             if mathState != nil {
                 print("calculation")
@@ -577,7 +570,6 @@ class PCalcViewController: UIPageViewController {
             } else {
                 print("do nothing")
             }
-            break
         default:
             break
         }
@@ -639,11 +631,9 @@ class PCalcViewController: UIPageViewController {
         case "1's":
             // TODO: Error handling
             mainLabel.text = converterHandler.toOnesComplement(valueStr: mainLabel.text!, mainSystem: systemMain!)
-            break
         case "2's":
             // TODO: Error handling
             mainLabel.text = converterHandler.toTwosComplement(valueStr: mainLabel.text!, mainSystem: systemMain!)
-            break
         default:
             break
         }
@@ -663,30 +653,22 @@ class PCalcViewController: UIPageViewController {
         switch buttonLabel {
         case "X<<Y":
             mainLabel.text = calculateResult(inputValue: mainLabel.text!, operation: .shiftLeft)
-            break
         case "X>>Y":
             mainLabel.text = calculateResult(inputValue: mainLabel.text!, operation: .shiftRight)
-            break
         case "<<":
             // TODO: Error handling
             mainLabel.text = converterHandler.shiftBits(value: mainLabel.text!, mainSystem: systemMain!, shiftOperation: <<, shiftCount: 1)
-            break
         case ">>":
             // TODO: Error handling
             mainLabel.text = converterHandler.shiftBits(value: mainLabel.text!, mainSystem: systemMain!, shiftOperation: >>, shiftCount: 1)
-            break
         case "AND":
             mainLabel.text = calculateResult(inputValue: mainLabel.text!, operation: .and)
-            break
         case "OR":
             mainLabel.text = calculateResult(inputValue: mainLabel.text!, operation: .or)
-            break
         case "XOR":
             mainLabel.text = calculateResult(inputValue: mainLabel.text!, operation: .xor)
-            break
         case "NOR":
             mainLabel.text = calculateResult(inputValue: mainLabel.text!, operation: .nor)
-            break
         default:
             break
         }

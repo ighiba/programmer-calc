@@ -40,26 +40,22 @@ import Foundation
         case "Binary":
             // if already binary
             binary = Binary(stringLiteral: anyStr)
-            break
         case "Octal":
             // convert oct to binary
             partition = 3
             
             let oct = Octal(stringLiteral: anyStr)
             binary = Binary(oct)
-            break
         case "Decimal":
             // convert dec to binary
             partition = 4
             let dec = Decimal(string: anyStr)!
             binary = Binary(dec)
-            break
         case "Hexadecimal":
             // convert hex to binary
             partition = 4
             let hex = Hexadecimal(stringLiteral: anyStr)
             binary = Binary(hex)
-            break
         default:
             // do nothing
             // TODO: Error handling
@@ -85,15 +81,12 @@ import Foundation
         case "Octal":
             // convert binary to oct
             targetStr = Octal(binary).value
-            break
         case "Decimal":
             // convert binary to dec
             targetStr = "\(Decimal(binary))"
-            break
         case "Hexadecimal":
             // convert binary to hex
             targetStr = Hexadecimal(binary).value
-            break
         default:
             // do nothing
             // TODO: Error handling

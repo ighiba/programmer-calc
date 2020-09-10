@@ -53,16 +53,14 @@ class SettingsViewController: UITableViewController {
                     switch title {
                     case "Dark mode":
                         switcher.setOn(data.darkMode, animated: false)
-                        break
                     case "Tapping sounds":
                         switcher.setOn(data.tappingSounds, animated: false)
-                        break
                     case "Haptic feedback":
                         switcher.setOn(data.hapticFeedback, animated: false)
-                        break
                     default:
                         // TODO: Handle
                         print("error")
+                        break
                     }
                 }
             }
@@ -85,16 +83,14 @@ class SettingsViewController: UITableViewController {
                     switch title {
                     case "Dark mode":
                         data.darkMode = switcher.isOn
-                        break
                     case "Tapping sounds":
                         data.tappingSounds = switcher.isOn
-                        break
                     case "Haptic feedback":
                         data.hapticFeedback = switcher.isOn
-                        break
                     default:
                         // TODO: Handle
                         print("error")
+                        break
                     }
                 }
             }
@@ -125,16 +121,14 @@ class SettingsViewController: UITableViewController {
             switch title {
             case "Dark mode":
                 print("Dark mode switch to \(sender.isOn)")
-                break
             case "Tapping sounds":
                 print("Tapping sounds switch to \(sender.isOn)")
-                break
             case "Haptic feedback":
                 print("Haptic feedback switch to \(sender.isOn)")
-                break
             default:
                 // TODO: Handle
                 print("error")
+                break
             }
         }
         
