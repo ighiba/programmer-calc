@@ -161,9 +161,6 @@ final class CalcMath {
             // delete zeros before for binary
             binary.value = binary.removeZerosBefore(str: binary.value)
             
-            if buffResult < 0 {
-                binary.twosComplement()
-            }
             // not result (invert binary)
             binary.invert()
             // convert to decimal

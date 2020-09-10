@@ -91,12 +91,23 @@ class Binary: NumberSystem {
     // BIN -> DEC
     func convertBinaryToDec() -> Decimal {
         let binary = self
-        
+        var signedMultipler: Decimal = 1 // default is positive value
         var result: Decimal = 0.0
         
         // if zero
         guard binary.value != "0" else {
             return result
+        }
+        
+        // to two's complement if value is signed and negative
+        ifProcessSigned {
+            // calcualte signed state
+            binary.updateSignedState() // changes binary.isSigned state to true of false
+
+            // set multipler to -1 or 1 for inverting value
+            if binary.isSigned {
+                binary.twosComplement()
+            }
         }
         
         // remove all spaces
@@ -109,8 +120,6 @@ class Binary: NumberSystem {
         guard binIntStrBuff != nil else {
             return 0.0
         }
-        
-        var signedMultipler: Decimal = 1 // default is unsigned value
         
         // First: converting int part
         ifProcessSigned {
@@ -168,17 +177,6 @@ class Binary: NumberSystem {
     func convertBinaryToHex( hexTable: [String : String]) -> Hexadecimal {
         let binary = self
         let hexadecimal = Hexadecimal()
-        
-        // handle signed values
-        ifProcessSigned {
-            // update signed state and change signed bit to 0
-            binary.updateSignedState()
-            //binary.changeSignedBit(to: "0")
-            if binary.isSigned {
-                // convert binary to twos complenment
-                binary.twosComplement()
-            }
-        }
    
         let partition: Int = 4
         
@@ -211,19 +209,8 @@ class Binary: NumberSystem {
     func convertBinaryToOct( octTable: [String : String]) -> Octal {
         let binary = self
         let octal = Octal()
-        let converterHandler = ConverterHandler()
          
         let partition: Int = 3
-         
-        // handle signed values
-        ifProcessSigned {
-            // update signed state and change signed bit to 0
-            binary.updateSignedState()
-            //binary.changeSignedBit(to: "0")
-            if binary.isSigned {
-                binary.value = converterHandler.toTwosComplement(valueStr: binary.value, mainSystem: "Binary")
-            }
-        }
         
         var dividedBinary = divideIntFract(value: binary.value)
         
@@ -695,11 +682,11 @@ class Binary: NumberSystem {
         // get the int part of binary
         let divided = divideIntFract(value: binary.value)
         
-        if divided.0 != nil {
+        if let intPart = divided.0 {
             // fill up with zeros one bit
             let oneBit = fillUpZeros(str: "1", to: divided.0!.count)
             // do simple addition
-            binary.value = doSimpleBinaryAddition(firstValue: binary.value, secondValue: oneBit)
+            binary.value = doSimpleBinaryAddition(firstValue: intPart, secondValue: oneBit)
         }
         
         // add fract part to int part if exists

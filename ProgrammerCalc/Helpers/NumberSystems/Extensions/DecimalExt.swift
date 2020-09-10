@@ -43,8 +43,7 @@ extension Decimal {
             decNumStr = String("\(self * -1)")
         } else {
             decNumStr = String("\(self)")
-        }
-              
+        }     
 
         if let decNumInt: Int = Int(decNumStr) {
             let str = binary.convertIntToBinary(decNumInt)
@@ -69,6 +68,10 @@ extension Decimal {
                 binary.isSigned = isDecSigned
                 // fill up to signed binary style
                 binary.fillUpSignedToNeededCount()
+                // convert to 2's complenment state if value is signed
+                if binary.isSigned {
+                    binary.twosComplement()
+                }
             }
             
             // add fract part if exists

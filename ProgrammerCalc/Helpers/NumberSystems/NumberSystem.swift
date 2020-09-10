@@ -96,11 +96,7 @@ class NumberSystem: ExpressibleByStringLiteral {
             switch resultBin.value.count {
             case 8,16,32,64:
                 // if already filled to needed bit
-                resultBin.updateSignedState()
-                if resultBin.isSigned {
-                    // convert binary to twos complenment
-                    resultBin.twosComplement()
-                }
+                // do nothing
                 break
             default:
                 // add zeros before to fill 8, 16, 32, 64 bits
