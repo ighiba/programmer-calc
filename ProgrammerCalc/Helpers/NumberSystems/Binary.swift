@@ -699,5 +699,57 @@ class Binary: NumberSystem {
         }
     }
     
-    
+    fileprivate func doSimpleBinaryAddition( firstValue: String, secondValue: String) -> String {
+        var result = String()
+        var reminder = 0
+
+        var firstBinary = firstValue
+        var secondBinary = secondValue
+
+        // Do addition
+        while firstBinary != "" {
+            let firstLast = String(firstBinary.last!)
+            let secondLast = String(secondBinary.last!)
+
+            // if point then new iteration
+            guard firstLast != "." && secondLast != "." else {
+                result = "." + result
+                firstBinary.removeLast()
+                secondBinary.removeLast()
+                continue
+            }
+            
+            // calculate bits
+            let intBuff = Int(firstLast)! + Int(secondLast)! + reminder
+            
+            // process calculation result
+            switch intBuff {
+                case 0:
+                    result = "0" + result
+                case 1:
+                    result = "1" + result
+                    reminder = 0
+                    break
+                case 2:
+                    result = "0" + result
+                    reminder = 1
+                case 3:
+                    result = "1" + result
+                    reminder = 1
+                default:
+                    break
+            }
+      
+            firstBinary.removeLast()
+            secondBinary.removeLast()
+        }
+        
+        // add last reminder if not 0
+        if reminder == 1 {
+            result = "1" + result
+        }
+
+        return result
+    }
+
 }
