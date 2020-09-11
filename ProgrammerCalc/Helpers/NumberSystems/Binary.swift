@@ -103,7 +103,6 @@ class Binary: NumberSystem {
         ifProcessSigned {
             // calcualte signed state
             binary.updateSignedState() // changes binary.isSigned state to true of false
-
             // set multipler to -1 or 1 for inverting value
             if binary.isSigned {
                 binary.twosComplement()
@@ -125,7 +124,6 @@ class Binary: NumberSystem {
         ifProcessSigned {
             // calcualte signed state
             binary.updateSignedState() // changes binary.isSigned state to true of false
-            
             // remove signed bit
             binIntStrBuff?.removeFirst()
             // set multipler to -1 or 1 for inverting value
@@ -166,7 +164,6 @@ class Binary: NumberSystem {
             // return decimal if second value after dividing is nil
             result += buffDecimal
             return result * signedMultipler
-            
         }
         
         return result * signedMultipler
@@ -369,13 +366,6 @@ class Binary: NumberSystem {
                 }
             }
 
-            // add zeros after for filling the parts
-//            if counter > 0 {
-//                for _ in 0...partition-counter-1 {
-//                    buffStr.append("0")
-//                }
-//            }
-
             // delete space before and after .
             if buffStr.contains(".") {
                 var pointPos = buffStr.firstIndex(of: ".")!
@@ -467,7 +457,6 @@ class Binary: NumberSystem {
         let binary = self
         
         binary.value = str
-        
         // remove spaces
         binary.value = removeAllSpaces(str: binary.value)
         
@@ -494,7 +483,6 @@ class Binary: NumberSystem {
                 return binary.value
             }
         }
-        
         // just make binary code pretty
         binary.value = fillUpParts(str: binary.value, by: 4)
         

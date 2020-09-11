@@ -54,10 +54,6 @@ class Hexadecimal: NumberSystem {
     func convertHexToBinary() -> Binary {
         let hexadecimal = self.value
         let binary = Binary()
-        
-        //let partition: Int = 4
-        
-        // TODO: Remove spaces
 
         // from hex to binary
         // process each number and form parts

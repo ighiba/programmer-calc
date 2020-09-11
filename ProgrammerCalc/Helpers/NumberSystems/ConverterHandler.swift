@@ -43,7 +43,6 @@ import Foundation
         case "Octal":
             // convert oct to binary
             partition = 3
-            
             let oct = Octal(stringLiteral: anyStr)
             binary = Binary(oct)
         case "Decimal":
@@ -143,7 +142,6 @@ import Foundation
         var resultStr = String(shiftOperation(decimal,shiftCount))
         
         // convert to mainSystem
-        
         resultStr = convertValue(value: resultStr, from: "Decimal", to: mainSystem) ?? "0"
         return resultStr
     }

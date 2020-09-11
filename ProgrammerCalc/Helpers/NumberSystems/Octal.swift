@@ -46,10 +46,6 @@ class Octal: NumberSystem {
         let octal = self.value
         let binary = Binary()
         
-        //let partition: Int = 3
-        
-        // TODO: Remove spaces
-
         // from oct to binary
         // process each number and form parts
         binary.value = tableOctHexToBin(valueOctHex: octal, table: table)
