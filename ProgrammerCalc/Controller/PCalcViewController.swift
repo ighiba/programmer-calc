@@ -67,12 +67,12 @@ class PCalcViewController: UIPageViewController {
         updateConversionState()
         handleConversion()
 
-        // update layout (handle button state and etc)
+        // update layout
         updateAllLayout()
         // update displaying of mainLabel
         handleDisplayingMainLabel()
         // handle all buttons state for current conversion system
-        handleButtonEnabledState()
+        updateButtons()
         
     }
     
@@ -201,38 +201,43 @@ class PCalcViewController: UIPageViewController {
     }
     
     // Handle button enabled state for various conversion systems
-    public func handleButtonEnabledState() {
+    public func updateButtons() {
         let systemMain = self.systemMain ?? "Decimal" // default value
         let forbidden = ConversionValues().forbidden
         
+        // Update all buttons except signed and plusminus
         // loop buttons vc
         for vc in arrayCalcButtonsViewController {
             // loop all buttons in vc
             for buttonTag in 100...218 {
                 if let button = vc.view.viewWithTag(buttonTag) as? CalculatorButton {
                     let buttonLabel = String((button.titleLabel?.text)!)
-                    if forbidden[systemMain]!.contains(buttonLabel) {
-                        print("Forbidden button \(buttonLabel)")
+                    if forbidden[systemMain]!.contains(buttonLabel) && button.calcButtonType == .numeric {
+                        //print("Forbidden button \(buttonLabel)")
                         button.isEnabled = false
                     } else {
+                        // just enable button
                         button.isEnabled = true
                     }
                 }
             }
         }
-        
+
+        // update signed button value
+        updateIsSignedButton()
+        // update plusminus button state
+        changeStatePlusMinus()
     }
     
     public func updateAllLayout() {
         // update button value
         updateIsSignedButton()
+        // update plusminus button state
+        changeStatePlusMinus()
         // update main label
         updateMainLabel()
         // update converter label
         updateConverterLabel()
-        // update plusminus button state
-        changeStatePlusMinus()
-        
     }
    
     public func updateConverterLabel() {
@@ -333,7 +338,7 @@ class PCalcViewController: UIPageViewController {
     private func updateIsSignedButton() {
         // get button by tag 102
         // TODO: Refactor hardcode
-        let isSignedButton = self.view.viewWithTag(102) as? UIButton ?? UIButton()
+        let isSignedButton = self.view.viewWithTag(102) as? CalculatorButton ?? CalculatorButton()
         
         if processSigned {
             // if ON then disable
@@ -347,7 +352,7 @@ class PCalcViewController: UIPageViewController {
     
     // Change state of plusminus button
     private func changeStatePlusMinus() {
-        if let plusMinusButton = self.view.viewWithTag(101) as? UIButton {
+        if let plusMinusButton = self.view.viewWithTag(101) as? CalculatorButton {
             plusMinusButton.isEnabled = processSigned
         }
     }

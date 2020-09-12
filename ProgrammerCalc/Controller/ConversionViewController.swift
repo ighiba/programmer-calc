@@ -112,7 +112,7 @@ class ConversionViewController: UIViewController {
         }
         
         rootVC!.handleDisplayingMainLabel()
-        rootVC!.handleButtonEnabledState()
+        rootVC!.updateButtons()
         
     }
     
