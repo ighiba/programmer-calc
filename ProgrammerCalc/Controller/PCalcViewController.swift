@@ -64,7 +64,6 @@ class PCalcViewController: UIPageViewController {
         setViewControllers([arrayCalcButtonsViewController[1]], direction: .forward, animated: false, completion: nil)
         
         // Update states and layout
-        
         updateConversionState()
         handleConversion()
 
@@ -72,6 +71,9 @@ class PCalcViewController: UIPageViewController {
         updateAllLayout()
         // update displaying of mainLabel
         handleDisplayingMainLabel()
+        // handle all buttons state for current conversion system
+        handleButtonEnabledState()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -196,6 +198,29 @@ class PCalcViewController: UIPageViewController {
         } else {
             // do nothing
         }
+    }
+    
+    // Handle button enabled state for various conversion systems
+    public func handleButtonEnabledState() {
+        let systemMain = self.systemMain ?? "Decimal" // default value
+        let forbidden = ConversionValues().forbidden
+        
+        // loop buttons vc
+        for vc in arrayCalcButtonsViewController {
+            // loop all buttons in vc
+            for buttonTag in 100...218 {
+                if let button = vc.view.viewWithTag(buttonTag) as? CalculatorButton {
+                    let buttonLabel = String((button.titleLabel?.text)!)
+                    if forbidden[systemMain]!.contains(buttonLabel) {
+                        print("Forbidden button \(buttonLabel)")
+                        button.isEnabled = false
+                    } else {
+                        button.isEnabled = true
+                    }
+                }
+            }
+        }
+        
     }
     
     public func updateAllLayout() {

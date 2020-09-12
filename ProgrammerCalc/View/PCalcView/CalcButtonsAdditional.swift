@@ -81,7 +81,7 @@ class CalcButtonsAdditional: UIView {
                          "00", "FF"]
                     
         var buttonLabel: Int = 9
-        //var buttonTag: Int = 100
+        var buttonTag: Int = 200
         var buttons: [UIButton] = []
         
         allTitles.forEach { (title) in
@@ -121,9 +121,9 @@ class CalcButtonsAdditional: UIView {
                 // width for default
                 button.widthAnchor.constraint(greaterThanOrEqualToConstant: button.buttonWidth()).isActive = true
             }
-            // button tags start from 100 to 118
-//            button.tag = buttonTag
-//            buttonTag += 1
+            // button tags start from 200 to 217
+            button.tag = buttonTag
+            buttonTag += 1
             
             // add element to array
             buttons.append(button)

@@ -9,10 +9,10 @@
 import Foundation
 
 class ConversionValues {
-    fileprivate let digitValues: Set<String> = ["0","1","2","3","4","5","6","7","8","8","9"]
-    fileprivate let charValues: Set<String> = ["A","B","C","D","E","F"]
+    fileprivate let digitValues: Set<String> = ["00","0","1","2","3","4","5","6","7","8","8","9"]
+    fileprivate let charValues: Set<String> = ["A","B","C","D","E","F","FF"]
     
-    lazy var forbidden = [ "Binary": digitValues.union(charValues).subtracting(["1","0"]),
+    lazy var forbidden = [ "Binary": digitValues.union(charValues).subtracting(["1","0", "00"]),
                            "Decimal": charValues,
                            "Octal": charValues.union(["8","9"]),
                            "Hexadecimal": []]
