@@ -85,20 +85,21 @@ class CalcButtonsMain: UIView {
         var buttons: [UIButton] = []
         
         allTitles.forEach { (title) in
-            let button = CalculatorButton(frame: CGRect())
+            let button : CalculatorButton
 
-            // set actions for button
+            // initialize button by type
             switch title{
             case "0"..."9",".":
-                button.setActions(for: .numeric)
-                break
+                button = CalculatorButton(calcButtonType: .numeric)
             case "Signed\nOFF":
+                button = CalculatorButton()
                 button.addTarget(nil, action: #selector(PCalcViewController.toggleIsSigned), for: .touchUpInside)
-                break
             default:
-                button.setActions(for: .sign)
+                button = CalculatorButton(calcButtonType: .sign)
                 break
             }
+            // set actions/targets
+            button.setActions(for: button.calcButtonType)
             
             // set title and style
             button.setTitle(title, for: .normal)

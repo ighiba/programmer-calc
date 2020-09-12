@@ -85,24 +85,23 @@ class CalcButtonsAdditional: UIView {
         var buttons: [UIButton] = []
         
         allTitles.forEach { (title) in
-            let button = CalculatorButton(frame: CGRect())
+            let button: CalculatorButton
 
-            // set actions for button
+            // initialize button by type
             switch title{
             case "A","B","C","D","E","F","00","FF":
-                button.setActions(for: .numeric)
-                break
+                button = CalculatorButton(calcButtonType: .numeric)
             // TODO: Localization
             case "1's", "2's":
-                button.setActions(for: .complement)
-                break
+                button = CalculatorButton(calcButtonType: .complement)
             case "X<<Y", "X>>Y", "<<", ">>", "AND", "OR", "XOR", "NOR":
-                button.setActions(for: .bitwise)
-                break
+                button = CalculatorButton(calcButtonType: .bitwise)
             default:
-                button.setActions(for: .numeric)
+                button = CalculatorButton(calcButtonType: .numeric)
                 break
             }
+            // set actions/targets
+            button.setActions(for: button.calcButtonType)
             
             // set title and style
             button.setTitle(title, for: .normal)

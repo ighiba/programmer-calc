@@ -18,12 +18,14 @@ class CalculatorButton: UIButton {
         case sign
         case complement
         case bitwise
+        case defaultBtn
     }
     
     // ==================
     // MARK: - Properties
     // ==================
     
+    public var calcButtonType: buttonTypes = .defaultBtn // default value
     
     private let _boundsExtension: CGFloat = 0
     // override isHighlighted for calculator buttons
@@ -51,6 +53,19 @@ class CalculatorButton: UIButton {
         }
     }
     
+    // ======================
+    // MARK: - Initialization
+    // ======================
+    
+    init() {
+        super.init(frame: CGRect())
+        self.calcButtonType = .defaultBtn
+    }
+    
+    convenience init(calcButtonType: buttonTypes) {
+        self.init()
+        self.calcButtonType = calcButtonType
+    }
     
     // ===============
     // MARK: - Methods
@@ -101,15 +116,14 @@ class CalculatorButton: UIButton {
         switch buttonType {
         case .numeric:
             self.addTarget(nil, action: #selector(PCalcViewController.numericButtonTapped), for: .touchUpInside)
-            break
         case .sign:
             self.addTarget(nil, action: #selector(PCalcViewController.signButtonTapped), for: .touchUpInside)
-            break
         case .complement:
             self.addTarget(nil, action: #selector(PCalcViewController.complementButtonTapped), for: .touchUpInside)
-            break
         case .bitwise:
             self.addTarget(nil, action: #selector(PCalcViewController.bitwiseButtonTapped), for: .touchUpInside)
+        case .defaultBtn:
+            // do nothing
             break
         }
     }
@@ -169,6 +183,10 @@ class CalculatorButton: UIButton {
             self.isHighlighted = false
             return sendActions(for: .touchUpOutside)
         }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
 }

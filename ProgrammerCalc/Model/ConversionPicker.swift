@@ -26,7 +26,6 @@ extension ConversionPicker: UIPickerViewDataSource {
 
 extension ConversionPicker: UIPickerViewDelegate {
     
-    
     // Process element from array to create picker row
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return systemsModel.conversionSystems[row]
