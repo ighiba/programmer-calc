@@ -111,6 +111,57 @@ class CalcMathTests: XCTestCase {
         XCTAssertEqual(result, "1.2", "Calaculation failure")
     }
     
+    // MARK: - Negate
+    
+    func testBinNegateSigned() throws {
+        // 1. given
+        SavedData.calcState = signedData
+        let bin = "00010000"
+        
+        // 2. when
+        let result = calcMathTest.negate(valueStr: bin, system: "Binary")
+        
+        // 3. then
+        XCTAssertEqual(result, "1111 0000", "Calaculation failure")
+    }
+    
+    func testDecNegateSigned() throws {
+        // 1. given
+        SavedData.calcState = signedData
+        let dec = "12"
+        
+        // 2. when
+        let result = calcMathTest.negate(valueStr: dec, system: "Decimal")
+        
+        // 3. then
+        XCTAssertEqual(result, "-12", "Calaculation failure")
+    }
+    
+    func testOctNegateSigned() throws {
+        // 1. given
+        SavedData.calcState = signedData
+        let oct = "12" // 10
+        
+        // 2. when
+        let result = calcMathTest.negate(valueStr: oct, system: "Octal")
+        
+        // 3. then
+        XCTAssertEqual(result, "366", "Calaculation failure") // -10
+    }
+    
+    func testHexNegateSigned() throws {
+        // 1. given
+        SavedData.calcState = signedData
+        let hex = "FEED" // -275
+        
+        // 2. when
+        let result = calcMathTest.negate(valueStr: hex, system: "Hexadecimal")
+        
+        // 3. then
+        XCTAssertEqual(result, "113", "Calaculation failure")
+    }
+    
+    
     // MARK: - AND
     
     func testCalcDecUnsignedAND() throws {
