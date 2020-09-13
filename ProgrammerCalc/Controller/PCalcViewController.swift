@@ -87,7 +87,6 @@ class PCalcViewController: UIPageViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         let mainButtons = CalcButtonsMain(frame: CGRect())
         let additionalButtons = CalcButtonsAdditional(frame: CGRect())
         
@@ -549,28 +548,8 @@ class PCalcViewController: UIPageViewController {
         // Invert button
         case "\u{00B1}":
             if label.text != "0" {
-                // if number is already signed
                 // TODO: Error handling
-                // TODO: Various sytems handling
-                if systemMain == "Binary" {
-                    // change left bit 1 to 0, 0 to 1
-                    if label.text!.first == "0" {
-                        label.text!.removeFirst()
-                        label.text = "1" + label.text!
-                    } else {
-                        label.text!.removeFirst()
-                        label.text = "0" + label.text!
-                    }
-                } else {
-                    // For other systems
-                    if label.text!.contains("-") {
-                        let minusIndex = label.text!.firstIndex(of: "-")
-                        label.text!.remove(at: minusIndex!)
-                    } else {
-                        // just add minus
-                        label.text = "-" + label.text!
-                    }
-                }
+                label.text = calculationHandler.negate(valueStr: label.text!, system: systemMain!)
             }
             updateConverterLabel()
         // Subtraction button

@@ -183,4 +183,39 @@ final class CalcMath {
         
         return resultStr
     }
+    
+    public func negate(valueStr: String, system: String) -> String {
+        // ======================
+        // Convert Any to Decimal
+        // ======================
+        
+        let valueConvertedStr: String
+        
+        if system != "Decimal" {
+            // TOOD: Error handling
+            valueConvertedStr = converterHandler.convertValue(value: valueStr, from: system, to: "Decimal")!
+        } else {
+            valueConvertedStr = valueStr
+        }
+        
+        // Negate decimal number
+        let decimal = Decimal(string: valueConvertedStr)!
+        // if 0 then return input value
+        guard decimal != 0 else {
+            return valueStr
+        }
+        // multiple by -1
+        let decimalStr = "\(-1 * decimal)"
+        
+        // ======================
+        // Convert Decimal to Any
+        // ======================
+        
+        if system != "Decimal" {
+            // TODO: Error handling
+            return converterHandler.convertValue(value: decimalStr, from: "Decimal", to: system)!
+        } else {
+            return decimalStr
+        }
+    }
 }
