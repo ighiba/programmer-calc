@@ -54,8 +54,10 @@ class PCalcView: UIView {
         // set transparent
         navBar.backgroundColor = UIColor.white.withAlphaComponent(0)
         navBar.barTintColor = UIColor.white.withAlphaComponent(0)
+        // set clear for bottom line (shadow)
+        navBar.setValue(true, forKey: "hidesShadow")
         // TODO: Theme color for buttons
-        
+
         return navBar
     }()
    
