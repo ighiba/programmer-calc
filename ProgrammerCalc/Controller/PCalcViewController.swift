@@ -110,6 +110,15 @@ class PCalcViewController: UIPageViewController {
         
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        self.unhighlightLabels()
+        
+        print("touched began")
+    }
+
+    
     // ===============
     // MARK: - Methods
     // ===============
@@ -173,6 +182,16 @@ class PCalcViewController: UIPageViewController {
             let newConversionSettings = ConversionSettingsModel(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 8.0)
             
             return newConversionSettings
+        }
+    }
+    
+    // make labels .clear color
+    func unhighlightLabels() {
+        if mainLabel.layer.backgroundColor != UIColor.clear.cgColor {
+            mainLabel.hideLabelMenu()
+        }
+        if converterLabel.layer.backgroundColor != UIColor.clear.cgColor {
+            converterLabel.hideLabelMenu()
         }
     }
     
@@ -383,6 +402,11 @@ class PCalcViewController: UIPageViewController {
         //print("touchUpOutside")
         //sender.backgroundColor = .red
         //sender.isHighlighted = false
+    }
+    
+    @objc func touchHandleLabelHighlight() {
+        // TODO: Refactor
+        unhighlightLabels()
     }
     
     // Numeric buttons actions
@@ -607,6 +631,10 @@ class PCalcViewController: UIPageViewController {
     // Change conversion button tapped
     @objc func changeButtonTapped( sender: UIButton) {
         print("Start changing conversion")
+        
+        // label higliglht handling
+        touchHandleLabelHighlight()
+        
         // initialize vc popover
         let vc = ConversionViewController()
         
@@ -621,6 +649,10 @@ class PCalcViewController: UIPageViewController {
     // Settings button tapped
     @objc func settingsButtonTapped( sender: UIButton) {
         print("Open settings")
+        
+        // label higliglht handling
+        touchHandleLabelHighlight()
+        
         // initialize vc popover and nav vc
         let vc = SettingsViewController()
         let navigationController = UINavigationController()

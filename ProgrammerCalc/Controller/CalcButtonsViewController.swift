@@ -19,4 +19,18 @@ class CalcButtonsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        // root vc for handling tappging on PCalcViewController
+        let rootVC = UIApplication.shared.windows.first?.rootViewController as? PCalcViewController
+        guard rootVC != nil else {
+            return
+        }
+        
+        rootVC?.unhighlightLabels()
+        
+        print("touched began page out")
+    }
 }
