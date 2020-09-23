@@ -20,8 +20,8 @@ class PCalcViewController: UIPageViewController {
     let calculationHandler: CalcMath = CalcMath()
     // views
     let calcView: PCalcView = PCalcView()
-    lazy var mainLabel: UILabel = calcView.mainLabel
-    lazy var converterLabel: UILabel = calcView.converterLabel
+    lazy var mainLabel: CalcualtorLabel = calcView.mainLabel
+    lazy var converterLabel: CalcualtorLabel = calcView.converterLabel
     // State for processign signed values
     private var processSigned = false // default value
     // State for calculating numbers

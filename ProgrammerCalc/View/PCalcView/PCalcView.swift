@@ -62,12 +62,12 @@ class PCalcView: UIView {
     }()
    
     // Label wich shows user input
-    lazy var mainLabel: UILabel = {
-        let label = UILabel()
+    lazy var mainLabel: CalcualtorLabel = {
+        let label = CalcualtorLabel()
         
         label.frame = CGRect()
         label.text = "0"
-        label.backgroundColor = .white
+        label.backgroundColor = .clear
         // set font size, font family
         label.font = UIFont(name: "HelveticaNeue-Thin", size: 72.0)
         //label.font = UIFont.systemFont(ofSize: 72.0, weight: UIFont.Weight.thin)
@@ -85,14 +85,14 @@ class PCalcView: UIView {
     }()
     
     // Label wich shows converted values from user input
-    lazy var converterLabel: UILabel = {
+    lazy var converterLabel: CalcualtorLabel = {
         
-        let label = UILabel()
+        let label = CalcualtorLabel()
         
         label.frame = CGRect()
         label.text = "0"
         label.numberOfLines = 2
-        label.backgroundColor = .white
+        label.backgroundColor = .clear
         // set font size, font family
         label.font = UIFont(name: "HelveticaNeue-Thin", size: 62.0)
         //label.font = UIFont.systemFont(ofSize: 62.0, weight: UIFont.Weight.thin)
