@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QuartzCore
 
 class CalcualtorLabel: UILabel {
     
@@ -41,9 +42,12 @@ class CalcualtorLabel: UILabel {
         self.becomeFirstResponder()
         
         let menu = UIMenuController.shared
-        
+
         if !menu.isMenuVisible {
+            
+            highlightLabel()
             menu.showMenu(from: self, rect: bounds)
+            
         }
     }
     
@@ -51,15 +55,50 @@ class CalcualtorLabel: UILabel {
     override func copy(_ sender: Any?) {
         let board = UIPasteboard.general
         
+        // delete all spaces in string
+        
+        
         board.string = text
         
-        let menu = UIMenuController.shared
+        self.hideLabelMenu()
+        self.resignFirstResponder()
         
-        menu.hideMenu(from: self)
+        undoHighlightLabel()
     }
 
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         return action == #selector(UIResponderStandardEditActions.copy)
+    }
+    
+    
+    func highlightLabel() {
+        self.layer.cornerRadius = 0
+        self.layer.masksToBounds = false
+        self.layer.backgroundColor = UIColor.lightGray.cgColor.copy(alpha: 0)
+        
+        UIView.animate(withDuration: 0.18, delay: 0, options: .curveEaseInOut, animations: {
+            self.layer.backgroundColor = UIColor.lightGray.cgColor.copy(alpha: 0.3)
+            self.layer.cornerRadius = 15
+            self.layer.masksToBounds = true
+        }, completion: nil)
+
+    }
+    
+    func undoHighlightLabel() {
+        
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
+            self.layer.backgroundColor = UIColor.lightGray.cgColor.copy(alpha: 0)
+            self.layer.cornerRadius = 0
+            self.layer.masksToBounds = false
+        }, completion: nil)
+        
+    }
+    
+    public func hideLabelMenu() {
+        let menu = UIMenuController.shared
+        menu.hideMenu(from: self)
+        
+        undoHighlightLabel()
     }
     
     required init?(coder: NSCoder) {
