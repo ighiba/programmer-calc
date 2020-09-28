@@ -753,18 +753,24 @@ extension PCalcViewController: UIPageViewControllerDataSource, UIPageViewControl
     
     // load vc before
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        // handle highlighting of labels when page changes
+        touchHandleLabelHighlight()
+        
         guard let viewController = viewController as? CalcButtonsViewController else {return nil}
         if let index = arrayCalcButtonsViewController.firstIndex(of: viewController) {
             if index > 0 {
                 return arrayCalcButtonsViewController[index - 1]
             }
         }
-        
+
         return nil
     }
     
     // load vc after
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        // handle highlighting of labels when page changes
+        touchHandleLabelHighlight()
+        
         guard let viewController = viewController as? CalcButtonsViewController else {return nil}
         if let index = arrayCalcButtonsViewController.firstIndex(of: viewController) {
             if index < arrayButtonsStack.count - 1 {
