@@ -99,6 +99,14 @@ class PCalcViewController: UIPageViewController {
         
         // get state from UserDefaults
         getCalcState()
+
+        // add swipe left for deleting last value in main label
+        [mainLabel,converterLabel].forEach { (label) in
+            let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(swipeRightLabel))
+            swipeRight.direction = .right
+            label.addGestureRecognizer(swipeRight)
+        }
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -717,6 +725,22 @@ class PCalcViewController: UIPageViewController {
         updateMainLabel()
         updateConverterLabel()
     }
+     
+    @objc func swipeRightLabel(sender: UISwipeGestureRecognizer) {
+        if sender.direction == .right {
+            if mainLabel.text!.count > 1 {
+                // delete last symbol in main label
+                mainLabel.text?.removeLast()
+            } else {
+                // if only one digit in label (or 0) then replace it to "0"
+                mainLabel.text = "0"
+            }
+            // update labels
+            updateMainLabel()
+            updateConverterLabel()
+        }
+    }
+    
 }
 
 
