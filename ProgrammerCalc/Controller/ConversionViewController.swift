@@ -129,12 +129,12 @@ class ConversionViewController: UIViewController {
         }
     }
     
-    fileprivate func isGestureInContainer( gesture: UIGestureRecognizer) -> Bool {
+    fileprivate func isGestureNotInContainer( gesture: UIGestureRecognizer) -> Bool {
         conversionView.container.updateConstraints()
         let currentLocation: CGPoint = gesture.location(in: conversionView.container)
         let containerBounds: CGRect = conversionView.container.bounds
 
-        return containerBounds.contains(currentLocation)
+        return !containerBounds.contains(currentLocation)
     }
     
     // ===============
@@ -148,26 +148,20 @@ class ConversionViewController: UIViewController {
     
     // Swipe up to exit
     @objc func handleSwipe( sender: UISwipeGestureRecognizer) {
-        let inContainer: Bool = isGestureInContainer(gesture: sender)
+        let notInContainer: Bool = isGestureNotInContainer(gesture: sender)
         
-        if inContainer {
-            // contains
-            // do nothing
-        } else {
-            // contains
+        if notInContainer {
+            // does not contains
             // dismiss vc
             dismissVC()
         }
     }
     
     @objc func tappedOutside( sender: UITapGestureRecognizer) {
-        let inContainer: Bool = isGestureInContainer(gesture: sender)
+        let notInContainer: Bool = isGestureNotInContainer(gesture: sender)
         
-        if inContainer {
-            // contains
-            // do nothing
-        } else {
-            // contains
+        if notInContainer {
+            // does not contains
             // dismiss vc
             dismissVC()
         }
