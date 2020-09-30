@@ -25,6 +25,11 @@ class ConversionViewController: UIViewController {
         tap.numberOfTapsRequired = 1
         self.view.isUserInteractionEnabled = true
         self.view.addGestureRecognizer(tap)
+        
+        // swipe up
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeUp.direction = .up
+        self.view.addGestureRecognizer(swipeUp)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -124,6 +129,14 @@ class ConversionViewController: UIViewController {
         }
     }
     
+    fileprivate func isGestureInContainer( gesture: UIGestureRecognizer) -> Bool {
+        conversionView.container.updateConstraints()
+        let currentLocation: CGPoint = gesture.location(in: conversionView.container)
+        let containerBounds: CGRect = conversionView.container.bounds
+
+        return containerBounds.contains(currentLocation)
+    }
+    
     // ===============
     // MARK: - Actions
     // ===============
@@ -133,11 +146,22 @@ class ConversionViewController: UIViewController {
         dismissVC()
     }
     
-    @objc func tappedOutside( touch: UITouch) {
-        conversionView.container.updateConstraints()
-        let currentLocation: CGPoint = touch.location(in: conversionView.container)
-        let containerBounds: CGRect = conversionView.container.bounds
-        let inContainer: Bool = containerBounds.contains(currentLocation)
+    // Swipe up to exit
+    @objc func handleSwipe( sender: UISwipeGestureRecognizer) {
+        let inContainer: Bool = isGestureInContainer(gesture: sender)
+        
+        if inContainer {
+            // contains
+            // do nothing
+        } else {
+            // contains
+            // dismiss vc
+            dismissVC()
+        }
+    }
+    
+    @objc func tappedOutside( sender: UITapGestureRecognizer) {
+        let inContainer: Bool = isGestureInContainer(gesture: sender)
         
         if inContainer {
             // contains
