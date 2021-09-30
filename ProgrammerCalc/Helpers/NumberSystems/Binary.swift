@@ -8,24 +8,32 @@
 
 import Foundation
 
-class Binary: NumberSystem {
+class Binary: NumberSystemProtocol {
+    
+    // for divided numbers
+    typealias IntPart = String
+    typealias FractPart = String
+    
+    // ==================
+    // MARK: - Properties
+    // ==================
+    
+    var value: String = ""
+    var isSigned: Bool = false // default
     
     required public init(stringLiteral value: String) {
-        super.init(stringLiteral: value)
-        
         // process string input and apply style for output
         self.value = processStringInput(str: value)
     }
     
     /// Creates an empty instance
-    override init() {
-        super.init()
+    init() {
+        self.value = ""
     }
     
     /// Creates an instance initialized to the Int value
     init(_ valueInt: Int) {
-        // TODO: Handle signed 
-        super.init()
+        // TODO: Handle signed
         self.value = String(valueInt, radix: 2)
         self.value = fillUpParts(str: self.value, by: 4)
     }
@@ -34,12 +42,11 @@ class Binary: NumberSystem {
     convenience init(_ valueDec: Decimal) {
         self.init()
         let binary = valueDec.convertDecToBinary()
-        super.value = binary.value
+        self.value = binary.value
     }
     
     /// Creates an instance initialized to the Hexadecimal value
     init(_ valueHex: Hexadecimal) {
-        super.init()
         let binary = valueHex.convertHexToBinary()
         self.value = binary.value
         
@@ -47,7 +54,6 @@ class Binary: NumberSystem {
     
     /// Creates an instance initialized to the Octal value
     init(_ valueOct: Octal) {
-        super.init()
         let binary = valueOct.convertOctToBinary()
         self.value = binary.value
         
@@ -57,6 +63,15 @@ class Binary: NumberSystem {
     // ===============
     // MARK: - Methods
     // ===============
+    
+    func ifProcessSigned(closure: () -> Void) {
+        // process signed
+        if let data = SavedData.calcState?.processSigned {
+            if data{
+                closure()
+            }
+        }
+    }
     
     // only for int or fract part of binary
     func removeZerosBefore( str: String) -> String {
@@ -88,6 +103,29 @@ class Binary: NumberSystem {
         return resultStr
     }
     
+    // Dividing string variable and converting it to double without loss of precision
+    func divideIntFract( value: Any) -> (IntPart?, FractPart?) {
+        let str = String(describing: value)
+        var strInt: String
+        var strFract: String
+        
+        // search index of floating pos
+        if let pointPos = str.firstIndex(of: ".") {
+            // fill strInt
+            strInt = String(str[str.startIndex..<pointPos])
+            // fill strFract
+            strFract = String(str[pointPos..<str.endIndex])
+            // delete .
+            strFract.removeFirst()
+           
+            return (strInt, strFract)
+            
+        } else {
+            // if is int
+            return (str, nil)
+        }
+    }
+    
     // BIN -> DEC
     func convertBinaryToDec() -> Decimal {
         let binary = self
@@ -110,7 +148,7 @@ class Binary: NumberSystem {
         }
         
         // remove all spaces
-        let str = removeAllSpaces(str: binary.value)
+        let str = binary.value.removeAllSpaces()
      
         // Dividing to int and fract parts
         let buffDividedStr = divideIntFract(value: str)
@@ -186,7 +224,7 @@ class Binary: NumberSystem {
         
         // from binary to oct
         // process each number and form parts
-        hexadecimal.value = tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: hexTable)
+        hexadecimal.value = hexadecimal.tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: hexTable)
         
         guard dividedBinary.1 != nil else { return hexadecimal }
         
@@ -196,7 +234,7 @@ class Binary: NumberSystem {
         dividedBinary.1 = String(dividedBinary.1!.reversed())
         // process fract part
         hexadecimal.value += "."
-        hexadecimal.value +=  tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: hexTable)
+        hexadecimal.value +=  hexadecimal.tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: hexTable)
         
         return hexadecimal
     }
@@ -216,7 +254,7 @@ class Binary: NumberSystem {
         
         // from binary to oct
         // process each number and form parts
-        octal.value = tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: octTable)
+        octal.value = octal.tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: octTable)
         
         guard dividedBinary.1 != nil else { return octal }
         
@@ -226,7 +264,7 @@ class Binary: NumberSystem {
         dividedBinary.1 = String(dividedBinary.1!.reversed())
         // process fract part
         octal.value += "."
-        octal.value +=  tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: octTable)
+        octal.value +=  octal.tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: octTable)
          
         return octal
     }
@@ -295,7 +333,7 @@ class Binary: NumberSystem {
     // Filling up BINARY number with zeros by num of zeros in 1 part
     func fillUpParts( str: String, by fillNum: Int) -> String {
         // remove all spaces
-        var buffStr = removeAllSpaces(str: str)
+        var buffStr = str.removeAllSpaces()
         
         if Int(buffStr) != 0 {
             // remove all zeros at beginning of string
@@ -347,7 +385,7 @@ class Binary: NumberSystem {
         if binary.value.count >= 1 && binary.value != "0" {
             var counter: Int = 0
             
-            binary.value = removeAllSpaces(str: binary.value)
+            binary.value = binary.value.removeAllSpaces()
 
             for char in binary.value {
                 // check if already point
@@ -458,7 +496,7 @@ class Binary: NumberSystem {
         
         binary.value = str
         // remove spaces
-        binary.value = removeAllSpaces(str: binary.value)
+        binary.value = binary.value.removeAllSpaces()
         
         // get saved data
         if let data = SavedData.calcState?.processSigned {
@@ -503,7 +541,7 @@ class Binary: NumberSystem {
         
         // process fract part
         if let fractPart = binaryDivided.1 {
-            let buffStr = removeAllSpaces(str: fractPart)
+            let buffStr = fractPart.removeAllSpaces()
             
             resultStr = resultStr + "." + buffStr
         }
@@ -575,7 +613,7 @@ class Binary: NumberSystem {
         }
         
         // if binary not float
-        binary.value = binary.removeAllSpaces(str: binary.value)
+        binary.value = binary.value.removeAllSpaces()
         
         // get saved data
         if let data = SavedData.calcState?.processSigned {
@@ -656,7 +694,7 @@ class Binary: NumberSystem {
         var signedBit = String()
         
         // remove spaces
-        binary.value = removeAllSpaces(str: binary.value)
+        binary.value = binary.value.removeAllSpaces()
         
         // convert to 1's complement
         binary.onesComplement()

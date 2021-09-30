@@ -113,7 +113,7 @@ class CalculatorButton: UIButton {
         
         self.addTarget(nil, action: #selector(PCalcViewController.toucUpOutsideAction), for: [.touchDragExit, .touchDragOutside])
         // label higliglht handling
-        self.addTarget(nil, action: #selector(PCalcViewController.touchHandleLabelHighlight), for: [.touchDown])
+        self.addTarget(nil, action: #selector(PCalcViewController.touchHandleLabelHighlight), for: .touchDown)
         
         switch buttonType {
         case .numeric:

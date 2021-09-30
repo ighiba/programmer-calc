@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C00616A827064449007BEF89 /* OctHexHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00616A727064449007BEF89 /* OctHexHelper.swift */; };
+		C00616AC27065097007BEF89 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00616AB27065097007BEF89 /* String.swift */; };
 		C05A169B24DD7B0D007B7FB8 /* SavedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05A169A24DD7B0D007B7FB8 /* SavedData.swift */; };
 		C05B008C24E6E0E100F8A5E0 /* Hexadecimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B008B24E6E0E100F8A5E0 /* Hexadecimal.swift */; };
 		C05B008E24E701ED00F8A5E0 /* Octal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B008D24E701ED00F8A5E0 /* Octal.swift */; };
@@ -64,6 +66,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C00616A727064449007BEF89 /* OctHexHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OctHexHelper.swift; sourceTree = "<group>"; };
+		C00616AB27065097007BEF89 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		C05A169A24DD7B0D007B7FB8 /* SavedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedData.swift; sourceTree = "<group>"; };
 		C05B008B24E6E0E100F8A5E0 /* Hexadecimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hexadecimal.swift; sourceTree = "<group>"; };
 		C05B008D24E701ED00F8A5E0 /* Octal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Octal.swift; sourceTree = "<group>"; };
@@ -156,6 +160,7 @@
 				C05B008B24E6E0E100F8A5E0 /* Hexadecimal.swift */,
 				C05B008D24E701ED00F8A5E0 /* Octal.swift */,
 				C066756D24E2D83300F832F9 /* ConverterHandler.swift */,
+				C00616A727064449007BEF89 /* OctHexHelper.swift */,
 			);
 			path = NumberSystems;
 			sourceTree = "<group>";
@@ -190,6 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				C068AFA924FA40B900BFE754 /* UIPageViewController.swift */,
+				C00616AB27065097007BEF89 /* String.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -430,6 +436,7 @@
 				C077CF6F24DC8DEE008E5F0F /* SettingsCell.swift in Sources */,
 				C066756924E27AE700F832F9 /* ConversionValues.swift in Sources */,
 				C068AFAC24FA605800BFE754 /* CalculatorButton.swift in Sources */,
+				C00616AC27065097007BEF89 /* String.swift in Sources */,
 				C05B008C24E6E0E100F8A5E0 /* Hexadecimal.swift in Sources */,
 				C05A169B24DD7B0D007B7FB8 /* SavedData.swift in Sources */,
 				C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */,
@@ -445,6 +452,7 @@
 				C07267DD24E5ACB300D4B4A2 /* Binary.swift in Sources */,
 				C077CF7124DC987B008E5F0F /* SettingsModel.swift in Sources */,
 				C070ED2624DB0ED400A04463 /* SettingsView.swift in Sources */,
+				C00616A827064449007BEF89 /* OctHexHelper.swift in Sources */,
 				C0666EBA24F9782F004809EF /* CalcButtonsMain.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

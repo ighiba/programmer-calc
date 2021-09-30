@@ -58,7 +58,7 @@ import Foundation
         default:
             // do nothing
             // TODO: Error handling
-            binary = "0"
+            binary = Binary(stringLiteral: "0")
             break
         }
         

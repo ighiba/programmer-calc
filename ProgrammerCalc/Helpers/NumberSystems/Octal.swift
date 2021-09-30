@@ -8,7 +8,14 @@
 
 import Foundation
 
-class Octal: NumberSystem {
+class Octal: OctHexHelper, NumberSystemProtocol {
+    
+    // ==================
+    // MARK: - Properties
+    // ==================
+    
+    var value: String = ""
+    var isSigned: Bool = false // default
 
     // table for converting from binary to oct
     let table = [   "000":"0",
@@ -21,7 +28,7 @@ class Octal: NumberSystem {
                     "111":"7",]
     
     required public init(stringLiteral value: String) {
-        super.init(stringLiteral: value)
+        self.value = value
     }
     
     /// Creates an empty instance
@@ -30,8 +37,7 @@ class Octal: NumberSystem {
     }
     
     /// Creates an instance initialized to the Binary value
-    override init(_ valueBin: Binary) {
-        super.init()
+    init(_ valueBin: Binary) {
         let octal = valueBin.convertBinaryToOct(octTable: table)
         self.value = octal.value
     }
