@@ -146,7 +146,7 @@ final class CalcMath {
                 return secondNum
             }
             // x or y
-            let buffResult = Decimal(Int(firstNum)! | Int(secondNum)!)
+            let buffResult = DecimalSystem(Decimal(Int(firstNum)! | Int(secondNum)!))
             // convert to binary
             let binary = Binary(buffResult)
             // delete zeros before for binary
@@ -155,7 +155,7 @@ final class CalcMath {
             // not result (invert binary)
             binary.invert()
             // convert to decimal
-            let decimal = Decimal(binary)
+            let decimal = DecimalSystem(binary)
             
             resultStr = "\(decimal)"
         }

@@ -39,7 +39,7 @@ class Binary: NumberSystemProtocol {
     }
     
     /// Creates an instance initialized to the Decimal value
-    convenience init(_ valueDec: Decimal) {
+    convenience init(_ valueDec: DecimalSystem) {
         self.init()
         let binary = valueDec.convertDecToBinary()
         self.value = binary.value

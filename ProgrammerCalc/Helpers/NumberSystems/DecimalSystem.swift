@@ -1,19 +1,41 @@
 //
-//  DecimalExt.swift
+//  DecimalSystem.swift
 //  ProgrammerCalc
 //
-//  Created by Ivan Ghiba on 14.08.2020.
+//  Created by Ivan Ghiba on 30.09.2020.
 //  Copyright © 2020 ighiba. All rights reserved.
 //
 
 import Foundation
 
-extension Decimal {
+class DecimalSystem: NumberSystemProtocol {
     
+    // ==================
+    // MARK: - Properties
+    // ==================
+    
+    var decimalValue: Decimal
+    
+    var value: String
+    var isSigned: Bool = false
+    
+    // ======================
+    // MARK: - Initialization
+    // ======================
+    
+    required init(stringLiteral: String) {
+        self.value = stringLiteral
+        self.decimalValue = Decimal(string: stringLiteral) ?? Decimal(0)
+    }
+
+    init(_ valueDec: Decimal) {
+        self.decimalValue = valueDec
+        self.value = "\(self.decimalValue)"
+    }
     
     init(_ valueBin: Binary) {
-        self.init()
-        self = valueBin.convertBinaryToDec()
+        self.decimalValue = valueBin.convertBinaryToDec()
+        self.value = "\(self.decimalValue)"
     }
     
     
@@ -28,22 +50,20 @@ extension Decimal {
         var decNumStr: String
         var binary = Binary()
         
-        let isDecSigned: Bool = {
-            if self < 0 {
-                return true
-            } else {
-                return false
-            }
-        }()
+        if decimalValue < 0 {
+            isSigned = true
+        } else {
+            isSigned = false
+        }
 
         // if number is signed
         // TODO: Signed handling
         
-        if isDecSigned {
-            decNumStr = String("\(self * -1)")
+        if isSigned {
+            decNumStr = String("\(decimalValue * -1)")
         } else {
-            decNumStr = String("\(self)")
-        }     
+            decNumStr = String("\(decimalValue)")
+        }
 
         if let decNumInt: Int = Int(decNumStr) {
             let str = binary.convertIntToBinary(decNumInt)
@@ -65,7 +85,7 @@ extension Decimal {
                 // remove zeros
                 binary.value = binary.removeZerosBefore(str: binary.value)
                 // set signed state to binary
-                binary.isSigned = isDecSigned
+                binary.isSigned = self.isSigned
                 // fill up to signed binary style
                 binary.fillUpSignedToNeededCount()
                 // convert to 2's complenment state if value is signed

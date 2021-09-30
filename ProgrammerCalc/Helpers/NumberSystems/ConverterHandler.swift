@@ -48,7 +48,7 @@ import Foundation
         case "Decimal":
             // convert dec to binary
             partition = 4
-            let dec = Decimal(string: anyStr)!
+            let dec = DecimalSystem(stringLiteral: anyStr)
             binary = Binary(dec)
         case "Hexadecimal":
             // convert hex to binary
@@ -82,7 +82,7 @@ import Foundation
             targetStr = Octal(binary).value
         case "Decimal":
             // convert binary to dec
-            targetStr = "\(Decimal(binary))"
+            targetStr = DecimalSystem(binary).value
         case "Hexadecimal":
             // convert binary to hex
             targetStr = Hexadecimal(binary).value
