@@ -62,7 +62,7 @@ class CalcualtorLabel: UILabel {
         let board = UIPasteboard.general
         
         // change clipboard with new value from label self.text and delete all spaces in string
-        board.string = self.text?.replacingOccurrences(of: " ", with: "")
+        board.string = self.text?.removeAllSpaces()
         
         self.hideLabelMenu()
         self.resignFirstResponder()
