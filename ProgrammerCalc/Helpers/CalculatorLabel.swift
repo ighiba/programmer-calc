@@ -55,10 +55,8 @@ class CalcualtorLabel: UILabel {
     override func copy(_ sender: Any?) {
         let board = UIPasteboard.general
         
-        // delete all spaces in string
-        
-        
-        board.string = text
+        // change clipboard with new value from label self.text and delete all spaces in string
+        board.string = self.text?.replacingOccurrences(of: " ", with: "")
         
         self.hideLabelMenu()
         self.resignFirstResponder()
@@ -85,6 +83,7 @@ class CalcualtorLabel: UILabel {
     }
     
     func undoHighlightLabel() {
+        self.resignFirstResponder()
         
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
             self.layer.backgroundColor = UIColor.lightGray.cgColor.copy(alpha: 0)
