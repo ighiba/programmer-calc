@@ -15,7 +15,7 @@ class CalcualtorLabel: UILabel {
     // MARK: - Properties
     // ==================
     
-    var rawValue: NumberSystemProtocol?
+    var value: NumberSystemProtocol?
 
     override var canBecomeFirstResponder: Bool {
         return true
@@ -40,7 +40,7 @@ class CalcualtorLabel: UILabel {
     // ===============
     
     func setRawValue(value: NumberSystemProtocol) {
-        self.rawValue = value
+        self.value = value
     }
     
     // Action when long press on label

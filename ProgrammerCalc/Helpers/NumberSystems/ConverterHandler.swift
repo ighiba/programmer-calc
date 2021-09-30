@@ -26,7 +26,7 @@ import Foundation
         // Second step: convert binary value to needed system
         // ==================================================
         
-        let resultStr = convertBinaryToAny(binary: binary, targetSystem: converterSystem)
+        let resultStr = convertBinaryToAny(binary: binary, targetSystem: converterSystem).value
         
         return resultStr
     }
@@ -69,31 +69,26 @@ import Foundation
     }
     
     // Converter from binary to any system
-    fileprivate func convertBinaryToAny( binary: Binary, targetSystem: String) -> String {
-        let binaryStr = binary.value
-        var targetStr: String
-        
+    fileprivate func convertBinaryToAny( binary: Binary, targetSystem: String) -> NumberSystemProtocol {
+
         switch targetSystem {
         case "Binary":
             // convert binary to binary
-            return binaryStr
+            return binary
         case "Octal":
             // convert binary to oct
-            targetStr = Octal(binary).value
+            return Octal(binary)
         case "Decimal":
             // convert binary to dec
-            targetStr = DecimalSystem(binary).value
+            return DecimalSystem(binary)
         case "Hexadecimal":
             // convert binary to hex
-            targetStr = Hexadecimal(binary).value
+            return Hexadecimal(binary)
         default:
             // do nothing
             // TODO: Error handling
-            targetStr = "err"
-            break
+            return binary
         }
-        
-        return targetStr
     }
     
     // Convert value to one's complement
