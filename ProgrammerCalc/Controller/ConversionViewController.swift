@@ -9,11 +9,21 @@
 import UIKit
 
 class ConversionViewController: UIViewController {
+    
+    // ==================
+    // MARK: - Properties
+    // ==================
+    
     lazy var conversionView = ConversionView()
     lazy var picker: ConversionPicker = conversionView.mainPicker
     lazy var slider: UISlider = conversionView.digitsAfterSlider
     lazy var labelValue: UILabel = conversionView.sliderValueDigit
     var sliderOldValue: Float = 2.0
+    
+    
+    // links to storages
+    private var settingsStorage: SettingsStorageProtocol = SettingsStorage()
+    private var conversionStorage: ConversionStorageProtocol = ConversionStorage()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,10 +63,10 @@ class ConversionViewController: UIViewController {
     // Update conversion values
     fileprivate func getConversionSettings() {
         // get data from UserDefaults
-        if let data = SavedData.conversionSettings {
+        if let conversionSettings = conversionStorage.loadData() {
             // TODO: Error handling
-            let mainRow: Int = picker.systemsModel.conversionSystems.firstIndex(of: data.systemMain)!
-            let converterRow: Int = picker.systemsModel.conversionSystems.firstIndex(of: data.systemConverter)!
+            let mainRow: Int = picker.systemsModel.conversionSystems.firstIndex(of: conversionSettings.systemMain)!
+            let converterRow: Int = picker.systemsModel.conversionSystems.firstIndex(of: conversionSettings.systemConverter)!
             // Picker component
             // 0 - main
             // 1 - converter
@@ -64,16 +74,17 @@ class ConversionViewController: UIViewController {
             picker.selectRow(converterRow, inComponent: 1, animated: false)
             
             // Slider label
-            labelValue.text = "\(Int(data.numbersAfterPoint))"
+            labelValue.text = "\(Int(conversionSettings.numbersAfterPoint))"
             
             // Slider
-            slider.value = data.numbersAfterPoint / 4
+            slider.value = conversionSettings.numbersAfterPoint / 4
             sliderOldValue = slider.value
         }  else {
             print("no settings")
             // Save default settings 
             let systems = ConversionModel.ConversionSystemsEnum.self
-            SavedData.conversionSettings = ConversionSettingsModel(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 8.0)
+            let newConversionSettings = ConversionSettings(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 8.0)
+            conversionStorage.saveData(newConversionSettings)
         }
     }
     
@@ -93,15 +104,17 @@ class ConversionViewController: UIViewController {
         let rootVC = UIApplication.shared.windows.first?.rootViewController as? PCalcViewController
         guard rootVC != nil else {
             // set data to UserDefaults
-            SavedData.conversionSettings = ConversionSettingsModel(systMain: systemMainNew!, systConverter: systemConverterNew!, number: sliderValue * 4)
+            let newConversionSettings = ConversionSettings(systMain: systemMainNew!, systConverter: systemConverterNew!, number: sliderValue * 4)
+            conversionStorage.saveData(newConversionSettings)
             return
         }
         
         // set last mainLabel system buffer
-        let buffSavedMainLabel = SavedData.conversionSettings?.systemMain
+        let conversionSettings = conversionStorage.loadData()
+        let buffSavedMainLabel = conversionSettings?.systemMain
         // set data to UserDefaults
-        let newConversionSettings = ConversionSettingsModel(systMain: systemMainNew!, systConverter: systemConverterNew!, number: sliderValue * 4)
-        SavedData.conversionSettings = newConversionSettings
+        let newConversionSettings = ConversionSettings(systMain: systemMainNew!, systConverter: systemConverterNew!, number: sliderValue * 4)
+        conversionStorage.saveData(newConversionSettings)
         // set data to rootVC state vars
         rootVC?.systemMain = systemMainNew
         rootVC?.systemConverter = systemConverterNew
@@ -175,7 +188,8 @@ class ConversionViewController: UIViewController {
             // do nothing
         } else {
             // taptic feedback generator
-            if (SavedData.appSettings?.hapticFeedback ?? false) {
+            let settings = settingsStorage.loadData()
+            if (settings?.hapticFeedback ?? false) {
                 let generator = UIImpactFeedbackGenerator(style: .medium)
                 generator.prepare()
                 // impact

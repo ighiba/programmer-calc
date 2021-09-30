@@ -21,7 +21,7 @@ class CalcMathTests: XCTestCase {
     override func setUp() {
         super.setUp()
         calcMathTest = CalcMath()
-        SavedData.conversionSettings = ConversionSettingsModel(systMain: "Decimal", systConverter: "Binary", number: 8.0)
+        SavedData.conversionSettings = ConversionSettings(systMain: "Decimal", systConverter: "Binary", number: 8.0)
         
     }
     

@@ -22,7 +22,7 @@ class HexadecimalTests: XCTestCase {
     override func setUp() {
         super.setUp()
         hexadecimalTest = Hexadecimal()
-        SavedData.conversionSettings = ConversionSettingsModel(systMain: "Decimal", systConverter: "Hexadecimal", number: 8.0)
+        SavedData.conversionSettings = ConversionSettings(systMain: "Decimal", systConverter: "Hexadecimal", number: 8.0)
         
     }
     

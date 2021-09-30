@@ -8,7 +8,13 @@
 
 import Foundation
 
-class SettingsModel: Codable {
+protocol SettingsProtocol {
+    var darkMode: Bool { get set }
+    var tappingSounds: Bool { get set }
+    var hapticFeedback: Bool { get set }
+}
+
+class Settings: SettingsProtocol, Decodable, Encodable {
     var darkMode: Bool
     var tappingSounds: Bool
     var hapticFeedback: Bool

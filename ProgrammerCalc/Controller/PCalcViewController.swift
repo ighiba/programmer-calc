@@ -30,6 +30,12 @@ class PCalcViewController: UIPageViewController {
     var systemMain: String?
     var systemConverter: String?
     
+    
+    // Storages
+    let settingsStorage: SettingsStorageProtocol = SettingsStorage()
+    let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
+    let conversionStorage: ConversionStorageProtocol = ConversionStorage()
+    
     // ======================
     // MARK: - Initialization
     // ======================
@@ -151,7 +157,8 @@ class PCalcViewController: UIPageViewController {
         let processSigned = self.processSigned
         
         // set data to UserDefaults
-        SavedData.calcState = CalcState(mainState: mainState, convertState: convertState, processSigned: processSigned)
+        let newState = CalcState(mainState: mainState, convertState: convertState, processSigned: processSigned)
+        calcStateStorage.saveData(newState)
     }
     
     fileprivate func updateConversionState() {
@@ -163,31 +170,32 @@ class PCalcViewController: UIPageViewController {
     }
     
     // just return calcState data from UserDefauls
-    private func returnCalcState() -> CalcState {
-        if let data = SavedData.calcState {
-            return data
+    private func returnCalcState() -> CalcStateProtocol {
+        if let state = calcStateStorage.loadData() {
+            return state
         }  else {
             // if no settings
             print("no settings")
             // default values
-            let newCalcState = CalcState(mainState: "0", convertState: "0", processSigned: false)
-            SavedData.calcState = newCalcState
+            let newState = CalcState(mainState: "0", convertState: "0", processSigned: false)
+            calcStateStorage.saveData(newState)
             
-            return newCalcState
+            return newState
         }
     }
     
     // just return conversionSettings data from UserDefauls
-    private func returnConversionSettings() -> ConversionSettingsModel {
-        if let data = SavedData.conversionSettings {
-            return data
+    private func returnConversionSettings() -> ConversionSettingsProtocol {
+        if let conversionSettings = conversionStorage.loadData() {
+            return conversionSettings
         }  else {
             // if no settings
             print("no settings")
             // Save default settings
             let systems = ConversionModel.ConversionSystemsEnum.self
             // From DEC to BIN
-            let newConversionSettings = ConversionSettingsModel(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 8.0)
+            let newConversionSettings = ConversionSettings(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 8.0)
+            conversionStorage.saveData(newConversionSettings)
             
             return newConversionSettings
         }
@@ -214,7 +222,8 @@ class PCalcViewController: UIPageViewController {
     // Handle conversion issues
     public func handleConversion() {
         let labelText = mainLabel.text
-        let systemMain = SavedData.conversionSettings?.systemMain ?? "Decimal" // default value
+        let conversionSettings = conversionStorage.loadData()
+        let systemMain = conversionSettings?.systemMain ?? "Decimal" // default value
         let forbidden = ConversionValues().forbidden
         
         if forbidden[systemMain]!.contains(where: labelText!.contains) {
@@ -388,7 +397,10 @@ class PCalcViewController: UIPageViewController {
         // process claculation buff values and previous operations
         if mathState != nil {
             print("calculation")
-            if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: mainLabel.text!, for: SavedData.conversionSettings!.systemMain) {
+            // load conversion settings
+            let conversionSettings = conversionStorage.loadData()
+            // calculate
+            if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: mainLabel.text!, for: conversionSettings!.systemMain) {
                 mathState = nil
                 mathState = CalcMath.MathState(buffValue: mainLabel.text!, operation: operation)
                 mathState?.lastResult = result
@@ -603,7 +615,10 @@ class PCalcViewController: UIPageViewController {
         case "=":
             if mathState != nil {
                 print("calculation")
-                if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: SavedData.conversionSettings!.systemMain) {
+                // load conversion settings
+                let conversionSettings = conversionStorage.loadData()
+                // calculate
+                if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: conversionSettings!.systemMain) {
                     label.text = result
                 }
                 // reset state

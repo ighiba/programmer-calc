@@ -9,9 +9,16 @@
 import UIKit
 
 class SettingsViewController: UITableViewController {
+    
+    // ==================
+    // MARK: - Properties
+    // ==================
 
     lazy var settingsView = SettingsView(frame: CGRect(), style: .grouped)
     lazy var doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(SettingsViewController.closeButtonTapped))
+    
+    // links to storages
+    private var settingsStorage: SettingsStorageProtocol = SettingsStorage()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,7 +50,7 @@ class SettingsViewController: UITableViewController {
     // Update settings values
     fileprivate func getSettings() {
         // get data from UserDefaults
-        if let data = SavedData.appSettings {
+        if let settings = settingsStorage.loadData() {
             // loop table cells
             for cell in self.tableView.visibleCells as! [SettingsCell] {
                 if let switcher = cell.accessoryView as? UISwitch {
@@ -52,11 +59,11 @@ class SettingsViewController: UITableViewController {
                     // set switcher to userdefault state
                     switch title {
                     case "Dark mode":
-                        switcher.setOn(data.darkMode, animated: false)
+                        switcher.setOn(settings.darkMode, animated: false)
                     case "Tapping sounds":
-                        switcher.setOn(data.tappingSounds, animated: false)
+                        switcher.setOn(settings.tappingSounds, animated: false)
                     case "Haptic feedback":
-                        switcher.setOn(data.hapticFeedback, animated: false)
+                        switcher.setOn(settings.hapticFeedback, animated: false)
                     default:
                         // TODO: Handle
                         print("error")
@@ -66,14 +73,16 @@ class SettingsViewController: UITableViewController {
             }
         } else {
             print("no settings")
-            // Save default settings (all true)
-            SavedData.appSettings = SettingsModel(darkMode: true, tappingSounds: true, hapticFeedback: true)
+            // Save default settings (all false)
+            let newSettings = Settings(darkMode: false, tappingSounds: false, hapticFeedback: false)
+            settingsStorage.saveData(newSettings)
         }
     }
     
     fileprivate func saveSettings() {
         // set data to UserDefaults
-        if let data = SavedData.appSettings {
+        if let settings = settingsStorage.loadData() {
+            var newSettings = settings
             // loop table cells
             for cell in self.tableView.visibleCells as! [SettingsCell] {
                 if let switcher = cell.accessoryView as? UISwitch {
@@ -82,11 +91,11 @@ class SettingsViewController: UITableViewController {
                     // get from switcher state and set to local userdefaults
                     switch title {
                     case "Dark mode":
-                        data.darkMode = switcher.isOn
+                        newSettings.darkMode = switcher.isOn
                     case "Tapping sounds":
-                        data.tappingSounds = switcher.isOn
+                        newSettings.tappingSounds = switcher.isOn
                     case "Haptic feedback":
-                        data.hapticFeedback = switcher.isOn
+                        newSettings.hapticFeedback = switcher.isOn
                     default:
                         // TODO: Handle
                         print("error")
@@ -95,12 +104,13 @@ class SettingsViewController: UITableViewController {
                 }
             }
             // Apply settings
-            SavedData.appSettings = SettingsModel(darkMode: data.darkMode, tappingSounds: data.tappingSounds, hapticFeedback: data.hapticFeedback)
+            settingsStorage.saveData(newSettings)
             
         } else {
             print("no settings")
             // Save default settings (all true)
-            SavedData.appSettings = SettingsModel(darkMode: true, tappingSounds: true, hapticFeedback: true)
+            let newSettings = Settings(darkMode: true, tappingSounds: true, hapticFeedback: true)
+            settingsStorage.saveData(newSettings)
         }
         
     }

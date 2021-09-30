@@ -65,9 +65,11 @@ class Binary: NumberSystemProtocol {
     // ===============
     
     func ifProcessSigned(closure: () -> Void) {
+        // storage
+        let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
         // process signed
-        if let data = SavedData.calcState?.processSigned {
-            if data{
+        if let state = calcStateStorage.loadData() {
+            if state.processSigned {
                 closure()
             }
         }
@@ -312,6 +314,10 @@ class Binary: NumberSystemProtocol {
     
     // Combine to parts to double string
     func convertDoubleToBinaryStr( numberStr: (IntPart?, FractPart?)) -> String {
+        // storage
+        let conversionStorage: ConversionStorageProtocol = ConversionStorage()
+        // conversion settings
+        let conversionSettins = conversionStorage.loadData()
         
         // Error handling
         guard numberStr.0 != nil else {
@@ -322,7 +328,7 @@ class Binary: NumberSystemProtocol {
         }
         
         let intNumber = Int(numberStr.0!)!
-        let precision = Int(SavedData.conversionSettings?.numbersAfterPoint ?? 8)
+        let precision = Int(conversionSettins?.numbersAfterPoint ?? 8)
         let intPart = convertIntToBinary(intNumber)
         let fractPart = convertFractToBinary(numberStr: numberStr.1!, precision: precision)
         
@@ -492,6 +498,11 @@ class Binary: NumberSystemProtocol {
     
     // Set fillig style for binary string
     private func fillingStyleResult(for str: String) -> String {
+        // storage
+        let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
+        // calc state
+        let calcState = calcStateStorage.loadData()
+        
         let binary = self
         
         binary.value = str
@@ -499,7 +510,7 @@ class Binary: NumberSystemProtocol {
         binary.value = binary.value.removeAllSpaces()
         
         // get saved data
-        if let data = SavedData.calcState?.processSigned {
+        if let data = calcState?.processSigned {
             // if .processSigned == true
             if data {
                 // fill if needed to
@@ -604,6 +615,11 @@ class Binary: NumberSystemProtocol {
     
     // Appending digit to end
     func appendDigit(_ digit: String) {
+        // storage
+        let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
+        // calc state
+        let calcState = calcStateStorage.loadData()
+        
         let binary = self
         
         // just add digit if point exits
@@ -616,7 +632,7 @@ class Binary: NumberSystemProtocol {
         binary.value = binary.value.removeAllSpaces()
         
         // get saved data
-        if let data = SavedData.calcState?.processSigned {
+        if let data = calcState?.processSigned {
             // if .processSigned == true
             if data {
                 // calcualte signed state

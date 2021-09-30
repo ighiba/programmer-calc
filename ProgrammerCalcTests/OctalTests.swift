@@ -22,7 +22,7 @@ class OctalTests: XCTestCase {
     override func setUp() {
         super.setUp()
         octalTest = Octal()
-        SavedData.conversionSettings = ConversionSettingsModel(systMain: "Decimal", systConverter: "Octal", number: 8.0)
+        SavedData.conversionSettings = ConversionSettings(systMain: "Decimal", systConverter: "Octal", number: 8.0)
         
     }
     

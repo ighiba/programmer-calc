@@ -8,19 +8,13 @@
 
 import Foundation
 
-class ConversionModel {
-   public enum ConversionSystemsEnum: String {
-        case bin = "Binary"
-        case dec = "Decimal"
-        case oct = "Octal"
-        case hex = "Hexadecimal"
-    }
-    
-    var conversionSystems = ["Binary", "Decimal", "Octal", "Hexadecimal"]
-    
+protocol ConversionSettingsProtocol {
+    var systemMain: String { get set }
+    var systemConverter: String { get set }
+    var numbersAfterPoint: Float { get set }
 }
 
-class ConversionSettingsModel:  Decodable, Encodable {
+class ConversionSettings: ConversionSettingsProtocol, Decodable, Encodable {
     
     var systemMain: String
     var systemConverter: String
@@ -32,5 +26,17 @@ class ConversionSettingsModel:  Decodable, Encodable {
         self.systemConverter = systConverter
         self.numbersAfterPoint = number
     }
+    
+}
+
+class ConversionModel {
+   public enum ConversionSystemsEnum: String {
+        case bin = "Binary"
+        case dec = "Decimal"
+        case oct = "Octal"
+        case hex = "Hexadecimal"
+    }
+    
+    var conversionSystems = ["Binary", "Decimal", "Octal", "Hexadecimal"]
     
 }

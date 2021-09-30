@@ -9,7 +9,9 @@
 /* Begin PBXBuildFile section */
 		C00616A827064449007BEF89 /* OctHexHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00616A727064449007BEF89 /* OctHexHelper.swift */; };
 		C00616AC27065097007BEF89 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00616AB27065097007BEF89 /* String.swift */; };
-		C05A169B24DD7B0D007B7FB8 /* SavedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05A169A24DD7B0D007B7FB8 /* SavedData.swift */; };
+		C00616AF270666DD007BEF89 /* SettingsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00616AE270666DD007BEF89 /* SettingsStorage.swift */; };
+		C00616B127066C91007BEF89 /* ConversionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00616B027066C91007BEF89 /* ConversionStorage.swift */; };
+		C00616B327066CB1007BEF89 /* CalcStateStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00616B227066CB1007BEF89 /* CalcStateStorage.swift */; };
 		C05B008C24E6E0E100F8A5E0 /* Hexadecimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B008B24E6E0E100F8A5E0 /* Hexadecimal.swift */; };
 		C05B008E24E701ED00F8A5E0 /* Octal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B008D24E701ED00F8A5E0 /* Octal.swift */; };
 		C05B009124E71B6E00F8A5E0 /* DecimalSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B009024E71B6E00F8A5E0 /* DecimalSystem.swift */; };
@@ -68,7 +70,9 @@
 /* Begin PBXFileReference section */
 		C00616A727064449007BEF89 /* OctHexHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OctHexHelper.swift; sourceTree = "<group>"; };
 		C00616AB27065097007BEF89 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
-		C05A169A24DD7B0D007B7FB8 /* SavedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedData.swift; sourceTree = "<group>"; };
+		C00616AE270666DD007BEF89 /* SettingsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStorage.swift; sourceTree = "<group>"; };
+		C00616B027066C91007BEF89 /* ConversionStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionStorage.swift; sourceTree = "<group>"; };
+		C00616B227066CB1007BEF89 /* CalcStateStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcStateStorage.swift; sourceTree = "<group>"; };
 		C05B008B24E6E0E100F8A5E0 /* Hexadecimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hexadecimal.swift; sourceTree = "<group>"; };
 		C05B008D24E701ED00F8A5E0 /* Octal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Octal.swift; sourceTree = "<group>"; };
 		C05B009024E71B6E00F8A5E0 /* DecimalSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalSystem.swift; sourceTree = "<group>"; };
@@ -138,11 +142,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C00616AD270666AD007BEF89 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				C00616AE270666DD007BEF89 /* SettingsStorage.swift */,
+				C00616B027066C91007BEF89 /* ConversionStorage.swift */,
+				C00616B227066CB1007BEF89 /* CalcStateStorage.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
 		C05A169924DD7AF7007B7FB8 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				C05A169A24DD7B0D007B7FB8 /* SavedData.swift */,
-				C065DB3D24E41E610059B38D /* CalcState.swift */,
 				C068AFAB24FA605800BFE754 /* CalculatorButton.swift */,
 				C061B7C1250FF9FF000E2EB6 /* CalculatorLabel.swift */,
 				C05B008A24E6B0F100F8A5E0 /* NumberSystems */,
@@ -266,6 +278,8 @@
 		C0D5BA4C24C340120038A378 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				C00616AD270666AD007BEF89 /* Storage */,
+				C065DB3D24E41E610059B38D /* CalcState.swift */,
 				C0635A7A24D9E2AA003855A9 /* ConversionModel.swift */,
 				C077CF7024DC987B008E5F0F /* SettingsModel.swift */,
 				C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */,
@@ -429,8 +443,8 @@
 				C066756924E27AE700F832F9 /* ConversionValues.swift in Sources */,
 				C068AFAC24FA605800BFE754 /* CalculatorButton.swift in Sources */,
 				C00616AC27065097007BEF89 /* String.swift in Sources */,
+				C00616B127066C91007BEF89 /* ConversionStorage.swift in Sources */,
 				C05B008C24E6E0E100F8A5E0 /* Hexadecimal.swift in Sources */,
-				C05A169B24DD7B0D007B7FB8 /* SavedData.swift in Sources */,
 				C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */,
 				C0E5FC7624BB9B8D00BA93CA /* PCalcView.swift in Sources */,
 				C06B7F0B2443B12B009642B9 /* PCalcViewController.swift in Sources */,
@@ -439,12 +453,14 @@
 				C066756E24E2D83300F832F9 /* ConverterHandler.swift in Sources */,
 				C05B009124E71B6E00F8A5E0 /* DecimalSystem.swift in Sources */,
 				C06B7F072443B12B009642B9 /* AppDelegate.swift in Sources */,
+				C00616AF270666DD007BEF89 /* SettingsStorage.swift in Sources */,
 				C0666EBC24F97855004809EF /* CalcButtonsAdditional.swift in Sources */,
 				C06B7F092443B12B009642B9 /* SceneDelegate.swift in Sources */,
 				C07267DD24E5ACB300D4B4A2 /* Binary.swift in Sources */,
 				C077CF7124DC987B008E5F0F /* SettingsModel.swift in Sources */,
 				C070ED2624DB0ED400A04463 /* SettingsView.swift in Sources */,
 				C00616A827064449007BEF89 /* OctHexHelper.swift in Sources */,
+				C00616B327066CB1007BEF89 /* CalcStateStorage.swift in Sources */,
 				C0666EBA24F9782F004809EF /* CalcButtonsMain.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

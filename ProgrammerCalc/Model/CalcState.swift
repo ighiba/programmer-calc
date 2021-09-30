@@ -7,11 +7,14 @@
 //
 
 import Foundation
-// ================
-// For UserDefaults
-// ================
 
-class CalcState: Codable {
+protocol CalcStateProtocol {
+    var mainLabelState: String { get set }
+    var converterLabelState: String { get set }
+    var processSigned: Bool { get set }
+}
+
+class CalcState: CalcStateProtocol, Decodable, Encodable {
     var mainLabelState: String
     var converterLabelState: String
     var processSigned: Bool

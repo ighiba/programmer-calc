@@ -22,7 +22,7 @@ class BinaryTests: XCTestCase {
     override func setUp() {
         super.setUp()
         binaryTest = Binary()
-        SavedData.conversionSettings = ConversionSettingsModel(systMain: "Decimal", systConverter: "Binary", number: 8.0)
+        SavedData.conversionSettings = ConversionSettings(systMain: "Decimal", systConverter: "Binary", number: 8.0)
         
     }
     
