@@ -111,11 +111,6 @@ class ConversionView: UIView {
     let mainPicker: ConversionPicker = {
         let picker = ConversionPicker()
         
-        var model = ConversionModel()
-        
-        // TODO: Add to picker all systems
-        picker.systemsModel = model
-        
         picker.delegate = picker
         picker.dataSource = picker
         

@@ -9,7 +9,6 @@
 import UIKit
 
 class ConversionPicker: UIPickerView {
-    var systemsModel: ConversionModel!
     let screenWidth = UIScreen.main.bounds.width
     
 }
@@ -20,7 +19,7 @@ extension ConversionPicker: UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return systemsModel.conversionSystems.count
+        return ConversionSystemsEnum.allCases.count
     }
 }
 
@@ -28,7 +27,7 @@ extension ConversionPicker: UIPickerViewDelegate {
     
     // Process element from array to create picker row
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return systemsModel.conversionSystems[row]
+        return ConversionSystemsEnum.allCases[row].rawValue
     }
     
     // Picker row width

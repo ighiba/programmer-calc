@@ -44,7 +44,7 @@ final class CalcMath {
     // MARK: - Methods
     // ===============
     
-    func calculate( firstValue: String, operation: mathOperation ,secondValue: String, for system: String) -> String? {
+    func calculate( firstValue: String, operation: mathOperation ,secondValue: String, for system: ConversionSystemsEnum) -> String? {
   
         // ======================
         // Convert Any to Decimal
@@ -53,9 +53,9 @@ final class CalcMath {
         let firstConvertedStr: String
         let secondConvertedStr: String
         
-        if system != "Decimal" {
-            firstConvertedStr = converterHandler.convertValue(value: firstValue, from: system, to: "Decimal")!
-            secondConvertedStr = converterHandler.convertValue(value: secondValue, from: system, to: "Decimal")!
+        if system != .dec {
+            firstConvertedStr = converterHandler.convertValue(value: firstValue, from: system, to: .dec)!
+            secondConvertedStr = converterHandler.convertValue(value: secondValue, from: system, to: .dec)!
         } else {
             firstConvertedStr = firstValue
             secondConvertedStr = secondValue
@@ -70,8 +70,8 @@ final class CalcMath {
         // Convert Decimal to Any
         // ======================
         
-        if system != "Decimal" {
-            return converterHandler.convertValue(value: decimalStr!, from: "Decimal", to: system)
+        if system != .dec {
+            return converterHandler.convertValue(value: decimalStr!, from: .dec, to: system)
         } else {
             return decimalStr
         }
@@ -111,14 +111,14 @@ final class CalcMath {
                 return secondNum
             }
             // TODO: Error handling
-            resultStr = converterHandler.shiftBits(value: firstNum, mainSystem: "Decimal", shiftOperation: <<, shiftCount: Int(secondNum)!)
+            resultStr = converterHandler.shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: <<, shiftCount: Int(secondNum)!)
         // Bitwise shift right
         case .shiftRight:
             guard !firstNum.contains(".") && !secondNum.contains(".") else {
                 return secondNum
             }
             // TODO: Error handling
-            resultStr = converterHandler.shiftBits(value: firstNum, mainSystem: "Decimal", shiftOperation: >>, shiftCount: Int(secondNum)!)
+            resultStr = converterHandler.shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: >>, shiftCount: Int(secondNum)!)
         // bitwise and
         case .and:
             guard !firstNum.contains(".") && !secondNum.contains(".") else {
@@ -184,16 +184,16 @@ final class CalcMath {
         return resultStr
     }
     
-    public func negate(valueStr: String, system: String) -> String {
+    public func negate(valueStr: String, system: ConversionSystemsEnum) -> String {
         // ======================
         // Convert Any to Decimal
         // ======================
         
         let valueConvertedStr: String
         
-        if system != "Decimal" {
+        if system != .dec {
             // TOOD: Error handling
-            valueConvertedStr = converterHandler.convertValue(value: valueStr, from: system, to: "Decimal")!
+            valueConvertedStr = converterHandler.convertValue(value: valueStr, from: system, to: .dec)!
         } else {
             valueConvertedStr = valueStr
         }
@@ -211,9 +211,9 @@ final class CalcMath {
         // Convert Decimal to Any
         // ======================
         
-        if system != "Decimal" {
+        if system != .dec {
             // TODO: Error handling
-            return converterHandler.convertValue(value: decimalStr, from: "Decimal", to: system)!
+            return converterHandler.convertValue(value: decimalStr, from: .dec, to: system)!
         } else {
             return decimalStr
         }

@@ -280,10 +280,10 @@
 			children = (
 				C00616AD270666AD007BEF89 /* Storage */,
 				C065DB3D24E41E610059B38D /* CalcState.swift */,
-				C0635A7A24D9E2AA003855A9 /* ConversionModel.swift */,
 				C077CF7024DC987B008E5F0F /* SettingsModel.swift */,
-				C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */,
 				C077CF6E24DC8DEE008E5F0F /* SettingsCell.swift */,
+				C0635A7A24D9E2AA003855A9 /* ConversionModel.swift */,
+				C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */,
 				C066756824E27AE700F832F9 /* ConversionValues.swift */,
 			);
 			path = Model;

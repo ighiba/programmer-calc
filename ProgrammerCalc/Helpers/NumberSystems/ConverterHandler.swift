@@ -15,7 +15,7 @@ import Foundation
     // ===============
     
     // Main function for conversion values
-    public func convertValue(value valueStr: String, from mainSystem: String, to converterSystem: String) -> String? {
+    public func convertValue(value valueStr: String, from mainSystem: ConversionSystemsEnum, to converterSystem: ConversionSystemsEnum) -> String? {
         
         // =======================================
         // First step: convert any value to binary
@@ -32,34 +32,29 @@ import Foundation
     }
     
     // Converter from any to binary system
-    fileprivate func convertAnyToBinary( anyStr: String, anySystem: String) -> Binary {
+    fileprivate func convertAnyToBinary( anyStr: String, anySystem: ConversionSystemsEnum) -> Binary {
         var binary: Binary
         var partition: Int = 4
         
         switch anySystem {
-        case "Binary":
+        case .bin:
             // if already binary
             binary = Binary(stringLiteral: anyStr)
-        case "Octal":
+        case .oct:
             // convert oct to binary
             partition = 3
             let oct = Octal(stringLiteral: anyStr)
             binary = Binary(oct)
-        case "Decimal":
+        case .dec:
             // convert dec to binary
             partition = 4
             let dec = DecimalSystem(stringLiteral: anyStr)
             binary = Binary(dec)
-        case "Hexadecimal":
+        case .hex:
             // convert hex to binary
             partition = 4
             let hex = Hexadecimal(stringLiteral: anyStr)
             binary = Binary(hex)
-        default:
-            // do nothing
-            // TODO: Error handling
-            binary = Binary(stringLiteral: "0")
-            break
         }
         
         // divide binary by parts
@@ -69,67 +64,63 @@ import Foundation
     }
     
     // Converter from binary to any system
-    fileprivate func convertBinaryToAny( binary: Binary, targetSystem: String) -> NumberSystemProtocol {
+    fileprivate func convertBinaryToAny( binary: Binary, targetSystem: ConversionSystemsEnum) -> NumberSystemProtocol {
 
         switch targetSystem {
-        case "Binary":
+        case .bin:
             // convert binary to binary
             return binary
-        case "Octal":
+        case .oct:
             // convert binary to oct
             return Octal(binary)
-        case "Decimal":
+        case .dec:
             // convert binary to dec
             return DecimalSystem(binary)
-        case "Hexadecimal":
+        case .hex:
             // convert binary to hex
             return Hexadecimal(binary)
-        default:
-            // do nothing
-            // TODO: Error handling
-            return binary
         }
     }
     
     // Convert value to one's complement
-    public func toOnesComplement( valueStr: String, mainSystem: String) -> String {
+    public func toOnesComplement( valueStr: String, mainSystem: ConversionSystemsEnum) -> String {
         var resultStr = String()
         let binary = Binary()
         
         // convert to Binary
-        binary.value = convertValue(value: valueStr, from: mainSystem, to: "Binary") ?? "0"
+        binary.value = convertValue(value: valueStr, from: mainSystem, to: .bin) ?? "0"
         
         // convert binary to one's complement
         binary.onesComplement()
 
         // convert to binary input system (mainSystem)
-        resultStr = convertValue(value: binary.value, from: "Binary", to: mainSystem) ?? "0"
+        resultStr = convertValue(value: binary.value, from: .bin, to: mainSystem) ?? "0"
     
         return resultStr
     }
     
     // Convert value to two's complement
-    public func toTwosComplement( valueStr: String, mainSystem: String) -> String {
+    public func toTwosComplement( valueStr: String, mainSystem: ConversionSystemsEnum) -> String {
         var resultStr = String()
         let binary = Binary()
         
         // convert to Binary
-        binary.value = convertValue(value: valueStr, from: mainSystem, to: "Binary") ?? "0"
+        binary.value = convertValue(value: valueStr, from: mainSystem, to: .bin) ?? "0"
         
         // convert binary to 2's complement
         binary.twosComplement()
         
         // convert to binary input system (mainSystem)
-        resultStr = convertValue(value: binary.value, from: "Binary", to: mainSystem) ?? "0"
+        resultStr = convertValue(value: binary.value, from: .bin, to: mainSystem) ?? "0"
     
         return resultStr
     }
     
     
     // Shift to needed bit count
-    public func shiftBits( value valueStr: String, mainSystem: String, shiftOperation: (Int,Int)->Int, shiftCount: Int ) -> String {
+    public func shiftBits( value valueStr: String, mainSystem: ConversionSystemsEnum, shiftOperation: (Int,Int)->Int, shiftCount: Int ) -> String {
         // convert to Decimal
-        let decimalStr = convertValue(value: valueStr, from: mainSystem, to: "Decimal") ?? "0"
+        let decimalStr = convertValue(value: valueStr, from: mainSystem, to: .dec) ?? "0"
         // TODO: Error handling
         let decimal = Int(decimalStr) ?? 0
         
@@ -137,7 +128,7 @@ import Foundation
         var resultStr = String(shiftOperation(decimal,shiftCount))
         
         // convert to mainSystem
-        resultStr = convertValue(value: resultStr, from: "Decimal", to: mainSystem) ?? "0"
+        resultStr = convertValue(value: resultStr, from: .dec, to: mainSystem) ?? "0"
         return resultStr
     }
 }

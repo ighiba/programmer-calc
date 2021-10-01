@@ -27,8 +27,8 @@ class PCalcViewController: UIPageViewController {
     // State for calculating numbers
     private var mathState: CalcMath.MathState?
     // State for conversion systems
-    var systemMain: String?
-    var systemConverter: String?
+    var systemMain: ConversionSystemsEnum?
+    var systemConverter: ConversionSystemsEnum?
     
     
     // Storages
@@ -165,8 +165,8 @@ class PCalcViewController: UIPageViewController {
         // get data from UserDefaults
         let data = returnConversionSettings()
         
-        systemMain = data.systemMain
-        systemConverter = data.systemConverter
+        systemMain = ConversionSystemsEnum(rawValue: data.systemMain)
+        systemConverter = ConversionSystemsEnum(rawValue: data.systemConverter)
     }
     
     // just return calcState data from UserDefauls
@@ -192,7 +192,7 @@ class PCalcViewController: UIPageViewController {
             // if no settings
             print("no settings")
             // Save default settings
-            let systems = ConversionModel.ConversionSystemsEnum.self
+            let systems = ConversionSystemsEnum.self
             // From DEC to BIN
             let newConversionSettings = ConversionSettings(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 8.0)
             conversionStorage.saveData(newConversionSettings)
@@ -237,7 +237,7 @@ class PCalcViewController: UIPageViewController {
     
     // Handle button enabled state for various conversion systems
     public func updateButtons() {
-        let systemMain = self.systemMain ?? "Decimal" // default value
+        let systemMain = self.systemMain ?? .dec // default value
         let forbidden = ConversionValues().forbidden
         
         // Update all buttons except signed and plusminus
@@ -247,7 +247,7 @@ class PCalcViewController: UIPageViewController {
             for buttonTag in 100...218 {
                 if let button = vc.view.viewWithTag(buttonTag) as? CalculatorButton {
                     let buttonLabel = String((button.titleLabel?.text)!)
-                    if forbidden[systemMain]!.contains(buttonLabel) && button.calcButtonType == .numeric {
+                    if forbidden[systemMain.rawValue]!.contains(buttonLabel) && button.calcButtonType == .numeric {
                         //print("Forbidden button \(buttonLabel)")
                         button.isEnabled = false
                     } else {
@@ -290,17 +290,18 @@ class PCalcViewController: UIPageViewController {
         }()
         
         // TODO: Refator hadling for Hexadecimal values
-        if Double(labelText) == nil && ( self.systemMain != "Hexadecimal") {
+        if Double(labelText) == nil && ( self.systemMain != .hex) {
             converterLabel.text = mainLabel.text
         } else {
             // Uptade converter label with converted number
             // TODO: Error handling
-            converterLabel.text = converterHandler.convertValue(value: labelText, from: self.systemMain!, to: self.systemConverter!)
+            updateConversionState()
+            converterLabel.text = converterHandler.convertValue(value: labelText, from: systemMain!, to: systemConverter!)
         }
     }
     
     public func updateMainLabel() {
-        if systemMain == "Binary" {
+        if systemMain == .bin {
             var binary = Binary(stringLiteral: mainLabel.text!)
              
              // divide binary by parts
@@ -322,14 +323,11 @@ class PCalcViewController: UIPageViewController {
             return labelText
         }
         
-        if systemMain == "Binary" {
+        if systemMain == .bin {
             var binary = Binary()
-            
             binary.value = labelText
-            
             // append input digit
             binary.appendDigit(digit)
-
             // divide binary by parts
             binary = binary.divideBinary(by: 4)
             
@@ -361,7 +359,7 @@ class PCalcViewController: UIPageViewController {
             mainLabel.font = UIFont(name: fontName, size: 72.0)
             
             // lines for binary
-            if systemMain == "Binary" {
+            if systemMain == .bin {
                 mainLabel.numberOfLines = 2
             } else {
                 mainLabel.numberOfLines = 1
@@ -397,10 +395,11 @@ class PCalcViewController: UIPageViewController {
         // process claculation buff values and previous operations
         if mathState != nil {
             print("calculation")
-            // load conversion settings
-            let conversionSettings = conversionStorage.loadData()
+
+            // update systemMain
+            updateConversionState()
             // calculate
-            if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: mainLabel.text!, for: conversionSettings!.systemMain) {
+            if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: mainLabel.text!, for: systemMain!) {
                 mathState = nil
                 mathState = CalcMath.MathState(buffValue: mainLabel.text!, operation: operation)
                 mathState?.lastResult = result
@@ -564,6 +563,10 @@ class PCalcViewController: UIPageViewController {
         let button = sender
         let buttonText = button.titleLabel!.text ?? ""
         let label = mainLabel
+        
+        // update conversion state
+        updateConversionState()
+        
         //let convertLabel = converterLabel
         // tag for AC/C button
         //let acButton = self.view.viewWithTag(100) as! UIButton
@@ -615,10 +618,9 @@ class PCalcViewController: UIPageViewController {
         case "=":
             if mathState != nil {
                 print("calculation")
-                // load conversion settings
-                let conversionSettings = conversionStorage.loadData()
+
                 // calculate
-                if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: conversionSettings!.systemMain) {
+                if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: systemMain!) {
                     label.text = result
                 }
                 // reset state
@@ -690,6 +692,8 @@ class PCalcViewController: UIPageViewController {
     // 1's or 2's button tapped
     @objc func complementButtonTapped( sender: UIButton) {
         let buttonLabel = sender.titleLabel?.text
+        // update conversion state
+        updateConversionState()
         // switch complements
         switch buttonLabel {
         case "1's":
@@ -709,6 +713,9 @@ class PCalcViewController: UIPageViewController {
     // Bitwise operations
     @objc func bitwiseButtonTapped( sender: UIButton) {
         let buttonLabel = sender.titleLabel?.text
+        
+        // update conversion state
+        updateConversionState()
         
         // if float then exit
         guard !mainLabel.text!.contains(".") else {return}

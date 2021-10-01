@@ -29,14 +29,21 @@ class ConversionSettings: ConversionSettingsProtocol, Decodable, Encodable {
     
 }
 
-class ConversionModel {
-   public enum ConversionSystemsEnum: String {
-        case bin = "Binary"
-        case dec = "Decimal"
-        case oct = "Octal"
-        case hex = "Hexadecimal"
-    }
-    
-    var conversionSystems = ["Binary", "Decimal", "Octal", "Hexadecimal"]
-    
-}
+//class ConversionModel {
+//   public enum ConversionSystemsEnum: String {
+//        case bin = "Binary"
+//        case dec = "Decimal"
+//        case oct = "Octal"
+//        case hex = "Hexadecimal"
+//    }
+//    
+//    //var conversionSystems = ["Binary", "Decimal", "Octal", "Hexadecimal"]
+//    
+//}
+
+enum ConversionSystemsEnum: String, CaseIterable{
+     case bin = "Binary"
+     case dec = "Decimal"
+     case oct = "Octal"
+     case hex = "Hexadecimal"
+ }

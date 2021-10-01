@@ -65,8 +65,9 @@ class ConversionViewController: UIViewController {
         // get data from UserDefaults
         if let conversionSettings = conversionStorage.loadData() {
             // TODO: Error handling
-            let mainRow: Int = picker.systemsModel.conversionSystems.firstIndex(of: conversionSettings.systemMain)!
-            let converterRow: Int = picker.systemsModel.conversionSystems.firstIndex(of: conversionSettings.systemConverter)!
+            
+            let mainRow: Int = ConversionSystemsEnum.allCases.firstIndex(of: ConversionSystemsEnum(rawValue: conversionSettings.systemMain)!)!
+            let converterRow: Int = ConversionSystemsEnum.allCases.firstIndex(of: ConversionSystemsEnum(rawValue: conversionSettings.systemConverter)!)!
             // Picker component
             // 0 - main
             // 1 - converter
@@ -82,7 +83,7 @@ class ConversionViewController: UIViewController {
         }  else {
             print("no settings")
             // Save default settings 
-            let systems = ConversionModel.ConversionSystemsEnum.self
+            let systems = ConversionSystemsEnum.self
             let newConversionSettings = ConversionSettings(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 8.0)
             conversionStorage.saveData(newConversionSettings)
         }
@@ -116,8 +117,8 @@ class ConversionViewController: UIViewController {
         let newConversionSettings = ConversionSettings(systMain: systemMainNew!, systConverter: systemConverterNew!, number: sliderValue * 4)
         conversionStorage.saveData(newConversionSettings)
         // set data to rootVC state vars
-        rootVC?.systemMain = systemMainNew
-        rootVC?.systemConverter = systemConverterNew
+        rootVC?.systemMain = ConversionSystemsEnum(rawValue: systemMainNew!)
+        rootVC?.systemConverter = ConversionSystemsEnum(rawValue: systemConverterNew!)
         // Handle changing of systems
         // TODO: Error handling
         if buffSavedMainLabel != systemMainNew! {
