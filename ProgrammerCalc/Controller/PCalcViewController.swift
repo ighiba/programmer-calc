@@ -22,6 +22,8 @@ class PCalcViewController: UIPageViewController {
     let calcView: PCalcView = PCalcView()
     lazy var mainLabel: CalcualtorLabel = calcView.mainLabel
     lazy var converterLabel: CalcualtorLabel = calcView.converterLabel
+    // State for raw value in main label
+    var mainLabelRawValue: NumberSystemProtocol! // TODO: Error handling
     // State for processign signed values
     private var processSigned = false // default value
     // State for calculating numbers
@@ -111,6 +113,13 @@ class PCalcViewController: UIPageViewController {
             let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(swipeRightLabel))
             swipeRight.direction = .right
             label.addGestureRecognizer(swipeRight)
+            
+        }
+        
+        // add handler
+        (mainLabel as UpdatableLabel).updateRawValueHandler = { [self] _ in
+            // update label rawValue
+            updateMainLabelRawValue()
         }
         
     }
@@ -296,7 +305,7 @@ class PCalcViewController: UIPageViewController {
             // Uptade converter label with converted number
             // TODO: Error handling
             updateConversionState()
-            converterLabel.text = converterHandler.convertValue(value: labelText, from: systemMain!, to: systemConverter!)
+            converterLabel.text = converterHandler.convertValue(value: mainLabelRawValue, from: systemMain!, to: systemConverter!)?.value
         }
     }
     
@@ -311,6 +320,28 @@ class PCalcViewController: UIPageViewController {
         } else {
             // do nothing
         }
+        
+        // update mainLabelRaw
+        updateMainLabelRawValue()
+    }
+    
+    private func updateMainLabelRawValue() {
+        // update label rawValue
+        switch systemMain {
+        case .bin:
+            mainLabel.setRawValue(value: Binary(stringLiteral: mainLabel.text!))
+        case .oct:
+            mainLabel.setRawValue(value: Octal(stringLiteral: mainLabel.text!))
+        case .dec:
+            mainLabel.setRawValue(value: DecimalSystem(stringLiteral: mainLabel.text!))
+        case .hex:
+            mainLabel.setRawValue(value: Hexadecimal(stringLiteral: mainLabel.text!))
+        case .none:
+            break
+        }
+        
+        // update VC rawValue
+        self.mainLabelRawValue = mainLabel.rawValue
     }
     
     // add digit to end of main label
@@ -390,7 +421,7 @@ class PCalcViewController: UIPageViewController {
         }
     }
     
-    fileprivate func calculateResult( inputValue: String, operation: CalcMath.mathOperation) -> String {
+    fileprivate func calculateResult( inputValue: NumberSystemProtocol, operation: CalcMath.mathOperation) -> String {
         var resultStr = String()
         // process claculation buff values and previous operations
         if mathState != nil {
@@ -399,14 +430,14 @@ class PCalcViewController: UIPageViewController {
             // update systemMain
             updateConversionState()
             // calculate
-            if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: mainLabel.text!, for: systemMain!) {
+            if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: mainLabelRawValue, for: systemMain!) {
                 mathState = nil
-                mathState = CalcMath.MathState(buffValue: mainLabel.text!, operation: operation)
+                mathState = CalcMath.MathState(buffValue: mainLabelRawValue, operation: operation)
                 mathState?.lastResult = result
-                resultStr = result
+                resultStr = result.value
             }
         } else {
-            mathState = CalcMath.MathState(buffValue: mainLabel.text!, operation: operation)
+            mathState = CalcMath.MathState(buffValue: mainLabelRawValue, operation: operation)
             resultStr = mainLabel.text!
         }
         
@@ -596,32 +627,32 @@ class PCalcViewController: UIPageViewController {
         case "\u{00B1}":
             if label.text != "0" {
                 // TODO: Error handling
-                label.text = calculationHandler.negate(valueStr: label.text!, system: systemMain!)
+                label.text = calculationHandler.negate(value: mainLabelRawValue, system: systemMain!).value
             }
             updateConverterLabel()
         // Subtraction button
         case "\u{00f7}":
             // calc results
-            label.text = calculateResult(inputValue: label.text!, operation: .div)
+            label.text = calculateResult(inputValue: mainLabelRawValue, operation: .div)
         // Multiplication button
         case "X":
             // calc results
-            label.text = calculateResult(inputValue: label.text!, operation: .mul)
+            label.text = calculateResult(inputValue: mainLabelRawValue, operation: .mul)
         // Multiplication button
         case "-":
             // calc results
-            label.text = calculateResult(inputValue: label.text!, operation: .sub)
+            label.text = calculateResult(inputValue: mainLabelRawValue, operation: .sub)
         // Addition button
         case "+":
             // calc results
-            label.text = calculateResult(inputValue: label.text!, operation: .add)
+            label.text = calculateResult(inputValue: mainLabelRawValue, operation: .add)
         case "=":
             if mathState != nil {
                 print("calculation")
 
                 // calculate
-                if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: label.text!, for: systemMain!) {
-                    label.text = result
+                if let result = calculationHandler.calculate(firstValue: mathState!.buffValue, operation: mathState!.operation, secondValue: mainLabelRawValue, for: systemMain!) {
+                    label.text = result.value
                 }
                 // reset state
                 mathState = nil
@@ -698,10 +729,10 @@ class PCalcViewController: UIPageViewController {
         switch buttonLabel {
         case "1's":
             // TODO: Error handling
-            mainLabel.text = converterHandler.toOnesComplement(valueStr: mainLabel.text!, mainSystem: systemMain!)
+            mainLabel.text = converterHandler.toOnesComplement(value: mainLabelRawValue, mainSystem: systemMain!).value
         case "2's":
             // TODO: Error handling
-            mainLabel.text = converterHandler.toTwosComplement(valueStr: mainLabel.text!, mainSystem: systemMain!)
+            mainLabel.text = converterHandler.toTwosComplement(value: mainLabelRawValue, mainSystem: systemMain!).value
         default:
             break
         }
@@ -723,23 +754,23 @@ class PCalcViewController: UIPageViewController {
         // swtch binary operation cases
         switch buttonLabel {
         case "X<<Y":
-            mainLabel.text = calculateResult(inputValue: mainLabel.text!, operation: .shiftLeft)
+            mainLabel.text = calculateResult(inputValue: mainLabelRawValue, operation: .shiftLeft)
         case "X>>Y":
-            mainLabel.text = calculateResult(inputValue: mainLabel.text!, operation: .shiftRight)
+            mainLabel.text = calculateResult(inputValue: mainLabelRawValue, operation: .shiftRight)
         case "<<":
             // TODO: Error handling
-            mainLabel.text = converterHandler.shiftBits(value: mainLabel.text!, mainSystem: systemMain!, shiftOperation: <<, shiftCount: 1)
+            mainLabel.text = converterHandler.shiftBits(value: mainLabelRawValue, mainSystem: systemMain!, shiftOperation: <<, shiftCount: 1).value
         case ">>":
             // TODO: Error handling
-            mainLabel.text = converterHandler.shiftBits(value: mainLabel.text!, mainSystem: systemMain!, shiftOperation: >>, shiftCount: 1)
+            mainLabel.text = converterHandler.shiftBits(value: mainLabelRawValue, mainSystem: systemMain!, shiftOperation: >>, shiftCount: 1).value
         case "AND":
-            mainLabel.text = calculateResult(inputValue: mainLabel.text!, operation: .and)
+            mainLabel.text = calculateResult(inputValue: mainLabelRawValue, operation: .and)
         case "OR":
-            mainLabel.text = calculateResult(inputValue: mainLabel.text!, operation: .or)
+            mainLabel.text = calculateResult(inputValue: mainLabelRawValue, operation: .or)
         case "XOR":
-            mainLabel.text = calculateResult(inputValue: mainLabel.text!, operation: .xor)
+            mainLabel.text = calculateResult(inputValue: mainLabelRawValue, operation: .xor)
         case "NOR":
-            mainLabel.text = calculateResult(inputValue: mainLabel.text!, operation: .nor)
+            mainLabel.text = calculateResult(inputValue: mainLabelRawValue, operation: .nor)
         default:
             break
         }

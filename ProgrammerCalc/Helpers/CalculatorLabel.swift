@@ -9,13 +9,25 @@
 import UIKit
 import QuartzCore
 
-class CalcualtorLabel: UILabel {
-    
+protocol UpdatableLabel: UILabel {
+    var updateRawValueHandler: ((UpdatableLabel) -> Void)? { get set }
+}
+
+class CalcualtorLabel: UILabel, UpdatableLabel {
+
     // ==================
     // MARK: - Properties
     // ==================
     
-    var value: NumberSystemProtocol?
+    var updateRawValueHandler: ((UpdatableLabel) -> Void)?
+    
+    override var text: String? {
+        didSet {
+            self.updateRawValueHandler?(self)
+            
+        }
+    }
+    var rawValue: NumberSystemProtocol?
 
     override var canBecomeFirstResponder: Bool {
         return true
@@ -40,7 +52,7 @@ class CalcualtorLabel: UILabel {
     // ===============
     
     func setRawValue(value: NumberSystemProtocol) {
-        self.value = value
+        self.rawValue = value
     }
     
     // Action when long press on label

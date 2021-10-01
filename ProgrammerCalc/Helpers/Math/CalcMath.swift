@@ -29,12 +29,12 @@ final class CalcMath {
     
     struct MathState {
         
-        var buffValue: String
+        var buffValue: NumberSystemProtocol
         var operation: mathOperation
-        var lastResult: String?
+        var lastResult: NumberSystemProtocol?
         var inputStart: Bool = false
         
-        init(buffValue:String, operation: mathOperation) {
+        init(buffValue: NumberSystemProtocol, operation: mathOperation) {
             self.buffValue = buffValue
             self.operation = operation
         }
@@ -44,109 +44,113 @@ final class CalcMath {
     // MARK: - Methods
     // ===============
     
-    func calculate( firstValue: String, operation: mathOperation ,secondValue: String, for system: ConversionSystemsEnum) -> String? {
+    func calculate( firstValue: NumberSystemProtocol, operation: mathOperation ,secondValue: NumberSystemProtocol, for system: ConversionSystemsEnum) -> NumberSystemProtocol? {
   
         // ======================
         // Convert Any to Decimal
         // ======================
         
-        let firstConvertedStr: String
-        let secondConvertedStr: String
+        let firstConverted: DecimalSystem
+        let secondConverted: DecimalSystem
         
         if system != .dec {
-            firstConvertedStr = converterHandler.convertValue(value: firstValue, from: system, to: .dec)!
-            secondConvertedStr = converterHandler.convertValue(value: secondValue, from: system, to: .dec)!
+            firstConverted = converterHandler.convertValue(value: firstValue, from: system, to: .dec)! as! DecimalSystem
+            secondConverted = converterHandler.convertValue(value: secondValue, from: system, to: .dec)! as! DecimalSystem
         } else {
-            firstConvertedStr = firstValue
-            secondConvertedStr = secondValue
+            firstConverted = firstValue as! DecimalSystem
+            secondConverted = secondValue as! DecimalSystem
         }
         
         // ========================
         // Calculate Decimal values
         // ========================
-        let decimalStr = calculateDecNumbers(firstNum: firstConvertedStr, secondNum: secondConvertedStr, operation: operation)
+        let newDecimal = calculateDecNumbers(firstNum: firstConverted, secondNum: secondConverted, operation: operation)!
         
         // ======================
         // Convert Decimal to Any
         // ======================
         
         if system != .dec {
-            return converterHandler.convertValue(value: decimalStr!, from: .dec, to: system)
+            return converterHandler.convertValue(value: newDecimal, from: .dec, to: system)
         } else {
-            return decimalStr
+            return newDecimal
         }
    
     }
     
     // Calculation of 2 decimal numbers by .operation
     // TODO: Make error handling for overflow
-    fileprivate func calculateDecNumbers( firstNum: String, secondNum: String, operation: CalcMath.mathOperation) -> String? {
+    fileprivate func calculateDecNumbers( firstNum: DecimalSystem, secondNum: DecimalSystem, operation: CalcMath.mathOperation) -> DecimalSystem? {
         var resultStr: String = String()
 
-        let firstDecimal = Decimal(string: firstNum)
-        let secondDecimal = Decimal(string: secondNum)
+        let firstDecimal = firstNum.decimalValue
+        let secondDecimal = secondNum.decimalValue
 
         switch operation {
         // Addition
         case .add:
-            resultStr = "\(firstDecimal! + secondDecimal!)"
+            resultStr = "\(firstDecimal + secondDecimal)"
         // Subtraction
         case .sub:
-            resultStr = "\(firstDecimal! - secondDecimal!)"
+            resultStr = "\(firstDecimal - secondDecimal)"
         // Multiplication
         case .mul:
-            resultStr = "\(firstDecimal! * secondDecimal!)"
+            resultStr = "\(firstDecimal * secondDecimal)"
         // Division
         case .div:
             // if dvision by zero
             guard secondDecimal != 0 else {
                 // TODO Make error code and replace hardcode
-                return "Division by zero"
+                let divByZero = DecimalSystem(0)
+                divByZero.value = "Division by zero"
+                return divByZero
             }
-            resultStr = "\(firstDecimal! / secondDecimal!)"
+            resultStr = "\(firstDecimal / secondDecimal)"
         // Bitwise shift left
         case .shiftLeft:
             // TODO: Refactor
-            guard !firstNum.contains(".") && !secondNum.contains(".") else {
+            guard !firstNum.value.contains(".") && !secondNum.value.contains(".") else {
                 return secondNum
             }
             // TODO: Error handling
-            resultStr = converterHandler.shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: <<, shiftCount: Int(secondNum)!)
+            let dec = converterHandler.shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: <<, shiftCount: Int(secondNum.value)!) as! DecimalSystem
+            resultStr = dec.value
         // Bitwise shift right
         case .shiftRight:
-            guard !firstNum.contains(".") && !secondNum.contains(".") else {
+            guard !firstNum.value.contains(".") && !secondNum.value.contains(".") else {
                 return secondNum
             }
             // TODO: Error handling
-            resultStr = converterHandler.shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: >>, shiftCount: Int(secondNum)!)
+            let dec = converterHandler.shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: >>, shiftCount: Int(secondNum.value)!) as! DecimalSystem
+            resultStr = dec.value
         // bitwise and
         case .and:
-            guard !firstNum.contains(".") && !secondNum.contains(".") else {
+            guard !firstNum.value.contains(".") && !secondNum.value.contains(".") else {
                 return secondNum
             }
             // x and y
-            resultStr = "\(Int(firstNum)! & Int(secondNum)!)"
+            resultStr = "\(Int(firstNum.value)! & Int(secondNum.value)!)"
         // bitwise or
         case .or:
-            guard !firstNum.contains(".") && !secondNum.contains(".") else {
+            guard !firstNum.value.contains(".") && !secondNum.value.contains(".") else {
                 return secondNum
             }
             // x or y
-            resultStr = "\(Int(firstNum)! | Int(secondNum)!)"
+            resultStr = "\(Int(firstNum.value)! | Int(secondNum.value)!)"
         // bitwise xor
         case .xor:
-            guard !firstNum.contains(".") && !secondNum.contains(".") else {
+            guard !firstNum.value.contains(".") && !secondNum.value.contains(".") else {
                 return secondNum
             }
             // x xor y
-            resultStr = "\(Int(firstNum)! ^ Int(secondNum)!)"
+            resultStr = "\(Int(firstNum.value)! ^ Int(secondNum.value)!)"
         // bitwise nor
         case .nor:
-            guard !firstNum.contains(".") && !secondNum.contains(".") else {
+            guard !firstNum.value.contains(".") && !secondNum.value.contains(".") else {
                 return secondNum
             }
             // x or y
-            let buffResult = DecimalSystem(Decimal(Int(firstNum)! | Int(secondNum)!))
+            let buffResult = DecimalSystem(stringLiteral: "\(Int(firstNum.value)! | Int(secondNum.value)!)")
             // convert to binary
             let binary = Binary(buffResult)
             // delete zeros before for binary
@@ -154,12 +158,13 @@ final class CalcMath {
             
             // not result (invert binary)
             binary.invert()
-            // convert to decimal
-            let decimal = DecimalSystem(binary)
-            
-            resultStr = "\(decimal)"
+            // convert to decimal and return
+            return DecimalSystem(binary)
+        
         }
-        return resultStr
+        
+        // convert resultStr to DecimalSystem
+        return DecimalSystem(stringLiteral: resultStr)
     }
     
     func fillUpZeros( str: String, to num: Int) -> String {
@@ -184,38 +189,38 @@ final class CalcMath {
         return resultStr
     }
     
-    public func negate(valueStr: String, system: ConversionSystemsEnum) -> String {
+    public func negate(value: NumberSystemProtocol, system: ConversionSystemsEnum) -> NumberSystemProtocol {
         // ======================
         // Convert Any to Decimal
         // ======================
         
-        let valueConvertedStr: String
+        let convertedDecimal: DecimalSystem
         
         if system != .dec {
             // TOOD: Error handling
-            valueConvertedStr = converterHandler.convertValue(value: valueStr, from: system, to: .dec)!
+            convertedDecimal = converterHandler.convertValue(value: value, from: system, to: .dec)! as! DecimalSystem
         } else {
-            valueConvertedStr = valueStr
+            convertedDecimal = value as! DecimalSystem
         }
         
         // Negate decimal number
-        let decimal = Decimal(string: valueConvertedStr)!
+        let decimalValue = convertedDecimal.decimalValue
         // if 0 then return input value
-        guard decimal != 0 else {
-            return valueStr
+        guard decimalValue != 0 else {
+            return value
         }
         // multiple by -1
-        let decimalStr = "\(-1 * decimal)"
+        let newDecimalValue = -1 * decimalValue
         
         // ======================
         // Convert Decimal to Any
         // ======================
-        
+        let newDecimal = DecimalSystem(newDecimalValue)
         if system != .dec {
             // TODO: Error handling
-            return converterHandler.convertValue(value: decimalStr, from: .dec, to: system)!
+            return converterHandler.convertValue(value: newDecimal, from: .dec, to: system)!
         } else {
-            return decimalStr
+            return newDecimal
         }
     }
 }
