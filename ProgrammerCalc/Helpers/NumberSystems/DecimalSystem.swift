@@ -19,6 +19,9 @@ class DecimalSystem: NumberSystemProtocol {
     var value: String
     var isSigned: Bool = false
     
+    // CalcState storage
+    private var calcStateStorage = CalcStateStorage()
+    
     // ======================
     // MARK: - Initialization
     // ======================
@@ -30,6 +33,11 @@ class DecimalSystem: NumberSystemProtocol {
 
     init(_ valueDec: Decimal) {
         self.decimalValue = valueDec
+        self.value = "\(self.decimalValue)"
+    }
+    
+    init(_ valueInt: Int) {
+        self.decimalValue = Decimal(valueInt)
         self.value = "\(self.decimalValue)"
     }
     
@@ -68,16 +76,23 @@ class DecimalSystem: NumberSystemProtocol {
         if let decNumInt: Int = Int(decNumStr) {
             let str = binary.convertIntToBinary(decNumInt)
             binary = Binary(stringLiteral: str)
-        } else {
+        } else if decNumStr.contains("."){
             // TODO   Error handling
             let splittedDoubleStr = binary.divideIntFract(value: decNumStr)
             let str = binary.convertDoubleToBinaryStr(numberStr: splittedDoubleStr)
             binary = Binary(stringLiteral: str)
-
+        } else {
+            
+            //
+            if !calcStateStorage.isProcessSigned() && decNumStr == "9223372036854775808" {
+                binary = Binary(stringLiteral: "1000000000000000000000000000000000000000000000000000000000000000")
+            } else {
+                print("error oveflow")
+            }
         }
         
         // process signed from UserDefaults
-        binary.ifProcessSigned {
+        if calcStateStorage.isProcessSigned() {
             let splittedBinaryStr = binary.divideIntFract(value: binary.value)
             
             if let intPart = splittedBinaryStr.0 {
@@ -101,5 +116,19 @@ class DecimalSystem: NumberSystemProtocol {
         }
         
         return binary
+    }
+}
+
+// Converting binary string in decimal number
+extension Decimal {
+    init(_ str: String, radix: Int) {
+        self.init()
+        var decimal = Decimal()
+        var multiplier = str.count - 1
+        for bit in str {
+            decimal += Decimal(string: String(bit))! * Decimal(pow(Double(radix), Double(multiplier)))
+            multiplier -= 1
+        }
+        self = decimal
     }
 }

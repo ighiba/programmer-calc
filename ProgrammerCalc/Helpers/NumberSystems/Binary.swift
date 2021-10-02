@@ -18,8 +18,11 @@ class Binary: NumberSystemProtocol {
     // MARK: - Properties
     // ==================
     
-    var value: String = ""
+    var value: String = "0"
     var isSigned: Bool = false // default
+
+    // CalcState storage
+    private var calcStateStorage = CalcStateStorage()
     
     required public init(stringLiteral value: String) {
         // process string input and apply style for output
@@ -28,7 +31,7 @@ class Binary: NumberSystemProtocol {
     
     /// Creates an empty instance
     init() {
-        self.value = ""
+        self.value = "0"
     }
     
     /// Creates an instance initialized to the Int value
@@ -64,16 +67,6 @@ class Binary: NumberSystemProtocol {
     // MARK: - Methods
     // ===============
     
-    func ifProcessSigned(closure: () -> Void) {
-        // storage
-        let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
-        // process signed
-        if let state = calcStateStorage.loadData() {
-            if state.processSigned {
-                closure()
-            }
-        }
-    }
     
     // only for int or fract part of binary
     func removeZerosBefore( str: String) -> String {
@@ -140,7 +133,7 @@ class Binary: NumberSystemProtocol {
         }
         
         // to two's complement if value is signed and negative
-        ifProcessSigned {
+        if calcStateStorage.isProcessSigned() {
             // calcualte signed state
             binary.updateSignedState() // changes binary.isSigned state to true of false
             // set multipler to -1 or 1 for inverting value
@@ -161,7 +154,7 @@ class Binary: NumberSystemProtocol {
         }
         
         // First: converting int part
-        ifProcessSigned {
+        if calcStateStorage.isProcessSigned() {
             // calcualte signed state
             binary.updateSignedState() // changes binary.isSigned state to true of false
             // remove signed bit
@@ -176,6 +169,9 @@ class Binary: NumberSystemProtocol {
         
         if let number = Int(binIntStrBuff!, radix: 2) {
             result += Decimal(integerLiteral: number)
+        } else if binIntStrBuff!.count == 64 {
+            // if Int overflowed
+            result = Decimal(binIntStrBuff!, radix: 2)
         } else {
             result = 0.0
         }
@@ -695,7 +691,7 @@ class Binary: NumberSystemProtocol {
         var signedBit = String()
         
         // delete signed bit if exist
-        ifProcessSigned {
+        if calcStateStorage.isProcessSigned() {
             signedBit = String(binary.value.first!)
             binary.value.removeFirst()
         }
@@ -715,7 +711,7 @@ class Binary: NumberSystemProtocol {
         // convert to 1's complement
         binary.onesComplement()
         // save signed bit and change to 0
-        binary.ifProcessSigned {
+        if calcStateStorage.isProcessSigned() {
             signedBit = String(binary.value.first!)
             binary.updateSignedState()
             binary.changeSignedBit(to: "0")

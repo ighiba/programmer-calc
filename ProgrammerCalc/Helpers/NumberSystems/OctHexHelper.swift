@@ -10,6 +10,9 @@ import Foundation
 
 class OctHexHelper {
     
+    // CalcState storage
+    private var calcStateStorage = CalcStateStorage()
+    
     // =========================================
     // MARK: - Octal / Hexadecimal Table Methods
     // =========================================
@@ -17,6 +20,7 @@ class OctHexHelper {
     // Parsing tables dictionary hex or oct for converting to bin
     func tableOctHexToBin( valueOctHex: String, table: [String : String]) -> String {
         let resultBin = Binary()
+        resultBin.value = ""
         
         // from hex or oct to binary
         // process each number and form parts
@@ -36,7 +40,7 @@ class OctHexHelper {
         }
        
         // process signed values
-        resultBin.ifProcessSigned {
+        if calcStateStorage.isProcessSigned() {
             // remove zeros
             resultBin.value = resultBin.removeZerosBefore(str: resultBin.value)
             // if octhex is negative

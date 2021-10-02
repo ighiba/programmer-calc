@@ -8,14 +8,17 @@
 
 import Foundation
 
- class ConverterHandler {
-    
+ class ConverterHandler { 
     // ===============
     // MARK: - Methods
     // ===============
     
     // Main function for conversion values
     public func convertValue(value: NumberSystemProtocol, from mainSystem: ConversionSystemsEnum, to converterSystem: ConversionSystemsEnum) -> NumberSystemProtocol? {
+        // if manSystem == converterSystem, then return imput value
+        if mainSystem == converterSystem {
+            return value
+        }
         
         // =======================================
         // First step: convert any value to binary
@@ -112,18 +115,4 @@ import Foundation
         return convertValue(value: binary, from: .bin, to: mainSystem)!
     }
     
-    
-    // Shift to needed bit count
-    public func shiftBits( value: NumberSystemProtocol, mainSystem: ConversionSystemsEnum, shiftOperation: (Int,Int)->Int, shiftCount: Int ) -> NumberSystemProtocol {
-        // convert to Decimal
-        let decimal = convertValue(value: value, from: mainSystem, to: .dec)
-        // TODO: Error handling
-        let decimalInt = Int(decimal!.value) ?? 0
-        
-        // shift left by 1 bit
-        let resultStr = String(shiftOperation(decimalInt,shiftCount))
-        
-        // convert to mainSystem
-        return convertValue(value: DecimalSystem(stringLiteral: resultStr), from: .dec, to: mainSystem)!
-    }
 }

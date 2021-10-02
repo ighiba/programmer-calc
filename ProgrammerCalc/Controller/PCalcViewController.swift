@@ -564,7 +564,7 @@ class PCalcViewController: UIPageViewController {
                     label.text! = addDigitToMainLabel(labelText: label.text!, digit: buttonText)
                     convertLabel.text! += buttonText
                     acButton.setTitle("C", for: .normal)
-                } else if buttonText != "0" {
+                } else if buttonText != "0" && buttonText != "00" {
                      // if 0 pressed then do nothing
                     label.text! = buttonText
                     acButton.setTitle("C", for: .normal)
@@ -759,10 +759,20 @@ class PCalcViewController: UIPageViewController {
             mainLabel.text = calculateResult(inputValue: mainLabelRawValue, operation: .shiftRight)
         case "<<":
             // TODO: Error handling
-            mainLabel.text = converterHandler.shiftBits(value: mainLabelRawValue, mainSystem: systemMain!, shiftOperation: <<, shiftCount: 1).value
+            if let result = calculationHandler.shiftBits(value: mainLabelRawValue, mainSystem: systemMain!, shiftOperation: .shiftLeft, shiftCount: 1) {
+                mainLabel.text = result.value
+            } else {
+                // do nothing
+                return
+            }
         case ">>":
             // TODO: Error handling
-            mainLabel.text = converterHandler.shiftBits(value: mainLabelRawValue, mainSystem: systemMain!, shiftOperation: >>, shiftCount: 1).value
+            if let result = calculationHandler.shiftBits(value: mainLabelRawValue, mainSystem: systemMain!, shiftOperation: .shiftRight, shiftCount: 1) {
+                mainLabel.text = result.value
+            } else {
+                // do nothing
+                return
+            }
         case "AND":
             mainLabel.text = calculateResult(inputValue: mainLabelRawValue, operation: .and)
         case "OR":

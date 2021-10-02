@@ -42,4 +42,15 @@ class CalcStateStorage: CalcStateStorageProtocol {
         }
         UserDefaults.standard.synchronize()
     }
+    
+    func isProcessSigned() -> Bool {
+        // storage
+        let calcStateStorage: CalcStateStorageProtocol = self
+        // process signed
+        if let state = calcStateStorage.loadData() {
+            return state.processSigned
+        }
+        
+        return false
+    }
 }
