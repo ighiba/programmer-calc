@@ -13,6 +13,10 @@ import XCTest
 
 class HexadecimalTests: XCTestCase {
     
+    // Storages
+    var conversionStorage: ConversionStorageProtocol? = ConversionStorage()
+    var calcStatetorage: CalcStateStorageProtocol? = CalcStateStorage()
+    
     var hexadecimalTest: Hexadecimal!
     var hexadecimalStrInput: String = "AF0" // dec = 2800
     
@@ -22,7 +26,8 @@ class HexadecimalTests: XCTestCase {
     override func setUp() {
         super.setUp()
         hexadecimalTest = Hexadecimal()
-        SavedData.conversionSettings = ConversionSettings(systMain: "Decimal", systConverter: "Hexadecimal", number: 8.0)
+        let dummyConversionSettings = ConversionSettings(systMain: "Decimal", systConverter: "Hexadecimal", number: 8.0)
+        conversionStorage?.saveData(dummyConversionSettings)
         
     }
     
@@ -42,7 +47,7 @@ class HexadecimalTests: XCTestCase {
     // XCTAssert to test model
     func testHexadecimalUnsignedInit() throws {
         // 1. given
-        SavedData.calcState = unsignedData
+        calcStatetorage?.saveData(unsignedData)
         
         // 2. when
         hexadecimalTest = Hexadecimal(stringLiteral: hexadecimalStrInput)
@@ -53,7 +58,7 @@ class HexadecimalTests: XCTestCase {
     
     func testHexadecimalSignedInit() throws {
         // 1. given
-        SavedData.calcState = signedData
+        calcStatetorage?.saveData(signedData)
         
         // 2. when
         hexadecimalTest = Hexadecimal(stringLiteral: hexadecimalStrInput)
@@ -63,7 +68,7 @@ class HexadecimalTests: XCTestCase {
     
     func testHexadecimalBinaryUnsignedInit() throws {
         // 1. given
-        SavedData.calcState = unsignedData
+        calcStatetorage?.saveData(unsignedData)
         let binary = Binary(stringLiteral: "101011110000")
         
         // 2. when
@@ -75,7 +80,7 @@ class HexadecimalTests: XCTestCase {
     
     func testHexadecimalBinarySignedInit() throws {
         // 1. given
-        SavedData.calcState = signedData
+        calcStatetorage?.saveData(signedData)
         let binary = Binary(stringLiteral: "101011110000")
         
         // 2. when
@@ -87,7 +92,7 @@ class HexadecimalTests: XCTestCase {
     
     func testHexadecimalBinarySignedInitWithMinus() throws {
         // 1. given
-        SavedData.calcState = signedData
+        calcStatetorage?.saveData(signedData)
         let binary = Binary(stringLiteral: "1000101011110000")
         
         // 2. when
@@ -99,7 +104,7 @@ class HexadecimalTests: XCTestCase {
     
     func testHexadecimalBinaryUnsignedInitWithMinus() throws {
         // 1. given
-        SavedData.calcState = unsignedData
+        calcStatetorage?.saveData(unsignedData)
         let binary = Binary(stringLiteral: "1000101011110000")
         
         // 2. when
@@ -111,7 +116,7 @@ class HexadecimalTests: XCTestCase {
     
     func testHexadecimalCovnertToBinaryUnsigned() throws {
         // 1. given
-        SavedData.calcState = unsignedData
+        calcStatetorage?.saveData(unsignedData)
         hexadecimalTest = Hexadecimal(stringLiteral: hexadecimalStrInput)
         
         // 2. when
@@ -123,7 +128,7 @@ class HexadecimalTests: XCTestCase {
     
     func testHexadecimalCovnertToBinarySigned() throws {
         // 1. given
-        SavedData.calcState = signedData
+        calcStatetorage?.saveData(signedData)
         hexadecimalTest = Hexadecimal(stringLiteral: hexadecimalStrInput)
         
         // 2. when
