@@ -794,6 +794,10 @@ class PCalcViewController: UIPageViewController {
             if mainLabel.text!.count > 1 {
                 // delete last symbol in main label
                 mainLabel.text?.removeLast()
+                // check if "-" is only one symbol
+                if mainLabel.text == "-" {
+                    mainLabel.text = "0"
+                }
             } else {
                 // if only one digit in label (or 0) then replace it to "0"
                 mainLabel.text = "0"
