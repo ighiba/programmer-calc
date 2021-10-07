@@ -39,4 +39,26 @@ extension String {
     func removeAllSpaces() -> String {
         return self.replacingOccurrences(of: " ", with: "")
     }
+    
+    // change places of input chars in string
+    func swap(first: Character, second: Character) -> String {
+        let buffStr = self
+        var resultStr = String()
+        
+        // process each character
+        buffStr.forEach { (bit) in
+            switch bit {
+            case "0":
+                resultStr.append("1")
+                break
+            case "1":
+                resultStr.append("0")
+                break
+            default:
+                resultStr.append(bit)
+                break
+            }
+        }
+        return resultStr
+    }
 }
