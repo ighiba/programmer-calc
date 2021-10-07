@@ -199,15 +199,17 @@ final class CalcMath {
             // x or y
             let buffResult = DecimalSystem(stringLiteral: "\(Int(firstNum.value)! | Int(secondNum.value)!)")
             // convert to binary
-            let binary = Binary(buffResult)
-            // delete zeros before for binary
-            binary.value = binary.removeZerosBefore(str: binary.value)
-            
-            // not result (invert binary)
-            binary.invert()
-            // convert to decimal and return
-            return DecimalSystem(binary)
-        
+            if let binary = Binary(buffResult) {
+                // delete zeros before for binary
+                binary.value = binary.removeZerosBefore(str: binary.value)
+                
+                // not result (invert binary)
+                binary.invert()
+                // convert to decimal and return
+                return DecimalSystem(binary)
+            } else {
+                return nil
+            }
         }
         
         // convert resultStr to DecimalSystem
