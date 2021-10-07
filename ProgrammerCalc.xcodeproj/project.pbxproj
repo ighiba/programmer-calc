@@ -200,6 +200,7 @@
 			children = (
 				C068AFA924FA40B900BFE754 /* UIPageViewController.swift */,
 				C00616AB27065097007BEF89 /* String.swift */,
+				C0F5CF4E270F394E0020CE14 /* Decimal.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -462,6 +463,7 @@
 				C00616A827064449007BEF89 /* OctHexHelper.swift in Sources */,
 				C00616B327066CB1007BEF89 /* CalcStateStorage.swift in Sources */,
 				C0666EBA24F9782F004809EF /* CalcButtonsMain.swift in Sources */,
+				C0F5CF4F270F394E0020CE14 /* Decimal.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
