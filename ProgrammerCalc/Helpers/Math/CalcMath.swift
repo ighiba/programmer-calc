@@ -69,6 +69,43 @@ final class CalcMath {
         // ========================
         let newDecimal = calculateDecNumbers(firstNum: firstConverted, secondNum: secondConverted, operation: operation)!
         
+        // Check for overflow
+        // calculate max/min decSigned/Unsigned values with current wordSize value
+        let max = Decimal().decPow(2, Decimal(wordSize_Global)) - 1
+        let maxSigned = Decimal().decPow(2, Decimal(wordSize_Global-1)) - 1
+        let minSigned = Decimal().decPow(2, Decimal(wordSize_Global-1)) * -1
+        
+        let processSigned = calcStateStorage.isProcessSigned()
+        // check for overflow
+        if abs(newDecimal.decimalValue) > maxSigned {
+            var decResult = newDecimal.decimalValue
+            // process overflow for different ways
+            if processSigned && newDecimal.decimalValue > maxSigned {
+                // count how much is overflowed after calculation
+                var decCount = newDecimal.decimalValue / (maxSigned + Decimal(1))
+                var decCountCopy = decCount
+                // round decCount
+                NSDecimalRound(&decCount, &decCountCopy, 0, .down)
+                decResult = newDecimal.decimalValue+(minSigned*2) * decCount
+                
+            } else if processSigned && newDecimal.decimalValue < minSigned {
+                
+                var decCount = newDecimal.decimalValue / (minSigned + Decimal(1))
+                var decCountCopy = decCount
+                NSDecimalRound(&decCount, &decCountCopy, 0, .down)
+                decResult = newDecimal.decimalValue-(minSigned*2) * decCount
+                
+            } else if !processSigned && newDecimal.decimalValue > max {
+                
+                var decCount = newDecimal.decimalValue / (max + Decimal(1))
+                var decCountCopy = decCount
+                NSDecimalRound(&decCount, &decCountCopy, 0, .down)
+                decResult = newDecimal.decimalValue-max * decCount
+            }
+            // update decimal
+            newDecimal.setNewDecimal(with: decResult)
+        }
+        
         // ======================
         // Convert Decimal to Any
         // ======================
@@ -186,15 +223,8 @@ final class CalcMath {
     // Filling binary number by 8, 16, 32, 64
     func fillUpBits( str: String) -> String {
         var resultStr = str
-        // brute force powers of 2; from 8 to 64
-        // number of bits in binary number
-        for power in 3...6 {
-            let bits = powf(2, Float(power))
-            if resultStr.count < Int(bits) {
-                resultStr = fillUpZeros(str: resultStr, to: Int(bits))
-                return resultStr
-            }
-        }
+        // fill up bits (0) to current word size
+        resultStr = fillUpZeros(str: resultStr, to: wordSize_Global)
         
         return resultStr
     }
@@ -205,30 +235,24 @@ final class CalcMath {
         // ======================
         
         let convertedDecimal: DecimalSystem
+        convertedDecimal = converterHandler.convertValue(value: value, from: system, to: .dec)! as! DecimalSystem
         
-        if system != .dec {
-            // TOOD: Error handling
-            convertedDecimal = converterHandler.convertValue(value: value, from: system, to: .dec)! as! DecimalSystem
-        } else {
-            convertedDecimal = value as! DecimalSystem
-        }
-        
-        // Negate decimal number
-        let decimalValue = convertedDecimal.decimalValue
         // if 0 then return input value
-        guard decimalValue != 0 else {
+        guard convertedDecimal.decimalValue != 0 else {
             return value
         }
         // multiple by -1
-        let newDecimalValue = -1 * decimalValue
+        let newDecimalValue = -1 * convertedDecimal.decimalValue
         
         // ======================
         // Convert Decimal to Any
         // ======================
         let newDecimal = DecimalSystem(newDecimalValue)
+
         if system != .dec {
             // TODO: Error handling
-            return converterHandler.convertValue(value: newDecimal, from: .dec, to: system)!
+            let negatedValue = converterHandler.convertValue(value: newDecimal, from: .dec, to: system)!
+            return negatedValue
         } else {
             return newDecimal
         }
@@ -244,7 +268,10 @@ final class CalcMath {
         }
         
         // convert to Binary
-        let binary = converterHandler.convertValue(value: value, from: mainSystem, to: .bin) as! Binary
+        let binary = converterHandler.convertValue(value: value, from: mainSystem, to: .bin) as? Binary
+        
+        // check if binary is nil
+        guard binary != nil else { return nil }
         
         // get operation
         let operation: CalcMath.mathOperation = {
@@ -264,7 +291,7 @@ final class CalcMath {
         // chosing shifting method for signed or unsigned value
         if calcStateStorage.isProcessSigned() {
             // For signed
-            let decStr = "\(binary.convertBinaryToDec())"
+            let decStr = "\(binary!.convertBinaryToDec())"
             var newInt = 0
             if operation == .shiftLeft {
                 newInt = Int(decStr)!<<abs(shiftCount)
@@ -274,7 +301,12 @@ final class CalcMath {
                 // if wrong operation
                 newInt = 0
             }
-            binary.value = DecimalSystem(newInt).convertDecToBinary().value
+            if let bin = DecimalSystem(newInt).convertDecToBinary() {
+                binary!.value = bin.value
+            } else {
+                return nil
+            }
+            //binary!.value = DecimalSystem(newInt).convertDecToBinary().value
         } else {
             // For unsigned
             // loop shiftCount for x>>y and x<<y
@@ -283,27 +315,28 @@ final class CalcMath {
                 if operation == .shiftLeft {
                     // <<
                     // append from right
-                    binary.value.append("0")
+                    binary!.value.append("0")
                 } else if operation == .shiftRight {
                     // >>
                     // remove from right
-                    if binary.value.count > 0 {
-                        binary.value.removeLast(1)
+                    if binary!.value.count > 0 {
+                        binary!.value.removeLast(1)
                     } else {
-                        binary.value = "0"
+                        binary!.value = "0"
                     }
                 } else {
                     // if wrong operation
-                    binary.value = "0"
+                    binary!.value = "0"
                 }
             }
         }
         
+        // TODO: Remove?
         // delete first bit if more than QWORD
-        if binary.value.removeAllSpaces().count > 64 {
-            binary.value.removeFirst(1)
+        if binary!.value.removeAllSpaces().count > 64 {
+            binary!.value.removeFirst(1)
         }
         
-        return converterHandler.convertValue(value: Binary(stringLiteral: binary.value), from: .bin, to: mainSystem)
+        return converterHandler.convertValue(value: Binary(stringLiteral: binary!.value), from: .bin, to: mainSystem)
     }
 }
