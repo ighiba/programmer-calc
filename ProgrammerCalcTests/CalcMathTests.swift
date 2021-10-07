@@ -122,7 +122,7 @@ class CalcMathTests: XCTestCase {
     func testBinNegateSigned() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
-        let bin = Binary(stringLiteral: "00010000")
+        let bin = Binary(stringLiteral: "00010000") // 16
         
         // 2. when
         let result = calcMathTest.negate(value: bin, system: .bin)

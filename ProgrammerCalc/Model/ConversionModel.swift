@@ -20,7 +20,6 @@ class ConversionSettings: ConversionSettingsProtocol, Decodable, Encodable {
     var systemConverter: String
     var numbersAfterPoint: Float
     
-    
     init(systMain: String, systConverter: String, number: Float) {
         self.systemMain = systMain
         self.systemConverter = systConverter
@@ -28,18 +27,6 @@ class ConversionSettings: ConversionSettingsProtocol, Decodable, Encodable {
     }
     
 }
-
-//class ConversionModel {
-//   public enum ConversionSystemsEnum: String {
-//        case bin = "Binary"
-//        case dec = "Decimal"
-//        case oct = "Octal"
-//        case hex = "Hexadecimal"
-//    }
-//    
-//    //var conversionSystems = ["Binary", "Decimal", "Octal", "Hexadecimal"]
-//    
-//}
 
 enum ConversionSystemsEnum: String, CaseIterable{
      case bin = "Binary"
