@@ -15,7 +15,9 @@ class DecimalSystem: NumberSystemProtocol {
     // ==================
     
     var decimalValue: Decimal
-    
+    let max = Decimal(string: "18446744073709551615")!
+    let maxSigned = Decimal(string: "9223372036854775807")!
+    let minSigned = Decimal(string: "-9223372036854775808")!
     var value: String
     var isSigned: Bool = false
     
@@ -29,21 +31,25 @@ class DecimalSystem: NumberSystemProtocol {
     required init(stringLiteral: String) {
         self.value = stringLiteral
         self.decimalValue = Decimal(string: stringLiteral) ?? Decimal(0)
+        updateIsSignedState()
     }
 
     init(_ valueDec: Decimal) {
         self.decimalValue = valueDec
         self.value = "\(self.decimalValue)"
+        updateIsSignedState()
     }
     
     init(_ valueInt: Int) {
         self.decimalValue = Decimal(valueInt)
         self.value = "\(self.decimalValue)"
+        updateIsSignedState()
     }
     
     init(_ valueBin: Binary) {
         self.decimalValue = valueBin.convertBinaryToDec()
         self.value = "\(self.decimalValue)"
+        updateIsSignedState()
     }
     
     
@@ -54,43 +60,39 @@ class DecimalSystem: NumberSystemProtocol {
     // Handle converting values NumberSystem
     
     // DEC -> BIN
-    func convertDecToBinary() -> Binary {
+    func convertDecToBinary() -> Binary? {
         var decNumStr: String
         var binary = Binary()
         
-        if decimalValue < 0 {
-            isSigned = true
-        } else {
-            isSigned = false
-        }
+        updateIsSignedState()
 
         // if number is signed
+        // remove minus for converting
         // TODO: Signed handling
         
         if isSigned {
-            decNumStr = String("\(decimalValue * -1)")
-        } else {
-            decNumStr = String("\(decimalValue)")
+            decimalValue *= -1
         }
+        
+        decNumStr = "\(decimalValue)"
 
-        if let decNumInt: Int = Int(decNumStr) {
-            let str = binary.convertIntToBinary(decNumInt)
-            binary = Binary(stringLiteral: str)
-        } else if decNumStr.contains("."){
+        if decNumStr.contains(".") {
+            // Process float numbers
             // TODO   Error handling
             let splittedDoubleStr = binary.divideIntFract(value: decNumStr)
             let str = binary.convertDoubleToBinaryStr(numberStr: splittedDoubleStr)
             binary = Binary(stringLiteral: str)
         } else {
-            
-            //
-            if !calcStateStorage.isProcessSigned() && decNumStr == "9223372036854775808" {
-                binary = Binary(stringLiteral: "1000000000000000000000000000000000000000000000000000000000000000")
-            } else {
-                print("error oveflow")
-            }
+            // TODO   Error handling
+            //print("handling overflow DEC to BIN - signed")
+            let str = binary.convertDecToBinary(decimalValue)
+            binary = Binary(stringLiteral: str)
         }
-        
+        // return sign to decimal
+        if isSigned {
+            decimalValue *= -1
+        }
+   
         // process signed from UserDefaults
         if calcStateStorage.isProcessSigned() {
             let splittedBinaryStr = binary.divideIntFract(value: binary.value)
@@ -103,32 +105,58 @@ class DecimalSystem: NumberSystemProtocol {
                 binary.isSigned = self.isSigned
                 // fill up to signed binary style
                 binary.fillUpSignedToNeededCount()
+                // isSigned == true -> 1 else -> 0
+                if binary.isSigned {
+                    binary.value = "1" + binary.value
+                } else {
+                    binary.value = "0" + binary.value
+                }
+                
+                // check if min signed
+                var binaryTest = binary.value
+                binaryTest.removeFirst(1)
+                
+                if binaryTest.first == "1" && binaryTest.replacingOccurrences(of: "0", with: "").count == 1 && binaryTest.count == wordSize_Global {
+                    binary.value = binaryTest
+                }
+                
                 // convert to 2's complenment state if value is signed
                 if binary.isSigned {
                     binary.twosComplement()
+                }
+                
+                if (self.decimalValue > self.maxSigned) || (self.decimalValue < self.minSigned) {
+                    print("overflow when convert dec to bin - \(decimalValue)")
+                    //return nil
                 }
             }
             
             // add fract part if exists
             if let fractPart = splittedBinaryStr.1 {
-                binary.value = "\(binary.value).\(fractPart)"
+                // invert fract part if isSigned
+                if isSigned {
+                    let invertedFractPart = fractPart.swap(first: "1", second: "0")
+                    binary.value = "\(binary.value).\(invertedFractPart)"
+                } else {
+                    binary.value = "\(binary.value).\(fractPart)"
+                }
             }
         }
         
         return binary
     }
-}
-
-// Converting binary string in decimal number
-extension Decimal {
-    init(_ str: String, radix: Int) {
-        self.init()
-        var decimal = Decimal()
-        var multiplier = str.count - 1
-        for bit in str {
-            decimal += Decimal(string: String(bit))! * Decimal(pow(Double(radix), Double(multiplier)))
-            multiplier -= 1
+    
+    private func updateIsSignedState() {
+        if decimalValue < 0 {
+            isSigned = true
+        } else {
+            isSigned = false
         }
-        self = decimal
+    }
+    
+    func setNewDecimal(with decimalValue: Decimal) {
+        self.decimalValue = decimalValue
+        self.value = "\(decimalValue)"
+        updateIsSignedState()
     }
 }

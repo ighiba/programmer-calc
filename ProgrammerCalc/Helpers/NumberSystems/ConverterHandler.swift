@@ -25,24 +25,29 @@ import Foundation
         // =======================================
         let binary = convertAnyToBinary(value: value, anySystem: mainSystem)
         
+        // Check if not nil after converting to binary
+        guard binary != nil else { return nil }
+        
         // ==================================================
         // Second step: convert binary value to needed system
         // ==================================================
         
-        let result = convertBinaryToAny(binary: binary, targetSystem: converterSystem)
+        let result = convertBinaryToAny(binary: binary!, targetSystem: converterSystem)
         
         return result
     }
     
     // Converter from any to binary system
-    fileprivate func convertAnyToBinary( value: NumberSystemProtocol, anySystem: ConversionSystemsEnum) -> Binary {
-        var binary: Binary
+    fileprivate func convertAnyToBinary( value: NumberSystemProtocol, anySystem: ConversionSystemsEnum) -> Binary? {
+        var binary: Binary?
         var partition: Int = 4
         
         switch anySystem {
         case .bin:
             // if already binary
-            binary = value as! Binary
+            if let bin = value as? Binary {
+                binary = Binary(bin)
+            }
         case .oct:
             // convert oct to binary
             partition = 3
@@ -52,7 +57,9 @@ import Foundation
             // convert dec to binary
             partition = 4
             let dec = value as! DecimalSystem
-            binary = Binary(dec)
+            if let bin = Binary(dec) {
+                binary = bin
+            }
         case .hex:
             // convert hex to binary
             partition = 4
@@ -60,8 +67,11 @@ import Foundation
             binary = Binary(hex)
         }
         
+        // check if binary is nil
+        guard binary != nil else { return nil }
+        
         // divide binary by parts
-        binary = binary.divideBinary(by: partition)
+        binary = binary!.divideBinary(by: partition)
 
         return binary
     }
@@ -72,7 +82,7 @@ import Foundation
         switch targetSystem {
         case .bin:
             // convert binary to binary
-            return binary
+            return Binary(binary)
         case .oct:
             // convert binary to oct
             return Octal(binary)
