@@ -48,6 +48,9 @@
 		C077CF6F24DC8DEE008E5F0F /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C077CF6E24DC8DEE008E5F0F /* SettingsCell.swift */; };
 		C077CF7124DC987B008E5F0F /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C077CF7024DC987B008E5F0F /* SettingsModel.swift */; };
 		C0E5FC7624BB9B8D00BA93CA /* PCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */; };
+		C0F5CF4B270E10870020CE14 /* WordSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF4A270E10870020CE14 /* WordSize.swift */; };
+		C0F5CF4D270E12100020CE14 /* WordSizeStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF4C270E12100020CE14 /* WordSizeStorage.swift */; };
+		C0F5CF4F270F394E0020CE14 /* Decimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF4E270F394E0020CE14 /* Decimal.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +118,9 @@
 		C077CF6E24DC8DEE008E5F0F /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
 		C077CF7024DC987B008E5F0F /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcView.swift; sourceTree = "<group>"; };
+		C0F5CF4A270E10870020CE14 /* WordSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSize.swift; sourceTree = "<group>"; };
+		C0F5CF4C270E12100020CE14 /* WordSizeStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSizeStorage.swift; sourceTree = "<group>"; };
+		C0F5CF4E270F394E0020CE14 /* Decimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decimal.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,9 +151,10 @@
 		C00616AD270666AD007BEF89 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
-				C00616AE270666DD007BEF89 /* SettingsStorage.swift */,
-				C00616B027066C91007BEF89 /* ConversionStorage.swift */,
 				C00616B227066CB1007BEF89 /* CalcStateStorage.swift */,
+				C00616B027066C91007BEF89 /* ConversionStorage.swift */,
+				C00616AE270666DD007BEF89 /* SettingsStorage.swift */,
+				C0F5CF4C270E12100020CE14 /* WordSizeStorage.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -281,6 +288,7 @@
 			children = (
 				C00616AD270666AD007BEF89 /* Storage */,
 				C065DB3D24E41E610059B38D /* CalcState.swift */,
+				C0F5CF4A270E10870020CE14 /* WordSize.swift */,
 				C077CF7024DC987B008E5F0F /* SettingsModel.swift */,
 				C077CF6E24DC8DEE008E5F0F /* SettingsCell.swift */,
 				C0635A7A24D9E2AA003855A9 /* ConversionModel.swift */,
@@ -444,6 +452,7 @@
 				C066756924E27AE700F832F9 /* ConversionValues.swift in Sources */,
 				C068AFAC24FA605800BFE754 /* CalculatorButton.swift in Sources */,
 				C00616AC27065097007BEF89 /* String.swift in Sources */,
+				C0F5CF4B270E10870020CE14 /* WordSize.swift in Sources */,
 				C00616B127066C91007BEF89 /* ConversionStorage.swift in Sources */,
 				C05B008C24E6E0E100F8A5E0 /* Hexadecimal.swift in Sources */,
 				C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */,
@@ -458,6 +467,7 @@
 				C0666EBC24F97855004809EF /* CalcButtonsAdditional.swift in Sources */,
 				C06B7F092443B12B009642B9 /* SceneDelegate.swift in Sources */,
 				C07267DD24E5ACB300D4B4A2 /* Binary.swift in Sources */,
+				C0F5CF4D270E12100020CE14 /* WordSizeStorage.swift in Sources */,
 				C077CF7124DC987B008E5F0F /* SettingsModel.swift in Sources */,
 				C070ED2624DB0ED400A04463 /* SettingsView.swift in Sources */,
 				C00616A827064449007BEF89 /* OctHexHelper.swift in Sources */,
