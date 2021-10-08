@@ -329,15 +329,25 @@ class PCalcViewController: UIPageViewController {
         if Double(labelText) == nil && ( self.systemMain != .hex) {
             converterLabel.text = mainLabel.text
         } else {
+            // if last char is dot then append dot
+            let lastDotIfExists: String = {
+                if mainLabel.text?.last == "." {
+                    return "."
+                } else {
+                    return ""
+                }
+            }()
             // Uptade converter label with converted number
+            
             // TODO: Error handling
             updateConversionState()
             let newValue = converterHandler.convertValue(value: mainLabelRawValue, from: systemMain!, to: systemConverter!)?.value
-            uptdateConverterLabelWith(newValue)
+            uptdateConverterLabel(with: newValue! + lastDotIfExists)
         }
     }
     
     public func updateMainLabel() {
+        
         if systemMain == .bin {
             var binary = Binary(stringLiteral: mainLabel.text!)
              
@@ -345,8 +355,50 @@ class PCalcViewController: UIPageViewController {
             binary = binary.divideBinary(by: 4)
             
             mainLabel.text! = binary.value
+        // updating dec for values with floating point
+        } else if systemMain == .dec && mainLabel.text!.contains(".") {
+            // if last char is dot then append dot
+            let lastDotIfExists: String = {
+                if mainLabel.text?.last == "." {
+                    return "."
+                } else {
+                    return ""
+                }
+            }()
+            // get dec value
+            let dec = converterHandler.convertValue(value: mainLabelRawValue, from: systemMain!, to: .dec) as! DecimalSystem
+            // get int part of decimal
+            var decIntPart = dec.decimalValue
+            var decIntPartCopy = decIntPart
+            // round decimal
+            NSDecimalRound(&decIntPart, &decIntPartCopy, 0, .down)
+            // get fract part of decimal
+            let decFractPart = decIntPartCopy - decIntPart
+            dec.setNewDecimal(with: decIntPart)
+            // convert to binary
+            let bin = converterHandler.convertValue(value: dec, from: .dec, to: .bin)
+            // process binary string with current settings: processSigned, wordSize etc.
+            let updatedBin = Binary(stringLiteral: bin!.value)
+            // convert processed bin back in dec
+            let updatedDec = converterHandler.convertValue(value: updatedBin, from: .bin, to: .dec)  as! DecimalSystem
+            // restore new decimal with fract part
+            dec.setNewDecimal(with: updatedDec.decimalValue + decFractPart)
+            
+            // set updated main label value + last dot if exists
+            mainLabel.text = dec.value + lastDotIfExists
+
         } else {
-            // do nothing
+            // TODO: Refactor
+            // Convert any non-float value in binary
+            // process binary raw string input in new binary with current settings: processSigned, wordSize etc.
+            // convert back in systemMain value and set new value in mainLabel
+            if mainLabelRawValue != nil {
+                let bin = converterHandler.convertValue(value: mainLabelRawValue, from: systemMain!, to: .bin)
+                let updatedBin = Binary(stringLiteral: bin!.value)
+                let updatedValue = converterHandler.convertValue(value: updatedBin, from: .bin, to: systemMain!)
+                mainLabel.text! = updatedValue!.value
+            }
+            
         }
     }
     
@@ -452,7 +504,7 @@ class PCalcViewController: UIPageViewController {
     }
     
     // Updating converter label with optional string value
-    private func uptdateConverterLabelWith(_ value: String?) {
+    private func uptdateConverterLabel(with value: String?) {
         if let newValue = value {
             converterLabel.text = newValue
         } else {

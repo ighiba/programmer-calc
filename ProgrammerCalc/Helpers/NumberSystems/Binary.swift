@@ -511,6 +511,12 @@ class Binary: NumberSystemProtocol {
                 // calcualte signed state
                 if binary.value.count == wordSizeValue {
                     binary.updateSignedState() // changes binary.isSigned state to true of false
+                } else if binary.value.count > wordSizeValue {
+                    // delete first values up to wordSizeValue
+                    while binary.value.count != wordSizeValue {
+                        binary.value.removeFirst(1)
+                    }
+                    binary.updateSignedState()
                 } else {
                     // if not full wordSize then first signed bit is off
                     binary.isSigned = false
