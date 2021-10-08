@@ -10,8 +10,9 @@ import Foundation
 
 final class CalcMath {
     
-    // CalcState storage
-    private var calcStateStorage = CalcStateStorage()
+    // Storages
+    private let calcStateStorage = CalcStateStorage()
+    private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
     
     // Handlers
     let converterHandler: ConverterHandler = ConverterHandler()
@@ -69,11 +70,13 @@ final class CalcMath {
         // ========================
         let newDecimal = calculateDecNumbers(firstNum: firstConverted, secondNum: secondConverted, operation: operation)!
         
+        let wordSizeValue = wordSizeStorage.getWordSizeValue()
+        
         // Check for overflow
         // calculate max/min decSigned/Unsigned values with current wordSize value
-        let max = Decimal().decPow(2, Decimal(wordSize_Global)) - 1
-        let maxSigned = Decimal().decPow(2, Decimal(wordSize_Global-1)) - 1
-        let minSigned = Decimal().decPow(2, Decimal(wordSize_Global-1)) * -1
+        let max = Decimal().decPow(2, Decimal(wordSizeValue)) - 1
+        let maxSigned = Decimal().decPow(2, Decimal(wordSizeValue-1)) - 1
+        let minSigned = Decimal().decPow(2, Decimal(wordSizeValue-1)) * -1
         
         let processSigned = calcStateStorage.isProcessSigned()
         // check for overflow
@@ -225,8 +228,11 @@ final class CalcMath {
     // Filling binary number by 8, 16, 32, 64
     func fillUpBits( str: String) -> String {
         var resultStr = str
+        
+        let wordSizeValue = wordSizeStorage.getWordSizeValue()
+        
         // fill up bits (0) to current word size
-        resultStr = fillUpZeros(str: resultStr, to: wordSize_Global)
+        resultStr = fillUpZeros(str: resultStr, to: wordSizeValue)
         
         return resultStr
     }

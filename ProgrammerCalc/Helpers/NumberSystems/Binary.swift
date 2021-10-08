@@ -22,8 +22,8 @@ class Binary: NumberSystemProtocol {
     var isSigned: Bool = false // default
 
     // Storages
-    private var calcStateStorage = CalcStateStorage()
-    private var wordSizeStorage = WordSizeStorage()
+    private let calcStateStorage = CalcStateStorage()
+    private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
     
     required public init(stringLiteral value: String) {
         // process string input and apply style for output
@@ -472,16 +472,18 @@ class Binary: NumberSystemProtocol {
     func fillToFormat( upToZeros signed:Bool) {
         let binary = self
         
+        let wordSizeValue = wordSizeStorage.getWordSizeValue()
+        
         if signed {
             // -12 => 1100 -> 11111100
             // 10011000 -> 1111111110011000
             // fill up with zeros to needed bit position
-            binary.value = fillUpZeros(str: binary.value, to: wordSize_Global)
+            binary.value = fillUpZeros(str: binary.value, to: wordSizeValue)
         } else {
             // 1100 -> 00001100
             // 10011000 -> 0000000010011000
             // fill up with one to needed bit position
-            binary.value = fillUpOne(str: binary.value, to: wordSize_Global)
+            binary.value = fillUpOne(str: binary.value, to: wordSizeValue)
         }
         
     }
@@ -504,8 +506,10 @@ class Binary: NumberSystemProtocol {
             // if .processSigned == true
             if data {
                 
+                let wordSizeValue = wordSizeStorage.getWordSizeValue()
+                
                 // calcualte signed state
-                if binary.value.count == wordSize_Global {
+                if binary.value.count == wordSizeValue {
                     binary.updateSignedState() // changes binary.isSigned state to true of false
                 } else {
                     // if not full wordSize then first signed bit is off
@@ -610,16 +614,10 @@ class Binary: NumberSystemProtocol {
             return
         }
         
-        // load word size from storage
-        var wordSize = wordSizeStorage.loadData()?.value
-        if wordSize == nil {
-            // set default 64 QWORD
-            wordSizeStorage.saveData(WordSize(64))
-            wordSize = 64
-        }
+        let wordSizeValue = wordSizeStorage.getWordSizeValue()
         
         // fill up with zeros to needed bit position
-        binary.value = fillUpZeros(str: binary.value, to: wordSize_Global-1)
+        binary.value = fillUpZeros(str: binary.value, to: wordSizeValue-1)
         
     }
     
@@ -656,10 +654,12 @@ class Binary: NumberSystemProtocol {
         
         // get saved data
         if let data = calcState?.processSigned {
+            let wordSizeValue = wordSizeStorage.getWordSizeValue()
+            
             // if .processSigned == true
             var testValue = binary.value
             testValue.append(digit)
-            if testValue.count > wordSize_Global && testValue.first == "1" {
+            if testValue.count > wordSizeValue && testValue.first == "1" {
                 return
             }
             
@@ -682,7 +682,7 @@ class Binary: NumberSystemProtocol {
                 }
                 
                 // check for max word size
-                if binary.value.count == wordSize_Global {
+                if binary.value.count == wordSizeValue {
                     return
                 }
                 

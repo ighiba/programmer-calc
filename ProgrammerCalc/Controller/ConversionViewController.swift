@@ -103,6 +103,7 @@ class ConversionViewController: UIViewController {
         // Slider
         let sliderValue = slider.value.rounded()
         
+        // TODO: Refactor to delegate or closure
         // root vc fo handling changing of mainSystem
         let rootVC = UIApplication.shared.windows.first?.rootViewController as? PCalcViewController
         guard rootVC != nil else {

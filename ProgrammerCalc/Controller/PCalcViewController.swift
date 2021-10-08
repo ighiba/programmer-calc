@@ -9,8 +9,9 @@
 import UIKit
 
 // Temporary workaround for changing word size
+
 // TODO: Load from storage
-var wordSize_Global: Int = 8
+//var wordSize_Global: Int = 8
 
 class PCalcViewController: UIPageViewController {
     
@@ -482,10 +483,12 @@ class PCalcViewController: UIPageViewController {
         }
         
         if let dec = converterHandler.convertValue(value: buffValue, from: system, to: .dec) as? DecimalSystem {
+            let wordSizeValue = wordSizeStorage.getWordSizeValue()
+            
             // calculate max/min decSigned/Unsigned values with current wordSize value
-            let max = Decimal().decPow(Decimal(2), Decimal(wordSize_Global)) - Decimal(1)
-            let maxSigned = Decimal().decPow(Decimal(2), Decimal(wordSize_Global-1)) - Decimal(1)
-            let minSigned = Decimal().decPow(Decimal(2), Decimal(wordSize_Global-1)) * Decimal(-1)
+            let max = Decimal().decPow(Decimal(2), Decimal(wordSizeValue)) - Decimal(1)
+            let maxSigned = Decimal().decPow(Decimal(2), Decimal(wordSizeValue-1)) - Decimal(1)
+            let minSigned = Decimal().decPow(Decimal(2), Decimal(wordSizeValue-1)) * Decimal(-1)
             
             let decValueOld = dec.decimalValue
             var decResult = dec.decimalValue

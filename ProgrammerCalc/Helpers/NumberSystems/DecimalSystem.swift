@@ -21,8 +21,9 @@ class DecimalSystem: NumberSystemProtocol {
     var value: String
     var isSigned: Bool = false
     
-    // CalcState storage
-    private var calcStateStorage = CalcStateStorage()
+    // Storages
+    private let calcStateStorage = CalcStateStorage()
+    private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
     
     // ======================
     // MARK: - Initialization
@@ -116,7 +117,9 @@ class DecimalSystem: NumberSystemProtocol {
                 var binaryTest = binary.value
                 binaryTest.removeFirst(1)
                 
-                if binaryTest.first == "1" && binaryTest.replacingOccurrences(of: "0", with: "").count == 1 && binaryTest.count == wordSize_Global {
+                let wordSizeValue = wordSizeStorage.getWordSizeValue()
+                
+                if binaryTest.first == "1" && binaryTest.replacingOccurrences(of: "0", with: "").count == 1 && binaryTest.count == wordSizeValue {
                     binary.value = binaryTest
                 }
                 
