@@ -51,6 +51,8 @@
 		C0F5CF4B270E10870020CE14 /* WordSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF4A270E10870020CE14 /* WordSize.swift */; };
 		C0F5CF4D270E12100020CE14 /* WordSizeStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF4C270E12100020CE14 /* WordSizeStorage.swift */; };
 		C0F5CF4F270F394E0020CE14 /* Decimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF4E270F394E0020CE14 /* Decimal.swift */; };
+		C0F5CF51270F4B970020CE14 /* WordSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF50270F4B970020CE14 /* WordSizeViewController.swift */; };
+		C0F5CF53270F4C4C0020CE14 /* WordSizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF52270F4C4C0020CE14 /* WordSizeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -121,6 +123,8 @@
 		C0F5CF4A270E10870020CE14 /* WordSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSize.swift; sourceTree = "<group>"; };
 		C0F5CF4C270E12100020CE14 /* WordSizeStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSizeStorage.swift; sourceTree = "<group>"; };
 		C0F5CF4E270F394E0020CE14 /* Decimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decimal.swift; sourceTree = "<group>"; };
+		C0F5CF50270F4B970020CE14 /* WordSizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSizeViewController.swift; sourceTree = "<group>"; };
+		C0F5CF52270F4C4C0020CE14 /* WordSizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSizeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -278,6 +282,7 @@
 				C06B7F0A2443B12B009642B9 /* PCalcViewController.swift */,
 				C0666EB724F97774004809EF /* CalcButtonsViewController.swift */,
 				C0619AC324D71240008A7291 /* ConversionViewController.swift */,
+				C0F5CF50270F4B970020CE14 /* WordSizeViewController.swift */,
 				C070ED2324DB0EC800A04463 /* SettingsViewController.swift */,
 			);
 			path = Controller;
@@ -303,6 +308,7 @@
 			children = (
 				C0666EBD24F991B8004809EF /* PCalcView */,
 				C0619AC124D71227008A7291 /* ConversionView.swift */,
+				C0F5CF52270F4C4C0020CE14 /* WordSizeView.swift */,
 				C070ED2524DB0ED400A04463 /* SettingsView.swift */,
 			);
 			path = View;
@@ -452,6 +458,7 @@
 				C066756924E27AE700F832F9 /* ConversionValues.swift in Sources */,
 				C068AFAC24FA605800BFE754 /* CalculatorButton.swift in Sources */,
 				C00616AC27065097007BEF89 /* String.swift in Sources */,
+				C0F5CF53270F4C4C0020CE14 /* WordSizeView.swift in Sources */,
 				C0F5CF4B270E10870020CE14 /* WordSize.swift in Sources */,
 				C00616B127066C91007BEF89 /* ConversionStorage.swift in Sources */,
 				C05B008C24E6E0E100F8A5E0 /* Hexadecimal.swift in Sources */,
@@ -464,6 +471,7 @@
 				C05B009124E71B6E00F8A5E0 /* DecimalSystem.swift in Sources */,
 				C06B7F072443B12B009642B9 /* AppDelegate.swift in Sources */,
 				C00616AF270666DD007BEF89 /* SettingsStorage.swift in Sources */,
+				C0F5CF51270F4B970020CE14 /* WordSizeViewController.swift in Sources */,
 				C0666EBC24F97855004809EF /* CalcButtonsAdditional.swift in Sources */,
 				C06B7F092443B12B009642B9 /* SceneDelegate.swift in Sources */,
 				C07267DD24E5ACB300D4B4A2 /* Binary.swift in Sources */,

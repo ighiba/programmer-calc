@@ -27,19 +27,44 @@ class PCalcView: UIView {
         setupLayout()
     }
     
+    // Set change word size button
+    lazy var changeWordSizeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.frame = CGRect(x: 0, y: 0, width: 88, height: 44)
+        // title adjustments
+        button.setTitle("QWORD", for: .normal)
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.setTitleColor(.systemBlue.withAlphaComponent(0.3), for: .highlighted)
+        // change font size
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18.0, weight: UIFont.Weight.regular)
+    
+        button.sizeToFit()
+        
+        button.addTarget(nil, action: #selector(PCalcViewController.changeWordSizeButtonTapped), for: .touchUpInside)
+        
+        return button
+    }()
+    
     // Set navigation bar
     fileprivate let navigationBar: UINavigationBar = {
         // Set navigation bar
         let navBar = UINavigationBar(frame: CGRect())
         let navItem = UINavigationItem()
-        let changeItem = UIBarButtonItem(title: "Change conversion", style: .plain, target: self, action: #selector(PCalcViewController.changeButtonTapped))
-        let settingsItem = UIBarButtonItem(title: "⚙\u{0000FE0E}", style: .plain, target: self, action: #selector(PCalcViewController.settingsButtonTapped))
+        //let changeItem = UIBarButtonItem(title: "Change conversion", style: .plain, target: self, action: #selector(PCalcViewController.changeButtonTapped))
+        let changeItem = UIBarButtonItem(image: UIImage(systemName: "arrow.up.arrow.down.circle"), style: .plain, target: self, action: #selector(PCalcViewController.changeConversionButtonTapped))
+        //let settingsItem = UIBarButtonItem(title: "⚙\u{0000FE0E}", style: .plain, target: self, action: #selector(PCalcViewController.settingsButtonTapped))
+        let settingsItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(PCalcViewController.settingsButtonTapped))
         let font = UIFont.systemFont(ofSize: 42.0)
         settingsItem.setTitleTextAttributes([NSAttributedString.Key.font: font], for: .normal)
         
         // add buttons to navigation item
         navItem.leftBarButtonItem = changeItem
         navItem.rightBarButtonItem = settingsItem
+        
+        // title view for middle button "Change word size"
+        let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 44*2, height: 44))
+        navItem.titleView = titleView
+
         // set navigation items
         navBar.setItems([navItem], animated: false)
         // set transparent
@@ -126,6 +151,12 @@ class PCalcView: UIView {
             converterLabel.widthAnchor.constraint(equalTo: labelsStack.widthAnchor),
             converterLabel.heightAnchor.constraint(equalToConstant: labelHeight() - 11),
         ])
+        
+        // Additional setups
+        
+        // add changeWordSizeButton to navigationBar title view(in center)
+        navigationBar.items?.first?.titleView?.addSubview(changeWordSizeButton)
+        changeWordSizeButton.center =  (navigationBar.items?.first?.titleView!.center)!
     }
     
     // Dynamic label height for autolayout

@@ -41,6 +41,7 @@ class PCalcViewController: UIPageViewController {
     let settingsStorage: SettingsStorageProtocol = SettingsStorage()
     let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
     let conversionStorage: ConversionStorageProtocol = ConversionStorage()
+    let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
     
     // ======================
     // MARK: - Initialization
@@ -276,7 +277,35 @@ class PCalcViewController: UIPageViewController {
         changeStatePlusMinus()
     }
     
+    public func updateChangeWordSizeButton() {
+        let wordSize: WordSize
+        // get data from UserDefaults
+        if let size = wordSizeStorage.loadData() {
+            wordSize = size as! WordSize
+        }  else {
+            print("no wordSize")
+            // Save default settings
+            wordSize = WordSize(64)
+            wordSizeStorage.saveData(wordSize)
+        }
+        
+        // prepare title
+        let newTitle: String = {
+            for item in wordSize.wordsDictionary {
+                if item.first?.value == wordSize.value {
+                    return item.first!.key
+                }
+            }
+            return (self.calcView.changeWordSizeButton.titleLabel?.text)!
+        }()
+        
+        // change button title
+        self.calcView.changeWordSizeButton.setTitle(newTitle, for: .normal)
+    }
+    
     public func updateAllLayout() {
+        // update change word size button
+        updateChangeWordSizeButton()
         // update button value
         updateIsSignedButton()
         // update plusminus button state
@@ -513,7 +542,7 @@ class PCalcViewController: UIPageViewController {
     // MARK: - Actions
     // ===============
     
-    @objc func toucUpOutsideAction( sender: UIButton) {
+    @objc func toucUpOutsideAction(_ sender: UIButton) {
         //print("touchUpOutside")
         //sender.backgroundColor = .red
         //sender.isHighlighted = false
@@ -525,7 +554,7 @@ class PCalcViewController: UIPageViewController {
     }
     
     // Numeric buttons actions
-    @objc func numericButtonTapped( sender: UIButton) {
+    @objc func numericButtonTapped(_ sender: UIButton) {
         let button = sender
         let buttonText = button.titleLabel!.text ?? ""
         let label = mainLabel
@@ -658,7 +687,7 @@ class PCalcViewController: UIPageViewController {
     }
     
     // Sign buttons actions
-    @objc func signButtonTapped( sender: UIButton) {
+    @objc func signButtonTapped(_ sender: UIButton) {
         let button = sender
         let buttonText = button.titleLabel!.text ?? ""
         let label = mainLabel
@@ -738,7 +767,7 @@ class PCalcViewController: UIPageViewController {
     }
     
     // Signed OFF/ON button
-    @objc func toggleIsSigned( sender: UIButton) {
+    @objc func toggleIsSigned(_ sender: UIButton) {
         // negate value if number is negative and processsigned == on
         if mainLabelRawValue.isSigned && processSigned {
             mainLabel.text = calculationHandler.negate(value: mainLabelRawValue, system: systemMain!).value
@@ -765,8 +794,8 @@ class PCalcViewController: UIPageViewController {
         changeStatePlusMinus()
     }
     
-    // Change conversion button tapped
-    @objc func changeButtonTapped( sender: UIButton) {
+    // Change conversion button action
+    @objc func changeConversionButtonTapped(_ sender: UIButton) {
         print("Start changing conversion")
         
         // label higliglht handling
@@ -783,8 +812,31 @@ class PCalcViewController: UIPageViewController {
         self.present(vc, animated: false, completion: nil)
     }
     
-    // Settings button tapped
-    @objc func settingsButtonTapped( sender: UIButton) {
+    // Change word size button action
+    @objc func changeWordSizeButtonTapped( _ sender: UIButton) {
+        print("changeWordSizeButtonTapped")
+        
+        // label higliglht handling
+        touchHandleLabelHighlight()
+        
+        // initialize vc popover
+        let vc = WordSizeViewController()
+        
+        // present settings
+        //vc.modalTransitionStyle = .coverVertical
+        vc.modalPresentationStyle = .overFullScreen
+        
+        // add updaterHandler
+        vc.updaterHandler = {
+            self.updateAllLayout()
+        }
+        
+        // show popover
+        self.present(vc, animated: false, completion: nil)
+    }
+    
+    // Settings button action
+    @objc func settingsButtonTapped(_ sender: UIButton) {
         print("Open settings")
         
         // label higliglht handling
@@ -802,7 +854,7 @@ class PCalcViewController: UIPageViewController {
     }
     
     // 1's or 2's button tapped
-    @objc func complementButtonTapped( sender: UIButton) {
+    @objc func complementButtonTapped(_ sender: UIButton) {
         let buttonLabel = sender.titleLabel?.text
         // update conversion state
         updateConversionState()
@@ -823,7 +875,7 @@ class PCalcViewController: UIPageViewController {
     }
     
     // Bitwise operations
-    @objc func bitwiseButtonTapped( sender: UIButton) {
+    @objc func bitwiseButtonTapped(_ sender: UIButton) {
         let buttonLabel = sender.titleLabel?.text
         
         // update conversion state
@@ -870,7 +922,7 @@ class PCalcViewController: UIPageViewController {
         updateConverterLabel()
     }
      
-    @objc func swipeRightLabel(sender: UISwipeGestureRecognizer) {
+    @objc func swipeRightLabel(_ sender: UISwipeGestureRecognizer) {
         if sender.direction == .right {
             if mainLabel.text!.count > 1 {
                 // delete last symbol in main label

@@ -33,12 +33,14 @@ class ConversionViewController: UIViewController {
         // tap outside popup(container)
         let tap = UITapGestureRecognizer(target: self, action: #selector(tappedOutside))
         tap.numberOfTapsRequired = 1
+        tap.cancelsTouchesInView = false
         self.view.isUserInteractionEnabled = true
         self.view.addGestureRecognizer(tap)
         
         // swipe up
         let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         swipeUp.direction = .up
+        swipeUp.cancelsTouchesInView = false
         self.view.addGestureRecognizer(swipeUp)
     }
     

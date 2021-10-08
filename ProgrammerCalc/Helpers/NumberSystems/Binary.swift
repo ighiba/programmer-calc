@@ -611,7 +611,7 @@ class Binary: NumberSystemProtocol {
         }
         
         // load word size from storage
-        var wordSize = wordSizeStorage.loadData()?.wordSize
+        var wordSize = wordSizeStorage.loadData()?.value
         if wordSize == nil {
             // set default 64 QWORD
             wordSizeStorage.saveData(WordSize(64))

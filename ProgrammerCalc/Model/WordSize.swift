@@ -9,7 +9,7 @@
 import Foundation
 
 protocol WordSizeProtocol {
-    var wordSize: Int { get set }
+    var value: Int { get set }
 }
 
 class WordSize: WordSizeProtocol, Decodable, Encodable  {
@@ -18,9 +18,9 @@ class WordSize: WordSizeProtocol, Decodable, Encodable  {
                            ["DWORD":32],
                            ["WORD" :16],
                            ["BYTE" :8]]
-    var wordSize: Int
+    var value: Int
     
     init(_ size: Int) {
-        self.wordSize = size
+        self.value = size
     }
 }
