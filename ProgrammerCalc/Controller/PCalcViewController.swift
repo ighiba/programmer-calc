@@ -62,32 +62,17 @@ class PCalcViewController: UIPageViewController {
     override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) {
         super.init(transitionStyle: .scroll, navigationOrientation: navigationOrientation, options: nil)
         
-        // TODO: Themes
-        self.view.backgroundColor = .white
-
-        let pageControl = UIPageControl.appearance()
-        pageControl.pageIndicatorTintColor = .lightGray
-        pageControl.currentPageIndicatorTintColor = .darkGray
+        // add handler for main label
+        (mainLabel as UpdatableLabel).updateRawValueHandler = { [self] _ in
+            // update label rawValue
+            updateMainLabelRawValue()
+        }
         
-        self.delegate = self
-        self.dataSource = self
-        // allow interaction with content without delay
-        self.delaysContentTouches = false
-        
-        // set start vc
-        setViewControllers([arrayCalcButtonsViewController[1]], direction: .forward, animated: false, completion: nil)
-        
-        // Update states and layout
+        // get states from UserDefaults
         updateConversionState()
+        updateCalcState()
         handleConversion()
-
-        // update layout
-        updateAllLayout()
-        // update displaying of mainLabel
-        handleDisplayingMainLabel()
-        // handle all buttons state for current conversion system
-        updateButtons()
-        
+              
     }
     
     required init?(coder: NSCoder) {
@@ -111,22 +96,35 @@ class PCalcViewController: UIPageViewController {
         // add view from PCalcView
         self.view.addSubview(calcView)
         
-        // get state from UserDefaults
-        updateCalcState()
+        // TODO: Themes
+        self.view.backgroundColor = .white
+
+        let pageControl = UIPageControl.appearance()
+        pageControl.pageIndicatorTintColor = .lightGray
+        pageControl.currentPageIndicatorTintColor = .darkGray
+        
+        self.delegate = self
+        self.dataSource = self
+        // allow interaction with content without delay
+        self.delaysContentTouches = false
+        
+        // set start vc
+        setViewControllers([arrayCalcButtonsViewController[1]], direction: .forward, animated: false, completion: nil)
 
         // add swipe left for deleting last value in main label
         [mainLabel,converterLabel].forEach { (label) in
             let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(swipeRightLabel))
             swipeRight.direction = .right
             label.addGestureRecognizer(swipeRight)
-            
         }
-
-        // add handler
-        (mainLabel as UpdatableLabel).updateRawValueHandler = { [self] _ in
-            // update label rawValue
-            updateMainLabelRawValue()
-        }
+        
+        // update layout
+        updateAllLayout()
+        // update displaying of mainLabel
+        handleDisplayingMainLabel()
+        // handle all buttons state for current conversion system
+        updateButtons()
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -183,13 +181,28 @@ class PCalcViewController: UIPageViewController {
         systemConverter = ConversionSystemsEnum(rawValue: data.systemConverter)
     }
     
+    // just return WordSize data from UserDefauls
+    private func returnWordSize() -> WordSizeProtocol {
+        if let size = wordSizeStorage.loadData() {
+            return size
+        }  else {
+            // if no WordSize
+            print("no WordSize")
+            // default values
+            let newSize = WordSize(64)
+            wordSizeStorage.saveData(newSize)
+            
+            return newSize
+        }
+    }
+    
     // just return calcState data from UserDefauls
     private func returnCalcState() -> CalcStateProtocol {
         if let state = calcStateStorage.loadData() {
             return state
         }  else {
-            // if no settings
-            print("no settings")
+            // if no CalcState
+            print("no CalcState")
             // default values
             let newState = CalcState(mainState: "0", convertState: "0", processSigned: false)
             calcStateStorage.saveData(newState)
@@ -204,7 +217,7 @@ class PCalcViewController: UIPageViewController {
             return conversionSettings
         }  else {
             // if no settings
-            print("no settings")
+            print("no Conversion settings")
             // Save default settings
             let systems = ConversionSystemsEnum.self
             // From DEC to BIN
@@ -279,16 +292,7 @@ class PCalcViewController: UIPageViewController {
     }
     
     public func updateChangeWordSizeButton() {
-        let wordSize: WordSize
-        // get data from UserDefaults
-        if let size = wordSizeStorage.loadData() {
-            wordSize = size as! WordSize
-        }  else {
-            print("no wordSize")
-            // Save default settings
-            wordSize = WordSize(64)
-            wordSizeStorage.saveData(wordSize)
-        }
+        let wordSize = returnWordSize() as! WordSize
         
         // prepare title
         let newTitle: String = {
@@ -330,7 +334,9 @@ class PCalcViewController: UIPageViewController {
             converterLabel.text = mainLabel.text
         } else {
             // if last char is dot then append dot
-            let lastDotIfExists: String = {
+            var lastDotIfExists: String = {
+                print(mainLabel.text!)
+                print(converterLabel.text!)
                 if mainLabel.text?.last == "." {
                     return "."
                 } else {
@@ -341,32 +347,94 @@ class PCalcViewController: UIPageViewController {
             
             // TODO: Error handling
             updateConversionState()
-            let newValue = converterHandler.convertValue(value: mainLabelRawValue, from: systemMain!, to: systemConverter!)?.value
-            uptdateConverterLabel(with: newValue! + lastDotIfExists)
+            var newValue = converterHandler.convertValue(value: mainLabelRawValue, from: systemMain!, to: systemConverter!)
+            if let bin = newValue as? Binary {
+                newValue = bin.divideBinary(by: 4)
+            }
+            lastDotIfExists = lastDotIfExists == "." && !(newValue?.value.contains("."))! ? "." : ""
+            uptdateConverterLabel(with: newValue!.value + lastDotIfExists)
         }
     }
     
     public func updateMainLabel() {
+        // ==================
+        // Process fract part
+        // ==================
+        
+        // if last char is dot then append dot
+        var lastDotIfExists: String = mainLabel.text?.last == "." ? "." : ""
+        
+        // check if value .0
+        let testLabelStr = mainLabel.text!.removeAllSpaces()
+        if testLabelStr.contains(".0") {
+            // get position fract part
+            let pointPos = testLabelStr.firstIndex(of: ".")!
+            let fractDistance = Int(testLabelStr.distance(from: pointPos, to:  testLabelStr.endIndex))
+            // get str fract part
+            let fractPartStr: String = {
+                let str = String(testLabelStr.reversed())
+                var buffStr = String()
+
+                for digit in str {
+                    buffStr.append(digit)
+                    if fractDistance-1 == buffStr.count {
+                        return buffStr
+                    }
+                }
+                
+                return buffStr
+            }()
+
+            // check if fract == 0, or 00, 000 etc.
+            if Int(fractPartStr)! == 0 {
+                // replace lastDotIfExists with old value of fract without updating it
+                lastDotIfExists = "." + fractPartStr
+            }
+            // continue to process as normal
+        }
+        
+        // ========================
+        // Process values by system
+        // ========================
         
         if systemMain == .bin {
-            var binary = Binary(stringLiteral: mainLabel.text!)
-             
-             // divide binary by parts
-            binary = binary.divideBinary(by: 4)
             
-            mainLabel.text! = binary.value
+            var bin: Binary = {
+                let dummyBin = Binary()
+                dummyBin.value = mainLabel.text!
+                return dummyBin
+            }()
+            bin = converterHandler.convertValue(value: bin, from: .bin, to: .bin) as! Binary
+            
+            // delete trailing zeros if contains .
+            if bin.value.contains(".") {
+                var str = bin.value.removeAllSpaces()
+                let splittedBinary = bin.divideIntFract(value: str)
+                // remove zeros in intpart
+                var intPart = splittedBinary.0!
+                intPart = intPart.removeLeading(characters: ["0"])
+                if intPart == "" {
+                    intPart = "0"
+                }
+                // remove zeros in fract part
+                var fractPart = mainLabel.text!.removeAllSpaces().removeLeading(characters: ["1","0"])
+                fractPart = fractPart.replacingOccurrences(of: ".", with: "")
+                
+                str = bin.fillUpZeros(str: intPart, to: wordSizeStorage.getWordSizeValue())
+                str = str + "." + fractPart
+                
+                bin.value = str
+            }
+            
+            // divide binary by parts
+            bin = bin.divideBinary(by: 4)
+            
+            mainLabel.text! = bin.value
         // updating dec for values with floating point
         } else if systemMain == .dec && mainLabel.text!.contains(".") {
-            // if last char is dot then append dot
-            let lastDotIfExists: String = {
-                if mainLabel.text?.last == "." {
-                    return "."
-                } else {
-                    return ""
-                }
-            }()
+            
             // get dec value
-            let dec = converterHandler.convertValue(value: mainLabelRawValue, from: systemMain!, to: .dec) as! DecimalSystem
+            let dec = DecimalSystem(stringLiteral: mainLabelRawValue.value)
             // get int part of decimal
             var decIntPart = dec.decimalValue
             var decIntPartCopy = decIntPart
@@ -393,12 +461,11 @@ class PCalcViewController: UIPageViewController {
             // process binary raw string input in new binary with current settings: processSigned, wordSize etc.
             // convert back in systemMain value and set new value in mainLabel
             if mainLabelRawValue != nil {
-                let bin = converterHandler.convertValue(value: mainLabelRawValue, from: systemMain!, to: .bin)
-                let updatedBin = Binary(stringLiteral: bin!.value)
-                let updatedValue = converterHandler.convertValue(value: updatedBin, from: .bin, to: systemMain!)
+                let bin = converterHandler.convertValue(value: mainLabelRawValue, from: systemMain!, to: .bin) as! Binary
+                //let updatedBin = Binary(stringLiteral: bin!.value)
+                let updatedValue = converterHandler.convertValue(value: bin, from: .bin, to: systemMain!)
                 mainLabel.text! = updatedValue!.value
             }
-            
         }
     }
     
@@ -406,7 +473,10 @@ class PCalcViewController: UIPageViewController {
         // update label rawValue
         switch systemMain {
         case .bin:
-            mainLabel.setRawValue(value: Binary(stringLiteral: mainLabel.text!))
+            var bin = Binary()
+            bin.value = mainLabel.text!
+            bin = converterHandler.processBinaryToFormat(bin)
+            mainLabel.setRawValue(value: bin)
         case .oct:
             mainLabel.setRawValue(value: Octal(stringLiteral: mainLabel.text!))
         case .dec:
@@ -416,7 +486,7 @@ class PCalcViewController: UIPageViewController {
         case .none:
             break
         }
-        
+
         // update VC rawValue
         self.mainLabelRawValue = mainLabel.rawValue
     }
@@ -446,10 +516,13 @@ class PCalcViewController: UIPageViewController {
             result =  labelText + digit
         }
         
-        // process overflow
-        let newResult = precessStrInputOverflow(input: result, for: systemMain!)
+        // check if can add more digits
+        let isOverflowed = isInputOverflowed(input: result, for: systemMain!)
+        guard isOverflowed else {
+            return labelText
+        }
         
-        return newResult
+        return result
     }
     
     // Handle displaying of mainLabel
@@ -514,60 +587,69 @@ class PCalcViewController: UIPageViewController {
         }
     }
     
-    private func precessStrInputOverflow(input: String, for system: ConversionSystemsEnum) -> String {
-        var result = String()
+    private func isInputOverflowed(input: String, for system: ConversionSystemsEnum) -> Bool {
         let buffValue: NumberSystemProtocol
-        
+        var binaryValue: Binary?
         // TODO: Refactor Create NumberSystem by factory?
         switch system {
         case .bin:
-            buffValue = Binary(stringLiteral: input)
+            let dummyBin = Binary()
+            dummyBin.value = input
+            binaryValue = Binary(dummyBin)
             break
         case .oct:
             buffValue = Octal(stringLiteral: input)
+            binaryValue = Binary(buffValue as! Octal)
             break
         case .dec:
             buffValue = DecimalSystem(stringLiteral: input)
+            binaryValue = Binary(buffValue as! DecimalSystem)
             break
         case .hex:
             buffValue = Hexadecimal(stringLiteral: input)
+            binaryValue = Binary(buffValue as! Hexadecimal)
             break
         }
-        
-        if let dec = converterHandler.convertValue(value: buffValue, from: system, to: .dec) as? DecimalSystem {
-            let wordSizeValue = wordSizeStorage.getWordSizeValue()
-            
-            // calculate max/min decSigned/Unsigned values with current wordSize value
-            let max = Decimal().decPow(Decimal(2), Decimal(wordSizeValue)) - Decimal(1)
-            let maxSigned = Decimal().decPow(Decimal(2), Decimal(wordSizeValue-1)) - Decimal(1)
-            let minSigned = Decimal().decPow(Decimal(2), Decimal(wordSizeValue-1)) * Decimal(-1)
-            
-            let decValueOld = dec.decimalValue
-            var decResult = dec.decimalValue
-            if processSigned && dec.decimalValue > maxSigned+1 {
-                print("input overflow signed +")
-                decResult = maxSigned
-            } else if processSigned && dec.decimalValue < minSigned-1 {
-                print("input overflow signed -")
-                decResult = minSigned
-            } else if !processSigned && dec.decimalValue > max+1 {
-                print("input overflow unsigned +")
-                decResult = max
-            }
-            
-            // change dec with new value
-            dec.setNewDecimal(with: decResult)
-            
-            // compare results
-            // if different then return result else return buffValue
-            if decValueOld != dec.decimalValue {
-                result = converterHandler.convertValue(value: dec, from: .dec, to: system)!.value
-            } else {
-                result = buffValue.value
-            }
 
+        if let bin = binaryValue {
+            let wordSizeValue = returnWordSize().value
+            bin.value = bin.value.removeAllSpaces()
+            // check for binary lenght for int part and fract part
+            if !input.contains(".") {
+                let testStr = bin.removeZerosBefore(str: bin.value)
+                
+                if system == .dec {
+                    let oldValue = mainLabelRawValue as! DecimalSystem
+                    let newValue = converterHandler.convertValue(value: bin, from: .bin, to: system) as! DecimalSystem
+                    
+                    if oldValue.isSigned != newValue.isSigned {
+                        return false
+                    }
+                }
+
+                if testStr.count <= wordSizeValue {
+                    return true
+                } else {
+                    return false
+                }
+            // for binary with floating point
+            } else {
+                guard input.last != "." else {
+                    // input allowed if last symol is "."
+                    return true
+                }
+
+                // check if fract part fits in numbersAfterPoint setting
+                let testStr = input.removeAllSpaces()
+                let numbersAfterPoint = Int(returnConversionSettings().numbersAfterPoint)
+                let pointPos = testStr.firstIndex(of: ".")!
+                let fractDistance = Int(testStr.distance(from: pointPos, to: testStr.endIndex))
+                // compare values
+                return fractDistance-1 <= numbersAfterPoint ? true : false
+                  
+            }
         }
-        return result
+        return true
     }
     
     fileprivate func calculateResult( inputValue: NumberSystemProtocol, operation: CalcMath.mathOperation) -> String {
@@ -619,42 +701,6 @@ class PCalcViewController: UIPageViewController {
         
         print("Button \(buttonText) touched")
         
-//        var test = isInputOverflowed(for: systemMain!)
-//        // check if . button is touched and number is int
-//        if buttonText == "." && !label.text!.contains(".") {
-//            test = false
-//        }
-//
-//        print(test)
-        
-        // bool calculates overflowing of mainLabel number for int and float value
-//        let isOverflowed: Bool = {
-//            let str = label.text!
-//
-//            // check if . button is touched and number is int
-//            if buttonText == "." && !str.contains(".") {return false}
-//            // handle fract state
-//            if  str.contains(".") {
-//                // search index of floating pos
-//                let pointPos: String.Index = str.firstIndex(of: ".")!
-//                let numsAfterPoint: Int = str.distance(from: str.endIndex, to: pointPos)
-//
-//                if abs(numsAfterPoint) > 12 {return true} else {return false}
-//            }
-//
-//            // if number is int
-////            let state  = calcStateStorage.loadData()
-////            if state!.processSigned {
-////                // signed
-////                let strCount = str.contains("-") ? 19 : 18
-////                return str.count > strCount ? true : false
-////            } else {
-////                // unsigned
-////                return str.count >= 20 ? true : false
-////            }
-//            return false
-//        }()
-        
         if mathState != nil {
             // if new value not inputed
             if !mathState!.inputStart {
@@ -671,11 +717,6 @@ class PCalcViewController: UIPageViewController {
                 // update mainLabel
                 updateMainLabel()
             } else {
-                // handle for number of digits in mainLabel
-//                if isOverflowed {
-//                    //print("too much digits")
-//                    return
-//                }
                 switch label.text! {
                 case "0":
                     if buttonText.contains(".") {
@@ -702,11 +743,6 @@ class PCalcViewController: UIPageViewController {
                 }
             }
         } else {
-
-//            if isOverflowed {
-//                print("too much digits")
-//                return
-//            }
             switch label.text! {
             case "0":
                 if buttonText.contains(".") {
@@ -779,7 +815,6 @@ class PCalcViewController: UIPageViewController {
         case "\u{00B1}":
             if label.text != "0" {
                 // TODO: Error handling
-                //updateMainLabelRawValue()
                 let test = calculationHandler.negate(value: mainLabelRawValue, system: systemMain!).value
                 
                 label.text = test
@@ -826,6 +861,8 @@ class PCalcViewController: UIPageViewController {
         // negate value if number is negative and processsigned == on
         if mainLabelRawValue.isSigned && processSigned {
             mainLabel.text = calculationHandler.negate(value: mainLabelRawValue, system: systemMain!).value
+        } else if !isInputOverflowed(input: mainLabelRawValue.value, for: systemMain!) {
+            clearLabels()
         }
         // invert value
         processSigned.toggle()
@@ -838,12 +875,6 @@ class PCalcViewController: UIPageViewController {
         print("Signed - \(processSigned)")
         // update converter and main labels
         updateConverterLabel()
-        
-        // TODO Refactor
-        // clear main label if overflow
-//        if let converterNum = Int(converterLabel.text!.removeAllSpaces()) {
-//            mainLabel.text = converterNum == 0 ? "0" : mainLabel.text
-//        }
         updateMainLabel()
         // toggle plusminus button
         changeStatePlusMinus()

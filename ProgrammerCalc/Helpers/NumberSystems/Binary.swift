@@ -571,9 +571,9 @@ class Binary: NumberSystemProtocol {
 //            }
 //        }
         // just make binary code pretty
-        binary.value = fillUpParts(str: binary.value, by: 4)
+        //binary.value = fillUpParts(str: binary.value, by: 4)
         
-        return binary.value
+        //return binary.value
     }
     
     // Processing strings that initialized from stringLiteral
