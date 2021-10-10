@@ -16,6 +16,7 @@ class ConverterHandlerTests: XCTestCase {
     // Storages
     var conversionStorage: ConversionStorageProtocol? = ConversionStorage()
     var calcStatetorage: CalcStateStorageProtocol? = CalcStateStorage()
+    let wordSizeStorage: WordSizeStorageProtocol? = WordSizeStorage()
     
     var converterHandlerTest: ConverterHandler?
     let binaryStrInput = "1100"
@@ -48,49 +49,53 @@ class ConverterHandlerTests: XCTestCase {
     func testOnesComplementUnsigned() throws {
         // 1. given
         calcStatetorage?.saveData(unsignedData)
-        let binary = Binary(stringLiteral: binaryStrInput)
+        wordSizeStorage?.saveData(WordSize(8))
+        let binary = Binary(stringLiteral: binaryStrInput) // 1100
         
         // 2. when
         let converted = converterHandlerTest!.toOnesComplement(value: binary, mainSystem: .bin)
         
         // 3. then
-        XCTAssertEqual(converted.value, "0011", "Converted values are wrong")
+        XCTAssertEqual(converted.value, "11110011", "Converted values are wrong")
     }
     
     func testOnesComplementSigned() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
+        wordSizeStorage?.saveData(WordSize(8))
         let binary = Binary(stringLiteral: binaryStrInput)
         
         // 2. when
         let converted = converterHandlerTest!.toOnesComplement(value: binary, mainSystem: .bin)
         
         // 3. then
-        XCTAssertEqual(converted.value, "01110011", "Converted values are wrong")
+        XCTAssertEqual(converted.value, "11110011", "Converted values are wrong")
     }
     
     func testTwosComplementUnsigned() throws {
         // 1. given
         calcStatetorage?.saveData(unsignedData)
+        wordSizeStorage?.saveData(WordSize(8))
         let binary = Binary(stringLiteral: binaryStrInput)
         
         // 2. when
         let converted = converterHandlerTest!.toTwosComplement(value: binary, mainSystem: .bin)
         
         // 3. then
-        XCTAssertEqual(converted.value, "0100", "Converted values are wrong")
+        XCTAssertEqual(converted.value, "11110100", "Converted values are wrong")
     }
     
     func testTwosComplementSigned() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
+        wordSizeStorage?.saveData(WordSize(8))
         let binary = Binary(stringLiteral: binaryStrInput)
         
         // 2. when
         let converted = converterHandlerTest!.toTwosComplement(value: binary, mainSystem: .bin)
         
         // 3. then
-        XCTAssertEqual(converted.value, "01110100", "Converted values are wrong")
+        XCTAssertEqual(converted.value, "11110100", "Converted values are wrong")
     }
     
     

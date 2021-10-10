@@ -16,6 +16,7 @@ class CalcMathTests: XCTestCase {
     // Storages
     var conversionStorage: ConversionStorageProtocol? = ConversionStorage()
     var calcStatetorage: CalcStateStorageProtocol? = CalcStateStorage()
+    let wordSizeStorage: WordSizeStorageProtocol? = WordSizeStorage()
     
     
     var calcMathTest: CalcMath!
@@ -47,6 +48,7 @@ class CalcMathTests: XCTestCase {
     func testFillUpBits() throws {
         // 1. given
         calcStatetorage?.saveData(unsignedData)
+        wordSizeStorage?.saveData(WordSize(16))
         let testValue = "10001100"
         
         // 2. when
@@ -122,13 +124,15 @@ class CalcMathTests: XCTestCase {
     func testBinNegateSigned() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
+        wordSizeStorage?.saveData(WordSize(8))
         let bin = Binary(stringLiteral: "00010000") // 16
+        
         
         // 2. when
         let result = calcMathTest.negate(value: bin, system: .bin)
         
         // 3. then
-        XCTAssertEqual(result.value, "1111 0000", "Calaculation failure")
+        XCTAssertEqual(result.value, "11110000", "Calaculation failure")
     }
     
     func testDecNegateSigned() throws {
@@ -146,6 +150,7 @@ class CalcMathTests: XCTestCase {
     func testOctNegateSigned() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
+        wordSizeStorage?.saveData(WordSize(8))
         let oct = Octal(stringLiteral: "12") // 10
         
         // 2. when
@@ -158,6 +163,7 @@ class CalcMathTests: XCTestCase {
     func testHexNegateSigned() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
+        wordSizeStorage?.saveData(WordSize(16))
         let hex = Hexadecimal(stringLiteral: "FEED") // -275
         
         // 2. when
@@ -186,6 +192,7 @@ class CalcMathTests: XCTestCase {
     func testCalcBinUnsignedAND() throws {
         // 1. given
         calcStatetorage?.saveData(unsignedData)
+        wordSizeStorage?.saveData(WordSize(8))
         let binFirst = Binary(stringLiteral: "110001")
         let binSecond = Binary(stringLiteral: "101010")
         
@@ -193,7 +200,7 @@ class CalcMathTests: XCTestCase {
         let result = calcMathTest.calculate(firstValue: binFirst, operation: .and, secondValue: binSecond, for: .bin)!
         
         // 3. then
-        XCTAssertEqual(result.value, "0010 0000", "Calaculation failure")
+        XCTAssertEqual(result.value, "00100000", "Calaculation failure")
     }
     
     func testCalcHexUnsignedAND() throws {
@@ -238,6 +245,7 @@ class CalcMathTests: XCTestCase {
     func testCalcBinSignedAND() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
+        wordSizeStorage?.saveData(WordSize(8))
         let binFirst =  Binary(stringLiteral: "11110000") // -16 dec
         let binSecond = Binary(stringLiteral: "01100011") // 99 dec
         
@@ -245,12 +253,13 @@ class CalcMathTests: XCTestCase {
         let result = calcMathTest.calculate(firstValue: binFirst, operation: .and, secondValue: binSecond, for: .bin)!
         
         // 3. then
-        XCTAssertEqual(result.value, "0110 0000", "Calaculation failure")
+        XCTAssertEqual(result.value, "01100000", "Calaculation failure")
     }
     
     func testCalcHexSignedAND() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
+        wordSizeStorage?.saveData(WordSize(16))
         let hexFirst = Hexadecimal(stringLiteral: "FEED")
         let hexSecond = Hexadecimal(stringLiteral: "BECA")
         
@@ -291,6 +300,7 @@ class CalcMathTests: XCTestCase {
     func testCalcBinUnsignedOR() throws {
         // 1. given
         calcStatetorage?.saveData(unsignedData)
+        wordSizeStorage?.saveData(WordSize(8))
         let binFirst =  Binary(stringLiteral: "110001")
         let binSecond = Binary(stringLiteral: "101010")
         
@@ -298,7 +308,7 @@ class CalcMathTests: XCTestCase {
         let result = calcMathTest.calculate(firstValue: binFirst, operation: .or, secondValue: binSecond, for: .bin)!
         
         // 3. then
-        XCTAssertEqual(result.value, "0011 1011", "Calaculation failure")
+        XCTAssertEqual(result.value, "00111011", "Calaculation failure")
     }
     
     func testCalcHexUnsignedOR() throws {
@@ -343,6 +353,7 @@ class CalcMathTests: XCTestCase {
     func testCalcBinSignedOR() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
+        wordSizeStorage?.saveData(WordSize(8))
         let binFirst =  Binary(stringLiteral: "11110000") // -16 dec
         let binSecond = Binary(stringLiteral: "01100011") // 99 dec
 
@@ -350,7 +361,7 @@ class CalcMathTests: XCTestCase {
         let result = calcMathTest.calculate(firstValue: binFirst, operation: .or, secondValue: binSecond, for: .bin)!
 
         // 3. then
-        XCTAssertEqual(result.value, "1111 0011", "Calaculation failure") // -13
+        XCTAssertEqual(result.value, "11110011", "Calaculation failure") // -13
     }
     
     func testCalcHexSignedOR() throws {
@@ -397,6 +408,7 @@ class CalcMathTests: XCTestCase {
     func testCalcBinUnsignedXOR() throws {
         // 1. given
         calcStatetorage?.saveData(unsignedData)
+        wordSizeStorage?.saveData(WordSize(8))
         let binFirst =  Binary(stringLiteral: "110001")
         let binSecond = Binary(stringLiteral: "101010")
         
@@ -404,7 +416,7 @@ class CalcMathTests: XCTestCase {
         let result = calcMathTest.calculate(firstValue: binFirst, operation: .xor, secondValue: binSecond, for: .bin)!
         
         // 3. then
-        XCTAssertEqual(result.value, "0001 1011", "Calaculation failure")
+        XCTAssertEqual(result.value, "00011011", "Calaculation failure")
     }
     
     func testCalcHexUnsignedXOR() throws {
@@ -449,6 +461,7 @@ class CalcMathTests: XCTestCase {
     func testCalcBinSignedXOR() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
+        wordSizeStorage?.saveData(WordSize(8))
         let binFirst =  Binary(stringLiteral: "11110000") // -16 dec
         let binSecond = Binary(stringLiteral: "01100011") // 99 dec
 
@@ -456,7 +469,7 @@ class CalcMathTests: XCTestCase {
         let result = calcMathTest.calculate(firstValue: binFirst, operation: .xor, secondValue: binSecond, for: .bin)!
         
         // 3. then
-        XCTAssertEqual(result.value, "1001 0011", "Calaculation failure") // -109
+        XCTAssertEqual(result.value, "10010011", "Calaculation failure") // -109
     }
     
     func testCalcHexSignedXOR() throws {
@@ -491,6 +504,7 @@ class CalcMathTests: XCTestCase {
 
         // 1. given
         calcStatetorage?.saveData(unsignedData)
+        wordSizeStorage?.saveData(WordSize(8))
         let decFirst =  DecimalSystem(stringLiteral: "12")
         let decSecond = DecimalSystem(stringLiteral: "10")
 
@@ -498,25 +512,27 @@ class CalcMathTests: XCTestCase {
         let result = calcMathTest.calculate(firstValue: decFirst, operation: .nor, secondValue: decSecond, for: .dec)!
 
         // 3. then
-        XCTAssertEqual(result.value, "1", "Calaculation failure")
+        XCTAssertEqual(result.value, "241", "Calaculation failure") // 1111001
    }
    
    func testCalcBinUnsignedNOR() throws {
         // 1. given
         calcStatetorage?.saveData(unsignedData)
-        let binFirst =  Binary(stringLiteral: "110001")
-        let binSecond = Binary(stringLiteral: "101010")
+        wordSizeStorage?.saveData(WordSize(8))
+        let binFirst =  Binary(stringLiteral: "110001") // 49
+        let binSecond = Binary(stringLiteral: "101010") // 42
 
         // 2. when
         let result = calcMathTest.calculate(firstValue: binFirst, operation: .nor, secondValue: binSecond, for: .bin)!
 
         // 3. then
-        XCTAssertEqual(result.value, "0100", "Calaculation failure")
+        XCTAssertEqual(result.value, "11000100", "Calaculation failure")
    }
    
    func testCalcHexUnsignedNOR() throws {
        // 1. given
        calcStatetorage?.saveData(unsignedData)
+        wordSizeStorage?.saveData(WordSize(16))
        let hexFirst =  Hexadecimal(stringLiteral: "FEED")
        let hexSecond = Hexadecimal(stringLiteral: "BECA")
        
@@ -526,10 +542,11 @@ class CalcMathTests: XCTestCase {
        // 3. then
        XCTAssertEqual(result.value, "110", "Calaculation failure")
    }
-   
+    
    func testCalcOctUnsignedNOR() throws {
        // 1. given
        calcStatetorage?.saveData(unsignedData)
+       wordSizeStorage?.saveData(WordSize(8))
        let octFirst =  Octal(stringLiteral: "327") // -17
        let octSecond = Octal(stringLiteral: "123") // 83
        
@@ -555,6 +572,7 @@ class CalcMathTests: XCTestCase {
     func testCalcBinSignedNOR() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
+        wordSizeStorage?.saveData(WordSize(8))
         let binFirst =  Binary(stringLiteral: "11110000") // -16 dec
         let binSecond = Binary(stringLiteral: "01100011") // 99 dec
 
@@ -562,12 +580,13 @@ class CalcMathTests: XCTestCase {
         let result = calcMathTest.calculate(firstValue: binFirst, operation: .nor, secondValue: binSecond, for: .bin)!
         
         // 3. then
-        XCTAssertEqual(result.value, "0000 1100", "Calaculation failure")
+        XCTAssertEqual(result.value, "00001100", "Calaculation failure")
     }
     
     func testCalcHexSignedNOR() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
+        wordSizeStorage?.saveData(WordSize(16))
         let hexFirst =  Hexadecimal(stringLiteral: "FEED")
         let hexSecond = Hexadecimal(stringLiteral: "BECA")
         
@@ -581,6 +600,7 @@ class CalcMathTests: XCTestCase {
     func testCalcOctSignedNOR() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
+        wordSizeStorage?.saveData(WordSize(8))
         let octFirst =  Octal(stringLiteral: "357") // -17
         let octSecond = Octal(stringLiteral: "123") // 83
 
@@ -596,7 +616,8 @@ class CalcMathTests: XCTestCase {
     func testBitwiseShiftLeftUnsigned() throws {
         // 1. given
         calcStatetorage?.saveData(unsignedData)
-        let binary = Binary(stringLiteral: "1100")
+        wordSizeStorage?.saveData(WordSize(8))
+        let binary = Binary(stringLiteral: "00001100")
         
         // 2. when
         let shifted = calcMathTest.shiftBits(value: binary, mainSystem: .bin, shiftOperation: .shiftLeft, shiftCount: 1)
@@ -608,6 +629,7 @@ class CalcMathTests: XCTestCase {
     func testBitwiseShiftLeftSigned() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
+        wordSizeStorage?.saveData(WordSize(8))
         let binary = Binary(stringLiteral: "11110100") // -12
         
         // 2. when
@@ -620,31 +642,34 @@ class CalcMathTests: XCTestCase {
     func testBitwiseShiftRightUnsigned() throws {
         // 1. given
         calcStatetorage?.saveData(unsignedData)
-        let binary = Binary(stringLiteral: "1100")
+        wordSizeStorage?.saveData(WordSize(8))
+        let binary = Binary(stringLiteral: "00001100")
         
         // 2. when
         let shifted = calcMathTest.shiftBits(value: binary, mainSystem: .bin, shiftOperation: .shiftRight, shiftCount: 1)!
         
         // 3. then
-        XCTAssertEqual(shifted.value, "0110", "Failed shifting right")
+        XCTAssertEqual(shifted.value, "00000110", "Failed shifting right")
     }
     
     func testBitwiseShiftRightSigned() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
+        wordSizeStorage?.saveData(WordSize(8))
         let binary = Binary(stringLiteral: "11110100") // -12
         
         // 2. when
         let shifted = calcMathTest.shiftBits(value: binary, mainSystem: .bin, shiftOperation: .shiftRight, shiftCount: 1)!
         
         // 3. then
-        XCTAssertEqual(shifted.value, "11111010", "Failed shifting right") // -6
+        XCTAssertEqual(shifted.value, "01111010", "Failed shifting right") // -6
     }
     
     func testBitwiseShiftTwelveRightUnsigned() throws {
         // 1. given
         calcStatetorage?.saveData(unsignedData)
-        let binary = Binary(stringLiteral: "1100") // 12
+        wordSizeStorage?.saveData(WordSize(16))
+        let binary = Binary(stringLiteral: "00001100") // 12
         
         // 2. when
         let shifted = calcMathTest.shiftBits(value: binary, mainSystem: .bin, shiftOperation: .shiftLeft, shiftCount: 12)!
@@ -656,30 +681,33 @@ class CalcMathTests: XCTestCase {
     func testBitwiseShiftTwoRightUnsigned() throws {
         // 1. given
         calcStatetorage?.saveData(unsignedData)
+        wordSizeStorage?.saveData(WordSize(8))
         let binary = Binary(stringLiteral: "1100") // 12
         
         // 2. when
         let shifted = calcMathTest.shiftBits(value: binary, mainSystem: .bin, shiftOperation: .shiftRight, shiftCount: 2)!
         
         // 3. then
-        XCTAssertEqual(shifted.value, "0011", "Failed shifting 2 right")
+        XCTAssertEqual(shifted.value, "00000011", "Failed shifting 2 right")
     }
     
     func testBitwiseShiftTwelveLeftSigned() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
-        let binary = Binary(stringLiteral: "1100") // 12
+        wordSizeStorage?.saveData(WordSize(16))
+        let binary = Binary(stringLiteral: "00001100") // 12
         
         // 2. when
         let shifted = calcMathTest.shiftBits(value: binary, mainSystem: .bin, shiftOperation: .shiftLeft, shiftCount: 12)!
         
         // 3. then
-        XCTAssertEqual(shifted.value, "00000000000000001100000000000000", "Failed shifting 12 left")
+        XCTAssertEqual(shifted.value, "1100000000000000", "Failed shifting 12 left")
     }
     
     func testBitwiseShiftTwoRightSigned() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
+        wordSizeStorage?.saveData(WordSize(8))
         let binary = Binary(stringLiteral: "1100") // 12
         
         // 2. when

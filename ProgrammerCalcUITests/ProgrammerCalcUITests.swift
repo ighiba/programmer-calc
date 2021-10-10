@@ -34,14 +34,14 @@ class ProgrammerCalcUITests: XCTestCase {
 
     func testSettingsButton() throws {
         // 1. given
-        let settingsButton = app.navigationBars.buttons["⚙︎"]
+        let settingsButton = app.navigationBars.buttons["gearshape"]
         let tablesQuery = app.tables
         let darkModeRow = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["Dark mode"]/*[[".cells.matching(identifier: \"0\").staticTexts[\"Dark mode\"]",".staticTexts[\"Dark mode\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
         let tappingSoundsRow = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["Tapping sounds"]/*[[".cells.matching(identifier: \"0\").staticTexts[\"Tapping sounds\"]",".staticTexts[\"Tapping sounds\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
         let hapticFeedbackRow = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["Haptic feedback"]/*[[".cells[\"1\"].staticTexts[\"Haptic feedback\"]",".staticTexts[\"Haptic feedback\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
         let aboutAppRow = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["About app"]/*[[".cells.staticTexts[\"About app\"]",".staticTexts[\"About app\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
         let contactUsRow = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["Contact us"]/*[[".cells.staticTexts[\"Contact us\"]",".staticTexts[\"Contact us\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-        
+                
         // 2. then
         settingsButton.tap()
         XCTAssertTrue(darkModeRow.exists)
@@ -53,7 +53,7 @@ class ProgrammerCalcUITests: XCTestCase {
     
     func testChangeConversionButton() throws {
         // 1. given
-        let changeConversionButton = app.navigationBars.buttons["Change conversion"]
+        let changeConversionButton = app.navigationBars.buttons["sort"]
         let maxNumberOfDigitsAfterPointStaticText = app.staticTexts["Max number of digits after point: "]
         let containerHeader = app.staticTexts["Conversion settings"]
         let doneButton = app.buttons["Done"]
@@ -64,6 +64,27 @@ class ProgrammerCalcUITests: XCTestCase {
         XCTAssertTrue(containerHeader.exists)
         XCTAssertTrue(doneButton.exists)
         doneButton.tap()
+    }
+    
+    func testChangeWordSizeButton() throws {
+        // 1. given
+        let changeWordSizeButton = app.navigationBars/*@START_MENU_TOKEN@*/.staticTexts["BYTE"]/*[[".buttons[\"BYTE\"].staticTexts[\"BYTE\"]",".staticTexts[\"BYTE\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        let tablesQuery = app.tables
+        let qword = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["QWORD"]/*[[".cells.staticTexts[\"QWORD\"]",".staticTexts[\"QWORD\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        let dword = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["DWORD"]/*[[".cells.staticTexts[\"DWORD\"]",".staticTexts[\"DWORD\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        let word = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["WORD"]/*[[".cells.staticTexts[\"WORD\"]",".staticTexts[\"WORD\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        let byte = tablesQuery.staticTexts["BYTE"]
+        let doneButton = app.buttons["Done"]
+        
+        // 2. then
+        changeWordSizeButton.tap()
+        XCTAssertTrue(qword.exists)
+        XCTAssertTrue(dword.exists)
+        XCTAssertTrue(word.exists)
+        XCTAssertTrue(byte.exists)
+        XCTAssertTrue(doneButton.exists)
+        doneButton.tap()
+                
     }
 
     func testLaunchPerformance() throws {

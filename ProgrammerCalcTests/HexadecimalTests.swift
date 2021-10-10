@@ -70,6 +70,7 @@ class HexadecimalTests: XCTestCase {
         // 1. given
         calcStatetorage?.saveData(unsignedData)
         let binary = Binary(stringLiteral: "101011110000")
+        binary.isSigned = false
         
         // 2. when
         hexadecimalTest = Hexadecimal(binary)
@@ -82,7 +83,8 @@ class HexadecimalTests: XCTestCase {
         // 1. given
         calcStatetorage?.saveData(signedData)
         let binary = Binary(stringLiteral: "101011110000")
-        
+        binary.isSigned = true
+
         // 2. when
         hexadecimalTest = Hexadecimal(binary)
         
@@ -93,7 +95,9 @@ class HexadecimalTests: XCTestCase {
     func testHexadecimalBinarySignedInitWithMinus() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
-        let binary = Binary(stringLiteral: "1000101011110000")
+        let binary = Binary()
+        binary.value = "1000101011110000"
+        binary.isSigned = true
         
         // 2. when
         hexadecimalTest = Hexadecimal(binary)
@@ -105,7 +109,9 @@ class HexadecimalTests: XCTestCase {
     func testHexadecimalBinaryUnsignedInitWithMinus() throws {
         // 1. given
         calcStatetorage?.saveData(unsignedData)
-        let binary = Binary(stringLiteral: "1000101011110000")
+        let binary = Binary()
+        binary.value = "1000101011110000"
+        binary.isSigned = false
         
         // 2. when
         hexadecimalTest = Hexadecimal(binary)
@@ -123,7 +129,7 @@ class HexadecimalTests: XCTestCase {
         let binary = hexadecimalTest.convertHexToBinary()
         
         // 3. then
-        XCTAssertEqual(binary.value, "101011110000", "Converted values are wrong")
+        XCTAssertEqual(binary.value, "000000000000000000000000000000000000000000000000000101011110000", "Converted values are wrong")
     }
     
     func testHexadecimalCovnertToBinarySigned() throws {
@@ -135,7 +141,7 @@ class HexadecimalTests: XCTestCase {
         let binary = hexadecimalTest.convertHexToBinary()
         
         // 3. then
-        XCTAssertEqual(binary.value, "0000101011110000", "Converted values are wrong")
+        XCTAssertEqual(binary.value, "000000000000000000000000000000000000000000000000000101011110000", "Converted values are wrong")
     }
     
     
