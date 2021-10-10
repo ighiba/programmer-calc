@@ -134,7 +134,7 @@ class Binary: NumberSystemProtocol {
     
     // BIN -> DEC
     func convertBinaryToDec() -> Decimal {
-        let binary = self
+        let binary = Binary(self)
         var signedMultipler: Decimal = 1 // default is positive value
         var result: Decimal = 0.0
         
@@ -148,7 +148,7 @@ class Binary: NumberSystemProtocol {
             // calcualte signed state
             //binary.updateSignedState() // changes binary.isSigned state to true of false
             // set multipler to -1 or 1 for inverting value
-            if binary.isSigned {
+            if self.isSigned {
                 binary.twosComplement()
             }
         //}
@@ -169,11 +169,11 @@ class Binary: NumberSystemProtocol {
             // calcualte signed state
             //binary.updateSignedState() // changes binary.isSigned state to true of false
             // remove signed bit
-        if binary.isSigned {
+        if self.isSigned {
             binIntStrBuff?.removeFirst()
         }
             // set multipler to -1 or 1 for inverting value
-            if binary.isSigned {
+            if self.isSigned {
                 signedMultipler = -1
                 // check if min signed
                 if binIntStrBuff!.replacingOccurrences(of: "0", with: "").count == 0 {
@@ -320,9 +320,6 @@ class Binary: NumberSystemProtocol {
     
     // Combine to parts to double string
     func convertDoubleToBinaryStr( numberStr: (IntPart?, FractPart?)) -> String {
-
-        // conversion settings
-        //let conversionSettins = conversionStorage.loadData()
         
         // Error handling
         guard numberStr.0 != nil else {
@@ -334,7 +331,6 @@ class Binary: NumberSystemProtocol {
         
         // TODO: Error handling
         let decNumber = Decimal(string: numberStr.0!)!
-        //let precision = Int(conversionSettins?.numbersAfterPoint ?? 8)
         let precision = 20
         let intPart = convertDecToBinary(decNumber)
         let fractPart = convertFractToBinary(numberStr: numberStr.1!, precision: precision)
@@ -500,6 +496,7 @@ class Binary: NumberSystemProtocol {
         //let calcState = calcStateStorage.loadData()
         
         let binary = self
+        var isInputSigned = false
         
         binary.value = str
         // remove spaces
@@ -531,11 +528,12 @@ class Binary: NumberSystemProtocol {
                 // update signed state if filled by 8,16,32,64 bits
                 if [8,16,32,64].contains(binary.value.count)  {
                     binary.updateSignedState()
+                    isInputSigned = binary.isSigned
                 }
 
                 
                 // fill if needed to
-                if !binary.isSigned {
+                if !isInputSigned {
                     // remove signed bit
                     // TODO: Remove maybe
                     if binary.value.first != "1" {
@@ -556,13 +554,13 @@ class Binary: NumberSystemProtocol {
                 
                 // isSigned == true -> 1 else -> 0
                 // add signed bit by signed state
-                if binary.isSigned {
+                if isInputSigned {
                     binary.value = "1" + binary.value
                 } else {
                     binary.value = "0" + binary.value
                 }
                 
-                if binary.isSigned {
+                if isInputSigned {
                     binary.twosComplement()
                     binary.changeSignedBit(to: "1")
                 }
@@ -764,34 +762,25 @@ class Binary: NumberSystemProtocol {
     
     public func onesComplement() {
         let binary = self
-        var signedBit = String()
-        
-        // delete signed bit if exist
-        //if calcStateStorage.isProcessSigned() {
-            signedBit = String(binary.value.first!)
-            binary.value.removeFirst()
-        //}
-        // invert binary
         binary.invert()
-        // return signed bit if exists
-        binary.value = signedBit + binary.value
     }
     
     public func twosComplement() {
         let binary = self
         var signedBit = String()
         
+        let calcStateStorage = CalcStateStorage()
         // remove spaces
         binary.value = binary.value.removeAllSpaces()
         
         // convert to 1's complement
         binary.onesComplement()
         // save signed bit and change to 0
-        //if calcStateStorage.isProcessSigned() {
+        if calcStateStorage.isProcessSigned() {
             signedBit = String(binary.value.first!)
             binary.updateSignedState()
             binary.changeSignedBit(to: "0")
-        //}
+        }
 
         // get the int part of binary
         let divided = divideIntFract(value: binary.value)

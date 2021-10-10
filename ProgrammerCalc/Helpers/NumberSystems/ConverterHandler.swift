@@ -120,9 +120,15 @@ import Foundation
         
         // convert binary to one's complement
         binary.onesComplement()
+        
+        if calcStateStorage.isProcessSigned() {
+            binary.updateSignedState()
+        }
 
         // convert to binary input system (mainSystem)
-        return convertValue(value: binary, from: .bin, to: mainSystem)!
+        let resultBin = convertValue(value: binary, from: .bin, to: mainSystem)!
+        
+        return resultBin
     
     }
     

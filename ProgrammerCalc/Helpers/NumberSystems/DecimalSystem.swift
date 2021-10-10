@@ -109,27 +109,27 @@ class DecimalSystem: NumberSystemProtocol {
                 // fill up to 63 bits
                 binary.fillUpToMaxBitsCount()
                 // isSigned == true -> 1 else -> 0
+
+                binary.value = "0" + binary.value
                 if self.isSigned {
-                    binary.value = "1" + binary.value
-                } else {
-                    binary.value = "0" + binary.value
-                }
-                
-                // check if min signed
-                var binaryTest = binary.value
-                binaryTest.removeFirst(1)
-                
-                //let wordSizeValue = wordSizeStorage.getWordSizeValue()
-                let wordSizeValue = 64
-                
-                if binaryTest.first == "1" && binaryTest.replacingOccurrences(of: "0", with: "").count == 1 && binaryTest.count == wordSizeValue {
-                    binary.value = binaryTest
-                }
-                
-                // convert to 2's complenment state if value is signed
-                if binary.isSigned {
                     binary.twosComplement()
                 }
+                
+//                // check if min signed
+//                var binaryTest = binary.value
+//                binaryTest.removeFirst(1)
+//                
+//                //let wordSizeValue = wordSizeStorage.getWordSizeValue()
+//                let wordSizeValue = 64
+//                
+//                if binaryTest.first == "1" && binaryTest.replacingOccurrences(of: "0", with: "").count == 1 && binaryTest.count == wordSizeValue {
+//                    binary.value = binaryTest
+//                }
+//                
+//                // convert to 2's complenment state if value is signed
+//                if binary.isSigned {
+//                    
+//                }
                 
             }
             
