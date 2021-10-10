@@ -59,12 +59,12 @@ class Hexadecimal: OctHexHelper, NumberSystemProtocol {
     // HEX -> BIN
     // Convert form hex to binary with table helper
     func convertHexToBinary() -> Binary {
-        let hexadecimal = self.value
+        let hexadecimalValue = self.value
         let binary = Binary()
 
         // from hex to binary
         // process each number and form parts
-        binary.value = tableOctHexToBin(valueOctHex: hexadecimal, table: table)
+        binary.value = tableOctHexToBin(valueOctHex: hexadecimalValue, table: table)
         
         return binary
     }

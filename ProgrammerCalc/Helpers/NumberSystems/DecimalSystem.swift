@@ -22,8 +22,8 @@ class DecimalSystem: NumberSystemProtocol {
     var isSigned: Bool = false
     
     // Storages
-    private let calcStateStorage = CalcStateStorage()
-    private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
+    //private let calcStateStorage = CalcStateStorage()
+    //private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
     
     // ======================
     // MARK: - Initialization
@@ -70,7 +70,6 @@ class DecimalSystem: NumberSystemProtocol {
         // if number is signed
         // remove minus for converting
         // TODO: Signed handling
-        
         if isSigned {
             decimalValue *= -1
         }
@@ -95,19 +94,22 @@ class DecimalSystem: NumberSystemProtocol {
         }
    
         // process signed from UserDefaults
-        if calcStateStorage.isProcessSigned() {
+       // if calcStateStorage.isProcessSigned() {
+        
+        // process value
             let splittedBinaryStr = binary.divideIntFract(value: binary.value)
             
+            // process int part of binary
             if let intPart = splittedBinaryStr.0 {
                 binary.value = intPart
                 // remove zeros
                 binary.value = binary.removeZerosBefore(str: binary.value)
                 // set signed state to binary
                 binary.isSigned = self.isSigned
-                // fill up to signed binary style
-                binary.fillUpSignedToNeededCount()
+                // fill up to 63 bits
+                binary.fillUpToMaxBitsCount()
                 // isSigned == true -> 1 else -> 0
-                if binary.isSigned {
+                if self.isSigned {
                     binary.value = "1" + binary.value
                 } else {
                     binary.value = "0" + binary.value
@@ -117,7 +119,8 @@ class DecimalSystem: NumberSystemProtocol {
                 var binaryTest = binary.value
                 binaryTest.removeFirst(1)
                 
-                let wordSizeValue = wordSizeStorage.getWordSizeValue()
+                //let wordSizeValue = wordSizeStorage.getWordSizeValue()
+                let wordSizeValue = 64
                 
                 if binaryTest.first == "1" && binaryTest.replacingOccurrences(of: "0", with: "").count == 1 && binaryTest.count == wordSizeValue {
                     binary.value = binaryTest
@@ -128,10 +131,6 @@ class DecimalSystem: NumberSystemProtocol {
                     binary.twosComplement()
                 }
                 
-                if (self.decimalValue > self.maxSigned) || (self.decimalValue < self.minSigned) {
-                    print("overflow when convert dec to bin - \(decimalValue)")
-                    //return nil
-                }
             }
             
             // add fract part if exists
@@ -144,7 +143,7 @@ class DecimalSystem: NumberSystemProtocol {
                     binary.value = "\(binary.value).\(fractPart)"
                 }
             }
-        }
+
         
         return binary
     }

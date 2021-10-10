@@ -11,7 +11,7 @@ import Foundation
 class OctHexHelper {
     
     // CalcState storage
-    private var calcStateStorage = CalcStateStorage()
+    //private var calcStateStorage = CalcStateStorage()
     
     // =========================================
     // MARK: - Octal / Hexadecimal Table Methods
@@ -39,23 +39,20 @@ class OctHexHelper {
             }
         }
        
-        // process signed values
-        if calcStateStorage.isProcessSigned() {
-            // remove zeros
-            resultBin.value = resultBin.removeZerosBefore(str: resultBin.value)
-            // if octhex is negative
-            // check value for bits count
-            // TODO: for floating point
-            switch resultBin.value.count {
-            case 8,16,32,64:
-                // if already filled to needed bit
-                // do nothing
-                break
-            default:
-                // add zeros before to fill 8, 16, 32, 64 bits
-                resultBin.fillUpSignedToNeededCount()
-                break
-            }
+        // remove zeros
+        resultBin.value = resultBin.removeZerosBefore(str: resultBin.value)
+        // if octhex is negative
+        // check value for bits count
+        // TODO: for floating point
+        switch resultBin.value.count {
+        case 8,16,32,64:
+            // if already filled to needed bit
+            // do nothing
+            break
+        default:
+            // add zeros before to fill 8, 16, 32, 64 bits
+            resultBin.fillUpToMaxBitsCount()
+            break
         }
         
         return resultBin.value

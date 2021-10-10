@@ -14,6 +14,10 @@ class Octal: OctHexHelper, NumberSystemProtocol {
     // MARK: - Properties
     // ==================
     
+    // Storages
+    //private let calcStateStorage = CalcStateStorage()
+    //private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
+    
     var value: String = ""
     var isSigned: Bool = false // default
 
@@ -49,13 +53,33 @@ class Octal: OctHexHelper, NumberSystemProtocol {
     // OCT -> BIN
     // Convert from oct to binary with table helper
     func convertOctToBinary() -> Binary {
-        let octal = self.value
+        let octalValue = self.value
         let binary = Binary()
         
         // from oct to binary
         // process each number and form parts
-        binary.value = tableOctHexToBin(valueOctHex: octal, table: table)
+        binary.value = tableOctHexToBin(valueOctHex: octalValue, table: table)
         
+//        // update signed state
+//        binary.updateSignedState()
+//        //self.isSigned = binary.isSigned
+//        
+//        binary = Binary(stringLiteral: binary.value)
+//
+//        // process string binary
+//        //binary.value = binary.processStringInput(str: binary.value)
+//        binary.value = binary.removeZerosBefore(str: binary.value)
+//        binary.fillUpSignedToNeededCount()
+//        
+//        let wordSizeValue = wordSizeStorage.getWordSizeValue()
+//        if  binary.value.count < wordSizeValue {
+//            if isSigned {
+//                binary.value = "1"+binary.value
+//            } else {
+//                binary.value = "0"+binary.value
+//            }
+//        }
+//
         return binary
     }
     
