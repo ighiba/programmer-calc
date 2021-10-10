@@ -8,7 +8,13 @@
 
 import Foundation
 
- class ConverterHandler { 
+ class ConverterHandler {
+    
+    // Storages
+    private let calcStateStorage = CalcStateStorage()
+    private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
+    private let conversionStorage: ConversionStorageProtocol = ConversionStorage()
+    
     // ===============
     // MARK: - Methods
     // ===============
@@ -16,7 +22,8 @@ import Foundation
     // Main function for conversion values
     public func convertValue(value: NumberSystemProtocol, from mainSystem: ConversionSystemsEnum, to converterSystem: ConversionSystemsEnum) -> NumberSystemProtocol? {
         // if manSystem == converterSystem, then return imput value
-        if mainSystem == converterSystem {
+        // except binary (for processing it to normal format)
+        if mainSystem == converterSystem && mainSystem != .bin {
             return value
         }
         
@@ -28,11 +35,14 @@ import Foundation
         // Check if not nil after converting to binary
         guard binary != nil else { return nil }
         
+        // Process binary to settings format
+        let processedBinary = processBinaryToFormat(binary!)
+        
         // ==================================================
         // Second step: convert binary value to needed system
         // ==================================================
         
-        let result = convertBinaryToAny(binary: binary!, targetSystem: converterSystem)
+        let result = convertBinaryToAny(binary: processedBinary, targetSystem: converterSystem)
         
         return result
     }
@@ -40,7 +50,7 @@ import Foundation
     // Converter from any to binary system
     fileprivate func convertAnyToBinary( value: NumberSystemProtocol, anySystem: ConversionSystemsEnum) -> Binary? {
         var binary: Binary?
-        var partition: Int = 4
+        let partition: Int = 4
         
         switch anySystem {
         case .bin:
@@ -50,19 +60,19 @@ import Foundation
             }
         case .oct:
             // convert oct to binary
-            partition = 3
+            //partition = 3
             let oct: Octal = value as! Octal
             binary = Binary(oct)
         case .dec:
             // convert dec to binary
-            partition = 4
+            //partition = 4
             let dec = value as! DecimalSystem
             if let bin = Binary(dec) {
                 binary = bin
             }
         case .hex:
             // convert hex to binary
-            partition = 4
+            //partition = 4
             let hex = value as! Hexadecimal
             binary = Binary(hex)
         }
@@ -88,7 +98,13 @@ import Foundation
             return Octal(binary)
         case .dec:
             // convert binary to dec
-            return DecimalSystem(binary)
+            let dec = DecimalSystem(binary)
+            if !calcStateStorage.isProcessSigned() {
+                if dec.decimalValue < 0 {
+                    dec.setNewDecimal(with: dec.decimalValue * -1)
+                }
+            }
+            return dec
         case .hex:
             // convert binary to hex
             return Hexadecimal(binary)
@@ -121,8 +137,80 @@ import Foundation
         binary.twosComplement()
         
         // convert to binary input system (mainSystem)
-
         return convertValue(value: binary, from: .bin, to: mainSystem)!
+    }
+    
+    // Process binary with settings from User Defaults
+    public func processBinaryToFormat(_ binary: Binary) -> Binary {
+        let resultBin = Binary()
+        // get word size from storage
+        let wordSizeValue = wordSizeStorage.getWordSizeValue()
+        
+        // remove spaces if exists
+        binary.value = binary.value.removeAllSpaces()
+        
+        // split binary
+        let splittedBinary = binary.divideIntFract(value: binary.value)
+        
+        // process int part
+        if let intPart = splittedBinary.0 {
+            var buffIntPart = binary.removeZerosBefore(str: intPart)
+            // fill or delete bits
+            if buffIntPart.count < wordSizeValue {
+                // add bits
+                while buffIntPart.count < wordSizeValue {
+                    buffIntPart = "0" + buffIntPart
+                }
+            } else if buffIntPart.count > wordSizeValue {
+                // delete bits down to wordSizeValue
+                while buffIntPart.count > wordSizeValue {
+                    buffIntPart.removeFirst(1)
+                }
+            } else if buffIntPart.count == wordSizeValue {
+                
+            }
+            
+            resultBin.value = buffIntPart
+            
+            // update signed value
+            if calcStateStorage.isProcessSigned() {
+                resultBin.updateSignedState()
+            }
+        }
+        
+        // process fract part
+        if let fractPart = splittedBinary.1 {
+            let numAfterPoint = Int(conversionStorage.loadData()?.numbersAfterPoint ?? 8.0)
+            var buffFractPart = fractPart.removeTrailing(characters: ["0"])
+            
+            if fractPart != "" {
+                // fill or delete bits
+                if buffFractPart.count < numAfterPoint {
+                    // add bits
+                    //print("add bits")
+                    while buffFractPart.count < numAfterPoint {
+                        buffFractPart.append("0")
+                    }
+                } else if buffFractPart.count > numAfterPoint {
+                    // delete bits down to numAfterPoint
+                    while buffFractPart.count > numAfterPoint {
+                        buffFractPart.removeLast(1)
+                    }
+                } else if buffFractPart.count == numAfterPoint {
+                    // do nothing all ok
+                }
+            }
+            
+            resultBin.value.append(".")
+            resultBin.value.append(buffFractPart)
+        }
+        
+        if !calcStateStorage.isProcessSigned() {
+            resultBin.isSigned = false
+        }
+        
+        
+        return resultBin
     }
     
 }
