@@ -616,7 +616,25 @@ class PCalcViewController: UIPageViewController {
             bin.value = bin.value.removeAllSpaces()
             // check for binary lenght for int part and fract part
             if !input.contains(".") {
-                let testStr = bin.removeZerosBefore(str: bin.value)
+                var testStr = String()
+                
+                // check if signed
+                if returnCalcState().processSigned {
+                    if bin.value.count >= wordSizeValue {
+                        let numIsSigned = bin.value.first! == "1" ? true : false
+                        if numIsSigned {
+                            let buffBin = Binary()
+                            buffBin.value = bin.value
+                            buffBin.twosComplement()
+                            // remove first bit
+                            buffBin.value.removeFirst(1)
+                            testStr = buffBin.removeZerosBefore(str: buffBin.value)
+                        }
+                    }
+                }
+                // for unsigned
+                if testStr == "" { testStr = bin.removeZerosBefore(str: bin.value) }
+                   
                 
                 if system == .dec {
                     let oldValue = mainLabelRawValue as! DecimalSystem
