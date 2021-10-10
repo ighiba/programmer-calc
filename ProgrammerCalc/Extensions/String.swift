@@ -61,4 +61,28 @@ extension String {
         }
         return resultStr
     }
+    
+    // removes leading given chars in str until str.last != character
+    func removeLeading(characters: [Character]) -> String {
+        var str = self
+        while str.count > 0 && characters.contains(str.first!) {
+            str.removeFirst(1)
+            guard str != "" else {
+                return str
+            }
+        }
+        return str
+    }
+    
+    // removes trailing given chars in str until str.last != character
+    func removeTrailing(characters: [Character]) -> String {
+        var str = self
+        while str.count > 0 && characters.contains(str.last!)  {
+            str.removeLast(1)
+            guard str != "" else {
+                return str
+            }
+        }
+        return str
+    }
 }
