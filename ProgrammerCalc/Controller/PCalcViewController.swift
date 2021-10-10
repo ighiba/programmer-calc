@@ -335,8 +335,8 @@ class PCalcViewController: UIPageViewController {
         } else {
             // if last char is dot then append dot
             var lastDotIfExists: String = {
-                print(mainLabel.text!)
-                print(converterLabel.text!)
+                //print(mainLabel.text!)
+                //print(converterLabel.text!)
                 if mainLabel.text?.last == "." {
                     return "."
                 } else {

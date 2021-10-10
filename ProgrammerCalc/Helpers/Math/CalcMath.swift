@@ -173,46 +173,49 @@ final class CalcMath {
             } else {
                 return firstNum
             }
+            
         // bitwise and
         case .and:
             guard !firstNum.value.contains(".") && !secondNum.value.contains(".") else {
                 return secondNum
             }
             // x and y
-            resultStr = "\(Int(firstNum.value)! & Int(secondNum.value)!)"
+            resultStr = calculateBitOperation(firstNum: firstNum, secondNum: secondNum, operation: { left, right in
+                bitAnd(left: left, right: right)
+            }).value
+            
         // bitwise or
         case .or:
             guard !firstNum.value.contains(".") && !secondNum.value.contains(".") else {
                 return secondNum
             }
             // x or y
-            resultStr = "\(Int(firstNum.value)! | Int(secondNum.value)!)"
+            resultStr = calculateBitOperation(firstNum: firstNum, secondNum: secondNum, operation: { left, right in
+                bitOr(left: left, right: right)
+            }).value
+
         // bitwise xor
         case .xor:
             guard !firstNum.value.contains(".") && !secondNum.value.contains(".") else {
                 return secondNum
             }
             // x xor y
-            resultStr = "\(Int(firstNum.value)! ^ Int(secondNum.value)!)"
+            resultStr = calculateBitOperation(firstNum: firstNum, secondNum: secondNum, operation: { left, right in
+                bitXor(left: left, right: right)
+            }).value
+            
         // bitwise nor
         case .nor:
             guard !firstNum.value.contains(".") && !secondNum.value.contains(".") else {
                 return secondNum
             }
-            // x or y
-            let buffResult = DecimalSystem(stringLiteral: "\(Int(firstNum.value)! | Int(secondNum.value)!)")
-            // convert to binary
-            if let binary = Binary(buffResult) {
-                // delete zeros before for binary
-                binary.value = binary.removeZerosBefore(str: binary.value)
-                
+            // x nor y
+            resultStr = calculateBitOperation(firstNum: firstNum, secondNum: secondNum, operation: { left, right in
+                let result = bitOr(left: left, right: right)
                 // not result (invert binary)
-                binary.invert()
-                // convert to decimal and return
-                return DecimalSystem(binary)
-            } else {
-                return nil
-            }
+                result.invert()
+                return result
+            }).value
         }
         
         // convert resultStr to DecimalSystem
@@ -297,25 +300,25 @@ final class CalcMath {
         }()
     
         // chosing shifting method for signed or unsigned value
-        if calcStateStorage.isProcessSigned() {
-            // For signed
-            let decStr = "\(binary!.convertBinaryToDec())"
-            var newInt = 0
-            if operation == .shiftLeft {
-                newInt = Int(decStr)!<<abs(shiftCount)
-            } else if operation == .shiftRight {
-                newInt = Int(decStr)!>>abs(shiftCount)
-            } else {
-                // if wrong operation
-                newInt = 0
-            }
-            if let bin = DecimalSystem(newInt).convertDecToBinary() {
-                binary!.value = bin.value
-            } else {
-                return nil
-            }
-            //binary!.value = DecimalSystem(newInt).convertDecToBinary().value
-        } else {
+//        if calcStateStorage.isProcessSigned() {
+//            // For signed
+//            let decStr = "\(binary!.convertBinaryToDec())"
+//            var newInt = 0
+//            if operation == .shiftLeft {
+//                newInt = Int(decStr)!<<abs(shiftCount)
+//            } else if operation == .shiftRight {
+//                newInt = Int(decStr)!>>abs(shiftCount)
+//            } else {
+//                // if wrong operation
+//                newInt = 0
+//            }
+//            if let bin = DecimalSystem(newInt).convertDecToBinary() {
+//                binary!.value = bin.value
+//            } else {
+//                return nil
+//            }
+//            //binary!.value = DecimalSystem(newInt).convertDecToBinary().value
+//        } else {
             // For unsigned
             // loop shiftCount for x>>y and x<<y
             for i in 0..<abs(shiftCount) {
@@ -337,7 +340,7 @@ final class CalcMath {
                     binary!.value = "0"
                 }
             }
-        }
+        //}
         
         // TODO: Remove?
         // delete first bit if more than QWORD
@@ -347,4 +350,91 @@ final class CalcMath {
         
         return converterHandler.convertValue(value: Binary(stringLiteral: binary!.value), from: .bin, to: mainSystem)
     }
+    
+    // AND
+    private func bitAnd(left: Binary, right: Binary) -> Binary {
+        
+        let resultBin = bitOperation(left: left, right: right) { reversedLeftBin, reversedRightBin in
+            var resultStr = String()
+            for index in 0..<reversedLeftBin.count {
+                if reversedLeftBin[index] == "1" && reversedLeftBin[index] == reversedRightBin[index] {
+                    resultStr.append("1")
+                } else {
+                    resultStr.append("0")
+                }
+            }
+            return resultStr
+        }
+        
+        return resultBin
+    }
+    
+    // OR
+    private func bitOr(left: Binary, right: Binary) -> Binary {
+        
+        let resultBin = bitOperation(left: left, right: right) { reversedLeftBin, reversedRightBin in
+            var resultStr = String()
+            for index in 0..<reversedLeftBin.count {
+                if reversedLeftBin[index] == "1" || reversedRightBin[index] == "1" {
+                    resultStr.append("1")
+                } else {
+                    resultStr.append("0")
+                }
+            }
+            return resultStr
+        }
+        
+        return resultBin
+    }
+    
+    // XOR
+    private func bitXor(left: Binary, right: Binary) -> Binary {
+        
+        let resultBin = bitOperation(left: left, right: right) { reversedLeftBin, reversedRightBin in
+            var resultStr = String()
+            for index in 0..<reversedLeftBin.count {
+                if reversedLeftBin[index] != reversedRightBin[index] {
+                    resultStr.append("1")
+                } else {
+                    resultStr.append("0")
+                }
+            }
+            return resultStr
+        }
+        
+        return resultBin
+    }
+    
+    // Universal bit operation with input logic of looping reversed bits
+    private func bitOperation(left: Binary, right: Binary, logic: ([Character],[Character]) -> String ) -> Binary {
+        let resultBin = Binary()
+        var resultStr = String()
+        let wordSizeValue = wordSizeStorage.getWordSizeValue()
+        
+        // fill binarys for wordSize
+        if left.value != right.value {
+            left.value = left.fillUpZeros(str: left.value, to: wordSizeValue)
+            right.value = right.fillUpZeros(str: right.value, to: wordSizeValue)
+        }
+        // reverse bin values
+        let reversedLeftBin = left.value.reversed() as [Character]
+        let reversedRightBin = right.value.reversed() as [Character]
+        // loop bits with given logic
+        resultStr = logic(reversedLeftBin,reversedRightBin)
+        
+        // set value to resultBin
+        resultBin.value = String(resultStr.reversed())
+        
+        return resultBin
+    }
+    
+    
+    // universal func for converting dec to bin, calculating and returning new dec
+    private func calculateBitOperation(firstNum: DecimalSystem, secondNum: DecimalSystem, operation: (Binary,Binary)->Binary ) -> DecimalSystem {
+        let binFirstNum = converterHandler.convertValue(value: firstNum, from: .dec, to: .bin) as! Binary
+        let binSecondNum = converterHandler.convertValue(value: secondNum, from: .dec, to: .bin) as! Binary
+        let binResult = operation(binFirstNum,binSecondNum)
+        return converterHandler.convertValue(value: binResult, from: .bin, to: .dec)! as! DecimalSystem
+    }
+    
 }
