@@ -19,16 +19,21 @@ class PCalcViewController: UIPageViewController {
     // MARK: - Properties
     // ==================
     
-    var arrayButtonsStack = [UIView]()
+    // Taptic feedback generator
+    private let generator = UIImpactFeedbackGenerator(style: .light)
+    // haptic feedback setting
+    private var hapticFeedback = false
+    
+    private var arrayButtonsStack = [UIView]()
     // Handlers
-    let converterHandler: ConverterHandler = ConverterHandler()
-    let calculationHandler: CalcMath = CalcMath()
+    private let converterHandler: ConverterHandler = ConverterHandler()
+    private let calculationHandler: CalcMath = CalcMath()
     // views
-    let calcView: PCalcView = PCalcView()
+    private let calcView: PCalcView = PCalcView()
     lazy var mainLabel: CalcualtorLabel = calcView.mainLabel
     lazy var converterLabel: CalcualtorLabel = calcView.converterLabel
     // State for raw value in main label
-    var mainLabelRawValue: NumberSystemProtocol! // TODO: Error handling
+    private var mainLabelRawValue: NumberSystemProtocol! // TODO: Error handling
     // State for processign signed values
     private var processSigned = false // default value
     // State for calculating numbers
@@ -37,12 +42,11 @@ class PCalcViewController: UIPageViewController {
     var systemMain: ConversionSystemsEnum?
     var systemConverter: ConversionSystemsEnum?
     
-    
     // Storages
-    let settingsStorage: SettingsStorageProtocol = SettingsStorage()
-    let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
-    let conversionStorage: ConversionStorageProtocol = ConversionStorage()
-    let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
+    private let settingsStorage: SettingsStorageProtocol = SettingsStorage()
+    private let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
+    private let conversionStorage: ConversionStorageProtocol = ConversionStorage()
+    private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
     
     // ======================
     // MARK: - Initialization
@@ -53,7 +57,6 @@ class PCalcViewController: UIPageViewController {
        var buttonsVC = [CalcButtonsViewController]()
         arrayButtonsStack.forEach { (buttonStack) in
             buttonsVC.append(CalcButtonsViewController(buttonsStack: buttonStack))
-            
         }
         return buttonsVC
     }()
@@ -69,6 +72,7 @@ class PCalcViewController: UIPageViewController {
         }
         
         // get states from UserDefaults
+        updateSettings()
         updateConversionState()
         updateCalcState()
         handleConversion()
@@ -150,7 +154,7 @@ class PCalcViewController: UIPageViewController {
     // ===============
     
     // Update conversion values
-    fileprivate func updateCalcState() {
+    private func updateCalcState() {
         // get data from UserDefaults
         let data = returnCalcState()
         // apply data to view
@@ -173,12 +177,33 @@ class PCalcViewController: UIPageViewController {
         calcStateStorage.saveData(newState)
     }
     
-    fileprivate func updateConversionState() {
+    private func updateConversionState() {
         // get data from UserDefaults
         let data = returnConversionSettings()
         
         systemMain = ConversionSystemsEnum(rawValue: data.systemMain)
         systemConverter = ConversionSystemsEnum(rawValue: data.systemConverter)
+    }
+    
+    private func updateSettings() {
+        // get data from UserDefaults
+        let data = returnSettings()
+        
+        hapticFeedback = data.hapticFeedback
+    }
+    
+    private func returnSettings() -> SettingsProtocol {
+        if let settings = settingsStorage.loadData() {
+            return settings
+        } else {
+            // if no settings
+            print("no app settings")
+            // default values
+            let newSettings = Settings(darkMode: false, tappingSounds: true, hapticFeedback: true)
+            settingsStorage.saveData(newSettings)
+            
+            return newSettings
+        }
     }
     
     // just return WordSize data from UserDefauls
@@ -708,6 +733,15 @@ class PCalcViewController: UIPageViewController {
         unhighlightLabels()
     }
     
+    // Haptic feedback action for all buttons
+    @objc func hapticFeedback(_ sender: CalculatorButton) {
+        if hapticFeedback {
+            generator.prepare()
+            // impact
+            generator.impactOccurred()
+        }
+    }
+    
     // Numeric buttons actions
     @objc func numericButtonTapped(_ sender: UIButton) {
         let button = sender
@@ -952,6 +986,11 @@ class PCalcViewController: UIPageViewController {
         
         // present settings
         vc.modalPresentationStyle = .pageSheet
+        
+        // add updaterHandler
+        vc.updaterHandler = {
+            self.updateSettings()
+        }
         
         navigationController.setViewControllers([vc], animated: false)
         self.present(navigationController, animated: true)

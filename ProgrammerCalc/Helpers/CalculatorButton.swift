@@ -13,7 +13,7 @@ class CalculatorButton: UIButton {
     // MARK: - Enumerations
     // ====================
     
-    enum buttonTypes {
+    enum ButtonTypes {
         case numeric
         case sign
         case complement
@@ -25,7 +25,8 @@ class CalculatorButton: UIButton {
     // MARK: - Properties
     // ==================
     
-    public var calcButtonType: buttonTypes = .defaultBtn // default value
+
+    public var calcButtonType: ButtonTypes = .defaultBtn // default value
     
     private let _boundsExtension: CGFloat = 0
     // override isHighlighted for calculator buttons
@@ -62,7 +63,7 @@ class CalculatorButton: UIButton {
         self.calcButtonType = .defaultBtn
     }
     
-    convenience init(calcButtonType: buttonTypes) {
+    convenience init(calcButtonType: ButtonTypes) {
         self.init()
         self.calcButtonType = calcButtonType
     }
@@ -109,11 +110,13 @@ class CalculatorButton: UIButton {
         
     }
     
-    func setActions(for buttonType: buttonTypes){
+    func setActions(for buttonType: ButtonTypes){
         
         self.addTarget(nil, action: #selector(PCalcViewController.toucUpOutsideAction), for: [.touchDragExit, .touchDragOutside])
         // label higliglht handling
         self.addTarget(nil, action: #selector(PCalcViewController.touchHandleLabelHighlight), for: .touchDown)
+        // haptic feedback
+        self.addTarget(nil, action: #selector(PCalcViewController.hapticFeedback), for: .touchUpInside)
         
         switch buttonType {
         case .numeric:

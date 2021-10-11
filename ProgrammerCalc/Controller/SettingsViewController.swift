@@ -20,6 +20,9 @@ class SettingsViewController: UITableViewController {
     // links to storages
     private var settingsStorage: SettingsStorageProtocol = SettingsStorage()
     
+    // updater settings in PCalcViewController
+    var updaterHandler: (() -> Void)?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -41,6 +44,8 @@ class SettingsViewController: UITableViewController {
         super.viewDidDisappear(animated)
         // save switch state to UserDefaults
         saveSettings()
+        // update settings in PCalcVC
+        updaterHandler?()
     }
     
     // ===============
