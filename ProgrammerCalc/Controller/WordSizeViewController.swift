@@ -34,12 +34,7 @@ class WordSizeViewController: UIViewController {
         
         self.view = wordSizeView
         
-        // tap outside popup(container)
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tappedOutside))
-        tap.numberOfTapsRequired = 1
-        tap.cancelsTouchesInView = false
-        self.view.isUserInteractionEnabled = true
-        self.view.addGestureRecognizer(tap)
+        setupGestures()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,6 +48,15 @@ class WordSizeViewController: UIViewController {
     // ===============
     // MARK: - Methods
     // ===============
+    
+    fileprivate func setupGestures() {
+        // tap outside popup(container)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tappedOutside))
+        tap.numberOfTapsRequired = 1
+        tap.cancelsTouchesInView = false
+        self.view.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(tap)
+    }
     
     // Update table values with
     fileprivate func getWordSize() {

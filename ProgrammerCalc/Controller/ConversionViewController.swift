@@ -30,18 +30,7 @@ class ConversionViewController: UIViewController {
         
         self.view = conversionView
         
-        // tap outside popup(container)
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tappedOutside))
-        tap.numberOfTapsRequired = 1
-        tap.cancelsTouchesInView = false
-        self.view.isUserInteractionEnabled = true
-        self.view.addGestureRecognizer(tap)
-        
-        // swipe up
-        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-        swipeUp.direction = .up
-        swipeUp.cancelsTouchesInView = false
-        self.view.addGestureRecognizer(swipeUp)
+        setupGestures()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -61,6 +50,21 @@ class ConversionViewController: UIViewController {
     // ===============
     // MARK: - Methods
     // ===============
+    
+    fileprivate func setupGestures() {
+        // tap outside popup(container)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tappedOutside))
+        tap.numberOfTapsRequired = 1
+        tap.cancelsTouchesInView = false
+        self.view.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(tap)
+        
+        // swipe up
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeUp.direction = .up
+        swipeUp.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(swipeUp)
+    }
     
     // Update conversion values
     fileprivate func getConversionSettings() {
