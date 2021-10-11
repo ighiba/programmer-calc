@@ -662,7 +662,7 @@ class CalcMathTests: XCTestCase {
         let shifted = calcMathTest.shiftBits(value: binary, mainSystem: .bin, shiftOperation: .shiftRight, shiftCount: 1)!
         
         // 3. then
-        XCTAssertEqual(shifted.value, "01111010", "Failed shifting right") // -6
+        XCTAssertEqual(shifted.value, "11111010", "Failed shifting right") // -6
     }
     
     func testBitwiseShiftTwelveRightUnsigned() throws {

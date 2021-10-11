@@ -299,48 +299,33 @@ final class CalcMath {
             }
         }()
     
-        // chosing shifting method for signed or unsigned value
-//        if calcStateStorage.isProcessSigned() {
-//            // For signed
-//            let decStr = "\(binary!.convertBinaryToDec())"
-//            var newInt = 0
-//            if operation == .shiftLeft {
-//                newInt = Int(decStr)!<<abs(shiftCount)
-//            } else if operation == .shiftRight {
-//                newInt = Int(decStr)!>>abs(shiftCount)
-//            } else {
-//                // if wrong operation
-//                newInt = 0
-//            }
-//            if let bin = DecimalSystem(newInt).convertDecToBinary() {
-//                binary!.value = bin.value
-//            } else {
-//                return nil
-//            }
-//            //binary!.value = DecimalSystem(newInt).convertDecToBinary().value
-//        } else {
-            // For unsigned
-            // loop shiftCount for x>>y and x<<y
-            for i in 0..<abs(shiftCount) {
-                print(abs(i))
-                if operation == .shiftLeft {
-                    // <<
-                    // append from right
-                    binary!.value.append("0")
-                } else if operation == .shiftRight {
-                    // >>
-                    // remove from right
-                    if binary!.value.count > 0 {
-                        binary!.value.removeLast(1)
+        // loop shiftCount for x>>y and x<<y
+        for i in 0..<abs(shiftCount) {
+            print(abs(i))
+            if operation == .shiftLeft {
+                // <<
+                // append from right
+                binary!.value.append("0")
+            } else if operation == .shiftRight {
+                // >>
+                // remove from right
+                if binary!.value.count > 0 {
+                    // remove right bit
+                    binary!.value.removeLast(1)
+                    // add left bit
+                    if binary!.isSigned {
+                        binary!.value = "1" + binary!.value
                     } else {
-                        binary!.value = "0"
+                        binary!.value = "0" + binary!.value
                     }
                 } else {
-                    // if wrong operation
                     binary!.value = "0"
                 }
+            } else {
+                // if wrong operation
+                binary!.value = "0"
             }
-        //}
+        }
         
         // TODO: Remove?
         // delete first bit if more than QWORD
