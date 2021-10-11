@@ -195,7 +195,7 @@ class ConversionViewController: UIViewController {
         if sliderOldValue == sliderNewValue {
             // do nothing
         } else {
-            // taptic feedback generator
+            // haptic feedback generator
             let settings = settingsStorage.loadData()
             if (settings?.hapticFeedback ?? false) {
                 let generator = UIImpactFeedbackGenerator(style: .medium)

@@ -62,7 +62,16 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
         let menu = UIMenuController.shared
 
         if !menu.isMenuVisible {
-            
+            let settingsStorage = SettingsStorage()
+            // haptic feedback generator
+            let settings = settingsStorage.loadData()
+            if (settings?.hapticFeedback ?? false) {
+                let generator = UIImpactFeedbackGenerator(style: .medium)
+                generator.prepare()
+                // impact
+                generator.impactOccurred()
+            }
+            // higlight label and show menu
             highlightLabel()
             menu.showMenu(from: self, rect: bounds)
             
