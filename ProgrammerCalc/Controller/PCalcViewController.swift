@@ -55,8 +55,8 @@ class PCalcViewController: UIPageViewController {
     // array of button pages
     lazy var arrayCalcButtonsViewController: [CalcButtonsViewController] = {
        var buttonsVC = [CalcButtonsViewController]()
-        arrayButtonsStack.forEach { (buttonStack) in
-            buttonsVC.append(CalcButtonsViewController(buttonsStack: buttonStack))
+        arrayButtonsStack.forEach { (buttonsPage) in
+            buttonsVC.append(CalcButtonsViewController(buttonsPage: buttonsPage))
         }
         return buttonsVC
     }()
@@ -180,9 +180,12 @@ class PCalcViewController: UIPageViewController {
     private func updateConversionState() {
         // get data from UserDefaults
         let data = returnConversionSettings()
-        
+        // properties update
         systemMain = ConversionSystemsEnum(rawValue: data.systemMain)
         systemConverter = ConversionSystemsEnum(rawValue: data.systemConverter)
+        // labels info update
+        mainLabel.setInfoLabelValue(systemMain!)
+        converterLabel.setInfoLabelValue(systemConverter!)
     }
     
     private func updateSettings() {

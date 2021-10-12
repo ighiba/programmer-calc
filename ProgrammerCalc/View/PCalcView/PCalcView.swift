@@ -10,6 +10,22 @@ import UIKit
 
 class PCalcView: UIView {
     
+    // MARK: - Properties
+    
+    private let margin: CGFloat = 10
+    private let navBarHeight: CGFloat = 44
+    
+    // safe area insets in CGFloat .top .bottom
+    let windowSafeAreaInsets: UIEdgeInsets = {
+        if let window = UIApplication.shared.windows.first {
+            return window.safeAreaInsets
+        } else {
+            return UIEdgeInsets()
+        }
+    }()
+    
+    // MARK: - Initialization
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -18,7 +34,7 @@ class PCalcView: UIView {
     
     func setViews() {
         self.backgroundColor = .clear
-        self.frame = CGRect( x: 0, y: 0, width: UIScreen.main.bounds.width, height: labelHeight() * 2 + 44)
+        self.frame = CGRect( x: 0, y: 0, width: UIScreen.main.bounds.width, height: viewHeight())
         // add navigation bar
         self.addSubview(navigationBar)
         // add labels
@@ -27,10 +43,12 @@ class PCalcView: UIView {
         setupLayout()
     }
     
+    // MARK: - Views
+    
     // Set change word size button
     lazy var changeWordSizeButton: UIButton = {
         let button = UIButton(type: .system)
-        button.frame = CGRect(x: 0, y: 0, width: 88, height: 44)
+        button.frame = CGRect(x: 0, y: 0, width: navBarHeight*2, height: navBarHeight)
         // title adjustments
         button.setTitle("QWORD", for: .normal)
         button.setTitleColor(.systemBlue, for: .normal)
@@ -85,11 +103,14 @@ class PCalcView: UIView {
         label.text = "0"
         label.backgroundColor = .clear
         // set font size, font family, allignment
-        label.font = UIFont(name: "HelveticaNeue-Thin", size: 72.0)
+        label.font = UIFont(name: "HelveticaNeue-Thin", size: 62.0)
         label.textAlignment = .right
         // resizeble text
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.25
+        
+        // add info label
+        label.addInfoLabel()
         
         return label
     }()
@@ -108,6 +129,9 @@ class PCalcView: UIView {
         // resizeble text
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.25
+        
+        // add info label
+        label.addInfoLabel()
    
         return label
     }()
@@ -115,13 +139,19 @@ class PCalcView: UIView {
     lazy var labelsStack: UIStackView = {
         let labels = UIStackView(arrangedSubviews: [self.mainLabel, self.converterLabel])
         // Display settings for labels UIStackView
-        labels.alignment = .fill
+        //labels.alignment = .fill
         labels.axis = .vertical
+        labels.distribution = .fillEqually
+        
+        labels.spacing = self.mainLabel.infoSubLabel.frame.height
         
         return labels
     }()
 
+    // MARK: - Layout
+    
     private func setupLayout() {
+        //self.translatesAutoresizingMaskIntoConstraints = false
         navigationBar.translatesAutoresizingMaskIntoConstraints = false
         labelsStack.translatesAutoresizingMaskIntoConstraints = false
         mainLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -129,27 +159,35 @@ class PCalcView: UIView {
         
         // Activate constraints
         NSLayoutConstraint.activate([
+            // View
+            //self.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
+            //self.heightAnchor.constraint(equalToConstant: viewHeight()+windowSafeAreaInsets.top-10),
+           // self.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
+            
             // Constraints for navigation bar
             navigationBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
             navigationBar.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
-            navigationBar.heightAnchor.constraint(equalToConstant: 44),
+            navigationBar.heightAnchor.constraint(equalToConstant: navBarHeight),
             navigationBar.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             
             // Constraints for labelStack
             labelsStack.topAnchor.constraint(equalTo: navigationBar.bottomAnchor),
             labelsStack.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.95),
-            labelsStack.heightAnchor.constraint(equalToConstant: labelHeight() * 2 - 44),
+            //labelsStack.heightAnchor.constraint(equalToConstant: self.frame.height - 44),
+            labelsStack.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: viewHeight() - margin*2),
             labelsStack.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             
             // Constraints for main label
             // width and height anchors
-            mainLabel.widthAnchor.constraint(equalTo: labelsStack.widthAnchor),
-            mainLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: labelHeight() - 33),
+            //mainLabel.widthAnchor.constraint(equalTo: labelsStack.widthAnchor),
+            //mainLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: labelHeight() ),
+            //mainLabel.heightAnchor.constraint(equalToConstant: labelHeight() ),
             
             // Constraints for converter label
             // width and height anchors
-            converterLabel.widthAnchor.constraint(equalTo: labelsStack.widthAnchor),
-            converterLabel.heightAnchor.constraint(equalToConstant: labelHeight() - 11),
+            //converterLabel.widthAnchor.constraint(equalTo: labelsStack.widthAnchor),
+            //converterLabel.heightAnchor.constraint(equalToConstant: labelHeight()),
+            
         ])
         
         // Additional setups
@@ -158,11 +196,16 @@ class PCalcView: UIView {
         navigationBar.items?.first?.titleView?.addSubview(changeWordSizeButton)
         changeWordSizeButton.center =  (navigationBar.items?.first?.titleView!.center)!
     }
+    // MARK: - Calculated heights
     
     // Dynamic label height for autolayout
-    // the labels must fill 1/3 part of screen
+    // the labels must fill 1/4 part of screen
     func labelHeight() -> CGFloat {
-        return (UIScreen.main.bounds.height / 3) / 2
+        return (viewHeight() - labelsStack.spacing * 2 - navBarHeight - windowSafeAreaInsets.top - margin ) / 2
+    }
+    
+    func viewHeight() -> CGFloat {
+        return UIScreen.main.bounds.height / 3
     }
     
     required init?(coder: NSCoder) {

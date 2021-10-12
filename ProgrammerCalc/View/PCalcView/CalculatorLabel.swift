@@ -33,13 +33,29 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
         return true
     }
     
+    lazy var infoSubLabel: UILabel = {
+        let label = UILabel()
+        
+        label.frame = CGRect()
+        label.text = "Decimal"
+        label.backgroundColor = .clear
+        label.textColor = .systemGray
+        
+        label.font = UIFont(name: "HelveticaNeue-Thin", size: 12.0)
+        label.textAlignment = .center
+        
+        label.sizeToFit()
+        
+        return label
+    }()
+    
     // ======================
     // MARK: - Initialization
     // ======================
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.sharedInit()
+        self.sharedInit() 
     }
     
     func sharedInit() {
@@ -53,6 +69,20 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
     
     func setRawValue(value: NumberSystemProtocol) {
         self.rawValue = value
+    }
+    
+    func addInfoLabel() {
+        self.addSubview(infoSubLabel)
+        infoSubLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            infoSubLabel.topAnchor.constraint(equalTo: self.bottomAnchor),
+            infoSubLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5)
+        ])
+    }
+    
+    // Set new value in info label
+    func setInfoLabelValue(_ newValue: ConversionSystemsEnum) {
+        self.infoSubLabel.text = newValue.rawValue
     }
     
     // Action when long press on label

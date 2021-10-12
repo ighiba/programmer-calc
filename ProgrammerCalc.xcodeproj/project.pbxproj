@@ -166,8 +166,6 @@
 		C05A169924DD7AF7007B7FB8 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				C068AFAB24FA605800BFE754 /* CalculatorButton.swift */,
-				C061B7C1250FF9FF000E2EB6 /* CalculatorLabel.swift */,
 				C05B008A24E6B0F100F8A5E0 /* NumberSystems */,
 				C065DB3824E3C89B0059B38D /* Math */,
 			);
@@ -200,6 +198,8 @@
 			isa = PBXGroup;
 			children = (
 				C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */,
+				C061B7C1250FF9FF000E2EB6 /* CalculatorLabel.swift */,
+				C068AFAB24FA605800BFE754 /* CalculatorButton.swift */,
 				C0666EB924F9782F004809EF /* CalcButtonsMain.swift */,
 				C0666EBB24F97855004809EF /* CalcButtonsAdditional.swift */,
 			);
