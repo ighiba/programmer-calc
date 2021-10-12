@@ -36,17 +36,18 @@ class CalculatorButton: UIButton {
         didSet {
             if isHighlighted {
                 // create button animation when button pressed
-                UIView.transition(
-                    with: self,
-                    duration: 0.1,
-                    options: [.curveEaseIn, .beginFromCurrentState, .allowUserInteraction],
-                    animations: { self.backgroundColor = .lightGray },
-                    completion: nil)
+                self.backgroundColor = .lightGray
+//                UIView.transition(
+//                    with: self,
+//                    duration: 0.1,
+//                    options: [.curveEaseIn, .beginFromCurrentState, .allowUserInteraction],
+//                    animations: { self.backgroundColor = .lightGray },
+//                    completion: nil)
             } else {
                 // create button animation when button unpressed
                 UIView.transition(
                     with: self,
-                    duration: 0.3,
+                    duration: 0.7,
                     options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction],
                     animations: { self.backgroundColor = .white },
                     completion: nil)
@@ -110,6 +111,15 @@ class CalculatorButton: UIButton {
         
     }
     
+    private func animateHighlight() {
+        UIView.transition(
+            with: self,
+            duration: 0.1,
+            options: [.curveEaseIn, .beginFromCurrentState, .allowUserInteraction],
+            animations: { self.backgroundColor = .lightGray },
+            completion: nil)
+    }
+    
     func setActions(for buttonType: ButtonTypes){
         
         self.addTarget(nil, action: #selector(PCalcViewController.toucUpOutsideAction), for: [.touchDragExit, .touchDragOutside])
@@ -165,10 +175,11 @@ class CalculatorButton: UIButton {
             let previousTouchOutside: Bool = !outerBounds.contains(previousLocation)
             if previousTouchOutside {
                 sendActions(for: .touchDragEnter)
-                self.isHighlighted = true
+                animateHighlight()
+                //self.isHighlighted = true
             } else {
                 sendActions(for: .touchDragInside)
-                self.isHighlighted = true
+                //self.isHighlighted = true
             }
         }
 
