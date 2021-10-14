@@ -53,6 +53,12 @@ class DecimalSystem: NumberSystemProtocol {
         updateIsSignedState()
     }
     
+    init(_ valueDec: DecimalSystem) {
+        self.decimalValue = valueDec.decimalValue
+        self.value = valueDec.value
+        self.isSigned = valueDec.isSigned
+    }
+    
     
     // ===============
     // MARK: - Methods
@@ -160,5 +166,23 @@ class DecimalSystem: NumberSystemProtocol {
         self.decimalValue = decimalValue
         self.value = "\(decimalValue)"
         updateIsSignedState()
+    }
+    
+    func removeFractPart() -> Decimal {
+        let dec = DecimalSystem(self)
+        var decIntPart = dec.decimalValue
+        var decIntPartCopy = decIntPart
+        // round decimal
+        if dec.decimalValue > 0 {
+            NSDecimalRound(&decIntPart, &decIntPartCopy, 0, .down)
+        } else {
+            NSDecimalRound(&decIntPart, &decIntPartCopy, 0, .up)
+        }
+        
+        // update self value
+        setNewDecimal(with: decIntPart)
+        
+        // return fract part of decimal
+        return decIntPartCopy - decIntPart
     }
 }

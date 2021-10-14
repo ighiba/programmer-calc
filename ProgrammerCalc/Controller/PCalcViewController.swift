@@ -20,7 +20,7 @@ class PCalcViewController: UIPageViewController {
     private let conversionStorage: ConversionStorageProtocol = ConversionStorage()
     private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
     
-    // views
+    // Views
     private let calcView: PCalcView = PCalcView()
     lazy var mainLabel: CalcualtorLabel = calcView.mainLabel
     lazy var converterLabel: CalcualtorLabel = calcView.converterLabel
@@ -43,7 +43,7 @@ class PCalcViewController: UIPageViewController {
     // MARK: - Initialization
     // ======================
     
-    // array of button pages
+    // Array of button pages
     lazy var arrayCalcButtonsViewController: [CalcButtonsViewController] = {
        var buttonsVC = [CalcButtonsViewController]()
         arrayButtonsStack.forEach { (buttonsPage) in
