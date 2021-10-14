@@ -8,7 +8,15 @@
 
 import Foundation
 
-class Hexadecimal: NumberSystem {
+class Hexadecimal: OctHexHelper, NumberSystemProtocol {
+    
+    // ==================
+    // MARK: - Properties
+    // ==================
+    
+    var value: String = ""
+    var isSigned: Bool = false // default
+    
 
     // hex table for converting from binary to hex
     // from 0 to 16
@@ -30,17 +38,16 @@ class Hexadecimal: NumberSystem {
                     "1111":"F",]
     
     required public init(stringLiteral value: String) {
-        super.init(stringLiteral: value)
+        self.value = value
     }
     
     /// Creates an empty instance
     override init() {
-        super.init()
+        self.value = ""
     }
     
     /// Creates an instance initialized to the Binary value
-    override init(_ valueBin: Binary) {
-        super.init()
+    init(_ valueBin: Binary) {
         let hexadecimal = valueBin.convertBinaryToHex(hexTable: table)
         self.value = hexadecimal.value
     }
@@ -52,15 +59,17 @@ class Hexadecimal: NumberSystem {
     // HEX -> BIN
     // Convert form hex to binary with table helper
     func convertHexToBinary() -> Binary {
-        let hexadecimal = self.value
+        let hexadecimalValue = self.value
         let binary = Binary()
 
         // from hex to binary
         // process each number and form parts
-        binary.value = tableOctHexToBin(valueOctHex: hexadecimal, table: table)
+        binary.value = tableOctHexToBin(valueOctHex: hexadecimalValue, table: table)
         
         return binary
     }
 
     
 }
+
+

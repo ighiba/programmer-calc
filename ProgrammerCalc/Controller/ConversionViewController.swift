@@ -9,27 +9,26 @@
 import UIKit
 
 class ConversionViewController: UIViewController {
+    
+    // MARK: - Properties
+    
     lazy var conversionView = ConversionView()
     lazy var picker: ConversionPicker = conversionView.mainPicker
     lazy var slider: UISlider = conversionView.digitsAfterSlider
     lazy var labelValue: UILabel = conversionView.sliderValueDigit
     var sliderOldValue: Float = 2.0
     
+    
+    // links to storages
+    private var settingsStorage: SettingsStorageProtocol = SettingsStorage()
+    private var conversionStorage: ConversionStorageProtocol = ConversionStorage()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.view = conversionView
         
-        // tap outside popup(container)
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tappedOutside))
-        tap.numberOfTapsRequired = 1
-        self.view.isUserInteractionEnabled = true
-        self.view.addGestureRecognizer(tap)
-        
-        // swipe up
-        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-        swipeUp.direction = .up
-        self.view.addGestureRecognizer(swipeUp)
+        setupGestures()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,17 +45,31 @@ class ConversionViewController: UIViewController {
         saveConversionSettings()
     }
     
-    // ===============
     // MARK: - Methods
-    // ===============
+    
+    fileprivate func setupGestures() {
+        // tap outside popup(container)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tappedOutside))
+        tap.numberOfTapsRequired = 1
+        tap.cancelsTouchesInView = false
+        self.view.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(tap)
+        
+        // swipe up
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeUp.direction = .up
+        swipeUp.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(swipeUp)
+    }
     
     // Update conversion values
     fileprivate func getConversionSettings() {
         // get data from UserDefaults
-        if let data = SavedData.conversionSettings {
+        if let conversionSettings = conversionStorage.loadData() {
             // TODO: Error handling
-            let mainRow: Int = picker.systemsModel.conversionSystems.firstIndex(of: data.systemMain)!
-            let converterRow: Int = picker.systemsModel.conversionSystems.firstIndex(of: data.systemConverter)!
+            
+            let mainRow: Int = ConversionSystemsEnum.allCases.firstIndex(of: ConversionSystemsEnum(rawValue: conversionSettings.systemMain)!)!
+            let converterRow: Int = ConversionSystemsEnum.allCases.firstIndex(of: ConversionSystemsEnum(rawValue: conversionSettings.systemConverter)!)!
             // Picker component
             // 0 - main
             // 1 - converter
@@ -64,16 +77,17 @@ class ConversionViewController: UIViewController {
             picker.selectRow(converterRow, inComponent: 1, animated: false)
             
             // Slider label
-            labelValue.text = "\(Int(data.numbersAfterPoint))"
+            labelValue.text = "\(Int(conversionSettings.numbersAfterPoint))"
             
             // Slider
-            slider.value = data.numbersAfterPoint / 4
+            slider.value = conversionSettings.numbersAfterPoint / 4
             sliderOldValue = slider.value
         }  else {
             print("no settings")
             // Save default settings 
-            let systems = ConversionModel.ConversionSystemsEnum.self
-            SavedData.conversionSettings = ConversionSettingsModel(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 8.0)
+            let systems = ConversionSystemsEnum.self
+            let newConversionSettings = ConversionSettings(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 8.0)
+            conversionStorage.saveData(newConversionSettings)
         }
     }
     
@@ -89,22 +103,25 @@ class ConversionViewController: UIViewController {
         // Slider
         let sliderValue = slider.value.rounded()
         
+        // TODO: Refactor to delegate or closure
         // root vc fo handling changing of mainSystem
         let rootVC = UIApplication.shared.windows.first?.rootViewController as? PCalcViewController
         guard rootVC != nil else {
             // set data to UserDefaults
-            SavedData.conversionSettings = ConversionSettingsModel(systMain: systemMainNew!, systConverter: systemConverterNew!, number: sliderValue * 4)
+            let newConversionSettings = ConversionSettings(systMain: systemMainNew!, systConverter: systemConverterNew!, number: sliderValue * 4)
+            conversionStorage.saveData(newConversionSettings)
             return
         }
         
         // set last mainLabel system buffer
-        let buffSavedMainLabel = SavedData.conversionSettings?.systemMain
+        let conversionSettings = conversionStorage.loadData()
+        let buffSavedMainLabel = conversionSettings?.systemMain
         // set data to UserDefaults
-        let newConversionSettings = ConversionSettingsModel(systMain: systemMainNew!, systConverter: systemConverterNew!, number: sliderValue * 4)
-        SavedData.conversionSettings = newConversionSettings
+        let newConversionSettings = ConversionSettings(systMain: systemMainNew!, systConverter: systemConverterNew!, number: sliderValue * 4)
+        conversionStorage.saveData(newConversionSettings)
         // set data to rootVC state vars
-        rootVC?.systemMain = systemMainNew
-        rootVC?.systemConverter = systemConverterNew
+        rootVC?.calculator.systemMain = ConversionSystemsEnum(rawValue: systemMainNew!)
+        rootVC?.calculator.systemConverter = ConversionSystemsEnum(rawValue: systemConverterNew!)
         // Handle changing of systems
         // TODO: Error handling
         if buffSavedMainLabel != systemMainNew! {
@@ -137,9 +154,7 @@ class ConversionViewController: UIViewController {
         return !containerBounds.contains(currentLocation)
     }
     
-    // ===============
     // MARK: - Actions
-    // ===============
     
     // Done button / Exit button
     @objc func doneButtonTapped( sender: UIButton) {
@@ -149,7 +164,6 @@ class ConversionViewController: UIViewController {
     // Swipe up to exit
     @objc func handleSwipe( sender: UISwipeGestureRecognizer) {
         let notInContainer: Bool = isGestureNotInContainer(gesture: sender)
-        
         if notInContainer {
             // does not contains
             // dismiss vc
@@ -159,7 +173,6 @@ class ConversionViewController: UIViewController {
     
     @objc func tappedOutside( sender: UITapGestureRecognizer) {
         let notInContainer: Bool = isGestureNotInContainer(gesture: sender)
-        
         if notInContainer {
             // does not contains
             // dismiss vc
@@ -174,8 +187,9 @@ class ConversionViewController: UIViewController {
         if sliderOldValue == sliderNewValue {
             // do nothing
         } else {
-            // taptic feedback generator
-            if (SavedData.appSettings?.hapticFeedback ?? false) {
+            // haptic feedback generator
+            let settings = settingsStorage.loadData()
+            if (settings?.hapticFeedback ?? false) {
                 let generator = UIImpactFeedbackGenerator(style: .medium)
                 generator.prepare()
                 // impact

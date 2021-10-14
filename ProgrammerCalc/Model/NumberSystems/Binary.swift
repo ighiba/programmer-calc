@@ -8,38 +8,59 @@
 
 import Foundation
 
-class Binary: NumberSystem {
+class Binary: NumberSystemProtocol {
+    
+    // for divided numbers
+    typealias IntPart = String
+    typealias FractPart = String
+    
+    // ==================
+    // MARK: - Properties
+    // ==================
+    
+    var value: String = "0"
+    var isSigned: Bool = false // default
+
+    // Storages
+    //private let calcStateStorage = CalcStateStorage()
+    //private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
+    //private let conversionStorage: ConversionStorageProtocol = ConversionStorage()
     
     required public init(stringLiteral value: String) {
-        super.init(stringLiteral: value)
-        
         // process string input and apply style for output
         self.value = processStringInput(str: value)
     }
     
     /// Creates an empty instance
-    override init() {
-        super.init()
+    init() {
+        self.value = "0"
     }
     
     /// Creates an instance initialized to the Int value
     init(_ valueInt: Int) {
-        // TODO: Handle signed 
-        super.init()
+        // TODO: Handle signed
         self.value = String(valueInt, radix: 2)
         self.value = fillUpParts(str: self.value, by: 4)
     }
     
+    /// Creates an instance initialized to the Binary  value / copying another instance
+    init(_ valueBin: Binary) {
+        self.value = valueBin.value
+        self.isSigned = valueBin.isSigned
+    }
+    
     /// Creates an instance initialized to the Decimal value
-    convenience init(_ valueDec: Decimal) {
+    convenience init?(_ valueDec: DecimalSystem) {
         self.init()
-        let binary = valueDec.convertDecToBinary()
-        super.value = binary.value
+        if let binary = valueDec.convertDecToBinary() {
+            self.value = binary.value
+        } else {
+            return nil
+        }
     }
     
     /// Creates an instance initialized to the Hexadecimal value
     init(_ valueHex: Hexadecimal) {
-        super.init()
         let binary = valueHex.convertHexToBinary()
         self.value = binary.value
         
@@ -47,7 +68,6 @@ class Binary: NumberSystem {
     
     /// Creates an instance initialized to the Octal value
     init(_ valueOct: Octal) {
-        super.init()
         let binary = valueOct.convertOctToBinary()
         self.value = binary.value
         
@@ -57,6 +77,7 @@ class Binary: NumberSystem {
     // ===============
     // MARK: - Methods
     // ===============
+    
     
     // only for int or fract part of binary
     func removeZerosBefore( str: String) -> String {
@@ -88,9 +109,32 @@ class Binary: NumberSystem {
         return resultStr
     }
     
+    // Dividing string variable and converting it to double without loss of precision
+    func divideIntFract( value: Any) -> (IntPart?, FractPart?) {
+        let str = String(describing: value)
+        var strInt: String
+        var strFract: String
+        
+        // search index of floating pos
+        if let pointPos = str.firstIndex(of: ".") {
+            // fill strInt
+            strInt = String(str[str.startIndex..<pointPos])
+            // fill strFract
+            strFract = String(str[pointPos..<str.endIndex])
+            // delete .
+            strFract.removeFirst()
+           
+            return (strInt, strFract)
+            
+        } else {
+            // if is int
+            return (str, nil)
+        }
+    }
+    
     // BIN -> DEC
     func convertBinaryToDec() -> Decimal {
-        let binary = self
+        let binary = Binary(self)
         var signedMultipler: Decimal = 1 // default is positive value
         var result: Decimal = 0.0
         
@@ -100,17 +144,17 @@ class Binary: NumberSystem {
         }
         
         // to two's complement if value is signed and negative
-        ifProcessSigned {
+        //if calcStateStorage.isProcessSigned() {
             // calcualte signed state
-            binary.updateSignedState() // changes binary.isSigned state to true of false
+            //binary.updateSignedState() // changes binary.isSigned state to true of false
             // set multipler to -1 or 1 for inverting value
-            if binary.isSigned {
+            if self.isSigned {
                 binary.twosComplement()
             }
-        }
+        //}
         
         // remove all spaces
-        let str = removeAllSpaces(str: binary.value)
+        let str = binary.value.removeAllSpaces()
      
         // Dividing to int and fract parts
         let buffDividedStr = divideIntFract(value: str)
@@ -121,30 +165,33 @@ class Binary: NumberSystem {
         }
         
         // First: converting int part
-        ifProcessSigned {
+        //if calcStateStorage.isProcessSigned() {
             // calcualte signed state
-            binary.updateSignedState() // changes binary.isSigned state to true of false
+            //binary.updateSignedState() // changes binary.isSigned state to true of false
             // remove signed bit
+        if self.isSigned {
             binIntStrBuff?.removeFirst()
+        }
             // set multipler to -1 or 1 for inverting value
-            if binary.isSigned {
+            if self.isSigned {
                 signedMultipler = -1
+                // check if min signed
+                if binIntStrBuff!.replacingOccurrences(of: "0", with: "").count == 0 {
+                    binIntStrBuff = "1" + binIntStrBuff!
+                }
             } else {
                 signedMultipler = 1
             }
-        }
+        //}
         
-        if let number = Int(binIntStrBuff!, radix: 2) {
-            result += Decimal(integerLiteral: number)
-        } else {
-            result = 0.0
-        }
+        // convert int part of binary to decimal
+        result = Decimal(binIntStrBuff!, radix: 2)
         
         // Second: converting fract part
         if let binFractStrBuff = buffDividedStr.1 {
             // if fract == 0 then dont calc it
             guard Int(binFractStrBuff) != 0 else {
-                return result
+                return result * signedMultipler
             }
             
             var counter = 1
@@ -155,10 +202,8 @@ class Binary: NumberSystem {
                 let buffInt = Int("\(num)")!
                 let buffIntDecimal = Decimal(integerLiteral: buffInt)
                 // 1 * 2^-n
-                let buffValue: Decimal = buffIntDecimal *  ( 1.0 / pow(2 as Decimal, counter))
-                
+                let buffValue: Decimal = buffIntDecimal *  ( 1.0 / pow(Decimal(2), counter))
                 buffDecimal += buffValue
-                
                 counter += 1
             }
             // return decimal if second value after dividing is nil
@@ -177,7 +222,7 @@ class Binary: NumberSystem {
    
         let partition: Int = 4
         
-        // TODO: Remove spaces
+        binary.value = binary.value.removeAllSpaces()
         
         var dividedBinary = divideIntFract(value: binary.value)
         
@@ -186,7 +231,7 @@ class Binary: NumberSystem {
         
         // from binary to oct
         // process each number and form parts
-        hexadecimal.value = tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: hexTable)
+        hexadecimal.value = hexadecimal.tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: hexTable)
         
         guard dividedBinary.1 != nil else { return hexadecimal }
         
@@ -196,7 +241,7 @@ class Binary: NumberSystem {
         dividedBinary.1 = String(dividedBinary.1!.reversed())
         // process fract part
         hexadecimal.value += "."
-        hexadecimal.value +=  tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: hexTable)
+        hexadecimal.value +=  hexadecimal.tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: hexTable)
         
         return hexadecimal
     }
@@ -216,7 +261,7 @@ class Binary: NumberSystem {
         
         // from binary to oct
         // process each number and form parts
-        octal.value = tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: octTable)
+        octal.value = octal.tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: octTable)
         
         guard dividedBinary.1 != nil else { return octal }
         
@@ -226,18 +271,19 @@ class Binary: NumberSystem {
         dividedBinary.1 = String(dividedBinary.1!.reversed())
         // process fract part
         octal.value += "."
-        octal.value +=  tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: octTable)
+        octal.value +=  octal.tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: octTable)
          
         return octal
     }
     
-    // Converting IntPart of Floating point binary
+    // Converting Int value to binary
     func convertIntToBinary(_ valueInt: Int) -> IntPart {
-        //var binaryStr = String(valueInt, radix: 2)
-        
-        //binaryStr = fillingStyleResult(for: binaryStr)
-
         return "0" + String(valueInt, radix: 2)
+    }
+    
+    // Converting IntPart of Floating point binary
+    func convertDecToBinary(_ valueDec: Decimal) -> String {
+        return "0" + String(valueDec, radix: 2)
     }
     
     // Converting FractPart of Floating point binary
@@ -283,11 +329,11 @@ class Binary: NumberSystem {
             return "Error"
         }
         
-        let intNumber = Int(numberStr.0!)!
-        let precision = Int(SavedData.conversionSettings?.numbersAfterPoint ?? 8)
-        let intPart = convertIntToBinary(intNumber)
+        // TODO: Error handling
+        let decNumber = Decimal(string: numberStr.0!)!
+        let precision = 20
+        let intPart = convertDecToBinary(decNumber)
         let fractPart = convertFractToBinary(numberStr: numberStr.1!, precision: precision)
-        
         
         return "\(intPart).\(fractPart)"
     }
@@ -295,7 +341,7 @@ class Binary: NumberSystem {
     // Filling up BINARY number with zeros by num of zeros in 1 part
     func fillUpParts( str: String, by fillNum: Int) -> String {
         // remove all spaces
-        var buffStr = removeAllSpaces(str: str)
+        var buffStr = str.removeAllSpaces()
         
         if Int(buffStr) != 0 {
             // remove all zeros at beginning of string
@@ -347,7 +393,7 @@ class Binary: NumberSystem {
         if binary.value.count >= 1 && binary.value != "0" {
             var counter: Int = 0
             
-            binary.value = removeAllSpaces(str: binary.value)
+            binary.value = binary.value.removeAllSpaces()
 
             for char in binary.value {
                 // check if already point
@@ -403,7 +449,7 @@ class Binary: NumberSystem {
     }
     
     // Filling up zeros to needed count
-    private func fillUpZeros( str: String, to num: Int) -> String {
+    func fillUpZeros( str: String, to num: Int) -> String {
         let diffInt = num - str.count
         
         guard diffInt > 0 else {return str}
@@ -425,72 +471,111 @@ class Binary: NumberSystem {
     func fillToFormat( upToZeros signed:Bool) {
         let binary = self
         
-        let neededCount: Int = {
-            var maxBits: Int = 8 // default
-            for power in 3...6 {
-                // 2^3, 2^4 ....calculating bits
-                let bits = Int(pow(2, Float(power)))
-                // set maximum lenght for binary str
-                if binary.value.count <= bits {
-                    maxBits = bits
-                    return maxBits
-                }
-            }
-            return maxBits
-        }()
+        let wordSizeValue = 64
+        //let wordSizeValue = wordSizeStorage.getWordSizeValue()
+        
         if signed {
             // -12 => 1100 -> 11111100
             // 10011000 -> 1111111110011000
             // fill up with zeros to needed bit position
-            binary.value = fillUpZeros(str: binary.value, to: neededCount)
+            binary.value = fillUpZeros(str: binary.value, to: wordSizeValue)
         } else {
             // 1100 -> 00001100
             // 10011000 -> 0000000010011000
             // fill up with one to needed bit position
-            binary.value = fillUpOne(str: binary.value, to: neededCount)
+            binary.value = fillUpOne(str: binary.value, to: wordSizeValue)
         }
         
     }
     
     // Set fillig style for binary string
     private func fillingStyleResult(for str: String) -> String {
+        // storage
+        //let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
+        // calc state
+        //let calcState = calcStateStorage.loadData()
+        
         let binary = self
+        var isInputSigned = false
         
         binary.value = str
         // remove spaces
-        binary.value = removeAllSpaces(str: binary.value)
+        binary.value = binary.value.removeAllSpaces()
         
         // get saved data
-        if let data = SavedData.calcState?.processSigned {
-            // if .processSigned == true
-            if data {
+//        if let data = calcState?.processSigned {
+//            // if .processSigned == true
+//            if data {
+                
+                //let wordSizeValue = wordSizeStorage.getWordSizeValue()
+                
+                
+        
+//                // calcualte signed state
+//                if binary.value.count == wordSizeValue {
+//                    binary.updateSignedState() // changes binary.isSigned state to true of false
+//                } else if binary.value.count > wordSizeValue {
+//                    // delete first values up to wordSizeValue
+//                    while binary.value.count != wordSizeValue {
+//                        binary.value.removeFirst(1)
+//                    }
+//                    binary.updateSignedState()
+//                } else {
+//                    // if not full wordSize then first signed bit is off
+//                    binary.isSigned = false
+//
+//                }
+                // update signed state if filled by 8,16,32,64 bits
+                if [8,16,32,64].contains(binary.value.count)  {
+                    binary.updateSignedState()
+                    isInputSigned = binary.isSigned
+                }
+
+                
                 // fill if needed to
-                binary.fillToFormat(upToZeros: true)
-                
-                // calcualte signed state
-                binary.updateSignedState() // changes binary.isSigned state to true of false
-                
-                // remove signed bit
-                binary.value.removeFirst()
+                if !isInputSigned {
+                    // remove signed bit
+                    // TODO: Remove maybe
+                    if binary.value.first != "1" {
+                        binary.value.removeFirst()
+                    }
+                    binary.fillToFormat(upToZeros: true)
+                } else {
+                    // invert binary if signed
+                    binary.twosComplement()
+                    binary.value.removeFirst()
+                }
                 
                 // remove zeros before
                 binary.value = binary.removeZerosBefore(str: binary.value)
                 
-                // fills up binary to 7, 15, 31, 63 + signed bit by self.isSigned
-                // isSigned == true -> 1 else -> 0
-                binary.fillUpSignedToNeededCount()
+                // fills up binary to 7, 15, 31, 63
+                binary.fillUpToMaxBitsCount()
                 
+                // isSigned == true -> 1 else -> 0
+                // add signed bit by signed state
+                if isInputSigned {
+                    binary.value = "1" + binary.value
+                } else {
+                    binary.value = "0" + binary.value
+                }
+                
+                if isInputSigned {
+                    binary.twosComplement()
+                    binary.changeSignedBit(to: "1")
+                }
+
                 return binary.value
-            }
-        }
+//            }
+//        }
         // just make binary code pretty
-        binary.value = fillUpParts(str: binary.value, by: 4)
+        //binary.value = fillUpParts(str: binary.value, by: 4)
         
-        return binary.value
+        //return binary.value
     }
     
     // Processing strings that initialized from stringLiteral
-    fileprivate func processStringInput( str: String) -> String {
+    func processStringInput( str: String) -> String {
         let binaryDivided = self.divideIntFract(value: str)
         var resultStr = String()
         
@@ -503,8 +588,22 @@ class Binary: NumberSystem {
         
         // process fract part
         if let fractPart = binaryDivided.1 {
-            let buffStr = removeAllSpaces(str: fractPart)
-            
+            let buffStr = fractPart.removeAllSpaces()
+//            guard fractPart != "" else {
+//                return resultStr + "."
+//            }
+//            var buffStr = fractPart.removeAllSpaces()
+//            if let conversionSettings = conversionStorage.loadData() {
+//                if buffStr.count < Int(conversionSettings.numbersAfterPoint) {
+//                    buffStr = String(fillUpZeros(str: String(buffStr.reversed()), to: Int(conversionSettings.numbersAfterPoint)).reversed())
+//                } else {
+//                    // remove last bit until it fits in numberAfterPoint
+//                    while buffStr.count > Int(conversionSettings.numbersAfterPoint) {
+//                        buffStr.removeLast(1)
+//                    }
+//                }
+//
+//            }
             resultStr = resultStr + "." + buffStr
         }
         
@@ -535,51 +634,66 @@ class Binary: NumberSystem {
         
     }
     
-    // Filling up signed binary to power 2^3, 2^4 .. etc
-    func fillUpSignedToNeededCount() {
+    // Filling up binary to 63
+    func fillUpToMaxBitsCount() {
         let binary = self
         
-        // count how much zeros need to fill
-        let neededCount: Int = {
-            var maxBits: Int = 8 // default
-            for power in 3...6 {
-                // 2^3, 2^4 ....calculating bits
-                let bits = Int(pow(2, Float(power)))
-                // set maximum lenght for binary str
-                if binary.value.count < bits {
-                    maxBits = bits
-                    return maxBits
-                }
-            }
-            return maxBits
-        }()
-        // fill up with zeros to needed bit position
-        binary.value = fillUpZeros(str: binary.value, to: neededCount-1)
-        
-        // add signed bit by signed state
-        if binary.isSigned {
-            binary.value = "1" + binary.value
-        } else {
-            binary.value = "0" + binary.value
+        // do nothing if already filled
+        if binary.value.count == 64 {
+            return
         }
+        
+        let wordSizeValue = 64
+        // let wordSizeValue = wordSizeStorage.getWordSizeValue()
+        
+        // fill up with zeros to needed bit position
+        binary.value = fillUpZeros(str: binary.value, to: wordSizeValue-1)
+        
     }
     
     // Appending digit to end
     func appendDigit(_ digit: String) {
+        // storage
+        let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
+        // calc state
+        let calcState = calcStateStorage.loadData()
+        
         let binary = self
         
         // just add digit if point exits
         guard digit != "." && !binary.value.contains(".") else {
-            binary.value.append(digit)
+            // check bits count after point
+            let testValue = binary.value.removeAllSpaces()
+            let pointPos = testValue.firstIndex(of: ".")!
+            let distance = testValue.distance(from: pointPos, to: testValue.endIndex)
+        
+            let conversionStorage: ConversionStorageProtocol = ConversionStorage()
+            let conversionSettings = conversionStorage.loadData()
+            if let numbersAfterPoint = conversionSettings?.numbersAfterPoint {
+                // exit if numbers after point is already filled
+                if Int(numbersAfterPoint) >= Int(distance) {
+                    // do nothing
+                    binary.value.append(digit)
+                }
+            }
             return
         }
         
         // if binary not float
-        binary.value = binary.removeAllSpaces(str: binary.value)
+        binary.value = binary.value.removeAllSpaces()
         
         // get saved data
-        if let data = SavedData.calcState?.processSigned {
+        if let data = calcState?.processSigned {
+            //let wordSizeValue = wordSizeStorage.getWordSizeValue()
+            let wordSizeValue = 64
+            
             // if .processSigned == true
+            var testValue = binary.value
+            testValue.append(digit)
+            if testValue.count > wordSizeValue && testValue.first == "1" {
+                return
+            }
+            
             if data {
                 // calcualte signed state
                 binary.updateSignedState() // changes binary.isSigned state to true of false
@@ -598,10 +712,20 @@ class Binary: NumberSystem {
                     binary.value.append(digit)   
                 }
                 
-                // fills up binary to 7, 15, 31, 63 + signed bit by self.isSigned
-                // isSigned == true -> 1 else -> 0
-                binary.fillUpSignedToNeededCount()
+                // check for max word size
+                if binary.value.count == wordSizeValue {
+                    return
+                }
                 
+                // fills up binary to 7, 15, 31, 63 detends of wordSize
+                binary.fillUpToMaxBitsCount()
+                // isSigned == true -> 1 else -> 0
+                // add signed bit by signed state
+                if binary.isSigned {
+                    binary.value = "1" + binary.value
+                } else {
+                    binary.value = "0" + binary.value
+                }
             } else {
                 // if doesnt process signed binary values
                 // just append
@@ -638,30 +762,21 @@ class Binary: NumberSystem {
     
     public func onesComplement() {
         let binary = self
-        var signedBit = String()
-        
-        // delete signed bit if exist
-        ifProcessSigned {
-            signedBit = String(binary.value.first!)
-            binary.value.removeFirst()
-        }
-        // invert binary
         binary.invert()
-        // return signed bit if exists
-        binary.value = signedBit + binary.value
     }
     
     public func twosComplement() {
         let binary = self
         var signedBit = String()
         
+        let calcStateStorage = CalcStateStorage()
         // remove spaces
-        binary.value = removeAllSpaces(str: binary.value)
+        binary.value = binary.value.removeAllSpaces()
         
         // convert to 1's complement
         binary.onesComplement()
         // save signed bit and change to 0
-        binary.ifProcessSigned {
+        if calcStateStorage.isProcessSigned() {
             signedBit = String(binary.value.first!)
             binary.updateSignedState()
             binary.changeSignedBit(to: "0")

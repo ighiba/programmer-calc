@@ -39,12 +39,12 @@ extension SettingsView: UITableViewDataSource, UITableViewDelegate {
     }
     // Returns cell for section
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: SettingsCell
+        let cell: AppSettingsCell
         let title = indexPath.section == 0 ? firstSection[indexPath.row] : otherSection[indexPath.row]
         if indexPath.section == 0 {
-            cell = SettingsCell(style: .default, reuseIdentifier: "cellId", label: title, switcher: true)
+            cell = AppSettingsCell(style: .default, reuseIdentifier: "cellId", label: title, switcher: true)
         } else {
-            cell = SettingsCell(style: .default, reuseIdentifier: "cellId", label: title, switcher: false)
+            cell = AppSettingsCell(style: .default, reuseIdentifier: "cellId", label: title, switcher: false)
         }
         
         return cell
@@ -58,7 +58,7 @@ extension SettingsView: UITableViewDataSource, UITableViewDelegate {
         if section == 1 {
             let label = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 50))
             // Version label
-            label.text = "Programmer Calc 0.6.9"
+            label.text = "Programmer Calc 0.6.12"
             label.font = UIFont.systemFont(ofSize: 16, weight: .thin)
             label.textAlignment = .center
             

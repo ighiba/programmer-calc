@@ -9,15 +9,45 @@
 import UIKit
 import QuartzCore
 
-class CalcualtorLabel: UILabel {
-    
+protocol UpdatableLabel: UILabel {
+    var updateRawValueHandler: ((UpdatableLabel) -> Void)? { get set }
+}
+
+class CalcualtorLabel: UILabel, UpdatableLabel {
+
     // ==================
     // MARK: - Properties
     // ==================
+    
+    var updateRawValueHandler: ((UpdatableLabel) -> Void)?
+    
+    override var text: String? {
+        didSet {
+            self.updateRawValueHandler?(self)
+            
+        }
+    }
+    var rawValue: NumberSystemProtocol?
 
     override var canBecomeFirstResponder: Bool {
         return true
     }
+    
+    lazy var infoSubLabel: UILabel = {
+        let label = UILabel()
+        
+        label.frame = CGRect()
+        label.text = "Decimal"
+        label.backgroundColor = .clear
+        label.textColor = .systemGray
+        
+        label.font = UIFont(name: "HelveticaNeue-Thin", size: 12.0)
+        label.textAlignment = .center
+        
+        label.sizeToFit()
+        
+        return label
+    }()
     
     // ======================
     // MARK: - Initialization
@@ -25,7 +55,7 @@ class CalcualtorLabel: UILabel {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.sharedInit()
+        self.sharedInit() 
     }
     
     func sharedInit() {
@@ -37,6 +67,24 @@ class CalcualtorLabel: UILabel {
     // MARK: - Methods
     // ===============
     
+    func setRawValue(value: NumberSystemProtocol) {
+        self.rawValue = value
+    }
+    
+    func addInfoLabel() {
+        self.addSubview(infoSubLabel)
+        infoSubLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            infoSubLabel.topAnchor.constraint(equalTo: self.bottomAnchor),
+            infoSubLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5)
+        ])
+    }
+    
+    // Set new value in info label
+    func setInfoLabelValue(_ newValue: ConversionSystemsEnum) {
+        self.infoSubLabel.text = newValue.rawValue
+    }
+    
     // Action when long press on label
     @objc func showMenu(_ sender: AnyObject?) {
         self.becomeFirstResponder()
@@ -44,7 +92,16 @@ class CalcualtorLabel: UILabel {
         let menu = UIMenuController.shared
 
         if !menu.isMenuVisible {
-            
+            let settingsStorage = SettingsStorage()
+            // haptic feedback generator
+            let settings = settingsStorage.loadData()
+            if (settings?.hapticFeedback ?? false) {
+                let generator = UIImpactFeedbackGenerator(style: .medium)
+                generator.prepare()
+                // impact
+                generator.impactOccurred()
+            }
+            // higlight label and show menu
             highlightLabel()
             menu.showMenu(from: self, rect: bounds)
             
@@ -55,10 +112,8 @@ class CalcualtorLabel: UILabel {
     override func copy(_ sender: Any?) {
         let board = UIPasteboard.general
         
-        // delete all spaces in string
-        
-        
-        board.string = text
+        // change clipboard with new value from label self.text and delete all spaces in string
+        board.string = self.text?.removeAllSpaces()
         
         self.hideLabelMenu()
         self.resignFirstResponder()
@@ -85,6 +140,7 @@ class CalcualtorLabel: UILabel {
     }
     
     func undoHighlightLabel() {
+        self.resignFirstResponder()
         
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
             self.layer.backgroundColor = UIColor.lightGray.cgColor.copy(alpha: 0)

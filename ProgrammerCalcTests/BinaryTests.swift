@@ -13,6 +13,10 @@ import XCTest
 
 class BinaryTests: XCTestCase {
     
+    // Storages
+    let conversionStorage: ConversionStorageProtocol? = ConversionStorage()
+    let calcStatetorage: CalcStateStorageProtocol? = CalcStateStorage()
+    
     var binaryTest: Binary!
     var binaryStrInput: String = "1100" // dec = 12
     
@@ -22,7 +26,8 @@ class BinaryTests: XCTestCase {
     override func setUp() {
         super.setUp()
         binaryTest = Binary()
-        SavedData.conversionSettings = ConversionSettingsModel(systMain: "Decimal", systConverter: "Binary", number: 8.0)
+        let dummyConversionSettings = ConversionSettings(systMain: "Decimal", systConverter: "Binary", number: 8.0)
+        conversionStorage?.saveData(dummyConversionSettings)
         
     }
     
@@ -42,29 +47,29 @@ class BinaryTests: XCTestCase {
     // XCTAssert to test model
     func testBinaryUnsignedInit() throws {
         // 1. given
-        SavedData.calcState = unsignedData
+        calcStatetorage?.saveData(unsignedData)
         
         // 2. when
         binaryTest = Binary(stringLiteral: binaryStrInput)
         
         // 3. then
-        XCTAssertEqual(binaryTest.value, "1100", "Converted values are wrong")
+        XCTAssertEqual(binaryTest.value, "0000000000000000000000000000000000000000000000000000000000001100", "Converted values are wrong")
     }
     
     func testBinarySignedInit() throws {
         // 1. given
-        SavedData.calcState = signedData
+        calcStatetorage?.saveData(signedData)
         
         // 2. when
         binaryTest = Binary(stringLiteral: binaryStrInput)
         
         // 3. then
-        XCTAssertEqual(binaryTest.value, "00001100", "Converted values are wrong")
+        XCTAssertEqual(binaryTest.value, "0000000000000000000000000000000000000000000000000000000000001100", "Converted values are wrong")
     }
     
     func testBinaryChangeSignedBit() throws {
         // 1. give
-        SavedData.calcState = signedData
+        calcStatetorage?.saveData(signedData)
         let bit: Character = "1"
         
         // 2. when
@@ -73,37 +78,37 @@ class BinaryTests: XCTestCase {
         binaryTest.updateSignedState()
         
         // 3. then
-        XCTAssertEqual(binaryTest.value, "10001100", "Converted values are wrong")
+        XCTAssertEqual(binaryTest.value, "1000000000000000000000000000000000000000000000000000000000001100", "Converted values are wrong")
     }
     
     func testBinaryDivide() throws {
         // 1. given
-        SavedData.calcState = signedData
+        calcStatetorage?.saveData(signedData)
         binaryTest = Binary(stringLiteral: binaryStrInput)
         
         // 2. when
         binaryTest = binaryTest.divideBinary(by: 4)
 
         // 3. then
-        XCTAssertEqual(binaryTest.value, "0000 1100", "No spaces inserted")
+        XCTAssertEqual(binaryTest.value, "0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 1100", "No spaces inserted")
     }
     
     func testBinaryRemoveAllSpaces() throws {
         // 1. given
-        SavedData.calcState = signedData
+        calcStatetorage?.saveData(signedData)
         binaryTest = Binary(stringLiteral: binaryStrInput)
         binaryTest = binaryTest.divideBinary(by: 4)
         
         // 2. when
-        let removedSpaces = binaryTest.removeAllSpaces(str: binaryTest.value)
+        let removedSpaces = binaryTest.value.removeAllSpaces()
 
         // 3. then
-        XCTAssertEqual(removedSpaces, "00001100", "Spaces not deleted")
+        XCTAssertEqual(removedSpaces, "0000000000000000000000000000000000000000000000000000000000001100", "Spaces not deleted")
     }
     
     func testBinaryRemoveZerosBefore() throws {
         // 1. given
-        SavedData.calcState = signedData
+        calcStatetorage?.saveData(signedData)
         binaryTest = Binary(stringLiteral: binaryStrInput)
         
         // 2. when
@@ -115,18 +120,18 @@ class BinaryTests: XCTestCase {
     
     func testBinaryRemoveZerosAfter() throws {
         // 1. given
-        SavedData.calcState = signedData
+        calcStatetorage?.saveData(signedData)
         binaryTest = Binary(stringLiteral: "\(binaryStrInput).0100")
         // 2. when
         let removedZerosAfter = binaryTest.removeZerosAfter(str: binaryTest.value)
 
         // 3. then
-        XCTAssertEqual(removedZerosAfter, "00001100.01", "Zeros after not removed")
+        XCTAssertEqual(removedZerosAfter, "0000000000000000000000000000000000000000000000000000000000001100.01", "Zeros after not removed")
     }
     
     func testBinaryAppendDigitToUnsigned() throws {
         // 1. given
-        SavedData.calcState = unsignedData
+        calcStatetorage?.saveData(unsignedData)
         binaryTest = Binary(stringLiteral: "01001100")
         
         // 2. when
@@ -138,80 +143,80 @@ class BinaryTests: XCTestCase {
     
     func testBinaryAppendDigitToSigned() throws {
         // 1. given
-        SavedData.calcState = signedData
+        calcStatetorage?.saveData(signedData)
         binaryTest = Binary(stringLiteral: "01001100")
         
         // 2. when
         binaryTest.appendDigit("1")
 
         // 3. then
-        XCTAssertEqual(binaryTest.value, "0000000010011001", "Digit not appended")
+        XCTAssertEqual(binaryTest.value, "0000000000000000000000000000000000000000000000000000000010011001", "Digit not appended")
     }
     
     func testBinaryToDecSignedPlus() throws {
         // 1. given
-        SavedData.calcState = signedData
+        calcStatetorage?.saveData(signedData)
         binaryTest = Binary(stringLiteral: binaryStrInput)
         
         // 2. when
-        let decValue = Decimal(binaryTest)
+        let decValue = DecimalSystem(binaryTest)
         
         // 3. then
-        XCTAssertEqual(decValue, 12, "Wrong conversion")
+        XCTAssertEqual(decValue.decimalValue, 12, "Wrong conversion")
     }
 
     func testBinaryToDecSignedMinus() throws {
         // 1. given
-        SavedData.calcState = signedData
+        calcStatetorage?.saveData(signedData)
         binaryTest = Binary(stringLiteral: binaryStrInput)
         binaryTest.changeSignedBit(to: "1")
         binaryTest.updateSignedState()
         
         // 2. when
-        let decValue = Decimal(binaryTest)
+        let decValue = DecimalSystem(binaryTest)
         
         // 3. then
-        XCTAssertEqual(decValue, -116, "Wrong conversion")
+        XCTAssertEqual(decValue.decimalValue, -9223372036854775796, "Wrong conversion")
     }
     
     func testBinaryToDecUnsignedPlus() throws {
         // 1. given
-        SavedData.calcState = unsignedData
+        calcStatetorage?.saveData(unsignedData)
         binaryTest = Binary(stringLiteral: binaryStrInput)
         
         // 2. when
-        let decValue = Decimal(binaryTest)
+        let decValue = DecimalSystem(binaryTest)
         
         // 3. then
-        XCTAssertEqual(decValue, 12, "Wrong conversion")
+        XCTAssertEqual(decValue.decimalValue, 12, "Wrong conversion")
     }
 
     func testBinaryToDecUnsignedMinus() throws {
         // 1. given
-        SavedData.calcState = unsignedData
-        binaryTest = Binary(stringLiteral: "1000\(binaryStrInput)")
+        calcStatetorage?.saveData(unsignedData)
+        binaryTest = Binary(stringLiteral: "01001100")
         
         // 2. when
-        let decValue = Decimal(binaryTest)
+        let decValue = DecimalSystem(binaryTest)
         // 3. then
-        XCTAssertEqual(decValue, 140, "Wrong conversion")
+        XCTAssertEqual(decValue.decimalValue, 76, "Wrong conversion")
     }
     
     func testBinaryConvertDoubleTo() throws {
         // 1. given
-        SavedData.calcState = unsignedData
+        calcStatetorage?.saveData(unsignedData)
         let binaryInt: Binary.IntPart = "12"
         let binaryFract: Binary.FractPart = "25"
 
         // 2. when
         binaryTest.value = binaryTest.convertDoubleToBinaryStr(numberStr: (binaryInt, binaryFract))
         // 3. then
-        XCTAssertEqual(binaryTest.value, "01100.01000000", "Wrong conversion")
+        XCTAssertEqual(binaryTest.value, "01100.01000000000000000000", "Wrong conversion")
     }
     
     func testConvertIntToBinary() throws {
         // 1. given
-        SavedData.calcState = unsignedData
+        calcStatetorage?.saveData(unsignedData)
         let intValue = 12
 
         // 2. when
@@ -222,14 +227,14 @@ class BinaryTests: XCTestCase {
     
     func testBinaryInvert() throws {
         // 1. given
-        SavedData.calcState = signedData
+        calcStatetorage?.saveData(signedData)
         binaryTest = Binary(stringLiteral: binaryStrInput)
         
         // 2. when
         binaryTest.invert()
         
         // 3. then
-        XCTAssertEqual(binaryTest.value, "11110011", "Wrong inversion")
+        XCTAssertEqual(binaryTest.value, "1111111111111111111111111111111111111111111111111111111111110011", "Wrong inversion")
     }
     
 

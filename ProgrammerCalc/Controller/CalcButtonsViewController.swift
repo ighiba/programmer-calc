@@ -10,9 +10,9 @@ import UIKit
 
 class CalcButtonsViewController: UIViewController {
     
-    init( buttonsStack: UIView) {
+    init( buttonsPage: UIView) {
         super.init(nibName: nil, bundle: nil)
-        self.view = buttonsStack
+        self.view = buttonsPage
     }
     
     required init?(coder: NSCoder) {
