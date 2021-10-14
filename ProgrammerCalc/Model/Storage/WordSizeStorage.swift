@@ -11,6 +11,7 @@ import Foundation
 protocol WordSizeStorageProtocol {
     func loadData() -> WordSizeProtocol?
     func saveData(_ size: WordSizeProtocol)
+    func safeGetData() -> WordSizeProtocol
     func getWordSizeValue() -> Int
 }
 
@@ -44,17 +45,27 @@ class WordSizeStorage: WordSizeStorageProtocol {
         UserDefaults.standard.synchronize()
     }
     
-    func getWordSizeValue() -> Int {
-        var wordSize: WordSizeProtocol? = self.loadData()
-        // if no data in user defaults
-        if wordSize == nil {
-            // default value
-            wordSize = WordSize(64)
-            // save to user defaults
-            self.saveData(wordSize!)
+    // get data from UserDefaults
+    // if no data then write default value
+    // and return it
+    func safeGetData() -> WordSizeProtocol {
+        if let size = self.loadData() {
+            return size
+        }  else {
+            // if no WordSize
+            print("no WordSize")
+            // default values
+            let newSize = WordSize(64)
+            self.saveData(newSize)
+            
+            return newSize
         }
-        return wordSize!.value
     }
+    
+    func getWordSizeValue() -> Int {
+        return safeGetData().value
+    }
+
     
 }
 

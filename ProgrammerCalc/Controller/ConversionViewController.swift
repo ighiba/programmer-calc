@@ -10,9 +10,7 @@ import UIKit
 
 class ConversionViewController: UIViewController {
     
-    // ==================
     // MARK: - Properties
-    // ==================
     
     lazy var conversionView = ConversionView()
     lazy var picker: ConversionPicker = conversionView.mainPicker
@@ -47,9 +45,7 @@ class ConversionViewController: UIViewController {
         saveConversionSettings()
     }
     
-    // ===============
     // MARK: - Methods
-    // ===============
     
     fileprivate func setupGestures() {
         // tap outside popup(container)
@@ -124,8 +120,8 @@ class ConversionViewController: UIViewController {
         let newConversionSettings = ConversionSettings(systMain: systemMainNew!, systConverter: systemConverterNew!, number: sliderValue * 4)
         conversionStorage.saveData(newConversionSettings)
         // set data to rootVC state vars
-        rootVC?.systemMain = ConversionSystemsEnum(rawValue: systemMainNew!)
-        rootVC?.systemConverter = ConversionSystemsEnum(rawValue: systemConverterNew!)
+        rootVC?.calculator.systemMain = ConversionSystemsEnum(rawValue: systemMainNew!)
+        rootVC?.calculator.systemConverter = ConversionSystemsEnum(rawValue: systemConverterNew!)
         // Handle changing of systems
         // TODO: Error handling
         if buffSavedMainLabel != systemMainNew! {
@@ -158,9 +154,7 @@ class ConversionViewController: UIViewController {
         return !containerBounds.contains(currentLocation)
     }
     
-    // ===============
     // MARK: - Actions
-    // ===============
     
     // Done button / Exit button
     @objc func doneButtonTapped( sender: UIButton) {
@@ -170,7 +164,6 @@ class ConversionViewController: UIViewController {
     // Swipe up to exit
     @objc func handleSwipe( sender: UISwipeGestureRecognizer) {
         let notInContainer: Bool = isGestureNotInContainer(gesture: sender)
-        
         if notInContainer {
             // does not contains
             // dismiss vc
@@ -180,7 +173,6 @@ class ConversionViewController: UIViewController {
     
     @objc func tappedOutside( sender: UITapGestureRecognizer) {
         let notInContainer: Bool = isGestureNotInContainer(gesture: sender)
-        
         if notInContainer {
             // does not contains
             // dismiss vc

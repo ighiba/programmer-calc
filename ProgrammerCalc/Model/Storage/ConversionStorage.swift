@@ -11,6 +11,7 @@ import Foundation
 protocol ConversionStorageProtocol {
     func loadData() -> ConversionSettingsProtocol?
     func saveData(_ conversion: ConversionSettingsProtocol)
+    func safeGetData() -> ConversionSettingsProtocol
 }
 
 class ConversionStorage: ConversionStorageProtocol {
@@ -42,4 +43,21 @@ class ConversionStorage: ConversionStorageProtocol {
         }
         UserDefaults.standard.synchronize()
     }
+    
+    func safeGetData() -> ConversionSettingsProtocol {
+        if let conversionSettings = self.loadData() {
+            return conversionSettings
+        }  else {
+            // if no settings
+            print("no Conversion settings")
+            // Save default settings
+            let systems = ConversionSystemsEnum.self
+            // From DEC to BIN
+            let newConversionSettings = ConversionSettings(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 8.0)
+            self.saveData(newConversionSettings)
+            
+            return newConversionSettings
+        }
+    }
+    
 }

@@ -1,5 +1,5 @@
 //
-//  SettingsModel.swift
+//  AppSettings.swift
 //  ProgrammerCalc
 //
 //  Created by Ivan Ghiba on 06.08.2020.
@@ -8,13 +8,13 @@
 
 import Foundation
 
-protocol SettingsProtocol {
+protocol AppSettingsProtocol {
     var darkMode: Bool { get set }
     var tappingSounds: Bool { get set }
     var hapticFeedback: Bool { get set }
 }
 
-class Settings: SettingsProtocol, Decodable, Encodable {
+class AppSettings: AppSettingsProtocol, Decodable, Encodable {
     var darkMode: Bool
     var tappingSounds: Bool
     var hapticFeedback: Bool

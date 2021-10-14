@@ -1,5 +1,5 @@
 //
-//  ConversionModel.swift
+//  ConversionSettings.swift
 //  ProgrammerCalc
 //
 //  Created by Ivan Ghiba on 04.08.2020.

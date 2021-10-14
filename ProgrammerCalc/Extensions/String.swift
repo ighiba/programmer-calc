@@ -85,4 +85,28 @@ extension String {
         }
         return str
     }
+    
+    func getPartAfter(divider: Character) -> String {
+        let str = self
+        
+        // get position fract part
+        let pointPos = str.firstIndex(of: divider)!
+        let fractDistance = Int(str.distance(from: pointPos, to:  str.endIndex))
+        // get str fract part
+        let fractPartStr: String = {
+            let reversedStr = String(str.reversed())
+            var buffStr = String()
+
+            for digit in reversedStr {
+                buffStr.append(digit)
+                if fractDistance-1 == buffStr.count {
+                    return buffStr
+                }
+            }
+            
+            return buffStr
+        }()
+        
+        return String(fractPartStr.reversed())
+    }
 }

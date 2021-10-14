@@ -1,5 +1,5 @@
 //
-//  ConverterHandlerTests.swift
+//  ConverterTests.swift
 //  ProgrammerCalcTests
 //
 //  Created by Ivan Ghiba on 31.08.2020.
@@ -11,14 +11,14 @@ import Foundation
 import XCTest
 @testable import ProgrammerCalc
 
-class ConverterHandlerTests: XCTestCase {
+class ConverterTests: XCTestCase {
     
     // Storages
     var conversionStorage: ConversionStorageProtocol? = ConversionStorage()
     var calcStatetorage: CalcStateStorageProtocol? = CalcStateStorage()
     let wordSizeStorage: WordSizeStorageProtocol? = WordSizeStorage()
     
-    var converterHandlerTest: ConverterHandler?
+    var converterTest: Converter?
     let binaryStrInput = "1100"
     
     let unsignedData = CalcState(mainState: "0", convertState: "0", processSigned: false)
@@ -26,14 +26,14 @@ class ConverterHandlerTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        converterHandlerTest = ConverterHandler()
+        converterTest = Converter()
         let dummyConversionSettings = ConversionSettings(systMain: "Decimal", systConverter: "Binary", number: 8.0)
         conversionStorage?.saveData(dummyConversionSettings)
         
     }
     
     override func tearDown() {
-        converterHandlerTest = nil
+        converterTest = nil
         super.tearDown()
     }
 
@@ -53,7 +53,7 @@ class ConverterHandlerTests: XCTestCase {
         let binary = Binary(stringLiteral: binaryStrInput) // 1100
         
         // 2. when
-        let converted = converterHandlerTest!.toOnesComplement(value: binary, mainSystem: .bin)
+        let converted = converterTest!.toOnesComplement(value: binary, mainSystem: .bin)
         
         // 3. then
         XCTAssertEqual(converted.value, "11110011", "Converted values are wrong")
@@ -66,7 +66,7 @@ class ConverterHandlerTests: XCTestCase {
         let binary = Binary(stringLiteral: binaryStrInput)
         
         // 2. when
-        let converted = converterHandlerTest!.toOnesComplement(value: binary, mainSystem: .bin)
+        let converted = converterTest!.toOnesComplement(value: binary, mainSystem: .bin)
         
         // 3. then
         XCTAssertEqual(converted.value, "11110011", "Converted values are wrong")
@@ -79,7 +79,7 @@ class ConverterHandlerTests: XCTestCase {
         let binary = Binary(stringLiteral: binaryStrInput)
         
         // 2. when
-        let converted = converterHandlerTest!.toTwosComplement(value: binary, mainSystem: .bin)
+        let converted = converterTest!.toTwosComplement(value: binary, mainSystem: .bin)
         
         // 3. then
         XCTAssertEqual(converted.value, "11110100", "Converted values are wrong")
@@ -92,7 +92,7 @@ class ConverterHandlerTests: XCTestCase {
         let binary = Binary(stringLiteral: binaryStrInput)
         
         // 2. when
-        let converted = converterHandlerTest!.toTwosComplement(value: binary, mainSystem: .bin)
+        let converted = converterTest!.toTwosComplement(value: binary, mainSystem: .bin)
         
         // 3. then
         XCTAssertEqual(converted.value, "11110100", "Converted values are wrong")

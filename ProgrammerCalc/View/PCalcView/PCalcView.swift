@@ -199,7 +199,7 @@ class PCalcView: UIView {
     // MARK: - Calculated heights
     
     // Dynamic label height for autolayout
-    // the labels must fill 1/4 part of screen
+    // the label stack must fill 1/3 part of screen
     func labelHeight() -> CGFloat {
         return (viewHeight() - labelsStack.spacing * 2 - navBarHeight - windowSafeAreaInsets.top - margin ) / 2
     }

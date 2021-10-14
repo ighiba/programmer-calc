@@ -11,6 +11,7 @@ import Foundation
 protocol CalcStateStorageProtocol {
     func loadData() -> CalcStateProtocol?
     func saveData(_ state: CalcStateProtocol)
+    func safeGetData() -> CalcStateProtocol
 }
 
 class CalcStateStorage: CalcStateStorageProtocol {
@@ -44,13 +45,20 @@ class CalcStateStorage: CalcStateStorageProtocol {
     }
     
     func isProcessSigned() -> Bool {
-        // storage
-        let calcStateStorage: CalcStateStorageProtocol = self
-        // process signed
-        if let state = calcStateStorage.loadData() {
-            return state.processSigned
+        return safeGetData().processSigned
+    }
+
+    func safeGetData() -> CalcStateProtocol {
+        if let state = self.loadData() {
+            return state
+        }  else {
+            // if no CalcState
+            print("no CalcState")
+            // default values
+            let newState = CalcState(mainState: "0", convertState: "0", processSigned: false)
+            self.saveData(newState)
+            
+            return newState
         }
-        
-        return false
     }
 }

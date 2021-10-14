@@ -1,5 +1,5 @@
 //
-//  MainConverter.swift
+//  Converter.swift
 //  ProgrammerCalc
 //
 //  Created by Ivan Ghiba on 11.08.2020.
@@ -8,7 +8,7 @@
 
 import Foundation
 
- class ConverterHandler {
+ class Converter {
     
     // Storages
     private let calcStateStorage = CalcStateStorage()
@@ -217,6 +217,32 @@ import Foundation
         
         
         return resultBin
+    }
+    
+    func processDecFloatStrToFormat(decStr: String, lastDotIfExists: String) -> String {
+        // get dec value
+        let dec = DecimalSystem(stringLiteral: decStr)
+        // get int part of decimal
+        var decIntPart = dec.decimalValue
+        var decIntPartCopy = decIntPart
+        // round decimal
+        if dec.decimalValue > 0 {
+            NSDecimalRound(&decIntPart, &decIntPartCopy, 0, .down)
+        } else {
+            NSDecimalRound(&decIntPart, &decIntPartCopy, 0, .up)
+        }
+        // get fract part of decimal
+        let decFractPart = decIntPartCopy - decIntPart
+        dec.setNewDecimal(with: decIntPart)
+        // convert to binary
+        let bin = convertValue(value: dec, from: .dec, to: .bin) as! Binary
+        // convert processed bin back in dec
+        let updatedDec = convertValue(value: bin, from: .bin, to: .dec)  as! DecimalSystem
+        // restore new decimal with fract part
+        dec.setNewDecimal(with: updatedDec.decimalValue + decFractPart)
+        
+        // set updated main label value + last dot if exists
+        return dec.value + lastDotIfExists
     }
     
 }

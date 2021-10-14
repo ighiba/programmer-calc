@@ -14,17 +14,19 @@ final class CalcMath {
     private let calcStateStorage = CalcStateStorage()
     private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
     
-    // Handlers
-    let converterHandler: ConverterHandler = ConverterHandler()
+    // Object "Converter"
+    let converter: Converter = Converter()
     
-    enum mathOperation {
+    enum MathOperation {
         case add
         case sub
         case mul
         case div
         // bitwise
-        case shiftLeft //  X << Y
-        case shiftRight // X >> Y
+        case shiftLeft //  <<
+        case shiftRight //  >>
+        case shiftLeftBy //  X << Y
+        case shiftRightBy // X >> Y
         case and
         case or
         case xor
@@ -34,11 +36,11 @@ final class CalcMath {
     struct MathState {
         
         var buffValue: NumberSystemProtocol
-        var operation: mathOperation
+        var operation: MathOperation
         var lastResult: NumberSystemProtocol?
         var inputStart: Bool = false
         
-        init(buffValue: NumberSystemProtocol, operation: mathOperation) {
+        init(buffValue: NumberSystemProtocol, operation: MathOperation) {
             self.buffValue = buffValue
             self.operation = operation
         }
@@ -48,7 +50,7 @@ final class CalcMath {
     // MARK: - Methods
     // ===============
     
-    func calculate( firstValue: NumberSystemProtocol, operation: mathOperation ,secondValue: NumberSystemProtocol, for system: ConversionSystemsEnum) -> NumberSystemProtocol? {
+    func calculate( firstValue: NumberSystemProtocol, operation: MathOperation ,secondValue: NumberSystemProtocol, for system: ConversionSystemsEnum) -> NumberSystemProtocol? {
   
         // ======================
         // Convert Any to Decimal
@@ -58,8 +60,8 @@ final class CalcMath {
         let secondConverted: DecimalSystem
         
         if system != .dec {
-            firstConverted = converterHandler.convertValue(value: firstValue, from: system, to: .dec)! as! DecimalSystem
-            secondConverted = converterHandler.convertValue(value: secondValue, from: system, to: .dec)! as! DecimalSystem
+            firstConverted = converter.convertValue(value: firstValue, from: system, to: .dec)! as! DecimalSystem
+            secondConverted = converter.convertValue(value: secondValue, from: system, to: .dec)! as! DecimalSystem
         } else {
             firstConverted = firstValue as! DecimalSystem
             secondConverted = secondValue as! DecimalSystem
@@ -80,30 +82,41 @@ final class CalcMath {
         
         let processSigned = calcStateStorage.isProcessSigned()
         // check for overflow
-        if abs(newDecimal.decimalValue) > maxSigned {
+        // TODO: Refactor to binary str processing?
+        if abs(newDecimal.decimalValue) > maxSigned || (!processSigned && newDecimal.decimalValue < 0) {
             var decResult = newDecimal.decimalValue
             // process overflow for different ways
             if processSigned && newDecimal.decimalValue > maxSigned {
                 // count how much is overflowed after calculation
-                var decCount = newDecimal.decimalValue / (maxSigned + Decimal(1))
+                var decCount = newDecimal.decimalValue / (maxSigned + 1)
                 var decCountCopy = decCount
                 // round decCount
                 NSDecimalRound(&decCount, &decCountCopy, 0, .down)
-                decResult = newDecimal.decimalValue+(minSigned*2) * decCount
+                decCount = decCount == 1.0 ? decCount + 1 : decCount
+                decResult = (newDecimal.decimalValue-(maxSigned + 1) * decCount)
                 
             } else if processSigned && newDecimal.decimalValue < minSigned {
                 
-                var decCount = newDecimal.decimalValue / (minSigned + Decimal(1))
+                var decCount = newDecimal.decimalValue / minSigned
                 var decCountCopy = decCount
                 NSDecimalRound(&decCount, &decCountCopy, 0, .down)
-                decResult = newDecimal.decimalValue-(minSigned*2) * decCount
+                decCount = decCount == 1.0 ? decCount + 1 : decCount
+                decResult = newDecimal.decimalValue-minSigned * decCount
                 
             } else if !processSigned && newDecimal.decimalValue > max {
                 
-                var decCount = newDecimal.decimalValue / (max + Decimal(1))
+                var decCount = newDecimal.decimalValue / (max + 1)
                 var decCountCopy = decCount
                 NSDecimalRound(&decCount, &decCountCopy, 0, .down)
-                decResult = newDecimal.decimalValue-max * decCount
+                //decCount = decCount == 1.0 ? decCount + 1 : decCount
+                decResult = newDecimal.decimalValue-(max + 1) * decCount
+                
+            } else if !processSigned && newDecimal.decimalValue < 0 {
+                var decCount = newDecimal.decimalValue / max + 1
+                var decCountCopy = decCount
+                NSDecimalRound(&decCount, &decCountCopy, 0, .down)
+                decCount = decCount == 0 ? decCount - 1 : decCount
+                decResult = newDecimal.decimalValue - (max + 1) * decCount
             }
             // update decimal
             newDecimal.setNewDecimal(with: decResult)
@@ -114,7 +127,7 @@ final class CalcMath {
         // ======================
         
         if system != .dec {
-            return converterHandler.convertValue(value: newDecimal, from: .dec, to: system)
+            return converter.convertValue(value: newDecimal, from: .dec, to: system)
         } else {
             return newDecimal
         }
@@ -123,7 +136,7 @@ final class CalcMath {
     
     // Calculation of 2 decimal numbers by .operation
     // TODO: Make error handling for overflow
-    fileprivate func calculateDecNumbers( firstNum: DecimalSystem, secondNum: DecimalSystem, operation: CalcMath.mathOperation) -> DecimalSystem? {
+    fileprivate func calculateDecNumbers( firstNum: DecimalSystem, secondNum: DecimalSystem, operation: CalcMath.MathOperation) -> DecimalSystem? {
         var resultStr: String = String()
 
         let firstDecimal = firstNum.decimalValue
@@ -132,13 +145,13 @@ final class CalcMath {
         switch operation {
         // Addition
         case .add:
-            resultStr = "\(firstDecimal + secondDecimal)"
+            return DecimalSystem(firstDecimal + secondDecimal)
         // Subtraction
         case .sub:
-            resultStr = "\(firstDecimal - secondDecimal)"
+            return DecimalSystem(firstDecimal - secondDecimal)
         // Multiplication
         case .mul:
-            resultStr = "\(firstDecimal * secondDecimal)"
+            return DecimalSystem(firstDecimal * secondDecimal)
         // Division
         case .div:
             // if dvision by zero
@@ -148,7 +161,7 @@ final class CalcMath {
                 divByZero.value = "Division by zero"
                 return divByZero
             }
-            resultStr = "\(firstDecimal / secondDecimal)"
+            return DecimalSystem(firstDecimal / secondDecimal)
         // Bitwise shift left
         case .shiftLeft:
             // TODO: Refactor
@@ -156,7 +169,7 @@ final class CalcMath {
                 return secondNum
             }
             // TODO: Error handling
-            if let dec = shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: .shiftLeft, shiftCount: Int(secondNum.value)!) as? DecimalSystem {
+            if let dec = shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: .shiftLeft, shiftCount: 1) as? DecimalSystem {
                 resultStr = dec.value
             } else {
                 return firstNum
@@ -168,7 +181,7 @@ final class CalcMath {
                 return secondNum
             }
             // TODO: Error handling
-            if let dec = shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: .shiftRight, shiftCount: Int(secondNum.value)!) as? DecimalSystem {
+            if let dec = shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: .shiftRight, shiftCount: 1) as? DecimalSystem {
                 resultStr = dec.value
             } else {
                 return firstNum
@@ -216,6 +229,18 @@ final class CalcMath {
                 result.invert()
                 return result
             }).value
+        case .shiftLeftBy:
+            if let dec = shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: .shiftLeft, shiftCount: Int(secondNum.value)!) as? DecimalSystem {
+                resultStr = dec.value
+            } else {
+                return firstNum
+            }
+        case .shiftRightBy:
+            if let dec = shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: .shiftRight, shiftCount: Int(secondNum.value)!) as? DecimalSystem {
+                resultStr = dec.value
+            } else {
+                return firstNum
+            }
         }
         
         // convert resultStr to DecimalSystem
@@ -246,7 +271,7 @@ final class CalcMath {
         // ======================
         
         let convertedDecimal: DecimalSystem
-        convertedDecimal = converterHandler.convertValue(value: value, from: system, to: .dec)! as! DecimalSystem
+        convertedDecimal = converter.convertValue(value: value, from: system, to: .dec)! as! DecimalSystem
         
         // if 0 then return input value
         guard convertedDecimal.decimalValue != 0 else {
@@ -262,7 +287,7 @@ final class CalcMath {
 
         if system != .dec {
             // TODO: Error handling
-            let negatedValue = converterHandler.convertValue(value: newDecimal, from: .dec, to: system)!
+            let negatedValue = converter.convertValue(value: newDecimal, from: .dec, to: system)!
             return negatedValue
         } else {
             return newDecimal
@@ -270,22 +295,22 @@ final class CalcMath {
     }
     
     // Shift to needed bit count
-    public func shiftBits( value: NumberSystemProtocol, mainSystem: ConversionSystemsEnum, shiftOperation: CalcMath.mathOperation, shiftCount: Int ) -> NumberSystemProtocol? {
+    public func shiftBits( value: NumberSystemProtocol, mainSystem: ConversionSystemsEnum, shiftOperation: CalcMath.MathOperation, shiftCount: Int ) -> NumberSystemProtocol? {
         // check if shift out of max bit index QWORD - 64
         // shifting more than 64 make no sense
         guard abs(shiftCount) < 64 else {
             // return 0
-            return converterHandler.convertValue(value: Binary(stringLiteral: "0"), from: .bin, to: mainSystem)
+            return converter.convertValue(value: Binary(stringLiteral: "0"), from: .bin, to: mainSystem)
         }
         
         // convert to Binary
-        let binary = converterHandler.convertValue(value: value, from: mainSystem, to: .bin) as? Binary
+        let binary = converter.convertValue(value: value, from: mainSystem, to: .bin) as? Binary
         
         // check if binary is nil
         guard binary != nil else { return nil }
         
         // get operation
-        let operation: CalcMath.mathOperation = {
+        let operation: CalcMath.MathOperation = {
             if shiftCount < 0 {
                 // swap operation if shift count < 0
                 if shiftOperation == .shiftRight {
@@ -300,8 +325,7 @@ final class CalcMath {
         }()
     
         // loop shiftCount for x>>y and x<<y
-        for i in 0..<abs(shiftCount) {
-            print(abs(i))
+        for _ in 0..<abs(shiftCount) {
             if operation == .shiftLeft {
                 // <<
                 // append from right
@@ -333,7 +357,7 @@ final class CalcMath {
             binary!.value.removeFirst(1)
         }
         
-        return converterHandler.convertValue(value: Binary(stringLiteral: binary!.value), from: .bin, to: mainSystem)
+        return converter.convertValue(value: Binary(stringLiteral: binary!.value), from: .bin, to: mainSystem)
     }
     
     // AND
@@ -416,10 +440,10 @@ final class CalcMath {
     
     // universal func for converting dec to bin, calculating and returning new dec
     private func calculateBitOperation(firstNum: DecimalSystem, secondNum: DecimalSystem, operation: (Binary,Binary)->Binary ) -> DecimalSystem {
-        let binFirstNum = converterHandler.convertValue(value: firstNum, from: .dec, to: .bin) as! Binary
-        let binSecondNum = converterHandler.convertValue(value: secondNum, from: .dec, to: .bin) as! Binary
+        let binFirstNum = converter.convertValue(value: firstNum, from: .dec, to: .bin) as! Binary
+        let binSecondNum = converter.convertValue(value: secondNum, from: .dec, to: .bin) as! Binary
         let binResult = operation(binFirstNum,binSecondNum)
-        return converterHandler.convertValue(value: binResult, from: .bin, to: .dec)! as! DecimalSystem
+        return converter.convertValue(value: binResult, from: .bin, to: .dec)! as! DecimalSystem
     }
     
 }

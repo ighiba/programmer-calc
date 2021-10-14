@@ -10,9 +10,7 @@ import UIKit
 
 class SettingsViewController: UITableViewController {
     
-    // ==================
     // MARK: - Properties
-    // ==================
 
     lazy var settingsView = SettingsView(frame: CGRect(), style: .grouped)
     lazy var doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(SettingsViewController.closeButtonTapped))
@@ -48,16 +46,14 @@ class SettingsViewController: UITableViewController {
         updaterHandler?()
     }
     
-    // ===============
     // MARK: - Methods
-    // ===============
     
     // Update settings values
     fileprivate func getSettings() {
         // get data from UserDefaults
         if let settings = settingsStorage.loadData() {
             // loop table cells
-            for cell in self.tableView.visibleCells as! [SettingsCell] {
+            for cell in self.tableView.visibleCells as! [AppSettingsCell] {
                 if let switcher = cell.accessoryView as? UISwitch {
                     let title = cell.textLabel?.text
                     
@@ -79,7 +75,7 @@ class SettingsViewController: UITableViewController {
         } else {
             print("no settings")
             // Save default settings (all false)
-            let newSettings = Settings(darkMode: false, tappingSounds: false, hapticFeedback: false)
+            let newSettings = AppSettings(darkMode: false, tappingSounds: false, hapticFeedback: false)
             settingsStorage.saveData(newSettings)
         }
     }
@@ -89,7 +85,7 @@ class SettingsViewController: UITableViewController {
         if let settings = settingsStorage.loadData() {
             var newSettings = settings
             // loop table cells
-            for cell in self.tableView.visibleCells as! [SettingsCell] {
+            for cell in self.tableView.visibleCells as! [AppSettingsCell] {
                 if let switcher = cell.accessoryView as? UISwitch {
                     let title = cell.textLabel?.text
                     
@@ -114,15 +110,13 @@ class SettingsViewController: UITableViewController {
         } else {
             print("no settings")
             // Save default settings (all true)
-            let newSettings = Settings(darkMode: true, tappingSounds: true, hapticFeedback: true)
+            let newSettings = AppSettings(darkMode: true, tappingSounds: true, hapticFeedback: true)
             settingsStorage.saveData(newSettings)
         }
         
     }
     
-    // ===============
     // MARK: - Actions
-    // ===============
     
     // Close settings popover
     @objc func closeButtonTapped( sender: UIButton) {
@@ -131,7 +125,7 @@ class SettingsViewController: UITableViewController {
     
     // Switcher handler
     @objc func switcherToggled( sender: UISwitch) {
-        if let cell = sender.superview as? SettingsCell {
+        if let cell = sender.superview as? AppSettingsCell {
             let title = cell.textLabel?.text
             switch title {
             case "Dark mode":
