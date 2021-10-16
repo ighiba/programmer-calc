@@ -149,7 +149,10 @@ class CalculatorButton: UIButton {
     //  4  - number of buttons
     func buttonWidth() -> CGFloat {
         // TODO: Spacing width by uiscreen width
-        return (UIScreen.main.bounds.width - 5 * 17) / 4
+        let screenWidth = UIScreen.main.bounds.width
+        let screenHeight = UIScreen.main.bounds.height
+        let width = screenWidth < screenHeight ? screenWidth : screenHeight
+        return (width - 5 * 17) / 4
     }
     
     // override for decrease control bounds of button

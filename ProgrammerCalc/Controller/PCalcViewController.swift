@@ -25,6 +25,8 @@ class PCalcViewController: UIPageViewController {
     lazy var mainLabel: CalcualtorLabel = calcView.mainLabel
     lazy var converterLabel: CalcualtorLabel = calcView.converterLabel
     
+    private var isAllowedLandscape: Bool = false
+    
     private var arrayButtonsStack = [UIView]()
     
     // Taptic feedback generator
@@ -69,6 +71,7 @@ class PCalcViewController: UIPageViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         let mainButtons = CalcButtonsMain(frame: CGRect())
         let additionalButtons = CalcButtonsAdditional(frame: CGRect())
         
@@ -77,7 +80,10 @@ class PCalcViewController: UIPageViewController {
         arrayButtonsStack.append(mainButtons)
         
         // add view from PCalcView
+        calcView.setViews()
         self.view.addSubview(calcView)
+        self.view.layoutIfNeeded()
+        calcView.layoutIfNeeded()
         
         // TODO: Themes
         self.view.backgroundColor = .white
@@ -93,6 +99,9 @@ class PCalcViewController: UIPageViewController {
         
         // set start vc
         setViewControllers([arrayCalcButtonsViewController[1]], direction: .forward, animated: false, completion: nil)
+        
+        // lock rotatiton
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
 
         // add swipe left for deleting last value in main label
         [mainLabel,converterLabel].forEach { (label) in
@@ -121,12 +130,76 @@ class PCalcViewController: UIPageViewController {
         updateButtons()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("loaded")
+        // unlock rotatiton
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.all, andRotateTo: UIInterfaceOrientation.portrait)
+        self.isAllowedLandscape = true
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // set state to UserDefaults
         print("main dissapear")
         saveCalcState()
     }
+    
+    // Handle orientation change for constraints
+    override func viewDidLayoutSubviews() {
+        let isPortrait = UIDevice.current.orientation.isPortrait
+        let isLandscape = UIDevice.current.orientation.isLandscape
+        
+        if isPortrait && !isLandscape {
+            
+            // unhide button pages
+            for page in arrayCalcButtonsViewController {
+                UIView.animate(withDuration: 0.15, delay: 0.15, options: .curveEaseOut, animations: {
+                    page.view.alpha = 1
+                    page.view.isHidden = false
+                }, completion: nil)
+            }
+            
+            // change constraints
+            NSLayoutConstraint.deactivate(calcView.landscape!)
+            NSLayoutConstraint.activate(calcView.portrait!)
+            // update label layouts
+            mainLabel.sizeToFit()
+            mainLabel.infoSubLabel.sizeToFit()
+            converterLabel.infoSubLabel.sizeToFit()
+            converterLabel.sizeToFit()
+            // unhide pagecontrol
+            self.setPageControl(visibile: true)
+            // unhide word size button
+            calcView.changeWordSizeButton.isHidden = false
+            
+            // set default calcView frame
+            self.calcView.frame = CGRect( x: 0, y: 0, width: UIScreen.main.bounds.width, height: self.calcView.viewHeight())
+            
+
+        } else if isLandscape && !isPortrait && isAllowedLandscape {
+            
+            // hide word size button
+            calcView.changeWordSizeButton.isHidden = true
+            // hide button pages
+            for page in arrayCalcButtonsViewController {
+                UIView.animate(withDuration: 0.3, delay: 0.3, options: .curveEaseOut, animations: {
+                    page.view.alpha = 0
+                    page.view.isHidden = true
+                }, completion: nil)
+            }
+            
+            // change constraints
+            NSLayoutConstraint.deactivate(calcView.portrait!)
+            NSLayoutConstraint.activate(calcView.landscape!)
+            // hide pagecontrol
+            self.setPageControl(visibile: false)
+            // set landscape calcView frame
+            self.calcView.frame = UIScreen.main.bounds
+
+        }
+    }
+    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
@@ -514,7 +587,7 @@ class PCalcViewController: UIPageViewController {
         // negate value if number is negative and processsigned == on
         if calculator.mainLabelRawValue.isSigned && calculator.processSigned {
             mainLabel.text = calculator.negateValue(value: calculator.mainLabelRawValue, system: calculator.systemMain!)
-        } else if !calculator.isValueOverflowed(value: calculator.mainLabelRawValue.value, for: calculator.systemMain!, when: .negate) {
+        } else if calculator.isValueOverflowed(value: calculator.mainLabelRawValue.value, for: calculator.systemMain!, when: .negate) {
             clearLabels()
         }
         // invert value

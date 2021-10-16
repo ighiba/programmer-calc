@@ -36,7 +36,7 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
     lazy var infoSubLabel: UILabel = {
         let label = UILabel()
         
-        label.frame = CGRect()
+        label.frame = CGRect(x: 0, y: 0, width: 44, height: 14.5)
         label.text = "Decimal"
         label.backgroundColor = .clear
         label.textColor = .systemGray

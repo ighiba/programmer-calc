@@ -10,9 +10,12 @@ import UIKit
 
 protocol CalcButtonPageProtocol: UIView {
     var allButtons: [CalculatorButton] { get set }
+    var layoutConstraints: [NSLayoutConstraint]? { get set}
 }
 
 class CalcButtonsMain: UIView, CalcButtonPageProtocol {
+    
+    var layoutConstraints: [NSLayoutConstraint]?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -51,7 +54,7 @@ class CalcButtonsMain: UIView, CalcButtonPageProtocol {
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
         
         // Activate constraints
-        NSLayoutConstraint.activate([
+        layoutConstraints = [
             // Constraints for buttons (Main)
             // width = main view width - spacing * 2
             buttonsStackView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.90),
@@ -60,8 +63,9 @@ class CalcButtonsMain: UIView, CalcButtonPageProtocol {
             // top anchor == spacing
             buttonsStackView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: buttonsStackHeight() / 2 + 5),
             // bottom anchor === spacing
-            buttonsStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0),
-        ])
+            buttonsStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+        ]
+        NSLayoutConstraint.activate(layoutConstraints!)
     }
     
     // Horizontal main calc buttons stack
@@ -148,7 +152,10 @@ class CalcButtonsMain: UIView, CalcButtonPageProtocol {
     
     // Dynamic butons stack height for autolayout
     func buttonsStackHeight() -> CGFloat {
-        return (UIScreen.main.bounds.height / 3) * 2
+        let screenWidth = UIScreen.main.bounds.width
+        let screenHeight = UIScreen.main.bounds.height
+        let height = screenHeight > screenWidth ? screenHeight : screenWidth
+        return (height / 3) * 2
     }
     
     required init(coder: NSCoder) {
@@ -157,6 +164,8 @@ class CalcButtonsMain: UIView, CalcButtonPageProtocol {
 }
 
 class CalcButtonsAdditional: UIView, CalcButtonPageProtocol {
+    
+    var layoutConstraints: [NSLayoutConstraint]?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -195,7 +204,7 @@ class CalcButtonsAdditional: UIView, CalcButtonPageProtocol {
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
         
         // Activate constraints
-        NSLayoutConstraint.activate([
+        layoutConstraints = [
             // Constraints for buttons (Main)
             // width = main view width - spacing * 2
             buttonsStackView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.90),
@@ -204,8 +213,9 @@ class CalcButtonsAdditional: UIView, CalcButtonPageProtocol {
             // top anchor == spacing
             buttonsStackView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: buttonsStackHeight() / 2 + 5),
             // bottom anchor === spacing
-            buttonsStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0),
-        ])
+            buttonsStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+        ]
+        NSLayoutConstraint.activate(layoutConstraints!)
     }
     
     // Horizontal main calc buttons stack
@@ -283,7 +293,10 @@ class CalcButtonsAdditional: UIView, CalcButtonPageProtocol {
     
     // Dynamic butons stack height for autolayout
     func buttonsStackHeight() -> CGFloat {
-        return (UIScreen.main.bounds.height / 3) * 2
+        let screenWidth = UIScreen.main.bounds.width
+        let screenHeight = UIScreen.main.bounds.height
+        let height = screenHeight > screenWidth ? screenHeight : screenWidth
+        return (height / 3) * 2
     }
     
     required init(coder: NSCoder) {

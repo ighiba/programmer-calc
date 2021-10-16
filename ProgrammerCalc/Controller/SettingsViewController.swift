@@ -34,17 +34,23 @@ class SettingsViewController: UITableViewController {
    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        // lock rotation
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
         // get switch last state from UserDefaults
         getSettings()
+        
     }
  
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+        super.viewWillDisappear(animated)
         // save switch state to UserDefaults
         saveSettings()
         // update settings in PCalcVC
         updaterHandler?()
+        // unlock rotation
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.all, andRotateTo: UIInterfaceOrientation.portrait)
     }
+    
     
     // MARK: - Methods
     

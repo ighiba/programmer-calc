@@ -15,6 +15,10 @@ class PCalcView: UIView {
     private let margin: CGFloat = 10
     private let navBarHeight: CGFloat = 44
     
+    // Constraints
+    var portrait: [NSLayoutConstraint]?
+    var landscape: [NSLayoutConstraint]?
+    
     // safe area insets in CGFloat .top .bottom
     let windowSafeAreaInsets: UIEdgeInsets = {
         if let window = UIApplication.shared.windows.first {
@@ -39,6 +43,8 @@ class PCalcView: UIView {
         self.addSubview(navigationBar)
         // add labels
         self.addSubview(labelsStack)
+        self.addSubview(self.mainLabel.infoSubLabel)
+        self.addSubview(self.converterLabel.infoSubLabel)
         
         setupLayout()
     }
@@ -66,7 +72,7 @@ class PCalcView: UIView {
     // Set navigation bar
     fileprivate let navigationBar: UINavigationBar = {
         // Set navigation bar
-        let navBar = UINavigationBar(frame: CGRect())
+        let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44))
         let navItem = UINavigationItem()
         //let changeItem = UIBarButtonItem(title: "Change conversion", style: .plain, target: self, action: #selector(PCalcViewController.changeButtonTapped))
         let changeItem = UIBarButtonItem(image: UIImage(systemName: "arrow.up.arrow.down.circle"), style: .plain, target: self, action: #selector(PCalcViewController.changeConversionButtonTapped))
@@ -103,14 +109,11 @@ class PCalcView: UIView {
         label.text = "0"
         label.backgroundColor = .clear
         // set font size, font family, allignment
-        label.font = UIFont(name: "HelveticaNeue-Thin", size: 62.0)
+        label.font = UIFont(name: "HelveticaNeue-Thin", size: 70.0)
         label.textAlignment = .right
         // resizeble text
         label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.25
-        
-        // add info label
-        label.addInfoLabel()
+        label.minimumScaleFactor = 0.15
         
         return label
     }()
@@ -124,14 +127,11 @@ class PCalcView: UIView {
         label.numberOfLines = 2
         label.backgroundColor = .clear
         // set font size, font family
-        label.font = UIFont(name: "HelveticaNeue-Thin", size: 62.0)
+        label.font = UIFont(name: "HelveticaNeue-Thin", size: 70.0)
         label.textAlignment = .right
         // resizeble text
         label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.25
-        
-        // add info label
-        label.addInfoLabel()
+        label.minimumScaleFactor = 0.15
    
         return label
     }()
@@ -147,55 +147,60 @@ class PCalcView: UIView {
         
         return labels
     }()
+    
 
     // MARK: - Layout
     
     private func setupLayout() {
-        //self.translatesAutoresizingMaskIntoConstraints = false
         navigationBar.translatesAutoresizingMaskIntoConstraints = false
         labelsStack.translatesAutoresizingMaskIntoConstraints = false
-        mainLabel.translatesAutoresizingMaskIntoConstraints = false
-        converterLabel.translatesAutoresizingMaskIntoConstraints = false
+        mainLabel.infoSubLabel.translatesAutoresizingMaskIntoConstraints = false
+        converterLabel.infoSubLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        // Activate constraints
-        NSLayoutConstraint.activate([
-            // View
-            //self.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-            //self.heightAnchor.constraint(equalToConstant: viewHeight()+windowSafeAreaInsets.top-10),
-           // self.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
-            
-            // Constraints for navigation bar
+        // Constraints for portrait orientation
+        portrait = [
             navigationBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-            navigationBar.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width),
             navigationBar.heightAnchor.constraint(equalToConstant: navBarHeight),
-            navigationBar.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            navigationBar.widthAnchor.constraint(equalTo: self.widthAnchor),
             
-            // Constraints for labelStack
             labelsStack.topAnchor.constraint(equalTo: navigationBar.bottomAnchor),
+            labelsStack.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             labelsStack.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.95),
-            //labelsStack.heightAnchor.constraint(equalToConstant: self.frame.height - 44),
-            labelsStack.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: viewHeight() - margin*2),
+            labelsStack.centerXAnchor.constraint(equalTo: navigationBar.centerXAnchor),
+            
+            mainLabel.infoSubLabel.topAnchor.constraint(equalTo: mainLabel.bottomAnchor),
+            mainLabel.infoSubLabel.trailingAnchor.constraint(equalTo: mainLabel.trailingAnchor, constant: -5),
+            
+            converterLabel.infoSubLabel.topAnchor.constraint(equalTo: converterLabel.bottomAnchor),
+            converterLabel.infoSubLabel.trailingAnchor.constraint(equalTo: converterLabel.trailingAnchor, constant: -5),
+            
+        ]
+        
+        // Constraints for landscape orientation
+        landscape = [
+            labelsStack.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             labelsStack.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+
+            labelsStack.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: getScreenBounds().width * 0.05),
+            labelsStack.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: getScreenBounds().width * -0.05),
+            labelsStack.heightAnchor.constraint(equalToConstant: getScreenBounds().width * 0.85),
             
-            // Constraints for main label
-            // width and height anchors
-            //mainLabel.widthAnchor.constraint(equalTo: labelsStack.widthAnchor),
-            //mainLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: labelHeight() ),
-            //mainLabel.heightAnchor.constraint(equalToConstant: labelHeight() ),
+            mainLabel.infoSubLabel.topAnchor.constraint(equalTo: mainLabel.bottomAnchor),
+            mainLabel.infoSubLabel.trailingAnchor.constraint(equalTo: mainLabel.trailingAnchor, constant: -5),
             
-            // Constraints for converter label
-            // width and height anchors
-            //converterLabel.widthAnchor.constraint(equalTo: labelsStack.widthAnchor),
-            //converterLabel.heightAnchor.constraint(equalToConstant: labelHeight()),
-            
-        ])
+            converterLabel.infoSubLabel.topAnchor.constraint(equalTo: converterLabel.bottomAnchor),
+            converterLabel.infoSubLabel.trailingAnchor.constraint(equalTo: converterLabel.trailingAnchor, constant: -5),
+        ]
+        
         
         // Additional setups
         
         // add changeWordSizeButton to navigationBar title view(in center)
         navigationBar.items?.first?.titleView?.addSubview(changeWordSizeButton)
         changeWordSizeButton.center =  (navigationBar.items?.first?.titleView!.center)!
+
     }
+    
     // MARK: - Calculated heights
     
     // Dynamic label height for autolayout
@@ -206,6 +211,18 @@ class PCalcView: UIView {
     
     func viewHeight() -> CGFloat {
         return UIScreen.main.bounds.height / 3
+    }
+    
+    func getScreenBounds() -> CGRect {
+        
+        // caclculation for landscape and portrait orientations
+        let screenWidth = UIScreen.main.bounds.width
+        let screenHeight = UIScreen.main.bounds.height
+        let width = screenWidth < screenHeight ? screenWidth : screenHeight
+        let height = screenHeight > screenHeight ? screenHeight : screenWidth
+        
+        
+        return CGRect(x: 0, y: 0, width: width, height: height)
     }
     
     required init?(coder: NSCoder) {

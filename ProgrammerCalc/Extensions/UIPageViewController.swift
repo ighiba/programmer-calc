@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIPageViewController {
-    // allows or disallows scroll pages and interact with content
+    // Allows or disallows scroll pages and interact with content
     var delaysContentTouches: Bool {
         get {
             var isAllowed: Bool = true
@@ -25,6 +25,17 @@ extension UIPageViewController {
                 if let subView = view as? UIScrollView {
                     subView.delaysContentTouches = newValue
                 }
+            }
+        }
+    }
+    
+    // Change page control visibility by bool
+    func setPageControl(visibile: Bool) {
+        for case let pageControl in self.view.subviews where pageControl is UIPageControl {
+            if visibile {
+                pageControl.isHidden = false
+            } else {
+                pageControl.isHidden = true
             }
         }
     }
