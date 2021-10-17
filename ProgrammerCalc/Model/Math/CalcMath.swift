@@ -82,6 +82,15 @@ final class CalcMath {
         // add decimal fract part
         formattedDec.setNewDecimal(with: formattedDec.decimalValue + decFractPart)
         
+        // Check if float and negative
+        if formattedDec.value.contains(".") && formattedDec.decimalValue < 0 {
+            // round decimal
+            var dec = formattedDec.decimalValue
+            var decCopy = dec
+            NSDecimalRound(&dec, &decCopy, 0, .up)
+            formattedDec.setNewDecimal(with: dec)
+        }
+        
         // ======================
         // Convert Decimal to Any
         // ======================
@@ -237,6 +246,16 @@ final class CalcMath {
         guard convertedDecimal.decimalValue != 0 else {
             return value
         }
+        
+        // Check if float
+        if convertedDecimal.value.contains(".") {
+            // round decimal
+            var dec = convertedDecimal.decimalValue
+            var decCopy = dec
+            NSDecimalRound(&dec, &decCopy, 0, .down)
+            convertedDecimal.setNewDecimal(with: dec)
+        }
+        
         // multiple by -1
         let newDecimalValue = -1 * convertedDecimal.decimalValue
         

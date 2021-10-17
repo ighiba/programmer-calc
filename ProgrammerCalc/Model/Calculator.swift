@@ -209,7 +209,7 @@ class Calculator: CalculatorProtocol {
         
         // Process fract part
         // if last char is dot then append dot
-        var lastDotIfExists: String = inputStr.last == "." ? "." : ""
+        var lastSymbolsIfExists: String = inputStr.last == "." ? "." : ""
         
         // check if value .0
         let testLabelStr = inputStr.removeAllSpaces()
@@ -217,11 +217,23 @@ class Calculator: CalculatorProtocol {
             // get str fract part
             let fractPartStr: String = testLabelStr.getPartAfter(divider: ".")
             // check if fract == 0, or 00, 000 etc.
-            if Int(fractPartStr)! == 0 {
-                // replace lastDotIfExists with old value of fract without updating it
-                lastDotIfExists = "." + fractPartStr
+            if Int(fractPartStr.replacingOccurrences(of: ".", with: ""))! == 0 {
+                // replace lastSymbolsIfExists with old value of fract without updating it
+                lastSymbolsIfExists = "." + fractPartStr
             }
             // continue to process as normal
+        } else if testLabelStr.last == "0" && testLabelStr.contains(".") {
+            // count how much zeros in back
+            let buffFractPart = String(testLabelStr.getPartAfter(divider: ".").reversed())
+            lastSymbolsIfExists = ""
+            for digit in buffFractPart {
+                if digit == "0" {
+                    lastSymbolsIfExists.append(digit)
+                } else {
+                    break
+                }
+            }
+            
         }
         
         // Process values by system
@@ -259,7 +271,7 @@ class Calculator: CalculatorProtocol {
             // updating dec for values with floating point
         } else if self.systemMain == .dec && inputStr.contains(".") {
             
-            processedStr = converter.processDecFloatStrToFormat(decStr: self.mainLabelRawValue.value, lastDotIfExists: lastDotIfExists)
+            processedStr = converter.processDecFloatStrToFormat(decStr: self.mainLabelRawValue.value, lastDotIfExists: lastSymbolsIfExists)
             
         } else {
             // TODO: Refactor
@@ -271,9 +283,59 @@ class Calculator: CalculatorProtocol {
                 //let updatedBin = Binary(stringLiteral: bin!.value)
                 let updatedValue = converter.convertValue(value: bin, from: .bin, to: self.systemMain!)
                 processedStr = updatedValue!.value
+                
+                if processedStr.contains(".") && inputStr.last != "." {
+                    let intPart = processedStr.getPartBefore(divider: ".")
+                    let fractPart = inputStr.getPartAfter(divider: ".")
+                    processedStr = intPart + "." + fractPart
+                }
+                
+
+                
+            }
+        }
+        
+        // Check if float and negative
+        // TODO: Refactor to factory
+        let testProcessed: NumberSystemProtocol? = getNumberBy(strValue: processedStr, currentSystem: systemMain!)
+        
+        if let testDec = converter.convertValue(value: testProcessed!, from: systemMain!, to: .dec) as? DecimalSystem {
+            if testDec.value.contains(".") && testDec.decimalValue < 0 {
+                print("negative and float")
+                // remove fract part from str
+                print(processedStr)
+                processedStr = processedStr.getPartBefore(divider: ".")
+                print(processedStr)
+                if testDec.decimalValue > -1 && testDec.decimalValue < 0 {
+                    processedStr = "0"
+                }
             }
         }
         
         return processedStr != "" ? processedStr : inputStr
+    }
+    
+    func getNumberBy(strValue value: String, currentSystem system: ConversionSystemsEnum) -> NumberSystemProtocol? {
+        var buffValue: NumberSystemProtocol?
+        
+        switch system {
+        case .bin:
+            let dummyBin = Binary()
+            dummyBin.value = value
+            buffValue = Binary(dummyBin)
+            break
+        case .oct:
+            buffValue = Octal(stringLiteral: value)
+            break
+        case .dec:
+            buffValue = DecimalSystem(stringLiteral: value)
+            break
+        case .hex:
+            buffValue = Hexadecimal(stringLiteral: value)
+            break
+        }
+        
+        return buffValue
+        
     }
 }

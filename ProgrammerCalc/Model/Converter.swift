@@ -220,6 +220,27 @@ import Foundation
     }
     
     func processDecFloatStrToFormat(decStr: String, lastDotIfExists: String) -> String {
+        var lastSymbolsIfExists = lastDotIfExists
+        if decStr.last == "0" && decStr.contains(".") {
+            // count how much zeros in back
+            let fractPart = decStr.getPartAfter(divider: ".")
+            
+            let buffFractPart = String(fractPart.reversed())
+            var buffStr = ""
+            for digit in buffFractPart {
+                if digit == "0" {
+                    buffStr.append(digit)
+                } else {
+                    break
+                }
+            }
+            
+            if Int(fractPart) != 0 {
+                lastSymbolsIfExists = buffStr
+            }
+            
+        }
+        
         // get dec value
         let dec = DecimalSystem(stringLiteral: decStr)
         // get int part of decimal
@@ -241,8 +262,8 @@ import Foundation
         // restore new decimal with fract part
         dec.setNewDecimal(with: updatedDec.decimalValue + decFractPart)
         
-        // set updated main label value + last dot if exists
-        return dec.value + lastDotIfExists
+        // set updated main label value + last symbols if exists
+        return dec.value + lastSymbolsIfExists
     }
     
 }

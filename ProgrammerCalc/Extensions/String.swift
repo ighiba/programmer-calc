@@ -86,12 +86,16 @@ extension String {
         return str
     }
     
+    // TODO: Refactor
     func getPartAfter(divider: Character) -> String {
         let str = self
         
         // get position fract part
         let pointPos = str.firstIndex(of: divider)!
         let fractDistance = Int(str.distance(from: pointPos, to:  str.endIndex))
+        guard fractDistance > 1 else {
+            return ""
+        }
         // get str fract part
         let fractPartStr: String = {
             let reversedStr = String(str.reversed())
@@ -108,5 +112,31 @@ extension String {
         }()
         
         return String(fractPartStr.reversed())
+    }
+    
+    func getPartBefore(divider: Character) -> String {
+        let str = self
+        
+        // get position fract part
+        let pointPos = str.firstIndex(of: divider)!
+        let fractDistance = abs(Int(str.distance(from: pointPos, to:  str.startIndex)))
+        guard fractDistance > 1 else {
+            return ""
+        }
+        // get str fract part
+        let fractPartStr: String = {
+            var buffStr = String()
+
+            for digit in str {
+                buffStr.append(digit)
+                if fractDistance == buffStr.count {
+                    return buffStr
+                }
+            }
+            
+            return buffStr
+        }()
+        
+        return fractPartStr
     }
 }

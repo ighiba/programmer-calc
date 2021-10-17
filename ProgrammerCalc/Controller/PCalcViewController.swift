@@ -448,6 +448,13 @@ class PCalcViewController: UIPageViewController {
         var result = String()
         
         if digit == "." && !labelText.contains(".") {
+            // forbid float input when negative number
+            if let dec = converter.convertValue(value: calculator.mainLabelRawValue, from: calculator.systemMain!, to: .dec) as? DecimalSystem {
+                if dec.decimalValue < 0 {
+                    return labelText
+                }
+            }
+            
             return labelText + digit
         } else if digit == "." && labelText.contains(".") {
             return labelText
@@ -571,6 +578,8 @@ class PCalcViewController: UIPageViewController {
         let buttonLabel = sender.titleLabel?.text
         // update conversion state
         updateConversionState()
+        // if float then exit
+        guard !mainLabel.text!.contains(".") else { return }
         // switch complements
         switch buttonLabel {
         case "1's":
@@ -654,11 +663,15 @@ class PCalcViewController: UIPageViewController {
     
     // Negate button
     @objc func negateButtonTapped(_ sender: UIButton) {
+        // if float then exit
+        guard !mainLabel.text!.contains(".") else { return }
+        // calculate result
         let result = calculator.negateValue(value: calculator.mainLabelRawValue, system: calculator.systemMain!)
         // check for overflow
         let isOverflowed = calculator.isValueOverflowed(value: result, for: calculator.systemMain!, when: .negate)
         guard !isOverflowed else { return }
         mainLabel.text = result
+        updateMainLabel()
         updateConverterLabel()
     }
     
