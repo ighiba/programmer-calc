@@ -219,6 +219,13 @@ class PCalcViewController: UIPageViewController {
         mainLabel.text = data.mainLabelState
         converterLabel.text = data.converterLabelState
         calculator.processSigned = data.processSigned
+        var hasInput = true
+        if let mainValue = Int(data.mainLabelState.removeAllSpaces()) {
+            if mainValue == 0 {
+                hasInput = false
+            }
+        }
+        updateClearButton(hasInput: hasInput)
     }
     
     public func saveCalcState() {
@@ -329,6 +336,23 @@ class PCalcViewController: UIPageViewController {
         updateIsSignedButton()
         // update plusminus button state
         changeStatePlusMinus()
+    }
+    
+    // Change clear button title
+    private func updateClearButton(hasInput state: Bool) {
+        if let clearButton = self.view.viewWithTag(100) as? CalculatorButton {
+            if state {
+                guard clearButton.titleLabel?.text != "C" else {
+                    return
+                }
+                clearButton.setTitle("C", for: .normal)
+            } else {
+                guard clearButton.titleLabel?.text != "AC" else {
+                    return
+                }
+                clearButton.setTitle("AC", for: .normal)
+            }
+        }
     }
     
     // Handle displaying of mainLabel
@@ -501,10 +525,11 @@ class PCalcViewController: UIPageViewController {
     @objc func numericButtonTapped(_ sender: UIButton) {
         let button = sender
         let buttonText = button.titleLabel!.text ?? ""
-        // tag for AC/C button
-        let acButton = self.view.viewWithTag(100) as! UIButton
-        acButton.setTitle("C", for: .normal)
-        
+        // update AC/C button
+        if buttonText != "0" && buttonText != "00" {
+            updateClearButton(hasInput: true)
+        }
+ 
         print("Button \(buttonText) touched")
         
         if calculator.mathState != nil {
@@ -565,13 +590,10 @@ class PCalcViewController: UIPageViewController {
     // Bitwise operations
     @objc func bitwiseButtonTapped(_ sender: UIButton) {
         let buttonText = sender.titleLabel?.text
-        
         // update conversion state
         updateConversionState()
-        
         // if float then exit
         guard !mainLabel.text!.contains(".") else { return }
-        
         let operation = calculator.getOperationBy(string: buttonText!)
         guard operation != nil else { return }
         
