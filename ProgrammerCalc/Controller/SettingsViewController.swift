@@ -59,25 +59,28 @@ class SettingsViewController: UITableViewController {
         // get data from UserDefaults
         if let settings = settingsStorage.loadData() {
             // loop table cells
-            for cell in self.tableView.visibleCells as! [AppSettingsCell] {
-                if let switcher = cell.accessoryView as? UISwitch {
-                    let title = cell.textLabel?.text
-                    
-                    // set switcher to userdefault state
-                    switch title {
-                    case "Dark mode":
-                        switcher.setOn(settings.darkMode, animated: false)
-                    case "Tapping sounds":
-                        switcher.setOn(settings.tappingSounds, animated: false)
-                    case "Haptic feedback":
-                        switcher.setOn(settings.hapticFeedback, animated: false)
-                    default:
-                        // TODO: Handle
-                        print("error")
-                        break
+            DispatchQueue.main.async {
+                for cell in self.tableView.visibleCells as! [AppSettingsCell] {
+                    if let switcher = cell.accessoryView as? UISwitch {
+                        let title = cell.textLabel?.text
+                        
+                        // set switcher to userdefault state
+                        switch title {
+                        case "Dark mode":
+                            switcher.setOn(settings.darkMode, animated: false)
+                        case "Tapping sounds":
+                            switcher.setOn(settings.tappingSounds, animated: false)
+                        case "Haptic feedback":
+                            switcher.setOn(settings.hapticFeedback, animated: false)
+                        default:
+                            // TODO: Handle
+                            print("error")
+                            break
+                        }
                     }
                 }
             }
+
         } else {
             print("no settings")
             // Save default settings (all false)
