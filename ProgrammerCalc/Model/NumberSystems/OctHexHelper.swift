@@ -41,19 +41,12 @@ class OctHexHelper {
        
         // remove zeros
         resultBin.value = resultBin.removeZerosBefore(str: resultBin.value)
-        // if octhex is negative
-        // check value for bits count
-        // TODO: for floating point
-        switch resultBin.value.count {
-        case 8,16,32,64:
-            // if already filled to needed bit
-            // do nothing
-            break
-        default:
-            // add zeros before to fill 8, 16, 32, 64 bits
-            resultBin.fillUpToMaxBitsCount()
-            break
+        // add zero if all zeros deleted
+        if resultBin.value.first == "." {
+            resultBin.value = "0" + resultBin.value
         }
+        // add zeros before to 64 bits
+        resultBin.fillUpToMaxBitsCount()
         
         return resultBin.value
     }
