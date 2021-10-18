@@ -7,10 +7,19 @@
 //
 
 import UIKit
+import MessageUI
 
-class SettingsViewController: UITableViewController {
+protocol SettingsViewControllerDelegate {
+    var appVersion: String { get set }
+    func openContactForm()
+}
+
+class SettingsViewController: UITableViewController, SettingsViewControllerDelegate, MFMailComposeViewControllerDelegate {
     
     // MARK: - Properties
+    
+    // App version number
+    var appVersion: String = "0.7"
 
     lazy var settingsView = SettingsView(frame: CGRect(), style: .grouped)
     lazy var doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(SettingsViewController.closeButtonTapped))
@@ -24,6 +33,7 @@ class SettingsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        settingsView.controllerDelegate = self
         self.tableView = settingsView
         // Setup navigation items
         self.navigationController?.navigationBar.topItem?.rightBarButtonItem = doneItem
@@ -123,6 +133,32 @@ class SettingsViewController: UITableViewController {
             settingsStorage.saveData(newSettings)
         }
         
+    }
+    
+    // Contact us cell
+    func openContactForm() {
+        // Check mail services aviability
+        if MFMailComposeViewController.canSendMail() {
+            let composeVC = MFMailComposeViewController()
+            composeVC.mailComposeDelegate = self
+            
+            let model = UIDevice.current.model
+            let systemVersion = UIDevice.current.systemVersion
+            
+            // Configure the fields of the interface
+            composeVC.setToRecipients(["ighiba.dev@gmail.com"])
+            composeVC.setSubject("ProgrammerCalc support")
+            composeVC.setMessageBody("Model - \(model), OS - \(systemVersion), App version - \(appVersion)", isHTML: false)
+            
+            self.present(composeVC, animated: true, completion: nil)
+        } else {
+            print("Mail services are not available")
+            return
+        }
+    }
+    // Dismissing contact us form
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Swift.Error?) {
+        controller.dismiss(animated: true, completion: nil)
     }
     
     // MARK: - Actions
