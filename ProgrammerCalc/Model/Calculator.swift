@@ -90,9 +90,9 @@ class Calculator: CalculatorProtocol {
     // Convert operation name from button title to enum
     func getOperationBy(string: String) -> CalcMath.MathOperation? {
         switch string {
-        case "\u{00f7}":
+        case "÷":
             return.div
-        case "X":
+        case "×":
             return .mul
         case "-":
             return .sub

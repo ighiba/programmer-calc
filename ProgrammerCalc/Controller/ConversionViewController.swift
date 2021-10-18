@@ -23,6 +23,11 @@ class ConversionViewController: UIViewController {
     private var settingsStorage: SettingsStorageProtocol = SettingsStorage()
     private var conversionStorage: ConversionStorageProtocol = ConversionStorage()
     
+    // Haptic feedback generator
+    let generator = UIImpactFeedbackGenerator(style: .medium)
+    // Hapting settings
+    lazy var hapticFeedback = settingsStorage.safeGetData().hapticFeedback
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -187,14 +192,12 @@ class ConversionViewController: UIViewController {
     // Changing value of slider
     @objc func sliderValueChanged( sender: UISlider) {
         let sliderNewValue = sender.value.rounded()
-
         if sliderOldValue == sliderNewValue {
             // do nothing
         } else {
-            // haptic feedback generator
-            let settings = settingsStorage.loadData()
-            if (settings?.hapticFeedback ?? false) {
-                let generator = UIImpactFeedbackGenerator(style: .medium)
+
+            if hapticFeedback {
+                
                 generator.prepare()
                 // impact
                 generator.impactOccurred()

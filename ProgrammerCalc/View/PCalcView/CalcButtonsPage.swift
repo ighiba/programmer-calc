@@ -82,8 +82,8 @@ class CalcButtonsMain: UIView, CalcButtonPageProtocol {
     // Standart calculator buttons
     var allButtons: [CalculatorButton] = {
         
-        let allTitles = ["AC","\u{00B1}","Signed\nOFF","\u{00f7}",
-                         "7", "8", "9", "X",
+        let allTitles = ["AC","±","Signed\nOFF","÷",
+                         "7", "8", "9", "×",
                          "4", "5", "6", "-",
                          "1", "2", "3", "+",
                          "0", ".", "="]
@@ -105,7 +105,7 @@ class CalcButtonsMain: UIView, CalcButtonPageProtocol {
             case "AC":
                 button = CalculatorButton()
                 button.addTarget(nil, action: #selector(PCalcViewController.clearButtonTapped), for: .touchUpInside)
-            case "\u{00B1}":
+            case "±":
                 button = CalculatorButton()
                 button.addTarget(nil, action: #selector(PCalcViewController.negateButtonTapped), for: .touchUpInside)
             case "=":

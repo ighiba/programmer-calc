@@ -1,5 +1,5 @@
 //
-//  UIPageViewController.swift
+//  PCalcViewControllerExtension.swift
 //  ProgrammerCalc
 //
 //  Created by Ivan Ghiba on 29.08.2020.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UIPageViewController {
+extension PCalcViewController {
     // Allows or disallows scroll pages and interact with content
     var delaysContentTouches: Bool {
         get {

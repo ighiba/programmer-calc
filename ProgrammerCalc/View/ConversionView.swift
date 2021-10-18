@@ -10,21 +10,27 @@ import UIKit
 
 class ConversionView: UIView {
     
+    private let margin: CGFloat = 10
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setViews()
     }
 
     func setViews() {
-        //let screenWidth = UIScreen.main.bounds.width
         self.frame = UIScreen.main.bounds
         
         // TODO: Themes
         self.backgroundColor = UIColor.gray.withAlphaComponent(0.6)
-        
-        mainPicker.addSubview(arrow)
-        container.addSubview(containerStack)
+
         self.addSubview(container)
+        container.addSubview(popoverTitle)
+        container.addSubview(mainPicker)
+        mainPicker.addSubview(arrow)
+        container.addSubview(digitsAfterLabel)
+        digitsAfterLabel.addSubview(sliderValueDigit)
+        container.addSubview(digitsAfterSlider)
+        container.addSubview(doneButton)
 
         setupLayout()
     }
@@ -32,12 +38,13 @@ class ConversionView: UIView {
     
     // Setup layout
     func setupLayout() {
-        //let screenWidth = UIScreen.main.bounds.width
         container.translatesAutoresizingMaskIntoConstraints = false
-        containerStack.translatesAutoresizingMaskIntoConstraints = false
+        popoverTitle.translatesAutoresizingMaskIntoConstraints = false
         mainPicker.translatesAutoresizingMaskIntoConstraints = false
         arrow.translatesAutoresizingMaskIntoConstraints = false
+        sliderValueDigit.translatesAutoresizingMaskIntoConstraints = false
         digitsAfterLabel.translatesAutoresizingMaskIntoConstraints = false
+        digitsAfterSlider.translatesAutoresizingMaskIntoConstraints = false
         doneButton.translatesAutoresizingMaskIntoConstraints = false
         
         // Activate constraints
@@ -48,14 +55,18 @@ class ConversionView: UIView {
             container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9),
             container.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.57),
             
-            // Set constraints for done button
-            containerStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            containerStack.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-            containerStack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.90),
-            containerStack.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.90),
+            // Set constraints for label
+            popoverTitle.topAnchor.constraint(equalTo: container.topAnchor, constant: margin),
+            popoverTitle.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.1),
+            popoverTitle.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
+            popoverTitle.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            
             
             // Set constraints for picker
-            mainPicker.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.25),
+            mainPicker.topAnchor.constraint(equalTo: popoverTitle.topAnchor, constant: 2*margin),
+            mainPicker.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.52),
+            mainPicker.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
+            mainPicker.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             
             // Set contraints for picker's arrow
             arrow.centerYAnchor.constraint(equalTo: mainPicker.centerYAnchor),
@@ -64,10 +75,26 @@ class ConversionView: UIView {
             arrow.heightAnchor.constraint(equalToConstant: 30),
             
             // Set constraints for digitsAfterLabel
-            digitsAfterLabel.heightAnchor.constraint(equalToConstant: 30),
+            digitsAfterLabel.topAnchor.constraint(equalTo: mainPicker.bottomAnchor),
+            digitsAfterLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor, constant: -margin),
+            digitsAfterLabel.heightAnchor.constraint(equalToConstant: 35),
+            // and slider value
+            sliderValueDigit.topAnchor.constraint(equalTo: digitsAfterLabel.topAnchor),
+            sliderValueDigit.bottomAnchor.constraint(equalTo: digitsAfterLabel.bottomAnchor),
+            sliderValueDigit.leftAnchor.constraint(equalTo: digitsAfterLabel.rightAnchor, constant: margin),
+            sliderValueDigit.heightAnchor.constraint(equalTo: digitsAfterLabel.heightAnchor),
+            
+            // Set constraints for slider
+            digitsAfterSlider.topAnchor.constraint(equalTo: digitsAfterLabel.bottomAnchor),
+            digitsAfterSlider.bottomAnchor.constraint(equalTo: doneButton.topAnchor),
+            digitsAfterSlider.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
+            digitsAfterSlider.centerXAnchor.constraint(equalTo: container.centerXAnchor),
 
             // Set contraints for done button
+            doneButton.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -margin * 1.7),
             doneButton.heightAnchor.constraint(equalToConstant: 50),
+            doneButton.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
+            doneButton.centerXAnchor.constraint(equalTo: container.centerXAnchor),
         ])
     }
     
@@ -82,14 +109,7 @@ class ConversionView: UIView {
     
     // Done button for saving and dismissing vc
     fileprivate let doneButton: UIButton = {
-        let button = UIButton()
-        
-        button.frame = CGRect(x: 0, y: 0, width: 20, height: 100)
-        
-        button.setTitle("Done", for: .normal)
-        // TODO: Themes
-        button.backgroundColor = .systemGreen
-        button.layer.cornerRadius = 16
+        let button = PopoverDoneButton(frame: CGRect())
         
         button.addTarget(nil, action: #selector(ConversionViewController.doneButtonTapped), for: .touchUpInside)
         
@@ -151,7 +171,6 @@ class ConversionView: UIView {
         // default value
         label.text = "8"
         label.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
-        //label.font = UIFont(name: "HelveticaNeue-Thin", size: 18.0)
         
         return label
     }()
@@ -160,9 +179,9 @@ class ConversionView: UIView {
     let digitsAfterSlider: UISlider = {
         let slider = UISlider()
         
-        // TODO: Multiple values up to 32 ( 1 * 4 = 4 digits after point etc)
+        // TODO: Multiple values up to 16 ( 1 * 4 = 4 digits after point etc)
         slider.minimumValue = 1
-        slider.maximumValue = 5
+        slider.maximumValue = 4
         
         // Initial value
         slider.value = 3
@@ -173,39 +192,6 @@ class ConversionView: UIView {
         slider.addTarget(nil, action: #selector(ConversionViewController.sliderValueChanged), for: .valueChanged)
         
         return slider
-    }()
-    
-    // stack for info labels
-    fileprivate lazy var horizontalInfoStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [digitsAfterLabel,sliderValueDigit])
-        
-        stack.axis = .horizontal
-        stack.alignment = .fill
-        stack.distribution = .fill
-        
-        return stack
-    }()
-    
-    // stack with pickers, slider and button
-    fileprivate lazy var containerStack: UIStackView = {
-        // form stack with views
-        let stack = UIStackView(arrangedSubviews: [popoverTitle,mainPicker,horizontalInfoStack,digitsAfterSlider,doneButton])
-        
-        stack.axis = .vertical
-        stack.alignment = .fill
-        stack.distribution = .fill
-        
-        let containerStackHeight = ((UIScreen.main.bounds.height * 0.55) * 0.9) * 0.9
-        
-        // Custom spacings
-        // after picker
-        stack.setCustomSpacing(containerStackHeight * 0.05, after: self.mainPicker)
-        // after slider label
-        stack.setCustomSpacing(containerStackHeight * 0.05, after: self.horizontalInfoStack)
-        // after slider
-        stack.setCustomSpacing(containerStackHeight * 0.1, after: self.digitsAfterSlider)
-        
-        return stack
     }()
     
     // Animation for presenting view

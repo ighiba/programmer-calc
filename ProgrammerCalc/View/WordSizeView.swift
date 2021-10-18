@@ -123,14 +123,7 @@ class WordSizeView: UIView {
     
     // Done button for saving and dismissing vc
     fileprivate let doneButton: UIButton = {
-        let button = UIButton()
-        
-        button.frame = CGRect(x: 0, y: 0, width: 20, height: 100)
-        
-        button.setTitle("Done", for: .normal)
-        // TODO: Themes
-        button.backgroundColor = .systemGreen
-        button.layer.cornerRadius = 16
+        let button = PopoverDoneButton(frame: CGRect())
         
         button.addTarget(nil, action: #selector(WordSizeViewController.doneButtonTapped), for: .touchUpInside)
         

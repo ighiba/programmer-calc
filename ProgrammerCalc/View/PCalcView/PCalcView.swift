@@ -110,6 +110,7 @@ class PCalcView: UIView {
         label.backgroundColor = .clear
         // set font size, font family, allignment
         label.font = UIFont(name: "HelveticaNeue-Thin", size: 70.0)
+        //label.font = UIFont(name: "CourierNewPSMT", size: 70.0)
         label.textAlignment = .right
         // resizeble text
         label.adjustsFontSizeToFitWidth = true
