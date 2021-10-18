@@ -12,6 +12,9 @@ class ConversionViewController: UIViewController {
     
     // MARK: - Properties
     
+    // PCalcViewController delegate
+    var delegate: PCalcViewControllerDelegate?
+    
     lazy var conversionView = ConversionView()
     lazy var picker: ConversionPicker = conversionView.mainPicker
     lazy var slider: UISlider = conversionView.digitsAfterSlider
@@ -112,10 +115,8 @@ class ConversionViewController: UIViewController {
         // Slider
         let sliderValue = slider.value.rounded()
         
-        // TODO: Refactor to delegate or closure
-        // root vc fo handling changing of mainSystem
-        let rootVC = UIApplication.shared.windows.first?.rootViewController as? PCalcViewController
-        guard rootVC != nil else {
+        // PCalcViewController delegate fo handling changing of mainSystem
+        guard delegate != nil else {
             // set data to UserDefaults
             let newConversionSettings = ConversionSettings(systMain: systemMainNew!, systConverter: systemConverterNew!, number: sliderValue * 4)
             conversionStorage.saveData(newConversionSettings)
@@ -128,22 +129,22 @@ class ConversionViewController: UIViewController {
         // set data to UserDefaults
         let newConversionSettings = ConversionSettings(systMain: systemMainNew!, systConverter: systemConverterNew!, number: sliderValue * 4)
         conversionStorage.saveData(newConversionSettings)
-        // set data to rootVC state vars
-        rootVC?.calculator.systemMain = ConversionSystemsEnum(rawValue: systemMainNew!)
-        rootVC?.calculator.systemConverter = ConversionSystemsEnum(rawValue: systemConverterNew!)
+        // set data to PCalcViewController system states
+        delegate?.updateSystemMain(with: systemMainNew!)
+        delegate?.updateSystemCoverter(with: systemConverterNew!)
         // Handle changing of systems
         // TODO: Error handling
         if buffSavedMainLabel != systemMainNew! {
             // set labels to 0 and update
-            rootVC!.clearLabels()
+            delegate!.clearLabels()
         } else {
             // if systemMain == last value of systemMain then just update values
             // update layout
-            rootVC!.updateAllLayout()
+            delegate!.updateAllLayout()
         }
         
-        rootVC!.handleDisplayingMainLabel()
-        rootVC!.updateButtons()
+        delegate!.handleDisplayingMainLabel()
+        delegate!.updateButtons()
         
     }
     

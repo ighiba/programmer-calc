@@ -8,7 +8,17 @@
 
 import UIKit
 
-class PCalcViewController: UIPageViewController {
+protocol PCalcViewControllerDelegate {
+    func clearLabels()
+    func unhighlightLabels()
+    func updateAllLayout()
+    func handleDisplayingMainLabel()
+    func updateButtons()
+    func updateSystemMain(with rawValue: String)
+    func updateSystemCoverter(with rawValue: String)
+}
+
+class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate {
     
     // ==================
     // MARK: - Properties
@@ -29,10 +39,7 @@ class PCalcViewController: UIPageViewController {
     
     private var arrayButtonsStack = [UIView]()
     
-    // Taptic feedback generator
-    private let generator = UIImpactFeedbackGenerator(style: .light)
-    // haptic feedback setting
-    private var hapticFeedback = false
+
 
     // Handlers
     private let converter: Converter = Converter()
@@ -49,7 +56,9 @@ class PCalcViewController: UIPageViewController {
     lazy var arrayCalcButtonsViewController: [CalcButtonsViewController] = {
        var buttonsVC = [CalcButtonsViewController]()
         arrayButtonsStack.forEach { (buttonsPage) in
-            buttonsVC.append(CalcButtonsViewController(buttonsPage: buttonsPage))
+            let vc = CalcButtonsViewController(buttonsPage: buttonsPage)
+            vc.delegate = self
+            buttonsVC.append(vc)
         }
         return buttonsVC
     }()
@@ -265,7 +274,11 @@ class PCalcViewController: UIPageViewController {
     private func updateSettings() {
         // get data from UserDefaults
         let data = settingsStorage.safeGetData()
-        hapticFeedback = data.hapticFeedback
+        // update vc of buttons
+        for vc in arrayCalcButtonsViewController {
+            vc.hapticFeedback = data.hapticFeedback
+            vc.tappingSounds = data.tappingSounds
+        }
     }
     
     public func updateChangeWordSizeButton() {
@@ -443,6 +456,14 @@ class PCalcViewController: UIPageViewController {
         }
     }
     
+    func updateSystemMain(with rawValue: String) {
+        calculator.systemMain = ConversionSystemsEnum(rawValue: rawValue)
+    }
+    
+    func updateSystemCoverter(with rawValue: String) {
+        calculator.systemConverter = ConversionSystemsEnum(rawValue: rawValue)
+    }
+    
     // Add digit to end of main label
     private func addDigitToMainLabel( labelText: String, digit: String) -> String {
         var result = String()
@@ -485,15 +506,15 @@ class PCalcViewController: UIPageViewController {
     // Update signed button
     private func updateIsSignedButton() {
         // get button by tag 102
-        let isSignedButton = self.view.viewWithTag(102) as? CalculatorButton ?? CalculatorButton()
-        
-        if calculator.processSigned {
-            // if ON then disable
-            // TODO: Localization
-            isSignedButton.setTitle("Signed\nON", for: .normal)
-        } else {
-            // if OFF then enable
-            isSignedButton.setTitle("Signed\nOFF", for: .normal)
+        if let isSignedButton = self.view.viewWithTag(102) as? CalculatorButton {
+            if calculator.processSigned {
+                // if ON then disable
+                // TODO: Localization
+                isSignedButton.setTitle("Signed\nON", for: .normal)
+            } else {
+                // if OFF then enable
+                isSignedButton.setTitle("Signed\nOFF", for: .normal)
+            }
         }
     }
     
@@ -519,23 +540,13 @@ class PCalcViewController: UIPageViewController {
         unhighlightLabels()
     }
     
-    // Haptic feedback action for all buttons
-    @objc func hapticFeedback(_ sender: CalculatorButton) {
-        if hapticFeedback {
-            generator.prepare()
-            // impact
-            generator.impactOccurred()
-        }
-    }
     
     // Numeric buttons actions
     @objc func numericButtonTapped(_ sender: UIButton) {
         let button = sender
         let buttonText = button.titleLabel!.text ?? ""
         // update AC/C button
-        if buttonText != "0" && buttonText != "00" {
-            updateClearButton(hasInput: true)
-        }
+        if buttonText != "0" && buttonText != "00" { updateClearButton(hasInput: true) }
  
         print("Button \(buttonText) touched")
         
@@ -640,9 +651,7 @@ class PCalcViewController: UIPageViewController {
     @objc func clearButtonTapped(_ sender: UIButton) {
         print("clear")
         // Clear buttons
-        if sender.titleLabel?.text != "AC" && sender.tag == 100 {
-            sender.setTitle("AC", for: .normal)
-        }
+        updateClearButton(hasInput: false)
         clearLabels()
         calculator.mathState = nil
     }
@@ -684,6 +693,8 @@ class PCalcViewController: UIPageViewController {
         let vc = ConversionViewController()
         // present settings
         vc.modalPresentationStyle = .overFullScreen
+        // set delegate
+        vc.delegate = self
         // show popover
         self.present(vc, animated: false, completion: nil)
     }

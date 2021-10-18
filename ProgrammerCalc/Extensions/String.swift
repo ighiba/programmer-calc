@@ -91,8 +91,11 @@ extension String {
         let str = self
         
         // get position fract part
-        let pointPos = str.firstIndex(of: divider)!
-        let fractDistance = Int(str.distance(from: pointPos, to:  str.endIndex))
+        let pointPos = str.firstIndex(of: divider)
+        guard pointPos != nil else {
+            return ""
+        }
+        let fractDistance = Int(str.distance(from: pointPos!, to:  str.endIndex))
         guard fractDistance > 1 else {
             return ""
         }
@@ -118,9 +121,12 @@ extension String {
         let str = self
         
         // get position fract part
-        let pointPos = str.firstIndex(of: divider)!
-        let fractDistance = abs(Int(str.distance(from: pointPos, to:  str.startIndex)))
-        guard fractDistance > 1 else {
+        let pointPos = str.firstIndex(of: divider)
+        guard pointPos != nil else {
+            return ""
+        }
+        let fractDistance = abs(Int(str.distance(from: pointPos!, to:  str.startIndex)))
+        guard fractDistance > 0 else {
             return ""
         }
         // get str fract part

@@ -11,6 +11,7 @@ import Foundation
 final class CalcMath {
     
     // Storages
+    private let conversionStorage = ConversionStorage()
     private let calcStateStorage = CalcStateStorage()
     private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
     
@@ -74,7 +75,10 @@ final class CalcMath {
         
         // Format if overflow
         // get fract part if exists
-        let decFractPart = newDecimal.removeFractPart()
+        var decFractPart = newDecimal.removeFractPart()
+        var decFractPartCopy = decFractPart
+        let numbersAfterPoint = Int(conversionStorage.safeGetData().numbersAfterPoint)
+        NSDecimalRound(&decFractPart, &decFractPartCopy, numbersAfterPoint, .down)
         // convert to formatted bin
         let formattedBin = converter.convertValue(value: newDecimal, from: .dec, to: .bin)
         // convert to decimal from bin

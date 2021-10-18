@@ -210,12 +210,19 @@ class Calculator: CalculatorProtocol {
         // Process fract part
         // if last char is dot then append dot
         var lastSymbolsIfExists: String = inputStr.last == "." ? "." : ""
+        // get str fract part
+        var testLabelStr = inputStr.removeAllSpaces()
+        let fractPartStr: String = testLabelStr.getPartAfter(divider: ".")
+
+        let numbersAfterPoint = Int(conversionStorage.safeGetData().numbersAfterPoint)
+        // cut fract part if more then numbersAfterPoint
+        if fractPartStr.count > numbersAfterPoint && testLabelStr.contains(".") {
+            testLabelStr = cutFractPart(strValue: testLabelStr, by: numbersAfterPoint)
+        }
+        
         
         // check if value .0
-        let testLabelStr = inputStr.removeAllSpaces()
         if testLabelStr.contains(".0") {
-            // get str fract part
-            let fractPartStr: String = testLabelStr.getPartAfter(divider: ".")
             // check if fract == 0, or 00, 000 etc.
             if Int(fractPartStr.replacingOccurrences(of: ".", with: ""))! == 0 {
                 // replace lastSymbolsIfExists with old value of fract without updating it
@@ -224,9 +231,9 @@ class Calculator: CalculatorProtocol {
             // continue to process as normal
         } else if testLabelStr.last == "0" && testLabelStr.contains(".") {
             // count how much zeros in back
-            let buffFractPart = String(testLabelStr.getPartAfter(divider: ".").reversed())
+            let buffFract = String(fractPartStr.reversed())
             lastSymbolsIfExists = ""
-            for digit in buffFractPart {
+            for digit in buffFract {
                 if digit == "0" {
                     lastSymbolsIfExists.append(digit)
                 } else {
@@ -242,7 +249,7 @@ class Calculator: CalculatorProtocol {
             
             var bin: Binary = {
                 let dummyBin = Binary()
-                dummyBin.value = inputStr
+                dummyBin.value = testLabelStr
                 return dummyBin
             }()
             bin = converter.convertValue(value: bin, from: .bin, to: .bin) as! Binary
@@ -256,7 +263,7 @@ class Calculator: CalculatorProtocol {
                 intPart = intPart.removeLeading(characters: ["0"])
                 if intPart == "" { intPart = "0" }
                 // remove zeros in fract part
-                let fractPart = inputStr.removeAllSpaces().getPartAfter(divider: ".")
+                let fractPart = testLabelStr.removeAllSpaces().getPartAfter(divider: ".")
                 
                 str = bin.fillUpZeros(str: intPart, to: wordSizeStorage.getWordSizeValue())
                 str = str + "." + fractPart
@@ -269,7 +276,7 @@ class Calculator: CalculatorProtocol {
             
             processedStr = bin.value
             // updating dec for values with floating point
-        } else if self.systemMain == .dec && inputStr.contains(".") {
+        } else if self.systemMain == .dec && testLabelStr.contains(".") {
             
             processedStr = converter.processDecFloatStrToFormat(decStr: self.mainLabelRawValue.value, lastDotIfExists: lastSymbolsIfExists)
             
@@ -284,13 +291,12 @@ class Calculator: CalculatorProtocol {
                 let updatedValue = converter.convertValue(value: bin, from: .bin, to: self.systemMain!)
                 processedStr = updatedValue!.value
                 
-                if processedStr.contains(".") && inputStr.last != "." {
+                if processedStr.contains(".") && testLabelStr.last != "." {
                     let intPart = processedStr.getPartBefore(divider: ".")
-                    let fractPart = inputStr.getPartAfter(divider: ".")
+                    let fractPart = testLabelStr.getPartAfter(divider: ".")
                     processedStr = intPart + "." + fractPart
                 }
                 
-
                 
             }
         }
@@ -312,7 +318,7 @@ class Calculator: CalculatorProtocol {
             }
         }
         
-        return processedStr != "" ? processedStr : inputStr
+        return processedStr != "" ? processedStr : testLabelStr
     }
     
     func getNumberBy(strValue value: String, currentSystem system: ConversionSystemsEnum) -> NumberSystemProtocol? {
@@ -337,5 +343,21 @@ class Calculator: CalculatorProtocol {
         
         return buffValue
         
+    }
+    
+    // Cutting fract part of float number by max number of digits after .
+    private func cutFractPart(strValue: String, by count: Int) -> String {
+        var result = strValue
+        var fractPartStr: String = strValue.getPartAfter(divider: ".")
+        while fractPartStr.count > count {
+            fractPartStr.removeLast(1)
+            if fractPartStr.count == count {
+                // create new inputStr
+                let intPart = strValue.getPartBefore(divider: ".")
+                result = intPart + "." + fractPartStr
+                break
+            }
+        }
+        return result
     }
 }
