@@ -7,8 +7,20 @@
 //
 
 import UIKit
+import AudioToolbox
 
 class CalcButtonsViewController: UIViewController {
+    
+    // Taptic feedback generator
+    private let generator = UIImpactFeedbackGenerator(style: .light)
+    // haptic feedback setting
+    var hapticFeedback = false
+    
+    // Sound of tapping bool setting
+    var tappingSounds = false
+    
+    // PCalcViewController delegate
+    var delegate: PCalcViewControllerDelegate?
     
     init( buttonsPage: UIView) {
         super.init(nibName: nil, bundle: nil)
@@ -23,14 +35,32 @@ class CalcButtonsViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
-        // root vc for handling tappging on PCalcViewController
-        let rootVC = UIApplication.shared.windows.first?.rootViewController as? PCalcViewController
-        guard rootVC != nil else {
+        // andling tappging on PCalcViewController
+        guard delegate != nil else {
             return
         }
         
-        rootVC?.unhighlightLabels()
+        delegate!.unhighlightLabels()
         
         print("touched began page out")
+    }
+    
+    // MARK: - Actions
+    
+    @objc func tappingSoundHandler(_ sender: CalculatorButton) {
+        if tappingSounds {
+            // play KeyPressed
+            AudioServicesPlaySystemSound(1104)
+        }
+
+    }
+    
+    // Haptic feedback action for all buttons
+    @objc func hapticFeedbackHandler(_ sender: CalculatorButton) {
+        if hapticFeedback {
+            generator.prepare()
+            // impact
+            generator.impactOccurred()
+        }
     }
 }

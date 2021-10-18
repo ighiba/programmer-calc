@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AudioToolbox
 
 class CalculatorButton: UIButton {
     // ====================
@@ -126,7 +127,9 @@ class CalculatorButton: UIButton {
         // label higliglht handling
         self.addTarget(nil, action: #selector(PCalcViewController.touchHandleLabelHighlight), for: .touchDown)
         // haptic feedback
-        self.addTarget(nil, action: #selector(PCalcViewController.hapticFeedback), for: .touchUpInside)
+        self.addTarget(nil, action: #selector(CalcButtonsViewController.hapticFeedbackHandler), for: .touchUpInside)
+        // tapping sound
+        self.addTarget(nil, action: #selector(CalcButtonsViewController.tappingSoundHandler), for: .touchUpInside)
         
         switch buttonType {
         case .numeric:
