@@ -231,11 +231,14 @@ class CalcButtonsAdditional: UIView, CalcButtonPageProtocol {
     
     // Standart calculator buttons
     var allButtons: [CalculatorButton] = {
+        // localization for 1's and 2's
+        let oneS = NSLocalizedString("1's", comment: "")
+        let twoS = NSLocalizedString("2's", comment: "")
         
         let allTitles = ["AND","OR","XOR","NOR",
                          "X<<Y", "X>>Y", "<<", ">>",
-                         "D", "E", "F", "1's",
-                         "A", "B", "C", "2's",
+                         "D", "E", "F", oneS,
+                         "A", "B", "C", twoS,
                          "00", "FF"]
                     
         var buttonLabel: Int = 9
@@ -250,7 +253,7 @@ class CalcButtonsAdditional: UIView, CalcButtonPageProtocol {
             case "A","B","C","D","E","F","00","FF":
                 button = CalculatorButton(calcButtonType: .numeric)
             // TODO: Localization
-            case "1's", "2's":
+            case oneS, twoS:
                 button = CalculatorButton(calcButtonType: .complement)
             case "X<<Y", "X>>Y", "<<", ">>", "AND", "OR", "XOR", "NOR":
                 button = CalculatorButton(calcButtonType: .bitwise)

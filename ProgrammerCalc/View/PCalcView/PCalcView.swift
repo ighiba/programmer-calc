@@ -163,6 +163,7 @@ class PCalcView: UIView {
             navigationBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
             navigationBar.heightAnchor.constraint(equalToConstant: navBarHeight),
             navigationBar.widthAnchor.constraint(equalTo: self.widthAnchor),
+            navigationBar.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             
             labelsStack.topAnchor.constraint(equalTo: navigationBar.bottomAnchor),
             labelsStack.bottomAnchor.constraint(equalTo: self.bottomAnchor),

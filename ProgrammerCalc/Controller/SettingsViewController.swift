@@ -10,16 +10,12 @@ import UIKit
 import MessageUI
 
 protocol SettingsViewControllerDelegate {
-    var appVersion: String { get set }
-    func openContactForm()
+    func openAbout()
 }
 
-class SettingsViewController: UITableViewController, SettingsViewControllerDelegate, MFMailComposeViewControllerDelegate {
+class SettingsViewController: UITableViewController, SettingsViewControllerDelegate {
     
     // MARK: - Properties
-    
-    // App version number
-    var appVersion: String = "0.7"
 
     lazy var settingsView = SettingsView(frame: CGRect(), style: .grouped)
     lazy var doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(SettingsViewController.closeButtonTapped))
@@ -37,7 +33,7 @@ class SettingsViewController: UITableViewController, SettingsViewControllerDeleg
         self.tableView = settingsView
         // Setup navigation items
         self.navigationController?.navigationBar.topItem?.rightBarButtonItem = doneItem
-        self.navigationController?.navigationBar.topItem?.title = "Settings"
+        self.navigationController?.navigationBar.topItem?.title = NSLocalizedString("Settings", comment: "")
         
         self.tableView.reloadData()
     }
@@ -67,35 +63,28 @@ class SettingsViewController: UITableViewController, SettingsViewControllerDeleg
     // Update settings values
     fileprivate func getSettings() {
         // get data from UserDefaults
-        if let settings = settingsStorage.loadData() {
-            // loop table cells
-            DispatchQueue.main.async {
-                for cell in self.tableView.visibleCells as! [AppSettingsCell] {
-                    if let switcher = cell.accessoryView as? UISwitch {
-                        let title = cell.textLabel?.text
-                        
-                        // set switcher to userdefault state
-                        switch title {
-                        case "Dark mode":
-                            switcher.setOn(settings.darkMode, animated: false)
-                        case "Tapping sounds":
-                            switcher.setOn(settings.tappingSounds, animated: false)
-                        case "Haptic feedback":
-                            switcher.setOn(settings.hapticFeedback, animated: false)
-                        default:
-                            // TODO: Handle
-                            print("error")
-                            break
-                        }
+        let settings = settingsStorage.safeGetData()
+        // loop table cells
+        DispatchQueue.main.async {
+            for cell in self.tableView.visibleCells as! [AppSettingsCell] {
+                if let switcher = cell.accessoryView as? UISwitch {
+                    let title = cell.textLabel?.text
+                    
+                    // set switcher to userdefault state
+                    switch title {
+                    case NSLocalizedString("Appearance", comment: ""):
+                        switcher.setOn(settings.darkMode, animated: false)
+                    case NSLocalizedString("Tapping sounds", comment: ""):
+                        switcher.setOn(settings.tappingSounds, animated: false)
+                    case NSLocalizedString("Haptic feedback", comment: ""):
+                        switcher.setOn(settings.hapticFeedback, animated: false)
+                    default:
+                        // TODO: Handle
+                        print("error")
+                        break
                     }
                 }
             }
-
-        } else {
-            print("no settings")
-            // Save default settings (all false)
-            let newSettings = AppSettings(darkMode: false, tappingSounds: false, hapticFeedback: false)
-            settingsStorage.saveData(newSettings)
         }
     }
     
@@ -110,11 +99,11 @@ class SettingsViewController: UITableViewController, SettingsViewControllerDeleg
                     
                     // get from switcher state and set to local userdefaults
                     switch title {
-                    case "Dark mode":
+                    case NSLocalizedString("Appearance", comment: ""):
                         newSettings.darkMode = switcher.isOn
-                    case "Tapping sounds":
+                    case NSLocalizedString("Tapping sounds", comment: ""):
                         newSettings.tappingSounds = switcher.isOn
-                    case "Haptic feedback":
+                    case NSLocalizedString("Haptic feedback", comment: ""):
                         newSettings.hapticFeedback = switcher.isOn
                     default:
                         // TODO: Handle
@@ -134,31 +123,12 @@ class SettingsViewController: UITableViewController, SettingsViewControllerDeleg
         }
         
     }
-    
-    // Contact us cell
-    func openContactForm() {
-        // Check mail services aviability
-        if MFMailComposeViewController.canSendMail() {
-            let composeVC = MFMailComposeViewController()
-            composeVC.mailComposeDelegate = self
-            
-            let model = UIDevice.current.model
-            let systemVersion = UIDevice.current.systemVersion
-            
-            // Configure the fields of the interface
-            composeVC.setToRecipients(["ighiba.dev@gmail.com"])
-            composeVC.setSubject("ProgrammerCalc support")
-            composeVC.setMessageBody("Model - \(model), OS - \(systemVersion), App version - \(appVersion)", isHTML: false)
-            
-            self.present(composeVC, animated: true, completion: nil)
-        } else {
-            print("Mail services are not available")
-            return
-        }
-    }
-    // Dismissing contact us form
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Swift.Error?) {
-        controller.dismiss(animated: true, completion: nil)
+
+    // About app cell touch
+    func openAbout() {        
+        let aboutVC = AboutViewController()
+
+        self.navigationController?.pushViewController(aboutVC, animated: true)
     }
     
     // MARK: - Actions
@@ -173,11 +143,11 @@ class SettingsViewController: UITableViewController, SettingsViewControllerDeleg
         if let cell = sender.superview as? AppSettingsCell {
             let title = cell.textLabel?.text
             switch title {
-            case "Dark mode":
-                print("Dark mode switch to \(sender.isOn)")
-            case "Tapping sounds":
+            case NSLocalizedString("Appearance", comment: ""):
+                print("Appearance switch to \(sender.isOn)")
+            case NSLocalizedString("Tapping sounds", comment: ""):
                 print("Tapping sounds switch to \(sender.isOn)")
-            case "Haptic feedback":
+            case NSLocalizedString("Haptic feedback", comment: ""):
                 print("Haptic feedback switch to \(sender.isOn)")
             default:
                 // TODO: Handle

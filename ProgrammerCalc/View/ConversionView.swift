@@ -120,7 +120,7 @@ class ConversionView: UIView {
     fileprivate let popoverTitle: UILabel = {
         let label = UILabel()
         
-        label.text = "Conversion settings"
+        label.text = NSLocalizedString("Conversion settings", comment: "")
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.textAlignment = .center
         
@@ -156,7 +156,7 @@ class ConversionView: UIView {
         let label = UILabel()
         
         label.frame = CGRect(x: 0, y: 0, width: 100, height: 30)
-        label.text = "Max number of digits after point: "
+        label.text = NSLocalizedString("Max number of digits after point: ", comment: "")
         label.font = UIFont.systemFont(ofSize: 18, weight: .light)
         //label.font = UIFont(name: "HelveticaNeue-Thin", size: 18.0)
         

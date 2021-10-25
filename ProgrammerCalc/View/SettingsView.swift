@@ -14,9 +14,11 @@ class SettingsView: UITableView {
     var controllerDelegate: SettingsViewControllerDelegate?
     
     // First section array
-    let firstSection = [ "Dark mode", "Tapping sounds", "Haptic feedback"]
+    let firstSection = [ NSLocalizedString("Appearance", comment: ""),
+                         NSLocalizedString("Tapping sounds", comment: ""),
+                         NSLocalizedString("Haptic feedback", comment: "")]
     // Second section array
-    let otherSection = ["About app", "Contact us"]
+    let otherSection = [NSLocalizedString("About app", comment: "")]
     
     
     override init(frame: CGRect, style: UITableView.Style) {
@@ -48,9 +50,18 @@ extension SettingsView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = AppSettingsCell()
         let title = indexPath.section == 0 ? firstSection[indexPath.row] : otherSection[indexPath.row]
-        if indexPath.section == 0 {
+        
+        // init cell w or w/o switcher
+        switch indexPath {
+        case [0,0]:
+            // Appearance cell
+            cell = AppSettingsCell(style: .default, reuseIdentifier: "cellId", label: title, switcher: false)
+            cell.accessoryType = .disclosureIndicator
+        case [0,1], [0,2]:
+            // Tapping sound, Haptics
             cell = AppSettingsCell(style: .default, reuseIdentifier: "cellId", label: title, switcher: true)
-        } else {
+        default:
+            // About app
             cell = AppSettingsCell(style: .default, reuseIdentifier: "cellId", label: title, switcher: false)
         }
         
@@ -59,22 +70,6 @@ extension SettingsView: UITableViewDataSource, UITableViewDelegate {
     // Numer of sections Main + other
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if section == 1 {
-            let label = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 50))
-            // Version label
-            let appVersion = controllerDelegate?.appVersion ?? "1.0"
-            label.text = "Programmer Calc \(appVersion)"
-            label.font = UIFont.systemFont(ofSize: 16, weight: .thin)
-            label.textAlignment = .center
-            
-            self.sectionFooterHeight = 30
-            
-            return label
-        }
-        return UIView()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -87,16 +82,12 @@ extension SettingsView: UITableViewDataSource, UITableViewDelegate {
         switch indexPath {
         case [1,0]:
             // About app
-            break
-        case [1,1]:
-            // Contact us
-            controllerDelegate!.openContactForm()
+            controllerDelegate!.openAbout()
             break
         default:
             // do nothing
             break
         }
-        
         
         // Handle deselection of row
         tableView.deselectRow(at: indexPath, animated: true)

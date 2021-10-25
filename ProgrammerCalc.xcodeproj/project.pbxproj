@@ -48,6 +48,9 @@
 		C077CF6F24DC8DEE008E5F0F /* AppSettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C077CF6E24DC8DEE008E5F0F /* AppSettingsCell.swift */; };
 		C077CF7124DC987B008E5F0F /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C077CF7024DC987B008E5F0F /* AppSettings.swift */; };
 		C0817788271D045E0068CF45 /* PopoverDoneButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0817787271D045E0068CF45 /* PopoverDoneButton.swift */; };
+		C09631C42725BA7C001DCD25 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C09631C62725BA7C001DCD25 /* Localizable.strings */; };
+		C0CC6DFF271F68AA00E59E64 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */; };
+		C0CC6E0127208EBB00E59E64 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CC6E0027208EBB00E59E64 /* AboutView.swift */; };
 		C0E5FC7624BB9B8D00BA93CA /* PCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */; };
 		C0F5CF4B270E10870020CE14 /* WordSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF4A270E10870020CE14 /* WordSize.swift */; };
 		C0F5CF4D270E12100020CE14 /* WordSizeStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF4C270E12100020CE14 /* WordSizeStorage.swift */; };
@@ -121,6 +124,11 @@
 		C077CF6E24DC8DEE008E5F0F /* AppSettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsCell.swift; sourceTree = "<group>"; };
 		C077CF7024DC987B008E5F0F /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		C0817787271D045E0068CF45 /* PopoverDoneButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverDoneButton.swift; sourceTree = "<group>"; };
+		C09631C32725BA6E001DCD25 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		C09631C52725BA7C001DCD25 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C09631C82725BA95001DCD25 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
+		C0CC6E0027208EBB00E59E64 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcView.swift; sourceTree = "<group>"; };
 		C0F5CF4A270E10870020CE14 /* WordSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSize.swift; sourceTree = "<group>"; };
 		C0F5CF4C270E12100020CE14 /* WordSizeStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSizeStorage.swift; sourceTree = "<group>"; };
@@ -247,6 +255,7 @@
 				C06B7F0F2443B12E009642B9 /* Assets.xcassets */,
 				C06B7F112443B12E009642B9 /* LaunchScreen.storyboard */,
 				C06B7F142443B12E009642B9 /* Info.plist */,
+				C09631C62725BA7C001DCD25 /* Localizable.strings */,
 			);
 			path = ProgrammerCalc;
 			sourceTree = "<group>";
@@ -282,6 +291,7 @@
 				C0619AC324D71240008A7291 /* ConversionViewController.swift */,
 				C0F5CF50270F4B970020CE14 /* WordSizeViewController.swift */,
 				C070ED2324DB0EC800A04463 /* SettingsViewController.swift */,
+				C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -313,6 +323,7 @@
 				C0F5CF52270F4C4C0020CE14 /* WordSizeView.swift */,
 				C0817787271D045E0068CF45 /* PopoverDoneButton.swift */,
 				C070ED2524DB0ED400A04463 /* SettingsView.swift */,
+				C0CC6E0027208EBB00E59E64 /* AboutView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -404,6 +415,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = C06B7EFA2443B12B009642B9;
 			productRefGroup = C06B7F042443B12B009642B9 /* Products */;
@@ -423,6 +435,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C06B7F132443B12E009642B9 /* LaunchScreen.storyboard in Resources */,
+				C09631C42725BA7C001DCD25 /* Localizable.strings in Resources */,
 				C06B7F102443B12E009642B9 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -472,6 +485,8 @@
 				C02705222715EF6F008B9C1E /* Calculator.swift in Sources */,
 				C0619AC424D71240008A7291 /* ConversionViewController.swift in Sources */,
 				C0817788271D045E0068CF45 /* PopoverDoneButton.swift in Sources */,
+				C0CC6E0127208EBB00E59E64 /* AboutView.swift in Sources */,
+				C0CC6DFF271F68AA00E59E64 /* AboutViewController.swift in Sources */,
 				C066756E24E2D83300F832F9 /* Converter.swift in Sources */,
 				C05B009124E71B6E00F8A5E0 /* DecimalSystem.swift in Sources */,
 				C06B7F072443B12B009642B9 /* AppDelegate.swift in Sources */,
@@ -530,8 +545,18 @@
 			isa = PBXVariantGroup;
 			children = (
 				C06B7F122443B12E009642B9 /* Base */,
+				C09631C32725BA6E001DCD25 /* ru */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		C09631C62725BA7C001DCD25 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C09631C52725BA7C001DCD25 /* en */,
+				C09631C82725BA95001DCD25 /* ru */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -541,6 +566,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -602,6 +628,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -665,6 +692,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ighiba.ProgrammerCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
@@ -686,6 +714,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ighiba.ProgrammerCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";

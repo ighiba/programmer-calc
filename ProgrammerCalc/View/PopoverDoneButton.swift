@@ -23,7 +23,9 @@ class PopoverDoneButton: UIButton {
     private func setupView() {
         self.frame = CGRect(x: 0, y: 0, width: 50, height: 100)
         
-        self.setTitle("Done", for: .normal)
+        let doneTitle = NSLocalizedString("Done", comment: "")
+        
+        self.setTitle(doneTitle, for: .normal)
         // TODO: Themes
         self.backgroundColor = .systemGreen
         self.setTitleColor(.white, for: .normal)

@@ -591,12 +591,15 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate {
         updateConversionState()
         // if float then exit
         guard !mainLabel.text!.contains(".") else { return }
+        // localization for 1's and 2's
+        let oneS = NSLocalizedString("1's", comment: "")
+        let twoS = NSLocalizedString("2's", comment: "")
         // switch complements
         switch buttonLabel {
-        case "1's":
+        case oneS:
             // TODO: Error handling
             mainLabel.text = converter.toOnesComplement(value: calculator.mainLabelRawValue, mainSystem: calculator.systemMain!).value
-        case "2's":
+        case twoS:
             // TODO: Error handling
             mainLabel.text = converter.toTwosComplement(value: calculator.mainLabelRawValue, mainSystem: calculator.systemMain!).value
         default:

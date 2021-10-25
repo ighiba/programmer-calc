@@ -58,47 +58,15 @@ class WordSizeView: UIView {
             
             // Set constraints for main container
             container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            //container.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: (self.frame.height/8) * -1),
             container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            //container.centerYAnchor.constrain(equalTo: self.centerXAnchor, multiplier: -0.2),
             container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9),
-            //container.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.47),
             container.heightAnchor.constraint(equalToConstant: containerStackHeight+margin*2),
             
             // Set constraints for done button
             containerStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             containerStack.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             containerStack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.90),
-            //containerStack.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.90),
             containerStack.heightAnchor.constraint(equalToConstant: containerStackHeight),
-            
-//            // Set constraints for main container
-//            container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-//            //container.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: (self.frame.height/8) * -1),
-//            container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-//            //container.centerYAnchor.constrain(equalTo: self.centerXAnchor, multiplier: -0.2),
-//            container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9),
-//            //container.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.47),
-//            container.heightAnchor.constraint(equalToConstant: containerStackHeight+margin*2),
-//
-//            // Set constraints for label
-//            popoverTitle.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-//            popoverTitle.topAnchor.constraint(equalTo: container.topAnchor, constant: margin),
-//            popoverTitle.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
-//            popoverTitle.heightAnchor.constraint(equalToConstant: popoverTitleHeight),
-//
-//            // Set constraints for table
-//            wordSizeTable.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-//            wordSizeTable.topAnchor.constraint(equalTo: popoverTitle.bottomAnchor, constant: margin),
-//            wordSizeTable.heightAnchor.constraint(equalToConstant: tableRowHeight*4),
-//            wordSizeTable.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
-//
-//            // Set contraints for done button
-//            doneButton.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-//            doneButton.topAnchor.constraint(equalTo: wordSizeTable.bottomAnchor, constant: margin),
-//            doneButton.heightAnchor.constraint(equalToConstant: doneButtonHeight),
-//            doneButton.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
-
         ])
     }
     
@@ -134,7 +102,7 @@ class WordSizeView: UIView {
     fileprivate let popoverTitle: UILabel = {
         let label = UILabel()
         
-        label.text = "Change word size"
+        label.text = NSLocalizedString("Change word size", comment: "")
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.textAlignment = .center
         
