@@ -23,7 +23,7 @@ class AboutViewController: PCalcTableViewController, AboutViewControllerDelegate
     // MARK: - Properties
     
     // App version number
-    var appVersion: String = "0.9"
+    var appVersion: String = "0.9.1"
     
     // Table view
     lazy var aboutView = AboutView(frame: CGRect(), style: .grouped)

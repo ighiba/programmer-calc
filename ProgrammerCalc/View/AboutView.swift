@@ -55,11 +55,12 @@ extension AboutView: UITableViewDelegate, UITableViewDataSource {
         
         // setup icon cell
         if indexPath == [0,0] {
-            // test layer for app icon
-            let appIcon = UIView()
+            // image view for app icon
+            let appIcon = UIImageView()
+            appIcon.image = UIImage(named: "icon-ios-about.png")
             appIcon.frame = CGRect(x: 0, y: 0, width: 114, height: 114)
-            appIcon.backgroundColor = .red
             appIcon.layer.cornerRadius = 18
+            appIcon.layer.masksToBounds = true
             // version label
             let versionLabel = UILabel()
             // get version from delegate
