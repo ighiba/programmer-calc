@@ -23,8 +23,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        window?.rootViewController = PCalcViewController()
+        // Set root vc
+        let rootVC = PCalcViewController()
+        window?.rootViewController = rootVC
         window?.makeKeyAndVisible()
+        
+        // Splash screen (for smoother transition from launch screen)
+        let splashScreen = UIView(frame: UIScreen.main.bounds)
+        splashScreen.backgroundColor = .black
+        rootVC.view.addSubview(splashScreen)
+        // animate transition
+        UIView.animate(withDuration: 0.8, delay: 0.2, options: .curveLinear, animations: {
+            splashScreen.alpha = 0
+        }, completion: { _ in
+            splashScreen.removeFromSuperview()
+        })
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
