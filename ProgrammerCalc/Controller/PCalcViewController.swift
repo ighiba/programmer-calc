@@ -8,30 +8,51 @@
 
 import UIKit
 
-class PCalcViewController: UIPageViewController {
-    
+var isDarkContentBackground_Global = false
+
+protocol PCalcViewControllerDelegate {
+    func clearLabels()
+    func unhighlightLabels()
+    func updateAllLayout()
+    func handleDisplayingMainLabel()
+    func updateButtons()
+    func updateSystemMain(with rawValue: String)
+    func updateSystemCoverter(with rawValue: String)
+}
+
+class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
+
     // ==================
     // MARK: - Properties
     // ==================
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        if isDarkContentBackground_Global {
+            return .lightContent
+        } else {
+            return .darkContent
+        }
+    }
     
     // Storages
     private let settingsStorage: SettingsStorageProtocol = SettingsStorage()
     private let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
     private let conversionStorage: ConversionStorageProtocol = ConversionStorage()
     private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
+    private let styleStorage: StyleStorageProtocol = StyleStorage()
     
-    // views
-    private let calcView: PCalcView = PCalcView()
+    // Views
+    let calcView: PCalcView = PCalcView()
     lazy var mainLabel: CalcualtorLabel = calcView.mainLabel
     lazy var converterLabel: CalcualtorLabel = calcView.converterLabel
     
+    private var isAllowedLandscape: Bool = false
+    
     private var arrayButtonsStack = [UIView]()
     
-    // Taptic feedback generator
-    private let generator = UIImpactFeedbackGenerator(style: .light)
-    // haptic feedback setting
-    private var hapticFeedback = false
-
+    // Style Factory
+    private let styleFactory: StyleFactory = StyleFactory()
+    
     // Handlers
     private let converter: Converter = Converter()
     
@@ -43,11 +64,13 @@ class PCalcViewController: UIPageViewController {
     // MARK: - Initialization
     // ======================
     
-    // array of button pages
+    // Array of button pages
     lazy var arrayCalcButtonsViewController: [CalcButtonsViewController] = {
        var buttonsVC = [CalcButtonsViewController]()
         arrayButtonsStack.forEach { (buttonsPage) in
-            buttonsVC.append(CalcButtonsViewController(buttonsPage: buttonsPage))
+            let vc = CalcButtonsViewController(buttonsPage: buttonsPage)
+            vc.delegate = self
+            buttonsVC.append(vc)
         }
         return buttonsVC
     }()
@@ -77,14 +100,18 @@ class PCalcViewController: UIPageViewController {
         arrayButtonsStack.append(mainButtons)
         
         // add view from PCalcView
+        calcView.setViews()
         self.view.addSubview(calcView)
+        self.view.layoutIfNeeded()
+        calcView.layoutIfNeeded()
         
-        // TODO: Themes
-        self.view.backgroundColor = .white
-
+        // constraints
+        NSLayoutConstraint.deactivate(calcView.landscape!)
+        NSLayoutConstraint.activate(calcView.portrait!)
+    
         let pageControl = UIPageControl.appearance()
-        pageControl.pageIndicatorTintColor = .lightGray
-        pageControl.currentPageIndicatorTintColor = .darkGray
+        pageControl.pageIndicatorTintColor = .systemGray4
+        pageControl.currentPageIndicatorTintColor = .systemGray
         
         self.delegate = self
         self.dataSource = self
@@ -93,6 +120,9 @@ class PCalcViewController: UIPageViewController {
         
         // set start vc
         setViewControllers([arrayCalcButtonsViewController[1]], direction: .forward, animated: false, completion: nil)
+        
+        // lock rotatiton
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
 
         // add swipe left for deleting last value in main label
         [mainLabel,converterLabel].forEach { (label) in
@@ -121,12 +151,97 @@ class PCalcViewController: UIPageViewController {
         updateButtons()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("loaded")
+        // unlock rotatiton
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
+        self.isAllowedLandscape = true
+        
+        // update shadows for buttons page
+        for page in arrayCalcButtonsViewController {
+            page.view.layoutSubviews()
+        }
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // set state to UserDefaults
         print("main dissapear")
         saveCalcState()
     }
+    
+    // Handle dismissing modal vc
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        // Update rotation settings
+        // unlock rotation
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
+    }
+
+    // Handle orientation change for constraints
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateStyle()
+        
+        let isPortrait = UIDevice.current.orientation.isPortrait
+        let isLandscape = UIDevice.current.orientation.isLandscape
+        
+        if isPortrait && !isLandscape {
+            // unhide button pages
+            for page in arrayCalcButtonsViewController {
+                page.view.layoutSubviews()
+                UIView.animate(withDuration: 0.15, delay: 0.15, options: .curveEaseOut, animations: {
+                    page.view.alpha = 1
+                    page.view.isHidden = false
+                }, completion: { _ in
+                    
+                })
+            }
+            
+            // change constraints
+            NSLayoutConstraint.deactivate(calcView.landscape!)
+            NSLayoutConstraint.activate(calcView.portrait!)
+            // update label layouts
+            mainLabel.sizeToFit()
+            mainLabel.infoSubLabel.sizeToFit()
+            converterLabel.infoSubLabel.sizeToFit()
+            converterLabel.sizeToFit()
+            // unhide pagecontrol
+            self.setPageControl(visibile: true)
+            // unhide word size button
+            calcView.changeWordSizeButton.isHidden = false
+            
+
+            
+            // set default calcView frame
+            self.calcView.frame = CGRect( x: 0, y: 0, width: UIScreen.main.bounds.width, height: self.calcView.viewHeight())
+            
+
+        } else if isLandscape && !isPortrait && isAllowedLandscape {
+            
+            // hide word size button
+            calcView.changeWordSizeButton.isHidden = true
+            // hide button pages
+            for page in arrayCalcButtonsViewController {
+                UIView.animate(withDuration: 0.3, delay: 0.3, options: .curveEaseOut, animations: {
+                    page.view.alpha = 0
+                    page.view.isHidden = true
+                }, completion: { _ in
+
+                })
+            }
+            
+            // change constraints
+            NSLayoutConstraint.deactivate(calcView.portrait!)
+            NSLayoutConstraint.activate(calcView.landscape!)
+            // hide pagecontrol
+            self.setPageControl(visibile: false)
+            // set landscape calcView frame
+            self.calcView.frame = UIScreen.main.bounds
+
+        }
+    }
+    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
@@ -146,6 +261,13 @@ class PCalcViewController: UIPageViewController {
         mainLabel.text = data.mainLabelState
         converterLabel.text = data.converterLabelState
         calculator.processSigned = data.processSigned
+        var hasInput = true
+        if let mainValue = Int(data.mainLabelState.removeAllSpaces()) {
+            if mainValue == 0 {
+                hasInput = false
+            }
+        }
+        updateClearButton(hasInput: hasInput)
     }
     
     public func saveCalcState() {
@@ -185,7 +307,11 @@ class PCalcViewController: UIPageViewController {
     private func updateSettings() {
         // get data from UserDefaults
         let data = settingsStorage.safeGetData()
-        hapticFeedback = data.hapticFeedback
+        // update vc of buttons
+        for vc in arrayCalcButtonsViewController {
+            vc.hapticFeedback = data.hapticFeedback
+            vc.tappingSounds = data.tappingSounds
+        }
     }
     
     public func updateChangeWordSizeButton() {
@@ -216,6 +342,43 @@ class PCalcViewController: UIPageViewController {
         updateMainLabel()
         updateConverterLabel()
     }
+    
+    func updateStyle() {
+        // Apply style
+        let styleState = styleStorage.safeGetSystemStyle()
+        var styleName = styleStorage.safeGetStyleData()
+        
+        let interfaceStyle: UIUserInterfaceStyle
+        // change style depends on state
+        if styleState {
+            switch UIScreen.main.traitCollection.userInterfaceStyle {
+            case .light, .unspecified:
+                // light mode detected
+                styleStorage.saveData(.light)
+            case .dark:
+                // dark mode detected
+                styleStorage.saveData(.dark)
+            @unknown default:
+                // light mode if unknown
+                styleStorage.saveData(.light)
+            }
+            view.window?.overrideUserInterfaceStyle = .unspecified
+            styleName = styleStorage.safeGetStyleData()
+
+        } else {
+            if styleName == .light {
+                interfaceStyle = .light
+            } else {
+                interfaceStyle = .dark
+            }
+            view.window?.overrideUserInterfaceStyle = interfaceStyle
+        }
+        
+        let style = styleFactory.get(style: styleName)
+        self.view.backgroundColor = style.backgroundColor
+        isDarkContentBackground_Global = styleName == .light ? false : true
+        self.setNeedsStatusBarAppearanceUpdate()
+    }
 
     public func updateAllLayout() {
         // update change word size button
@@ -243,10 +406,13 @@ class PCalcViewController: UIPageViewController {
                 buttonsPage.allButtons.forEach { button in
                     let buttonLabel = String((button.titleLabel?.text)!)
                     if forbidden[systemMain.rawValue]!.contains(buttonLabel) && button.calcButtonType == .numeric {
+                        // disable and set transparent
                         button.isEnabled = false
+                        button.alpha = 0.5
                     } else {
-                        // just enable button
+                        // enable button ans set normal opacity
                         button.isEnabled = true
+                        button.alpha = 1
                     }
                 }
             }
@@ -256,6 +422,23 @@ class PCalcViewController: UIPageViewController {
         updateIsSignedButton()
         // update plusminus button state
         changeStatePlusMinus()
+    }
+    
+    // Change clear button title
+    private func updateClearButton(hasInput state: Bool) {
+        if let clearButton = self.view.viewWithTag(100) as? CalculatorButton {
+            if state {
+                guard clearButton.titleLabel?.text != "C" else {
+                    return
+                }
+                clearButton.setTitle("C", for: .normal)
+            } else {
+                guard clearButton.titleLabel?.text != "AC" else {
+                    return
+                }
+                clearButton.setTitle("AC", for: .normal)
+            }
+        }
     }
     
     // Handle displaying of mainLabel
@@ -346,11 +529,26 @@ class PCalcViewController: UIPageViewController {
         }
     }
     
+    func updateSystemMain(with rawValue: String) {
+        calculator.systemMain = ConversionSystemsEnum(rawValue: rawValue)
+    }
+    
+    func updateSystemCoverter(with rawValue: String) {
+        calculator.systemConverter = ConversionSystemsEnum(rawValue: rawValue)
+    }
+    
     // Add digit to end of main label
     private func addDigitToMainLabel( labelText: String, digit: String) -> String {
         var result = String()
         
         if digit == "." && !labelText.contains(".") {
+            // forbid float input when negative number
+            if let dec = converter.convertValue(value: calculator.mainLabelRawValue, from: calculator.systemMain!, to: .dec) as? DecimalSystem {
+                if dec.decimalValue < 0 {
+                    return labelText
+                }
+            }
+            
             return labelText + digit
         } else if digit == "." && labelText.contains(".") {
             return labelText
@@ -381,15 +579,15 @@ class PCalcViewController: UIPageViewController {
     // Update signed button
     private func updateIsSignedButton() {
         // get button by tag 102
-        let isSignedButton = self.view.viewWithTag(102) as? CalculatorButton ?? CalculatorButton()
-        
-        if calculator.processSigned {
-            // if ON then disable
-            // TODO: Localization
-            isSignedButton.setTitle("Signed\nON", for: .normal)
-        } else {
-            // if OFF then enable
-            isSignedButton.setTitle("Signed\nOFF", for: .normal)
+        if let isSignedButton = self.view.viewWithTag(102) as? CalculatorButton {
+            if calculator.processSigned {
+                // if ON then disable
+                // TODO: Localization ?
+                isSignedButton.setTitle("Signed\nON", for: .normal)
+            } else {
+                // if OFF then enable
+                isSignedButton.setTitle("Signed\nOFF", for: .normal)
+            }
         }
     }
     
@@ -397,6 +595,11 @@ class PCalcViewController: UIPageViewController {
     private func changeStatePlusMinus() {
         if let plusMinusButton = self.view.viewWithTag(101) as? CalculatorButton {
             plusMinusButton.isEnabled = calculator.processSigned
+            if plusMinusButton.isEnabled {
+                plusMinusButton.alpha = 1.0
+            } else {
+                plusMinusButton.alpha = 0.5
+            }
         }
     }
     
@@ -415,23 +618,14 @@ class PCalcViewController: UIPageViewController {
         unhighlightLabels()
     }
     
-    // Haptic feedback action for all buttons
-    @objc func hapticFeedback(_ sender: CalculatorButton) {
-        if hapticFeedback {
-            generator.prepare()
-            // impact
-            generator.impactOccurred()
-        }
-    }
     
     // Numeric buttons actions
     @objc func numericButtonTapped(_ sender: UIButton) {
         let button = sender
         let buttonText = button.titleLabel!.text ?? ""
-        // tag for AC/C button
-        let acButton = self.view.viewWithTag(100) as! UIButton
-        acButton.setTitle("C", for: .normal)
-        
+        // update AC/C button
+        if buttonText != "0" && buttonText != "00" { updateClearButton(hasInput: true) }
+ 
         print("Button \(buttonText) touched")
         
         if calculator.mathState != nil {
@@ -473,12 +667,17 @@ class PCalcViewController: UIPageViewController {
         let buttonLabel = sender.titleLabel?.text
         // update conversion state
         updateConversionState()
+        // if float then exit
+        guard !mainLabel.text!.contains(".") else { return }
+        // localization for 1's and 2's
+        let oneS = NSLocalizedString("1's", comment: "")
+        let twoS = NSLocalizedString("2's", comment: "")
         // switch complements
         switch buttonLabel {
-        case "1's":
+        case oneS:
             // TODO: Error handling
             mainLabel.text = converter.toOnesComplement(value: calculator.mainLabelRawValue, mainSystem: calculator.systemMain!).value
-        case "2's":
+        case twoS:
             // TODO: Error handling
             mainLabel.text = converter.toTwosComplement(value: calculator.mainLabelRawValue, mainSystem: calculator.systemMain!).value
         default:
@@ -492,13 +691,10 @@ class PCalcViewController: UIPageViewController {
     // Bitwise operations
     @objc func bitwiseButtonTapped(_ sender: UIButton) {
         let buttonText = sender.titleLabel?.text
-        
         // update conversion state
         updateConversionState()
-        
         // if float then exit
         guard !mainLabel.text!.contains(".") else { return }
-        
         let operation = calculator.getOperationBy(string: buttonText!)
         guard operation != nil else { return }
         
@@ -514,7 +710,7 @@ class PCalcViewController: UIPageViewController {
         // negate value if number is negative and processsigned == on
         if calculator.mainLabelRawValue.isSigned && calculator.processSigned {
             mainLabel.text = calculator.negateValue(value: calculator.mainLabelRawValue, system: calculator.systemMain!)
-        } else if !calculator.isValueOverflowed(value: calculator.mainLabelRawValue.value, for: calculator.systemMain!, when: .negate) {
+        } else if calculator.isValueOverflowed(value: calculator.mainLabelRawValue.value, for: calculator.systemMain!, when: .negate) {
             clearLabels()
         }
         // invert value
@@ -536,9 +732,7 @@ class PCalcViewController: UIPageViewController {
     @objc func clearButtonTapped(_ sender: UIButton) {
         print("clear")
         // Clear buttons
-        if sender.titleLabel?.text != "AC" && sender.tag == 100 {
-            sender.setTitle("AC", for: .normal)
-        }
+        updateClearButton(hasInput: false)
         clearLabels()
         calculator.mathState = nil
     }
@@ -559,11 +753,15 @@ class PCalcViewController: UIPageViewController {
     
     // Negate button
     @objc func negateButtonTapped(_ sender: UIButton) {
+        // if float then exit
+        guard !mainLabel.text!.contains(".") else { return }
+        // calculate result
         let result = calculator.negateValue(value: calculator.mainLabelRawValue, system: calculator.systemMain!)
         // check for overflow
         let isOverflowed = calculator.isValueOverflowed(value: result, for: calculator.systemMain!, when: .negate)
         guard !isOverflowed else { return }
         mainLabel.text = result
+        updateMainLabel()
         updateConverterLabel()
     }
     
@@ -576,6 +774,8 @@ class PCalcViewController: UIPageViewController {
         let vc = ConversionViewController()
         // present settings
         vc.modalPresentationStyle = .overFullScreen
+        // set delegate
+        vc.delegate = self
         // show popover
         self.present(vc, animated: false, completion: nil)
     }
@@ -602,6 +802,7 @@ class PCalcViewController: UIPageViewController {
         let vc = SettingsViewController()
         let navigationController = UINavigationController()
         vc.modalPresentationStyle = .pageSheet
+        navigationController.presentationController?.delegate = self
         vc.updaterHandler = {
             self.updateSettings()
         }
@@ -630,9 +831,8 @@ class PCalcViewController: UIPageViewController {
     
 }
 
-// =================
-// MARK: - Extension
-// =================
+// MARK: - DataSource
+
 
 extension PCalcViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     

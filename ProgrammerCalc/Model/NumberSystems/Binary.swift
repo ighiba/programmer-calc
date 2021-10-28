@@ -21,10 +21,6 @@ class Binary: NumberSystemProtocol {
     var value: String = "0"
     var isSigned: Bool = false // default
 
-    // Storages
-    //private let calcStateStorage = CalcStateStorage()
-    //private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
-    //private let conversionStorage: ConversionStorageProtocol = ConversionStorage()
     
     required public init(stringLiteral value: String) {
         // process string input and apply style for output
@@ -144,14 +140,9 @@ class Binary: NumberSystemProtocol {
         }
         
         // to two's complement if value is signed and negative
-        //if calcStateStorage.isProcessSigned() {
-            // calcualte signed state
-            //binary.updateSignedState() // changes binary.isSigned state to true of false
-            // set multipler to -1 or 1 for inverting value
-            if self.isSigned {
-                binary.twosComplement()
-            }
-        //}
+        if self.isSigned {
+            binary.twosComplement()
+        }
         
         // remove all spaces
         let str = binary.value.removeAllSpaces()
@@ -165,24 +156,21 @@ class Binary: NumberSystemProtocol {
         }
         
         // First: converting int part
-        //if calcStateStorage.isProcessSigned() {
-            // calcualte signed state
-            //binary.updateSignedState() // changes binary.isSigned state to true of false
-            // remove signed bit
+
+        // remove signed bit
         if self.isSigned {
             binIntStrBuff?.removeFirst()
         }
-            // set multipler to -1 or 1 for inverting value
-            if self.isSigned {
-                signedMultipler = -1
-                // check if min signed
-                if binIntStrBuff!.replacingOccurrences(of: "0", with: "").count == 0 {
-                    binIntStrBuff = "1" + binIntStrBuff!
-                }
-            } else {
-                signedMultipler = 1
+        // set multipler to -1 or 1 for inverting value
+        if self.isSigned {
+            signedMultipler = -1
+            // check if min signed
+            if binIntStrBuff!.replacingOccurrences(of: "0", with: "").count == 0 {
+                binIntStrBuff = "1" + binIntStrBuff!
             }
-        //}
+        } else {
+            signedMultipler = 1
+        }
         
         // convert int part of binary to decimal
         result = Decimal(binIntStrBuff!, radix: 2)
@@ -502,76 +490,47 @@ class Binary: NumberSystemProtocol {
         // remove spaces
         binary.value = binary.value.removeAllSpaces()
         
-        // get saved data
-//        if let data = calcState?.processSigned {
-//            // if .processSigned == true
-//            if data {
-                
-                //let wordSizeValue = wordSizeStorage.getWordSizeValue()
-                
-                
-        
-//                // calcualte signed state
-//                if binary.value.count == wordSizeValue {
-//                    binary.updateSignedState() // changes binary.isSigned state to true of false
-//                } else if binary.value.count > wordSizeValue {
-//                    // delete first values up to wordSizeValue
-//                    while binary.value.count != wordSizeValue {
-//                        binary.value.removeFirst(1)
-//                    }
-//                    binary.updateSignedState()
-//                } else {
-//                    // if not full wordSize then first signed bit is off
-//                    binary.isSigned = false
-//
-//                }
-                // update signed state if filled by 8,16,32,64 bits
-                if [8,16,32,64].contains(binary.value.count)  {
-                    binary.updateSignedState()
-                    isInputSigned = binary.isSigned
-                }
+        // update signed state if filled by 8,16,32,64 bits
+        if [8,16,32,64].contains(binary.value.count)  {
+            binary.updateSignedState()
+            isInputSigned = binary.isSigned
+        }
 
-                
-                // fill if needed to
-                if !isInputSigned {
-                    // remove signed bit
-                    // TODO: Remove maybe
-                    if binary.value.first != "1" {
-                        binary.value.removeFirst()
-                    }
-                    binary.fillToFormat(upToZeros: true)
-                } else {
-                    // invert binary if signed
-                    binary.twosComplement()
-                    binary.value.removeFirst()
-                }
-                
-                // remove zeros before
-                binary.value = binary.removeZerosBefore(str: binary.value)
-                
-                // fills up binary to 7, 15, 31, 63
-                binary.fillUpToMaxBitsCount()
-                
-                // isSigned == true -> 1 else -> 0
-                // add signed bit by signed state
-                if isInputSigned {
-                    binary.value = "1" + binary.value
-                } else {
-                    binary.value = "0" + binary.value
-                }
-                
-                if isInputSigned {
-                    binary.twosComplement()
-                    binary.changeSignedBit(to: "1")
-                }
-
-                return binary.value
-//            }
-//        }
-        // just make binary code pretty
-        //binary.value = fillUpParts(str: binary.value, by: 4)
         
-        //return binary.value
+        // fill if needed to
+        if !isInputSigned {
+            // remove signed bit
+            // TODO: Remove maybe
+            if binary.value.first != "1" {
+                binary.value.removeFirst()
+            }
+            binary.fillToFormat(upToZeros: true)
+        } else {
+            // invert binary if signed
+            binary.twosComplement()
+            binary.value.removeFirst()
+        }
+        
+        // remove zeros before
+        binary.value = binary.removeZerosBefore(str: binary.value)
+        
+        // fills up binary to 7, 15, 31, 63
+        binary.fillUpToMaxBitsCount()
+        
+        // isSigned == true -> 1 else -> 0
+        // add signed bit by signed state
+        if isInputSigned {
+            binary.value = "1" + binary.value
+        } else {
+            binary.value = "0" + binary.value
+        }
+        
+        if isInputSigned {
+            binary.twosComplement()
+            binary.changeSignedBit(to: "1")
+        }
+
+        return binary.value
     }
     
     // Processing strings that initialized from stringLiteral
@@ -589,21 +548,6 @@ class Binary: NumberSystemProtocol {
         // process fract part
         if let fractPart = binaryDivided.1 {
             let buffStr = fractPart.removeAllSpaces()
-//            guard fractPart != "" else {
-//                return resultStr + "."
-//            }
-//            var buffStr = fractPart.removeAllSpaces()
-//            if let conversionSettings = conversionStorage.loadData() {
-//                if buffStr.count < Int(conversionSettings.numbersAfterPoint) {
-//                    buffStr = String(fillUpZeros(str: String(buffStr.reversed()), to: Int(conversionSettings.numbersAfterPoint)).reversed())
-//                } else {
-//                    // remove last bit until it fits in numberAfterPoint
-//                    while buffStr.count > Int(conversionSettings.numbersAfterPoint) {
-//                        buffStr.removeLast(1)
-//                    }
-//                }
-//
-//            }
             resultStr = resultStr + "." + buffStr
         }
         

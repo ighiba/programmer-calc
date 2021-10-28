@@ -18,17 +18,21 @@ class WordSizeView: UIView {
     }
 
     func setViews() {
-        //let screenWidth = UIScreen.main.bounds.width
         self.frame = UIScreen.main.bounds
+
+        self.backgroundColor = .clear
         
-        // TODO: Themes
-        self.backgroundColor = UIColor.gray.withAlphaComponent(0.6)
-        
-//        mainPicker.addSubview(arrow)
         container.addSubview(containerStack)
         self.addSubview(container)
 
         setupLayout()
+        
+        // Add blur effect
+        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.systemUltraThinMaterialDark)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = self.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.insertSubview(blurEffectView, at: 0)
     }
     
     
@@ -58,54 +62,22 @@ class WordSizeView: UIView {
             
             // Set constraints for main container
             container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            //container.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: (self.frame.height/8) * -1),
             container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            //container.centerYAnchor.constrain(equalTo: self.centerXAnchor, multiplier: -0.2),
             container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9),
-            //container.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.47),
             container.heightAnchor.constraint(equalToConstant: containerStackHeight+margin*2),
             
             // Set constraints for done button
             containerStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             containerStack.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             containerStack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.90),
-            //containerStack.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.90),
             containerStack.heightAnchor.constraint(equalToConstant: containerStackHeight),
-            
-//            // Set constraints for main container
-//            container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-//            //container.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: (self.frame.height/8) * -1),
-//            container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-//            //container.centerYAnchor.constrain(equalTo: self.centerXAnchor, multiplier: -0.2),
-//            container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9),
-//            //container.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.47),
-//            container.heightAnchor.constraint(equalToConstant: containerStackHeight+margin*2),
-//
-//            // Set constraints for label
-//            popoverTitle.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-//            popoverTitle.topAnchor.constraint(equalTo: container.topAnchor, constant: margin),
-//            popoverTitle.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
-//            popoverTitle.heightAnchor.constraint(equalToConstant: popoverTitleHeight),
-//
-//            // Set constraints for table
-//            wordSizeTable.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-//            wordSizeTable.topAnchor.constraint(equalTo: popoverTitle.bottomAnchor, constant: margin),
-//            wordSizeTable.heightAnchor.constraint(equalToConstant: tableRowHeight*4),
-//            wordSizeTable.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
-//
-//            // Set contraints for done button
-//            doneButton.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-//            doneButton.topAnchor.constraint(equalTo: wordSizeTable.bottomAnchor, constant: margin),
-//            doneButton.heightAnchor.constraint(equalToConstant: doneButtonHeight),
-//            doneButton.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
-
         ])
     }
     
     let container: UIView = {
         let view = UIView()
 
-        view.backgroundColor = .white
+        view.backgroundColor = .systemGray6
         view.layer.cornerRadius = 24
 
         return view
@@ -123,14 +95,7 @@ class WordSizeView: UIView {
     
     // Done button for saving and dismissing vc
     fileprivate let doneButton: UIButton = {
-        let button = UIButton()
-        
-        button.frame = CGRect(x: 0, y: 0, width: 20, height: 100)
-        
-        button.setTitle("Done", for: .normal)
-        // TODO: Themes
-        button.backgroundColor = .systemGreen
-        button.layer.cornerRadius = 16
+        let button = PopoverDoneButton(frame: CGRect())
         
         button.addTarget(nil, action: #selector(WordSizeViewController.doneButtonTapped), for: .touchUpInside)
         
@@ -141,10 +106,11 @@ class WordSizeView: UIView {
     fileprivate let popoverTitle: UILabel = {
         let label = UILabel()
         
-        label.text = "Change word size"
+        label.text = NSLocalizedString("Change word size", comment: "")
+        label.textColor = .label
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.textAlignment = .center
-        
+               
         return label
     }()
     

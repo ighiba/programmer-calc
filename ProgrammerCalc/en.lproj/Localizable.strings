@@ -1,0 +1,29 @@
+/* 
+  Localizable.strings
+  ProgrammerCalc
+
+  Created by Ivan Ghiba on 24.10.2021.
+  Copyright © 2021 ighiba. All rights reserved.
+*/
+
+"1's" = "1's";
+"2's" = "2's";
+
+"Use system appearance" = "Use system appearance";
+"Theme" = "Appearance";
+"Light Mode" = "Light";
+"Dark Mode" = "Dark";
+"Old School" = "Old School";
+"About app" = "About app";
+"Rate app" = "Rate app";
+"Contact us" = "Contact us";
+"Settings" = "Settings";
+"Appearance" = "Appearance";
+"Tapping sounds" = "Tapping sounds";
+"Haptic feedback" = "Haptic feedback";
+"Conversion settings" = "Conversion settings";
+"Max number of digits after point: " = "Max number of digits afrer point: ";
+"Change word size" = "Change word size";
+"Done" = "Done";
+"Description" = "Description";
+"DescriptionFullText" = "This app is intended for conversion of numbers between different number systems, as well as performing some arithmetic, logical and bitwise operations with these numbers. All this is on your phone and with the usual interface. If you learn a programmer, then it can be useful for you.\n\nYour suggestions and comments can be sent through the contact form.\n\nThank you for choosing this app.";

@@ -7,8 +7,14 @@
 //
 
 import UIKit
+import MessageUI
 
-class SettingsViewController: UITableViewController {
+protocol SettingsViewControllerDelegate {
+    func openAppearance()
+    func openAbout()
+}
+
+class SettingsViewController: PCalcTableViewController, SettingsViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
     
     // MARK: - Properties
 
@@ -16,7 +22,10 @@ class SettingsViewController: UITableViewController {
     lazy var doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(SettingsViewController.closeButtonTapped))
     
     // links to storages
-    private var settingsStorage: SettingsStorageProtocol = SettingsStorage()
+    private let settingsStorage: SettingsStorageProtocol = SettingsStorage()
+    private let styleStorage: StyleStorageProtocol = StyleStorage()
+    
+    private let styleFactory: StyleFactory = StyleFactory()
     
     // updater settings in PCalcViewController
     var updaterHandler: (() -> Void)?
@@ -24,46 +33,57 @@ class SettingsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        settingsView.controllerDelegate = self
         self.tableView = settingsView
+        
+        // Color for done item
+        let style = styleFactory.get(style: styleStorage.safeGetStyleData())
+        //doneItem.tintColor = style.tintColor
+        self.navigationController?.navigationBar.tintColor = style.tintColor
+        
         // Setup navigation items
         self.navigationController?.navigationBar.topItem?.rightBarButtonItem = doneItem
-        self.navigationController?.navigationBar.topItem?.title = "Settings"
+        self.navigationController?.navigationBar.topItem?.title = NSLocalizedString("Settings", comment: "")
         
         self.tableView.reloadData()
     }
    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        // lock rotation
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
         // get switch last state from UserDefaults
         getSettings()
     }
  
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+        super.viewWillDisappear(animated)
         // save switch state to UserDefaults
         saveSettings()
         // update settings in PCalcVC
         updaterHandler?()
     }
     
+    
     // MARK: - Methods
     
     // Update settings values
     fileprivate func getSettings() {
         // get data from UserDefaults
-        if let settings = settingsStorage.loadData() {
-            // loop table cells
+        let settings = settingsStorage.safeGetData()
+        // loop table cells
+        DispatchQueue.main.async {
             for cell in self.tableView.visibleCells as! [AppSettingsCell] {
                 if let switcher = cell.accessoryView as? UISwitch {
                     let title = cell.textLabel?.text
                     
                     // set switcher to userdefault state
                     switch title {
-                    case "Dark mode":
+                    case NSLocalizedString("Appearance", comment: ""):
                         switcher.setOn(settings.darkMode, animated: false)
-                    case "Tapping sounds":
+                    case NSLocalizedString("Tapping sounds", comment: ""):
                         switcher.setOn(settings.tappingSounds, animated: false)
-                    case "Haptic feedback":
+                    case NSLocalizedString("Haptic feedback", comment: ""):
                         switcher.setOn(settings.hapticFeedback, animated: false)
                     default:
                         // TODO: Handle
@@ -72,11 +92,6 @@ class SettingsViewController: UITableViewController {
                     }
                 }
             }
-        } else {
-            print("no settings")
-            // Save default settings (all false)
-            let newSettings = AppSettings(darkMode: false, tappingSounds: false, hapticFeedback: false)
-            settingsStorage.saveData(newSettings)
         }
     }
     
@@ -91,11 +106,11 @@ class SettingsViewController: UITableViewController {
                     
                     // get from switcher state and set to local userdefaults
                     switch title {
-                    case "Dark mode":
+                    case NSLocalizedString("Appearance", comment: ""):
                         newSettings.darkMode = switcher.isOn
-                    case "Tapping sounds":
+                    case NSLocalizedString("Tapping sounds", comment: ""):
                         newSettings.tappingSounds = switcher.isOn
-                    case "Haptic feedback":
+                    case NSLocalizedString("Haptic feedback", comment: ""):
                         newSettings.hapticFeedback = switcher.isOn
                     default:
                         // TODO: Handle
@@ -116,11 +131,26 @@ class SettingsViewController: UITableViewController {
         
     }
     
+    // Appearance cell touch
+    func openAppearance() {
+        let appearanceVC = AppearanceViewController()
+        self.navigationController?.pushViewController(appearanceVC, animated: true)
+    }
+
+    // About app cell touch
+    func openAbout() {        
+        let aboutVC = AboutViewController()
+        self.navigationController?.pushViewController(aboutVC, animated: true)
+    }
+    
     // MARK: - Actions
     
     // Close settings popover
     @objc func closeButtonTapped( sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true, completion: {
+            // unlock rotation
+            AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
+        })
     }
     
     // Switcher handler
@@ -128,11 +158,11 @@ class SettingsViewController: UITableViewController {
         if let cell = sender.superview as? AppSettingsCell {
             let title = cell.textLabel?.text
             switch title {
-            case "Dark mode":
-                print("Dark mode switch to \(sender.isOn)")
-            case "Tapping sounds":
+            case NSLocalizedString("Appearance", comment: ""):
+                print("Appearance switch to \(sender.isOn)")
+            case NSLocalizedString("Tapping sounds", comment: ""):
                 print("Tapping sounds switch to \(sender.isOn)")
-            case "Haptic feedback":
+            case NSLocalizedString("Haptic feedback", comment: ""):
                 print("Haptic feedback switch to \(sender.isOn)")
             default:
                 // TODO: Handle

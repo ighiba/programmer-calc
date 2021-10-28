@@ -11,6 +11,7 @@ import Foundation
 final class CalcMath {
     
     // Storages
+    private let conversionStorage = ConversionStorage()
     private let calcStateStorage = CalcStateStorage()
     private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
     
@@ -72,54 +73,26 @@ final class CalcMath {
         // ========================
         let newDecimal = calculateDecNumbers(firstNum: firstConverted, secondNum: secondConverted, operation: operation)!
         
-        let wordSizeValue = wordSizeStorage.getWordSizeValue()
+        // Format if overflow
+        // get fract part if exists
+        var decFractPart = newDecimal.removeFractPart()
+        var decFractPartCopy = decFractPart
+        let numbersAfterPoint = Int(conversionStorage.safeGetData().numbersAfterPoint)
+        NSDecimalRound(&decFractPart, &decFractPartCopy, numbersAfterPoint, .down)
+        // convert to formatted bin
+        let formattedBin = converter.convertValue(value: newDecimal, from: .dec, to: .bin)
+        // convert to decimal from bin
+        let formattedDec = converter.convertValue(value: formattedBin!, from: .bin, to: .dec) as! DecimalSystem
+        // add decimal fract part
+        formattedDec.setNewDecimal(with: formattedDec.decimalValue + decFractPart)
         
-        // Check for overflow
-        // calculate max/min decSigned/Unsigned values with current wordSize value
-        let max = Decimal().decPow(2, Decimal(wordSizeValue)) - 1
-        let maxSigned = Decimal().decPow(2, Decimal(wordSizeValue-1)) - 1
-        let minSigned = Decimal().decPow(2, Decimal(wordSizeValue-1)) * -1
-        
-        let processSigned = calcStateStorage.isProcessSigned()
-        // check for overflow
-        // TODO: Refactor to binary str processing?
-        if abs(newDecimal.decimalValue) > maxSigned || (!processSigned && newDecimal.decimalValue < 0) {
-            var decResult = newDecimal.decimalValue
-            // process overflow for different ways
-            if processSigned && newDecimal.decimalValue > maxSigned {
-                // count how much is overflowed after calculation
-                var decCount = newDecimal.decimalValue / (maxSigned + 1)
-                var decCountCopy = decCount
-                // round decCount
-                NSDecimalRound(&decCount, &decCountCopy, 0, .down)
-                decCount = decCount == 1.0 ? decCount + 1 : decCount
-                decResult = (newDecimal.decimalValue-(maxSigned + 1) * decCount)
-                
-            } else if processSigned && newDecimal.decimalValue < minSigned {
-                
-                var decCount = newDecimal.decimalValue / minSigned
-                var decCountCopy = decCount
-                NSDecimalRound(&decCount, &decCountCopy, 0, .down)
-                decCount = decCount == 1.0 ? decCount + 1 : decCount
-                decResult = newDecimal.decimalValue-minSigned * decCount
-                
-            } else if !processSigned && newDecimal.decimalValue > max {
-                
-                var decCount = newDecimal.decimalValue / (max + 1)
-                var decCountCopy = decCount
-                NSDecimalRound(&decCount, &decCountCopy, 0, .down)
-                //decCount = decCount == 1.0 ? decCount + 1 : decCount
-                decResult = newDecimal.decimalValue-(max + 1) * decCount
-                
-            } else if !processSigned && newDecimal.decimalValue < 0 {
-                var decCount = newDecimal.decimalValue / max + 1
-                var decCountCopy = decCount
-                NSDecimalRound(&decCount, &decCountCopy, 0, .down)
-                decCount = decCount == 0 ? decCount - 1 : decCount
-                decResult = newDecimal.decimalValue - (max + 1) * decCount
-            }
-            // update decimal
-            newDecimal.setNewDecimal(with: decResult)
+        // Check if float and negative
+        if formattedDec.value.contains(".") && formattedDec.decimalValue < 0 {
+            // round decimal
+            var dec = formattedDec.decimalValue
+            var decCopy = dec
+            NSDecimalRound(&dec, &decCopy, 0, .up)
+            formattedDec.setNewDecimal(with: dec)
         }
         
         // ======================
@@ -127,9 +100,9 @@ final class CalcMath {
         // ======================
         
         if system != .dec {
-            return converter.convertValue(value: newDecimal, from: .dec, to: system)
+            return converter.convertValue(value: formattedDec, from: .dec, to: system)
         } else {
-            return newDecimal
+            return formattedDec
         }
    
     }
@@ -277,6 +250,16 @@ final class CalcMath {
         guard convertedDecimal.decimalValue != 0 else {
             return value
         }
+        
+        // Check if float
+        if convertedDecimal.value.contains(".") {
+            // round decimal
+            var dec = convertedDecimal.decimalValue
+            var decCopy = dec
+            NSDecimalRound(&dec, &decCopy, 0, .down)
+            convertedDecimal.setNewDecimal(with: dec)
+        }
+        
         // multiple by -1
         let newDecimalValue = -1 * convertedDecimal.decimalValue
         
@@ -445,5 +428,6 @@ final class CalcMath {
         let binResult = operation(binFirstNum,binSecondNum)
         return converter.convertValue(value: binResult, from: .bin, to: .dec)! as! DecimalSystem
     }
+    
     
 }

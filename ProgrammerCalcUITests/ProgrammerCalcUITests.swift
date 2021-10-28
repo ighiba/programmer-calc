@@ -36,11 +36,10 @@ class ProgrammerCalcUITests: XCTestCase {
         // 1. given
         let settingsButton = app.navigationBars.buttons["gearshape"]
         let tablesQuery = app.tables
-        let darkModeRow = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["Dark mode"]/*[[".cells.matching(identifier: \"0\").staticTexts[\"Dark mode\"]",".staticTexts[\"Dark mode\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        let darkModeRow = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["Appearance"]/*[[".cells.matching(identifier: \"0\").staticTexts[\"Appearance\"]",".staticTexts[\"Appearance\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
         let tappingSoundsRow = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["Tapping sounds"]/*[[".cells.matching(identifier: \"0\").staticTexts[\"Tapping sounds\"]",".staticTexts[\"Tapping sounds\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
         let hapticFeedbackRow = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["Haptic feedback"]/*[[".cells[\"1\"].staticTexts[\"Haptic feedback\"]",".staticTexts[\"Haptic feedback\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
         let aboutAppRow = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["About app"]/*[[".cells.staticTexts[\"About app\"]",".staticTexts[\"About app\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-        let contactUsRow = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["Contact us"]/*[[".cells.staticTexts[\"Contact us\"]",".staticTexts[\"Contact us\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
                 
         // 2. then
         settingsButton.tap()
@@ -48,8 +47,34 @@ class ProgrammerCalcUITests: XCTestCase {
         XCTAssertTrue(tappingSoundsRow.exists)
         XCTAssertTrue(hapticFeedbackRow.exists)
         XCTAssertTrue(aboutAppRow.exists)
-        XCTAssertTrue(contactUsRow.exists)
     }
+    
+//    func testAboutView() throws {
+//        // 1. given
+//
+//        let tablesQuery_About = app.tables
+//        let descriptionRow = tablesQuery_About/*@START_MENU_TOKEN@*/.staticTexts["Description"]/*[[".cells.staticTexts[\"Description\"]",".staticTexts[\"Description\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+//
+//        let rateAppRow = tablesQuery_About/*@START_MENU_TOKEN@*/.staticTexts["Rate app"]/*[[".cells.staticTexts[\"Rate app\"]",".staticTexts[\"Rate app\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+//        let contactUsRow = tablesQuery_About/*@START_MENU_TOKEN@*/.staticTexts["Contact us"]/*[[".cells.staticTexts[\"Contact us\"]",".staticTexts[\"Contact us\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+//
+//
+//
+//
+//        let settingsButton = app.navigationBars.buttons["gearshape"]
+//        let tablesQuery_Settings = app.tables
+//        let aboutAppRow = tablesQuery_Settings/*@START_MENU_TOKEN@*/.staticTexts["About app"]/*[[".cells.staticTexts[\"About app\"]",".staticTexts[\"About app\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+//
+//        // 2. then
+//        settingsButton.tap()
+//        XCTAssertTrue(aboutAppRow.exists)
+//        aboutAppRow.tap()
+//        XCTAssertTrue(descriptionRow.exists)
+//        XCTAssertTrue(rateAppRow.exists)
+//        XCTAssertTrue(contactUsRow.exists)
+//        //descriptionRow.tap()
+//
+//    }
     
     func testChangeConversionButton() throws {
         // 1. given

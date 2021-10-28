@@ -31,7 +31,7 @@
 		C0666EBA24F9782F004809EF /* CalcButtonsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0666EB924F9782F004809EF /* CalcButtonsPage.swift */; };
 		C066756924E27AE700F832F9 /* ConversionValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = C066756824E27AE700F832F9 /* ConversionValues.swift */; };
 		C066756E24E2D83300F832F9 /* Converter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C066756D24E2D83300F832F9 /* Converter.swift */; };
-		C068AFAA24FA40B900BFE754 /* UIPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C068AFA924FA40B900BFE754 /* UIPageViewController.swift */; };
+		C068AFAA24FA40B900BFE754 /* PCalcViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C068AFA924FA40B900BFE754 /* PCalcViewControllerExtension.swift */; };
 		C068AFAC24FA605800BFE754 /* CalculatorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C068AFAB24FA605800BFE754 /* CalculatorButton.swift */; };
 		C06B7F072443B12B009642B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F062443B12B009642B9 /* AppDelegate.swift */; };
 		C06B7F092443B12B009642B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F082443B12B009642B9 /* SceneDelegate.swift */; };
@@ -47,6 +47,18 @@
 		C0746E0E24F45C6000A0BDF9 /* NumberSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0746E0D24F45C5F00A0BDF9 /* NumberSystem.swift */; };
 		C077CF6F24DC8DEE008E5F0F /* AppSettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C077CF6E24DC8DEE008E5F0F /* AppSettingsCell.swift */; };
 		C077CF7124DC987B008E5F0F /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C077CF7024DC987B008E5F0F /* AppSettings.swift */; };
+		C0817788271D045E0068CF45 /* PopoverDoneButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0817787271D045E0068CF45 /* PopoverDoneButton.swift */; };
+		C09631C42725BA7C001DCD25 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C09631C62725BA7C001DCD25 /* Localizable.strings */; };
+		C09631CA2726FB12001DCD25 /* AppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631C92726FB12001DCD25 /* AppearanceViewController.swift */; };
+		C09631CC2726FBF1001DCD25 /* AppearanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631CB2726FBF1001DCD25 /* AppearanceView.swift */; };
+		C09631CE27270D6B001DCD25 /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631CD27270D6B001DCD25 /* Style.swift */; };
+		C09631D027270FCC001DCD25 /* StyleFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631CF27270FCC001DCD25 /* StyleFactory.swift */; };
+		C09631D22727121D001DCD25 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631D12727121D001DCD25 /* UIColor.swift */; };
+		C09631D427271A4D001DCD25 /* StyleStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631D327271A4D001DCD25 /* StyleStorage.swift */; };
+		C09631D627277066001DCD25 /* ButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631D527277066001DCD25 /* ButtonStyle.swift */; };
+		C09631D82728E9DC001DCD25 /* PCalcTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631D72728E9DC001DCD25 /* PCalcTableViewController.swift */; };
+		C0CC6DFF271F68AA00E59E64 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */; };
+		C0CC6E0127208EBB00E59E64 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CC6E0027208EBB00E59E64 /* AboutView.swift */; };
 		C0E5FC7624BB9B8D00BA93CA /* PCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */; };
 		C0F5CF4B270E10870020CE14 /* WordSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF4A270E10870020CE14 /* WordSize.swift */; };
 		C0F5CF4D270E12100020CE14 /* WordSizeStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF4C270E12100020CE14 /* WordSizeStorage.swift */; };
@@ -97,7 +109,7 @@
 		C0666EB924F9782F004809EF /* CalcButtonsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcButtonsPage.swift; sourceTree = "<group>"; };
 		C066756824E27AE700F832F9 /* ConversionValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionValues.swift; sourceTree = "<group>"; };
 		C066756D24E2D83300F832F9 /* Converter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Converter.swift; sourceTree = "<group>"; };
-		C068AFA924FA40B900BFE754 /* UIPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPageViewController.swift; sourceTree = "<group>"; };
+		C068AFA924FA40B900BFE754 /* PCalcViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcViewControllerExtension.swift; sourceTree = "<group>"; };
 		C068AFAB24FA605800BFE754 /* CalculatorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorButton.swift; sourceTree = "<group>"; };
 		C06B7F032443B12B009642B9 /* ProgrammerCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProgrammerCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C06B7F062443B12B009642B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -119,6 +131,20 @@
 		C0746E0D24F45C5F00A0BDF9 /* NumberSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberSystem.swift; sourceTree = "<group>"; };
 		C077CF6E24DC8DEE008E5F0F /* AppSettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsCell.swift; sourceTree = "<group>"; };
 		C077CF7024DC987B008E5F0F /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		C0817787271D045E0068CF45 /* PopoverDoneButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverDoneButton.swift; sourceTree = "<group>"; };
+		C09631C32725BA6E001DCD25 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		C09631C52725BA7C001DCD25 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C09631C82725BA95001DCD25 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C09631C92726FB12001DCD25 /* AppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceViewController.swift; sourceTree = "<group>"; };
+		C09631CB2726FBF1001DCD25 /* AppearanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceView.swift; sourceTree = "<group>"; };
+		C09631CD27270D6B001DCD25 /* Style.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Style.swift; sourceTree = "<group>"; };
+		C09631CF27270FCC001DCD25 /* StyleFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleFactory.swift; sourceTree = "<group>"; };
+		C09631D12727121D001DCD25 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		C09631D327271A4D001DCD25 /* StyleStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleStorage.swift; sourceTree = "<group>"; };
+		C09631D527277066001DCD25 /* ButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyle.swift; sourceTree = "<group>"; };
+		C09631D72728E9DC001DCD25 /* PCalcTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcTableViewController.swift; sourceTree = "<group>"; };
+		C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
+		C0CC6E0027208EBB00E59E64 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcView.swift; sourceTree = "<group>"; };
 		C0F5CF4A270E10870020CE14 /* WordSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSize.swift; sourceTree = "<group>"; };
 		C0F5CF4C270E12100020CE14 /* WordSizeStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSizeStorage.swift; sourceTree = "<group>"; };
@@ -155,6 +181,7 @@
 		C00616AD270666AD007BEF89 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
+				C09631D327271A4D001DCD25 /* StyleStorage.swift */,
 				C00616B227066CB1007BEF89 /* CalcStateStorage.swift */,
 				C00616B027066C91007BEF89 /* ConversionStorage.swift */,
 				C00616AE270666DD007BEF89 /* SettingsStorage.swift */,
@@ -166,6 +193,10 @@
 		C05A169924DD7AF7007B7FB8 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				C09631CD27270D6B001DCD25 /* Style.swift */,
+				C09631D527277066001DCD25 /* ButtonStyle.swift */,
+				C09631CF27270FCC001DCD25 /* StyleFactory.swift */,
+				C09631D72728E9DC001DCD25 /* PCalcTableViewController.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -205,9 +236,10 @@
 		C068AFA824FA409200BFE754 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				C068AFA924FA40B900BFE754 /* UIPageViewController.swift */,
+				C068AFA924FA40B900BFE754 /* PCalcViewControllerExtension.swift */,
 				C00616AB27065097007BEF89 /* String.swift */,
 				C0F5CF4E270F394E0020CE14 /* Decimal.swift */,
+				C09631D12727121D001DCD25 /* UIColor.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -245,6 +277,7 @@
 				C06B7F0F2443B12E009642B9 /* Assets.xcassets */,
 				C06B7F112443B12E009642B9 /* LaunchScreen.storyboard */,
 				C06B7F142443B12E009642B9 /* Info.plist */,
+				C09631C62725BA7C001DCD25 /* Localizable.strings */,
 			);
 			path = ProgrammerCalc;
 			sourceTree = "<group>";
@@ -280,6 +313,8 @@
 				C0619AC324D71240008A7291 /* ConversionViewController.swift */,
 				C0F5CF50270F4B970020CE14 /* WordSizeViewController.swift */,
 				C070ED2324DB0EC800A04463 /* SettingsViewController.swift */,
+				C09631C92726FB12001DCD25 /* AppearanceViewController.swift */,
+				C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -309,7 +344,10 @@
 				C0666EBD24F991B8004809EF /* PCalcView */,
 				C0619AC124D71227008A7291 /* ConversionView.swift */,
 				C0F5CF52270F4C4C0020CE14 /* WordSizeView.swift */,
+				C0817787271D045E0068CF45 /* PopoverDoneButton.swift */,
 				C070ED2524DB0ED400A04463 /* SettingsView.swift */,
+				C09631CB2726FBF1001DCD25 /* AppearanceView.swift */,
+				C0CC6E0027208EBB00E59E64 /* AboutView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -401,6 +439,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = C06B7EFA2443B12B009642B9;
 			productRefGroup = C06B7F042443B12B009642B9 /* Products */;
@@ -420,6 +459,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C06B7F132443B12E009642B9 /* LaunchScreen.storyboard in Resources */,
+				C09631C42725BA7C001DCD25 /* Localizable.strings in Resources */,
 				C06B7F102443B12E009642B9 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -446,14 +486,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				C0635A7924D9E0F6003855A9 /* ConversionPicker.swift in Sources */,
+				C09631D627277066001DCD25 /* ButtonStyle.swift in Sources */,
 				C0666EB824F97774004809EF /* CalcButtonsViewController.swift in Sources */,
 				C065DB3C24E3DC4F0059B38D /* CalcMath.swift in Sources */,
 				C0619AC224D71227008A7291 /* ConversionView.swift in Sources */,
+				C09631D22727121D001DCD25 /* UIColor.swift in Sources */,
 				C0746E0E24F45C6000A0BDF9 /* NumberSystem.swift in Sources */,
 				C05B008E24E701ED00F8A5E0 /* Octal.swift in Sources */,
 				C061B7C2250FF9FF000E2EB6 /* CalculatorLabel.swift in Sources */,
+				C09631CA2726FB12001DCD25 /* AppearanceViewController.swift in Sources */,
 				C0635A7B24D9E2AA003855A9 /* ConversionSettings.swift in Sources */,
 				C065DB3E24E41E610059B38D /* CalcState.swift in Sources */,
+				C09631CC2726FBF1001DCD25 /* AppearanceView.swift in Sources */,
 				C077CF6F24DC8DEE008E5F0F /* AppSettingsCell.swift in Sources */,
 				C066756924E27AE700F832F9 /* ConversionValues.swift in Sources */,
 				C068AFAC24FA605800BFE754 /* CalculatorButton.swift in Sources */,
@@ -465,19 +509,26 @@
 				C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */,
 				C0E5FC7624BB9B8D00BA93CA /* PCalcView.swift in Sources */,
 				C06B7F0B2443B12B009642B9 /* PCalcViewController.swift in Sources */,
-				C068AFAA24FA40B900BFE754 /* UIPageViewController.swift in Sources */,
+				C068AFAA24FA40B900BFE754 /* PCalcViewControllerExtension.swift in Sources */,
 				C02705222715EF6F008B9C1E /* Calculator.swift in Sources */,
 				C0619AC424D71240008A7291 /* ConversionViewController.swift in Sources */,
+				C0817788271D045E0068CF45 /* PopoverDoneButton.swift in Sources */,
+				C09631D027270FCC001DCD25 /* StyleFactory.swift in Sources */,
+				C0CC6E0127208EBB00E59E64 /* AboutView.swift in Sources */,
+				C0CC6DFF271F68AA00E59E64 /* AboutViewController.swift in Sources */,
 				C066756E24E2D83300F832F9 /* Converter.swift in Sources */,
 				C05B009124E71B6E00F8A5E0 /* DecimalSystem.swift in Sources */,
 				C06B7F072443B12B009642B9 /* AppDelegate.swift in Sources */,
 				C00616AF270666DD007BEF89 /* SettingsStorage.swift in Sources */,
+				C09631D82728E9DC001DCD25 /* PCalcTableViewController.swift in Sources */,
+				C09631CE27270D6B001DCD25 /* Style.swift in Sources */,
 				C0F5CF51270F4B970020CE14 /* WordSizeViewController.swift in Sources */,
 				C06B7F092443B12B009642B9 /* SceneDelegate.swift in Sources */,
 				C07267DD24E5ACB300D4B4A2 /* Binary.swift in Sources */,
 				C0F5CF4D270E12100020CE14 /* WordSizeStorage.swift in Sources */,
 				C077CF7124DC987B008E5F0F /* AppSettings.swift in Sources */,
 				C070ED2624DB0ED400A04463 /* SettingsView.swift in Sources */,
+				C09631D427271A4D001DCD25 /* StyleStorage.swift in Sources */,
 				C00616A827064449007BEF89 /* OctHexHelper.swift in Sources */,
 				C00616B327066CB1007BEF89 /* CalcStateStorage.swift in Sources */,
 				C0666EBA24F9782F004809EF /* CalcButtonsPage.swift in Sources */,
@@ -526,8 +577,18 @@
 			isa = PBXVariantGroup;
 			children = (
 				C06B7F122443B12E009642B9 /* Base */,
+				C09631C32725BA6E001DCD25 /* ru */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		C09631C62725BA7C001DCD25 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C09631C52725BA7C001DCD25 /* en */,
+				C09631C82725BA95001DCD25 /* ru */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -537,6 +598,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -598,6 +660,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -661,6 +724,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ighiba.ProgrammerCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
@@ -682,6 +746,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ighiba.ProgrammerCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";

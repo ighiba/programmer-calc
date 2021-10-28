@@ -38,10 +38,17 @@ class WordSizeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        // lock rotation
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
         // load data from UserDefaults to table
         wordSize = wordSizeStorage.safeGetData() as! WordSize
         // animate popover
         wordSizeView.animateIn()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        // unlock rotation
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
     }
     
     // MARK: - Methods
@@ -60,7 +67,7 @@ class WordSizeViewController: UIViewController {
         // anation
         wordSizeView.animateOut {
             self.dismiss(animated: false, completion: {
-                // update all layout in root vc (PCalcViewController)
+                // update all layout in main vc (PCalcViewController)
                 guard self.updaterHandler != nil else {
                     return
                 }
@@ -115,6 +122,8 @@ extension WordSizeViewController: UITableViewDataSource, UITableViewDelegate {
         
         cell.textLabel?.text = wordSize.wordsDictionary[indexPath.row].keys.first
         cell.textLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 18.0)
+        cell.textLabel?.textColor = .label
+        cell.backgroundColor = .systemGray6
         cell.selectionStyle = .default
         
         if wordSize.wordsDictionary[indexPath.row].values.first == wordSize.value {

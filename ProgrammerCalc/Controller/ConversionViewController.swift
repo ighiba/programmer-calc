@@ -12,6 +12,9 @@ class ConversionViewController: UIViewController {
     
     // MARK: - Properties
     
+    // PCalcViewController delegate
+    var delegate: PCalcViewControllerDelegate?
+    
     lazy var conversionView = ConversionView()
     lazy var picker: ConversionPicker = conversionView.mainPicker
     lazy var slider: UISlider = conversionView.digitsAfterSlider
@@ -23,6 +26,11 @@ class ConversionViewController: UIViewController {
     private var settingsStorage: SettingsStorageProtocol = SettingsStorage()
     private var conversionStorage: ConversionStorageProtocol = ConversionStorage()
     
+    // Haptic feedback generator
+    let generator = UIImpactFeedbackGenerator(style: .medium)
+    // Hapting settings
+    lazy var hapticFeedback = settingsStorage.safeGetData().hapticFeedback
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -33,6 +41,8 @@ class ConversionViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        // lock rotation
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
         // load data from UserDefaults to picker and slider
         getConversionSettings()
         // animate popover
@@ -43,6 +53,8 @@ class ConversionViewController: UIViewController {
         super.viewWillDisappear(animated)
         // save conversion data to UserDefaults
         saveConversionSettings()
+        // unlock rotation
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
     }
     
     // MARK: - Methods
@@ -103,10 +115,8 @@ class ConversionViewController: UIViewController {
         // Slider
         let sliderValue = slider.value.rounded()
         
-        // TODO: Refactor to delegate or closure
-        // root vc fo handling changing of mainSystem
-        let rootVC = UIApplication.shared.windows.first?.rootViewController as? PCalcViewController
-        guard rootVC != nil else {
+        // PCalcViewController delegate fo handling changing of mainSystem
+        guard delegate != nil else {
             // set data to UserDefaults
             let newConversionSettings = ConversionSettings(systMain: systemMainNew!, systConverter: systemConverterNew!, number: sliderValue * 4)
             conversionStorage.saveData(newConversionSettings)
@@ -119,22 +129,22 @@ class ConversionViewController: UIViewController {
         // set data to UserDefaults
         let newConversionSettings = ConversionSettings(systMain: systemMainNew!, systConverter: systemConverterNew!, number: sliderValue * 4)
         conversionStorage.saveData(newConversionSettings)
-        // set data to rootVC state vars
-        rootVC?.calculator.systemMain = ConversionSystemsEnum(rawValue: systemMainNew!)
-        rootVC?.calculator.systemConverter = ConversionSystemsEnum(rawValue: systemConverterNew!)
+        // set data to PCalcViewController system states
+        delegate?.updateSystemMain(with: systemMainNew!)
+        delegate?.updateSystemCoverter(with: systemConverterNew!)
         // Handle changing of systems
         // TODO: Error handling
         if buffSavedMainLabel != systemMainNew! {
             // set labels to 0 and update
-            rootVC!.clearLabels()
+            delegate!.clearLabels()
         } else {
             // if systemMain == last value of systemMain then just update values
             // update layout
-            rootVC!.updateAllLayout()
+            delegate!.updateAllLayout()
         }
         
-        rootVC!.handleDisplayingMainLabel()
-        rootVC!.updateButtons()
+        delegate!.handleDisplayingMainLabel()
+        delegate!.updateButtons()
         
     }
     
@@ -183,14 +193,12 @@ class ConversionViewController: UIViewController {
     // Changing value of slider
     @objc func sliderValueChanged( sender: UISlider) {
         let sliderNewValue = sender.value.rounded()
-
         if sliderOldValue == sliderNewValue {
             // do nothing
         } else {
-            // haptic feedback generator
-            let settings = settingsStorage.loadData()
-            if (settings?.hapticFeedback ?? false) {
-                let generator = UIImpactFeedbackGenerator(style: .medium)
+
+            if hapticFeedback {
+                
                 generator.prepare()
                 // impact
                 generator.impactOccurred()

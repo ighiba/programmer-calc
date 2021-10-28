@@ -15,10 +15,9 @@ protocol CalcStateStorageProtocol {
 }
 
 class CalcStateStorage: CalcStateStorageProtocol {
-    // ==================
+
     // MARK: - Properties
-    // ==================
-    
+
     // storage key
     private var key = "calcState"
     

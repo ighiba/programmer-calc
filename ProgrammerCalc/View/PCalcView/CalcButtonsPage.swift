@@ -10,18 +10,166 @@ import UIKit
 
 protocol CalcButtonPageProtocol: UIView {
     var allButtons: [CalculatorButton] { get set }
+    var layoutConstraints: [NSLayoutConstraint]? { get set}
 }
 
-class CalcButtonsMain: UIView, CalcButtonPageProtocol {
+// Parent Class
+class CalcButtonsPage: UIView, CalcButtonPageProtocol {
+    // Layout constraints
+    var layoutConstraints: [NSLayoutConstraint]?
+    // Style storage
+    var styleStorage: StyleStorageProtocol = StyleStorage()
+    // Style factory
+    var styleFactory: StyleFactory = StyleFactory()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    func setViews() {
+        // override in child class
+    }
+    
+    fileprivate func setLayout() {
+        buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Activate constraints
+        layoutConstraints = [
+            // Constraints for buttons (Main)
+            // width
+            buttonsStackView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.90),
+            // centering
+            buttonsStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            // top anchor
+            //buttonsStackView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: buttonsStackHeight() / 2 + 2),
+            buttonsStackView.topAnchor.constraint(equalTo: self.topAnchor, constant: (buttonsStackHeight() / 2 + 2) * 1.089),
+            // bottom anchor === spacing -3.5 for shadows
+            buttonsStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -3.5),
+        ]
+        NSLayoutConstraint.activate(layoutConstraints!)
+    }
+    
+    // Horizontal main calc buttons stack
+    let buttonsStackView: UIStackView = {
+        let stackView = UIStackView()
+        // Display settings for buttons UIStackView
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .equalSpacing
+        
+        return stackView
+    }()
+    
+    // Standart calculator buttons
+    var allButtons: [CalculatorButton] = []
+    
+    // Style for buttons
+    func updateStyle(for buttons: [CalculatorButton]) {
+        
+        // Apply style by button type
+        let styleName = styleStorage.safeGetStyleData()
+        let style = styleFactory.get(style: styleName)
+        
+        // set background color and text color
+        for button in buttons {
+            switch button.calcButtonType {
+            case .numeric:
+                button.backgroundColor = style.numericButtonStyle.frameColor
+                button.frameTint = style.numericButtonStyle.frameTint
+                button.setTitleColor(style.numericButtonStyle.textColor, for: .normal)
+                button.setTitleColor(style.numericButtonStyle.textTint, for: .highlighted)
+                break
+            case .sign:
+                button.backgroundColor = style.actionButtonStyle.frameColor
+                button.frameTint = style.actionButtonStyle.frameTint
+                button.setTitleColor(style.actionButtonStyle.textColor, for: .normal)
+                button.setTitleColor(style.actionButtonStyle.textTint, for: .highlighted)
+                break
+            case .complement:
+                button.backgroundColor = style.miscButtonStyle.frameColor
+                button.frameTint = style.miscButtonStyle.frameTint
+                button.setTitleColor(style.miscButtonStyle.textColor, for: .normal)
+                button.setTitleColor(style.miscButtonStyle.textTint, for: .highlighted)
+                break
+            case .bitwise:
+                button.backgroundColor = style.actionButtonStyle.frameColor
+                button.frameTint = style.actionButtonStyle.frameTint
+                button.setTitleColor(style.actionButtonStyle.textColor, for: .normal)
+                button.setTitleColor(style.actionButtonStyle.textTint, for: .highlighted)
+                break
+            case .defaultBtn:
+                button.backgroundColor = style.miscButtonStyle.frameColor
+                button.frameTint = style.miscButtonStyle.frameTint
+                button.setTitleColor(style.miscButtonStyle.textColor, for: .normal)
+                button.setTitleColor(style.miscButtonStyle.textTint, for: .highlighted)
+                button.setTitleColor(style.miscButtonStyle.textTint.setDarker(by: 0.7), for: .disabled)
+                //button.setTitleColor(style.miscButtonStyle.textColor, for: .disabled)
+                break
+            }
+            // set border color
+            if style.buttonBorderColor != .clear {
+                let borderColor = button.backgroundColor?.setDarker(by: 0.98)
+                button.layer.borderColor = borderColor?.cgColor
+            } else {
+                button.layer.borderColor = style.buttonBorderColor.cgColor
+            }
+            button.layer.borderWidth = 0.5
+            
+            
+            // set shadow
+            button.layer.shadowColor = UIColor.black.cgColor
+            button.layer.shadowOpacity = 0.25
+            button.layer.shadowOffset = CGSize(width: button.bounds.width, height: 1)
+            button.layer.shadowRadius = 1.5
+            
+            let shadowPath = CGPath(roundedRect: CGRect(x: -button.layer.bounds.width, y: 0, width: button.layer.bounds.width, height: button.layer.bounds.height),
+                                    cornerWidth: button.layer.cornerRadius,
+                                    cornerHeight: button.layer.cornerRadius,
+                                    transform: nil)
+            button.layer.shadowPath = shadowPath
+
+        }
+
+    }
+    
+    
+    // Dynamic butons stack height for autolayout
+    func buttonsStackHeight() -> CGFloat {
+        let screenWidth = UIScreen.main.bounds.width
+        let screenHeight = UIScreen.main.bounds.height
+        let height = screenHeight > screenWidth ? screenHeight : screenWidth
+        return (height / 3) * 2
+    }
+    
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// MARK: - Main Page
+
+class CalcButtonsMain: CalcButtonsPage {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        setViews()
-        setLayout()
+        self.getButtons()
+        self.setViews()
+        super.setLayout()
     }
     
-    fileprivate func setViews() {
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        // Update style for buttons
+        super.updateStyle(for: allButtons)
+    }
+    
+    // MARK: - Methods
+    
+    override func setViews() {
         // stuff for create buttonStackView
         var buffStackView: UIStackView = UIStackView()
         var counter: Int = 0
@@ -47,44 +195,17 @@ class CalcButtonsMain: UIView, CalcButtonPageProtocol {
         self.addSubview(buttonsStackView)
     }
     
-    fileprivate func setLayout() {
-        buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Activate constraints
-        NSLayoutConstraint.activate([
-            // Constraints for buttons (Main)
-            // width = main view width - spacing * 2
-            buttonsStackView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.90),
-            // centering
-            buttonsStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            // top anchor == spacing
-            buttonsStackView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: buttonsStackHeight() / 2 + 5),
-            // bottom anchor === spacing
-            buttonsStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0),
-        ])
-    }
-    
-    // Horizontal main calc buttons stack
-    let buttonsStackView: UIStackView = {
-        let stackView = UIStackView()
-        // Display settings for buttons UIStackView
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .equalSpacing
-        
-        return stackView
-    }()
     
     // Standart calculator buttons
-    var allButtons: [CalculatorButton] = {
+    func getButtons() {
         
-        let allTitles = ["AC","\u{00B1}","Signed\nOFF","\u{00f7}",
-                         "7", "8", "9", "X",
+        let allTitles = ["AC","±","Signed\nOFF","÷",
+                         "7", "8", "9", "×",
                          "4", "5", "6", "-",
                          "1", "2", "3", "+",
                          "0", ".", "="]
                     
-        var buttonLabel: Int = 9
+        //var buttonLabel: Int = 9
         var buttonTag: Int = 100
         var buttons: [CalculatorButton] = []
         
@@ -101,11 +222,12 @@ class CalcButtonsMain: UIView, CalcButtonPageProtocol {
             case "AC":
                 button = CalculatorButton()
                 button.addTarget(nil, action: #selector(PCalcViewController.clearButtonTapped), for: .touchUpInside)
-            case "\u{00B1}":
+            case "±":
                 button = CalculatorButton()
                 button.addTarget(nil, action: #selector(PCalcViewController.negateButtonTapped), for: .touchUpInside)
             case "=":
-                button = CalculatorButton()
+                button = CalculatorButton(calcButtonType: .sign)
+                button.removeTarget(nil, action: #selector(PCalcViewController.signButtonTapped), for: .touchUpInside)
                 button.addTarget(nil, action: #selector(PCalcViewController.calculateButtonTapped), for: .touchUpInside)
             default:
                 button = CalculatorButton(calcButtonType: .sign)
@@ -116,8 +238,8 @@ class CalcButtonsMain: UIView, CalcButtonPageProtocol {
             
             // set title and style
             button.setTitle(title, for: .normal)
-            // TODO: Themes
-            button.setTitleColor(.lightGray, for: .disabled)
+
+            button.setTitleColor(.systemGray, for: .disabled)
             button.applyStyle()
             
             // apply font style for AC button
@@ -127,14 +249,24 @@ class CalcButtonsMain: UIView, CalcButtonPageProtocol {
                     
             // set width and height by constraints
             button.translatesAutoresizingMaskIntoConstraints = false
-            button.heightAnchor.constraint(greaterThanOrEqualToConstant: button.buttonWidth()).isActive = true
+            button.portrait = []
+            button.portrait?.append( button.heightAnchor.constraint(equalToConstant: button.buttonWidth()) )
             // special width for zero
             if title == "0" {
-                button.widthAnchor.constraint(greaterThanOrEqualToConstant: button.buttonWidth() * 2 + 17).isActive = true
+                button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth() * 2 + 17) )
             } else {
                 // width for default
-                button.widthAnchor.constraint(greaterThanOrEqualToConstant: button.buttonWidth()).isActive = true
+                button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth()) )
+
             }
+            // change priority for all constraints to 999 (for disable log noise when device is rotated)
+            button.portrait!.forEach { constraint in
+                constraint.priority = UILayoutPriority(999)
+            }
+            
+            // activate portrait constraint
+            NSLayoutConstraint.activate(button.portrait!)
+            
             // button tags start from 100 to 118
             button.tag = buttonTag
             buttonTag += 1
@@ -143,29 +275,37 @@ class CalcButtonsMain: UIView, CalcButtonPageProtocol {
             buttons.append(button)
         }
 
-        return buttons
-    }()
+        allButtons = buttons
+    }
     
-    // Dynamic butons stack height for autolayout
-    func buttonsStackHeight() -> CGFloat {
-        return (UIScreen.main.bounds.height / 3) * 2
+}
+
+// MARK: - Additional page
+
+class CalcButtonsAdditional: CalcButtonsPage {
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        self.getButtons()
+        self.setViews()
+        super.setLayout()
+        // Update style for buttons
+        super.updateStyle(for: allButtons)
     }
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-}
-
-class CalcButtonsAdditional: UIView, CalcButtonPageProtocol {
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        setViews()
-        setLayout()
+    override func layoutSubviews() {
+        // Update style for buttons
+        super.updateStyle(for: allButtons)
     }
     
-    fileprivate func setViews() {
+    // MARK: - Methods
+    
+    override func setViews() {
         // stuff for create buttonStackView
         var buffStackView: UIStackView = UIStackView()
         var counter: Int = 0
@@ -190,45 +330,20 @@ class CalcButtonsAdditional: UIView, CalcButtonPageProtocol {
         
         self.addSubview(buttonsStackView)
     }
-    
-    fileprivate func setLayout() {
-        buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Activate constraints
-        NSLayoutConstraint.activate([
-            // Constraints for buttons (Main)
-            // width = main view width - spacing * 2
-            buttonsStackView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.90),
-            // centering
-            buttonsStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            // top anchor == spacing
-            buttonsStackView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: buttonsStackHeight() / 2 + 5),
-            // bottom anchor === spacing
-            buttonsStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0),
-        ])
-    }
-    
-    // Horizontal main calc buttons stack
-    let buttonsStackView: UIStackView = {
-        let stackView = UIStackView()
-        // Display settings for buttons UIStackView
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .equalSpacing
-        
-        return stackView
-    }()
-    
+
     // Standart calculator buttons
-    var allButtons: [CalculatorButton] = {
+    func getButtons() {
+        // localization for 1's and 2's
+        let oneS = NSLocalizedString("1's", comment: "")
+        let twoS = NSLocalizedString("2's", comment: "")
         
         let allTitles = ["AND","OR","XOR","NOR",
                          "X<<Y", "X>>Y", "<<", ">>",
-                         "D", "E", "F", "1's",
-                         "A", "B", "C", "2's",
+                         "D", "E", "F", oneS,
+                         "A", "B", "C", twoS,
                          "00", "FF"]
                     
-        var buttonLabel: Int = 9
+        //var buttonLabel: Int = 9
         var buttonTag: Int = 200
         var buttons: [CalculatorButton] = []
         
@@ -239,8 +354,7 @@ class CalcButtonsAdditional: UIView, CalcButtonPageProtocol {
             switch title{
             case "A","B","C","D","E","F","00","FF":
                 button = CalculatorButton(calcButtonType: .numeric)
-            // TODO: Localization
-            case "1's", "2's":
+            case oneS, twoS:
                 button = CalculatorButton(calcButtonType: .complement)
             case "X<<Y", "X>>Y", "<<", ">>", "AND", "OR", "XOR", "NOR":
                 button = CalculatorButton(calcButtonType: .bitwise)
@@ -253,21 +367,31 @@ class CalcButtonsAdditional: UIView, CalcButtonPageProtocol {
             
             // set title and style
             button.setTitle(title, for: .normal)
-            // TODO: Themes
-            button.setTitleColor(.lightGray, for: .disabled)
+
+            button.setTitleColor(.systemGray, for: .disabled)
             button.applyStyle()
             
             // set width and height by constraints
             button.translatesAutoresizingMaskIntoConstraints = false
-            button.heightAnchor.constraint(greaterThanOrEqualToConstant: button.buttonWidth()).isActive = true
+            button.portrait = []
+            button.portrait?.append( button.heightAnchor.constraint(equalToConstant: button.buttonWidth()) )
             // special style for 00 and FF
             if title == "00" || title == "FF" {
-                button.widthAnchor.constraint(greaterThanOrEqualToConstant: button.buttonWidth() * 2 + 17).isActive = true
+
+                button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth() * 2 + 17) )
                 button.titleLabel?.font = UIFont.systemFont(ofSize: 45.0, weight: UIFont.Weight.thin) // default
             } else {
                 // width for default
-                button.widthAnchor.constraint(greaterThanOrEqualToConstant: button.buttonWidth()).isActive = true
+                button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth()) )
+
             }
+            // change priority for all constraints to 999 (for disable log noise when device is rotated)
+            button.portrait!.forEach { constraint in
+                constraint.priority = UILayoutPriority(999)
+            }
+            // activate portrait constraint
+            NSLayoutConstraint.activate(button.portrait!)
+            
             // button tags start from 200 to 217
             button.tag = buttonTag
             buttonTag += 1
@@ -277,17 +401,7 @@ class CalcButtonsAdditional: UIView, CalcButtonPageProtocol {
             
         }
 
-        return buttons
-    }()
-    
-    
-    // Dynamic butons stack height for autolayout
-    func buttonsStackHeight() -> CGFloat {
-        return (UIScreen.main.bounds.height / 3) * 2
-    }
-    
-    required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        allButtons = buttons
     }
     
 }
