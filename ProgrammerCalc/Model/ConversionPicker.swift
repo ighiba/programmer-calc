@@ -52,7 +52,8 @@ extension ConversionPicker: UIPickerViewDelegate {
         // Picker row text style
         label.text = self.pickerView(self, titleForRow: row, forComponent: component)
         label.font = UIFont.systemFont(ofSize: 22, weight: .light)
-        //label.font = UIFont(name: "HelveticaNeue-Thin", size: 22.0)
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.5
         label.textAlignment = .center
         
         view.addSubview(label)

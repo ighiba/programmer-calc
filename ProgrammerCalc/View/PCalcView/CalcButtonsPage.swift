@@ -244,7 +244,7 @@ class CalcButtonsMain: CalcButtonsPage {
             
             // apply font style for AC button
             if title == "AC" {
-                button.titleLabel?.font = UIFont.systemFont(ofSize: 45.0, weight: UIFont.Weight.thin) // default
+                button.titleLabel?.font = UIFont.systemFont(ofSize: button.buttonWidth() / 1.7, weight: UIFont.Weight.thin) // default
             }
                     
             // set width and height by constraints

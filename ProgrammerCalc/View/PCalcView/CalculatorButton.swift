@@ -87,6 +87,7 @@ class CalculatorButton: UIButton {
         //self.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 45.0)
         
         self.titleLabel?.font = UIFont.systemFont(ofSize: 45.0, weight: UIFont.Weight.thin)
+        self.titleLabel?.autoresizingMask = .flexibleWidth
         //self.titleLabel?.font = UIFont.systemFont(ofSize: 45.0, weight: UIFont.Weight.thin)
         // resizeble text
         self.titleLabel?.adjustsFontSizeToFitWidth = true
@@ -99,12 +100,15 @@ class CalculatorButton: UIButton {
                 self.titleLabel?.numberOfLines = 2
                 self.titleLabel?.textAlignment = .center
                 //self.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 18.0)
-                self.titleLabel?.font = UIFont.systemFont(ofSize: 20.0, weight: UIFont.Weight.thin)
-            // if more than 1 char in title
+                self.titleLabel?.font = UIFont.systemFont(ofSize: buttonWidth() / 3.916 , weight: UIFont.Weight.thin)
+                
+            // if more than 3 char in title
+            } else if titleText.count > 3 {
+                self.titleLabel?.font = UIFont.systemFont(ofSize: buttonWidth() / 2.670 , weight: UIFont.Weight.thin)
+            // for 2 and 3 chars
             } else if titleText.count > 1 {
-                self.titleLabel?.font = UIFont.systemFont(ofSize: 28.0, weight: UIFont.Weight.thin)
+                self.titleLabel?.font = UIFont.systemFont(ofSize: buttonWidth() / 2.35 , weight: UIFont.Weight.thin)
             }
-            
         }
         
         // round corners
