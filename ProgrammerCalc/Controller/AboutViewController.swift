@@ -18,12 +18,12 @@ protocol AboutViewControllerDelegate {
 
 // MARK: - About VC
 
-class AboutViewController: UITableViewController, AboutViewControllerDelegate, MFMailComposeViewControllerDelegate {
+class AboutViewController: PCalcTableViewController, AboutViewControllerDelegate, MFMailComposeViewControllerDelegate {
     
     // MARK: - Properties
     
     // App version number
-    var appVersion: String = "0.8"
+    var appVersion: String = "0.9"
     
     // Table view
     lazy var aboutView = AboutView(frame: CGRect(), style: .grouped)
@@ -98,14 +98,25 @@ class DescriptionViewController: UIViewController {
         super.viewDidLoad()
         
         self.view.frame = UIScreen.main.bounds
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = .systemBackground
         
         // add text to label
         descriptionLabel.text = descriptionText
-        
         self.view.addSubview(descriptionLabel)
-        
         descriptionLabel.sizeToFit()
+    }
+    
+    // Updating navbar tint color if user changed system appearance
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        // Style storage
+        let styleStorage: StyleStorageProtocol = StyleStorage()
+        // Style factory
+        let styleFactory: StyleFactory = StyleFactory()
+        // change navbar tint
+        let styleName = styleStorage.safeGetStyleData()
+        let style = styleFactory.get(style: styleName)
+        self.navigationController?.navigationBar.tintColor = style.tintColor
     }
     
     // MARK: - Label
@@ -123,9 +134,12 @@ class DescriptionViewController: UIViewController {
         // set string
         let attributedString = NSAttributedString(string: descriptionText, attributes: attributes)
         label.attributedText = attributedString
+        
+        label.textColor = .label
 
         // set multiple lines
         label.numberOfLines = 0
+        
 
         return label
     }()
@@ -142,16 +156,5 @@ class DescriptionViewController: UIViewController {
             descriptionLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -margin),
         ])
     }
-}
-
-class HowToConvertViewController: UIViewController {
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.view.frame = UIScreen.main.bounds
-        self.view.backgroundColor = .white
-    }
-    
 }
 

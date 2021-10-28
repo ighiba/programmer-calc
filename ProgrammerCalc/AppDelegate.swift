@@ -12,7 +12,7 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // default locked orientation
-    var orientationLock = UIInterfaceOrientationMask.all
+    var orientationLock = UIInterfaceOrientationMask.allButUpsideDown
     
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

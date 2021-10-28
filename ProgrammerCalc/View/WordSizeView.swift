@@ -18,17 +18,21 @@ class WordSizeView: UIView {
     }
 
     func setViews() {
-        //let screenWidth = UIScreen.main.bounds.width
         self.frame = UIScreen.main.bounds
+
+        self.backgroundColor = .clear
         
-        // TODO: Themes
-        self.backgroundColor = UIColor.gray.withAlphaComponent(0.6)
-        
-//        mainPicker.addSubview(arrow)
         container.addSubview(containerStack)
         self.addSubview(container)
 
         setupLayout()
+        
+        // Add blur effect
+        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.systemUltraThinMaterialDark)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = self.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.insertSubview(blurEffectView, at: 0)
     }
     
     
@@ -73,7 +77,7 @@ class WordSizeView: UIView {
     let container: UIView = {
         let view = UIView()
 
-        view.backgroundColor = .white
+        view.backgroundColor = .systemGray6
         view.layer.cornerRadius = 24
 
         return view
@@ -103,9 +107,10 @@ class WordSizeView: UIView {
         let label = UILabel()
         
         label.text = NSLocalizedString("Change word size", comment: "")
+        label.textColor = .label
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.textAlignment = .center
-        
+               
         return label
     }()
     

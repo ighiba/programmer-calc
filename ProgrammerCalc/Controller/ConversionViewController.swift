@@ -54,7 +54,7 @@ class ConversionViewController: UIViewController {
         // save conversion data to UserDefaults
         saveConversionSettings()
         // unlock rotation
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.all, andRotateTo: UIInterfaceOrientation.portrait)
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
     }
     
     // MARK: - Methods

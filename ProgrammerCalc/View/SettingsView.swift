@@ -78,8 +78,12 @@ extension SettingsView: UITableViewDataSource, UITableViewDelegate {
             return
         }
         
-        // Section 1 handling
+        // Tap on cell handling
         switch indexPath {
+        case [0,0]:
+            // Appearance
+            controllerDelegate!.openAppearance()
+            break
         case [1,0]:
             // About app
             controllerDelegate!.openAbout()

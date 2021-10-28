@@ -20,8 +20,7 @@ class ConversionView: UIView {
     func setViews() {
         self.frame = UIScreen.main.bounds
         
-        // TODO: Themes
-        self.backgroundColor = UIColor.gray.withAlphaComponent(0.6)
+        self.backgroundColor = .clear
 
         self.addSubview(container)
         container.addSubview(popoverTitle)
@@ -31,8 +30,17 @@ class ConversionView: UIView {
         digitsAfterLabel.addSubview(sliderValueDigit)
         container.addSubview(digitsAfterSlider)
         container.addSubview(doneButton)
-
+        
+        container.bringSubviewToFront(popoverTitle)
+        
         setupLayout()
+        
+        // Add blur effect
+        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.systemUltraThinMaterialDark)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = self.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.insertSubview(blurEffectView, at: 0)
     }
     
     
@@ -101,7 +109,7 @@ class ConversionView: UIView {
     let container: UIView = {
         let view = UIView()
 
-        view.backgroundColor = .white
+        view.backgroundColor = .systemGray6
         view.layer.cornerRadius = 24
 
         return view
@@ -123,6 +131,7 @@ class ConversionView: UIView {
         label.text = NSLocalizedString("Conversion settings", comment: "")
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.textAlignment = .center
+        label.textColor = .label
         
         return label
     }()
@@ -133,6 +142,8 @@ class ConversionView: UIView {
         
         picker.delegate = picker
         picker.dataSource = picker
+        
+        picker.backgroundColor = .systemGray6
         
         let selected = picker.selectedRow(inComponent: 0)
         
@@ -147,6 +158,7 @@ class ConversionView: UIView {
         label.text = "→"
         label.font = UIFont(name: "HelveticaNeue-Thin", size: 22.0)
         label.textAlignment = .center
+        label.textColor = .label
         
         return label
     }()
@@ -158,7 +170,7 @@ class ConversionView: UIView {
         label.frame = CGRect(x: 0, y: 0, width: 100, height: 30)
         label.text = NSLocalizedString("Max number of digits after point: ", comment: "")
         label.font = UIFont.systemFont(ofSize: 18, weight: .light)
-        //label.font = UIFont(name: "HelveticaNeue-Thin", size: 18.0)
+        label.textColor = .label
         
         return label
     }()
@@ -171,6 +183,7 @@ class ConversionView: UIView {
         // default value
         label.text = "8"
         label.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
+        label.textColor = .label
         
         return label
     }()
@@ -179,14 +192,12 @@ class ConversionView: UIView {
     let digitsAfterSlider: UISlider = {
         let slider = UISlider()
         
-        // TODO: Multiple values up to 16 ( 1 * 4 = 4 digits after point etc)
         slider.minimumValue = 1
         slider.maximumValue = 4
         
         // Initial value
         slider.value = 3
         
-        // TODO: Theme
         slider.tintColor = .systemGreen
         
         slider.addTarget(nil, action: #selector(ConversionViewController.sliderValueChanged), for: .valueChanged)

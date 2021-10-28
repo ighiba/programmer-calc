@@ -48,7 +48,7 @@ class WordSizeViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         // unlock rotation
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.all, andRotateTo: UIInterfaceOrientation.portrait)
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
     }
     
     // MARK: - Methods
@@ -122,6 +122,8 @@ extension WordSizeViewController: UITableViewDataSource, UITableViewDelegate {
         
         cell.textLabel?.text = wordSize.wordsDictionary[indexPath.row].keys.first
         cell.textLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 18.0)
+        cell.textLabel?.textColor = .label
+        cell.backgroundColor = .systemGray6
         cell.selectionStyle = .default
         
         if wordSize.wordsDictionary[indexPath.row].values.first == wordSize.value {

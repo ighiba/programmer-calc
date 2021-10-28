@@ -26,10 +26,18 @@ class CalculatorButton: UIButton {
     // MARK: - Properties
     // ==================
     
-
-    public var calcButtonType: ButtonTypes = .defaultBtn // default value
-    
     private let _boundsExtension: CGFloat = 0
+    
+    // Button types
+    public var calcButtonType: ButtonTypes = .defaultBtn // default value
+    // Buff color
+    var buffColor: UIColor = .white
+    // Custom tint colors
+    var frameTint: UIColor = .white
+    var textTint: UIColor = .black
+    // Constraints
+    var portrait: [NSLayoutConstraint]?
+    
     // override isHighlighted for calculator buttons
     override open var isHighlighted: Bool {
         // if variable state changed
@@ -37,20 +45,16 @@ class CalculatorButton: UIButton {
         didSet {
             if isHighlighted {
                 // create button animation when button pressed
-                self.backgroundColor = .lightGray
-//                UIView.transition(
-//                    with: self,
-//                    duration: 0.1,
-//                    options: [.curveEaseIn, .beginFromCurrentState, .allowUserInteraction],
-//                    animations: { self.backgroundColor = .lightGray },
-//                    completion: nil)
+                self.buffColor = self.backgroundColor!
+                // set tint color
+                self.backgroundColor = self.frameTint
             } else {
                 // create button animation when button unpressed
                 UIView.transition(
                     with: self,
                     duration: 0.7,
                     options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction],
-                    animations: { self.backgroundColor = .white },
+                    animations: { self.backgroundColor = self.buffColor },
                     completion: nil)
             }
         }
@@ -74,8 +78,7 @@ class CalculatorButton: UIButton {
     // MARK: - Methods
     // ===============
     
-    // Apply Style method to the all buttons
-    // TODO: Style protocol
+    // Apply default style to the all buttons
     func applyStyle() {
         // set title and background
         self.setTitleColor(.black, for: .normal)
@@ -104,9 +107,6 @@ class CalculatorButton: UIButton {
             
         }
         
-        // set borders
-        self.layer.borderWidth = 0.5
-        self.layer.borderColor = UIColor.lightGray.cgColor
         // round corners
         self.layer.cornerRadius = buttonWidth() / 2
         
@@ -117,7 +117,7 @@ class CalculatorButton: UIButton {
             with: self,
             duration: 0.1,
             options: [.curveEaseIn, .beginFromCurrentState, .allowUserInteraction],
-            animations: { self.backgroundColor = .lightGray },
+            animations: { self.backgroundColor = self.frameTint },
             completion: nil)
     }
     

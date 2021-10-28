@@ -10,10 +10,11 @@ import UIKit
 import MessageUI
 
 protocol SettingsViewControllerDelegate {
+    func openAppearance()
     func openAbout()
 }
 
-class SettingsViewController: UITableViewController, SettingsViewControllerDelegate {
+class SettingsViewController: PCalcTableViewController, SettingsViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
     
     // MARK: - Properties
 
@@ -21,7 +22,10 @@ class SettingsViewController: UITableViewController, SettingsViewControllerDeleg
     lazy var doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(SettingsViewController.closeButtonTapped))
     
     // links to storages
-    private var settingsStorage: SettingsStorageProtocol = SettingsStorage()
+    private let settingsStorage: SettingsStorageProtocol = SettingsStorage()
+    private let styleStorage: StyleStorageProtocol = StyleStorage()
+    
+    private let styleFactory: StyleFactory = StyleFactory()
     
     // updater settings in PCalcViewController
     var updaterHandler: (() -> Void)?
@@ -31,6 +35,12 @@ class SettingsViewController: UITableViewController, SettingsViewControllerDeleg
 
         settingsView.controllerDelegate = self
         self.tableView = settingsView
+        
+        // Color for done item
+        let style = styleFactory.get(style: styleStorage.safeGetStyleData())
+        //doneItem.tintColor = style.tintColor
+        self.navigationController?.navigationBar.tintColor = style.tintColor
+        
         // Setup navigation items
         self.navigationController?.navigationBar.topItem?.rightBarButtonItem = doneItem
         self.navigationController?.navigationBar.topItem?.title = NSLocalizedString("Settings", comment: "")
@@ -44,7 +54,6 @@ class SettingsViewController: UITableViewController, SettingsViewControllerDeleg
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
         // get switch last state from UserDefaults
         getSettings()
-        
     }
  
     override func viewWillDisappear(_ animated: Bool) {
@@ -53,8 +62,6 @@ class SettingsViewController: UITableViewController, SettingsViewControllerDeleg
         saveSettings()
         // update settings in PCalcVC
         updaterHandler?()
-        // unlock rotation
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.all, andRotateTo: UIInterfaceOrientation.portrait)
     }
     
     
@@ -123,11 +130,16 @@ class SettingsViewController: UITableViewController, SettingsViewControllerDeleg
         }
         
     }
+    
+    // Appearance cell touch
+    func openAppearance() {
+        let appearanceVC = AppearanceViewController()
+        self.navigationController?.pushViewController(appearanceVC, animated: true)
+    }
 
     // About app cell touch
     func openAbout() {        
         let aboutVC = AboutViewController()
-
         self.navigationController?.pushViewController(aboutVC, animated: true)
     }
     
@@ -135,7 +147,10 @@ class SettingsViewController: UITableViewController, SettingsViewControllerDeleg
     
     // Close settings popover
     @objc func closeButtonTapped( sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true, completion: {
+            // unlock rotation
+            AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
+        })
     }
     
     // Switcher handler

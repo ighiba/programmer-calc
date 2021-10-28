@@ -28,12 +28,33 @@ class PCalcView: UIView {
         }
     }()
     
+    // Style storage
+    var styleStorage: StyleStorageProtocol = StyleStorage()
+    // Style factory
+    var styleFactory: StyleFactory = StyleFactory()
+    
+    
+    // NavBar buttons
+    private let changeItem = UIBarButtonItem(image: UIImage(systemName: "arrow.up.arrow.down.circle"),
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(PCalcViewController.changeConversionButtonTapped))
+    private let settingsItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"),
+                                                              style: .plain,
+                                                              target: self,
+                                                              action: #selector(PCalcViewController.settingsButtonTapped))
+    
     // MARK: - Initialization
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         setViews()
+    }
+    
+    override func layoutSubviews() {
+        // update colors by style
+        updateStyle()
     }
     
     func setViews() {
@@ -49,6 +70,23 @@ class PCalcView: UIView {
         setupLayout()
     }
     
+    func updateStyle() {
+        // Apply style
+        let styleName = styleStorage.safeGetStyleData()
+        let style = styleFactory.get(style: styleName)
+        
+        // Set colors
+        // Labels
+        mainLabel.textColor = style.labelTextColor
+        converterLabel.textColor = style.labelTextColor
+        mainLabel.infoSubLabel.textColor = .systemGray
+        converterLabel.infoSubLabel.textColor = .systemGray
+        // NavBar items
+        changeItem.tintColor = style.tintColor
+        settingsItem.tintColor = style.tintColor
+        changeWordSizeButton.tintColor = style.tintColor
+    }
+    
     // MARK: - Views
     
     // Set change word size button
@@ -57,8 +95,6 @@ class PCalcView: UIView {
         button.frame = CGRect(x: 0, y: 0, width: navBarHeight*2, height: navBarHeight)
         // title adjustments
         button.setTitle("QWORD", for: .normal)
-        button.setTitleColor(.systemBlue, for: .normal)
-        button.setTitleColor(.systemBlue.withAlphaComponent(0.3), for: .highlighted)
         // change font size
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18.0, weight: UIFont.Weight.regular)
     
@@ -70,20 +106,16 @@ class PCalcView: UIView {
     }()
     
     // Set navigation bar
-    fileprivate let navigationBar: UINavigationBar = {
+    fileprivate lazy var navigationBar: UINavigationBar = {
         // Set navigation bar
         let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44))
         let navItem = UINavigationItem()
-        //let changeItem = UIBarButtonItem(title: "Change conversion", style: .plain, target: self, action: #selector(PCalcViewController.changeButtonTapped))
-        let changeItem = UIBarButtonItem(image: UIImage(systemName: "arrow.up.arrow.down.circle"), style: .plain, target: self, action: #selector(PCalcViewController.changeConversionButtonTapped))
-        //let settingsItem = UIBarButtonItem(title: "⚙\u{0000FE0E}", style: .plain, target: self, action: #selector(PCalcViewController.settingsButtonTapped))
-        let settingsItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(PCalcViewController.settingsButtonTapped))
         let font = UIFont.systemFont(ofSize: 42.0)
-        settingsItem.setTitleTextAttributes([NSAttributedString.Key.font: font], for: .normal)
+        self.settingsItem.setTitleTextAttributes([NSAttributedString.Key.font: font], for: .normal)
         
         // add buttons to navigation item
-        navItem.leftBarButtonItem = changeItem
-        navItem.rightBarButtonItem = settingsItem
+        navItem.leftBarButtonItem = self.changeItem
+        navItem.rightBarButtonItem = self.settingsItem
         
         // title view for middle button "Change word size"
         let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 44*2, height: 44))
@@ -92,11 +124,9 @@ class PCalcView: UIView {
         // set navigation items
         navBar.setItems([navItem], animated: false)
         // set transparent
-        navBar.backgroundColor = UIColor.white.withAlphaComponent(0)
-        navBar.barTintColor = UIColor.white.withAlphaComponent(0)
-        // set clear for bottom line (shadow)
-        navBar.setValue(true, forKey: "hidesShadow")
-        // TODO: Theme color for buttons
+        navBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        navBar.shadowImage = UIImage()
+        navBar.isTranslucent = true
 
         return navBar
     }()
@@ -181,7 +211,7 @@ class PCalcView: UIView {
         // Constraints for landscape orientation
         landscape = [
             labelsStack.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            labelsStack.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            //labelsStack.centerXAnchor.constraint(equalTo: self.centerXAnchor),
 
             labelsStack.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: getScreenBounds().width * 0.05),
             labelsStack.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: getScreenBounds().width * -0.05),
@@ -212,7 +242,7 @@ class PCalcView: UIView {
     }
     
     func viewHeight() -> CGFloat {
-        return UIScreen.main.bounds.height / 3
+        return UIScreen.main.bounds.height / 3 - 2
     }
     
     func getScreenBounds() -> CGRect {

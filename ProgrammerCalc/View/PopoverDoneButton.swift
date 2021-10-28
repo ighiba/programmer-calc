@@ -26,7 +26,7 @@ class PopoverDoneButton: UIButton {
         let doneTitle = NSLocalizedString("Done", comment: "")
         
         self.setTitle(doneTitle, for: .normal)
-        // TODO: Themes
+
         self.backgroundColor = .systemGreen
         self.setTitleColor(.white, for: .normal)
         self.layer.cornerRadius = 16
