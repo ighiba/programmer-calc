@@ -127,7 +127,6 @@ class CalculatorButton: UIButton {
     
     func setActions(for buttonType: ButtonTypes){
         
-        self.addTarget(nil, action: #selector(PCalcViewController.toucUpOutsideAction), for: [.touchDragExit, .touchDragOutside])
         // label higliglht handling
         self.addTarget(nil, action: #selector(PCalcViewController.touchHandleLabelHighlight), for: .touchDown)
         // haptic feedback

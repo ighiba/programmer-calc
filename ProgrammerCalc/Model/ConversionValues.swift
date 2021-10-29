@@ -9,11 +9,18 @@
 import Foundation
 
 class ConversionValues {
-    fileprivate let digitValues: Set<String> = ["00","0","1","2","3","4","5","6","7","8","8","9"]
-    fileprivate let charValues: Set<String> = ["A","B","C","D","E","F","FF"]
     
-    lazy var forbidden = [ "Binary": digitValues.union(charValues).subtracting(["1","0", "00"]),
-                           "Decimal": charValues,
-                           "Octal": charValues.union(["8","9"]),
-                           "Hexadecimal": []]
+    static func getForbiddenValues() -> [ConversionSystemsEnum : Set<String>] {
+        
+        let digitValues: Set<String> = ["00","0","1","2","3","4","5","6","7","8","8","9"]
+        let charValues: Set<String> = ["A","B","C","D","E","F","FF"]
+        let forbidden: [ConversionSystemsEnum : Set<String>]
+        
+        forbidden = [ .bin : digitValues.union(charValues).subtracting(["1","0", "00"]),
+                      .dec : charValues,
+                      .oct: charValues.union(["8","9"]),
+                      .hex: []]
+
+        return forbidden
+    }
 }

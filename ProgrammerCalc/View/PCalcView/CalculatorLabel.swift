@@ -111,13 +111,12 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
     // Press copy button
     override func copy(_ sender: Any?) {
         let board = UIPasteboard.general
-        
         // change clipboard with new value from label self.text and delete all spaces in string
         board.string = self.text?.removeAllSpaces()
-        
+        // hide menu
         self.hideLabelMenu()
         self.resignFirstResponder()
-        
+        // do animation
         undoHighlightLabel()
     }
 
