@@ -460,7 +460,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     
     // Update main label to current format settings
     public func updateMainLabel() {
-        mainLabel.text = calculator.processStrInputToFormat(inputStr: mainLabel.text!)
+        mainLabel.text = calculator.processStrInputToFormat(inputStr: mainLabel.text!, for: calculator.systemMain!)
     }
     
     private func updateMainLabelRawValue() {

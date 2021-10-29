@@ -57,6 +57,7 @@
 		C09631D427271A4D001DCD25 /* StyleStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631D327271A4D001DCD25 /* StyleStorage.swift */; };
 		C09631D627277066001DCD25 /* ButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631D527277066001DCD25 /* ButtonStyle.swift */; };
 		C09631D82728E9DC001DCD25 /* PCalcTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631D72728E9DC001DCD25 /* PCalcTableViewController.swift */; };
+		C09631DC272C581C001DCD25 /* CalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DB272C581B001DCD25 /* CalculatorTests.swift */; };
 		C0CC6DFF271F68AA00E59E64 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */; };
 		C0CC6E0127208EBB00E59E64 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CC6E0027208EBB00E59E64 /* AboutView.swift */; };
 		C0E5FC7624BB9B8D00BA93CA /* PCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */; };
@@ -143,6 +144,7 @@
 		C09631D327271A4D001DCD25 /* StyleStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleStorage.swift; sourceTree = "<group>"; };
 		C09631D527277066001DCD25 /* ButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyle.swift; sourceTree = "<group>"; };
 		C09631D72728E9DC001DCD25 /* PCalcTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcTableViewController.swift; sourceTree = "<group>"; };
+		C09631DB272C581B001DCD25 /* CalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorTests.swift; sourceTree = "<group>"; };
 		C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		C0CC6E0027208EBB00E59E64 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcView.swift; sourceTree = "<group>"; };
@@ -286,6 +288,7 @@
 			isa = PBXGroup;
 			children = (
 				C06B7F1D2443B12E009642B9 /* ProgrammerCalcTests.swift */,
+				C09631DB272C581B001DCD25 /* CalculatorTests.swift */,
 				C06072B02501567E004CF6AA /* CalcMathTests.swift */,
 				C064A3AF24FD847B003DE683 /* ConverterTests.swift */,
 				C06DFD5C24FC22C600255646 /* BinaryTests.swift */,
@@ -540,6 +543,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C09631DC272C581C001DCD25 /* CalculatorTests.swift in Sources */,
 				C06072B12501567E004CF6AA /* CalcMathTests.swift in Sources */,
 				C06DFD5D24FC22C600255646 /* BinaryTests.swift in Sources */,
 				C064A3AE24FD5B13003DE683 /* OctalTests.swift in Sources */,

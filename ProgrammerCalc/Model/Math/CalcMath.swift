@@ -137,11 +137,7 @@ final class CalcMath {
             return DecimalSystem(firstDecimal / secondDecimal)
         // Bitwise shift left
         case .shiftLeft:
-            // TODO: Refactor
-            guard !firstNum.value.contains(".") && !secondNum.value.contains(".") else {
-                return secondNum
-            }
-            // TODO: Error handling
+
             if let dec = shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: .shiftLeft, shiftCount: 1) as? DecimalSystem {
                 resultStr = dec.value
             } else {
@@ -150,10 +146,7 @@ final class CalcMath {
             
         // Bitwise shift right
         case .shiftRight:
-            guard !firstNum.value.contains(".") && !secondNum.value.contains(".") else {
-                return secondNum
-            }
-            // TODO: Error handling
+            
             if let dec = shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: .shiftRight, shiftCount: 1) as? DecimalSystem {
                 resultStr = dec.value
             } else {
@@ -162,9 +155,7 @@ final class CalcMath {
             
         // bitwise and
         case .and:
-            guard !firstNum.value.contains(".") && !secondNum.value.contains(".") else {
-                return secondNum
-            }
+
             // x and y
             resultStr = calculateBitOperation(firstNum: firstNum, secondNum: secondNum, operation: { left, right in
                 bitAnd(left: left, right: right)
@@ -172,9 +163,7 @@ final class CalcMath {
             
         // bitwise or
         case .or:
-            guard !firstNum.value.contains(".") && !secondNum.value.contains(".") else {
-                return secondNum
-            }
+
             // x or y
             resultStr = calculateBitOperation(firstNum: firstNum, secondNum: secondNum, operation: { left, right in
                 bitOr(left: left, right: right)
@@ -182,9 +171,7 @@ final class CalcMath {
 
         // bitwise xor
         case .xor:
-            guard !firstNum.value.contains(".") && !secondNum.value.contains(".") else {
-                return secondNum
-            }
+
             // x xor y
             resultStr = calculateBitOperation(firstNum: firstNum, secondNum: secondNum, operation: { left, right in
                 bitXor(left: left, right: right)
@@ -192,9 +179,7 @@ final class CalcMath {
             
         // bitwise nor
         case .nor:
-            guard !firstNum.value.contains(".") && !secondNum.value.contains(".") else {
-                return secondNum
-            }
+
             // x nor y
             resultStr = calculateBitOperation(firstNum: firstNum, secondNum: secondNum, operation: { left, right in
                 let result = bitOr(left: left, right: right)
@@ -279,6 +264,11 @@ final class CalcMath {
     
     // Shift to needed bit count
     public func shiftBits( value: NumberSystemProtocol, mainSystem: ConversionSystemsEnum, shiftOperation: CalcMath.MathOperation, shiftCount: Int ) -> NumberSystemProtocol? {
+        // Check if value is not float
+        guard !value.value.contains(".") else {
+            return value
+        }
+        
         // check if shift out of max bit index QWORD - 64
         // shifting more than 64 make no sense
         guard abs(shiftCount) < 64 else {
@@ -423,8 +413,14 @@ final class CalcMath {
     
     // universal func for converting dec to bin, calculating and returning new dec
     private func calculateBitOperation(firstNum: DecimalSystem, secondNum: DecimalSystem, operation: (Binary,Binary)->Binary ) -> DecimalSystem {
+        // Check if value is not float
+        guard !firstNum.value.contains(".") else {
+            return firstNum
+        }
+        // Convert values to binary
         let binFirstNum = converter.convertValue(value: firstNum, from: .dec, to: .bin) as! Binary
         let binSecondNum = converter.convertValue(value: secondNum, from: .dec, to: .bin) as! Binary
+        // do closure operation
         let binResult = operation(binFirstNum,binSecondNum)
         return converter.convertValue(value: binResult, from: .bin, to: .dec)! as! DecimalSystem
     }

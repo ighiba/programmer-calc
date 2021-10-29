@@ -169,7 +169,7 @@ class Calculator: CalculatorProtocol {
                 if testStr == "" { testStr = bin.removeZerosBefore(str: bin.value) }
                    
                 if system == .dec {
-                    let oldValue = mainLabelRawValue as! DecimalSystem
+                    let oldValue = mainLabelRawValue as? DecimalSystem ?? DecimalSystem(0)
                     bin.updateSignedState()
                     let newValue = converter.convertValue(value: bin, from: .bin, to: system) as! DecimalSystem
                     
@@ -204,7 +204,7 @@ class Calculator: CalculatorProtocol {
     
     
     // For updating input main label
-    func processStrInputToFormat(inputStr: String) -> String {
+    func processStrInputToFormat(inputStr: String, for system: ConversionSystemsEnum) -> String {
         var processedStr = String()
         
         // Process fract part
@@ -245,7 +245,7 @@ class Calculator: CalculatorProtocol {
         
         // Process values by system
         
-        if self.systemMain == .bin {
+        if system == .bin {
             
             var bin: Binary = {
                 let dummyBin = Binary()
@@ -276,7 +276,7 @@ class Calculator: CalculatorProtocol {
             
             processedStr = bin.value
             // updating dec for values with floating point
-        } else if self.systemMain == .dec && testLabelStr.contains(".") {
+        } else if system == .dec && testLabelStr.contains(".") {
             
             processedStr = converter.processDecFloatStrToFormat(decStr: self.mainLabelRawValue.value, lastDotIfExists: lastSymbolsIfExists)
             
@@ -286,9 +286,9 @@ class Calculator: CalculatorProtocol {
             // process binary raw string input in new binary with current settings: processSigned, wordSize etc.
             // convert back in systemMain value and set new value in mainLabel
             if self.mainLabelRawValue != nil {
-                let bin = converter.convertValue(value: self.mainLabelRawValue, from: self.systemMain!, to: .bin) as! Binary
+                let bin = converter.convertValue(value: self.mainLabelRawValue, from: system, to: .bin) as! Binary
                 //let updatedBin = Binary(stringLiteral: bin!.value)
-                let updatedValue = converter.convertValue(value: bin, from: .bin, to: self.systemMain!)
+                let updatedValue = converter.convertValue(value: bin, from: .bin, to: system)
                 processedStr = updatedValue!.value
                 
                 if processedStr.contains(".") && testLabelStr.last != "." {
@@ -303,9 +303,9 @@ class Calculator: CalculatorProtocol {
         
         // Check if float and negative
         // TODO: Refactor to factory
-        let testProcessed: NumberSystemProtocol? = getNumberBy(strValue: processedStr, currentSystem: systemMain!)
+        let testProcessed: NumberSystemProtocol? = getNumberBy(strValue: processedStr, currentSystem: system)
         
-        if let testDec = converter.convertValue(value: testProcessed!, from: systemMain!, to: .dec) as? DecimalSystem {
+        if let testDec = converter.convertValue(value: testProcessed!, from: system, to: .dec) as? DecimalSystem {
             if testDec.value.contains(".") && testDec.decimalValue < 0 {
                 print("negative and float")
                 // remove fract part from str
