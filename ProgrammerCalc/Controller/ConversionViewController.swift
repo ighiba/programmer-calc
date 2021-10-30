@@ -67,7 +67,7 @@ class ConversionViewController: UIViewController {
         self.view.isUserInteractionEnabled = true
         self.view.addGestureRecognizer(tap)
         
-        // swipe up
+        // swipe up for dismiss
         let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         swipeUp.direction = .up
         swipeUp.cancelsTouchesInView = false
@@ -77,34 +77,24 @@ class ConversionViewController: UIViewController {
     // Update conversion values
     fileprivate func getConversionSettings() {
         // get data from UserDefaults
-        if let conversionSettings = conversionStorage.loadData() {
-            // TODO: Error handling
-            
-            let mainRow: Int = ConversionSystemsEnum.allCases.firstIndex(of: ConversionSystemsEnum(rawValue: conversionSettings.systemMain)!)!
-            let converterRow: Int = ConversionSystemsEnum.allCases.firstIndex(of: ConversionSystemsEnum(rawValue: conversionSettings.systemConverter)!)!
-            // Picker component
-            // 0 - main
-            // 1 - converter
-            picker.selectRow(mainRow, inComponent: 0, animated: false)
-            picker.selectRow(converterRow, inComponent: 1, animated: false)
-            
-            // Slider label
-            labelValue.text = "\(Int(conversionSettings.numbersAfterPoint))"
-            
-            // Slider
-            slider.value = conversionSettings.numbersAfterPoint / 4
-            sliderOldValue = slider.value
-        }  else {
-            print("no settings")
-            // Save default settings 
-            let systems = ConversionSystemsEnum.self
-            let newConversionSettings = ConversionSettings(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 8.0)
-            conversionStorage.saveData(newConversionSettings)
-        }
+        let conversionSettings = conversionStorage.safeGetData()
+        let mainRow: Int = ConversionSystemsEnum.allCases.firstIndex(of: ConversionSystemsEnum(rawValue: conversionSettings.systemMain)!) ?? 1 // default decimal for main
+        let converterRow: Int = ConversionSystemsEnum.allCases.firstIndex(of: ConversionSystemsEnum(rawValue: conversionSettings.systemConverter)!) ?? 0 // default binary for converter
+        // Picker component
+        // 0 - main
+        // 1 - converter
+        picker.selectRow(mainRow, inComponent: 0, animated: false)
+        picker.selectRow(converterRow, inComponent: 1, animated: false)
+        
+        // Slider label
+        labelValue.text = "\(Int(conversionSettings.numbersAfterPoint))"
+        
+        // Slider
+        slider.value = conversionSettings.numbersAfterPoint / 4
+        sliderOldValue = slider.value
     }
     
     fileprivate func saveConversionSettings() {
-        // TODO: Error handling
         // Picker  component
         // 0 - main
         // 1 - converter
@@ -133,7 +123,6 @@ class ConversionViewController: UIViewController {
         delegate?.updateSystemMain(with: systemMainNew!)
         delegate?.updateSystemCoverter(with: systemConverterNew!)
         // Handle changing of systems
-        // TODO: Error handling
         if buffSavedMainLabel != systemMainNew! {
             // set labels to 0 and update
             delegate!.clearLabels()

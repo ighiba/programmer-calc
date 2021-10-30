@@ -13,14 +13,6 @@ class SettingsView: UITableView {
     // SettingsViewController delegate
     var controllerDelegate: SettingsViewControllerDelegate?
     
-    // First section array
-    let firstSection = [ NSLocalizedString("Appearance", comment: ""),
-                         NSLocalizedString("Tapping sounds", comment: ""),
-                         NSLocalizedString("Haptic feedback", comment: "")]
-    // Second section array
-    let otherSection = [NSLocalizedString("About app", comment: "")]
-    
-    
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
         
@@ -39,30 +31,40 @@ extension SettingsView: UITableViewDataSource, UITableViewDelegate {
     
     // Number of sections
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard controllerDelegate != nil else {
+            return 0
+        }
+        
         switch section {
         case 1:
-            return otherSection.count
+            return controllerDelegate!.otherSection.count
         default:
-            return firstSection.count
+            return controllerDelegate!.firstSection.count
         }
     }
     // Returns cell for section
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = AppSettingsCell()
-        let title = indexPath.section == 0 ? firstSection[indexPath.row] : otherSection[indexPath.row]
         
-        // init cell w or w/o switcher
+        guard controllerDelegate != nil else {
+            return cell
+        }
+
+        // init cell by arrays
         switch indexPath {
         case [0,0]:
             // Appearance cell
-            cell = AppSettingsCell(style: .default, reuseIdentifier: "cellId", label: title, switcher: false)
+            cell = controllerDelegate!.firstSection[indexPath.row]
             cell.accessoryType = .disclosureIndicator
         case [0,1], [0,2]:
             // Tapping sound, Haptics
-            cell = AppSettingsCell(style: .default, reuseIdentifier: "cellId", label: title, switcher: true)
-        default:
+            cell = controllerDelegate!.firstSection[indexPath.row]
+        case [1,0]:
             // About app
-            cell = AppSettingsCell(style: .default, reuseIdentifier: "cellId", label: title, switcher: false)
+            cell = controllerDelegate!.otherSection[indexPath.row]
+        default:
+            // return empty cell
+            break
         }
         
         return cell

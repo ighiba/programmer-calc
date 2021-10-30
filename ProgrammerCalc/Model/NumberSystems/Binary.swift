@@ -31,18 +31,23 @@ class Binary: NumberSystemProtocol {
     init() {
         self.value = "0"
     }
-    
-    /// Creates an instance initialized to the Int value
-    init(_ valueInt: Int) {
-        // TODO: Handle signed
-        self.value = String(valueInt, radix: 2)
-        self.value = fillUpParts(str: self.value, by: 4)
-    }
-    
+  
     /// Creates an instance initialized to the Binary  value / copying another instance
     init(_ valueBin: Binary) {
         self.value = valueBin.value
         self.isSigned = valueBin.isSigned
+    }
+    
+    /// Creates an instance initialized to the Int value
+    convenience init(_ valueInt: Int) {
+        self.init()
+        // Get new DecimalSystem value
+        let decNumber = DecimalSystem(valueInt)
+        if let binary = decNumber.convertDecToBinary() {
+            self.value = binary.value
+        } else {
+            self.value = "0"
+        }
     }
     
     /// Creates an instance initialized to the Decimal value
@@ -186,9 +191,7 @@ class Binary: NumberSystemProtocol {
             var buffDecimal: Decimal = 0.0
             
             binFractStrBuff.forEach { (num) in
-                // TODO: Error handling
-                let buffInt = Int("\(num)")!
-                let buffIntDecimal = Decimal(integerLiteral: buffInt)
+                let buffIntDecimal = Decimal(string: String(num)) ?? 0
                 // 1 * 2^-n
                 let buffValue: Decimal = buffIntDecimal *  ( 1.0 / pow(Decimal(2), counter))
                 buffDecimal += buffValue

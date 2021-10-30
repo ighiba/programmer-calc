@@ -51,7 +51,7 @@ class SettingsStorage: SettingsStorageProtocol {
             // if no settings
             print("no app settings")
             // default values
-            let newSettings = AppSettings(darkMode: false, tappingSounds: true, hapticFeedback: true)
+            let newSettings = AppSettings(tappingSounds: true, hapticFeedback: true)
             self.saveData(newSettings)
             
             return newSettings

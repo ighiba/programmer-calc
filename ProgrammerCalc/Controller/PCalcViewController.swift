@@ -259,7 +259,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     }
     
     public func saveCalcState() {
-        // TODO: Error handling
         let mainState = mainLabel.text ?? "0"
         let convertState = converterLabel.text ?? "0"
         let processSigned = calculator.processSigned
@@ -657,10 +656,8 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         // switch complements
         switch buttonLabel {
         case oneS:
-            // TODO: Error handling
             mainLabel.text = converter.toOnesComplement(value: calculator.mainLabelRawValue, mainSystem: calculator.systemMain!).value
         case twoS:
-            // TODO: Error handling
             mainLabel.text = converter.toTwosComplement(value: calculator.mainLabelRawValue, mainSystem: calculator.systemMain!).value
         default:
             break

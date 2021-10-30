@@ -60,6 +60,12 @@ class WordSizeViewController: UIViewController {
         tap.cancelsTouchesInView = false
         self.view.isUserInteractionEnabled = true
         self.view.addGestureRecognizer(tap)
+        
+        // swipe up for dismiss
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeUp.direction = .up
+        swipeUp.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(swipeUp)
     }
 
     // ViewConvtroller dismissing
@@ -94,6 +100,16 @@ class WordSizeViewController: UIViewController {
     @objc func tappedOutside( sender: UITapGestureRecognizer) {
         let notInContainer: Bool = isGestureNotInContainer(gesture: sender)
         
+        if notInContainer {
+            // does not contains
+            // dismiss vc
+            dismissVC()
+        }
+    }
+    
+    // Swipe up to exit
+    @objc func handleSwipe( sender: UISwipeGestureRecognizer) {
+        let notInContainer: Bool = isGestureNotInContainer(gesture: sender)
         if notInContainer {
             // does not contains
             // dismiss vc
