@@ -111,8 +111,22 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
     // Press copy button
     override func copy(_ sender: Any?) {
         let board = UIPasteboard.general
-        // change clipboard with new value from label self.text and delete all spaces in string
-        board.string = self.text?.removeAllSpaces()
+        var textToBoard: String? = ""
+        // Check if error message in main label
+        for error in MathErrors.allCases {
+            if self.text == error.localizedDescription {
+                // set converter to NaN if error in label
+                textToBoard = self.text
+                break
+            } else {
+                // change clipboard text with new value from label self.text and delete all spaces in string
+                textToBoard = self.text?.removeAllSpaces()
+            }
+        }
+        
+        // set clipboard
+        board.string = textToBoard
+
         // hide menu
         self.hideLabelMenu()
         self.resignFirstResponder()

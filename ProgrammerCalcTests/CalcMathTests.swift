@@ -58,9 +58,29 @@ class CalcMathTests: XCTestCase {
         XCTAssertEqual(result, "0000000010001100", "Calaculation failure")
     }
     
+    func testDivisionByZero() throws {
+        // 1. given
+        calcStatetorage?.saveData(unsignedData)
+        let decFirst = DecimalSystem(stringLiteral: "12")
+        let decSecond = DecimalSystem(stringLiteral: "0")
+        var result = String()
+        
+        // 2. when
+        do {
+            let _ = try calcMathTest.calculate(firstValue: decFirst, operation: .div, secondValue: decSecond, for: .dec)!
+        } catch MathErrors.divByZero {
+            result = MathErrors.divByZero.localizedDescription ?? ""
+        } catch {
+            // else
+            result = "no error"
+        }
+        
+        // 3. then
+        XCTAssertEqual(result, "Cannot divide by zero", "Calaculation failure")
+    }
+    
     // MARK: - ADD
     
-    // XCTAssert to test model
     func testCalcDecAdd() throws {
         // 1. given
         calcStatetorage?.saveData(unsignedData)
@@ -68,7 +88,7 @@ class CalcMathTests: XCTestCase {
         let decSecond = DecimalSystem(stringLiteral: "10")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: decFirst, operation: .add, secondValue: decSecond, for: .dec)!
+        let result = try! calcMathTest.calculate(firstValue: decFirst, operation: .add, secondValue: decSecond, for: .dec)!
         
         // 3. then
         XCTAssertEqual(result.value, "22", "Calaculation failure")
@@ -83,7 +103,7 @@ class CalcMathTests: XCTestCase {
         let decSecond = DecimalSystem(stringLiteral: "10")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: decFirst, operation: .sub, secondValue: decSecond, for: .dec)!
+        let result = try! calcMathTest.calculate(firstValue: decFirst, operation: .sub, secondValue: decSecond, for: .dec)!
         
         // 3. then
         XCTAssertEqual(result.value, "2", "Calaculation failure")
@@ -98,7 +118,7 @@ class CalcMathTests: XCTestCase {
         let decSecond = DecimalSystem(stringLiteral: "10")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: decFirst, operation: .mul, secondValue: decSecond, for: .dec)!
+        let result = try! calcMathTest.calculate(firstValue: decFirst, operation: .mul, secondValue: decSecond, for: .dec)!
         
         // 3. then
         XCTAssertEqual(result.value, "120", "Calaculation failure")
@@ -113,7 +133,7 @@ class CalcMathTests: XCTestCase {
         let decSecond = DecimalSystem(stringLiteral: "10")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: decFirst, operation: .div, secondValue: decSecond, for: .dec)!
+        let result = try! calcMathTest.calculate(firstValue: decFirst, operation: .div, secondValue: decSecond, for: .dec)!
         
         // 3. then
         XCTAssertEqual(result.value, "1.2", "Calaculation failure")
@@ -183,7 +203,7 @@ class CalcMathTests: XCTestCase {
         let decSecond = DecimalSystem(stringLiteral: "10")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: decFirst, operation: .and, secondValue: decSecond, for: .dec)!
+        let result = try! calcMathTest.calculate(firstValue: decFirst, operation: .and, secondValue: decSecond, for: .dec)!
         
         // 3. then
         XCTAssertEqual(result.value, "8", "Calaculation failure")
@@ -197,7 +217,7 @@ class CalcMathTests: XCTestCase {
         let binSecond = Binary(stringLiteral: "101010")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: binFirst, operation: .and, secondValue: binSecond, for: .bin)!
+        let result = try! calcMathTest.calculate(firstValue: binFirst, operation: .and, secondValue: binSecond, for: .bin)!
         
         // 3. then
         XCTAssertEqual(result.value, "00100000", "Calaculation failure")
@@ -210,7 +230,7 @@ class CalcMathTests: XCTestCase {
         let hexSecond = Hexadecimal(stringLiteral: "BECA")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: hexFirst, operation: .and, secondValue: hexSecond, for: .hex)!
+        let result = try! calcMathTest.calculate(firstValue: hexFirst, operation: .and, secondValue: hexSecond, for: .hex)!
         
         // 3. then
         XCTAssertEqual(result.value, "BEC8", "Calaculation failure")
@@ -223,7 +243,7 @@ class CalcMathTests: XCTestCase {
         let octSecond = Octal(stringLiteral: "123")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: octFirst, operation: .and, secondValue: octSecond, for: .oct)!
+        let result = try! calcMathTest.calculate(firstValue: octFirst, operation: .and, secondValue: octSecond, for: .oct)!
         
         // 3. then
         XCTAssertEqual(result.value, "103", "Calaculation failure")
@@ -236,7 +256,7 @@ class CalcMathTests: XCTestCase {
         let decSecond = DecimalSystem(stringLiteral: "4")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: decFirst, operation: .and, secondValue: decSecond, for: .dec)!
+        let result = try! calcMathTest.calculate(firstValue: decFirst, operation: .and, secondValue: decSecond, for: .dec)!
         
         // 3. then
         XCTAssertEqual(result.value, "4", "Calaculation failure")
@@ -250,7 +270,7 @@ class CalcMathTests: XCTestCase {
         let binSecond = Binary(stringLiteral: "01100011") // 99 dec
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: binFirst, operation: .and, secondValue: binSecond, for: .bin)!
+        let result = try! calcMathTest.calculate(firstValue: binFirst, operation: .and, secondValue: binSecond, for: .bin)!
         
         // 3. then
         XCTAssertEqual(result.value, "01100000", "Calaculation failure")
@@ -264,7 +284,7 @@ class CalcMathTests: XCTestCase {
         let hexSecond = Hexadecimal(stringLiteral: "BECA")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: hexFirst, operation: .and, secondValue: hexSecond, for: .hex)!
+        let result = try! calcMathTest.calculate(firstValue: hexFirst, operation: .and, secondValue: hexSecond, for: .hex)!
         // 3. then
         XCTAssertEqual(result.value, "BEC8", "Calaculation failure")
     }
@@ -276,7 +296,7 @@ class CalcMathTests: XCTestCase {
         let octSecond = Octal(stringLiteral: "123")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: octFirst, operation: .and, secondValue: octSecond, for: .oct)!
+        let result = try! calcMathTest.calculate(firstValue: octFirst, operation: .and, secondValue: octSecond, for: .oct)!
         
         // 3. then
         XCTAssertEqual(result.value, "103", "Calaculation failure")
@@ -291,7 +311,7 @@ class CalcMathTests: XCTestCase {
         let decSecond = DecimalSystem(stringLiteral: "10")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: decFirst, operation: .or, secondValue: decSecond, for: .dec)!
+        let result = try! calcMathTest.calculate(firstValue: decFirst, operation: .or, secondValue: decSecond, for: .dec)!
         
         // 3. then
         XCTAssertEqual(result.value, "14", "Calaculation failure")
@@ -305,7 +325,7 @@ class CalcMathTests: XCTestCase {
         let binSecond = Binary(stringLiteral: "101010")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: binFirst, operation: .or, secondValue: binSecond, for: .bin)!
+        let result = try! calcMathTest.calculate(firstValue: binFirst, operation: .or, secondValue: binSecond, for: .bin)!
         
         // 3. then
         XCTAssertEqual(result.value, "00111011", "Calaculation failure")
@@ -318,7 +338,7 @@ class CalcMathTests: XCTestCase {
         let hexSecond = Hexadecimal(stringLiteral: "BECA")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: hexFirst, operation: .or, secondValue: hexSecond, for: .hex)!
+        let result = try! calcMathTest.calculate(firstValue: hexFirst, operation: .or, secondValue: hexSecond, for: .hex)!
         
         // 3. then
         XCTAssertEqual(result.value, "FEEF", "Calaculation failure")
@@ -331,7 +351,7 @@ class CalcMathTests: XCTestCase {
         let octSecond = Octal(stringLiteral: "123")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: octFirst, operation: .or, secondValue: octSecond, for: .oct)!
+        let result = try! calcMathTest.calculate(firstValue: octFirst, operation: .or, secondValue: octSecond, for: .oct)!
         
         // 3. then
         XCTAssertEqual(result.value, "377", "Calaculation failure")
@@ -344,7 +364,7 @@ class CalcMathTests: XCTestCase {
         let decSecond = DecimalSystem(stringLiteral: "4")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: decFirst, operation: .or, secondValue: decSecond, for: .dec)!
+        let result = try! calcMathTest.calculate(firstValue: decFirst, operation: .or, secondValue: decSecond, for: .dec)!
         
         // 3. then
         XCTAssertEqual(result.value, "-12", "Calaculation failure")
@@ -358,7 +378,7 @@ class CalcMathTests: XCTestCase {
         let binSecond = Binary(stringLiteral: "01100011") // 99 dec
 
         // 2. when
-        let result = calcMathTest.calculate(firstValue: binFirst, operation: .or, secondValue: binSecond, for: .bin)!
+        let result = try! calcMathTest.calculate(firstValue: binFirst, operation: .or, secondValue: binSecond, for: .bin)!
 
         // 3. then
         XCTAssertEqual(result.value, "11110011", "Calaculation failure") // -13
@@ -371,7 +391,7 @@ class CalcMathTests: XCTestCase {
         let hexSecond = Hexadecimal(stringLiteral: "BECA")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: hexFirst, operation: .or, secondValue: hexSecond, for: .hex)!
+        let result = try! calcMathTest.calculate(firstValue: hexFirst, operation: .or, secondValue: hexSecond, for: .hex)!
         
         // 3. then
         XCTAssertEqual(result.value, "FEEF", "Calaculation failure")
@@ -384,7 +404,7 @@ class CalcMathTests: XCTestCase {
         let octSecond = Octal(stringLiteral: "12") // 10
 
         // 2. when
-        let result = calcMathTest.calculate(firstValue: octFirst, operation: .or, secondValue: octSecond, for: .oct)!
+        let result = try! calcMathTest.calculate(firstValue: octFirst, operation: .or, secondValue: octSecond, for: .oct)!
         
         // 3. then
         XCTAssertEqual(result.value, "217", "Calaculation failure")
@@ -399,7 +419,7 @@ class CalcMathTests: XCTestCase {
         let decSecond = DecimalSystem(stringLiteral: "10")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: decFirst, operation: .xor, secondValue: decSecond, for: .dec)!
+        let result = try! calcMathTest.calculate(firstValue: decFirst, operation: .xor, secondValue: decSecond, for: .dec)!
         
         // 3. then
         XCTAssertEqual(result.value, "6", "Calaculation failure")
@@ -413,7 +433,7 @@ class CalcMathTests: XCTestCase {
         let binSecond = Binary(stringLiteral: "101010")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: binFirst, operation: .xor, secondValue: binSecond, for: .bin)!
+        let result = try! calcMathTest.calculate(firstValue: binFirst, operation: .xor, secondValue: binSecond, for: .bin)!
         
         // 3. then
         XCTAssertEqual(result.value, "00011011", "Calaculation failure")
@@ -426,7 +446,7 @@ class CalcMathTests: XCTestCase {
         let hexSecond = Hexadecimal(stringLiteral: "BECA")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: hexFirst, operation: .xor, secondValue: hexSecond, for: .hex)!
+        let result = try! calcMathTest.calculate(firstValue: hexFirst, operation: .xor, secondValue: hexSecond, for: .hex)!
         
         // 3. then
         XCTAssertEqual(result.value, "4027", "Calaculation failure")
@@ -439,7 +459,7 @@ class CalcMathTests: XCTestCase {
         let octSecond = Octal(stringLiteral: "123") // 83
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: octFirst, operation: .xor, secondValue: octSecond, for: .oct)!
+        let result = try! calcMathTest.calculate(firstValue: octFirst, operation: .xor, secondValue: octSecond, for: .oct)!
         
         // 3. then
         XCTAssertEqual(result.value, "274", "Calaculation failure")
@@ -452,7 +472,7 @@ class CalcMathTests: XCTestCase {
         let decSecond = DecimalSystem(stringLiteral: "99")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: decFirst, operation: .xor, secondValue: decSecond, for: .dec)!
+        let result = try! calcMathTest.calculate(firstValue: decFirst, operation: .xor, secondValue: decSecond, for: .dec)!
         
         // 3. then
         XCTAssertEqual(result.value, "-109", "Calaculation failure")
@@ -466,7 +486,7 @@ class CalcMathTests: XCTestCase {
         let binSecond = Binary(stringLiteral: "01100011") // 99 dec
 
         // 2. when
-        let result = calcMathTest.calculate(firstValue: binFirst, operation: .xor, secondValue: binSecond, for: .bin)!
+        let result = try! calcMathTest.calculate(firstValue: binFirst, operation: .xor, secondValue: binSecond, for: .bin)!
         
         // 3. then
         XCTAssertEqual(result.value, "10010011", "Calaculation failure") // -109
@@ -479,7 +499,7 @@ class CalcMathTests: XCTestCase {
         let hexSecond = Hexadecimal(stringLiteral: "BECA")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: hexFirst, operation: .xor, secondValue: hexSecond, for: .hex)!
+        let result = try! calcMathTest.calculate(firstValue: hexFirst, operation: .xor, secondValue: hexSecond, for: .hex)!
         
         // 3. then
         XCTAssertEqual(result.value, "4027", "Calaculation failure")
@@ -492,7 +512,7 @@ class CalcMathTests: XCTestCase {
         let octSecond = Octal(stringLiteral: "123") // 83
 
         // 2. when
-        let result = calcMathTest.calculate(firstValue: octFirst, operation: .xor, secondValue: octSecond, for: .oct)!
+        let result = try! calcMathTest.calculate(firstValue: octFirst, operation: .xor, secondValue: octSecond, for: .oct)!
         
         // 3. then
         XCTAssertEqual(result.value, "274", "Calaculation failure")
@@ -509,7 +529,7 @@ class CalcMathTests: XCTestCase {
         let decSecond = DecimalSystem(stringLiteral: "10")
 
         // 2. when
-        let result = calcMathTest.calculate(firstValue: decFirst, operation: .nor, secondValue: decSecond, for: .dec)!
+        let result = try! calcMathTest.calculate(firstValue: decFirst, operation: .nor, secondValue: decSecond, for: .dec)!
 
         // 3. then
         XCTAssertEqual(result.value, "241", "Calaculation failure") // 1111001
@@ -523,7 +543,7 @@ class CalcMathTests: XCTestCase {
         let binSecond = Binary(stringLiteral: "101010") // 42
 
         // 2. when
-        let result = calcMathTest.calculate(firstValue: binFirst, operation: .nor, secondValue: binSecond, for: .bin)!
+        let result = try! calcMathTest.calculate(firstValue: binFirst, operation: .nor, secondValue: binSecond, for: .bin)!
 
         // 3. then
         XCTAssertEqual(result.value, "11000100", "Calaculation failure")
@@ -537,7 +557,7 @@ class CalcMathTests: XCTestCase {
        let hexSecond = Hexadecimal(stringLiteral: "BECA")
        
        // 2. when
-       let result = calcMathTest.calculate(firstValue: hexFirst, operation: .nor, secondValue: hexSecond, for: .hex)!
+       let result = try! calcMathTest.calculate(firstValue: hexFirst, operation: .nor, secondValue: hexSecond, for: .hex)!
        
        // 3. then
        XCTAssertEqual(result.value, "110", "Calaculation failure")
@@ -551,7 +571,7 @@ class CalcMathTests: XCTestCase {
        let octSecond = Octal(stringLiteral: "123") // 83
        
        // 2. when
-       let result = calcMathTest.calculate(firstValue: octFirst, operation: .nor, secondValue: octSecond, for: .oct)!
+       let result = try! calcMathTest.calculate(firstValue: octFirst, operation: .nor, secondValue: octSecond, for: .oct)!
        
        // 3. then
        XCTAssertEqual(result.value, "50", "Calaculation failure")
@@ -563,7 +583,7 @@ class CalcMathTests: XCTestCase {
         let decSecond = DecimalSystem(stringLiteral: "99")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: decFirst, operation: .nor, secondValue: decSecond, for: .dec)!
+        let result = try! calcMathTest.calculate(firstValue: decFirst, operation: .nor, secondValue: decSecond, for: .dec)!
         
         // 3. then
         XCTAssertEqual(result.value, "12", "Calaculation failure")
@@ -577,7 +597,7 @@ class CalcMathTests: XCTestCase {
         let binSecond = Binary(stringLiteral: "01100011") // 99 dec
 
         // 2. when
-        let result = calcMathTest.calculate(firstValue: binFirst, operation: .nor, secondValue: binSecond, for: .bin)!
+        let result = try! calcMathTest.calculate(firstValue: binFirst, operation: .nor, secondValue: binSecond, for: .bin)!
         
         // 3. then
         XCTAssertEqual(result.value, "00001100", "Calaculation failure")
@@ -591,7 +611,7 @@ class CalcMathTests: XCTestCase {
         let hexSecond = Hexadecimal(stringLiteral: "BECA")
         
         // 2. when
-        let result = calcMathTest.calculate(firstValue: hexFirst, operation: .nor, secondValue: hexSecond, for: .hex)!
+        let result = try! calcMathTest.calculate(firstValue: hexFirst, operation: .nor, secondValue: hexSecond, for: .hex)!
         
         // 3. then
         XCTAssertEqual(result.value, "110", "Calaculation failure")
@@ -605,7 +625,7 @@ class CalcMathTests: XCTestCase {
         let octSecond = Octal(stringLiteral: "123") // 83
 
         // 2. when
-        let result = calcMathTest.calculate(firstValue: octFirst, operation: .nor, secondValue: octSecond, for: .oct)!
+        let result = try! calcMathTest.calculate(firstValue: octFirst, operation: .nor, secondValue: octSecond, for: .oct)!
         
         // 3. then
         XCTAssertEqual(result.value, "0", "Calaculation failure")

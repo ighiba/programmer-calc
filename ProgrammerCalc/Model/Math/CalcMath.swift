@@ -8,8 +8,24 @@
 
 import Foundation
 
+// Error
+enum MathErrors: Error, CaseIterable {
+    case divByZero
+}
+
+extension MathErrors: LocalizedError {
+
+    public var localizedDescription: String? {
+        switch self {
+        case .divByZero:
+            return NSLocalizedString("Cannot divide by zero", comment: "")
+    }
+
+ }
+}
+
 final class CalcMath {
-    
+        
     // Storages
     private let conversionStorage = ConversionStorage()
     private let calcStateStorage = CalcStateStorage()
@@ -51,7 +67,7 @@ final class CalcMath {
     // MARK: - Methods
     // ===============
     
-    func calculate( firstValue: NumberSystemProtocol, operation: MathOperation ,secondValue: NumberSystemProtocol, for system: ConversionSystemsEnum) -> NumberSystemProtocol? {
+    func calculate( firstValue: NumberSystemProtocol, operation: MathOperation ,secondValue: NumberSystemProtocol, for system: ConversionSystemsEnum) throws -> NumberSystemProtocol? {
   
         // ======================
         // Convert Any to Decimal
@@ -71,16 +87,24 @@ final class CalcMath {
         // ========================
         // Calculate Decimal values
         // ========================
-        let newDecimal = calculateDecNumbers(firstNum: firstConverted, secondNum: secondConverted, operation: operation)!
+        var newDecimal: DecimalSystem?
+        do {
+            newDecimal = try calculateDecNumbers(firstNum: firstConverted, secondNum: secondConverted, operation: operation)!
+        } catch MathErrors.divByZero {
+            // Throw division by zero
+            throw MathErrors.divByZero
+        } catch {
+            // else
+        }
         
         // Format if overflow
         // get fract part if exists
-        var decFractPart = newDecimal.removeFractPart()
+        var decFractPart = newDecimal!.removeFractPart()
         var decFractPartCopy = decFractPart
         let numbersAfterPoint = Int(conversionStorage.safeGetData().numbersAfterPoint)
         NSDecimalRound(&decFractPart, &decFractPartCopy, numbersAfterPoint, .down)
         // convert to formatted bin
-        let formattedBin = converter.convertValue(value: newDecimal, from: .dec, to: .bin)
+        let formattedBin = converter.convertValue(value: newDecimal!, from: .dec, to: .bin)
         // convert to decimal from bin
         let formattedDec = converter.convertValue(value: formattedBin!, from: .bin, to: .dec) as! DecimalSystem
         // add decimal fract part
@@ -108,8 +132,7 @@ final class CalcMath {
     }
     
     // Calculation of 2 decimal numbers by .operation
-    // TODO: Make error handling for overflow
-    fileprivate func calculateDecNumbers( firstNum: DecimalSystem, secondNum: DecimalSystem, operation: CalcMath.MathOperation) -> DecimalSystem? {
+    fileprivate func calculateDecNumbers( firstNum: DecimalSystem, secondNum: DecimalSystem, operation: CalcMath.MathOperation) throws -> DecimalSystem? {
         var resultStr: String = String()
 
         let firstDecimal = firstNum.decimalValue
@@ -129,10 +152,8 @@ final class CalcMath {
         case .div:
             // if dvision by zero
             guard secondDecimal != 0 else {
-                // TODO Make error code and replace hardcode
-                let divByZero = DecimalSystem(0)
-                divByZero.value = "Division by zero"
-                return divByZero
+                // Throw division by zero
+                throw MathErrors.divByZero
             }
             return DecimalSystem(firstDecimal / secondDecimal)
         // Bitwise shift left
@@ -252,11 +273,15 @@ final class CalcMath {
         // Convert Decimal to Any
         // ======================
         let newDecimal = DecimalSystem(newDecimalValue)
-
+        // convert to system value if not decimal
         if system != .dec {
-            // TODO: Error handling
-            let negatedValue = converter.convertValue(value: newDecimal, from: .dec, to: system)!
-            return negatedValue
+            if let negatedValue = converter.convertValue(value: newDecimal, from: .dec, to: system) {
+                return negatedValue
+            } else {
+                // if return nil
+                return value
+            }
+        // for decimal return newDecimal
         } else {
             return newDecimal
         }
@@ -322,12 +347,6 @@ final class CalcMath {
                 // if wrong operation
                 binary!.value = "0"
             }
-        }
-        
-        // TODO: Remove?
-        // delete first bit if more than QWORD
-        if binary!.value.removeAllSpaces().count > 64 {
-            binary!.value.removeFirst(1)
         }
         
         return converter.convertValue(value: Binary(stringLiteral: binary!.value), from: .bin, to: mainSystem)

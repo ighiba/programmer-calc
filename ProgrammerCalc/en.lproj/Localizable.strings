@@ -8,6 +8,7 @@
 
 "1's" = "1's";
 "2's" = "2's";
+"Cannot divide by zero" = "Cannot divide by zero";
 
 "Use system appearance" = "Use system appearance";
 "Theme" = "Appearance";

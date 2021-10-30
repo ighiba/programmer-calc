@@ -55,21 +55,39 @@ class Calculator: CalculatorProtocol {
     // Calculate result
     fileprivate func calculateBuffWith(_ inputValue: NumberSystemProtocol,_  operation: CalcMath.MathOperation) -> String {
         var resultStr = String()
-        // process claculation buff values and previous operations
-        if self.mathState != nil {
-            print("calculation")
-            
-            // calculate
-            if let result = calculationHandler.calculate(firstValue: self.mathState!.buffValue, operation: self.mathState!.operation, secondValue: inputValue, for: self.systemMain!) {
-                self.mathState = nil
-                self.mathState = CalcMath.MathState(buffValue: inputValue, operation: operation)
-                self.mathState?.lastResult = result
-                resultStr = result.value
-            }
-        } else {
+        // chek if math statate == nil
+        guard self.mathState != nil else {
             self.mathState = CalcMath.MathState(buffValue: self.mainLabelRawValue, operation: operation)
-            resultStr = inputValue.value
+            return inputValue.value
+            
         }
+        
+        // process claculation buff values and previous operations
+        print("calculation")
+        var result: NumberSystemProtocol?
+        // Try calculate
+        // And handle errors
+        do {
+            result = try calculationHandler.calculate(firstValue: self.mathState!.buffValue, operation: self.mathState!.operation, secondValue: inputValue, for: self.systemMain!)
+        } catch MathErrors.divByZero {
+            // if division by zero
+            self.mathState = nil
+            self.mainLabelRawValue = nil
+            // return message in labels
+            let error = MathErrors.divByZero.localizedDescription ?? NSLocalizedString("Cannot divide by zero", comment: "")
+            return error
+        } catch {
+            // else
+        }
+        
+        // if result not error and not nil
+        if result != nil {
+            self.mathState = nil
+            self.mathState = CalcMath.MathState(buffValue: inputValue, operation: operation)
+            self.mathState?.lastResult = result
+            resultStr = result!.value
+        }
+
         return resultStr
     }
     

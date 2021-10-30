@@ -259,6 +259,16 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     }
     
     public func saveCalcState() {
+        // Handle error in labels
+        for error in MathErrors.allCases {
+            if  mainLabel.text == error.localizedDescription {
+                // set default values
+                let newState = CalcState(mainState: "0", convertState: "0", processSigned: calculator.processSigned)
+                calcStateStorage.saveData(newState)
+                return
+            }
+        }
+        // process if no error
         let mainState = mainLabel.text ?? "0"
         let convertState = converterLabel.text ?? "0"
         let processSigned = calculator.processSigned
@@ -266,7 +276,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         let newState = CalcState(mainState: mainState, convertState: convertState, processSigned: processSigned)
         calcStateStorage.saveData(newState)
     }
-    
+    	
     private func updateConversionState() {
         // get data from UserDefaults
         let data = conversionStorage.safeGetData()
@@ -490,6 +500,14 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         
         // TODO: Refator hadling for Hexadecimal values
         if Double(labelText) == nil && ( calculator.systemMain != .hex) {
+            // Check if error message in main label
+            for error in MathErrors.allCases {
+                if  mainLabel.text == error.localizedDescription {
+                    // set converter to NaN if error in label
+                    converterLabel.text = "NaN"
+                    return
+                }
+            }
             converterLabel.text = mainLabel.text
         } else {
             // if last char is dot then append dot
@@ -529,6 +547,14 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     private func addDigitToMainLabel( labelText: String, digit: String) -> String {
         var result = String()
         
+        // Check if error message in main label
+        for error in MathErrors.allCases {
+            if  mainLabel.text == error.localizedDescription {
+                // return digit
+                return digit
+            }
+        }
+
         if digit == "." && !labelText.contains(".") {
             // forbid float input when negative number
             if let dec = converter.convertValue(value: calculator.mainLabelRawValue, from: calculator.systemMain!, to: .dec) as? DecimalSystem {
@@ -700,9 +726,9 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         updateIsSignedButton()
         // save state processSigned
         saveCalcState()
-        // update converter and main labels
-        updateConverterLabel()
+        // update labels
         updateMainLabel()
+        updateConverterLabel()
         // toggle plusminus button
         changeStatePlusMinus()
     }

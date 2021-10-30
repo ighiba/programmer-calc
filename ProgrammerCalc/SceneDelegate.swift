@@ -90,8 +90,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             // Save
             vc.saveCalcState()
             // Get data for shortcuts
-            inputResult = vc.mainLabel.text ?? "0"
-            outputResult = vc.converterLabel.text ?? "0"
+            let calcStateStorage = CalcStateStorage()
+            let data = calcStateStorage.safeGetData()
+            inputResult = data.mainLabelState
+            outputResult = data.converterLabelState
             
             inputSystem = vc.calculator.systemMain?.rawValue ?? ""
             outputSystem = vc.calculator.systemConverter?.rawValue ?? ""
