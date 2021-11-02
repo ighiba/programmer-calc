@@ -18,6 +18,8 @@ class Binary: NumberSystemProtocol {
     // MARK: - Properties
     // ==================
     
+    private let octHexHelper = OctHexHelper()
+    
     var value: String = "0"
     var isSigned: Bool = false // default
 
@@ -111,8 +113,8 @@ class Binary: NumberSystemProtocol {
     }
     
     // Dividing string variable and converting it to double without loss of precision
-    func divideIntFract( value: Any) -> (IntPart?, FractPart?) {
-        let str = String(describing: value)
+    func divideIntFract( value: String) -> (IntPart?, FractPart?) {
+        let str = value
         var strInt: String
         var strFract: String
         
@@ -222,7 +224,7 @@ class Binary: NumberSystemProtocol {
         
         // from binary to oct
         // process each number and form parts
-        hexadecimal.value = hexadecimal.tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: hexTable)
+        hexadecimal.value = octHexHelper.tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: hexTable)
         
         guard dividedBinary.1 != nil else { return hexadecimal }
         
@@ -232,7 +234,7 @@ class Binary: NumberSystemProtocol {
         dividedBinary.1 = String(dividedBinary.1!.reversed())
         // process fract part
         hexadecimal.value += "."
-        hexadecimal.value +=  hexadecimal.tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: hexTable)
+        hexadecimal.value +=  octHexHelper.tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: hexTable)
         
         return hexadecimal
     }
@@ -252,7 +254,7 @@ class Binary: NumberSystemProtocol {
         
         // from binary to oct
         // process each number and form parts
-        octal.value = octal.tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: octTable)
+        octal.value = octHexHelper.tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: octTable)
         
         guard dividedBinary.1 != nil else { return octal }
         
@@ -262,7 +264,7 @@ class Binary: NumberSystemProtocol {
         dividedBinary.1 = String(dividedBinary.1!.reversed())
         // process fract part
         octal.value += "."
-        octal.value +=  octal.tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: octTable)
+        octal.value +=  octHexHelper.tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: octTable)
          
         return octal
     }

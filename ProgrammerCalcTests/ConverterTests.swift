@@ -27,7 +27,7 @@ class ConverterTests: XCTestCase {
     override func setUp() {
         super.setUp()
         converterTest = Converter()
-        let dummyConversionSettings = ConversionSettings(systMain: "Decimal", systConverter: "Binary", number: 8.0)
+        let dummyConversionSettings = ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
         conversionStorage?.saveData(dummyConversionSettings)
         
     }

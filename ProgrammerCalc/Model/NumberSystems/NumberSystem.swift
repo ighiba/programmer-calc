@@ -15,6 +15,5 @@ protocol NumberSystemProtocol {
     var isSigned: Bool { get set }
     // default init by string
     init(stringLiteral: String)
-    
 }
 

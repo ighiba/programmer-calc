@@ -78,8 +78,8 @@ class ConversionViewController: UIViewController {
     fileprivate func getConversionSettings() {
         // get data from UserDefaults
         let conversionSettings = conversionStorage.safeGetData()
-        let mainRow: Int = ConversionSystemsEnum.allCases.firstIndex(of: ConversionSystemsEnum(rawValue: conversionSettings.systemMain)!) ?? 1 // default decimal for main
-        let converterRow: Int = ConversionSystemsEnum.allCases.firstIndex(of: ConversionSystemsEnum(rawValue: conversionSettings.systemConverter)!) ?? 0 // default binary for converter
+        let mainRow: Int = ConversionSystemsEnum.allCases.firstIndex(of: conversionSettings.systemMain) ?? 1 // default decimal for main
+        let converterRow: Int = ConversionSystemsEnum.allCases.firstIndex(of: conversionSettings.systemConverter) ?? 0 // default binary for converter
         // Picker component
         // 0 - main
         // 1 - converter
@@ -90,7 +90,7 @@ class ConversionViewController: UIViewController {
         labelValue.text = "\(Int(conversionSettings.numbersAfterPoint))"
         
         // Slider
-        slider.value = conversionSettings.numbersAfterPoint / 4
+        slider.value = Float(conversionSettings.numbersAfterPoint) / 4
         sliderOldValue = slider.value
     }
     
@@ -100,15 +100,15 @@ class ConversionViewController: UIViewController {
         // 1 - converter
         let mainSelectedRow = picker.selectedRow(inComponent: 0)
         let converterSelectedRow = picker.selectedRow(inComponent: 1)
-        let systemMainNew = picker.pickerView(picker, titleForRow: mainSelectedRow, forComponent: 0)
-        let systemConverterNew = picker.pickerView(picker, titleForRow: converterSelectedRow, forComponent: 1)
+        let systemMainNew = ConversionSystemsEnum(rawValue: picker.pickerView(picker, titleForRow: mainSelectedRow, forComponent: 0)!)
+        let systemConverterNew = ConversionSystemsEnum(rawValue: picker.pickerView(picker, titleForRow: converterSelectedRow, forComponent: 1)!)
         // Slider
         let sliderValue = slider.value.rounded()
         
         // PCalcViewController delegate fo handling changing of mainSystem
         guard delegate != nil else {
             // set data to UserDefaults
-            let newConversionSettings = ConversionSettings(systMain: systemMainNew!, systConverter: systemConverterNew!, number: sliderValue * 4)
+            let newConversionSettings = ConversionSettings(systMain: systemMainNew!, systConverter: systemConverterNew!, number: Int(sliderValue) * 4)
             conversionStorage.saveData(newConversionSettings)
             return
         }
@@ -117,7 +117,7 @@ class ConversionViewController: UIViewController {
         let conversionSettings = conversionStorage.loadData()
         let buffSavedMainLabel = conversionSettings?.systemMain
         // set data to UserDefaults
-        let newConversionSettings = ConversionSettings(systMain: systemMainNew!, systConverter: systemConverterNew!, number: sliderValue * 4)
+        let newConversionSettings = ConversionSettings(systMain: systemMainNew!, systConverter: systemConverterNew!, number: Int(sliderValue) * 4)
         conversionStorage.saveData(newConversionSettings)
         // set data to PCalcViewController system states
         delegate?.updateSystemMain(with: systemMainNew!)

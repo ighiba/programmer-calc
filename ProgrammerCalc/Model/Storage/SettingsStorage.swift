@@ -9,9 +9,9 @@
 import Foundation
 
 protocol SettingsStorageProtocol {
-    func loadData() -> AppSettingsProtocol?
-    func saveData(_ settings: AppSettingsProtocol)
-    func safeGetData() -> AppSettingsProtocol
+    func loadData() -> SettingsProtocol?
+    func saveData(_ settings: SettingsProtocol)
+    func safeGetData() -> SettingsProtocol
 }
 
 class SettingsStorage: SettingsStorageProtocol {
@@ -25,17 +25,17 @@ class SettingsStorage: SettingsStorageProtocol {
     // link to storage
     private var storage = UserDefaults.standard
     
-    func loadData() -> AppSettingsProtocol? {
+    func loadData() -> SettingsProtocol? {
         guard let data = UserDefaults.standard.data(forKey: key) else {
             // if data doesn't exists
             return nil
         }
         // if data (stored value) exists
-        return try? JSONDecoder().decode(AppSettings.self, from: data)
+        return try? JSONDecoder().decode(Settings.self, from: data)
     }
     
-    func saveData(_ settings: AppSettingsProtocol) {
-        if let data = try? JSONEncoder().encode(settings as? AppSettings) {
+    func saveData(_ settings: SettingsProtocol) {
+        if let data = try? JSONEncoder().encode(settings as? Settings) {
             UserDefaults.standard.set(data, forKey: key)
         } else {
             // delete data if doesn't encode
@@ -44,14 +44,14 @@ class SettingsStorage: SettingsStorageProtocol {
         UserDefaults.standard.synchronize()
     }
     
-    func safeGetData() -> AppSettingsProtocol {
+    func safeGetData() -> SettingsProtocol {
         if let settings = self.loadData() {
             return settings
         } else {
             // if no settings
             print("no app settings")
             // default values
-            let newSettings = AppSettings(tappingSounds: true, hapticFeedback: true)
+            let newSettings = Settings(tappingSounds: true, hapticFeedback: true)
             self.saveData(newSettings)
             
             return newSettings

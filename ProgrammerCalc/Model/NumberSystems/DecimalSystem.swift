@@ -14,42 +14,45 @@ class DecimalSystem: NumberSystemProtocol {
     // MARK: - Properties
     // ==================
     
+    // Decimal raw value for calculatiing
     var decimalValue: Decimal
+    
     var value: String
     var isSigned: Bool = false
-    
-    // Storages
-    //private let calcStateStorage = CalcStateStorage()
-    //private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
     
     // ======================
     // MARK: - Initialization
     // ======================
     
+    /// Creates an instance initialized to the String
     required init(stringLiteral: String) {
         self.value = stringLiteral
         self.decimalValue = Decimal(string: stringLiteral) ?? Decimal(0)
         updateIsSignedState()
     }
 
+    /// Creates an instance initialized to the Decimal value
     init(_ valueDec: Decimal) {
         self.decimalValue = valueDec
         self.value = "\(self.decimalValue)"
         updateIsSignedState()
     }
     
+    /// Creates an instance initialized to the Int  value
     init(_ valueInt: Int) {
         self.decimalValue = Decimal(valueInt)
         self.value = "\(self.decimalValue)"
         updateIsSignedState()
     }
     
+    /// Creates an instance initialized to the Binary value
     init(_ valueBin: Binary) {
         self.decimalValue = valueBin.convertBinaryToDec()
         self.value = "\(self.decimalValue)"
         updateIsSignedState()
     }
     
+    /// Creates an instance initialized to the DecimalSystem value
     init(_ valueDec: DecimalSystem) {
         self.decimalValue = valueDec.decimalValue
         self.value = valueDec.value

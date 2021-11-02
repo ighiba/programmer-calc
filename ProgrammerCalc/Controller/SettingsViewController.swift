@@ -11,9 +11,9 @@ import MessageUI
 
 protocol SettingsViewControllerDelegate {
     // First section array
-    var firstSection: [AppSettingsCell] { get set }
+    var firstSection: [SettingsCell] { get set }
     // Second section array
-    var otherSection: [AppSettingsCell] { get set }
+    var otherSection: [SettingsCell] { get set }
     // Open appearance view
     func openAppearance()
     // Open about view
@@ -26,20 +26,20 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
 
     // Cels
     // First section array
-    var firstSection = [ AppSettingsCell(style: .default,
+    var firstSection = [ SettingsCell(style: .default,
                                          reuseIdentifier: "appearance",
                                          label: NSLocalizedString("Appearance", comment: ""),
                                          hasSwitcher: false),
-                         AppSettingsCell(style: .default,
+                         SettingsCell(style: .default,
                                          reuseIdentifier: "tappingSounds",
                                          label:  NSLocalizedString("Tapping sounds", comment: ""),
                                          hasSwitcher: true),
-                         AppSettingsCell(style: .default,
+                         SettingsCell(style: .default,
                                          reuseIdentifier: "haptic",
                                          label: NSLocalizedString("Haptic feedback", comment: ""),
                                          hasSwitcher: true),]
     // Second section array
-    var otherSection = [ AppSettingsCell(style: .default,
+    var otherSection = [ SettingsCell(style: .default,
                                          reuseIdentifier: "about",
                                          label: NSLocalizedString("About app", comment: ""),
                                          hasSwitcher: false)]

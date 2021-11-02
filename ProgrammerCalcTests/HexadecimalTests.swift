@@ -26,9 +26,8 @@ class HexadecimalTests: XCTestCase {
     override func setUp() {
         super.setUp()
         hexadecimalTest = Hexadecimal()
-        let dummyConversionSettings = ConversionSettings(systMain: "Decimal", systConverter: "Hexadecimal", number: 8.0)
+        let dummyConversionSettings = ConversionSettings(systMain: .dec, systConverter: .hex, number: 8)
         conversionStorage?.saveData(dummyConversionSettings)
-        
     }
     
     override func tearDown() {

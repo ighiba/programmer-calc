@@ -8,12 +8,12 @@
 
 import Foundation
 
-protocol AppSettingsProtocol {
+protocol SettingsProtocol {
     var tappingSounds: Bool { get set }
     var hapticFeedback: Bool { get set }
 }
 
-class AppSettings: AppSettingsProtocol, Decodable, Encodable {
+class Settings: SettingsProtocol, Decodable, Encodable {
     var tappingSounds: Bool
     var hapticFeedback: Bool
     
@@ -22,3 +22,5 @@ class AppSettings: AppSettingsProtocol, Decodable, Encodable {
         self.hapticFeedback = hapticFeedback
     }
 }
+
+

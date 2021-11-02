@@ -1,5 +1,5 @@
 //
-//  AppSettingsCell.swift
+//  SettingsCell.swift
 //  ProgrammerCalc
 //
 //  Created by Ivan Ghiba on 06.08.2020.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AppSettingsCell: UITableViewCell {
+class SettingsCell: UITableViewCell {
     
     var switcher: UISwitch?
     

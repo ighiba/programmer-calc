@@ -24,14 +24,14 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
     override var text: String? {
         didSet {
             self.updateRawValueHandler?(self)
-            
         }
     }
-    var rawValue: NumberSystemProtocol?
-
+    
     override var canBecomeFirstResponder: Bool {
         return true
     }
+    
+    var rawValue: NumberSystemProtocol?
     
     lazy var infoSubLabel: UILabel = {
         let label = UILabel()
@@ -138,7 +138,7 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
         return action == #selector(UIResponderStandardEditActions.copy)
     }
     
-    
+    // Animations for un/highllight labels on long touch (copy from label)
     func highlightLabel() {
         self.layer.cornerRadius = 0
         self.layer.masksToBounds = false
@@ -166,7 +166,6 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
     public func hideLabelMenu() {
         let menu = UIMenuController.shared
         menu.hideMenu(from: self)
-        
         undoHighlightLabel()
     }
     

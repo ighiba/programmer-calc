@@ -9,8 +9,11 @@
 import Foundation
 
 protocol CalcStateProtocol {
+    // Last string value from mainLabel (Input)
     var mainLabelState: String { get set }
+    // Last string value from converterLabel (Output)
     var converterLabelState: String { get set }
+    // State from signed on/off button
     var processSigned: Bool { get set }
 }
 

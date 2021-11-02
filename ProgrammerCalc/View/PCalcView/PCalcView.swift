@@ -48,7 +48,6 @@ class PCalcView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setViews()
     }
     
@@ -170,7 +169,6 @@ class PCalcView: UIView {
     lazy var labelsStack: UIStackView = {
         let labels = UIStackView(arrangedSubviews: [self.mainLabel, self.converterLabel])
         // Display settings for labels UIStackView
-        //labels.alignment = .fill
         labels.axis = .vertical
         labels.distribution = .fillEqually
         
@@ -211,7 +209,6 @@ class PCalcView: UIView {
         // Constraints for landscape orientation
         landscape = [
             labelsStack.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            //labelsStack.centerXAnchor.constraint(equalTo: self.centerXAnchor),
 
             labelsStack.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: getScreenBounds().width * 0.05),
             labelsStack.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: getScreenBounds().width * -0.05),
@@ -226,7 +223,6 @@ class PCalcView: UIView {
         
         
         // Additional setups
-        
         // add changeWordSizeButton to navigationBar title view(in center)
         navigationBar.items?.first?.titleView?.addSubview(changeWordSizeButton)
         changeWordSizeButton.center =  (navigationBar.items?.first?.titleView!.center)!

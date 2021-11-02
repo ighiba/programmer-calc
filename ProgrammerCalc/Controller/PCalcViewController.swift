@@ -15,8 +15,8 @@ protocol PCalcViewControllerDelegate {
     func updateAllLayout()
     func handleDisplayingMainLabel()
     func updateButtons()
-    func updateSystemMain(with rawValue: String)
-    func updateSystemCoverter(with rawValue: String)
+    func updateSystemMain(with value: ConversionSystemsEnum)
+    func updateSystemCoverter(with value: ConversionSystemsEnum)
 }
 
 class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
@@ -44,7 +44,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     let calcView: PCalcView = PCalcView()
     lazy var mainLabel: CalcualtorLabel = calcView.mainLabel
     lazy var converterLabel: CalcualtorLabel = calcView.converterLabel
-    // Device state vars
+    // Device states
     private var isAllowedLandscape: Bool = false
     private var isDarkContentBackground: Bool = false
     
@@ -76,7 +76,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     // MARK: - Initialization
     // ======================
     
-
     override init(transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, options: [UIPageViewController.OptionsKey : Any]? = nil) {
         super.init(transitionStyle: .scroll, navigationOrientation: navigationOrientation, options: nil)
 
@@ -169,13 +168,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         print("main dissapear")
         saveCalcState()
     }
-    
-    // Handle dismissing modal vc
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        // Update rotation settings
-        // unlock rotation
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
-    }
 
     // Handle orientation change for constraints
     override func viewDidLayoutSubviews() {
@@ -230,11 +222,16 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         }
     }
     
+    // Handle dismissing modal vc
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        // Update rotation settings
+        // unlock rotation
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
+    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         unhighlightLabels()
-        print("touched began")
     }
 
     // ===============
@@ -281,8 +278,8 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         // get data from UserDefaults
         let data = conversionStorage.safeGetData()
         // properties update
-        calculator.systemMain = ConversionSystemsEnum(rawValue: data.systemMain)
-        calculator.systemConverter = ConversionSystemsEnum(rawValue: data.systemConverter)
+        calculator.systemMain = data.systemMain
+        calculator.systemConverter = data.systemConverter
         // labels info update
         mainLabel.setInfoLabelValue(calculator.systemMain!)
         converterLabel.setInfoLabelValue(calculator.systemConverter!)
@@ -293,7 +290,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         let labelText = mainLabel.text
         let conversionSettings = conversionStorage.safeGetData()
         let forbidden = ConversionValues.getForbiddenValues()
-        let systemMainFromEnum = ConversionSystemsEnum(rawValue: conversionSettings.systemMain)!
+        let systemMainFromEnum = conversionSettings.systemMain
         
         if forbidden[systemMainFromEnum]!.contains(where: labelText!.contains) {
             print("Forbidden values at input")
@@ -426,14 +423,10 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     private func updateClearButton(hasInput state: Bool) {
         if let clearButton = self.view.viewWithTag(100) as? CalculatorButton {
             if state {
-                guard clearButton.titleLabel?.text != "C" else {
-                    return
-                }
+                guard clearButton.titleLabel?.text != "C" else { return }
                 clearButton.setTitle("C", for: .normal)
             } else {
-                guard clearButton.titleLabel?.text != "AC" else {
-                    return
-                }
+                guard clearButton.titleLabel?.text != "AC" else { return }
                 clearButton.setTitle("AC", for: .normal)
             }
         }
@@ -478,10 +471,8 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         guard numValue != nil else {
             return
         }
-        
         // set value to main label
         mainLabel.setRawValue(value: numValue!)
-
         // update calculator rawValue
         calculator.mainLabelRawValue = numValue!
     }
@@ -514,16 +505,15 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             }
             lastDotIfExists = lastDotIfExists == "." && !(newValue?.value.contains("."))! ? "." : ""
             converterLabel.text = newValue!.value + lastDotIfExists
-            //uptdateConverterLabel(with: newValue!.value + lastDotIfExists)
         }
     }
     
-    func updateSystemMain(with rawValue: String) {
-        calculator.systemMain = ConversionSystemsEnum(rawValue: rawValue)
+    func updateSystemMain(with value: ConversionSystemsEnum) {
+        calculator.systemMain = value
     }
     
-    func updateSystemCoverter(with rawValue: String) {
-        calculator.systemConverter = ConversionSystemsEnum(rawValue: rawValue)
+    func updateSystemCoverter(with value: ConversionSystemsEnum) {
+        calculator.systemConverter = value
     }
     
     // Add digit to end of main label
@@ -531,11 +521,9 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         var result = String()
         
         // Check if error message in main label
-        for error in MathErrors.allCases {
-            if  mainLabel.text == error.localizedDescription {
-                // return digit
-                return digit
-            }
+        for error in MathErrors.allCases where error.localizedDescription == mainLabel.text {
+            // return digit
+            return digit
         }
 
         if digit == "." && !labelText.contains(".") {

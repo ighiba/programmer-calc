@@ -15,7 +15,6 @@ class SettingsView: UITableView {
     
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
-        
         self.delegate = self
         self.dataSource = self
     }
@@ -42,9 +41,10 @@ extension SettingsView: UITableViewDataSource, UITableViewDelegate {
             return controllerDelegate!.firstSection.count
         }
     }
+    
     // Returns cell for section
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = AppSettingsCell()
+        var cell = SettingsCell()
         
         guard controllerDelegate != nil else {
             return cell

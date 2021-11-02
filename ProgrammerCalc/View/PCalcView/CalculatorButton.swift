@@ -10,9 +10,8 @@ import UIKit
 import AudioToolbox
 
 class CalculatorButton: UIButton {
-    // ====================
+
     // MARK: - Enumerations
-    // ====================
     
     enum ButtonTypes {
         case numeric
@@ -22,10 +21,9 @@ class CalculatorButton: UIButton {
         case defaultBtn
     }
     
-    // ==================
+
     // MARK: - Properties
-    // ==================
-    
+
     private let _boundsExtension: CGFloat = 0
     
     // Button types
@@ -84,11 +82,8 @@ class CalculatorButton: UIButton {
         self.setTitleColor(.black, for: .normal)
         self.backgroundColor = .white
         // set font size, font family
-        //self.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 45.0)
-        
         self.titleLabel?.font = UIFont.systemFont(ofSize: 45.0, weight: UIFont.Weight.thin)
         self.titleLabel?.autoresizingMask = .flexibleWidth
-        //self.titleLabel?.font = UIFont.systemFont(ofSize: 45.0, weight: UIFont.Weight.thin)
         // resizeble text
         self.titleLabel?.adjustsFontSizeToFitWidth = true
         self.titleLabel?.minimumScaleFactor = 0.75
@@ -99,9 +94,7 @@ class CalculatorButton: UIButton {
             if titleText.contains("\n") {
                 self.titleLabel?.numberOfLines = 2
                 self.titleLabel?.textAlignment = .center
-                //self.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 18.0)
                 self.titleLabel?.font = UIFont.systemFont(ofSize: buttonWidth() / 3.916 , weight: UIFont.Weight.thin)
-                
             // if more than 3 char in title
             } else if titleText.count > 3 {
                 self.titleLabel?.font = UIFont.systemFont(ofSize: buttonWidth() / 2.670 , weight: UIFont.Weight.thin)
@@ -184,10 +177,8 @@ class CalculatorButton: UIButton {
             if previousTouchOutside {
                 sendActions(for: .touchDragEnter)
                 animateHighlight()
-                //self.isHighlighted = true
             } else {
                 sendActions(for: .touchDragInside)
-                //self.isHighlighted = true
             }
         }
 

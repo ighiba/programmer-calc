@@ -167,6 +167,8 @@ class AppearanceViewController: PCalcTableViewController, AppearanceViewControll
     }
 }
 
+// MARK: - TableViewDelegate
+
 extension AppearanceViewController {
     // Actions on tap for section 1
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

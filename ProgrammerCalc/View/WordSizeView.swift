@@ -130,10 +130,6 @@ class WordSizeView: UIView {
         stack.setCustomSpacing(margin, after: self.popoverTitle)
         // after table
         stack.setCustomSpacing(margin, after: self.wordSizeTable)
-//        // after slider label
-//        stack.setCustomSpacing(containerStackHeight * 0.05, after: self.horizontalInfoStack)
-//        // after slider
-//        stack.setCustomSpacing(containerStackHeight * 0.1, after: self.digitsAfterSlider)
         
         return stack
     }()
@@ -169,8 +165,7 @@ class WordSizeView: UIView {
             self.container.transform = transform
             self.container.alpha = 0.01
             self.alpha = 0
-        }, completion: { (completed) in
-            //print("completed")
+        }, completion: { _ in
             // dismiss vc
             finished()
         })

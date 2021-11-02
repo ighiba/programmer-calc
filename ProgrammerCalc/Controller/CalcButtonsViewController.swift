@@ -35,7 +35,7 @@ class CalcButtonsViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
-        // andling tappging on PCalcViewController
+        // handling tappging on PCalcViewController
         guard delegate != nil else {
             return
         }

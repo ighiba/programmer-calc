@@ -27,8 +27,6 @@ class ConversionView: UIView {
         container.addSubview(mainPicker)
         mainPicker.addSubview(arrow)
         container.addSubview(labelStack)
-//        container.addSubview(digitsAfterLabel)
-//        digitsAfterLabel.addSubview(sliderValueDigit)
         container.addSubview(digitsAfterSlider)
         container.addSubview(doneButton)
         
@@ -63,7 +61,6 @@ class ConversionView: UIView {
             container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9),
-            //container.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.6),
             container.heightAnchor.constraint(greaterThanOrEqualToConstant: 400),
             
             // Set constraints for label
@@ -93,14 +90,6 @@ class ConversionView: UIView {
             
             digitsAfterLabel.widthAnchor.constraint(equalTo: labelStack.widthAnchor, multiplier: 0.9),
             sliderValueDigit.widthAnchor.constraint(equalTo: labelStack.widthAnchor, multiplier: 0.1),
-//            digitsAfterLabel.topAnchor.constraint(equalTo: mainPicker.bottomAnchor),
-//            digitsAfterLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor, constant: -margin),
-//            digitsAfterLabel.heightAnchor.constraint(equalToConstant: 35),
-//            // and slider value
-//            sliderValueDigit.topAnchor.constraint(equalTo: digitsAfterLabel.topAnchor),
-//            sliderValueDigit.bottomAnchor.constraint(equalTo: digitsAfterLabel.bottomAnchor),
-//            sliderValueDigit.leftAnchor.constraint(equalTo: digitsAfterLabel.rightAnchor, constant: margin),
-//            sliderValueDigit.heightAnchor.constraint(equalTo: digitsAfterLabel.heightAnchor),
             
             // Set constraints for slider
             digitsAfterSlider.topAnchor.constraint(equalTo: labelStack.bottomAnchor, constant: margin),
@@ -258,7 +247,7 @@ class ConversionView: UIView {
             self.container.transform = transform
             self.container.alpha = 0.01
             self.alpha = 0
-        }, completion: { (completed) in
+        }, completion: { _ in
             //print("completed")
             // dismiss vc
             finished()

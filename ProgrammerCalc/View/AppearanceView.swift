@@ -26,8 +26,7 @@ class AppearanceView: UITableView {
     
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
-        
-        //self.delegate = self
+
         self.dataSource = self
     }
 

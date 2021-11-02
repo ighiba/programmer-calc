@@ -8,11 +8,13 @@
 
 import Foundation
 
-class Hexadecimal: OctHexHelper, NumberSystemProtocol {
+class Hexadecimal: NumberSystemProtocol {
     
     // ==================
     // MARK: - Properties
     // ==================
+    
+    private let octHexHelper = OctHexHelper()
     
     var value: String = ""
     var isSigned: Bool = false // default
@@ -35,15 +37,15 @@ class Hexadecimal: OctHexHelper, NumberSystemProtocol {
                     "1100":"C",
                     "1101":"D",
                     "1110":"E",
-                    "1111":"F",]
+                    "1111":"F"]
     
     required public init(stringLiteral value: String) {
         self.value = value
     }
     
     /// Creates an empty instance
-    override init() {
-        self.value = ""
+    init() {
+        self.value = "0000"
     }
     
     /// Creates an instance initialized to the Binary value
@@ -64,7 +66,7 @@ class Hexadecimal: OctHexHelper, NumberSystemProtocol {
 
         // from hex to binary
         // process each number and form parts
-        binary.value = tableOctHexToBin(valueOctHex: hexadecimalValue, table: table)
+        binary.value = octHexHelper.tableOctHexToBin(valueOctHex: hexadecimalValue, table: table)
         
         return binary
     }

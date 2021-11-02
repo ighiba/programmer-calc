@@ -10,9 +10,6 @@ import Foundation
 
 class OctHexHelper {
     
-    // CalcState storage
-    //private var calcStateStorage = CalcStateStorage()
-    
     // =========================================
     // MARK: - Octal / Hexadecimal Table Methods
     // =========================================

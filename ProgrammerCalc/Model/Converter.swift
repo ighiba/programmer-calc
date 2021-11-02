@@ -56,7 +56,6 @@ import Foundation
     // Converter from any to binary system
     fileprivate func convertAnyToBinary( value: NumberSystemProtocol, anySystem: ConversionSystemsEnum) -> Binary? {
         var binary: Binary?
-        let partition: Int = 4
         
         switch anySystem {
         case .bin:
@@ -66,28 +65,22 @@ import Foundation
             }
         case .oct:
             // convert oct to binary
-            //partition = 3
             let oct: Octal = value as! Octal
             binary = Binary(oct)
         case .dec:
             // convert dec to binary
-            //partition = 4
             let dec = value as! DecimalSystem
             if let bin = Binary(dec) {
                 binary = bin
             }
         case .hex:
             // convert hex to binary
-            //partition = 4
             let hex = value as! Hexadecimal
             binary = Binary(hex)
         }
         
         // check if binary is nil
         guard binary != nil else { return nil }
-        
-        // divide binary by parts
-        binary = binary!.divideBinary(by: partition)
 
         return binary
     }
@@ -192,7 +185,7 @@ import Foundation
         
         // process fract part
         if let fractPart = splittedBinary.1 {
-            let numAfterPoint = Int(conversionStorage.loadData()?.numbersAfterPoint ?? 8.0)
+            let numAfterPoint = conversionStorage.safeGetData().numbersAfterPoint
             var buffFractPart = fractPart.removeTrailing(characters: ["0"])
             
             if fractPart != "" {
@@ -221,12 +214,13 @@ import Foundation
             resultBin.isSigned = false
         }
         
-        
         return resultBin
     }
     
     func processDecFloatStrToFormat(decStr: String, lastDotIfExists: String) -> String {
         var lastSymbolsIfExists = lastDotIfExists
+        
+        // Process fact part if exists and last digit is 0
         if decStr.last == "0" && decStr.contains(".") {
             // count how much zeros in back
             let fractPart = decStr.getPartAfter(divider: ".")
@@ -240,11 +234,10 @@ import Foundation
                     break
                 }
             }
-            
+            // check if fract part not 0, 00 ,000 etc.
             if Int(fractPart) != 0 {
                 lastSymbolsIfExists = buffStr
             }
-            
         }
         
         // get dec value

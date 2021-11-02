@@ -8,20 +8,19 @@
 
 import Foundation
 
-// Error
+// Error types
 enum MathErrors: Error, CaseIterable {
     case divByZero
 }
 
 extension MathErrors: LocalizedError {
-
+    // Error localization
     public var localizedDescription: String? {
         switch self {
         case .divByZero:
             return NSLocalizedString("Cannot divide by zero", comment: "")
+        }
     }
-
- }
 }
 
 final class CalcMath {
@@ -34,7 +33,8 @@ final class CalcMath {
     // Object "Converter"
     let converter: Converter = Converter()
     
-    enum MathOperation {
+    enum Operation {
+        // arithmetic
         case add
         case sub
         case mul
@@ -44,30 +44,18 @@ final class CalcMath {
         case shiftRight //  >>
         case shiftLeftBy //  X << Y
         case shiftRightBy // X >> Y
+        // logical
         case and
         case or
         case xor
         case nor
     }
     
-    struct MathState {
-        
-        var buffValue: NumberSystemProtocol
-        var operation: MathOperation
-        var lastResult: NumberSystemProtocol?
-        var inputStart: Bool = false
-        
-        init(buffValue: NumberSystemProtocol, operation: MathOperation) {
-            self.buffValue = buffValue
-            self.operation = operation
-        }
-    }
-    
     // ===============
     // MARK: - Methods
     // ===============
     
-    func calculate( firstValue: NumberSystemProtocol, operation: MathOperation ,secondValue: NumberSystemProtocol, for system: ConversionSystemsEnum) throws -> NumberSystemProtocol? {
+    func calculate( firstValue: NumberSystemProtocol, operation: Operation ,secondValue: NumberSystemProtocol, for system: ConversionSystemsEnum) throws -> NumberSystemProtocol? {
   
         // ======================
         // Convert Any to Decimal
@@ -132,7 +120,7 @@ final class CalcMath {
     }
     
     // Calculation of 2 decimal numbers by .operation
-    fileprivate func calculateDecNumbers( firstNum: DecimalSystem, secondNum: DecimalSystem, operation: CalcMath.MathOperation) throws -> DecimalSystem? {
+    fileprivate func calculateDecNumbers( firstNum: DecimalSystem, secondNum: DecimalSystem, operation: CalcMath.Operation) throws -> DecimalSystem? {
         var resultStr: String = String()
 
         let firstDecimal = firstNum.decimalValue
@@ -228,7 +216,6 @@ final class CalcMath {
     
     func fillUpZeros( str: String, to num: Int) -> String {
         let diffInt = num - str.count
-        
         return String(repeating: "0", count: diffInt) + str
     }
     
@@ -288,7 +275,7 @@ final class CalcMath {
     }
     
     // Shift to needed bit count
-    public func shiftBits( value: NumberSystemProtocol, mainSystem: ConversionSystemsEnum, shiftOperation: CalcMath.MathOperation, shiftCount: Int ) -> NumberSystemProtocol? {
+    public func shiftBits( value: NumberSystemProtocol, mainSystem: ConversionSystemsEnum, shiftOperation: CalcMath.Operation, shiftCount: Int ) -> NumberSystemProtocol? {
         // Check if value is not float
         guard !value.value.contains(".") else {
             return value
@@ -308,7 +295,7 @@ final class CalcMath {
         guard binary != nil else { return nil }
         
         // get operation
-        let operation: CalcMath.MathOperation = {
+        let operation: CalcMath.Operation = {
             if shiftCount < 0 {
                 // swap operation if shift count < 0
                 if shiftOperation == .shiftRight {
@@ -441,7 +428,7 @@ final class CalcMath {
         let binSecondNum = converter.convertValue(value: secondNum, from: .dec, to: .bin, format: true) as! Binary
         // do closure operation
         let binResult = operation(binFirstNum,binSecondNum)
-        return converter.convertValue(value: binResult, from: .bin, to: .dec, format: true)! as! DecimalSystem
+        return converter.convertValue(value: binResult, from: .bin, to: .dec, format: true) as! DecimalSystem
     }
     
     
