@@ -21,6 +21,13 @@ class AboutView: UITableView {
     // Default version number
     var appVersion: String = "1.0"
     
+    var iconTint: UIColor {
+        let styleStorage = StyleStorage()
+        let styleType = styleStorage.safeGetStyleData()
+        let style = StyleFactory().get(style: styleType)
+        return style.tintColor
+    }
+    
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
         
@@ -31,6 +38,15 @@ class AboutView: UITableView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        // change cells view tint color
+        for row in 0...cellLabels.count {
+            let cell = cellForRow(at: IndexPath(row: row, section: 1))
+            cell?.imageView?.tintColor = iconTint
+        }
     }
     
 }
@@ -92,6 +108,8 @@ extension AboutView: UITableViewDelegate, UITableViewDataSource {
             cell.selectionStyle = .none
         } else {
             cell.textLabel?.text = cellLabels[indexPath.row]
+            // color for icon before text
+            cell.imageView?.tintColor = iconTint
             
             switch indexPath.row {
             case 0:

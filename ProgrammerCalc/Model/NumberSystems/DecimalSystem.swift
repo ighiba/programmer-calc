@@ -15,9 +15,6 @@ class DecimalSystem: NumberSystemProtocol {
     // ==================
     
     var decimalValue: Decimal
-    let max = Decimal(string: "18446744073709551615")!
-    let maxSigned = Decimal(string: "9223372036854775807")!
-    let minSigned = Decimal(string: "-9223372036854775808")!
     var value: String
     var isSigned: Bool = false
     
@@ -138,6 +135,7 @@ class DecimalSystem: NumberSystemProtocol {
         }
     }
     
+    // Change raw decimal value and update sign state
     func setNewDecimal(with decimalValue: Decimal) {
         self.decimalValue = decimalValue
         self.value = "\(decimalValue)"

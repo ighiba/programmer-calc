@@ -48,7 +48,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     private var isAllowedLandscape: Bool = false
     private var isDarkContentBackground: Bool = false
     
-    private var arrayButtonsStack = [UIView]()
+    private var arrayButtonsStack = [CalcButtonsPage]()
     
     // Style Factory
     private let styleFactory: StyleFactory = StyleFactory()
@@ -474,64 +474,47 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     
     private func updateMainLabelRawValue() {
         // update label rawValue
-        switch calculator.systemMain {
-        case .bin:
-            var bin = Binary()
-            bin.value = mainLabel.text!
-            bin = converter.processBinaryToFormat(bin)
-            mainLabel.setRawValue(value: bin)
-        case .oct:
-            mainLabel.setRawValue(value: Octal(stringLiteral: mainLabel.text!))
-        case .dec:
-            mainLabel.setRawValue(value: DecimalSystem(stringLiteral: mainLabel.text!))
-        case .hex:
-            mainLabel.setRawValue(value: Hexadecimal(stringLiteral: mainLabel.text!))
-        case .none:
-            break
+        let numValue = calculator.numberSystemFactory.get(strValue: mainLabel.text!, currentSystem: calculator.systemMain!)
+        guard numValue != nil else {
+            return
         }
+        
+        // set value to main label
+        mainLabel.setRawValue(value: numValue!)
 
         // update calculator rawValue
-        self.calculator.mainLabelRawValue = mainLabel.rawValue
+        calculator.mainLabelRawValue = numValue!
     }
        
     public func updateConverterLabel() {
         // remove spaces mainLabel
         let labelText: String =  mainLabel.text!.removeAllSpaces() // remove spaces in mainLabel for converting
         
-        // TODO: Refator hadling for Hexadecimal values
-        if Double(labelText) == nil && ( calculator.systemMain != .hex) {
-            // Check if error message in main label
-            for error in MathErrors.allCases {
-                if  mainLabel.text == error.localizedDescription {
-                    // set converter to NaN if error in label
-                    converterLabel.text = "NaN"
-                    return
-                }
+        // Check if error message in main label
+        for error in MathErrors.allCases {
+            if  mainLabel.text == error.localizedDescription {
+                // set converter to NaN if error in label
+                converterLabel.text = "NaN"
+                return
             }
+        }
+        
+        if Double(labelText) == nil && ( calculator.systemMain != .hex) {
             converterLabel.text = mainLabel.text
         } else {
             // if last char is dot then append dot
             var lastDotIfExists: String = mainLabel.text?.last == "." ? "." : ""
             // Update converter label with converted number
-            // TODO: Error handling
             updateConversionState()
-            var newValue = converter.convertValue(value: calculator.mainLabelRawValue, from: calculator.systemMain!, to: calculator.systemConverter!)
+            var newValue = converter.convertValue(value: calculator.mainLabelRawValue, from: calculator.systemMain!, to: calculator.systemConverter!, format: true)
+            guard newValue != nil else { return }
             if let bin = newValue as? Binary {
+                // divide binary by parts
                 newValue = bin.divideBinary(by: 4)
             }
             lastDotIfExists = lastDotIfExists == "." && !(newValue?.value.contains("."))! ? "." : ""
-            uptdateConverterLabel(with: newValue!.value + lastDotIfExists)
-        }
-    }
-    
-    // Updating converter label with optional string value
-    private func uptdateConverterLabel(with value: String?) {
-        if let newValue = value {
-            converterLabel.text = newValue
-        } else {
-            // TODO: Refactor or delete
-            //       Localization
-            converterLabel.text = "Impossible to convert"
+            converterLabel.text = newValue!.value + lastDotIfExists
+            //uptdateConverterLabel(with: newValue!.value + lastDotIfExists)
         }
     }
     
@@ -557,7 +540,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
 
         if digit == "." && !labelText.contains(".") {
             // forbid float input when negative number
-            if let dec = converter.convertValue(value: calculator.mainLabelRawValue, from: calculator.systemMain!, to: .dec) as? DecimalSystem {
+            if let dec = converter.convertValue(value: calculator.mainLabelRawValue, from: calculator.systemMain!, to: .dec, format: true) as? DecimalSystem {
                 if dec.decimalValue < 0 {
                     return labelText
                 }
@@ -596,7 +579,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         if let isSignedButton = self.view.viewWithTag(102) as? CalculatorButton {
             if calculator.processSigned {
                 // if ON then disable
-                // TODO: Localization ?
                 isSignedButton.setTitle("Signed\nON", for: .normal)
             } else {
                 // if OFF then enable

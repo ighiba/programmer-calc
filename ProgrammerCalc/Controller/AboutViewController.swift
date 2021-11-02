@@ -23,7 +23,7 @@ class AboutViewController: PCalcTableViewController, AboutViewControllerDelegate
     // MARK: - Properties
     
     // App version number
-    var appVersion: String = "0.9.3"
+    var appVersion: String = "0.9.4"
     
     // Table view
     lazy var aboutView = AboutView(frame: CGRect(), style: .grouped)
@@ -38,7 +38,7 @@ class AboutViewController: PCalcTableViewController, AboutViewControllerDelegate
         
         aboutView.controllerDelegate = self
         self.tableView = aboutView
-        
+        self.tableView.tintColor = self.navigationController?.navigationBar.tintColor
         self.tableView.reloadData()
     }
     

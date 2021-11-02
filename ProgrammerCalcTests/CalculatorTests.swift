@@ -284,6 +284,19 @@ class CalculatorTests: XCTestCase {
         XCTAssertEqual(result, true, "Calculation failure")
     }
     
+    func testIsValueOverflowed_BIN_BYTE_ERROR() throws {
+        // 1. given
+        calcStatetorage?.saveData(signedData)
+        wordSizeStorage?.saveData(byte)
+        let testValue = Binary(stringLiteral: "100000000")
+        
+        // 2. when
+        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .bin, when: .input)
+        
+        // 3. then
+        XCTAssertEqual(result, true, "Calculation failure")
+    }
+    
     func testIsValueOverflowed_WORD_OK() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)

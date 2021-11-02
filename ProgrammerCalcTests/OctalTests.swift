@@ -33,6 +33,7 @@ class OctalTests: XCTestCase {
     
     override func tearDown() {
         octalTest = nil
+        conversionStorage?.saveData(ConversionSettings(systMain: "Decimal", systConverter: "Binary", number: 8.0))
         super.tearDown()
     }
 

@@ -77,8 +77,8 @@ final class CalcMath {
         let secondConverted: DecimalSystem
         
         if system != .dec {
-            firstConverted = converter.convertValue(value: firstValue, from: system, to: .dec)! as! DecimalSystem
-            secondConverted = converter.convertValue(value: secondValue, from: system, to: .dec)! as! DecimalSystem
+            firstConverted = converter.convertValue(value: firstValue, from: system, to: .dec, format: true)! as! DecimalSystem
+            secondConverted = converter.convertValue(value: secondValue, from: system, to: .dec, format: true)! as! DecimalSystem
         } else {
             firstConverted = firstValue as! DecimalSystem
             secondConverted = secondValue as! DecimalSystem
@@ -104,9 +104,9 @@ final class CalcMath {
         let numbersAfterPoint = Int(conversionStorage.safeGetData().numbersAfterPoint)
         NSDecimalRound(&decFractPart, &decFractPartCopy, numbersAfterPoint, .down)
         // convert to formatted bin
-        let formattedBin = converter.convertValue(value: newDecimal!, from: .dec, to: .bin)
+        let formattedBin = converter.convertValue(value: newDecimal!, from: .dec, to: .bin, format: true)
         // convert to decimal from bin
-        let formattedDec = converter.convertValue(value: formattedBin!, from: .bin, to: .dec) as! DecimalSystem
+        let formattedDec = converter.convertValue(value: formattedBin!, from: .bin, to: .dec, format: true) as! DecimalSystem
         // add decimal fract part
         formattedDec.setNewDecimal(with: formattedDec.decimalValue + decFractPart)
         
@@ -124,7 +124,7 @@ final class CalcMath {
         // ======================
         
         if system != .dec {
-            return converter.convertValue(value: formattedDec, from: .dec, to: system)
+            return converter.convertValue(value: formattedDec, from: .dec, to: system, format: true)
         } else {
             return formattedDec
         }
@@ -250,7 +250,7 @@ final class CalcMath {
         // ======================
         
         let convertedDecimal: DecimalSystem
-        convertedDecimal = converter.convertValue(value: value, from: system, to: .dec)! as! DecimalSystem
+        convertedDecimal = converter.convertValue(value: value, from: system, to: .dec, format: true)! as! DecimalSystem
         
         // if 0 then return input value
         guard convertedDecimal.decimalValue != 0 else {
@@ -275,7 +275,7 @@ final class CalcMath {
         let newDecimal = DecimalSystem(newDecimalValue)
         // convert to system value if not decimal
         if system != .dec {
-            if let negatedValue = converter.convertValue(value: newDecimal, from: .dec, to: system) {
+            if let negatedValue = converter.convertValue(value: newDecimal, from: .dec, to: system, format: true) {
                 return negatedValue
             } else {
                 // if return nil
@@ -298,11 +298,11 @@ final class CalcMath {
         // shifting more than 64 make no sense
         guard abs(shiftCount) < 64 else {
             // return 0
-            return converter.convertValue(value: Binary(stringLiteral: "0"), from: .bin, to: mainSystem)
+            return converter.convertValue(value: Binary(stringLiteral: "0"), from: .bin, to: mainSystem, format: true)
         }
         
         // convert to Binary
-        let binary = converter.convertValue(value: value, from: mainSystem, to: .bin) as? Binary
+        let binary = converter.convertValue(value: value, from: mainSystem, to: .bin, format: true) as? Binary
         
         // check if binary is nil
         guard binary != nil else { return nil }
@@ -349,7 +349,7 @@ final class CalcMath {
             }
         }
         
-        return converter.convertValue(value: Binary(stringLiteral: binary!.value), from: .bin, to: mainSystem)
+        return converter.convertValue(value: Binary(stringLiteral: binary!.value), from: .bin, to: mainSystem, format: true)
     }
     
     // AND
@@ -437,11 +437,11 @@ final class CalcMath {
             return firstNum
         }
         // Convert values to binary
-        let binFirstNum = converter.convertValue(value: firstNum, from: .dec, to: .bin) as! Binary
-        let binSecondNum = converter.convertValue(value: secondNum, from: .dec, to: .bin) as! Binary
+        let binFirstNum = converter.convertValue(value: firstNum, from: .dec, to: .bin, format: true) as! Binary
+        let binSecondNum = converter.convertValue(value: secondNum, from: .dec, to: .bin, format: true) as! Binary
         // do closure operation
         let binResult = operation(binFirstNum,binSecondNum)
-        return converter.convertValue(value: binResult, from: .bin, to: .dec)! as! DecimalSystem
+        return converter.convertValue(value: binResult, from: .bin, to: .dec, format: true)! as! DecimalSystem
     }
     
     

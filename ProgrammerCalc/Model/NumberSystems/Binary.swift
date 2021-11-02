@@ -311,18 +311,16 @@ class Binary: NumberSystemProtocol {
     
     // Combine to parts to double string
     func convertDoubleToBinaryStr( numberStr: (IntPart?, FractPart?)) -> String {
-        
-        // Error handling
+
         guard numberStr.0 != nil else {
-            return "Error"
+            return "0"
         }
         guard numberStr.1 != nil else {
-            return "Error"
+            return "0.0"
         }
         
-        // TODO: Error handling
-        let decNumber = Decimal(string: numberStr.0!)!
-        let precision = 20
+        let decNumber = Decimal(string: numberStr.0!) ?? 0
+        let precision = 16 // max number after point
         let intPart = convertDecToBinary(decNumber)
         let fractPart = convertFractToBinary(numberStr: numberStr.1!, precision: precision)
         
@@ -481,10 +479,6 @@ class Binary: NumberSystemProtocol {
     
     // Set fillig style for binary string
     private func fillingStyleResult(for str: String) -> String {
-        // storage
-        //let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
-        // calc state
-        //let calcState = calcStateStorage.loadData()
         
         let binary = self
         var isInputSigned = false
@@ -499,14 +493,12 @@ class Binary: NumberSystemProtocol {
             isInputSigned = binary.isSigned
         }
 
-        
         // fill if needed to
         if !isInputSigned {
             // remove signed bit
-            // TODO: Remove maybe
-            if binary.value.first != "1" {
-                binary.value.removeFirst()
-            }
+//            if binary.value.first != "1" {
+//                binary.value.removeFirst()
+//            }
             binary.fillToFormat(upToZeros: true)
         } else {
             // invert binary if signed

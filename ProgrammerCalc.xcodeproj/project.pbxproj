@@ -59,6 +59,7 @@
 		C09631D82728E9DC001DCD25 /* PCalcTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631D72728E9DC001DCD25 /* PCalcTableViewController.swift */; };
 		C09631DC272C581C001DCD25 /* CalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DB272C581B001DCD25 /* CalculatorTests.swift */; };
 		C09631DE272D4FBE001DCD25 /* StringExtTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DD272D4FBE001DCD25 /* StringExtTests.swift */; };
+		C09631E027305315001DCD25 /* NumberSystemFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DF27305315001DCD25 /* NumberSystemFactory.swift */; };
 		C0CC6DFF271F68AA00E59E64 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */; };
 		C0CC6E0127208EBB00E59E64 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CC6E0027208EBB00E59E64 /* AboutView.swift */; };
 		C0E5FC7624BB9B8D00BA93CA /* PCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */; };
@@ -147,6 +148,7 @@
 		C09631D72728E9DC001DCD25 /* PCalcTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcTableViewController.swift; sourceTree = "<group>"; };
 		C09631DB272C581B001DCD25 /* CalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorTests.swift; sourceTree = "<group>"; };
 		C09631DD272D4FBE001DCD25 /* StringExtTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtTests.swift; sourceTree = "<group>"; };
+		C09631DF27305315001DCD25 /* NumberSystemFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberSystemFactory.swift; sourceTree = "<group>"; };
 		C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		C0CC6E0027208EBB00E59E64 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcView.swift; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 				C09631D527277066001DCD25 /* ButtonStyle.swift */,
 				C09631CF27270FCC001DCD25 /* StyleFactory.swift */,
 				C09631D72728E9DC001DCD25 /* PCalcTableViewController.swift */,
+				C09631DF27305315001DCD25 /* NumberSystemFactory.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -532,6 +535,7 @@
 				C06B7F092443B12B009642B9 /* SceneDelegate.swift in Sources */,
 				C07267DD24E5ACB300D4B4A2 /* Binary.swift in Sources */,
 				C0F5CF4D270E12100020CE14 /* WordSizeStorage.swift in Sources */,
+				C09631E027305315001DCD25 /* NumberSystemFactory.swift in Sources */,
 				C077CF7124DC987B008E5F0F /* AppSettings.swift in Sources */,
 				C070ED2624DB0ED400A04463 /* SettingsView.swift in Sources */,
 				C09631D427271A4D001DCD25 /* StyleStorage.swift in Sources */,
@@ -733,7 +737,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.9.3;
+				MARKETING_VERSION = 0.9.4;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.ighiba.ProgrammerCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
@@ -756,7 +760,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.9.3;
+				MARKETING_VERSION = 0.9.4;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.ighiba.ProgrammerCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
