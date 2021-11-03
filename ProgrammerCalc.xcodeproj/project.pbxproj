@@ -280,10 +280,10 @@
 			children = (
 				C06B7F062443B12B009642B9 /* AppDelegate.swift */,
 				C06B7F082443B12B009642B9 /* SceneDelegate.swift */,
-				C05A169924DD7AF7007B7FB8 /* Helpers */,
 				C0D5BA4C24C340120038A378 /* Model */,
 				C0E5FC7424BB9B6100BA93CA /* View */,
 				C0D5BA4B24C340050038A378 /* Controller */,
+				C05A169924DD7AF7007B7FB8 /* Helpers */,
 				C068AFA824FA409200BFE754 /* Extensions */,
 				C06B7F0F2443B12E009642B9 /* Assets.xcassets */,
 				C06B7F112443B12E009642B9 /* LaunchScreen.storyboard */,
@@ -321,14 +321,10 @@
 		C0D5BA4B24C340050038A378 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				C06B7F0A2443B12B009642B9 /* PCalcViewController.swift */,
-				C0666EB724F97774004809EF /* CalcButtonsViewController.swift */,
-				C0619AC324D71240008A7291 /* ConversionViewController.swift */,
-				C0F5CF50270F4B970020CE14 /* WordSizeViewController.swift */,
-				C070ED2324DB0EC800A04463 /* SettingsViewController.swift */,
-				C09631C92726FB12001DCD25 /* AppearanceViewController.swift */,
-				C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */,
-				C0D919DB2731F80600AD8C05 /* DescriptionViewController.swift */,
+				C0D919E227320F4700AD8C05 /* PCalcController */,
+				C0D919E527320F6F00AD8C05 /* ConversionController */,
+				C0D919E427320F6800AD8C05 /* WordSizeController */,
+				C0D919E327320F6000AD8C05 /* SettingsController */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -345,24 +341,116 @@
 				C0D919D92731ABC900AD8C05 /* MathState.swift */,
 				C077CF7024DC987B008E5F0F /* Settings.swift */,
 				C0635A7A24D9E2AA003855A9 /* ConversionSettings.swift */,
-				C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */,
 				C066756824E27AE700F832F9 /* ConversionValues.swift */,
 				C0F5CF4A270E10870020CE14 /* WordSize.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
 		};
+		C0D919DD27320E2D00AD8C05 /* ConversionView */ = {
+			isa = PBXGroup;
+			children = (
+				C0619AC124D71227008A7291 /* ConversionView.swift */,
+				C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */,
+			);
+			path = ConversionView;
+			sourceTree = "<group>";
+		};
+		C0D919DE27320E5000AD8C05 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				C070ED2524DB0ED400A04463 /* SettingsView.swift */,
+				C077CF6E24DC8DEE008E5F0F /* SettingsCell.swift */,
+				C0D919DF27320EAF00AD8C05 /* AppearanceView */,
+				C0D919E027320EED00AD8C05 /* AboutView */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		C0D919DF27320EAF00AD8C05 /* AppearanceView */ = {
+			isa = PBXGroup;
+			children = (
+				C09631CB2726FBF1001DCD25 /* AppearanceView.swift */,
+			);
+			path = AppearanceView;
+			sourceTree = "<group>";
+		};
+		C0D919E027320EED00AD8C05 /* AboutView */ = {
+			isa = PBXGroup;
+			children = (
+				C0CC6E0027208EBB00E59E64 /* AboutView.swift */,
+			);
+			path = AboutView;
+			sourceTree = "<group>";
+		};
+		C0D919E127320F1300AD8C05 /* WordSizeView */ = {
+			isa = PBXGroup;
+			children = (
+				C0F5CF52270F4C4C0020CE14 /* WordSizeView.swift */,
+			);
+			path = WordSizeView;
+			sourceTree = "<group>";
+		};
+		C0D919E227320F4700AD8C05 /* PCalcController */ = {
+			isa = PBXGroup;
+			children = (
+				C06B7F0A2443B12B009642B9 /* PCalcViewController.swift */,
+				C0666EB724F97774004809EF /* CalcButtonsViewController.swift */,
+			);
+			path = PCalcController;
+			sourceTree = "<group>";
+		};
+		C0D919E327320F6000AD8C05 /* SettingsController */ = {
+			isa = PBXGroup;
+			children = (
+				C070ED2324DB0EC800A04463 /* SettingsViewController.swift */,
+				C0D919E627320F9900AD8C05 /* ApperanceController */,
+				C0D919E727320FBD00AD8C05 /* AboutController */,
+			);
+			path = SettingsController;
+			sourceTree = "<group>";
+		};
+		C0D919E427320F6800AD8C05 /* WordSizeController */ = {
+			isa = PBXGroup;
+			children = (
+				C0F5CF50270F4B970020CE14 /* WordSizeViewController.swift */,
+			);
+			path = WordSizeController;
+			sourceTree = "<group>";
+		};
+		C0D919E527320F6F00AD8C05 /* ConversionController */ = {
+			isa = PBXGroup;
+			children = (
+				C0619AC324D71240008A7291 /* ConversionViewController.swift */,
+			);
+			path = ConversionController;
+			sourceTree = "<group>";
+		};
+		C0D919E627320F9900AD8C05 /* ApperanceController */ = {
+			isa = PBXGroup;
+			children = (
+				C09631C92726FB12001DCD25 /* AppearanceViewController.swift */,
+			);
+			path = ApperanceController;
+			sourceTree = "<group>";
+		};
+		C0D919E727320FBD00AD8C05 /* AboutController */ = {
+			isa = PBXGroup;
+			children = (
+				C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */,
+				C0D919DB2731F80600AD8C05 /* DescriptionViewController.swift */,
+			);
+			path = AboutController;
+			sourceTree = "<group>";
+		};
 		C0E5FC7424BB9B6100BA93CA /* View */ = {
 			isa = PBXGroup;
 			children = (
 				C0666EBD24F991B8004809EF /* PCalcView */,
-				C0619AC124D71227008A7291 /* ConversionView.swift */,
-				C0F5CF52270F4C4C0020CE14 /* WordSizeView.swift */,
+				C0D919DD27320E2D00AD8C05 /* ConversionView */,
+				C0D919E127320F1300AD8C05 /* WordSizeView */,
+				C0D919DE27320E5000AD8C05 /* Settings */,
 				C0817787271D045E0068CF45 /* PopoverDoneButton.swift */,
-				C070ED2524DB0ED400A04463 /* SettingsView.swift */,
-				C077CF6E24DC8DEE008E5F0F /* SettingsCell.swift */,
-				C09631CB2726FBF1001DCD25 /* AppearanceView.swift */,
-				C0CC6E0027208EBB00E59E64 /* AboutView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";

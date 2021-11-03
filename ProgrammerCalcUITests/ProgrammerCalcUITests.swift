@@ -192,9 +192,13 @@ class ProgrammerCalcUITests: XCTestCase {
         // 2. then
         changeWordSizeButton.tap()
         XCTAssertTrue(qword.exists)
+        qword.tap()
         XCTAssertTrue(dword.exists)
+        dword.tap()
         XCTAssertTrue(word.exists)
+        word.tap()
         XCTAssertTrue(byte.exists)
+        byte.tap()
         XCTAssertTrue(doneButton.exists)
         doneButton.tap()
                 
