@@ -9,8 +9,12 @@
 import UIKit
 
 protocol CalcButtonPageProtocol: UIView {
+    // Array with calcualtor buttons
     var allButtons: [CalculatorButton] { get set }
+    // Constraitns for current orientation
     var layoutConstraints: [NSLayoutConstraint]? { get set}
+    // Updater method for disabling/enabling numeric buttons depends on covnersion system forbidden values
+    func updateButtonIsEnabled(by forbiddenValues: Set<String>)
 }
 
 // Parent Class
@@ -22,8 +26,8 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
     // Style factory
     var styleFactory: StyleFactory = StyleFactory()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init() {
+        super.init(frame: CGRect())
     }
     
     func setViews() {
@@ -141,6 +145,21 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
         return (height / 3) * 2
     }
     
+    func updateButtonIsEnabled(by forbiddenValues: Set<String>) {
+        allButtons.forEach { button in
+            let buttonLabel = String((button.titleLabel?.text)!)
+            if forbiddenValues.contains(buttonLabel) && button.calcButtonType == .numeric {
+                // disable and set transparent
+                button.isEnabled = false
+                button.alpha = 0.5
+            } else {
+                // enable button ans set normal opacity
+                button.isEnabled = true
+                button.alpha = 1
+            }
+        }
+    }
+    
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -150,8 +169,8 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
 
 class CalcButtonsMain: CalcButtonsPage {
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init() {
+        super.init()
         
         self.getButtons()
         self.setViews()
@@ -174,7 +193,7 @@ class CalcButtonsMain: CalcButtonsPage {
         var buffStackView: UIStackView = UIStackView()
         var counter: Int = 0
         
-        allButtons.forEach { (button) in
+        allButtons.forEach { button in
             
             buffStackView.addArrangedSubview(button)
             // fill each stack with 4 buttons (the last one with 3)
@@ -284,14 +303,12 @@ class CalcButtonsMain: CalcButtonsPage {
 
 class CalcButtonsAdditional: CalcButtonsPage {
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init() {
+        super.init()
         
         self.getButtons()
         self.setViews()
         super.setLayout()
-        // Update style for buttons
-        super.updateStyle(for: allButtons)
     }
     
     required init(coder: NSCoder) {
@@ -310,7 +327,7 @@ class CalcButtonsAdditional: CalcButtonsPage {
         var buffStackView: UIStackView = UIStackView()
         var counter: Int = 0
         
-        allButtons.forEach { (button) in
+        allButtons.forEach { button in
             
             buffStackView.addArrangedSubview(button)
             // fill each stack with 4 buttons (the last one with 3)
@@ -343,7 +360,6 @@ class CalcButtonsAdditional: CalcButtonsPage {
                          "A", "B", "C", twoS,
                          "00", "FF"]
                     
-        //var buttonLabel: Int = 9
         var buttonTag: Int = 200
         var buttons: [CalculatorButton] = []
         

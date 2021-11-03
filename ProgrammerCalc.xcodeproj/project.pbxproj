@@ -229,6 +229,7 @@
 			isa = PBXGroup;
 			children = (
 				C065DB3B24E3DC4F0059B38D /* CalcMath.swift */,
+				C0D919D92731ABC900AD8C05 /* MathState.swift */,
 			);
 			path = Math;
 			sourceTree = "<group>";
@@ -338,7 +339,6 @@
 				C02705212715EF6F008B9C1E /* Calculator.swift */,
 				C066756D24E2D83300F832F9 /* Converter.swift */,
 				C065DB3D24E41E610059B38D /* CalcState.swift */,
-				C0D919D92731ABC900AD8C05 /* MathState.swift */,
 				C077CF7024DC987B008E5F0F /* Settings.swift */,
 				C0635A7A24D9E2AA003855A9 /* ConversionSettings.swift */,
 				C066756824E27AE700F832F9 /* ConversionValues.swift */,
@@ -833,7 +833,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.9.5;
+				MARKETING_VERSION = 0.9.6;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.ighiba.ProgrammerCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
@@ -856,7 +856,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.9.5;
+				MARKETING_VERSION = 0.9.6;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.ighiba.ProgrammerCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";

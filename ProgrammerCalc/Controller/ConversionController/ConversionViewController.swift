@@ -13,7 +13,7 @@ class ConversionViewController: UIViewController {
     // MARK: - Properties
     
     // PCalcViewController delegate
-    var delegate: PCalcViewControllerDelegate?
+    weak var delegate: PCalcViewControllerDelegate?
     
     lazy var conversionView = ConversionView()
     lazy var picker: ConversionPicker = conversionView.mainPicker
@@ -133,7 +133,7 @@ class ConversionViewController: UIViewController {
         }
         
         delegate!.handleDisplayingMainLabel()
-        delegate!.updateButtons()
+        delegate!.updateButtonsState()
         
     }
     

@@ -86,6 +86,23 @@ class PCalcView: UIView {
         changeWordSizeButton.tintColor = style.tintColor
     }
     
+    func hideConverterLabel() {
+        // hide
+        mainLabel.isHidden = false
+        converterLabel.isHidden = true
+        // bigger font for mainLabel
+        mainLabel.font = UIFont(name: mainLabel.fontName, size: 82.0)
+        mainLabel.numberOfLines = 2
+    }
+    
+    func unhideConverterLabel() {
+        // unhide
+        mainLabel.isHidden = false
+        converterLabel.isHidden = false
+        // default font for mainLabel
+        mainLabel.font = UIFont(name: mainLabel.fontName, size: 70.0)
+    }
+    
     // MARK: - Views
     
     // Set change word size button
@@ -138,7 +155,7 @@ class PCalcView: UIView {
         label.text = "0"
         label.backgroundColor = .clear
         // set font size, font family, allignment
-        label.font = UIFont(name: "HelveticaNeue-Thin", size: 70.0)
+        label.font = UIFont(name: label.fontName, size: 70.0)
         //label.font = UIFont(name: "CourierNewPSMT", size: 70.0)
         label.textAlignment = .right
         // resizeble text
@@ -157,7 +174,7 @@ class PCalcView: UIView {
         label.numberOfLines = 2
         label.backgroundColor = .clear
         // set font size, font family
-        label.font = UIFont(name: "HelveticaNeue-Thin", size: 70.0)
+        label.font = UIFont(name: label.fontName, size: 70.0)
         label.textAlignment = .right
         // resizeble text
         label.adjustsFontSizeToFitWidth = true

@@ -13,7 +13,7 @@ class AppearanceView: UITableView {
     // MARK: - Properties
     
     // AppearanceViewController delegate
-    var controllerDelegate: AppearanceViewControllerDelegate?
+    weak var controllerDelegate: AppearanceViewControllerDelegate?
     
     private let useSystemAppearanceCell = [ NSLocalizedString("Use system appearance", comment: "")]
     

@@ -9,7 +9,7 @@
 import UIKit
 import MessageUI
 
-protocol SettingsViewControllerDelegate {
+protocol SettingsViewControllerDelegate: AnyObject {
     // First section array
     var firstSection: [SettingsCell] { get set }
     // Second section array

@@ -33,6 +33,8 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
     
     var rawValue: NumberSystemProtocol?
     
+    let fontName: String = "HelveticaNeue-Thin"
+    
     lazy var infoSubLabel: UILabel = {
         let label = UILabel()
         
@@ -41,7 +43,7 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
         label.backgroundColor = .clear
         label.textColor = .systemGray
         
-        label.font = UIFont(name: "HelveticaNeue-Thin", size: 12.0)
+        label.font = UIFont(name: fontName, size: 12.0)
         label.textAlignment = .center
         
         label.sizeToFit()

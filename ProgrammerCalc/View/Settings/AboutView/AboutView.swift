@@ -11,7 +11,7 @@ import UIKit
 class AboutView: UITableView {
     
     // AboutViewController delegate
-    var controllerDelegate: AboutViewControllerDelegate?
+    weak var controllerDelegate: AboutViewControllerDelegate?
     
     private let cellLabels = [ NSLocalizedString("Description", comment: ""),
                                NSLocalizedString("Rate app", comment: ""),

@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol AppearanceViewControllerDelegate {
+protocol AppearanceViewControllerDelegate: AnyObject {
     var isSystemAppearance: Bool { get set }
     var currentStyle: StyleType { get set }
     var checkmarkedIndexPath: IndexPath { get set }

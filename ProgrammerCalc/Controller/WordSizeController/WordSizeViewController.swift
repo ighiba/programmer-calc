@@ -124,7 +124,7 @@ extension WordSizeViewController: UITableViewDataSource, UITableViewDelegate {
     
     // Rows
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return wordSize.wordsDictionary.count
+        return WordSize.wordsDictionary.count
     }
     
     // Sections
@@ -136,13 +136,13 @@ extension WordSizeViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         
-        cell.textLabel?.text = wordSize.wordsDictionary[indexPath.row].keys.first
+        cell.textLabel?.text = WordSize.wordsDictionary[indexPath.row].keys.first
         cell.textLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 18.0)
         cell.textLabel?.textColor = .label
         cell.backgroundColor = .systemGray6
         cell.selectionStyle = .default
         
-        if wordSize.wordsDictionary[indexPath.row].values.first == wordSize.value {
+        if WordSize.wordsDictionary[indexPath.row].values.first == wordSize.value {
             cell.accessoryType = .checkmark
             checkmarkedIndexPath = indexPath
         }
@@ -166,7 +166,7 @@ extension WordSizeViewController: UITableViewDataSource, UITableViewDelegate {
         checkmarkedIndexPath = indexPath
         
         // update wordSize value
-        wordSize.value = wordSize.wordsDictionary[indexPath.row].first!.value
+        wordSize.value = WordSize.wordsDictionary[indexPath.row].first!.value
         
         // update user defaults
         wordSizeStorage.saveData(wordSize)

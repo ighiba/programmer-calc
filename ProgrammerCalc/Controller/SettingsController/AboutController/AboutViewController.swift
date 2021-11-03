@@ -9,7 +9,7 @@
 import UIKit
 import MessageUI
 
-protocol AboutViewControllerDelegate {
+protocol AboutViewControllerDelegate: AnyObject {
     // App version number
     var appVersion: String { get set }
     func openDescription()
@@ -23,7 +23,7 @@ class AboutViewController: PCalcTableViewController, AboutViewControllerDelegate
     // MARK: - Properties
     
     // App version number
-    var appVersion: String = "0.9.5"
+    var appVersion: String = "0.9.6"
     
     // Table view
     lazy var aboutView = AboutView(frame: CGRect(), style: .grouped)

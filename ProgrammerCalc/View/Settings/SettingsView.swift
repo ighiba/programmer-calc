@@ -11,7 +11,7 @@ import UIKit
 class SettingsView: UITableView {
     
     // SettingsViewController delegate
-    var controllerDelegate: SettingsViewControllerDelegate?
+    weak var controllerDelegate: SettingsViewControllerDelegate?
     
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
