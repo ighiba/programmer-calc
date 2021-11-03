@@ -137,7 +137,7 @@ extension AboutView: UITableViewDelegate, UITableViewDataSource {
                 break
             case [1,1]:
                 // Rate app
-                break
+                controller.rateApp()
             case [1,2]:
                 // Contact us
                 controller.openContactForm()

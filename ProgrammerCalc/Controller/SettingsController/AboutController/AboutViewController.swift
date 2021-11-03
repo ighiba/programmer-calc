@@ -8,11 +8,13 @@
 
 import UIKit
 import MessageUI
+import StoreKit
 
 protocol AboutViewControllerDelegate: AnyObject {
     // App version number
     var appVersion: String { get set }
     func openDescription()
+    func rateApp()
     func openContactForm()
 }
 
@@ -56,6 +58,18 @@ class AboutViewController: PCalcTableViewController, AboutViewControllerDelegate
         vc.title = NSLocalizedString("Description", comment: "")
         
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    // Rate app button
+    func rateApp() {
+        if #available(iOS 14.0, *) {
+            if let scene = UIApplication.shared.connectedScenes.first(where: {$0.activationState == .foregroundActive}) as? UIWindowScene {
+                SKStoreReviewController.requestReview(in: scene)
+            }
+        } else {
+            SKStoreReviewController.requestReview()
+        }
+
     }
 
     // Contact us cell touch
