@@ -91,7 +91,7 @@ class PCalcView: UIView {
         mainLabel.isHidden = false
         converterLabel.isHidden = true
         // bigger font for mainLabel
-        mainLabel.font = UIFont(name: mainLabel.fontName, size: 82.0)
+        mainLabel.font = mainLabel.font.withSize(82.0)
         mainLabel.numberOfLines = 2
     }
     
@@ -100,7 +100,7 @@ class PCalcView: UIView {
         mainLabel.isHidden = false
         converterLabel.isHidden = false
         // default font for mainLabel
-        mainLabel.font = UIFont(name: mainLabel.fontName, size: 70.0)
+        mainLabel.font = mainLabel.font.withSize(70.0)
     }
     
     // MARK: - Views

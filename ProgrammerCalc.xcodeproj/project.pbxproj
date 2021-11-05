@@ -281,10 +281,10 @@
 			children = (
 				C06B7F062443B12B009642B9 /* AppDelegate.swift */,
 				C06B7F082443B12B009642B9 /* SceneDelegate.swift */,
+				C05A169924DD7AF7007B7FB8 /* Helpers */,
 				C0D5BA4C24C340120038A378 /* Model */,
 				C0E5FC7424BB9B6100BA93CA /* View */,
 				C0D5BA4B24C340050038A378 /* Controller */,
-				C05A169924DD7AF7007B7FB8 /* Helpers */,
 				C068AFA824FA409200BFE754 /* Extensions */,
 				C06B7F0F2443B12E009642B9 /* Assets.xcassets */,
 				C06B7F112443B12E009642B9 /* LaunchScreen.storyboard */,
@@ -833,7 +833,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.9.6;
+				MARKETING_VERSION = 0.9.9;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.ighiba.ProgrammerCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
@@ -856,7 +856,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.9.6;
+				MARKETING_VERSION = 0.9.9;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.ighiba.ProgrammerCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";

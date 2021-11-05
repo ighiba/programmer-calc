@@ -65,6 +65,10 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
         self.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(self.showMenu)))
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // ===============
     // MARK: - Methods
     // ===============
@@ -170,8 +174,5 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
         menu.hideMenu(from: self)
         undoHighlightLabel()
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+
 }

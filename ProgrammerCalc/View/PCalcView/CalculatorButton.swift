@@ -25,8 +25,12 @@ class CalculatorButton: UIButton {
     // MARK: - Properties
 
     private let _boundsExtension: CGFloat = 0
-    
+    // Spacing between buttons in horizontal stack (need for calculating width)
     static let spacingWidth: CGFloat = 15.83333333333333
+    // Button fontSize
+    var defaultFontSize: CGFloat {
+        return buttonWidth() / 1.65
+    }
     
     // Button types
     public var calcButtonType: ButtonTypes = .defaultBtn // default value
@@ -74,6 +78,10 @@ class CalculatorButton: UIButton {
         self.calcButtonType = calcButtonType
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // ===============
     // MARK: - Methods
     // ===============
@@ -84,11 +92,16 @@ class CalculatorButton: UIButton {
         self.setTitleColor(.black, for: .normal)
         self.backgroundColor = .white
         // set font size, font family
-        self.titleLabel?.font = UIFont.systemFont(ofSize: 45.0, weight: UIFont.Weight.thin)
+        self.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: defaultFontSize)
         self.titleLabel?.autoresizingMask = .flexibleWidth
         // resizeble text
         self.titleLabel?.adjustsFontSizeToFitWidth = true
         self.titleLabel?.minimumScaleFactor = 0.75
+        
+        // content aligment for sign buttons
+        if self.calcButtonType == .sign {
+            self.contentVerticalAlignment = .top
+        }
         
         // handle various button types by titleLabel text lenght
         if let titleText = self.titleLabel?.text {
@@ -96,19 +109,18 @@ class CalculatorButton: UIButton {
             if titleText.contains("\n") {
                 self.titleLabel?.numberOfLines = 2
                 self.titleLabel?.textAlignment = .center
-                self.titleLabel?.font = UIFont.systemFont(ofSize: buttonWidth() / 3.916 , weight: UIFont.Weight.thin)
+                self.titleLabel?.font = self.titleLabel?.font.withSize(buttonWidth() / 3.916)
             // if more than 3 char in title
             } else if titleText.count > 3 {
-                self.titleLabel?.font = UIFont.systemFont(ofSize: buttonWidth() / 2.770 , weight: UIFont.Weight.thin)
+                self.titleLabel?.font = self.titleLabel?.font.withSize(buttonWidth() / 2.970)
             // for 2 and 3 chars
             } else if titleText.count > 1 {
-                self.titleLabel?.font = UIFont.systemFont(ofSize: buttonWidth() / 2.45 , weight: UIFont.Weight.thin)
+                self.titleLabel?.font = self.titleLabel?.font.withSize(buttonWidth() / 2.65)
             }
         }
         
         // round corners
         self.layer.cornerRadius = buttonWidth() / 2
-        
     }
     
     private func animateHighlight() {
@@ -200,10 +212,6 @@ class CalculatorButton: UIButton {
             self.isHighlighted = false
             return sendActions(for: .touchUpOutside)
         }
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
 }
