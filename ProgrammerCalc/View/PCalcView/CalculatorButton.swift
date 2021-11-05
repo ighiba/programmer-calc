@@ -26,6 +26,8 @@ class CalculatorButton: UIButton {
 
     private let _boundsExtension: CGFloat = 0
     
+    static let spacingWidth: CGFloat = 15.83333333333333
+    
     // Button types
     public var calcButtonType: ButtonTypes = .defaultBtn // default value
     // Buff color
@@ -88,7 +90,7 @@ class CalculatorButton: UIButton {
         self.titleLabel?.adjustsFontSizeToFitWidth = true
         self.titleLabel?.minimumScaleFactor = 0.75
         
-        // handle two lined label
+        // handle various button types by titleLabel text lenght
         if let titleText = self.titleLabel?.text {
             // if second line exists
             if titleText.contains("\n") {
@@ -97,10 +99,10 @@ class CalculatorButton: UIButton {
                 self.titleLabel?.font = UIFont.systemFont(ofSize: buttonWidth() / 3.916 , weight: UIFont.Weight.thin)
             // if more than 3 char in title
             } else if titleText.count > 3 {
-                self.titleLabel?.font = UIFont.systemFont(ofSize: buttonWidth() / 2.670 , weight: UIFont.Weight.thin)
+                self.titleLabel?.font = UIFont.systemFont(ofSize: buttonWidth() / 2.770 , weight: UIFont.Weight.thin)
             // for 2 and 3 chars
             } else if titleText.count > 1 {
-                self.titleLabel?.font = UIFont.systemFont(ofSize: buttonWidth() / 2.35 , weight: UIFont.Weight.thin)
+                self.titleLabel?.font = UIFont.systemFont(ofSize: buttonWidth() / 2.45 , weight: UIFont.Weight.thin)
             }
         }
         
@@ -143,14 +145,14 @@ class CalculatorButton: UIButton {
     }
     
     // Dynamic button width (except zero button) and height for autolayout
-    //  5  - number of spacings
-    //  17 - spacing width
+    //  3  - number of spacings in horizontal stack
+    //  16.5 - spacingWidth
     //  4  - number of buttons
     func buttonWidth() -> CGFloat {
         let screenWidth = UIScreen.main.bounds.width
         let screenHeight = UIScreen.main.bounds.height
         let width = screenWidth < screenHeight ? screenWidth : screenHeight
-        return (width - 5 * 17) / 4
+        return (width * 0.9 - 3 * CalculatorButton.spacingWidth) / 4
     }
     
     // override for decrease control bounds of button

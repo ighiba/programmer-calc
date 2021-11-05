@@ -26,6 +26,9 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
     // Style factory
     var styleFactory: StyleFactory = StyleFactory()
     
+    // spacing between buttons in horizontal stack
+    let spacing: CGFloat = CalculatorButton.spacingWidth
+    
     init() {
         super.init(frame: CGRect())
     }
@@ -272,7 +275,7 @@ class CalcButtonsMain: CalcButtonsPage {
             button.portrait?.append( button.heightAnchor.constraint(equalToConstant: button.buttonWidth()) )
             // special width for zero
             if title == "0" {
-                button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth() * 2 + 17) )
+                button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth() * 2 + spacing) )
             } else {
                 // width for default
                 button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth()) )
@@ -394,7 +397,7 @@ class CalcButtonsAdditional: CalcButtonsPage {
             // special style for 00 and FF
             if title == "00" || title == "FF" {
 
-                button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth() * 2 + 17) )
+                button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth() * 2 + spacing) )
                 button.titleLabel?.font = UIFont.systemFont(ofSize: 45.0, weight: UIFont.Weight.thin) // default
             } else {
                 // width for default

@@ -63,7 +63,7 @@ class AboutViewController: PCalcTableViewController, AboutViewControllerDelegate
     // Rate app button
     func rateApp() {
         if #available(iOS 14.0, *) {
-            if let scene = UIApplication.shared.connectedScenes.first(where: {$0.activationState == .foregroundActive}) as? UIWindowScene {
+            if let scene = UIApplication.shared.connectedScenes.first(where: {$0.activationState == .foregroundActive} ) as? UIWindowScene {
                 SKStoreReviewController.requestReview(in: scene)
             }
         } else {
