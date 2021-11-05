@@ -64,7 +64,7 @@ extension String {
     
     // removes leading given chars in str until str.last != character
     func removeLeading(characters: [Character]) -> String {
-        var str = self
+        var str = self.removeAllSpaces()
         while str.count > 0 && characters.contains(str.first!) {
             str.removeFirst(1)
             guard str != "" else {
@@ -76,7 +76,7 @@ extension String {
     
     // removes trailing given chars in str until str.last != character
     func removeTrailing(characters: [Character]) -> String {
-        var str = self
+        var str = self.removeAllSpaces()
         while str.count > 0 && characters.contains(str.last!)  {
             str.removeLast(1)
             guard str != "" else {
@@ -86,56 +86,37 @@ extension String {
         return str
     }
     
-    // TODO: Refactor
     func getPartAfter(divider: Character) -> String {
-        let str = self
-        
+        let str = String(self.reversed())
         // get position fract part
-        let pointPos = str.firstIndex(of: divider)
-        guard pointPos != nil else {
-            return ""
-        }
-        let fractDistance = Int(str.distance(from: pointPos!, to:  str.endIndex))
-        guard fractDistance > 1 else {
-            return ""
-        }
-        // get str fract part
-        let fractPartStr: String = {
-            let reversedStr = String(str.reversed())
-            var buffStr = String()
-
-            for digit in reversedStr {
-                buffStr.append(digit)
-                if fractDistance-1 == buffStr.count {
-                    return buffStr
-                }
-            }
-            
-            return buffStr
-        }()
-        
-        return String(fractPartStr.reversed())
+        let partAfter = str.getPart(from: str, divider: divider, for: str.startIndex, distance: 0)
+        return String(partAfter.reversed())
     }
     
     func getPartBefore(divider: Character) -> String {
         let str = self
-        
-        // get position fract part
+        // get position int part
+        let partBefore = str.getPart(from: str, divider: divider, for: str.startIndex, distance: 0)
+        return partBefore
+    }
+    
+    fileprivate func getPart(from str: String, divider: Character, for index: String.Index, distance: Int) -> String {
+        // get position part
         let pointPos = str.firstIndex(of: divider)
         guard pointPos != nil else {
             return ""
         }
-        let fractDistance = abs(Int(str.distance(from: pointPos!, to:  str.startIndex)))
-        guard fractDistance > 0 else {
+        let partDistance = abs(Int(str.distance(from: pointPos!, to: index)))
+        guard partDistance > distance else {
             return ""
         }
-        // get str fract part
-        let fractPartStr: String = {
+        // get str part
+        let partStr: String = {
             var buffStr = String()
 
             for digit in str {
                 buffStr.append(digit)
-                if fractDistance == buffStr.count {
+                if partDistance-distance == buffStr.count {
                     return buffStr
                 }
             }
@@ -143,6 +124,6 @@ extension String {
             return buffStr
         }()
         
-        return fractPartStr
+        return partStr
     }
 }

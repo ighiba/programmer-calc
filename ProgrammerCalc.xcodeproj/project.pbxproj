@@ -45,8 +45,8 @@
 		C070ED2624DB0ED400A04463 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C070ED2524DB0ED400A04463 /* SettingsView.swift */; };
 		C07267DD24E5ACB300D4B4A2 /* Binary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07267DC24E5ACB300D4B4A2 /* Binary.swift */; };
 		C0746E0E24F45C6000A0BDF9 /* NumberSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0746E0D24F45C5F00A0BDF9 /* NumberSystem.swift */; };
-		C077CF6F24DC8DEE008E5F0F /* AppSettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C077CF6E24DC8DEE008E5F0F /* AppSettingsCell.swift */; };
-		C077CF7124DC987B008E5F0F /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C077CF7024DC987B008E5F0F /* AppSettings.swift */; };
+		C077CF6F24DC8DEE008E5F0F /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C077CF6E24DC8DEE008E5F0F /* SettingsCell.swift */; };
+		C077CF7124DC987B008E5F0F /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C077CF7024DC987B008E5F0F /* Settings.swift */; };
 		C0817788271D045E0068CF45 /* PopoverDoneButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0817787271D045E0068CF45 /* PopoverDoneButton.swift */; };
 		C09631C42725BA7C001DCD25 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C09631C62725BA7C001DCD25 /* Localizable.strings */; };
 		C09631CA2726FB12001DCD25 /* AppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631C92726FB12001DCD25 /* AppearanceViewController.swift */; };
@@ -57,8 +57,13 @@
 		C09631D427271A4D001DCD25 /* StyleStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631D327271A4D001DCD25 /* StyleStorage.swift */; };
 		C09631D627277066001DCD25 /* ButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631D527277066001DCD25 /* ButtonStyle.swift */; };
 		C09631D82728E9DC001DCD25 /* PCalcTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631D72728E9DC001DCD25 /* PCalcTableViewController.swift */; };
+		C09631DC272C581C001DCD25 /* CalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DB272C581B001DCD25 /* CalculatorTests.swift */; };
+		C09631DE272D4FBE001DCD25 /* StringExtTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DD272D4FBE001DCD25 /* StringExtTests.swift */; };
+		C09631E027305315001DCD25 /* NumberSystemFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DF27305315001DCD25 /* NumberSystemFactory.swift */; };
 		C0CC6DFF271F68AA00E59E64 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */; };
 		C0CC6E0127208EBB00E59E64 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CC6E0027208EBB00E59E64 /* AboutView.swift */; };
+		C0D919DA2731ABC900AD8C05 /* MathState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D919D92731ABC900AD8C05 /* MathState.swift */; };
+		C0D919DC2731F80600AD8C05 /* DescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D919DB2731F80600AD8C05 /* DescriptionViewController.swift */; };
 		C0E5FC7624BB9B8D00BA93CA /* PCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */; };
 		C0F5CF4B270E10870020CE14 /* WordSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF4A270E10870020CE14 /* WordSize.swift */; };
 		C0F5CF4D270E12100020CE14 /* WordSizeStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF4C270E12100020CE14 /* WordSizeStorage.swift */; };
@@ -129,8 +134,8 @@
 		C070ED2524DB0ED400A04463 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		C07267DC24E5ACB300D4B4A2 /* Binary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binary.swift; sourceTree = "<group>"; };
 		C0746E0D24F45C5F00A0BDF9 /* NumberSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberSystem.swift; sourceTree = "<group>"; };
-		C077CF6E24DC8DEE008E5F0F /* AppSettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsCell.swift; sourceTree = "<group>"; };
-		C077CF7024DC987B008E5F0F /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		C077CF6E24DC8DEE008E5F0F /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
+		C077CF7024DC987B008E5F0F /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		C0817787271D045E0068CF45 /* PopoverDoneButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverDoneButton.swift; sourceTree = "<group>"; };
 		C09631C32725BA6E001DCD25 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		C09631C52725BA7C001DCD25 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -143,8 +148,13 @@
 		C09631D327271A4D001DCD25 /* StyleStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleStorage.swift; sourceTree = "<group>"; };
 		C09631D527277066001DCD25 /* ButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyle.swift; sourceTree = "<group>"; };
 		C09631D72728E9DC001DCD25 /* PCalcTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcTableViewController.swift; sourceTree = "<group>"; };
+		C09631DB272C581B001DCD25 /* CalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorTests.swift; sourceTree = "<group>"; };
+		C09631DD272D4FBE001DCD25 /* StringExtTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtTests.swift; sourceTree = "<group>"; };
+		C09631DF27305315001DCD25 /* NumberSystemFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberSystemFactory.swift; sourceTree = "<group>"; };
 		C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		C0CC6E0027208EBB00E59E64 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		C0D919D92731ABC900AD8C05 /* MathState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathState.swift; sourceTree = "<group>"; };
+		C0D919DB2731F80600AD8C05 /* DescriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionViewController.swift; sourceTree = "<group>"; };
 		C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcView.swift; sourceTree = "<group>"; };
 		C0F5CF4A270E10870020CE14 /* WordSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSize.swift; sourceTree = "<group>"; };
 		C0F5CF4C270E12100020CE14 /* WordSizeStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSizeStorage.swift; sourceTree = "<group>"; };
@@ -197,6 +207,8 @@
 				C09631D527277066001DCD25 /* ButtonStyle.swift */,
 				C09631CF27270FCC001DCD25 /* StyleFactory.swift */,
 				C09631D72728E9DC001DCD25 /* PCalcTableViewController.swift */,
+				C09631DF27305315001DCD25 /* NumberSystemFactory.swift */,
+				C00616A727064449007BEF89 /* OctHexHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -209,7 +221,6 @@
 				C05B008D24E701ED00F8A5E0 /* Octal.swift */,
 				C05B009024E71B6E00F8A5E0 /* DecimalSystem.swift */,
 				C05B008B24E6E0E100F8A5E0 /* Hexadecimal.swift */,
-				C00616A727064449007BEF89 /* OctHexHelper.swift */,
 			);
 			path = NumberSystems;
 			sourceTree = "<group>";
@@ -218,6 +229,7 @@
 			isa = PBXGroup;
 			children = (
 				C065DB3B24E3DC4F0059B38D /* CalcMath.swift */,
+				C0D919D92731ABC900AD8C05 /* MathState.swift */,
 			);
 			path = Math;
 			sourceTree = "<group>";
@@ -286,11 +298,13 @@
 			isa = PBXGroup;
 			children = (
 				C06B7F1D2443B12E009642B9 /* ProgrammerCalcTests.swift */,
+				C09631DB272C581B001DCD25 /* CalculatorTests.swift */,
 				C06072B02501567E004CF6AA /* CalcMathTests.swift */,
 				C064A3AF24FD847B003DE683 /* ConverterTests.swift */,
 				C06DFD5C24FC22C600255646 /* BinaryTests.swift */,
 				C064A3A924FD55B8003DE683 /* HexadecimalTests.swift */,
 				C064A3AD24FD5B13003DE683 /* OctalTests.swift */,
+				C09631DD272D4FBE001DCD25 /* StringExtTests.swift */,
 				C06B7F1F2443B12E009642B9 /* Info.plist */,
 			);
 			path = ProgrammerCalcTests;
@@ -308,13 +322,10 @@
 		C0D5BA4B24C340050038A378 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				C06B7F0A2443B12B009642B9 /* PCalcViewController.swift */,
-				C0666EB724F97774004809EF /* CalcButtonsViewController.swift */,
-				C0619AC324D71240008A7291 /* ConversionViewController.swift */,
-				C0F5CF50270F4B970020CE14 /* WordSizeViewController.swift */,
-				C070ED2324DB0EC800A04463 /* SettingsViewController.swift */,
-				C09631C92726FB12001DCD25 /* AppearanceViewController.swift */,
-				C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */,
+				C0D919E227320F4700AD8C05 /* PCalcController */,
+				C0D919E527320F6F00AD8C05 /* ConversionController */,
+				C0D919E427320F6800AD8C05 /* WordSizeController */,
+				C0D919E327320F6000AD8C05 /* SettingsController */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -328,26 +339,118 @@
 				C02705212715EF6F008B9C1E /* Calculator.swift */,
 				C066756D24E2D83300F832F9 /* Converter.swift */,
 				C065DB3D24E41E610059B38D /* CalcState.swift */,
-				C077CF7024DC987B008E5F0F /* AppSettings.swift */,
-				C077CF6E24DC8DEE008E5F0F /* AppSettingsCell.swift */,
+				C077CF7024DC987B008E5F0F /* Settings.swift */,
 				C0635A7A24D9E2AA003855A9 /* ConversionSettings.swift */,
-				C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */,
 				C066756824E27AE700F832F9 /* ConversionValues.swift */,
 				C0F5CF4A270E10870020CE14 /* WordSize.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
 		};
+		C0D919DD27320E2D00AD8C05 /* ConversionView */ = {
+			isa = PBXGroup;
+			children = (
+				C0619AC124D71227008A7291 /* ConversionView.swift */,
+				C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */,
+			);
+			path = ConversionView;
+			sourceTree = "<group>";
+		};
+		C0D919DE27320E5000AD8C05 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				C070ED2524DB0ED400A04463 /* SettingsView.swift */,
+				C077CF6E24DC8DEE008E5F0F /* SettingsCell.swift */,
+				C0D919DF27320EAF00AD8C05 /* AppearanceView */,
+				C0D919E027320EED00AD8C05 /* AboutView */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		C0D919DF27320EAF00AD8C05 /* AppearanceView */ = {
+			isa = PBXGroup;
+			children = (
+				C09631CB2726FBF1001DCD25 /* AppearanceView.swift */,
+			);
+			path = AppearanceView;
+			sourceTree = "<group>";
+		};
+		C0D919E027320EED00AD8C05 /* AboutView */ = {
+			isa = PBXGroup;
+			children = (
+				C0CC6E0027208EBB00E59E64 /* AboutView.swift */,
+			);
+			path = AboutView;
+			sourceTree = "<group>";
+		};
+		C0D919E127320F1300AD8C05 /* WordSizeView */ = {
+			isa = PBXGroup;
+			children = (
+				C0F5CF52270F4C4C0020CE14 /* WordSizeView.swift */,
+			);
+			path = WordSizeView;
+			sourceTree = "<group>";
+		};
+		C0D919E227320F4700AD8C05 /* PCalcController */ = {
+			isa = PBXGroup;
+			children = (
+				C06B7F0A2443B12B009642B9 /* PCalcViewController.swift */,
+				C0666EB724F97774004809EF /* CalcButtonsViewController.swift */,
+			);
+			path = PCalcController;
+			sourceTree = "<group>";
+		};
+		C0D919E327320F6000AD8C05 /* SettingsController */ = {
+			isa = PBXGroup;
+			children = (
+				C070ED2324DB0EC800A04463 /* SettingsViewController.swift */,
+				C0D919E627320F9900AD8C05 /* ApperanceController */,
+				C0D919E727320FBD00AD8C05 /* AboutController */,
+			);
+			path = SettingsController;
+			sourceTree = "<group>";
+		};
+		C0D919E427320F6800AD8C05 /* WordSizeController */ = {
+			isa = PBXGroup;
+			children = (
+				C0F5CF50270F4B970020CE14 /* WordSizeViewController.swift */,
+			);
+			path = WordSizeController;
+			sourceTree = "<group>";
+		};
+		C0D919E527320F6F00AD8C05 /* ConversionController */ = {
+			isa = PBXGroup;
+			children = (
+				C0619AC324D71240008A7291 /* ConversionViewController.swift */,
+			);
+			path = ConversionController;
+			sourceTree = "<group>";
+		};
+		C0D919E627320F9900AD8C05 /* ApperanceController */ = {
+			isa = PBXGroup;
+			children = (
+				C09631C92726FB12001DCD25 /* AppearanceViewController.swift */,
+			);
+			path = ApperanceController;
+			sourceTree = "<group>";
+		};
+		C0D919E727320FBD00AD8C05 /* AboutController */ = {
+			isa = PBXGroup;
+			children = (
+				C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */,
+				C0D919DB2731F80600AD8C05 /* DescriptionViewController.swift */,
+			);
+			path = AboutController;
+			sourceTree = "<group>";
+		};
 		C0E5FC7424BB9B6100BA93CA /* View */ = {
 			isa = PBXGroup;
 			children = (
 				C0666EBD24F991B8004809EF /* PCalcView */,
-				C0619AC124D71227008A7291 /* ConversionView.swift */,
-				C0F5CF52270F4C4C0020CE14 /* WordSizeView.swift */,
+				C0D919DD27320E2D00AD8C05 /* ConversionView */,
+				C0D919E127320F1300AD8C05 /* WordSizeView */,
+				C0D919DE27320E5000AD8C05 /* Settings */,
 				C0817787271D045E0068CF45 /* PopoverDoneButton.swift */,
-				C070ED2524DB0ED400A04463 /* SettingsView.swift */,
-				C09631CB2726FBF1001DCD25 /* AppearanceView.swift */,
-				C0CC6E0027208EBB00E59E64 /* AboutView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -494,14 +597,16 @@
 				C0746E0E24F45C6000A0BDF9 /* NumberSystem.swift in Sources */,
 				C05B008E24E701ED00F8A5E0 /* Octal.swift in Sources */,
 				C061B7C2250FF9FF000E2EB6 /* CalculatorLabel.swift in Sources */,
+				C0D919DA2731ABC900AD8C05 /* MathState.swift in Sources */,
 				C09631CA2726FB12001DCD25 /* AppearanceViewController.swift in Sources */,
 				C0635A7B24D9E2AA003855A9 /* ConversionSettings.swift in Sources */,
 				C065DB3E24E41E610059B38D /* CalcState.swift in Sources */,
 				C09631CC2726FBF1001DCD25 /* AppearanceView.swift in Sources */,
-				C077CF6F24DC8DEE008E5F0F /* AppSettingsCell.swift in Sources */,
+				C077CF6F24DC8DEE008E5F0F /* SettingsCell.swift in Sources */,
 				C066756924E27AE700F832F9 /* ConversionValues.swift in Sources */,
 				C068AFAC24FA605800BFE754 /* CalculatorButton.swift in Sources */,
 				C00616AC27065097007BEF89 /* String.swift in Sources */,
+				C0D919DC2731F80600AD8C05 /* DescriptionViewController.swift in Sources */,
 				C0F5CF53270F4C4C0020CE14 /* WordSizeView.swift in Sources */,
 				C0F5CF4B270E10870020CE14 /* WordSize.swift in Sources */,
 				C00616B127066C91007BEF89 /* ConversionStorage.swift in Sources */,
@@ -526,7 +631,8 @@
 				C06B7F092443B12B009642B9 /* SceneDelegate.swift in Sources */,
 				C07267DD24E5ACB300D4B4A2 /* Binary.swift in Sources */,
 				C0F5CF4D270E12100020CE14 /* WordSizeStorage.swift in Sources */,
-				C077CF7124DC987B008E5F0F /* AppSettings.swift in Sources */,
+				C09631E027305315001DCD25 /* NumberSystemFactory.swift in Sources */,
+				C077CF7124DC987B008E5F0F /* Settings.swift in Sources */,
 				C070ED2624DB0ED400A04463 /* SettingsView.swift in Sources */,
 				C09631D427271A4D001DCD25 /* StyleStorage.swift in Sources */,
 				C00616A827064449007BEF89 /* OctHexHelper.swift in Sources */,
@@ -540,7 +646,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C09631DC272C581C001DCD25 /* CalculatorTests.swift in Sources */,
 				C06072B12501567E004CF6AA /* CalcMathTests.swift in Sources */,
+				C09631DE272D4FBE001DCD25 /* StringExtTests.swift in Sources */,
 				C06DFD5D24FC22C600255646 /* BinaryTests.swift in Sources */,
 				C064A3AE24FD5B13003DE683 /* OctalTests.swift in Sources */,
 				C064A3AA24FD55B8003DE683 /* HexadecimalTests.swift in Sources */,
@@ -720,12 +828,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 586JQB45F3;
 				INFOPLIST_FILE = ProgrammerCalc/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.8;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ighiba.ProgrammerCalc;
+				MARKETING_VERSION = 0.9.9;
+				PRODUCT_BUNDLE_IDENTIFIER = ru.ighiba.ProgrammerCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -742,12 +851,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 586JQB45F3;
 				INFOPLIST_FILE = ProgrammerCalc/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.8;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ighiba.ProgrammerCalc;
+				MARKETING_VERSION = 0.9.9;
+				PRODUCT_BUNDLE_IDENTIFIER = ru.ighiba.ProgrammerCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;

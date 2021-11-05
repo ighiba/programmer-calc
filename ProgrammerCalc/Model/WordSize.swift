@@ -13,11 +13,11 @@ protocol WordSizeProtocol {
 }
 
 class WordSize: WordSizeProtocol, Decodable, Encodable  {
-    // TOOD: Move somewhere else
-    var wordsDictionary = [["QWORD":64],
-                           ["DWORD":32],
-                           ["WORD" :16],
-                           ["BYTE" :8]]
+
+    static let wordsDictionary = [["QWORD":64],
+                                  ["DWORD":32],
+                                  ["WORD" :16],
+                                  ["BYTE" :8]]
     var value: Int
     
     init(_ size: Int) {

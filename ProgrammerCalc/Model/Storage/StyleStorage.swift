@@ -66,7 +66,7 @@ class StyleStorage: StyleStorageProtocol {
             // if no Style
             print("no Style")
             // default values
-            let defaultStyle: StyleType = .light
+            let defaultStyle: StyleType = .dark
             self.saveData(defaultStyle)
             
             return defaultStyle

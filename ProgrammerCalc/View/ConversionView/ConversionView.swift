@@ -26,8 +26,7 @@ class ConversionView: UIView {
         container.addSubview(popoverTitle)
         container.addSubview(mainPicker)
         mainPicker.addSubview(arrow)
-        container.addSubview(digitsAfterLabel)
-        digitsAfterLabel.addSubview(sliderValueDigit)
+        container.addSubview(labelStack)
         container.addSubview(digitsAfterSlider)
         container.addSubview(doneButton)
         
@@ -50,6 +49,7 @@ class ConversionView: UIView {
         popoverTitle.translatesAutoresizingMaskIntoConstraints = false
         mainPicker.translatesAutoresizingMaskIntoConstraints = false
         arrow.translatesAutoresizingMaskIntoConstraints = false
+        labelStack.translatesAutoresizingMaskIntoConstraints = false
         sliderValueDigit.translatesAutoresizingMaskIntoConstraints = false
         digitsAfterLabel.translatesAutoresizingMaskIntoConstraints = false
         digitsAfterSlider.translatesAutoresizingMaskIntoConstraints = false
@@ -61,7 +61,7 @@ class ConversionView: UIView {
             container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9),
-            container.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.57),
+            container.heightAnchor.constraint(greaterThanOrEqualToConstant: 400),
             
             // Set constraints for label
             popoverTitle.topAnchor.constraint(equalTo: container.topAnchor, constant: margin),
@@ -83,18 +83,17 @@ class ConversionView: UIView {
             arrow.heightAnchor.constraint(equalToConstant: 30),
             
             // Set constraints for digitsAfterLabel
-            digitsAfterLabel.topAnchor.constraint(equalTo: mainPicker.bottomAnchor),
-            digitsAfterLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor, constant: -margin),
-            digitsAfterLabel.heightAnchor.constraint(equalToConstant: 35),
-            // and slider value
-            sliderValueDigit.topAnchor.constraint(equalTo: digitsAfterLabel.topAnchor),
-            sliderValueDigit.bottomAnchor.constraint(equalTo: digitsAfterLabel.bottomAnchor),
-            sliderValueDigit.leftAnchor.constraint(equalTo: digitsAfterLabel.rightAnchor, constant: margin),
-            sliderValueDigit.heightAnchor.constraint(equalTo: digitsAfterLabel.heightAnchor),
+            labelStack.topAnchor.constraint(equalTo: mainPicker.bottomAnchor),
+            labelStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            labelStack.heightAnchor.constraint(equalToConstant: 35),
+            labelStack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
+            
+            digitsAfterLabel.widthAnchor.constraint(equalTo: labelStack.widthAnchor, multiplier: 0.9),
+            sliderValueDigit.widthAnchor.constraint(equalTo: labelStack.widthAnchor, multiplier: 0.1),
             
             // Set constraints for slider
-            digitsAfterSlider.topAnchor.constraint(equalTo: digitsAfterLabel.bottomAnchor),
-            digitsAfterSlider.bottomAnchor.constraint(equalTo: doneButton.topAnchor),
+            digitsAfterSlider.topAnchor.constraint(equalTo: labelStack.bottomAnchor, constant: margin),
+            digitsAfterSlider.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -margin * 1.7),
             digitsAfterSlider.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
             digitsAfterSlider.centerXAnchor.constraint(equalTo: container.centerXAnchor),
 
@@ -170,6 +169,8 @@ class ConversionView: UIView {
         label.frame = CGRect(x: 0, y: 0, width: 100, height: 30)
         label.text = NSLocalizedString("Max number of digits after point: ", comment: "")
         label.font = UIFont.systemFont(ofSize: 18, weight: .light)
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.15
         label.textColor = .label
         
         return label
@@ -183,9 +184,20 @@ class ConversionView: UIView {
         // default value
         label.text = "8"
         label.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.75
         label.textColor = .label
         
         return label
+    }()
+    
+    // Stack for label
+    lazy var labelStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [digitsAfterLabel, sliderValueDigit])
+        stack.axis = .horizontal
+        stack.alignment = .fill
+        
+        return stack
     }()
     
     // Slider for changing number of digits after point
@@ -235,7 +247,7 @@ class ConversionView: UIView {
             self.container.transform = transform
             self.container.alpha = 0.01
             self.alpha = 0
-        }, completion: { (completed) in
+        }, completion: { _ in
             //print("completed")
             // dismiss vc
             finished()

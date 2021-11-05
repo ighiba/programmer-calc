@@ -26,9 +26,8 @@ class BinaryTests: XCTestCase {
     override func setUp() {
         super.setUp()
         binaryTest = Binary()
-        let dummyConversionSettings = ConversionSettings(systMain: "Decimal", systConverter: "Binary", number: 8.0)
+        let dummyConversionSettings = ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
         conversionStorage?.saveData(dummyConversionSettings)
-        
     }
     
     override func tearDown() {
@@ -211,7 +210,7 @@ class BinaryTests: XCTestCase {
         // 2. when
         binaryTest.value = binaryTest.convertDoubleToBinaryStr(numberStr: (binaryInt, binaryFract))
         // 3. then
-        XCTAssertEqual(binaryTest.value, "01100.01000000000000000000", "Wrong conversion")
+        XCTAssertEqual(binaryTest.value, "01100.0100000000000000", "Wrong conversion")
     }
     
     func testConvertIntToBinary() throws {

@@ -9,26 +9,27 @@
 import Foundation
 
 protocol ConversionSettingsProtocol {
-    var systemMain: String { get set }
-    var systemConverter: String { get set }
-    var numbersAfterPoint: Float { get set }
+    // Conversion system from
+    var systemMain: ConversionSystemsEnum { get set }
+    // Conversion system to
+    var systemConverter: ConversionSystemsEnum { get set }
+    // // Number of digits after point
+    var numbersAfterPoint: Int { get set }
 }
 
 class ConversionSettings: ConversionSettingsProtocol, Decodable, Encodable {
+    var systemMain: ConversionSystemsEnum
+    var systemConverter: ConversionSystemsEnum
+    var numbersAfterPoint: Int
     
-    var systemMain: String
-    var systemConverter: String
-    var numbersAfterPoint: Float
-    
-    init(systMain: String, systConverter: String, number: Float) {
+    init(systMain: ConversionSystemsEnum, systConverter: ConversionSystemsEnum, number: Int) {
         self.systemMain = systMain
         self.systemConverter = systConverter
         self.numbersAfterPoint = number
     }
-    
 }
 
-enum ConversionSystemsEnum: String, CaseIterable{
+enum ConversionSystemsEnum: String, CaseIterable, Decodable, Encodable {
      case bin = "Binary"
      case dec = "Decimal"
      case oct = "Octal"

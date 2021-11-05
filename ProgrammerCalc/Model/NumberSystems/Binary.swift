@@ -18,6 +18,8 @@ class Binary: NumberSystemProtocol {
     // MARK: - Properties
     // ==================
     
+    private let octHexHelper = OctHexHelper()
+    
     var value: String = "0"
     var isSigned: Bool = false // default
 
@@ -31,18 +33,23 @@ class Binary: NumberSystemProtocol {
     init() {
         self.value = "0"
     }
-    
-    /// Creates an instance initialized to the Int value
-    init(_ valueInt: Int) {
-        // TODO: Handle signed
-        self.value = String(valueInt, radix: 2)
-        self.value = fillUpParts(str: self.value, by: 4)
-    }
-    
+  
     /// Creates an instance initialized to the Binary  value / copying another instance
     init(_ valueBin: Binary) {
         self.value = valueBin.value
         self.isSigned = valueBin.isSigned
+    }
+    
+    /// Creates an instance initialized to the Int value
+    convenience init(_ valueInt: Int) {
+        self.init()
+        // Get new DecimalSystem value
+        let decNumber = DecimalSystem(valueInt)
+        if let binary = decNumber.convertDecToBinary() {
+            self.value = binary.value
+        } else {
+            self.value = "0"
+        }
     }
     
     /// Creates an instance initialized to the Decimal value
@@ -106,8 +113,8 @@ class Binary: NumberSystemProtocol {
     }
     
     // Dividing string variable and converting it to double without loss of precision
-    func divideIntFract( value: Any) -> (IntPart?, FractPart?) {
-        let str = String(describing: value)
+    func divideIntFract( value: String) -> (IntPart?, FractPart?) {
+        let str = value
         var strInt: String
         var strFract: String
         
@@ -186,9 +193,7 @@ class Binary: NumberSystemProtocol {
             var buffDecimal: Decimal = 0.0
             
             binFractStrBuff.forEach { (num) in
-                // TODO: Error handling
-                let buffInt = Int("\(num)")!
-                let buffIntDecimal = Decimal(integerLiteral: buffInt)
+                let buffIntDecimal = Decimal(string: String(num)) ?? 0
                 // 1 * 2^-n
                 let buffValue: Decimal = buffIntDecimal *  ( 1.0 / pow(Decimal(2), counter))
                 buffDecimal += buffValue
@@ -219,7 +224,7 @@ class Binary: NumberSystemProtocol {
         
         // from binary to oct
         // process each number and form parts
-        hexadecimal.value = hexadecimal.tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: hexTable)
+        hexadecimal.value = octHexHelper.tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: hexTable)
         
         guard dividedBinary.1 != nil else { return hexadecimal }
         
@@ -229,7 +234,7 @@ class Binary: NumberSystemProtocol {
         dividedBinary.1 = String(dividedBinary.1!.reversed())
         // process fract part
         hexadecimal.value += "."
-        hexadecimal.value +=  hexadecimal.tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: hexTable)
+        hexadecimal.value +=  octHexHelper.tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: hexTable)
         
         return hexadecimal
     }
@@ -249,7 +254,7 @@ class Binary: NumberSystemProtocol {
         
         // from binary to oct
         // process each number and form parts
-        octal.value = octal.tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: octTable)
+        octal.value = octHexHelper.tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: octTable)
         
         guard dividedBinary.1 != nil else { return octal }
         
@@ -259,7 +264,7 @@ class Binary: NumberSystemProtocol {
         dividedBinary.1 = String(dividedBinary.1!.reversed())
         // process fract part
         octal.value += "."
-        octal.value +=  octal.tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: octTable)
+        octal.value +=  octHexHelper.tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: octTable)
          
         return octal
     }
@@ -308,18 +313,16 @@ class Binary: NumberSystemProtocol {
     
     // Combine to parts to double string
     func convertDoubleToBinaryStr( numberStr: (IntPart?, FractPart?)) -> String {
-        
-        // Error handling
+
         guard numberStr.0 != nil else {
-            return "Error"
+            return "0"
         }
         guard numberStr.1 != nil else {
-            return "Error"
+            return "0.0"
         }
         
-        // TODO: Error handling
-        let decNumber = Decimal(string: numberStr.0!)!
-        let precision = 20
+        let decNumber = Decimal(string: numberStr.0!) ?? 0
+        let precision = 16 // max number after point
         let intPart = convertDecToBinary(decNumber)
         let fractPart = convertFractToBinary(numberStr: numberStr.1!, precision: precision)
         
@@ -478,10 +481,6 @@ class Binary: NumberSystemProtocol {
     
     // Set fillig style for binary string
     private func fillingStyleResult(for str: String) -> String {
-        // storage
-        //let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
-        // calc state
-        //let calcState = calcStateStorage.loadData()
         
         let binary = self
         var isInputSigned = false
@@ -496,14 +495,12 @@ class Binary: NumberSystemProtocol {
             isInputSigned = binary.isSigned
         }
 
-        
         // fill if needed to
         if !isInputSigned {
             // remove signed bit
-            // TODO: Remove maybe
-            if binary.value.first != "1" {
-                binary.value.removeFirst()
-            }
+//            if binary.value.first != "1" {
+//                binary.value.removeFirst()
+//            }
             binary.fillToFormat(upToZeros: true)
         } else {
             // invert binary if signed

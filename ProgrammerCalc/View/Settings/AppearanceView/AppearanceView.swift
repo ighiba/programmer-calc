@@ -13,7 +13,7 @@ class AppearanceView: UITableView {
     // MARK: - Properties
     
     // AppearanceViewController delegate
-    var controllerDelegate: AppearanceViewControllerDelegate?
+    weak var controllerDelegate: AppearanceViewControllerDelegate?
     
     private let useSystemAppearanceCell = [ NSLocalizedString("Use system appearance", comment: "")]
     
@@ -26,8 +26,7 @@ class AppearanceView: UITableView {
     
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
-        
-        //self.delegate = self
+
         self.dataSource = self
     }
 

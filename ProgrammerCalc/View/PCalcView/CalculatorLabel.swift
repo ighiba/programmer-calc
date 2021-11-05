@@ -24,14 +24,16 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
     override var text: String? {
         didSet {
             self.updateRawValueHandler?(self)
-            
         }
     }
-    var rawValue: NumberSystemProtocol?
-
+    
     override var canBecomeFirstResponder: Bool {
         return true
     }
+    
+    var rawValue: NumberSystemProtocol?
+    
+    let fontName: String = "HelveticaNeue-Thin"
     
     lazy var infoSubLabel: UILabel = {
         let label = UILabel()
@@ -41,7 +43,7 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
         label.backgroundColor = .clear
         label.textColor = .systemGray
         
-        label.font = UIFont(name: "HelveticaNeue-Thin", size: 12.0)
+        label.font = UIFont(name: fontName, size: 12.0)
         label.textAlignment = .center
         
         label.sizeToFit()
@@ -61,6 +63,10 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
     func sharedInit() {
         self.isUserInteractionEnabled = true
         self.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(self.showMenu)))
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     // ===============
@@ -111,13 +117,26 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
     // Press copy button
     override func copy(_ sender: Any?) {
         let board = UIPasteboard.general
+        var textToBoard: String? = ""
+        // Check if error message in main label
+        for error in MathErrors.allCases {
+            if self.text == error.localizedDescription {
+                // set converter to NaN if error in label
+                textToBoard = self.text
+                break
+            } else {
+                // change clipboard text with new value from label self.text and delete all spaces in string
+                textToBoard = self.text?.removeAllSpaces()
+            }
+        }
         
-        // change clipboard with new value from label self.text and delete all spaces in string
-        board.string = self.text?.removeAllSpaces()
-        
+        // set clipboard
+        board.string = textToBoard
+
+        // hide menu
         self.hideLabelMenu()
         self.resignFirstResponder()
-        
+        // do animation
         undoHighlightLabel()
     }
 
@@ -125,7 +144,7 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
         return action == #selector(UIResponderStandardEditActions.copy)
     }
     
-    
+    // Animations for un/highllight labels on long touch (copy from label)
     func highlightLabel() {
         self.layer.cornerRadius = 0
         self.layer.masksToBounds = false
@@ -153,11 +172,7 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
     public func hideLabelMenu() {
         let menu = UIMenuController.shared
         menu.hideMenu(from: self)
-        
         undoHighlightLabel()
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+
 }

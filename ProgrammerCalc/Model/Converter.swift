@@ -20,7 +20,11 @@ import Foundation
     // ===============
     
     // Main function for conversion values
-    public func convertValue(value: NumberSystemProtocol, from mainSystem: ConversionSystemsEnum, to converterSystem: ConversionSystemsEnum) -> NumberSystemProtocol? {
+    public func convertValue(value: NumberSystemProtocol,
+                             from mainSystem: ConversionSystemsEnum,
+                             to converterSystem: ConversionSystemsEnum,
+                             format processToFormat: Bool) -> NumberSystemProtocol? {
+        
         // if manSystem == converterSystem, then return imput value
         // except binary (for processing it to normal format)
         if mainSystem == converterSystem && mainSystem != .bin {
@@ -30,19 +34,21 @@ import Foundation
         // =======================================
         // First step: convert any value to binary
         // =======================================
-        let binary = convertAnyToBinary(value: value, anySystem: mainSystem)
+        var binary = convertAnyToBinary(value: value, anySystem: mainSystem)
         
         // Check if not nil after converting to binary
         guard binary != nil else { return nil }
         
-        // Process binary to settings format
-        let processedBinary = processBinaryToFormat(binary!)
-        
+        if processToFormat {
+            // Process binary to settings format
+            binary = processBinaryToFormat(binary!)
+        }
+
         // ==================================================
         // Second step: convert binary value to needed system
         // ==================================================
         
-        let result = convertBinaryToAny(binary: processedBinary, targetSystem: converterSystem)
+        let result = convertBinaryToAny(binary: binary!, targetSystem: converterSystem)
         
         return result
     }
@@ -50,7 +56,6 @@ import Foundation
     // Converter from any to binary system
     fileprivate func convertAnyToBinary( value: NumberSystemProtocol, anySystem: ConversionSystemsEnum) -> Binary? {
         var binary: Binary?
-        let partition: Int = 4
         
         switch anySystem {
         case .bin:
@@ -60,28 +65,22 @@ import Foundation
             }
         case .oct:
             // convert oct to binary
-            //partition = 3
             let oct: Octal = value as! Octal
             binary = Binary(oct)
         case .dec:
             // convert dec to binary
-            //partition = 4
             let dec = value as! DecimalSystem
             if let bin = Binary(dec) {
                 binary = bin
             }
         case .hex:
             // convert hex to binary
-            //partition = 4
             let hex = value as! Hexadecimal
             binary = Binary(hex)
         }
         
         // check if binary is nil
         guard binary != nil else { return nil }
-        
-        // divide binary by parts
-        binary = binary!.divideBinary(by: partition)
 
         return binary
     }
@@ -116,7 +115,7 @@ import Foundation
         var binary = Binary()
         
         // convert to Binary
-        binary = convertValue(value: value, from: mainSystem, to: .bin) as! Binary
+        binary = convertValue(value: value, from: mainSystem, to: .bin, format: true) as! Binary
         
         // convert binary to one's complement
         binary.onesComplement()
@@ -126,7 +125,7 @@ import Foundation
         }
 
         // convert to binary input system (mainSystem)
-        let resultBin = convertValue(value: binary, from: .bin, to: mainSystem)!
+        let resultBin = convertValue(value: binary, from: .bin, to: mainSystem, format: true)!
         
         return resultBin
     
@@ -137,13 +136,13 @@ import Foundation
         var binary = Binary()
         
         // convert to Binary
-        binary = convertValue(value: value, from: mainSystem, to: .bin) as! Binary
+        binary = convertValue(value: value, from: mainSystem, to: .bin, format: true) as! Binary
         
         // convert binary to 2's complement
         binary.twosComplement()
         
         // convert to binary input system (mainSystem)
-        return convertValue(value: binary, from: .bin, to: mainSystem)!
+        return convertValue(value: binary, from: .bin, to: mainSystem, format: true)!
     }
     
     // Process binary with settings from User Defaults
@@ -186,7 +185,7 @@ import Foundation
         
         // process fract part
         if let fractPart = splittedBinary.1 {
-            let numAfterPoint = Int(conversionStorage.loadData()?.numbersAfterPoint ?? 8.0)
+            let numAfterPoint = conversionStorage.safeGetData().numbersAfterPoint
             var buffFractPart = fractPart.removeTrailing(characters: ["0"])
             
             if fractPart != "" {
@@ -215,12 +214,13 @@ import Foundation
             resultBin.isSigned = false
         }
         
-        
         return resultBin
     }
     
     func processDecFloatStrToFormat(decStr: String, lastDotIfExists: String) -> String {
         var lastSymbolsIfExists = lastDotIfExists
+        
+        // Process fact part if exists and last digit is 0
         if decStr.last == "0" && decStr.contains(".") {
             // count how much zeros in back
             let fractPart = decStr.getPartAfter(divider: ".")
@@ -234,11 +234,10 @@ import Foundation
                     break
                 }
             }
-            
+            // check if fract part not 0, 00 ,000 etc.
             if Int(fractPart) != 0 {
                 lastSymbolsIfExists = buffStr
             }
-            
         }
         
         // get dec value
@@ -256,9 +255,9 @@ import Foundation
         let decFractPart = decIntPartCopy - decIntPart
         dec.setNewDecimal(with: decIntPart)
         // convert to binary
-        let bin = convertValue(value: dec, from: .dec, to: .bin) as! Binary
+        let bin = convertValue(value: dec, from: .dec, to: .bin, format: true) as! Binary
         // convert processed bin back in dec
-        let updatedDec = convertValue(value: bin, from: .bin, to: .dec)  as! DecimalSystem
+        let updatedDec = convertValue(value: bin, from: .bin, to: .dec, format: true)  as! DecimalSystem
         // restore new decimal with fract part
         dec.setNewDecimal(with: updatedDec.decimalValue + decFractPart)
         

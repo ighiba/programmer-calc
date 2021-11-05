@@ -10,9 +10,8 @@ import UIKit
 import AudioToolbox
 
 class CalculatorButton: UIButton {
-    // ====================
+
     // MARK: - Enumerations
-    // ====================
     
     enum ButtonTypes {
         case numeric
@@ -22,11 +21,16 @@ class CalculatorButton: UIButton {
         case defaultBtn
     }
     
-    // ==================
+
     // MARK: - Properties
-    // ==================
-    
+
     private let _boundsExtension: CGFloat = 0
+    // Spacing between buttons in horizontal stack (need for calculating width)
+    static let spacingWidth: CGFloat = 15.83333333333333
+    // Button fontSize
+    var defaultFontSize: CGFloat {
+        return buttonWidth() / 1.65
+    }
     
     // Button types
     public var calcButtonType: ButtonTypes = .defaultBtn // default value
@@ -74,6 +78,10 @@ class CalculatorButton: UIButton {
         self.calcButtonType = calcButtonType
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // ===============
     // MARK: - Methods
     // ===============
@@ -84,32 +92,35 @@ class CalculatorButton: UIButton {
         self.setTitleColor(.black, for: .normal)
         self.backgroundColor = .white
         // set font size, font family
-        //self.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 45.0)
-        
-        self.titleLabel?.font = UIFont.systemFont(ofSize: 45.0, weight: UIFont.Weight.thin)
-        //self.titleLabel?.font = UIFont.systemFont(ofSize: 45.0, weight: UIFont.Weight.thin)
+        self.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: defaultFontSize)
+        self.titleLabel?.autoresizingMask = .flexibleWidth
         // resizeble text
         self.titleLabel?.adjustsFontSizeToFitWidth = true
         self.titleLabel?.minimumScaleFactor = 0.75
         
-        // handle two lined label
+        // content aligment for sign buttons
+        if self.calcButtonType == .sign {
+            self.contentVerticalAlignment = .top
+        }
+        
+        // handle various button types by titleLabel text lenght
         if let titleText = self.titleLabel?.text {
             // if second line exists
             if titleText.contains("\n") {
                 self.titleLabel?.numberOfLines = 2
                 self.titleLabel?.textAlignment = .center
-                //self.titleLabel?.font = UIFont(name: "HelveticaNeue-Thin", size: 18.0)
-                self.titleLabel?.font = UIFont.systemFont(ofSize: 20.0, weight: UIFont.Weight.thin)
-            // if more than 1 char in title
+                self.titleLabel?.font = self.titleLabel?.font.withSize(buttonWidth() / 3.916)
+            // if more than 3 char in title
+            } else if titleText.count > 3 {
+                self.titleLabel?.font = self.titleLabel?.font.withSize(buttonWidth() / 2.970)
+            // for 2 and 3 chars
             } else if titleText.count > 1 {
-                self.titleLabel?.font = UIFont.systemFont(ofSize: 28.0, weight: UIFont.Weight.thin)
+                self.titleLabel?.font = self.titleLabel?.font.withSize(buttonWidth() / 2.65)
             }
-            
         }
         
         // round corners
         self.layer.cornerRadius = buttonWidth() / 2
-        
     }
     
     private func animateHighlight() {
@@ -123,7 +134,6 @@ class CalculatorButton: UIButton {
     
     func setActions(for buttonType: ButtonTypes){
         
-        self.addTarget(nil, action: #selector(PCalcViewController.toucUpOutsideAction), for: [.touchDragExit, .touchDragOutside])
         // label higliglht handling
         self.addTarget(nil, action: #selector(PCalcViewController.touchHandleLabelHighlight), for: .touchDown)
         // haptic feedback
@@ -147,15 +157,14 @@ class CalculatorButton: UIButton {
     }
     
     // Dynamic button width (except zero button) and height for autolayout
-    //  5  - number of spacings
-    //  17 - spacing width
+    //  3  - number of spacings in horizontal stack
+    //  16.5 - spacingWidth
     //  4  - number of buttons
     func buttonWidth() -> CGFloat {
-        // TODO: Spacing width by uiscreen width
         let screenWidth = UIScreen.main.bounds.width
         let screenHeight = UIScreen.main.bounds.height
         let width = screenWidth < screenHeight ? screenWidth : screenHeight
-        return (width - 5 * 17) / 4
+        return (width * 0.9 - 3 * CalculatorButton.spacingWidth) / 4
     }
     
     // override for decrease control bounds of button
@@ -182,10 +191,8 @@ class CalculatorButton: UIButton {
             if previousTouchOutside {
                 sendActions(for: .touchDragEnter)
                 animateHighlight()
-                //self.isHighlighted = true
             } else {
                 sendActions(for: .touchDragInside)
-                //self.isHighlighted = true
             }
         }
 
@@ -205,10 +212,6 @@ class CalculatorButton: UIButton {
             self.isHighlighted = false
             return sendActions(for: .touchUpOutside)
         }
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
 }

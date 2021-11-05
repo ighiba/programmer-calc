@@ -60,6 +60,12 @@ class WordSizeViewController: UIViewController {
         tap.cancelsTouchesInView = false
         self.view.isUserInteractionEnabled = true
         self.view.addGestureRecognizer(tap)
+        
+        // swipe up for dismiss
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
+        swipeUp.direction = .up
+        swipeUp.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(swipeUp)
     }
 
     // ViewConvtroller dismissing
@@ -100,6 +106,16 @@ class WordSizeViewController: UIViewController {
             dismissVC()
         }
     }
+    
+    // Swipe up to exit
+    @objc func handleSwipe( sender: UISwipeGestureRecognizer) {
+        let notInContainer: Bool = isGestureNotInContainer(gesture: sender)
+        if notInContainer {
+            // does not contains
+            // dismiss vc
+            dismissVC()
+        }
+    }
 }
 
 // MARK: - TableView Data Source
@@ -108,7 +124,7 @@ extension WordSizeViewController: UITableViewDataSource, UITableViewDelegate {
     
     // Rows
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return wordSize.wordsDictionary.count
+        return WordSize.wordsDictionary.count
     }
     
     // Sections
@@ -120,13 +136,13 @@ extension WordSizeViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         
-        cell.textLabel?.text = wordSize.wordsDictionary[indexPath.row].keys.first
+        cell.textLabel?.text = WordSize.wordsDictionary[indexPath.row].keys.first
         cell.textLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 18.0)
         cell.textLabel?.textColor = .label
         cell.backgroundColor = .systemGray6
         cell.selectionStyle = .default
         
-        if wordSize.wordsDictionary[indexPath.row].values.first == wordSize.value {
+        if WordSize.wordsDictionary[indexPath.row].values.first == wordSize.value {
             cell.accessoryType = .checkmark
             checkmarkedIndexPath = indexPath
         }
@@ -150,7 +166,7 @@ extension WordSizeViewController: UITableViewDataSource, UITableViewDelegate {
         checkmarkedIndexPath = indexPath
         
         // update wordSize value
-        wordSize.value = wordSize.wordsDictionary[indexPath.row].first!.value
+        wordSize.value = WordSize.wordsDictionary[indexPath.row].first!.value
         
         // update user defaults
         wordSizeStorage.saveData(wordSize)

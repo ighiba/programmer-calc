@@ -11,7 +11,7 @@ import UIKit
 class AboutView: UITableView {
     
     // AboutViewController delegate
-    var controllerDelegate: AboutViewControllerDelegate?
+    weak var controllerDelegate: AboutViewControllerDelegate?
     
     private let cellLabels = [ NSLocalizedString("Description", comment: ""),
                                NSLocalizedString("Rate app", comment: ""),
@@ -21,9 +21,15 @@ class AboutView: UITableView {
     // Default version number
     var appVersion: String = "1.0"
     
+    var iconTint: UIColor {
+        let styleStorage = StyleStorage()
+        let styleType = styleStorage.safeGetStyleData()
+        let style = StyleFactory().get(style: styleType)
+        return style.tintColor
+    }
+    
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
-        
         self.delegate = self
         self.dataSource = self
     }
@@ -31,6 +37,15 @@ class AboutView: UITableView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        // change cells view tint color
+        for row in 0...cellLabels.count {
+            let cell = cellForRow(at: IndexPath(row: row, section: 1))
+            cell?.imageView?.tintColor = iconTint
+        }
     }
     
 }
@@ -55,11 +70,12 @@ extension AboutView: UITableViewDelegate, UITableViewDataSource {
         
         // setup icon cell
         if indexPath == [0,0] {
-            // test layer for app icon
-            let appIcon = UIView()
+            // image view for app icon
+            let appIcon = UIImageView()
+            appIcon.image = UIImage(named: "icon-ios-about.png")
             appIcon.frame = CGRect(x: 0, y: 0, width: 114, height: 114)
-            appIcon.backgroundColor = .red
             appIcon.layer.cornerRadius = 18
+            appIcon.layer.masksToBounds = true
             // version label
             let versionLabel = UILabel()
             // get version from delegate
@@ -91,6 +107,8 @@ extension AboutView: UITableViewDelegate, UITableViewDataSource {
             cell.selectionStyle = .none
         } else {
             cell.textLabel?.text = cellLabels[indexPath.row]
+            // color for icon before text
+            cell.imageView?.tintColor = iconTint
             
             switch indexPath.row {
             case 0:
@@ -119,7 +137,7 @@ extension AboutView: UITableViewDelegate, UITableViewDataSource {
                 break
             case [1,1]:
                 // Rate app
-                break
+                controller.rateApp()
             case [1,2]:
                 // Contact us
                 controller.openContactForm()

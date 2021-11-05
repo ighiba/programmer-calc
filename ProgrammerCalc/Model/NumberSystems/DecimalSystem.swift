@@ -14,45 +14,45 @@ class DecimalSystem: NumberSystemProtocol {
     // MARK: - Properties
     // ==================
     
+    // Decimal raw value for calculatiing
     var decimalValue: Decimal
-    let max = Decimal(string: "18446744073709551615")!
-    let maxSigned = Decimal(string: "9223372036854775807")!
-    let minSigned = Decimal(string: "-9223372036854775808")!
+    
     var value: String
     var isSigned: Bool = false
-    
-    // Storages
-    //private let calcStateStorage = CalcStateStorage()
-    //private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
     
     // ======================
     // MARK: - Initialization
     // ======================
     
+    /// Creates an instance initialized to the String
     required init(stringLiteral: String) {
         self.value = stringLiteral
         self.decimalValue = Decimal(string: stringLiteral) ?? Decimal(0)
         updateIsSignedState()
     }
 
+    /// Creates an instance initialized to the Decimal value
     init(_ valueDec: Decimal) {
         self.decimalValue = valueDec
         self.value = "\(self.decimalValue)"
         updateIsSignedState()
     }
     
+    /// Creates an instance initialized to the Int  value
     init(_ valueInt: Int) {
         self.decimalValue = Decimal(valueInt)
         self.value = "\(self.decimalValue)"
         updateIsSignedState()
     }
     
+    /// Creates an instance initialized to the Binary value
     init(_ valueBin: Binary) {
         self.decimalValue = valueBin.convertBinaryToDec()
         self.value = "\(self.decimalValue)"
         updateIsSignedState()
     }
     
+    /// Creates an instance initialized to the DecimalSystem value
     init(_ valueDec: DecimalSystem) {
         self.decimalValue = valueDec.decimalValue
         self.value = valueDec.value
@@ -75,7 +75,6 @@ class DecimalSystem: NumberSystemProtocol {
 
         // if number is signed
         // remove minus for converting
-        // TODO: Signed handling
         if isSigned {
             decimalValue *= -1
         }
@@ -84,13 +83,10 @@ class DecimalSystem: NumberSystemProtocol {
 
         if decNumStr.contains(".") {
             // Process float numbers
-            // TODO   Error handling
             let splittedDoubleStr = binary.divideIntFract(value: decNumStr)
             let str = binary.convertDoubleToBinaryStr(numberStr: splittedDoubleStr)
             binary = Binary(stringLiteral: str)
         } else {
-            // TODO   Error handling
-            //print("handling overflow DEC to BIN - signed")
             let str = binary.convertDecToBinary(decimalValue)
             binary = Binary(stringLiteral: str)
         }
@@ -98,9 +94,6 @@ class DecimalSystem: NumberSystemProtocol {
         if isSigned {
             decimalValue *= -1
         }
-   
-        // process signed from UserDefaults
-       // if calcStateStorage.isProcessSigned() {
         
         // process value
             let splittedBinaryStr = binary.divideIntFract(value: binary.value)
@@ -120,23 +113,6 @@ class DecimalSystem: NumberSystemProtocol {
                 if self.isSigned {
                     binary.twosComplement()
                 }
-                
-//                // check if min signed
-//                var binaryTest = binary.value
-//                binaryTest.removeFirst(1)
-//                
-//                //let wordSizeValue = wordSizeStorage.getWordSizeValue()
-//                let wordSizeValue = 64
-//                
-//                if binaryTest.first == "1" && binaryTest.replacingOccurrences(of: "0", with: "").count == 1 && binaryTest.count == wordSizeValue {
-//                    binary.value = binaryTest
-//                }
-//                
-//                // convert to 2's complenment state if value is signed
-//                if binary.isSigned {
-//                    
-//                }
-                
             }
             
             // add fract part if exists
@@ -162,6 +138,7 @@ class DecimalSystem: NumberSystemProtocol {
         }
     }
     
+    // Change raw decimal value and update sign state
     func setNewDecimal(with decimalValue: Decimal) {
         self.decimalValue = decimalValue
         self.value = "\(decimalValue)"

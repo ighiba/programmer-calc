@@ -9,8 +9,14 @@
 import UIKit
 import MessageUI
 
-protocol SettingsViewControllerDelegate {
+protocol SettingsViewControllerDelegate: AnyObject {
+    // First section array
+    var firstSection: [SettingsCell] { get set }
+    // Second section array
+    var otherSection: [SettingsCell] { get set }
+    // Open appearance view
     func openAppearance()
+    // Open about view
     func openAbout()
 }
 
@@ -18,6 +24,27 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
     
     // MARK: - Properties
 
+    // Cels
+    // First section array
+    var firstSection = [ SettingsCell(style: .default,
+                                         reuseIdentifier: "appearance",
+                                         label: NSLocalizedString("Appearance", comment: ""),
+                                         hasSwitcher: false),
+                         SettingsCell(style: .default,
+                                         reuseIdentifier: "tappingSounds",
+                                         label:  NSLocalizedString("Tapping sounds", comment: ""),
+                                         hasSwitcher: true),
+                         SettingsCell(style: .default,
+                                         reuseIdentifier: "haptic",
+                                         label: NSLocalizedString("Haptic feedback", comment: ""),
+                                         hasSwitcher: true),]
+    // Second section array
+    var otherSection = [ SettingsCell(style: .default,
+                                         reuseIdentifier: "about",
+                                         label: NSLocalizedString("About app", comment: ""),
+                                         hasSwitcher: false)]
+    
+    // Views
     lazy var settingsView = SettingsView(frame: CGRect(), style: .grouped)
     lazy var doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(SettingsViewController.closeButtonTapped))
     
@@ -72,62 +99,51 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
         // get data from UserDefaults
         let settings = settingsStorage.safeGetData()
         // loop table cells
-        DispatchQueue.main.async {
-            for cell in self.tableView.visibleCells as! [AppSettingsCell] {
-                if let switcher = cell.accessoryView as? UISwitch {
-                    let title = cell.textLabel?.text
-                    
-                    // set switcher to userdefault state
-                    switch title {
-                    case NSLocalizedString("Appearance", comment: ""):
-                        switcher.setOn(settings.darkMode, animated: false)
-                    case NSLocalizedString("Tapping sounds", comment: ""):
-                        switcher.setOn(settings.tappingSounds, animated: false)
-                    case NSLocalizedString("Haptic feedback", comment: ""):
-                        switcher.setOn(settings.hapticFeedback, animated: false)
-                    default:
-                        // TODO: Handle
-                        print("error")
-                        break
-                    }
+        DispatchQueue.main.async { [self] in
+            // loop table cells in firstSections
+            for cell in firstSection {
+                // check if cell have switcher
+                guard cell.switcher != nil else {
+                    continue
+                }
+                // check cell reuseID
+                switch cell.reuseIdentifier {
+                case "tappingSounds":
+                    cell.switcher?.setOn(settings.tappingSounds, animated: false)
+                case "haptic":
+                    cell.switcher?.setOn(settings.hapticFeedback, animated: false)
+                default:
+                    // do nothing
+                    break
                 }
             }
+            self.tableView.reloadData()
         }
+        
     }
     
     fileprivate func saveSettings() {
         // set data to UserDefaults
-        if let settings = settingsStorage.loadData() {
-            var newSettings = settings
-            // loop table cells
-            for cell in self.tableView.visibleCells as! [AppSettingsCell] {
-                if let switcher = cell.accessoryView as? UISwitch {
-                    let title = cell.textLabel?.text
-                    
-                    // get from switcher state and set to local userdefaults
-                    switch title {
-                    case NSLocalizedString("Appearance", comment: ""):
-                        newSettings.darkMode = switcher.isOn
-                    case NSLocalizedString("Tapping sounds", comment: ""):
-                        newSettings.tappingSounds = switcher.isOn
-                    case NSLocalizedString("Haptic feedback", comment: ""):
-                        newSettings.hapticFeedback = switcher.isOn
-                    default:
-                        // TODO: Handle
-                        print("error")
-                        break
-                    }
-                }
+        var newSettings = settingsStorage.safeGetData()
+        // loop table cells in firstSections
+        for cell in firstSection {
+            // check if cell have switcher
+            guard cell.switcher != nil else {
+                continue
             }
-            // Apply settings
-            settingsStorage.saveData(newSettings)
-            
-        } else {
-            print("no settings")
-            // Save default settings (all true)
-            let newSettings = AppSettings(darkMode: true, tappingSounds: true, hapticFeedback: true)
-            settingsStorage.saveData(newSettings)
+            // check cell reuseID
+            switch cell.reuseIdentifier {
+            case "tappingSounds":
+                newSettings.tappingSounds = cell.switcher!.isOn
+            case "haptic":
+                newSettings.hapticFeedback = cell.switcher!.isOn
+            default:
+                // do nothing
+                break
+            }
         }
+        // Apply settings
+        settingsStorage.saveData(newSettings)
         
     }
     
@@ -155,22 +171,8 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
     
     // Switcher handler
     @objc func switcherToggled( sender: UISwitch) {
-        if let cell = sender.superview as? AppSettingsCell {
-            let title = cell.textLabel?.text
-            switch title {
-            case NSLocalizedString("Appearance", comment: ""):
-                print("Appearance switch to \(sender.isOn)")
-            case NSLocalizedString("Tapping sounds", comment: ""):
-                print("Tapping sounds switch to \(sender.isOn)")
-            case NSLocalizedString("Haptic feedback", comment: ""):
-                print("Haptic feedback switch to \(sender.isOn)")
-            default:
-                // TODO: Handle
-                print("error")
-                break
-            }
-        }
-        
+        // save settings
+        saveSettings()        
     }
     
 }

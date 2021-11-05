@@ -6,14 +6,14 @@
 //  Copyright © 2021 ighiba. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 protocol CalculatorProtocol {
     var mainLabelRawValue: NumberSystemProtocol! { get set }
     // State for processign signed values
     var processSigned: Bool { get set }
     // State for calculating numbers
-    var mathState: CalcMath.MathState? { get set }
+    var mathState: MathStateProtocol? { get set }
     // State for conversion systems in labels
     var systemMain: ConversionSystemsEnum? { get set }
     var systemConverter: ConversionSystemsEnum? { get set }
@@ -39,41 +39,80 @@ class Calculator: CalculatorProtocol {
     private let converter: Converter = Converter()
     
     private let calculationHandler: CalcMath = CalcMath()
+    // Factory for NumberSystem from String value
+    let numberSystemFactory: NumberSystemFactory = NumberSystemFactory()
     
-    var mainLabelRawValue: NumberSystemProtocol! // TODO: Error handling
+    var mainLabelRawValue: NumberSystemProtocol!
     var processSigned = false // default value
-    var mathState: CalcMath.MathState?
+    var mathState: MathStateProtocol?
     var systemMain: ConversionSystemsEnum?
     var systemConverter: ConversionSystemsEnum?
     
+    // Taptic feedback generator for Errors
+    private let errorGenerator = UINotificationFeedbackGenerator()
+    
     // MARK: - Initialization
+    
+    init() {
+        // Load from storage
+        let calcState = calcStateStorage.safeGetData()
+        let conversionSettings = conversionStorage.safeGetData()
+        // Set states
+        processSigned = calcState.processSigned
+        systemMain = conversionSettings.systemMain
+        systemConverter = conversionSettings.systemConverter
+        // update mainLabel rawValue
+        if let numValue = numberSystemFactory.get(strValue: calcState.mainLabelState, currentSystem: systemMain!) {
+            mainLabelRawValue = numValue
+        }
+    }
     
     
     // MARK: - Methods
     
-    
     // Calculate result
-    fileprivate func calculateBuffWith(_ inputValue: NumberSystemProtocol,_  operation: CalcMath.MathOperation) -> String {
+    fileprivate func calculateBuffWith(_ inputValue: NumberSystemProtocol, _  operation: CalcMath.Operation) -> String {
         var resultStr = String()
-        // process claculation buff values and previous operations
-        if self.mathState != nil {
-            print("calculation")
-            
-            // calculate
-            if let result = calculationHandler.calculate(firstValue: self.mathState!.buffValue, operation: self.mathState!.operation, secondValue: inputValue, for: self.systemMain!) {
-                self.mathState = nil
-                self.mathState = CalcMath.MathState(buffValue: inputValue, operation: operation)
-                self.mathState?.lastResult = result
-                resultStr = result.value
-            }
-        } else {
-            self.mathState = CalcMath.MathState(buffValue: self.mainLabelRawValue, operation: operation)
-            resultStr = inputValue.value
+        // chek if math statate != nil
+        guard self.mathState != nil else {
+            self.mathState = MathState(buffValue: self.mainLabelRawValue, operation: operation)
+            return inputValue.value
         }
+        
+        var result: NumberSystemProtocol?
+        // Try calculate
+        // And handle errors
+        do {
+            // process claculation buff values and previous operations
+            result = try calculationHandler.calculate(firstValue: self.mathState!.buffValue, operation: self.mathState!.operation, secondValue: inputValue, for: self.systemMain!)
+        } catch MathErrors.divByZero {
+            // if division by zero
+            self.mathState = nil
+            self.mainLabelRawValue = nil
+            // return message in labels
+            let errorStr = MathErrors.divByZero.localizedDescription ?? NSLocalizedString("Cannot divide by zero", comment: "")
+            // haptic feedback
+            if settingsStorage.safeGetData().hapticFeedback {
+                errorGenerator.notificationOccurred(.error)
+            }
+            
+            return errorStr
+        } catch {
+            // else
+        }
+        
+        // if result not error and not nil
+        if let res = result {
+            self.mathState = nil
+            self.mathState = MathState(buffValue: inputValue, operation: operation)
+            self.mathState?.lastResult = res
+            resultStr = res.value
+        }
+
         return resultStr
     }
     
-    func calculateResult( inputValue: NumberSystemProtocol, operation: CalcMath.MathOperation) -> String {
+    func calculateResult( inputValue: NumberSystemProtocol, operation: CalcMath.Operation) -> String {
 
         if operation == .shiftLeft || operation == .shiftRight {
             return calculateSoloBitwise(inputValue, operation)
@@ -83,12 +122,12 @@ class Calculator: CalculatorProtocol {
 
     }
     
-    fileprivate func calculateSoloBitwise(_ inputValue: NumberSystemProtocol, _ operation: CalcMath.MathOperation) -> String {
+    fileprivate func calculateSoloBitwise(_ inputValue: NumberSystemProtocol, _ operation: CalcMath.Operation) -> String {
         return calculationHandler.shiftBits(value: inputValue, mainSystem: systemMain!, shiftOperation: operation, shiftCount: 1)!.value
     }
     
     // Convert operation name from button title to enum
-    func getOperationBy(string: String) -> CalcMath.MathOperation? {
+    func getOperationBy(string: String) -> CalcMath.Operation? {
         switch string {
         case "÷":
             return.div
@@ -123,26 +162,11 @@ class Calculator: CalculatorProtocol {
     func isValueOverflowed(value: String, for system: ConversionSystemsEnum, when variant: OverflowVariants) -> Bool {
         let buffValue: NumberSystemProtocol
         var binaryValue: Binary?
-        // TODO: Refactor Create NumberSystem by factory?
-        switch system {
-        case .bin:
-            let dummyBin = Binary()
-            dummyBin.value = value
-            binaryValue = Binary(dummyBin)
-            break
-        case .oct:
-            buffValue = Octal(stringLiteral: value)
-            binaryValue = Binary(buffValue as! Octal)
-            break
-        case .dec:
-            buffValue = DecimalSystem(stringLiteral: value)
-            binaryValue = Binary(buffValue as! DecimalSystem)
-            break
-        case .hex:
-            buffValue = Hexadecimal(stringLiteral: value)
-            binaryValue = Binary(buffValue as! Hexadecimal)
-            break
-        }
+
+        // Get number by string input
+        buffValue = numberSystemFactory.get(strValue: value, currentSystem: system)!
+        // Convert number to Binary without formatting
+        binaryValue = converter.convertValue(value: buffValue, from: system, to: .bin, format: false) as? Binary
 
         if let bin = binaryValue {
             let wordSizeValue = wordSizeStorage.getWordSizeValue()
@@ -152,34 +176,34 @@ class Calculator: CalculatorProtocol {
                 var testStr = String()
                 
                 // check if signed
-                if calcStateStorage.safeGetData().processSigned {
-                    if bin.value.count >= wordSizeValue {
-                        let numIsSigned = bin.value.first! == "1" ? true : false
-                        if numIsSigned {
-                            let buffBin = Binary()
-                            buffBin.value = bin.value
-                            buffBin.twosComplement()
-                            // remove first bit
-                            buffBin.value.removeFirst(1)
-                            testStr = buffBin.removeZerosBefore(str: buffBin.value)
-                        }
+                if calcStateStorage.safeGetData().processSigned && bin.value.count >= wordSizeValue {
+                    let numIsSigned = bin.value.first! == "1" ? true : false
+                    if numIsSigned {
+                        let buffBin = Binary()
+                        buffBin.value = bin.value
+                        buffBin.twosComplement()
+                        // remove first bit
+                        buffBin.value.removeFirst(1)
+                        testStr = buffBin.removeZerosBefore(str: buffBin.value)
+                        // if == 0 then overflowed (min signed)
+                        guard testStr != "0" else { return true }
                     }
                 }
                 // for unsigned
                 if testStr == "" { testStr = bin.removeZerosBefore(str: bin.value) }
                    
                 if system == .dec {
-                    let oldValue = mainLabelRawValue as! DecimalSystem
+                    let oldValue = mainLabelRawValue as? DecimalSystem ?? DecimalSystem(0)
                     bin.updateSignedState()
-                    let newValue = converter.convertValue(value: bin, from: .bin, to: system) as! DecimalSystem
-                    
+                    let newValue = converter.convertValue(value: bin, from: .bin, to: system, format: true) as! DecimalSystem
+                    // compare old value and new input value
+                    // overflow if signs don't match
                     if oldValue.isSigned != newValue.isSigned && variant != .negate {
                         return true
                     } else if variant == .negate && !bin.isSigned {
                         return testStr.count >= wordSizeValue ? true : false
                     }
                 }
-
                 return testStr.count <= wordSizeValue ? false : true
             // for binary with floating point
             } else {
@@ -192,7 +216,6 @@ class Calculator: CalculatorProtocol {
                 let fractPartCount = testStr.getPartAfter(divider: ".").count
                 // compare values
                 return fractPartCount <= numbersAfterPoint ? false : true
-                  
             }
         }
         return false
@@ -204,15 +227,18 @@ class Calculator: CalculatorProtocol {
     
     
     // For updating input main label
-    func processStrInputToFormat(inputStr: String) -> String {
+    func processStrInputToFormat(inputStr: String, for system: ConversionSystemsEnum) -> String {
         var processedStr = String()
         
+        // ==================
         // Process fract part
+        // ==================
+        
         // if last char is dot then append dot
         var lastSymbolsIfExists: String = inputStr.last == "." ? "." : ""
         // get str fract part
         var testLabelStr = inputStr.removeAllSpaces()
-        let fractPartStr: String = testLabelStr.getPartAfter(divider: ".")
+        let fractPartStr = testLabelStr.getPartAfter(divider: ".")
 
         let numbersAfterPoint = Int(conversionStorage.safeGetData().numbersAfterPoint)
         // cut fract part if more then numbersAfterPoint
@@ -220,13 +246,12 @@ class Calculator: CalculatorProtocol {
             testLabelStr = cutFractPart(strValue: testLabelStr, by: numbersAfterPoint)
         }
         
-        
-        // check if value .0
+        // check if value contains .0
         if testLabelStr.contains(".0") {
             // check if fract == 0, or 00, 000 etc.
-            if Int(fractPartStr.replacingOccurrences(of: ".", with: ""))! == 0 {
+            if let fractPartInt = Int(fractPartStr.replacingOccurrences(of: ".", with: "")) {
                 // replace lastSymbolsIfExists with old value of fract without updating it
-                lastSymbolsIfExists = "." + fractPartStr
+                lastSymbolsIfExists = fractPartInt == 0 ? "." + fractPartStr : lastSymbolsIfExists
             }
             // continue to process as normal
         } else if testLabelStr.last == "0" && testLabelStr.contains(".") {
@@ -240,19 +265,21 @@ class Calculator: CalculatorProtocol {
                     break
                 }
             }
-            
         }
         
-        // Process values by system
+        // =======================
+        // Process value by system
+        // =======================
         
-        if self.systemMain == .bin {
-            
+        if system == .bin {
+            // get dummy bin without formatiing
             var bin: Binary = {
                 let dummyBin = Binary()
                 dummyBin.value = testLabelStr
                 return dummyBin
             }()
-            bin = converter.convertValue(value: bin, from: .bin, to: .bin) as! Binary
+            
+            bin = converter.convertValue(value: bin, from: .bin, to: .bin, format: true) as! Binary
             
             // delete trailing zeros if contains .
             if bin.value.contains(".") {
@@ -264,85 +291,56 @@ class Calculator: CalculatorProtocol {
                 if intPart == "" { intPart = "0" }
                 // remove zeros in fract part
                 let fractPart = testLabelStr.removeAllSpaces().getPartAfter(divider: ".")
-                
+                // fill zeros to word size
                 str = bin.fillUpZeros(str: intPart, to: wordSizeStorage.getWordSizeValue())
                 str = str + "." + fractPart
-                
                 bin.value = str
             }
-            
             // divide binary by parts
             bin = bin.divideBinary(by: 4)
-            
             processedStr = bin.value
-            // updating dec for values with floating point
-        } else if self.systemMain == .dec && testLabelStr.contains(".") {
-            
-            processedStr = converter.processDecFloatStrToFormat(decStr: self.mainLabelRawValue.value, lastDotIfExists: lastSymbolsIfExists)
-            
-        } else {
-            // TODO: Refactor
-            // Convert any non-float value in binary
+        } else if system == .dec && testLabelStr.contains(".") {
+            // Updating dec for values with floating point
+            processedStr = converter.processDecFloatStrToFormat(decStr: mainLabelRawValue.value, lastDotIfExists: lastSymbolsIfExists)
+        } else if mainLabelRawValue != nil {
+            // Convert value in binary
             // process binary raw string input in new binary with current settings: processSigned, wordSize etc.
             // convert back in systemMain value and set new value in mainLabel
-            if self.mainLabelRawValue != nil {
-                let bin = converter.convertValue(value: self.mainLabelRawValue, from: self.systemMain!, to: .bin) as! Binary
-                //let updatedBin = Binary(stringLiteral: bin!.value)
-                let updatedValue = converter.convertValue(value: bin, from: .bin, to: self.systemMain!)
-                processedStr = updatedValue!.value
-                
-                if processedStr.contains(".") && testLabelStr.last != "." {
-                    let intPart = processedStr.getPartBefore(divider: ".")
-                    let fractPart = testLabelStr.getPartAfter(divider: ".")
-                    processedStr = intPart + "." + fractPart
-                }
-                
-                
-            }
+            let bin = converter.convertValue(value: mainLabelRawValue, from: system, to: .bin, format: true) as! Binary
+            let updatedValue = converter.convertValue(value: bin, from: .bin, to: system, format: true)
+            processedStr = updatedValue!.value
+            
+            // compose new str value if exists
+            processedStr = composePartsFrom(intPartFrom: processedStr, fractPartFrom: testLabelStr)
         }
         
-        // Check if float and negative
-        // TODO: Refactor to factory
-        let testProcessed: NumberSystemProtocol? = getNumberBy(strValue: processedStr, currentSystem: systemMain!)
+        // ====================================
+        // Check if value is float and negative
+        // ====================================
         
-        if let testDec = converter.convertValue(value: testProcessed!, from: systemMain!, to: .dec) as? DecimalSystem {
+        let testProcessed: NumberSystemProtocol? = numberSystemFactory.get(strValue: processedStr, currentSystem: system)
+        
+        if let testDec = converter.convertValue(value: testProcessed!, from: system, to: .dec, format: true) as? DecimalSystem {
+            // check if is negative float value
             if testDec.value.contains(".") && testDec.decimalValue < 0 {
-                print("negative and float")
                 // remove fract part from str
-                print(processedStr)
                 processedStr = processedStr.getPartBefore(divider: ".")
-                print(processedStr)
-                if testDec.decimalValue > -1 && testDec.decimalValue < 0 {
-                    processedStr = "0"
-                }
+                // if negative value is from 0.* then set it to zero
+                if testDec.decimalValue > -1 && testDec.decimalValue < 0 { processedStr = "0" }
             }
         }
         
         return processedStr != "" ? processedStr : testLabelStr
     }
     
-    func getNumberBy(strValue value: String, currentSystem system: ConversionSystemsEnum) -> NumberSystemProtocol? {
-        var buffValue: NumberSystemProtocol?
-        
-        switch system {
-        case .bin:
-            let dummyBin = Binary()
-            dummyBin.value = value
-            buffValue = Binary(dummyBin)
-            break
-        case .oct:
-            buffValue = Octal(stringLiteral: value)
-            break
-        case .dec:
-            buffValue = DecimalSystem(stringLiteral: value)
-            break
-        case .hex:
-            buffValue = Hexadecimal(stringLiteral: value)
-            break
+    private func composePartsFrom(intPartFrom: String, fractPartFrom: String) -> String {
+        if intPartFrom.contains(".") && fractPartFrom.last != "." {
+            let intPart = intPartFrom.getPartBefore(divider: ".")
+            let fractPart = fractPartFrom.getPartAfter(divider: ".")
+            return intPart + "." + fractPart
+        } else {
+            return intPartFrom
         }
-        
-        return buffValue
-        
     }
     
     // Cutting fract part of float number by max number of digits after .

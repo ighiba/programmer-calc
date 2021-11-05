@@ -21,7 +21,7 @@ class PopoverDoneButton: UIButton {
     }
     
     private func setupView() {
-        self.frame = CGRect(x: 0, y: 0, width: 50, height: 100)
+        self.frame = CGRect(x: 0, y: 0, width: 100, height: 50)
         
         let doneTitle = NSLocalizedString("Done", comment: "")
         

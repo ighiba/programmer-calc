@@ -31,6 +31,70 @@ class ProgrammerCalcUITests: XCTestCase {
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
+    
+    func testMainVieController() throws {
+        // 1. given
+        
+        let scrollViewsQuery = app.scrollViews
+        
+        var buttonsMain: [XCUIElement] = []
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["AC"])
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["0"])
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["1"])
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["2"])
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["3"])
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["4"])
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["5"])
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["6"])
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["7"])
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["8"])
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["9"])
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["."])
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["="])
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["+"])
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["-"])
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["×"])
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["÷"])
+        
+
+        var buttonsAdditional: [XCUIElement] = []
+        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["00"])
+        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["FF"])
+        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["A"])
+        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["B"])
+        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["C"])
+        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["D"])
+        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["E"])
+        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["F"])
+        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["1's"])
+        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["2's"])
+        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["X<<Y"])
+        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["X>>Y"])
+        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["<<"])
+        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons[">>"])
+        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["AND"])
+        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["OR"])
+        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["XOR"])
+        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["NOR"])
+        
+     
+        // 2. then
+        // Test main button sexisting
+        for button in buttonsMain {
+            XCTAssert(button.exists)
+            // try to tap
+            button.tap()
+        }
+        // Scroll to additional page
+        scrollViewsQuery.children(matching: .other).element.children(matching: .other).element.swipeRight()
+        // Test additional buttons existing
+        for button in buttonsAdditional {
+            XCTAssert(button.exists)
+            // try to tap
+            button.tap()
+        }
+    }
+    
 
     func testSettingsButton() throws {
         // 1. given
@@ -49,37 +113,61 @@ class ProgrammerCalcUITests: XCTestCase {
         XCTAssertTrue(aboutAppRow.exists)
     }
     
-//    func testAboutView() throws {
-//        // 1. given
-//
-//        let tablesQuery_About = app.tables
-//        let descriptionRow = tablesQuery_About/*@START_MENU_TOKEN@*/.staticTexts["Description"]/*[[".cells.staticTexts[\"Description\"]",".staticTexts[\"Description\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-//
-//        let rateAppRow = tablesQuery_About/*@START_MENU_TOKEN@*/.staticTexts["Rate app"]/*[[".cells.staticTexts[\"Rate app\"]",".staticTexts[\"Rate app\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-//        let contactUsRow = tablesQuery_About/*@START_MENU_TOKEN@*/.staticTexts["Contact us"]/*[[".cells.staticTexts[\"Contact us\"]",".staticTexts[\"Contact us\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-//
-//
-//
-//
-//        let settingsButton = app.navigationBars.buttons["gearshape"]
-//        let tablesQuery_Settings = app.tables
-//        let aboutAppRow = tablesQuery_Settings/*@START_MENU_TOKEN@*/.staticTexts["About app"]/*[[".cells.staticTexts[\"About app\"]",".staticTexts[\"About app\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-//
-//        // 2. then
-//        settingsButton.tap()
-//        XCTAssertTrue(aboutAppRow.exists)
-//        aboutAppRow.tap()
-//        XCTAssertTrue(descriptionRow.exists)
-//        XCTAssertTrue(rateAppRow.exists)
-//        XCTAssertTrue(contactUsRow.exists)
-//        //descriptionRow.tap()
-//
-//    }
+    func testAppearanceView() throws {
+        // 1. given
+        let settingsButton = app.navigationBars.buttons["gearshape"]
+        let tablesQuery_Settings = app.tables
+        let appearanceRow = tablesQuery_Settings.staticTexts["Appearance"]
+        let tablesQuery_Appearance = app.tables
+        let lightTheme = tablesQuery_Appearance.staticTexts["Light"]
+        let darkTheme = tablesQuery_Appearance.staticTexts["Dark"]
+        let oldSchoolTheme = tablesQuery_Appearance.staticTexts["Old School"]
+        
+        
+        // 2. then
+        settingsButton.tap()
+        XCTAssertTrue(appearanceRow.exists)
+        appearanceRow.tap()
+        XCTAssertTrue(lightTheme.exists)
+        XCTAssertTrue(darkTheme.exists)
+        XCTAssertTrue(oldSchoolTheme.exists)
+        lightTheme.tap()
+        darkTheme.tap()
+        oldSchoolTheme.tap()
+        darkTheme.tap()
+        app.navigationBars["Appearance"].buttons["Settings"].tap()
+        app.navigationBars["Settings"].buttons["Done"].tap()
+    }
+    
+    func testAboutView() throws {
+        // 1. given
+
+        let tablesQuery_About = app.tables
+        let descriptionRow = tablesQuery_About.staticTexts["Description"]
+        let rateAppRow = tablesQuery_About.staticTexts["Rate app"]
+        let contactUsRow = tablesQuery_About/*@START_MENU_TOKEN@*/.staticTexts["Contact us"]/*[[".cells.staticTexts[\"Contact us\"]",".staticTexts[\"Contact us\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+
+        let settingsButton = app.navigationBars.buttons["gearshape"]
+        let tablesQuery_Settings = app.tables
+        let aboutAppRow = tablesQuery_Settings.staticTexts["About app"]
+
+        // 2. then
+        settingsButton.tap()
+        XCTAssertTrue(aboutAppRow.exists)
+        aboutAppRow.tap()
+        XCTAssertTrue(descriptionRow.exists)
+        XCTAssertTrue(rateAppRow.exists)
+        XCTAssertTrue(contactUsRow.exists)
+        descriptionRow.tap()
+        app.navigationBars["Description"].buttons["About app"].tap()
+        app.navigationBars["About app"].buttons["Settings"].tap()
+        app.navigationBars["Settings"].buttons["Done"].tap()
+    }
     
     func testChangeConversionButton() throws {
         // 1. given
         let changeConversionButton = app.navigationBars.buttons["sort"]
-        let maxNumberOfDigitsAfterPointStaticText = app.staticTexts["Max number of digits after point: "]
+        let maxNumberOfDigitsAfterPointStaticText = app.staticTexts["Max number of digits afrer point: "]
         let containerHeader = app.staticTexts["Conversion settings"]
         let doneButton = app.buttons["Done"]
         
@@ -104,9 +192,13 @@ class ProgrammerCalcUITests: XCTestCase {
         // 2. then
         changeWordSizeButton.tap()
         XCTAssertTrue(qword.exists)
+        qword.tap()
         XCTAssertTrue(dword.exists)
+        dword.tap()
         XCTAssertTrue(word.exists)
+        word.tap()
         XCTAssertTrue(byte.exists)
+        byte.tap()
         XCTAssertTrue(doneButton.exists)
         doneButton.tap()
                 

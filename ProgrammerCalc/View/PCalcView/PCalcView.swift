@@ -48,7 +48,6 @@ class PCalcView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setViews()
     }
     
@@ -85,6 +84,23 @@ class PCalcView: UIView {
         changeItem.tintColor = style.tintColor
         settingsItem.tintColor = style.tintColor
         changeWordSizeButton.tintColor = style.tintColor
+    }
+    
+    func hideConverterLabel() {
+        // hide
+        mainLabel.isHidden = false
+        converterLabel.isHidden = true
+        // bigger font for mainLabel
+        mainLabel.font = mainLabel.font.withSize(82.0)
+        mainLabel.numberOfLines = 2
+    }
+    
+    func unhideConverterLabel() {
+        // unhide
+        mainLabel.isHidden = false
+        converterLabel.isHidden = false
+        // default font for mainLabel
+        mainLabel.font = mainLabel.font.withSize(70.0)
     }
     
     // MARK: - Views
@@ -139,7 +155,7 @@ class PCalcView: UIView {
         label.text = "0"
         label.backgroundColor = .clear
         // set font size, font family, allignment
-        label.font = UIFont(name: "HelveticaNeue-Thin", size: 70.0)
+        label.font = UIFont(name: label.fontName, size: 70.0)
         //label.font = UIFont(name: "CourierNewPSMT", size: 70.0)
         label.textAlignment = .right
         // resizeble text
@@ -158,7 +174,7 @@ class PCalcView: UIView {
         label.numberOfLines = 2
         label.backgroundColor = .clear
         // set font size, font family
-        label.font = UIFont(name: "HelveticaNeue-Thin", size: 70.0)
+        label.font = UIFont(name: label.fontName, size: 70.0)
         label.textAlignment = .right
         // resizeble text
         label.adjustsFontSizeToFitWidth = true
@@ -170,7 +186,6 @@ class PCalcView: UIView {
     lazy var labelsStack: UIStackView = {
         let labels = UIStackView(arrangedSubviews: [self.mainLabel, self.converterLabel])
         // Display settings for labels UIStackView
-        //labels.alignment = .fill
         labels.axis = .vertical
         labels.distribution = .fillEqually
         
@@ -211,7 +226,6 @@ class PCalcView: UIView {
         // Constraints for landscape orientation
         landscape = [
             labelsStack.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            //labelsStack.centerXAnchor.constraint(equalTo: self.centerXAnchor),
 
             labelsStack.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: getScreenBounds().width * 0.05),
             labelsStack.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: getScreenBounds().width * -0.05),
@@ -226,7 +240,6 @@ class PCalcView: UIView {
         
         
         // Additional setups
-        
         // add changeWordSizeButton to navigationBar title view(in center)
         navigationBar.items?.first?.titleView?.addSubview(changeWordSizeButton)
         changeWordSizeButton.center =  (navigationBar.items?.first?.titleView!.center)!

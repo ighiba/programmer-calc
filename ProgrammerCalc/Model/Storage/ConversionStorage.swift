@@ -51,9 +51,8 @@ class ConversionStorage: ConversionStorageProtocol {
             // if no settings
             print("no Conversion settings")
             // Save default settings
-            let systems = ConversionSystemsEnum.self
             // From DEC to BIN
-            let newConversionSettings = ConversionSettings(systMain: systems.dec.rawValue, systConverter: systems.bin.rawValue, number: 8.0)
+            let newConversionSettings = ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
             self.saveData(newConversionSettings)
             
             return newConversionSettings

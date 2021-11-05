@@ -8,20 +8,19 @@
 
 import Foundation
 
-protocol AppSettingsProtocol {
-    var darkMode: Bool { get set }
+protocol SettingsProtocol {
     var tappingSounds: Bool { get set }
     var hapticFeedback: Bool { get set }
 }
 
-class AppSettings: AppSettingsProtocol, Decodable, Encodable {
-    var darkMode: Bool
+class Settings: SettingsProtocol, Decodable, Encodable {
     var tappingSounds: Bool
     var hapticFeedback: Bool
     
-    init(darkMode: Bool, tappingSounds: Bool, hapticFeedback: Bool) {
-        self.darkMode = darkMode
+    init( tappingSounds: Bool, hapticFeedback: Bool) {
         self.tappingSounds = tappingSounds
         self.hapticFeedback = hapticFeedback
     }
 }
+
+
