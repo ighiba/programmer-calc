@@ -65,6 +65,7 @@
 		C0D919DA2731ABC900AD8C05 /* MathState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D919D92731ABC900AD8C05 /* MathState.swift */; };
 		C0D919DC2731F80600AD8C05 /* DescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D919DB2731F80600AD8C05 /* DescriptionViewController.swift */; };
 		C0E5FC7624BB9B8D00BA93CA /* PCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */; };
+		C0F3D945273B0A7300EA3333 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F3D944273B0A7300EA3333 /* UIApplication.swift */; };
 		C0F5CF4B270E10870020CE14 /* WordSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF4A270E10870020CE14 /* WordSize.swift */; };
 		C0F5CF4D270E12100020CE14 /* WordSizeStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF4C270E12100020CE14 /* WordSizeStorage.swift */; };
 		C0F5CF4F270F394E0020CE14 /* Decimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF4E270F394E0020CE14 /* Decimal.swift */; };
@@ -156,6 +157,7 @@
 		C0D919D92731ABC900AD8C05 /* MathState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathState.swift; sourceTree = "<group>"; };
 		C0D919DB2731F80600AD8C05 /* DescriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionViewController.swift; sourceTree = "<group>"; };
 		C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcView.swift; sourceTree = "<group>"; };
+		C0F3D944273B0A7300EA3333 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
 		C0F5CF4A270E10870020CE14 /* WordSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSize.swift; sourceTree = "<group>"; };
 		C0F5CF4C270E12100020CE14 /* WordSizeStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSizeStorage.swift; sourceTree = "<group>"; };
 		C0F5CF4E270F394E0020CE14 /* Decimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decimal.swift; sourceTree = "<group>"; };
@@ -248,9 +250,10 @@
 		C068AFA824FA409200BFE754 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				C0F3D944273B0A7300EA3333 /* UIApplication.swift */,
+				C0F5CF4E270F394E0020CE14 /* Decimal.swift */,
 				C068AFA924FA40B900BFE754 /* PCalcViewControllerExtension.swift */,
 				C00616AB27065097007BEF89 /* String.swift */,
-				C0F5CF4E270F394E0020CE14 /* Decimal.swift */,
 				C09631D12727121D001DCD25 /* UIColor.swift */,
 			);
 			path = Extensions;
@@ -588,6 +591,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C0F3D945273B0A7300EA3333 /* UIApplication.swift in Sources */,
 				C0635A7924D9E0F6003855A9 /* ConversionPicker.swift in Sources */,
 				C09631D627277066001DCD25 /* ButtonStyle.swift in Sources */,
 				C0666EB824F97774004809EF /* CalcButtonsViewController.swift in Sources */,
@@ -826,7 +830,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 586JQB45F3;
 				INFOPLIST_FILE = ProgrammerCalc/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -850,7 +854,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 586JQB45F3;
 				INFOPLIST_FILE = ProgrammerCalc/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;

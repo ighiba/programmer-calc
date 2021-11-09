@@ -606,6 +606,12 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         let operation = calculator.getOperationBy(string: buttonText)
         guard operation != nil else { return }
         
+        // Check if error message in main label
+        for error in MathErrors.allCases where error.localizedDescription == mainLabel.text {
+            // clear labels
+            clearLabels()
+        }
+        
         // calculate
         mainLabel.text = calculator.calculateResult(inputValue: calculator.mainLabelRawValue, operation: operation!)
 
@@ -621,6 +627,11 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         updateConversionState()
         // if float then exit
         guard !mainLabel.text!.contains(".") else { return }
+        // Check if error message in main label
+        for error in MathErrors.allCases where error.localizedDescription == mainLabel.text {
+            // clear labels
+            clearLabels()
+        }
         // localization for 1's and 2's
         let oneS = NSLocalizedString("1's", comment: "")
         let twoS = NSLocalizedString("2's", comment: "")
