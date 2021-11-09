@@ -11,8 +11,6 @@ import MessageUI
 import StoreKit
 
 protocol AboutViewControllerDelegate: AnyObject {
-    // App version number
-    var appVersion: String { get set }
     func openDescription()
     func rateApp()
     func openContactForm()
@@ -23,9 +21,6 @@ protocol AboutViewControllerDelegate: AnyObject {
 class AboutViewController: PCalcTableViewController, AboutViewControllerDelegate, MFMailComposeViewControllerDelegate {
     
     // MARK: - Properties
-    
-    // App version number
-    var appVersion: String = "0.9.9"
     
     // Table view
     lazy var aboutView = AboutView(frame: CGRect(), style: .grouped)
@@ -81,11 +76,13 @@ class AboutViewController: PCalcTableViewController, AboutViewControllerDelegate
             
             let model = UIDevice.current.model
             let systemVersion = UIDevice.current.systemVersion
+            let appVersion = UIApplication.appVersion ?? "1.0"
+            let buildNumber = UIApplication.buildNumber ?? "1"
             
             // Configure the fields of the interface
             composeVC.setToRecipients(["ighiba.dev@gmail.com"])
             composeVC.setSubject("ProgrammerCalc support")
-            composeVC.setMessageBody("Model - \(model), OS - \(systemVersion), App version - \(appVersion)", isHTML: false)
+            composeVC.setMessageBody("Model - \(model), OS - \(systemVersion), App version - \(appVersion)(\(buildNumber))", isHTML: false)
             
             self.present(composeVC, animated: true, completion: nil)
         } else {

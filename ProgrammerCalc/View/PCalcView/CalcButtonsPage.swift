@@ -185,6 +185,7 @@ class CalcButtonsMain: CalcButtonsPage {
     }
     
     override func layoutSubviews() {
+        super.layoutSubviews()
         // Update style for buttons
         super.updateStyle(for: allButtons)
     }
@@ -319,6 +320,7 @@ class CalcButtonsAdditional: CalcButtonsPage {
     }
     
     override func layoutSubviews() {
+        super.layoutSubviews()
         // Update style for buttons
         super.updateStyle(for: allButtons)
     }
@@ -359,8 +361,8 @@ class CalcButtonsAdditional: CalcButtonsPage {
         
         let allTitles = ["AND","OR","XOR","NOR",
                          "X<<Y", "X>>Y", "<<", ">>",
-                         "D", "E", "F", oneS,
-                         "A", "B", "C", twoS,
+                         oneS, "D", "E", "F",
+                         twoS, "A", "B", "C",
                          "00", "FF"]
                     
         var buttonTag: Int = 200
