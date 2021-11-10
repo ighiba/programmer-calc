@@ -71,7 +71,7 @@ class ConversionView: UIView {
             
             
             // Set constraints for picker
-            mainPicker.topAnchor.constraint(equalTo: popoverTitle.topAnchor, constant: 2*margin),
+            mainPicker.topAnchor.constraint(equalTo: popoverTitle.topAnchor, constant: 2 * margin),
             mainPicker.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.52),
             mainPicker.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
             mainPicker.centerXAnchor.constraint(equalTo: container.centerXAnchor),

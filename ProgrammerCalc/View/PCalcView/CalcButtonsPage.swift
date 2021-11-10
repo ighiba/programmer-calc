@@ -54,6 +54,28 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
             buttonsStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -3.5),
         ]
         NSLayoutConstraint.activate(layoutConstraints!)
+        
+        
+        // Buttons constraints
+        for button in allButtons {
+            let title = button.titleLabel?.text // shorter name
+            // set width and height by constraints
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.portrait = []
+            button.portrait?.append( button.heightAnchor.constraint(equalToConstant: button.buttonWidth()) )
+            // special style for double button
+            if title == "00" || title == "FF" || title == "0" {
+                button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth() * 2 + spacing) )
+                button.titleLabel?.font = button.titleLabel?.font.withSize(button.defaultFontSize) // default
+            } else {
+                // width for default
+                button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth()) )
+            }
+            // change priority for all constraints to 999 (for disable log noise when device is rotated)
+            button.portrait!.forEach { $0.priority = UILayoutPriority(999) }
+            // activate portrait constraint
+            NSLayoutConstraint.activate(button.portrait!)
+        }
     }
     
     // Horizontal main calc buttons stack
@@ -110,7 +132,6 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
                 button.setTitleColor(style.miscButtonStyle.textColor, for: .normal)
                 button.setTitleColor(style.miscButtonStyle.textTint, for: .highlighted)
                 button.setTitleColor(style.miscButtonStyle.textTint.setDarker(by: 0.7), for: .disabled)
-                //button.setTitleColor(style.miscButtonStyle.textColor, for: .disabled)
                 break
             }
             // set border color
@@ -126,10 +147,10 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
             // set shadow
             button.layer.shadowColor = UIColor.black.cgColor
             button.layer.shadowOpacity = 0.25
-            button.layer.shadowOffset = CGSize(width: button.bounds.width, height: 1)
+            button.layer.shadowOffset = CGSize(width: 0, height: 1)
             button.layer.shadowRadius = 1.5
             
-            let shadowPath = CGPath(roundedRect: CGRect(x: -button.layer.bounds.width, y: 0, width: button.layer.bounds.width, height: button.layer.bounds.height),
+            let shadowPath = CGPath(roundedRect: button.layer.bounds,
                                     cornerWidth: button.layer.cornerRadius,
                                     cornerHeight: button.layer.cornerRadius,
                                     transform: nil)
@@ -197,8 +218,7 @@ class CalcButtonsMain: CalcButtonsPage {
         var buffStackView: UIStackView = UIStackView()
         var counter: Int = 0
         
-        allButtons.forEach { button in
-            
+        for button in allButtons {
             buffStackView.addArrangedSubview(button)
             // fill each stack with 4 buttons (the last one with 3)
             switch counter {
@@ -228,12 +248,12 @@ class CalcButtonsMain: CalcButtonsPage {
                          "1", "2", "3", "+",
                          "0", ".", "="]
                     
-        //var buttonLabel: Int = 9
         var buttonTag: Int = 100
         var buttons: [CalculatorButton] = []
         
-        allTitles.forEach { (title) in
-            let button : CalculatorButton
+        // Create buttons by looping titles
+        for title in allTitles {
+            let button: CalculatorButton
 
             // initialize button by type
             switch title{
@@ -269,26 +289,6 @@ class CalcButtonsMain: CalcButtonsPage {
             if title == "AC" {
                 button.titleLabel?.font = button.titleLabel?.font.withSize(button.buttonWidth() / 1.8)
             }
-                    
-            // set width and height by constraints
-            button.translatesAutoresizingMaskIntoConstraints = false
-            button.portrait = []
-            button.portrait?.append( button.heightAnchor.constraint(equalToConstant: button.buttonWidth()) )
-            // special width for zero
-            if title == "0" {
-                button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth() * 2 + spacing) )
-            } else {
-                // width for default
-                button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth()) )
-
-            }
-            // change priority for all constraints to 999 (for disable log noise when device is rotated)
-            button.portrait!.forEach { constraint in
-                constraint.priority = UILayoutPriority(999)
-            }
-            
-            // activate portrait constraint
-            NSLayoutConstraint.activate(button.portrait!)
             
             // button tags start from 100 to 118
             button.tag = buttonTag
@@ -332,8 +332,7 @@ class CalcButtonsAdditional: CalcButtonsPage {
         var buffStackView: UIStackView = UIStackView()
         var counter: Int = 0
         
-        allButtons.forEach { button in
-            
+        for button in allButtons {
             buffStackView.addArrangedSubview(button)
             // fill each stack with 4 buttons (the last one with 3)
             switch counter {
@@ -368,7 +367,8 @@ class CalcButtonsAdditional: CalcButtonsPage {
         var buttonTag: Int = 200
         var buttons: [CalculatorButton] = []
         
-        allTitles.forEach { (title) in
+        // Create buttons by looping titles
+        for title in allTitles {
             let button: CalculatorButton
 
             // initialize button by type
@@ -392,34 +392,12 @@ class CalcButtonsAdditional: CalcButtonsPage {
             button.setTitleColor(.systemGray, for: .disabled)
             button.applyStyle()
             
-            // set width and height by constraints
-            button.translatesAutoresizingMaskIntoConstraints = false
-            button.portrait = []
-            button.portrait?.append( button.heightAnchor.constraint(equalToConstant: button.buttonWidth()) )
-            // special style for 00 and FF
-            if title == "00" || title == "FF" {
-
-                button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth() * 2 + spacing) )
-                button.titleLabel?.font = button.titleLabel?.font.withSize(button.defaultFontSize) // default
-            } else {
-                // width for default
-                button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth()) )
-
-            }
-            // change priority for all constraints to 999 (for disable log noise when device is rotated)
-            button.portrait!.forEach { constraint in
-                constraint.priority = UILayoutPriority(999)
-            }
-            // activate portrait constraint
-            NSLayoutConstraint.activate(button.portrait!)
-            
             // button tags start from 200 to 217
             button.tag = buttonTag
             buttonTag += 1
             
             // add element to array
             buttons.append(button)
-            
         }
 
         allButtons = buttons

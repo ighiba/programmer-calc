@@ -65,7 +65,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     // Array of button pages controllers
     lazy var arrayCalcButtonsViewController: [CalcButtonsViewController] = {
        var buttonsVC = [CalcButtonsViewController]()
-        arrayButtonsStack.forEach { (buttonsPage) in
+        for buttonsPage in arrayButtonsStack {
             let vc = CalcButtonsViewController(buttonsPage: buttonsPage)
             vc.delegate = self
             buttonsVC.append(vc)
@@ -152,9 +152,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
         isAllowedLandscape = true
         // update shadows for buttons page
-        for page in arrayCalcButtonsViewController {
-            page.view.layoutSubviews()
-        }
+        arrayCalcButtonsViewController.forEach { $0.view.layoutSubviews() }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
