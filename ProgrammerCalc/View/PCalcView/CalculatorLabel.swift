@@ -10,7 +10,7 @@ import UIKit
 import QuartzCore
 
 protocol UpdatableLabel: UILabel {
-    var updateRawValueHandler: ((UpdatableLabel) -> Void)? { get set }
+    var updateNumberValueHandler: ((UpdatableLabel) -> Void)? { get set }
 }
 
 class CalcualtorLabel: UILabel, UpdatableLabel {
@@ -19,37 +19,24 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
     // MARK: - Properties
     // ==================
     
-    var updateRawValueHandler: ((UpdatableLabel) -> Void)?
-    
-    override var text: String? {
-        didSet {
-            self.updateRawValueHandler?(self)
-        }
-    }
+    // numberValue update handler
+    var updateNumberValueHandler: ((UpdatableLabel) -> Void)?
+    var numberValue: NumberSystemProtocol?
+    // Font
+    let fontName: String = "HelveticaNeue-Thin"
+    // Sub label for displaying current system of label
+    lazy var infoSubLabel: UILabel = getSubLabel()
     
     override var canBecomeFirstResponder: Bool {
         return true
     }
     
-    var rawValue: NumberSystemProtocol?
-    
-    let fontName: String = "HelveticaNeue-Thin"
-    
-    lazy var infoSubLabel: UILabel = {
-        let label = UILabel()
-        
-        label.frame = CGRect(x: 0, y: 0, width: 44, height: 14.5)
-        label.text = "Decimal"
-        label.backgroundColor = .clear
-        label.textColor = .systemGray
-        
-        label.font = UIFont(name: fontName, size: 12.0)
-        label.textAlignment = .center
-        
-        label.sizeToFit()
-        
-        return label
-    }()
+    override var text: String? {
+        didSet {
+            // update number value every time text is changed
+            self.updateNumberValueHandler?(self)
+        }
+    }
     
     // ======================
     // MARK: - Initialization
@@ -73,8 +60,8 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
     // MARK: - Methods
     // ===============
     
-    func setRawValue(value: NumberSystemProtocol) {
-        self.rawValue = value
+    func setNumberValue(_ value: NumberSystemProtocol) {
+        self.numberValue = value
     }
     
     func addInfoLabel() {
@@ -89,6 +76,22 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
     // Set new value in info label
     func setInfoLabelValue(_ newValue: ConversionSystemsEnum) {
         self.infoSubLabel.text = newValue.rawValue
+    }
+    
+    fileprivate func getSubLabel() -> UILabel {
+        let label = UILabel()
+        
+        label.frame = CGRect(x: 0, y: 0, width: 44, height: 14.5)
+        label.text = "Decimal"
+        label.backgroundColor = .clear
+        label.textColor = .systemGray
+        
+        label.font = UIFont(name: fontName, size: 12.0)
+        label.textAlignment = .center
+        
+        label.sizeToFit()
+        
+        return label
     }
     
     // Action when long press on label

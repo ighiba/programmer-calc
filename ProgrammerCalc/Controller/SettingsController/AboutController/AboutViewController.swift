@@ -23,7 +23,7 @@ class AboutViewController: PCalcTableViewController, AboutViewControllerDelegate
     // MARK: - Properties
     
     // Table view
-    lazy var aboutView = AboutView(frame: CGRect(), style: .grouped)
+    lazy var aboutView = AboutView(frame: CGRect(), style: .insetGrouped)
     
     
     // MARK: - viewDidLoad

@@ -126,9 +126,9 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         }
         
         // Add handler for main label
-        (mainLabel as UpdatableLabel).updateRawValueHandler = { _ in
-            // update label rawValue
-            self.updateMainLabelRawValue()
+        (mainLabel as UpdatableLabel).updateNumberValueHandler = { _ in
+            // update label numberValue
+            self.updateMainLabelNumberValue()
         }
         
         // Get data from UserDefaults
@@ -147,7 +147,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        print("loaded")
         // unlock rotatiton
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
         isAllowedLandscape = true
@@ -158,7 +157,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // save state to UserDefaults
-        print("main dissapear")
         saveCalcState()
     }
 
@@ -377,7 +375,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         changeStatePlusMinus()
         // update main label
         updateMainLabel()
-        updateMainLabelRawValue()
+        updateMainLabelNumberValue()
         // update converter label
         updateConverterLabel()
     }
@@ -436,16 +434,16 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         mainLabel.text = calculator.processStrInputToFormat(inputStr: mainLabel.text!, for: calculator.systemMain!)
     }
     
-    private func updateMainLabelRawValue() {
-        // update label rawValue
+    private func updateMainLabelNumberValue() {
+        // update label numberValue
         let numValue = calculator.numberSystemFactory.get(strValue: mainLabel.text!, currentSystem: calculator.systemMain!)
         guard numValue != nil else {
             return
         }
         // set value to main label
-        mainLabel.setRawValue(value: numValue!)
-        // update calculator rawValue
-        calculator.mainLabelRawValue = numValue!
+        mainLabel.setNumberValue(numValue!)
+        // update calculator inputValue (main label number value)
+        calculator.inputValue = numValue!
     }
        
     public func updateConverterLabel() {
@@ -476,7 +474,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             var lastDotIfExists: String = mainLabel.text?.last == "." ? "." : ""
             // Update converter label with converted number
             updateConversionState()
-            var newValue = converter.convertValue(value: calculator.mainLabelRawValue, from: calculator.systemMain!, to: calculator.systemConverter!, format: true)
+            var newValue = converter.convertValue(value: calculator.inputValue, from: calculator.systemMain!, to: calculator.systemConverter!, format: true)
             guard newValue != nil else { return }
             if let bin = newValue as? Binary {
                 // divide binary by parts
@@ -507,7 +505,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
 
         if digit == "." && !labelText.contains(".") {
             // forbid float input when negative number
-            if let dec = converter.convertValue(value: calculator.mainLabelRawValue, from: calculator.systemMain!, to: .dec, format: true) as? DecimalSystem {
+            if let dec = converter.convertValue(value: calculator.inputValue, from: calculator.systemMain!, to: .dec, format: true) as? DecimalSystem {
                 if dec.decimalValue < 0 { return labelText }
             }
             return labelText + digit
@@ -611,7 +609,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         }
         
         // calculate
-        mainLabel.text = calculator.calculateResult(inputValue: calculator.mainLabelRawValue, operation: operation!)
+        mainLabel.text = calculator.calculateResult(inputValue: calculator.inputValue, operation: operation!)
 
         // update all labels
         updateMainLabel()
@@ -636,9 +634,9 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         // switch complements
         switch buttonLabel {
         case oneS:
-            mainLabel.text = converter.toOnesComplement(value: calculator.mainLabelRawValue, mainSystem: calculator.systemMain!).value
+            mainLabel.text = converter.toOnesComplement(value: calculator.inputValue, mainSystem: calculator.systemMain!).value
         case twoS:
-            mainLabel.text = converter.toTwosComplement(value: calculator.mainLabelRawValue, mainSystem: calculator.systemMain!).value
+            mainLabel.text = converter.toTwosComplement(value: calculator.inputValue, mainSystem: calculator.systemMain!).value
         default:
             break
         }
@@ -657,7 +655,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         let operation = calculator.getOperationBy(string: buttonText!)
         guard operation != nil else { return }
         
-        mainLabel.text = calculator.calculateResult(inputValue: calculator.mainLabelRawValue, operation: operation!)
+        mainLabel.text = calculator.calculateResult(inputValue: calculator.inputValue, operation: operation!)
 
         // update all labels
         updateMainLabel()
@@ -667,9 +665,9 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     // Signed OFF/ON button
     @objc func toggleIsSigned(_ sender: UIButton) {
         // negate value if number is negative and processsigned == on
-        if calculator.mainLabelRawValue.isSigned && calculator.processSigned {
-            mainLabel.text = calculator.negateValue(value: calculator.mainLabelRawValue, system: calculator.systemMain!)
-        } else if calculator.isValueOverflowed(value: calculator.mainLabelRawValue.value, for: calculator.systemMain!, when: .negate) {
+        if calculator.inputValue.isSigned && calculator.processSigned {
+            mainLabel.text = calculator.negateValue(value: calculator.inputValue, system: calculator.systemMain!)
+        } else if calculator.isValueOverflowed(value: calculator.inputValue.value, for: calculator.systemMain!, when: .negate) {
             clearLabels()
         }
         // invert value
@@ -701,7 +699,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         print("=")
         if calculator.mathState != nil {
             // calculate
-            mainLabel.text = calculator.calculateResult(inputValue: calculator.mainLabelRawValue, operation: calculator.mathState!.operation)
+            mainLabel.text = calculator.calculateResult(inputValue: calculator.inputValue, operation: calculator.mathState!.operation)
             // reset state
             calculator.mathState = nil
             // update converter label
@@ -715,7 +713,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         // if float then exit
         guard !mainLabel.text!.contains(".") else { return }
         // calculate result
-        let result = calculator.negateValue(value: calculator.mainLabelRawValue, system: calculator.systemMain!)
+        let result = calculator.negateValue(value: calculator.inputValue, system: calculator.systemMain!)
         // check for overflow
         let isOverflowed = calculator.isValueOverflowed(value: result, for: calculator.systemMain!, when: .negate)
         guard !isOverflowed else { return }

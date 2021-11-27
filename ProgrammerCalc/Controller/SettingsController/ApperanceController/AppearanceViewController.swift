@@ -21,7 +21,7 @@ class AppearanceViewController: PCalcTableViewController, AppearanceViewControll
     // MARK: - Properties
     
     // Table view
-    lazy var appearanceView = AppearanceView(frame: CGRect(), style: .grouped)
+    lazy var appearanceView = AppearanceView(frame: CGRect(), style: .insetGrouped)
     // Index of table checkmarks
     var checkmarkedIndexPath: IndexPath = IndexPath(row: 0, section: 0)
     // Appearance state
