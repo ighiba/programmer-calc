@@ -38,12 +38,11 @@ class WordSizeView: UIView {
     
     // Setup layout
     func setupLayout() {
-        //let screenWidth = UIScreen.main.bounds.width
-        let popoverTitleHeight: CGFloat = (popoverTitle.font.pointSize+1)
+        let popoverTitleHeight: CGFloat = popoverTitle.font.pointSize + 1
         let tableRowHeight: CGFloat = 44
         let doneButtonHeight: CGFloat = 50
         // calculate container stack height
-        let containerStackHeight: CGFloat =  popoverTitleHeight + margin*2 + tableRowHeight*4 + doneButtonHeight
+        let containerStackHeight: CGFloat =  popoverTitleHeight + margin * 2 + tableRowHeight * 4 + doneButtonHeight
         
         popoverTitle.translatesAutoresizingMaskIntoConstraints = false
         container.translatesAutoresizingMaskIntoConstraints = false
@@ -52,10 +51,11 @@ class WordSizeView: UIView {
         doneButton.translatesAutoresizingMaskIntoConstraints = false
         // Activate constraints
         NSLayoutConstraint.activate([
+            // Set constraints for title
             popoverTitle.heightAnchor.constraint(equalToConstant: popoverTitleHeight),
             
             // Set constraints for table
-            wordSizeTable.heightAnchor.constraint(equalToConstant: tableRowHeight*4),
+            wordSizeTable.heightAnchor.constraint(equalToConstant: tableRowHeight * 4),
             
             // Set contraints for done button
             doneButton.heightAnchor.constraint(equalToConstant: doneButtonHeight),
@@ -64,7 +64,7 @@ class WordSizeView: UIView {
             container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9),
-            container.heightAnchor.constraint(equalToConstant: containerStackHeight+margin*2),
+            container.heightAnchor.constraint(equalToConstant: containerStackHeight+margin * 2),
             
             // Set constraints for done button
             containerStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),

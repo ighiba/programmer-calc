@@ -13,9 +13,9 @@ class CalcButtonsViewController: UIViewController {
     
     // Taptic feedback generator
     private let generator = UIImpactFeedbackGenerator(style: .light)
+    
     // haptic feedback setting
     var hapticFeedback = false
-    
     // Sound of tapping bool setting
     var tappingSounds = false
     
@@ -41,8 +41,6 @@ class CalcButtonsViewController: UIViewController {
         }
         
         delegate!.unhighlightLabels()
-        
-        print("touched began page out")
     }
     
     // MARK: - Actions
@@ -52,7 +50,6 @@ class CalcButtonsViewController: UIViewController {
             // play KeyPressed
             AudioServicesPlaySystemSound(1104)
         }
-
     }
     
     // Haptic feedback action for all buttons

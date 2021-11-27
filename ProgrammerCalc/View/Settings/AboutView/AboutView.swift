@@ -16,10 +16,6 @@ class AboutView: UITableView {
     private let cellLabels = [ NSLocalizedString("Description", comment: ""),
                                NSLocalizedString("Rate app", comment: ""),
                                NSLocalizedString("Contact us", comment: "")]
-                       
-    
-    // Default version number
-    var appVersion: String = "1.0"
     
     var iconTint: UIColor {
         let styleStorage = StyleStorage()
@@ -78,10 +74,8 @@ extension AboutView: UITableViewDelegate, UITableViewDataSource {
             appIcon.layer.masksToBounds = true
             // version label
             let versionLabel = UILabel()
-            // get version from delegate
-            if let version = controllerDelegate?.appVersion {
-                appVersion = version
-            }
+            // get version
+            let appVersion = UIApplication.appVersion ?? "1.0"
             versionLabel.text = "ProgrammerCalc \(appVersion)"
             versionLabel.font = UIFont.systemFont(ofSize: 12, weight: .thin)
             versionLabel.textColor = .systemGray

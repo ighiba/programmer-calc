@@ -9,7 +9,7 @@
 import UIKit
 
 protocol CalculatorProtocol {
-    var mainLabelRawValue: NumberSystemProtocol! { get set }
+    var inputValue: NumberSystemProtocol! { get set }
     // State for processign signed values
     var processSigned: Bool { get set }
     // State for calculating numbers
@@ -42,7 +42,7 @@ class Calculator: CalculatorProtocol {
     // Factory for NumberSystem from String value
     let numberSystemFactory: NumberSystemFactory = NumberSystemFactory()
     
-    var mainLabelRawValue: NumberSystemProtocol!
+    var inputValue: NumberSystemProtocol!
     var processSigned = false // default value
     var mathState: MathStateProtocol?
     var systemMain: ConversionSystemsEnum?
@@ -61,9 +61,9 @@ class Calculator: CalculatorProtocol {
         processSigned = calcState.processSigned
         systemMain = conversionSettings.systemMain
         systemConverter = conversionSettings.systemConverter
-        // update mainLabel rawValue
+        // update mainLabel numberValue (inputValue)
         if let numValue = numberSystemFactory.get(strValue: calcState.mainLabelState, currentSystem: systemMain!) {
-            mainLabelRawValue = numValue
+            inputValue = numValue
         }
     }
     
@@ -75,7 +75,7 @@ class Calculator: CalculatorProtocol {
         var resultStr = String()
         // chek if math statate != nil
         guard self.mathState != nil else {
-            self.mathState = MathState(buffValue: self.mainLabelRawValue, operation: operation)
+            self.mathState = MathState(buffValue: self.inputValue, operation: operation)
             return inputValue.value
         }
         
@@ -88,7 +88,7 @@ class Calculator: CalculatorProtocol {
         } catch MathErrors.divByZero {
             // if division by zero
             self.mathState = nil
-            self.mainLabelRawValue = nil
+            self.inputValue = nil
             // return message in labels
             let errorStr = MathErrors.divByZero.localizedDescription ?? NSLocalizedString("Cannot divide by zero", comment: "")
             // haptic feedback
@@ -113,13 +113,11 @@ class Calculator: CalculatorProtocol {
     }
     
     func calculateResult( inputValue: NumberSystemProtocol, operation: CalcMath.Operation) -> String {
-
         if operation == .shiftLeft || operation == .shiftRight {
             return calculateSoloBitwise(inputValue, operation)
         } else {
             return calculateBuffWith(inputValue, operation)
         }
-
     }
     
     fileprivate func calculateSoloBitwise(_ inputValue: NumberSystemProtocol, _ operation: CalcMath.Operation) -> String {
@@ -193,7 +191,7 @@ class Calculator: CalculatorProtocol {
                 if testStr == "" { testStr = bin.removeZerosBefore(str: bin.value) }
                    
                 if system == .dec {
-                    let oldValue = mainLabelRawValue as? DecimalSystem ?? DecimalSystem(0)
+                    let oldValue = inputValue as? DecimalSystem ?? DecimalSystem(0)
                     bin.updateSignedState()
                     let newValue = converter.convertValue(value: bin, from: .bin, to: system, format: true) as! DecimalSystem
                     // compare old value and new input value
@@ -301,12 +299,12 @@ class Calculator: CalculatorProtocol {
             processedStr = bin.value
         } else if system == .dec && testLabelStr.contains(".") {
             // Updating dec for values with floating point
-            processedStr = converter.processDecFloatStrToFormat(decStr: mainLabelRawValue.value, lastDotIfExists: lastSymbolsIfExists)
-        } else if mainLabelRawValue != nil {
+            processedStr = converter.processDecFloatStrToFormat(decStr: inputValue.value, lastDotIfExists: lastSymbolsIfExists)
+        } else if inputValue != nil {
             // Convert value in binary
             // process binary raw string input in new binary with current settings: processSigned, wordSize etc.
             // convert back in systemMain value and set new value in mainLabel
-            let bin = converter.convertValue(value: mainLabelRawValue, from: system, to: .bin, format: true) as! Binary
+            let bin = converter.convertValue(value: inputValue, from: system, to: .bin, format: true) as! Binary
             let updatedValue = converter.convertValue(value: bin, from: .bin, to: system, format: true)
             processedStr = updatedValue!.value
             

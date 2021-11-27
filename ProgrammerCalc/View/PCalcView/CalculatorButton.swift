@@ -158,7 +158,7 @@ class CalculatorButton: UIButton {
     
     // Dynamic button width (except zero button) and height for autolayout
     //  3  - number of spacings in horizontal stack
-    //  16.5 - spacingWidth
+    //  0.9 - buttons stack view width
     //  4  - number of buttons
     func buttonWidth() -> CGFloat {
         let screenWidth = UIScreen.main.bounds.width
@@ -197,7 +197,6 @@ class CalculatorButton: UIButton {
         }
 
     }
-    
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch: UITouch = touches.first!

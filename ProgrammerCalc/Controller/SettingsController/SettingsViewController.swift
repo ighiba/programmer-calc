@@ -45,7 +45,7 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
                                          hasSwitcher: false)]
     
     // Views
-    lazy var settingsView = SettingsView(frame: CGRect(), style: .grouped)
+    lazy var settingsView = SettingsView(frame: CGRect(), style: .insetGrouped)
     lazy var doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(SettingsViewController.closeButtonTapped))
     
     // links to storages
