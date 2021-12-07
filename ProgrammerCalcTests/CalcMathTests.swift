@@ -79,6 +79,29 @@ class CalcMathTests: XCTestCase {
         XCTAssertEqual(result, "Cannot divide by zero", "Calaculation failure")
     }
     
+    // MARK: - VALUES_TYPES_ERROR
+    
+    func testCalcValuesTypes_ERROR() throws {
+        // 1. given
+        calcStatetorage?.saveData(unsignedData)
+        let decValue = DecimalSystem(stringLiteral: "12")
+        let binValue = Binary(stringLiteral: "10") // 2
+        let octValue = Octal(stringLiteral: "10") // 8
+        let hexValue = Hexadecimal(stringLiteral: "A") // 10
+        
+        // 2. when
+        let result_1 = try! calcMathTest.calculate(firstValue: decValue, operation: .add, secondValue: binValue, for: .dec)! // Dec(12) + Bin(10) = 14
+        let result_2 = try! calcMathTest.calculate(firstValue: binValue, operation: .add, secondValue: decValue, for: .dec)! // Bin(10) + Dec(12) = 14
+        let result_3 = try! calcMathTest.calculate(firstValue: octValue, operation: .add, secondValue: binValue, for: .dec)! // Oct(10) + Bin(10) = 10
+        let result_4 = try! calcMathTest.calculate(firstValue: hexValue, operation: .add, secondValue: decValue, for: .dec)! // Hex(A)  + Dec(12) = 22
+        
+        // 3. then
+        XCTAssertEqual(result_1.value, "14", "Calaculation failure")
+        XCTAssertEqual(result_2.value, "14", "Calaculation failure")
+        XCTAssertEqual(result_3.value, "10", "Calaculation failure")
+        XCTAssertEqual(result_4.value, "22", "Calaculation failure")
+    }
+    
     // MARK: - ADD
     
     func testCalcDecAdd() throws {

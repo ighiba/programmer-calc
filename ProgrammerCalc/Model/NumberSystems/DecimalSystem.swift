@@ -67,7 +67,7 @@ class DecimalSystem: NumberSystemProtocol {
     // Handle converting values NumberSystem
     
     // DEC -> BIN
-    func convertDecToBinary() -> Binary? {
+    func convertDecToBinary() -> Binary {
         var decNumStr: String
         var binary = Binary()
         

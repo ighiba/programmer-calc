@@ -164,7 +164,7 @@ class Calculator: CalculatorProtocol {
         // Get number by string input
         buffValue = numberSystemFactory.get(strValue: value, currentSystem: system)!
         // Convert number to Binary without formatting
-        binaryValue = converter.convertValue(value: buffValue, from: system, to: .bin, format: false) as? Binary
+        binaryValue = converter.convertValue(value: buffValue, to: .bin, format: false) as? Binary
 
         if let bin = binaryValue {
             let wordSizeValue = wordSizeStorage.getWordSizeValue()
@@ -193,7 +193,7 @@ class Calculator: CalculatorProtocol {
                 if system == .dec {
                     let oldValue = inputValue as? DecimalSystem ?? DecimalSystem(0)
                     bin.updateSignedState()
-                    let newValue = converter.convertValue(value: bin, from: .bin, to: system, format: true) as! DecimalSystem
+                    let newValue = converter.convertValue(value: bin, to: system, format: true) as! DecimalSystem
                     // compare old value and new input value
                     // overflow if signs don't match
                     if oldValue.isSigned != newValue.isSigned && variant != .negate {
@@ -277,7 +277,7 @@ class Calculator: CalculatorProtocol {
                 return dummyBin
             }()
             
-            bin = converter.convertValue(value: bin, from: .bin, to: .bin, format: true) as! Binary
+            bin = converter.convertValue(value: bin, to: .bin, format: true) as! Binary
             
             // delete trailing zeros if contains .
             if bin.value.contains(".") {
@@ -304,8 +304,8 @@ class Calculator: CalculatorProtocol {
             // Convert value in binary
             // process binary raw string input in new binary with current settings: processSigned, wordSize etc.
             // convert back in systemMain value and set new value in mainLabel
-            let bin = converter.convertValue(value: inputValue, from: system, to: .bin, format: true) as! Binary
-            let updatedValue = converter.convertValue(value: bin, from: .bin, to: system, format: true)
+            let bin = converter.convertValue(value: inputValue, to: .bin, format: true) as! Binary
+            let updatedValue = converter.convertValue(value: bin, to: system, format: true)
             processedStr = updatedValue!.value
             
             // compose new str value if exists
@@ -318,7 +318,7 @@ class Calculator: CalculatorProtocol {
         
         let testProcessed: NumberSystemProtocol? = numberSystemFactory.get(strValue: processedStr, currentSystem: system)
         
-        if let testDec = converter.convertValue(value: testProcessed!, from: system, to: .dec, format: true) as? DecimalSystem {
+        if let testDec = converter.convertValue(value: testProcessed!, to: .dec, format: true) as? DecimalSystem {
             // check if is negative float value
             if testDec.value.contains(".") && testDec.decimalValue < 0 {
                 // remove fract part from str

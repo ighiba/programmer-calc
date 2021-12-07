@@ -21,66 +21,62 @@ import Foundation
     
     // Main function for conversion values
     public func convertValue(value: NumberSystemProtocol,
-                             from mainSystem: ConversionSystemsEnum,
                              to converterSystem: ConversionSystemsEnum,
                              format processToFormat: Bool) -> NumberSystemProtocol? {
         
-        // if manSystem == converterSystem, then return imput value
+        // if value system == converterSystem, then return imput value
         // except binary (for processing it to normal format)
-        if mainSystem == converterSystem && mainSystem != .bin {
+        if getSystemBy(value) == converterSystem &&
+           !(value is Binary) {
             return value
         }
         
         // =======================================
         // First step: convert any value to binary
         // =======================================
-        var binary = convertAnyToBinary(value: value, anySystem: mainSystem)
-        
-        // Check if not nil after converting to binary
-        guard binary != nil else { return nil }
+        var binary = convertAnyToBinary(value: value)
         
         if processToFormat {
             // Process binary to settings format
-            binary = processBinaryToFormat(binary!)
+            binary = processBinaryToFormat(binary)
         }
 
         // ==================================================
         // Second step: convert binary value to needed system
         // ==================================================
         
-        let result = convertBinaryToAny(binary: binary!, targetSystem: converterSystem)
+        let result = convertBinaryToAny(binary: binary, targetSystem: converterSystem)
         
         return result
     }
     
     // Converter from any to binary system
-    fileprivate func convertAnyToBinary( value: NumberSystemProtocol, anySystem: ConversionSystemsEnum) -> Binary? {
-        var binary: Binary?
+    fileprivate func convertAnyToBinary( value: NumberSystemProtocol) -> Binary {
+        var binary: Binary
         
-        switch anySystem {
+        let system = getSystemBy(value)
+        
+        switch system {
         case .bin:
-            // if already binary
-            if let bin = value as? Binary {
-                binary = Binary(bin)
-            }
+            // if already binary then copy bin
+            binary = Binary(value as! Binary)
         case .oct:
             // convert oct to binary
-            let oct: Octal = value as! Octal
+            let oct = value as! Octal
             binary = Binary(oct)
         case .dec:
             // convert dec to binary
             let dec = value as! DecimalSystem
-            if let bin = Binary(dec) {
-                binary = bin
-            }
+            binary = Binary(dec)
         case .hex:
             // convert hex to binary
             let hex = value as! Hexadecimal
             binary = Binary(hex)
+        case nil:
+            // dummy bin 0
+            binary = Binary(0)
+            break
         }
-        
-        // check if binary is nil
-        guard binary != nil else { return nil }
 
         return binary
     }
@@ -110,12 +106,29 @@ import Foundation
         }
     }
     
+    // Returns enum value depends on input value type
+    fileprivate func getSystemBy(_ value: NumberSystemProtocol) -> ConversionSystemsEnum? {
+        switch value {
+        case is Binary:
+            return .bin
+        case is Octal:
+            return .oct
+        case is DecimalSystem:
+            return .dec
+        case is Hexadecimal:
+            return .hex
+        default:
+            // no valid input type
+            return nil
+        }
+    }
+    
     // Convert value to one's complement
     public func toOnesComplement( value: NumberSystemProtocol, mainSystem: ConversionSystemsEnum) -> NumberSystemProtocol {
         var binary = Binary()
         
         // convert to Binary
-        binary = convertValue(value: value, from: mainSystem, to: .bin, format: true) as! Binary
+        binary = convertValue(value: value, to: .bin, format: true) as! Binary
         
         // convert binary to one's complement
         binary.onesComplement()
@@ -125,7 +138,7 @@ import Foundation
         }
 
         // convert to binary input system (mainSystem)
-        let resultBin = convertValue(value: binary, from: .bin, to: mainSystem, format: true)!
+        let resultBin = convertValue(value: binary, to: mainSystem, format: true)!
         
         return resultBin
     
@@ -136,13 +149,13 @@ import Foundation
         var binary = Binary()
         
         // convert to Binary
-        binary = convertValue(value: value, from: mainSystem, to: .bin, format: true) as! Binary
+        binary = convertValue(value: value, to: .bin, format: true) as! Binary
         
         // convert binary to 2's complement
         binary.twosComplement()
         
         // convert to binary input system (mainSystem)
-        return convertValue(value: binary, from: .bin, to: mainSystem, format: true)!
+        return convertValue(value: binary, to: mainSystem, format: true)!
     }
     
     // Process binary with settings from User Defaults
@@ -255,14 +268,14 @@ import Foundation
         let decFractPart = decIntPartCopy - decIntPart
         dec.setNewDecimal(with: decIntPart)
         // convert to binary
-        let bin = convertValue(value: dec, from: .dec, to: .bin, format: true) as! Binary
+        let bin = convertValue(value: dec, to: .bin, format: true) as! Binary
         // convert processed bin back in dec
-        let updatedDec = convertValue(value: bin, from: .bin, to: .dec, format: true)  as! DecimalSystem
+        let updatedDec = convertValue(value: bin, to: .dec, format: true) as! DecimalSystem
         // restore new decimal with fract part
         dec.setNewDecimal(with: updatedDec.decimalValue + decFractPart)
         
         // set updated main label value + last symbols if exists
         return dec.value + lastSymbolsIfExists
     }
-    
+
 }

@@ -474,7 +474,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             var lastDotIfExists: String = mainLabel.text?.last == "." ? "." : ""
             // Update converter label with converted number
             updateConversionState()
-            var newValue = converter.convertValue(value: calculator.inputValue, from: calculator.systemMain!, to: calculator.systemConverter!, format: true)
+            var newValue = converter.convertValue(value: calculator.inputValue, to: calculator.systemConverter!, format: true)
             guard newValue != nil else { return }
             if let bin = newValue as? Binary {
                 // divide binary by parts
@@ -505,7 +505,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
 
         if digit == "." && !labelText.contains(".") {
             // forbid float input when negative number
-            if let dec = converter.convertValue(value: calculator.inputValue, from: calculator.systemMain!, to: .dec, format: true) as? DecimalSystem {
+            if let dec = converter.convertValue(value: calculator.inputValue, to: .dec, format: true) as? DecimalSystem {
                 if dec.decimalValue < 0 { return labelText }
             }
             return labelText + digit

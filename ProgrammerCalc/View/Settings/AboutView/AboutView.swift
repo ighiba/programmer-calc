@@ -76,7 +76,7 @@ extension AboutView: UITableViewDelegate, UITableViewDataSource {
             let versionLabel = UILabel()
             // get version
             let appVersion = UIApplication.appVersion ?? "1.0"
-            versionLabel.text = "ProgrammerCalc \(appVersion)"
+            versionLabel.text = "Programmer's Calculator \(appVersion)"
             versionLabel.font = UIFont.systemFont(ofSize: 12, weight: .thin)
             versionLabel.textColor = .systemGray
             

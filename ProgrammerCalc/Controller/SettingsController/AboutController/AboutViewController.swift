@@ -81,7 +81,7 @@ class AboutViewController: PCalcTableViewController, AboutViewControllerDelegate
             
             // Configure the fields of the interface
             composeVC.setToRecipients(["ighiba.dev@gmail.com"])
-            composeVC.setSubject("ProgrammerCalc support")
+            composeVC.setSubject("Programmer's Calculator support")
             composeVC.setMessageBody("Model - \(model), OS - \(systemVersion), App version - \(appVersion)(\(buildNumber))", isHTML: false)
             
             self.present(composeVC, animated: true, completion: nil)

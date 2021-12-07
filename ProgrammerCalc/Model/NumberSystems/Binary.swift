@@ -45,21 +45,15 @@ class Binary: NumberSystemProtocol {
         self.init()
         // Get new DecimalSystem value
         let decNumber = DecimalSystem(valueInt)
-        if let binary = decNumber.convertDecToBinary() {
-            self.value = binary.value
-        } else {
-            self.value = "0"
-        }
+        let binary = decNumber.convertDecToBinary()
+        self.value = binary.value
     }
     
     /// Creates an instance initialized to the Decimal value
-    convenience init?(_ valueDec: DecimalSystem) {
+    convenience init(_ valueDec: DecimalSystem) {
         self.init()
-        if let binary = valueDec.convertDecToBinary() {
-            self.value = binary.value
-        } else {
-            return nil
-        }
+        let binary = valueDec.convertDecToBinary()
+        self.value = binary.value
     }
     
     /// Creates an instance initialized to the Hexadecimal value
