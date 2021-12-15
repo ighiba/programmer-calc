@@ -436,14 +436,13 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     
     private func updateMainLabelNumberValue() {
         // update label numberValue
-        let numValue = calculator.numberSystemFactory.get(strValue: mainLabel.text!, currentSystem: calculator.systemMain!)
-        guard numValue != nil else {
+        guard let numValue = calculator.numberSystemFactory.get(strValue: mainLabel.text!, currentSystem: calculator.systemMain!) else {
             return
         }
         // set value to main label
-        mainLabel.setNumberValue(numValue!)
+        mainLabel.setNumberValue(numValue)
         // update calculator inputValue (main label number value)
-        calculator.inputValue = numValue!
+        calculator.inputValue = numValue
     }
        
     public func updateConverterLabel() {

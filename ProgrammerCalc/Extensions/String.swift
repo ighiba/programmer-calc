@@ -102,11 +102,10 @@ extension String {
     
     fileprivate func getPart(from str: String, divider: Character, for index: String.Index, distance: Int) -> String {
         // get position part
-        let pointPos = str.firstIndex(of: divider)
-        guard pointPos != nil else {
+        guard let pointPos = str.firstIndex(of: divider) else {
             return ""
         }
-        let partDistance = abs(Int(str.distance(from: pointPos!, to: index)))
+        let partDistance = abs(Int(str.distance(from: pointPos, to: index)))
         guard partDistance > distance else {
             return ""
         }

@@ -457,7 +457,6 @@ class Binary: NumberSystemProtocol {
         let binary = self
         
         let wordSizeValue = 64
-        //let wordSizeValue = wordSizeStorage.getWordSizeValue()
         
         if signed {
             // -12 => 1100 -> 11111100
@@ -489,12 +488,8 @@ class Binary: NumberSystemProtocol {
             isInputSigned = binary.isSigned
         }
 
-        // fill if needed to
         if !isInputSigned {
-            // remove signed bit
-//            if binary.value.first != "1" {
-//                binary.value.removeFirst()
-//            }
+            // fill if needed to
             binary.fillToFormat(upToZeros: true)
         } else {
             // invert binary if signed

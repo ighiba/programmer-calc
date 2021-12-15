@@ -25,7 +25,7 @@ extension Decimal {
     
     // pow func for decimal values
     func decPow(_ value: Decimal, _ power: Decimal) -> Decimal {
-        let powerInt = Int("\(power)")!
+        let powerInt = Int("\(power)") ?? 1
         var result = Decimal(1.0)
         for _ in 0..<powerInt {
             result *= value

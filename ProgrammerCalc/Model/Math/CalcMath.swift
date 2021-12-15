@@ -149,7 +149,7 @@ final class CalcMath {
         // Bitwise shift left
         case .shiftLeft:
 
-            if let dec = shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: .shiftLeft, shiftCount: 1) as? DecimalSystem {
+            if let dec = shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: .shiftLeft, shiftCount: DecimalSystem(1)) as? DecimalSystem {
                 resultStr = dec.value
             } else {
                 return firstNum
@@ -158,7 +158,7 @@ final class CalcMath {
         // Bitwise shift right
         case .shiftRight:
             
-            if let dec = shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: .shiftRight, shiftCount: 1) as? DecimalSystem {
+            if let dec = shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: .shiftRight, shiftCount: DecimalSystem(1)) as? DecimalSystem {
                 resultStr = dec.value
             } else {
                 return firstNum
@@ -199,13 +199,13 @@ final class CalcMath {
                 return result
             }).value
         case .shiftLeftBy:
-            if let dec = shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: .shiftLeft, shiftCount: Int(secondNum.value)!) as? DecimalSystem {
+            if let dec = shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: .shiftLeft, shiftCount: secondNum) as? DecimalSystem {
                 resultStr = dec.value
             } else {
                 return firstNum
             }
         case .shiftRightBy:
-            if let dec = shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: .shiftRight, shiftCount: Int(secondNum.value)!) as? DecimalSystem {
+            if let dec = shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: .shiftRight, shiftCount: secondNum) as? DecimalSystem {
                 resultStr = dec.value
             } else {
                 return firstNum
@@ -238,8 +238,7 @@ final class CalcMath {
         // Convert Any to Decimal
         // ======================
         
-        let convertedDecimal: DecimalSystem
-        convertedDecimal = converter.convertValue(value: value, to: .dec, format: true)! as! DecimalSystem
+        let convertedDecimal = converter.convertValue(value: value, to: .dec, format: true)! as! DecimalSystem
         
         // if 0 then return input value
         guard convertedDecimal.decimalValue != 0 else {
@@ -277,7 +276,10 @@ final class CalcMath {
     }
     
     // Shift to needed bit count
-    public func shiftBits( value: NumberSystemProtocol, mainSystem: ConversionSystemsEnum, shiftOperation: CalcMath.Operation, shiftCount: Int ) -> NumberSystemProtocol? {
+    public func shiftBits(value: NumberSystemProtocol,
+                          mainSystem: ConversionSystemsEnum,
+                          shiftOperation: CalcMath.Operation,
+                          shiftCount: DecimalSystem ) -> NumberSystemProtocol? {
         // Check if value is not float
         guard !value.value.contains(".") else {
             return value
@@ -285,60 +287,59 @@ final class CalcMath {
         
         // check if shift out of max bit index QWORD - 64
         // shifting more than 64 make no sense
-        guard abs(shiftCount) < 64 else {
+        guard shiftCount.decimalValue < 64 && shiftCount.decimalValue > -64 else {
             // return 0
-            return converter.convertValue(value: Binary(stringLiteral: "0"), to: mainSystem, format: true)
+            return converter.convertValue(value: Binary(0), to: mainSystem, format: true)
         }
         
+        // convert shift count to absolute int
+        let absoluteShiftCount = (abs(shiftCount.decimalValue) as NSDecimalNumber).intValue
+        
         // convert to Binary
-        let binary = converter.convertValue(value: value, to: .bin, format: true) as? Binary
-        
-        // check if binary is nil
-        guard binary != nil else { return nil }
-        
+        guard let binary = converter.convertValue(value: value, to: .bin, format: true) as? Binary else {
+            return nil
+        }
+
         // get operation
         let operation: CalcMath.Operation = {
-            if shiftCount < 0 {
+            if shiftCount.decimalValue < 0 {
                 // swap operation if shift count < 0
-                if shiftOperation == .shiftRight {
-                    return .shiftLeft
-                } else {
-                    return .shiftRight
-                }
+                return shiftOperation == .shiftRight ? .shiftLeft : .shiftRight
             } else {
-                // keep inpu value if shift count > 0
+                // keep input value if shift count > 0
                 return shiftOperation
             }
         }()
     
         // loop shiftCount for x>>y and x<<y
-        for _ in 0..<abs(shiftCount) {
-            if operation == .shiftLeft {
+        for _ in 0..<absoluteShiftCount {
+            switch operation {
+            case .shiftLeft:
                 // <<
                 // append from right
-                binary!.value.append("0")
-            } else if operation == .shiftRight {
+                binary.value.append("0")
+            case .shiftRight:
                 // >>
                 // remove from right
-                if binary!.value.count > 0 {
+                if binary.value.count > 0 {
                     // remove right bit
-                    binary!.value.removeLast(1)
+                    binary.value.removeLast(1)
                     // add left bit
-                    if binary!.isSigned {
-                        binary!.value = "1" + binary!.value
+                    if binary.isSigned {
+                        binary.value = "1" + binary.value
                     } else {
-                        binary!.value = "0" + binary!.value
+                        binary.value = "0" + binary.value
                     }
                 } else {
-                    binary!.value = "0"
+                    binary.value = "0"
                 }
-            } else {
+            default:
                 // if wrong operation
-                binary!.value = "0"
+                binary.value = "0"
             }
         }
         
-        return converter.convertValue(value: Binary(stringLiteral: binary!.value), to: mainSystem, format: true)
+        return converter.convertValue(value: Binary(stringLiteral: binary.value), to: mainSystem, format: true)
     }
     
     // AND
