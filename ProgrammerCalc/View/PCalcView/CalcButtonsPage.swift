@@ -48,7 +48,6 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
             // centering
             buttonsStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             // top anchor
-            //buttonsStackView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: buttonsStackHeight() / 2 + 2),
             buttonsStackView.topAnchor.constraint(equalTo: self.topAnchor, constant: (buttonsStackHeight() / 2 + 2) * 1.089),
             // bottom anchor === spacing -3.5 for shadows
             buttonsStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -3.5),
@@ -107,32 +106,32 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
                 button.frameTint = style.numericButtonStyle.frameTint
                 button.setTitleColor(style.numericButtonStyle.textColor, for: .normal)
                 button.setTitleColor(style.numericButtonStyle.textTint, for: .highlighted)
-                break
+
             case .sign:
                 button.backgroundColor = style.actionButtonStyle.frameColor
                 button.frameTint = style.actionButtonStyle.frameTint
                 button.setTitleColor(style.actionButtonStyle.textColor, for: .normal)
                 button.setTitleColor(style.actionButtonStyle.textTint, for: .highlighted)
-                break
+
             case .complement:
                 button.backgroundColor = style.miscButtonStyle.frameColor
                 button.frameTint = style.miscButtonStyle.frameTint
                 button.setTitleColor(style.miscButtonStyle.textColor, for: .normal)
                 button.setTitleColor(style.miscButtonStyle.textTint, for: .highlighted)
-                break
+
             case .bitwise:
                 button.backgroundColor = style.actionButtonStyle.frameColor
                 button.frameTint = style.actionButtonStyle.frameTint
                 button.setTitleColor(style.actionButtonStyle.textColor, for: .normal)
                 button.setTitleColor(style.actionButtonStyle.textTint, for: .highlighted)
-                break
+
             case .defaultBtn:
                 button.backgroundColor = style.miscButtonStyle.frameColor
                 button.frameTint = style.miscButtonStyle.frameTint
                 button.setTitleColor(style.miscButtonStyle.textColor, for: .normal)
                 button.setTitleColor(style.miscButtonStyle.textTint, for: .highlighted)
                 button.setTitleColor(style.miscButtonStyle.textTint.setDarker(by: 0.7), for: .disabled)
-                break
+                
             }
             // set border color
             if style.buttonBorderColor != .clear {
@@ -142,7 +141,6 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
                 button.layer.borderColor = style.buttonBorderColor.cgColor
             }
             button.layer.borderWidth = 0.5
-            
             
             // set shadow
             button.layer.shadowColor = UIColor.black.cgColor
@@ -155,7 +153,6 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
                                     cornerHeight: button.layer.cornerRadius,
                                     transform: nil)
             button.layer.shadowPath = shadowPath
-
         }
 
     }
@@ -274,7 +271,6 @@ class CalcButtonsMain: CalcButtonsPage {
                 button.addTarget(nil, action: #selector(PCalcViewController.calculateButtonTapped), for: .touchUpInside)
             default:
                 button = CalculatorButton(calcButtonType: .sign)
-                break
             }
             // set actions/targets
             button.setActions(for: button.calcButtonType)
@@ -381,7 +377,6 @@ class CalcButtonsAdditional: CalcButtonsPage {
                 button = CalculatorButton(calcButtonType: .bitwise)
             default:
                 button = CalculatorButton(calcButtonType: .numeric)
-                break
             }
             // set actions/targets
             button.setActions(for: button.calcButtonType)

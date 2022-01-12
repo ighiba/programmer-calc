@@ -63,8 +63,8 @@ class PCalcView: UIView {
         self.addSubview(navigationBar)
         // add labels
         self.addSubview(labelsStack)
-        self.addSubview(self.mainLabel.infoSubLabel)
-        self.addSubview(self.converterLabel.infoSubLabel)
+        self.addSubview(mainLabel.infoSubLabel)
+        self.addSubview(converterLabel.infoSubLabel)
         
         setupLayout()
     }
@@ -95,7 +95,7 @@ class PCalcView: UIView {
         mainLabel.numberOfLines = 2
     }
     
-    func unhideConverterLabel() {
+    func showConverterLabel() {
         // unhide
         mainLabel.isHidden = false
         converterLabel.isHidden = false
@@ -156,7 +156,6 @@ class PCalcView: UIView {
         label.backgroundColor = .clear
         // set font size, font family, allignment
         label.font = UIFont(name: label.fontName, size: 70.0)
-        //label.font = UIFont(name: "CourierNewPSMT", size: 70.0)
         label.textAlignment = .right
         // resizeble text
         label.adjustsFontSizeToFitWidth = true

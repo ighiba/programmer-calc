@@ -149,7 +149,7 @@ final class CalcMath {
         // Bitwise shift left
         case .shiftLeft:
 
-            if let dec = shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: .shiftLeft, shiftCount: DecimalSystem(1)) as? DecimalSystem {
+            if let dec = shiftBits(number: firstNum, mainSystem: .dec, shiftOperation: .shiftLeft, shiftCount: DecimalSystem(1)) as? DecimalSystem {
                 resultStr = dec.value
             } else {
                 return firstNum
@@ -158,7 +158,7 @@ final class CalcMath {
         // Bitwise shift right
         case .shiftRight:
             
-            if let dec = shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: .shiftRight, shiftCount: DecimalSystem(1)) as? DecimalSystem {
+            if let dec = shiftBits(number: firstNum, mainSystem: .dec, shiftOperation: .shiftRight, shiftCount: DecimalSystem(1)) as? DecimalSystem {
                 resultStr = dec.value
             } else {
                 return firstNum
@@ -199,13 +199,13 @@ final class CalcMath {
                 return result
             }).value
         case .shiftLeftBy:
-            if let dec = shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: .shiftLeft, shiftCount: secondNum) as? DecimalSystem {
+            if let dec = shiftBits(number: firstNum, mainSystem: .dec, shiftOperation: .shiftLeft, shiftCount: secondNum) as? DecimalSystem {
                 resultStr = dec.value
             } else {
                 return firstNum
             }
         case .shiftRightBy:
-            if let dec = shiftBits(value: firstNum, mainSystem: .dec, shiftOperation: .shiftRight, shiftCount: secondNum) as? DecimalSystem {
+            if let dec = shiftBits(number: firstNum, mainSystem: .dec, shiftOperation: .shiftRight, shiftCount: secondNum) as? DecimalSystem {
                 resultStr = dec.value
             } else {
                 return firstNum
@@ -276,13 +276,13 @@ final class CalcMath {
     }
     
     // Shift to needed bit count
-    public func shiftBits(value: NumberSystemProtocol,
+    public func shiftBits(number: NumberSystemProtocol,
                           mainSystem: ConversionSystemsEnum,
                           shiftOperation: CalcMath.Operation,
                           shiftCount: DecimalSystem ) -> NumberSystemProtocol? {
         // Check if value is not float
-        guard !value.value.contains(".") else {
-            return value
+        guard !number.value.contains(".") else {
+            return number
         }
         
         // check if shift out of max bit index QWORD - 64
@@ -296,7 +296,7 @@ final class CalcMath {
         let absoluteShiftCount = (abs(shiftCount.decimalValue) as NSDecimalNumber).intValue
         
         // convert to Binary
-        guard let binary = converter.convertValue(value: value, to: .bin, format: true) as? Binary else {
+        guard let binary = converter.convertValue(value: number, to: .bin, format: true) as? Binary else {
             return nil
         }
 

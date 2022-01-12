@@ -663,7 +663,7 @@ class CalcMathTests: XCTestCase {
         let binary = Binary(stringLiteral: "00001100")
         
         // 2. when
-        let shifted = calcMathTest.shiftBits(value: binary, mainSystem: .bin, shiftOperation: .shiftLeft, shiftCount: DecimalSystem(1))
+        let shifted = calcMathTest.shiftBits(number: binary, mainSystem: .bin, shiftOperation: .shiftLeft, shiftCount: DecimalSystem(1))
         
         // 3. then
         XCTAssertEqual(shifted?.value, "00011000", "Failed shifting left")
@@ -676,7 +676,7 @@ class CalcMathTests: XCTestCase {
         let binary = Binary(stringLiteral: "11110100") // -12
         
         // 2. when
-        let shifted = calcMathTest.shiftBits(value: binary, mainSystem: .bin, shiftOperation: .shiftLeft, shiftCount: DecimalSystem(1))!
+        let shifted = calcMathTest.shiftBits(number: binary, mainSystem: .bin, shiftOperation: .shiftLeft, shiftCount: DecimalSystem(1))!
         
         // 3. then
         XCTAssertEqual(shifted.value, "11101000", "Failed shifting left") // -24
@@ -689,7 +689,7 @@ class CalcMathTests: XCTestCase {
         let binary = Binary(stringLiteral: "00001100")
         
         // 2. when
-        let shifted = calcMathTest.shiftBits(value: binary, mainSystem: .bin, shiftOperation: .shiftRight, shiftCount: DecimalSystem(1))!
+        let shifted = calcMathTest.shiftBits(number: binary, mainSystem: .bin, shiftOperation: .shiftRight, shiftCount: DecimalSystem(1))!
         
         // 3. then
         XCTAssertEqual(shifted.value, "00000110", "Failed shifting right")
@@ -702,7 +702,7 @@ class CalcMathTests: XCTestCase {
         let binary = Binary(stringLiteral: "11110100") // -12
         
         // 2. when
-        let shifted = calcMathTest.shiftBits(value: binary, mainSystem: .bin, shiftOperation: .shiftRight, shiftCount: DecimalSystem(1))!
+        let shifted = calcMathTest.shiftBits(number: binary, mainSystem: .bin, shiftOperation: .shiftRight, shiftCount: DecimalSystem(1))!
         
         // 3. then
         XCTAssertEqual(shifted.value, "11111010", "Failed shifting right") // -6
@@ -715,7 +715,7 @@ class CalcMathTests: XCTestCase {
         let binary = Binary(stringLiteral: "00001100") // 12
         
         // 2. when
-        let shifted = calcMathTest.shiftBits(value: binary, mainSystem: .bin, shiftOperation: .shiftLeft, shiftCount: DecimalSystem(12))!
+        let shifted = calcMathTest.shiftBits(number: binary, mainSystem: .bin, shiftOperation: .shiftLeft, shiftCount: DecimalSystem(12))!
         
         // 3. then
         XCTAssertEqual(shifted.value, "1100000000000000", "Failed shifting 12 left")
@@ -728,7 +728,7 @@ class CalcMathTests: XCTestCase {
         let binary = Binary(stringLiteral: "1100") // 12
         
         // 2. when
-        let shifted = calcMathTest.shiftBits(value: binary, mainSystem: .bin, shiftOperation: .shiftRight, shiftCount: DecimalSystem(2))!
+        let shifted = calcMathTest.shiftBits(number: binary, mainSystem: .bin, shiftOperation: .shiftRight, shiftCount: DecimalSystem(2))!
         
         // 3. then
         XCTAssertEqual(shifted.value, "00000011", "Failed shifting 2 right")
@@ -741,7 +741,7 @@ class CalcMathTests: XCTestCase {
         let binary = Binary(stringLiteral: "00001100") // 12
         
         // 2. when
-        let shifted = calcMathTest.shiftBits(value: binary, mainSystem: .bin, shiftOperation: .shiftLeft, shiftCount: DecimalSystem(12))!
+        let shifted = calcMathTest.shiftBits(number: binary, mainSystem: .bin, shiftOperation: .shiftLeft, shiftCount: DecimalSystem(12))!
         
         // 3. then
         XCTAssertEqual(shifted.value, "1100000000000000", "Failed shifting 12 left")
@@ -754,7 +754,7 @@ class CalcMathTests: XCTestCase {
         let binary = Binary(stringLiteral: "1100") // 12
         
         // 2. when
-        let shifted = calcMathTest.shiftBits(value: binary, mainSystem: .bin, shiftOperation: .shiftRight, shiftCount: DecimalSystem(2))!
+        let shifted = calcMathTest.shiftBits(number: binary, mainSystem: .bin, shiftOperation: .shiftRight, shiftCount: DecimalSystem(2))!
         
         // 3. then
         XCTAssertEqual(shifted.value, "00000011", "Failed shifting 2 right")

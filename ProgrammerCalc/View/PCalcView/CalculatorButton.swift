@@ -49,9 +49,9 @@ class CalculatorButton: UIButton {
         didSet {
             if isHighlighted {
                 // create button animation when button pressed
-                self.buffColor = self.backgroundColor!
+                buffColor = self.backgroundColor!
                 // set tint color
-                self.backgroundColor = self.frameTint
+                self.backgroundColor = frameTint
             } else {
                 // create button animation when button unpressed
                 UIView.transition(
@@ -181,10 +181,10 @@ class CalculatorButton: UIButton {
             let previousTouchInside: Bool = outerBounds.contains(previousLocation)
             if previousTouchInside {
                 sendActions(for: .touchDragExit)
-                self.isHighlighted = false
+                isHighlighted = false
             } else {
                 sendActions(for: .touchDragOutside)
-                self.isHighlighted = false
+                isHighlighted = false
             }
         } else {
             let previousTouchOutside: Bool = !outerBounds.contains(previousLocation)

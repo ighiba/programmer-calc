@@ -141,7 +141,6 @@ class ProgrammerCalcUITests: XCTestCase {
     
     func testAboutView() throws {
         // 1. given
-
         let tablesQuery_About = app.tables
         let descriptionRow = tablesQuery_About.staticTexts["Description"]
         let rateAppRow = tablesQuery_About.staticTexts["Rate app"]

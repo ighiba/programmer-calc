@@ -121,7 +121,7 @@ class Calculator: CalculatorProtocol {
     }
     
     fileprivate func calculateSoloBitwise(_ inputValue: NumberSystemProtocol, _ operation: CalcMath.Operation) -> String {
-        return calculationHandler.shiftBits(value: inputValue, mainSystem: systemMain!, shiftOperation: operation, shiftCount: DecimalSystem(1))!.value
+        return calculationHandler.shiftBits(number: inputValue, mainSystem: systemMain!, shiftOperation: operation, shiftCount: DecimalSystem(1))!.value
     }
     
     // Convert operation name from button title to enum

@@ -418,14 +418,10 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             // hide
             calcView.hideConverterLabel()
         } else {
-            // unhide
-            calcView.unhideConverterLabel()
+            // show
+            calcView.showConverterLabel()
             // lines for binary
-            if calculator.systemMain == .bin {
-                mainLabel.numberOfLines = 2
-            } else {
-                mainLabel.numberOfLines = 1
-            }
+            mainLabel.numberOfLines = calculator.systemMain == .bin ? 2 : 1 // 2 if binary else 1
         }
     }
     
