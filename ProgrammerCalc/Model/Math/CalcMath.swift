@@ -344,60 +344,27 @@ final class CalcMath {
     
     // AND
     private func bitAnd(left: Binary, right: Binary) -> Binary {
-        
-        let resultBin = bitOperation(left: left, right: right) { reversedLeftBin, reversedRightBin in
-            var resultStr = String()
-            for index in 0..<reversedLeftBin.count {
-                if reversedLeftBin[index] == "1" && reversedLeftBin[index] == reversedRightBin[index] {
-                    resultStr.append("1")
-                } else {
-                    resultStr.append("0")
-                }
-            }
-            return resultStr
+        return bitOperation(left: left, right: right) { leftBit, rightBit in
+            compareBitsAnd(leftBit, rightBit)
         }
-        
-        return resultBin
     }
     
     // OR
     private func bitOr(left: Binary, right: Binary) -> Binary {
-        
-        let resultBin = bitOperation(left: left, right: right) { reversedLeftBin, reversedRightBin in
-            var resultStr = String()
-            for index in 0..<reversedLeftBin.count {
-                if reversedLeftBin[index] == "1" || reversedRightBin[index] == "1" {
-                    resultStr.append("1")
-                } else {
-                    resultStr.append("0")
-                }
-            }
-            return resultStr
+        return bitOperation(left: left, right: right) { leftBit, rightBit in
+            compareBitsOr(leftBit, rightBit)
         }
-        
-        return resultBin
     }
     
     // XOR
     private func bitXor(left: Binary, right: Binary) -> Binary {
-        
-        let resultBin = bitOperation(left: left, right: right) { reversedLeftBin, reversedRightBin in
-            var resultStr = String()
-            for index in 0..<reversedLeftBin.count {
-                if reversedLeftBin[index] != reversedRightBin[index] {
-                    resultStr.append("1")
-                } else {
-                    resultStr.append("0")
-                }
-            }
-            return resultStr
+        return bitOperation(left: left, right: right) { leftBit, rightBit in
+            compareBitsXor(leftBit, rightBit)
         }
-        
-        return resultBin
     }
     
-    // Universal bit operation with input logic of looping reversed bits
-    private func bitOperation(left: Binary, right: Binary, logic: ([Character],[Character]) -> String ) -> Binary {
+    // Universal bit operation with input bit comparison logic closure
+    private func bitOperation(left: Binary, right: Binary, comparison: (Character, Character) -> Bool ) -> Binary {
         let resultBin = Binary()
         var resultStr = String()
         let wordSizeValue = wordSizeStorage.getWordSizeValue()
@@ -410,13 +377,34 @@ final class CalcMath {
         // reverse bin values
         let reversedLeftBin = left.value.reversed() as [Character]
         let reversedRightBin = right.value.reversed() as [Character]
-        // loop bits with given logic
-        resultStr = logic(reversedLeftBin,reversedRightBin)
+        
+        // loop bits with given comparison logic closure
+        for i in 0..<reversedLeftBin.count {
+            let condition = comparison(reversedLeftBin[i], reversedRightBin[i])
+            let bit = getBitBy(cond: condition)
+            resultStr.append(bit)
+        }
         
         // set value to resultBin
         resultBin.value = String(resultStr.reversed())
         
         return resultBin
+    }
+    
+    private func getBitBy(cond: Bool) -> String {
+        return cond ? "1" : "0"
+    }
+    
+    private func compareBitsAnd(_ leftBit: Character, _ rightBit: Character) -> Bool {
+        return leftBit == "1" && leftBit == rightBit
+    }
+    
+    private func compareBitsOr(_ leftBit: Character, _ rightBit: Character) -> Bool {
+        return leftBit == "1" || rightBit == "1"
+    }
+    
+    private func compareBitsXor(_ leftBit: Character, _ rightBit: Character) -> Bool {
+        return leftBit != rightBit
     }
     
     
