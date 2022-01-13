@@ -316,23 +316,10 @@ final class CalcMath {
             switch operation {
             case .shiftLeft:
                 // <<
-                // append from right
-                binary.value.append("0")
+                binary.shiftOneLeft()
             case .shiftRight:
                 // >>
-                // remove from right
-                if binary.value.count > 0 {
-                    // remove right bit
-                    binary.value.removeLast(1)
-                    // add left bit
-                    if binary.isSigned {
-                        binary.value = "1" + binary.value
-                    } else {
-                        binary.value = "0" + binary.value
-                    }
-                } else {
-                    binary.value = "0"
-                }
+                binary.shiftOneRight()
             default:
                 // if wrong operation
                 binary.value = "0"

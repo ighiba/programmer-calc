@@ -785,5 +785,24 @@ class Binary: NumberSystemProtocol {
 
         return result
     }
+    
+    // <<
+    func shiftOneRight() {
+        if self.value.count > 0 {
+            // remove right bit
+            self.value.removeLast(1)
+            // add left bit by signed state
+            let leftBit = self.isSigned ? "1" : "0"
+            self.value = leftBit + self.value
+        } else {
+            self.value = "0"
+        }
+    }
+    
+    // <<
+    func shiftOneLeft() {
+        // append from right
+        self.value.append("0")
+    }
 
 }
