@@ -21,7 +21,6 @@ class ConversionViewController: UIViewController {
     lazy var labelValue: UILabel = conversionView.sliderValueDigit
     var sliderOldValue: Float = 2.0
     
-    
     // links to storages
     private var settingsStorage: SettingsStorageProtocol = SettingsStorage()
     private var conversionStorage: ConversionStorageProtocol = ConversionStorage()
@@ -30,6 +29,8 @@ class ConversionViewController: UIViewController {
     let generator = UIImpactFeedbackGenerator(style: .medium)
     // Hapting settings
     lazy var hapticFeedback = settingsStorage.safeGetData().hapticFeedback
+    
+    var updaterHandler: (() -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -132,8 +133,7 @@ class ConversionViewController: UIViewController {
             delegate!.updateAllLayout()
         }
         
-        delegate!.handleDisplayingMainLabel()
-        delegate!.updateButtonsState()
+        updaterHandler!()
         
     }
     

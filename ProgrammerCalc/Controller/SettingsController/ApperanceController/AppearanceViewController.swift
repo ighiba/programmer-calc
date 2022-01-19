@@ -160,7 +160,7 @@ class AppearanceViewController: PCalcTableViewController, AppearanceViewControll
         if let PCalcVC = self.view.window?.rootViewController as? PCalcViewController {
             PCalcVC.view.layoutSubviews()
             PCalcVC.calcView.layoutSubviews()
-            PCalcVC.arrayCalcButtonsViewController.forEach { vc in
+            PCalcVC.calcButtonsViewControllers.forEach { vc in
                 vc.view.layoutSubviews()
             }
         }

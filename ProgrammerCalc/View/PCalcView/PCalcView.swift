@@ -18,6 +18,7 @@ class PCalcView: UIView {
     // Constraints
     var portrait: [NSLayoutConstraint]?
     var landscape: [NSLayoutConstraint]?
+    var landscapeWithBitKeypad: [NSLayoutConstraint]?
     
     // safe area insets in CGFloat .top .bottom
     let windowSafeAreaInsets: UIEdgeInsets = {
@@ -39,6 +40,10 @@ class PCalcView: UIView {
                                                             style: .plain,
                                                             target: self,
                                                             action: #selector(PCalcViewController.changeConversionButtonTapped))
+    private let keypadItem = UIBarButtonItem(image: UIImage(named: "keypadIcon-bitwise"),
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(PCalcViewController.switchKeypad))
     private let settingsItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"),
                                                               style: .plain,
                                                               target: self,
@@ -51,6 +56,12 @@ class PCalcView: UIView {
         setViews()
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Methods
+    
     override func layoutSubviews() {
         // update colors by style
         updateStyle()
@@ -58,13 +69,15 @@ class PCalcView: UIView {
     
     func setViews() {
         self.backgroundColor = .clear
-        self.frame = CGRect( x: 0, y: 0, width: UIScreen.main.bounds.width, height: viewHeight())
+        self.frame = CGRect( x: 0, y: 0, width: UIScreen.main.bounds.width, height: getViewHeight())
         // add navigation bar
         self.addSubview(navigationBar)
         // add labels
         self.addSubview(labelsStack)
         self.addSubview(mainLabel.infoSubLabel)
         self.addSubview(converterLabel.infoSubLabel)
+        
+        navigationBar.subviews.forEach({ $0.isExclusiveTouch = true })
         
         setupLayout()
     }
@@ -82,6 +95,7 @@ class PCalcView: UIView {
         converterLabel.infoSubLabel.textColor = .systemGray
         // NavBar items
         changeItem.tintColor = style.tintColor
+        keypadItem.tintColor = style.tintColor
         settingsItem.tintColor = style.tintColor
         changeWordSizeButton.tintColor = style.tintColor
     }
@@ -89,6 +103,7 @@ class PCalcView: UIView {
     func hideConverterLabel() {
         // hide
         mainLabel.isHidden = false
+        converterLabel.infoSubLabel.isHidden = true
         converterLabel.isHidden = true
         // bigger font for mainLabel
         mainLabel.font = mainLabel.font.withSize(82.0)
@@ -98,9 +113,17 @@ class PCalcView: UIView {
     func showConverterLabel() {
         // unhide
         mainLabel.isHidden = false
+        converterLabel.infoSubLabel.isHidden = false
         converterLabel.isHidden = false
         // default font for mainLabel
         mainLabel.font = mainLabel.font.withSize(70.0)
+    }
+    
+    func freezeNavBar(by duration: CGFloat) {
+        navigationBar.isUserInteractionEnabled = false
+        Timer.scheduledTimer(withTimeInterval: duration, repeats: false, block: { _ in
+            self.navigationBar.isUserInteractionEnabled = true
+        })
     }
     
     // MARK: - Views
@@ -130,8 +153,8 @@ class PCalcView: UIView {
         self.settingsItem.setTitleTextAttributes([NSAttributedString.Key.font: font], for: .normal)
         
         // add buttons to navigation item
-        navItem.leftBarButtonItem = self.changeItem
-        navItem.rightBarButtonItem = self.settingsItem
+        navItem.leftBarButtonItems = [changeItem, keypadItem]
+        navItem.rightBarButtonItem = settingsItem
         
         // title view for middle button "Change word size"
         let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 44*2, height: 44))
@@ -237,6 +260,19 @@ class PCalcView: UIView {
             converterLabel.infoSubLabel.trailingAnchor.constraint(equalTo: converterLabel.trailingAnchor, constant: -5),
         ]
         
+        // Constraints for landscape orientation (with bitwise keypad enabled)
+        landscapeWithBitKeypad = [
+            labelsStack.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: getScreenBounds().width * 0.05),
+            labelsStack.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: getScreenBounds().width * -0.05),
+            labelsStack.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: margin),
+            labelsStack.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.3, constant: -margin*3),
+            
+            mainLabel.infoSubLabel.topAnchor.constraint(equalTo: mainLabel.bottomAnchor),
+            mainLabel.infoSubLabel.trailingAnchor.constraint(equalTo: mainLabel.trailingAnchor, constant: -5),
+            
+            converterLabel.infoSubLabel.topAnchor.constraint(equalTo: converterLabel.bottomAnchor),
+            converterLabel.infoSubLabel.trailingAnchor.constraint(equalTo: converterLabel.trailingAnchor, constant: -5),
+        ]
         
         // Additional setups
         // add changeWordSizeButton to navigationBar title view(in center)
@@ -247,13 +283,7 @@ class PCalcView: UIView {
     
     // MARK: - Calculated heights
     
-    // Dynamic label height for autolayout
-    // the label stack must fill 1/3 part of screen
-    func labelHeight() -> CGFloat {
-        return (viewHeight() - labelsStack.spacing * 2 - navBarHeight - windowSafeAreaInsets.top - margin ) / 2
-    }
-    
-    func viewHeight() -> CGFloat {
+    func getViewHeight() -> CGFloat {
         return UIScreen.main.bounds.height / 3 - 2
     }
     
@@ -268,10 +298,7 @@ class PCalcView: UIView {
         
         return CGRect(x: 0, y: 0, width: width, height: height)
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+
 }
 
 

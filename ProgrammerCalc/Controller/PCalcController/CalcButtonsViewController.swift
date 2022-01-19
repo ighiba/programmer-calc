@@ -22,9 +22,10 @@ class CalcButtonsViewController: UIViewController {
     // PCalcViewController delegate
     var delegate: PCalcViewControllerDelegate?
     
-    init( buttonsPage: UIView) {
+    init(buttonsPage: UIView) {
         super.init(nibName: nil, bundle: nil)
         self.view = buttonsPage
+        self.view.isExclusiveTouch = true
     }
     
     required init?(coder: NSCoder) {
@@ -35,12 +36,9 @@ class CalcButtonsViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         
-        // handling tappging on PCalcViewController
-        guard delegate != nil else {
-            return
-        }
-        
-        delegate!.unhighlightLabels()
+        guard let delegate = delegate else { return }
+        // handling label when tappging on PCalcViewController
+        delegate.unhighlightLabels()
     }
     
     // MARK: - Actions

@@ -34,6 +34,12 @@ extension String {
         // reverse string
         self = String(str.reversed())
     }
+    
+    func replaceAt(index: Int, with char: Character) -> String {
+        var charArray = [Character](self)
+        charArray[index] = char
+        return String(charArray)
+    }
 
     // removing all spaces from string
     func removeAllSpaces() -> String {

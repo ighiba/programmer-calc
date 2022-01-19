@@ -77,13 +77,15 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
         }
     }
     
-    // Horizontal main calc buttons stack
+    // Vertical main calc buttons stack
     let buttonsStackView: UIStackView = {
         let stackView = UIStackView()
         // Display settings for buttons UIStackView
         stackView.axis = .vertical
         stackView.alignment = .fill
         stackView.distribution = .equalSpacing
+        
+        stackView.isExclusiveTouch = true
         
         return stackView
     }()
@@ -223,7 +225,9 @@ class CalcButtonsMain: CalcButtonsPage {
                 buffStackView.axis = .horizontal
                 buffStackView.alignment = .fill
                 buffStackView.distribution = .equalSpacing
+                buffStackView.isExclusiveTouch = true
                 buttonsStackView.addArrangedSubview(buffStackView)
+
                 buffStackView = UIStackView()
                 break
             default:
@@ -336,6 +340,7 @@ class CalcButtonsAdditional: CalcButtonsPage {
                 buffStackView.axis = .horizontal
                 buffStackView.alignment = .fill
                 buffStackView.distribution = .equalSpacing
+                buffStackView.isExclusiveTouch = true
                 buttonsStackView.addArrangedSubview(buffStackView)
                 buffStackView = UIStackView()
                 break

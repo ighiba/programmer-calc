@@ -104,7 +104,7 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
             let settingsStorage = SettingsStorage()
             // haptic feedback generator
             let settings = settingsStorage.loadData()
-            if (settings?.hapticFeedback ?? false) {
+            if settings?.hapticFeedback ?? false {
                 let generator = UIImpactFeedbackGenerator(style: .medium)
                 generator.prepare()
                 // impact

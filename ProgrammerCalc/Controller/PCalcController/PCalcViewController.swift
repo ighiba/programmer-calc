@@ -13,8 +13,6 @@ protocol PCalcViewControllerDelegate: AnyObject {
     func clearLabels()
     func unhighlightLabels()
     func updateAllLayout()
-    func handleDisplayingMainLabel()
-    func updateButtonsState()
     func updateSystemMain(with value: ConversionSystemsEnum)
     func updateSystemCoverter(with value: ConversionSystemsEnum)
 }
@@ -49,6 +47,8 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     // array of pages with calc buttons
     private var arrayButtonsStack: [CalcButtonsPage] = [CalcButtonsAdditional(),
                                                         CalcButtonsMain()]
+    // additional bitwise keypad for input
+    private var bitwiseKeypad: BitwiseKeypadController?
     
     // Device states
     private var isAllowedLandscape: Bool = false
@@ -63,7 +63,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     
     
     // Array of button pages controllers
-    lazy var arrayCalcButtonsViewController: [CalcButtonsViewController] = {
+    lazy var calcButtonsViewControllers: [CalcButtonsViewController] = {
        var buttonsVC = [CalcButtonsViewController]()
         for buttonsPage in arrayButtonsStack {
             let vc = CalcButtonsViewController(buttonsPage: buttonsPage)
@@ -113,14 +113,14 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         delaysContentTouches = false
         
         // Set start vc for pages (CalcButtonsMain)
-        setViewControllers([arrayCalcButtonsViewController[1]], direction: .forward, animated: false, completion: nil)
+        setViewControllers([calcButtonsViewControllers[1]], direction: .forward, animated: false, completion: nil)
         
         // Lock rotatiton in portrait mode
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
 
         // Add swipe left for deleting last value in main label
         [mainLabel,converterLabel].forEach { label in
-            let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(swipeRightLabel))
+            let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(labelSwipeRight))
             swipeRight.direction = .right
             label.addGestureRecognizer(swipeRight)
         }
@@ -151,7 +151,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
         isAllowedLandscape = true
         // update shadows for buttons page
-        arrayCalcButtonsViewController.forEach { $0.view.layoutSubviews() }
+        calcButtonsViewControllers.forEach { $0.view.layoutSubviews() }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -170,7 +170,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         
         if isPortrait && !isLandscape {
             // unhide button pages
-            for page in arrayCalcButtonsViewController {
+            for page in calcButtonsViewControllers {
                 page.view.layoutSubviews()
                 UIView.animate(withDuration: 0.15, delay: 0.15, options: .curveEaseOut, animations: {
                     page.view.alpha = 1
@@ -179,8 +179,10 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             }
             // change constraints
             NSLayoutConstraint.deactivate(calcView.landscape!)
+            NSLayoutConstraint.deactivate(calcView.landscapeWithBitKeypad!)
             NSLayoutConstraint.activate(calcView.portrait!)
             // update label layouts
+            handleDisplayingMainLabel()
             mainLabel.sizeToFit()
             mainLabel.infoSubLabel.sizeToFit()
             converterLabel.infoSubLabel.sizeToFit()
@@ -190,13 +192,13 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             // unhide word size button
             calcView.changeWordSizeButton.isHidden = false
             // set default calcView frame
-            calcView.frame = CGRect( x: 0, y: 0, width: UIScreen.main.bounds.width, height: self.calcView.viewHeight())
+            calcView.frame = CGRect( x: 0, y: 0, width: UIScreen.main.bounds.width, height: self.calcView.getViewHeight())
             
         } else if isLandscape && !isPortrait && isAllowedLandscape {
             // hide word size button
             calcView.changeWordSizeButton.isHidden = true
             // hide button pages
-            for page in arrayCalcButtonsViewController {
+            for page in calcButtonsViewControllers {
                 UIView.animate(withDuration: 0.3, delay: 0.3, options: .curveEaseOut, animations: {
                     page.view.alpha = 0
                     page.view.isHidden = true
@@ -204,7 +206,13 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             }
             // change constraints
             NSLayoutConstraint.deactivate(calcView.portrait!)
-            NSLayoutConstraint.activate(calcView.landscape!)
+            // landscape constraints by existing bitwiseKeypad
+            if bitwiseKeypad != nil {
+                calcView.hideConverterLabel()
+                NSLayoutConstraint.activate(calcView.landscapeWithBitKeypad!)
+            } else {
+                NSLayoutConstraint.activate(calcView.landscape!)
+            }
             // hide pagecontrol
             setPageControl(visibile: false)
             // set landscape calcView frame
@@ -294,10 +302,13 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         // get data from UserDefaults
         let data = settingsStorage.safeGetData()
         // update vc of buttons
-        for vc in arrayCalcButtonsViewController {
-            vc.hapticFeedback = data.hapticFeedback
+        for vc in calcButtonsViewControllers {
             vc.tappingSounds = data.tappingSounds
+            vc.hapticFeedback = data.hapticFeedback
         }
+        // update bitwise keypad settings if exists
+        bitwiseKeypad?.setTappingSounds(data.tappingSounds)
+        bitwiseKeypad?.setHapticFeedback(data.hapticFeedback)
     }
     
     public func updateChangeWordSizeButton() {
@@ -326,6 +337,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     public func clearLabels() {
         mainLabel.text = "0"
         updateMainLabel()
+        updateMainLabelNumberValue()
         updateConverterLabel()
     }
     
@@ -360,6 +372,9 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             view.window?.overrideUserInterfaceStyle = interfaceStyle
         }
         
+        // Update bitwise keypad style if exist
+        bitwiseKeypad?.updateStyle()
+        
         let style = styleFactory.get(style: styleName)
         self.view.backgroundColor = style.backgroundColor
         isDarkContentBackground = styleName == .light ? false : true
@@ -386,7 +401,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         let forbidden: Set<String> = ConversionValues.getForbiddenValues()[systemMain]!
         // Update all numeric buttons
         // loop buttons vc
-        for vc in arrayCalcButtonsViewController {
+        for vc in calcButtonsViewControllers {
             // update all numeric buttons state in vc
             if let buttonsPage = vc.view as? CalcButtonPageProtocol {
                 buttonsPage.updateButtonIsEnabled(by: forbidden)
@@ -725,20 +740,129 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         let vc = ConversionViewController()
         // present settings
         vc.modalPresentationStyle = .overFullScreen
-        // set delegate
+        // set delegate and update handler
         vc.delegate = self
+        vc.updaterHandler = {
+            self.handleDisplayingMainLabel()
+            self.updateButtonsState()
+            self.updateBitwiseKeypadState()
+            self.updateBitwiseKeypadValues()
+        }
         // show popover
         self.present(vc, animated: false, completion: nil)
     }
     
+    // Keypad switch action Default/Bitwise
+    @objc func switchKeypad(_ sender: UIBarButtonItem) {
+        let animDuration: CGFloat = 0.3
+        let animOptions: UIView.AnimationOptions = [.curveEaseInOut]
+        let calcButtonsTransform = CGAffineTransform(translationX: -UIScreen.main.bounds.width, y: 0)
+        let bitwiseKeypadTransform = CGAffineTransform(translationX: UIScreen.main.bounds.width, y: 0)
+                                                       
+        calcView.freezeNavBar(by: animDuration * 1.5) // also freezes all navbar items
+        
+        
+        if isBitwiseKeypadExists() {
+            
+            sender.changeImage(named: "keypadIcon-bitwise")
+            
+            calcButtonsViewControllers.forEach({ $0.view?.transform = calcButtonsTransform })
+            
+            UIView.animate(withDuration: animDuration, delay: 0, options: animOptions, animations: {
+                self.bitwiseKeypad?.view.transform = bitwiseKeypadTransform
+                self.calcButtonsViewControllers.forEach({ $0.view?.transform = .identity })
+            }, completion: { _ in
+                self.bitwiseKeypad?.willMove(toParent: nil)
+                self.bitwiseKeypad?.view.removeFromSuperview()
+                self.bitwiseKeypad?.removeFromParent()
+                self.bitwiseKeypad = nil
+            })
+            
+        } else {
+            
+            sender.changeImage(named: "keypadIcon-default")
+            
+            // prepare input value for bitwise keypad
+            let dec = converter.convertValue(value: calculator.inputValue, to: .dec, format: true) as! DecimalSystem
+            let binary = converter.convertValue(value: dec, to: .bin, format: false) as! Binary
+            
+            bitwiseKeypad = BitwiseKeypadController(binary: binary)
+            
+            self.addChild(bitwiseKeypad!)
+            self.view.addSubview(bitwiseKeypad!.view)
+            
+            bitwiseKeypad?.updateHandlder = bitwiseUpdateHandler()
+            bitwiseKeypad?.setContainerConstraintsFor(self.view)
+
+            bitwiseKeypad?.view.transform = bitwiseKeypadTransform
+            
+            UIView.animate(withDuration: animDuration, delay: 0, options: animOptions, animations: {
+                self.bitwiseKeypad?.view.transform = .identity
+                self.calcButtonsViewControllers.forEach({ $0.view?.transform = calcButtonsTransform })
+            }, completion: { _ in
+                self.bitwiseKeypad?.didMove(toParent: self)
+                self.calcButtonsViewControllers.forEach({ $0.view?.transform = .identity })
+                self.refreshCalcButtons()
+            })
+        }
+    }
+    
+    private func isBitwiseKeypadExists() -> Bool {
+        return bitwiseKeypad != nil
+    }
+    
+//    private func hideBitwiseKeypad(_ animDuration: CGFloat,
+//                                   _ animOptions: UIView.AnimationOptions,
+//                                   _ calcButtonsTransform: CGAffineTransform,
+//                                   _ bitwiseKeypadTransform: CGAffineTransform) {
+//
+//        calcButtonsViewControllers.forEach({ $0.view?.transform = calcButtonsTransform })
+//
+//        UIView.animate(withDuration: animDuration, delay: 0, options: animOptions, animations: {
+//            self.bitwiseKeypad?.view.transform = bitwiseKeypadTransform
+//            self.calcButtonsViewControllers.forEach({ $0.view?.transform = .identity })
+//        }, completion: { _ in
+//            self.bitwiseKeypad?.willMove(toParent: nil)
+//            self.bitwiseKeypad?.view.removeFromSuperview()
+//            self.bitwiseKeypad?.removeFromParent()
+//            self.bitwiseKeypad = nil
+//        })
+//    }
+    
+    private func bitwiseUpdateHandler() -> ((NumberSystemProtocol) -> Void) {
+        let handler: ((NumberSystemProtocol) -> Void) = { [self] newValue in
+            // set new NumberSystem value in inputValue
+            calculator.inputValue = converter.convertValue(value: newValue, to: calculator.systemMain!, format: true)
+            // set new String value in label
+            mainLabel.text = calculator.inputValue.value
+            // update labels
+            updateMainLabel()
+            updateConverterLabel()
+        }
+        return handler
+    }
+    
+    private func refreshCalcButtons() {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1, execute: { [self] in
+            let currentPage = (viewControllers?.first as? CalcButtonsViewController) ?? calcButtonsViewControllers[1]
+            let currentPageCount = calcButtonsViewControllers.firstIndex(of: currentPage) ?? 1
+            
+            setViewControllers([currentPage], direction: .forward, animated: false, completion: nil)
+            // update selected dot for uipagecontrol
+            setPageControlCurrentPage(count: currentPageCount)
+        })
+    }
+    
     // Change word size button action
-    @objc func changeWordSizeButtonTapped( _ sender: UIButton) {
+    @objc func changeWordSizeButtonTapped(_ sender: UIButton) {
         touchHandleLabelHighlight()
         
         let vc = WordSizeViewController()
         vc.modalPresentationStyle = .overFullScreen
         vc.updaterHandler = {
             self.updateAllLayout()
+            self.updateBitwiseKeypadState()
+            self.updateBitwiseKeypadValues()
         }
         // show popover
         self.present(vc, animated: false, completion: nil)
@@ -754,12 +878,35 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         navigationController.presentationController?.delegate = self
         vc.updaterHandler = {
             self.updateSettings()
+            self.updateBitwiseKeypadState()
         }
         navigationController.setViewControllers([vc], animated: false)
         self.present(navigationController, animated: true)
     }
+    
+    func updateBitwiseKeypadState() {
+        if let vc = bitwiseKeypad {
+            let dec = converter.convertValue(value: calculator.inputValue, to: .dec, format: true) as! DecimalSystem
+            let binary = converter.convertValue(value: dec, to: .bin, format: false) as! Binary
+            let wordSize = wordSizeStorage.safeGetData() as! WordSize
+            vc.binary = binary
+            vc.setWordSize(wordSize)
+            vc.updateKeypadState()
+        }
+    }
+    
+    func updateBitwiseKeypadValues() {
+        if let vc = bitwiseKeypad {
+            let dec = converter.convertValue(value: calculator.inputValue, to: .dec, format: true) as! DecimalSystem
+            let binary = converter.convertValue(value: dec, to: .bin, format: false) as! Binary
+            let wordSize = wordSizeStorage.safeGetData() as! WordSize
+            vc.binary = binary
+            vc.setWordSize(wordSize)
+            vc.updateKeypadValues()
+        }
+    }
      
-    @objc func swipeRightLabel(_ sender: UISwipeGestureRecognizer) {
+    @objc func labelSwipeRight(_ sender: UISwipeGestureRecognizer) {
         if sender.direction == .right {
             if mainLabel.text!.count > 1 {
                 // delete last symbol in main label
@@ -775,6 +922,8 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             // update labels
             updateMainLabel()
             updateConverterLabel()
+            // update bitwise keyboard bitwise if exists
+            updateBitwiseKeypadValues()
         }
     }
     
@@ -790,9 +939,9 @@ extension PCalcViewController: UIPageViewControllerDataSource, UIPageViewControl
         touchHandleLabelHighlight()
         
         guard let viewController = viewController as? CalcButtonsViewController else {return nil}
-        if let index = arrayCalcButtonsViewController.firstIndex(of: viewController) {
+        if let index = calcButtonsViewControllers.firstIndex(of: viewController) {
             if index > 0 {
-                return arrayCalcButtonsViewController[index - 1]
+                return calcButtonsViewControllers[index - 1]
             }
         }
 
@@ -805,9 +954,9 @@ extension PCalcViewController: UIPageViewControllerDataSource, UIPageViewControl
         touchHandleLabelHighlight()
         
         guard let viewController = viewController as? CalcButtonsViewController else {return nil}
-        if let index = arrayCalcButtonsViewController.firstIndex(of: viewController) {
+        if let index = calcButtonsViewControllers.firstIndex(of: viewController) {
             if index < arrayButtonsStack.count - 1 {
-                return arrayCalcButtonsViewController[index + 1]
+                return calcButtonsViewControllers[index + 1]
             }
         }
         

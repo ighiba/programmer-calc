@@ -39,4 +39,11 @@ extension PCalcViewController {
             }
         }
     }
+    
+    // Change page control current page
+    func setPageControlCurrentPage(count currentPage: Int) {
+        for case let pageControl in self.view.subviews where pageControl is UIPageControl {
+            (pageControl as! UIPageControl).currentPage = currentPage
+        }
+    }
 }

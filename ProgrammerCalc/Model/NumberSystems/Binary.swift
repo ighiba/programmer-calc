@@ -60,14 +60,12 @@ class Binary: NumberSystemProtocol {
     init(_ valueHex: Hexadecimal) {
         let binary = valueHex.convertHexToBinary()
         self.value = binary.value
-        
     }
     
     /// Creates an instance initialized to the Octal value
     init(_ valueOct: Octal) {
         let binary = valueOct.convertOctToBinary()
         self.value = binary.value
-        
     }
 
     

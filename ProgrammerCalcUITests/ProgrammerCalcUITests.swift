@@ -202,6 +202,58 @@ class ProgrammerCalcUITests: XCTestCase {
         doneButton.tap()
                 
     }
+    
+    func testBitwiseKeypad() throws {
+        // 1. given
+        let scrollViewsQuery = app.scrollViews
+        let firstResult = ["0","1","1","1","1","0","1","1"] // 123
+        let secondResult = ["0","0","0","0","1","1","0","0"] // 12
+        let thirdResult = ["0","0","0","0","0","0","0","1"] // 1
+        
+        var buttonsMain: [XCUIElement] = []
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["AC"])
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["1"])
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["2"])
+        buttonsMain.append(scrollViewsQuery.otherElements.buttons["3"])
+        
+        let bitButtons = (0..<8).reversed().map({
+            return app.buttons["bitButton_\($0)"]
+        })
+        
+        buttonsMain.forEach({ $0.tap() }) // input 123 (Dec) -> 0111 1011 (Bin)
+        
+        let bitwiseSwitch = XCUIApplication().navigationBars.children(matching: .button).element(boundBy: 1)
+
+        
+        
+        // 2. then
+        
+        XCTAssert( bitwiseSwitch.exists)
+        bitwiseSwitch.tap()
+        
+        bitButtons.forEach({ XCTAssert($0.exists) })
+        
+        // check 0111 1011
+        for i in 0..<8 {
+            XCTAssert(bitButtons[i].label == firstResult[i])
+        }
+
+        // swipe to delete
+        app.buttons["123"].swipeRight()
+
+        // check 0000 1100
+        for i in 0..<8 {
+            XCTAssert(bitButtons[i].label == secondResult[i])
+        }
+        
+        // swipe to delete
+        app.buttons["12"].swipeRight()
+        
+        // check 0000 1100
+        for i in 0..<8 {
+            XCTAssert(bitButtons[i].label == thirdResult[i])
+        }
+    }
 
     func testLaunchPerformance() throws {
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, *) {
