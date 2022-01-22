@@ -25,7 +25,7 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     var binary: Binary
     // inputValue in array for further processing
     lazy var binaryValue: [Character] = getBinaryValueString()
-    var wordSize: WordSize = WordSize(64)
+    var wordSize: WordSize = WordSize.shared
     var processSigned: Bool = false
     // tag offset for viewWithTag
     var tagOffset: Int = 300
@@ -40,7 +40,6 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     
     // Storages
     private let settingsStorage: SettingsStorageProtocol = SettingsStorage()
-    private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
     private let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
     private let styleStorage: StyleStorageProtocol = StyleStorage()
     
@@ -58,7 +57,6 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     init(binary: Binary) {
         self.binary = binary
         super.init(nibName: nil, bundle: nil)
-        self.updateWordSize()
         self.updateProcessSigned()
         self.updateSettings()
         self.bitwiseKeypadView.controllerDelegate = self
@@ -104,15 +102,6 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
         let styleName = styleStorage.safeGetStyleData()
         let style = styleFactory.get(style: styleName)
         return style
-    }
-    
-    private func updateWordSize() {
-        let wordSize = wordSizeStorage.safeGetData() as! WordSize
-        setWordSize(wordSize)
-    }
-    
-    public func setWordSize(_ size: WordSize) {
-        wordSize = size
     }
     
     func getWordSizeValue() -> Int {

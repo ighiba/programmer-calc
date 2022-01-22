@@ -26,6 +26,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         
+        // Set all shared instances that stored in UserDefaults
+        let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
+        let wordSize = wordSizeStorage.safeGetData()
+        WordSize.shared.updateValue(with: wordSize.value)
         
         /** Process the quick action if the user selected one to launch the app.
             Grab a reference to the shortcutItem to use in the scene.
@@ -55,6 +59,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }, completion: { _ in
             splashScreen.removeFromSuperview()
         })
+  
+        
     }
     
     func windowScene(_ windowScene: UIWindowScene,

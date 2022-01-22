@@ -35,7 +35,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     private let settingsStorage: SettingsStorageProtocol = SettingsStorage()
     private let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
     private let conversionStorage: ConversionStorageProtocol = ConversionStorage()
-    private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
     private let styleStorage: StyleStorageProtocol = StyleStorage()
     
     // Views
@@ -310,7 +309,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     }
     
     public func updateChangeWordSizeButton() {
-        let wordSize = wordSizeStorage.safeGetData() as! WordSize
+        let wordSize = WordSize.shared
         // prepare title
         let newTitle: String = {
             for item in WordSize.wordsDictionary {
@@ -558,9 +557,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     private func updateBitwiseKeypad() {
         if let vc = bitwiseKeypad {
             let bin = calculator.inputValue.toBinary()
-            let wordSize = wordSizeStorage.safeGetData() as! WordSize
             vc.binary = bin
-            vc.setWordSize(wordSize)
             vc.updateKeypad()
         }
     }

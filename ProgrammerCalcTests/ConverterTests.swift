@@ -16,13 +16,14 @@ class ConverterTests: XCTestCase {
     // Storages
     var conversionStorage: ConversionStorageProtocol? = ConversionStorage()
     var calcStatetorage: CalcStateStorageProtocol? = CalcStateStorage()
-    let wordSizeStorage: WordSizeStorageProtocol? = WordSizeStorage()
     
     var converterTest: Converter?
     let binaryStrInput = "1100"
     
     let unsignedData = CalcState(mainState: "0", convertState: "0", processSigned: false)
     let signedData = CalcState(mainState: "0", convertState: "0", processSigned: true)
+    
+    let wordSize: WordSize = WordSize.shared
     
     override func setUp() {
         super.setUp()
@@ -49,7 +50,7 @@ class ConverterTests: XCTestCase {
     func testOnesComplementUnsigned() throws {
         // 1. given
         calcStatetorage?.saveData(unsignedData)
-        wordSizeStorage?.saveData(WordSize(8))
+        wordSize.updateValue(with: 8)
         let binary = Binary(stringLiteral: binaryStrInput) // 1100
         
         // 2. when
@@ -62,7 +63,7 @@ class ConverterTests: XCTestCase {
     func testOnesComplementSigned() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
-        wordSizeStorage?.saveData(WordSize(8))
+        wordSize.updateValue(with: 8)
         let binary = Binary(stringLiteral: binaryStrInput)
         
         // 2. when
@@ -75,7 +76,7 @@ class ConverterTests: XCTestCase {
     func testTwosComplementUnsigned() throws {
         // 1. given
         calcStatetorage?.saveData(unsignedData)
-        wordSizeStorage?.saveData(WordSize(8))
+        wordSize.updateValue(with: 8)
         let binary = Binary(stringLiteral: binaryStrInput)
         
         // 2. when
@@ -88,7 +89,7 @@ class ConverterTests: XCTestCase {
     func testTwosComplementSigned() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
-        wordSizeStorage?.saveData(WordSize(8))
+        wordSize.updateValue(with: 8)
         let binary = Binary(stringLiteral: binaryStrInput)
         
         // 2. when

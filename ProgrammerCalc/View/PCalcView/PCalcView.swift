@@ -141,6 +141,9 @@ class PCalcView: UIView {
         
         button.addTarget(nil, action: #selector(PCalcViewController.changeWordSizeButtonTapped), for: .touchUpInside)
         
+        // for UI tests
+        button.accessibilityIdentifier = "ChangeWordSizeButton"
+        
         return button
     }()
     

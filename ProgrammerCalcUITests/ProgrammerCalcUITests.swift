@@ -145,7 +145,7 @@ class ProgrammerCalcUITests: XCTestCase {
     
     func testChangeWordSizeButton() throws {
         // 1. given
-        let changeWordSizeButton = app.navigationBars/*@START_MENU_TOKEN@*/.staticTexts["BYTE"]/*[[".buttons[\"BYTE\"].staticTexts[\"BYTE\"]",".staticTexts[\"BYTE\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        let changeWordSizeButton = app.buttons["ChangeWordSizeButton"]
         let tablesQuery = app.tables
         let qword = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["QWORD"]/*[[".cells.staticTexts[\"QWORD\"]",".staticTexts[\"QWORD\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
         let dword = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["DWORD"]/*[[".cells.staticTexts[\"DWORD\"]",".staticTexts[\"DWORD\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/

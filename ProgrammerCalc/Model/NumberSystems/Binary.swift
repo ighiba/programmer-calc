@@ -608,7 +608,6 @@ class Binary: NumberSystemProtocol {
         
         // get saved data
         if let data = calcState?.processSigned {
-            //let wordSizeValue = wordSizeStorage.getWordSizeValue()
             let wordSizeValue = 64
             
             // if .processSigned == true

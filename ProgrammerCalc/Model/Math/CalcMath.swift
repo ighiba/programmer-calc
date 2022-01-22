@@ -28,7 +28,8 @@ final class CalcMath {
     // Storages
     private let conversionStorage = ConversionStorage()
     private let calcStateStorage = CalcStateStorage()
-    private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
+    
+    private let wordSize: WordSize = WordSize.shared
     
     // Object "Converter"
     let converter: Converter = Converter()
@@ -225,10 +226,9 @@ final class CalcMath {
     func fillUpBits( str: String) -> String {
         var resultStr = str
         
-        let wordSizeValue = wordSizeStorage.getWordSizeValue()
         
         // fill up bits (0) to current word size
-        resultStr = fillUpZeros(str: resultStr, to: wordSizeValue)
+        resultStr = fillUpZeros(str: resultStr, to: wordSize.value)
         
         return resultStr
     }
@@ -354,12 +354,12 @@ final class CalcMath {
     private func bitOperation(left: Binary, right: Binary, comparison: (Character, Character) -> Bool ) -> Binary {
         let resultBin = Binary()
         var resultStr = String()
-        let wordSizeValue = wordSizeStorage.getWordSizeValue()
+    
         
         // fill binarys for wordSize
         if left.value != right.value {
-            left.value = left.fillUpZeros(str: left.value, to: wordSizeValue)
-            right.value = right.fillUpZeros(str: right.value, to: wordSizeValue)
+            left.value = left.fillUpZeros(str: left.value, to: wordSize.value)
+            right.value = right.fillUpZeros(str: right.value, to: wordSize.value)
         }
         // reverse bin values
         let reversedLeftBin = left.value.reversed() as [Character]

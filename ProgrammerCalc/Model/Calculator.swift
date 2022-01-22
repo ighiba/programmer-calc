@@ -28,7 +28,6 @@ class Calculator: CalculatorProtocol {
     private let settingsStorage: SettingsStorageProtocol = SettingsStorage()
     private let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
     private let conversionStorage: ConversionStorageProtocol = ConversionStorage()
-    private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
     
     // Object "Converter"
     private let converter: Converter = Converter()
@@ -42,6 +41,8 @@ class Calculator: CalculatorProtocol {
     var mathState: MathStateProtocol?
     var systemMain: ConversionSystemsEnum?
     var systemConverter: ConversionSystemsEnum?
+    
+    let wordSize: WordSize = WordSize.shared
     
     // Taptic feedback generator for Errors
     private let errorGenerator = UINotificationFeedbackGenerator()
@@ -198,19 +199,17 @@ class Calculator: CalculatorProtocol {
         }
         
         var testStr = bin.removeZerosBefore(str: bin.value)
-        let wordSizeValue = wordSizeStorage.getWordSizeValue()
         
         if bin.isSigned {
             bin.twosComplement() // convert to positive value
             testStr = bin.removeZerosBefore(str: bin.value)
         }
         
-        return testStr.count <= wordSizeValue ? false : true
+        return testStr.count <= wordSize.value ? false : true
     }
     
     private func checkIfMinSigned(_ bin: Binary) -> Bool {
-        let wordSizeValue = wordSizeStorage.getWordSizeValue()
-        if processSigned && bin.value.count >= wordSizeValue && binIsSigned(bin) {
+        if processSigned && bin.value.count >= wordSize.value && binIsSigned(bin) {
             var testStr = String()
             let binBuff = Binary(bin)
             binBuff.twosComplement()
@@ -309,7 +308,7 @@ class Calculator: CalculatorProtocol {
                 // remove zeros in fract part
                 let fractPart = testLabelStr.removeAllSpaces().getPartAfter(divider: ".")
                 // fill zeros to word size
-                str = bin.fillUpZeros(str: intPart, to: wordSizeStorage.getWordSizeValue())
+                str = bin.fillUpZeros(str: intPart, to: wordSize.value)
                 str = str + "." + fractPart
                 bin.value = str
             }
