@@ -25,7 +25,6 @@ class Calculator: CalculatorProtocol {
     // MARK: - Properties
     
     // Storages
-    private let settingsStorage: SettingsStorageProtocol = SettingsStorage()
     private let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
     private let conversionStorage: ConversionStorageProtocol = ConversionStorage()
     
@@ -43,6 +42,7 @@ class Calculator: CalculatorProtocol {
     var systemConverter: ConversionSystemsEnum?
     
     let wordSize: WordSize = WordSize.shared
+    let settings: Settings = Settings.shared
     
     // Taptic feedback generator for Errors
     private let errorGenerator = UINotificationFeedbackGenerator()
@@ -88,7 +88,7 @@ class Calculator: CalculatorProtocol {
             // return message in labels
             let errorStr = MathErrors.divByZero.localizedDescription ?? NSLocalizedString("Cannot divide by zero", comment: "")
             // haptic feedback
-            if settingsStorage.safeGetData().hapticFeedback {
+            if settings.hapticFeedback {
                 errorGenerator.notificationOccurred(.error)
             }
             

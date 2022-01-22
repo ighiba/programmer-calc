@@ -11,13 +11,12 @@ import AudioToolbox
 
 class CalcButtonsViewController: UIViewController {
     
+    // Sound of tapping bool setting
+    // and
+    // Haptic feedback setting
+    let settings = Settings.shared
     // Taptic feedback generator
     private let generator = UIImpactFeedbackGenerator(style: .light)
-    
-    // haptic feedback setting
-    var hapticFeedback = false
-    // Sound of tapping bool setting
-    var tappingSounds = false
     
     // PCalcViewController delegate
     var delegate: PCalcViewControllerDelegate?
@@ -44,7 +43,7 @@ class CalcButtonsViewController: UIViewController {
     // MARK: - Actions
     
     @objc func tappingSoundHandler(_ sender: CalculatorButton) {
-        if tappingSounds {
+        if settings.tappingSounds {
             // play KeyPressed
             AudioServicesPlaySystemSound(1104)
         }
@@ -52,7 +51,7 @@ class CalcButtonsViewController: UIViewController {
     
     // Haptic feedback action for all buttons
     @objc func hapticFeedbackHandler(_ sender: CalculatorButton) {
-        if hapticFeedback {
+        if settings.hapticFeedback {
             generator.prepare()
             // impact
             generator.impactOccurred()

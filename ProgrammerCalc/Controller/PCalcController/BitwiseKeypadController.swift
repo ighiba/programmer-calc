@@ -39,16 +39,15 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     var updateHandlder: ((NumberSystemProtocol) -> Void)?
     
     // Storages
-    private let settingsStorage: SettingsStorageProtocol = SettingsStorage()
     private let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
     private let styleStorage: StyleStorageProtocol = StyleStorage()
     
     private let styleFactory: StyleFactory = StyleFactory()
     
     // Sound of tapping bool setting
-    private var tappingSounds = false
-    // haptic feedback setting
-    private var hapticFeedback = false
+    // and
+    // Haptic feedback setting
+    let settings = Settings.shared
     // Taptic feedback generator
     private let generator = UIImpactFeedbackGenerator(style: .light)
     
@@ -58,7 +57,6 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
         self.binary = binary
         super.init(nibName: nil, bundle: nil)
         self.updateProcessSigned()
-        self.updateSettings()
         self.bitwiseKeypadView.controllerDelegate = self
         self.bitwiseKeypadView.setViews()
         self.view = bitwiseKeypadView
@@ -112,24 +110,9 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
         return tagOffset
     }
     
-    public func setTappingSounds(_ state: Bool) {
-        tappingSounds = state
-    }
-    
-    public func setHapticFeedback(_ state: Bool) {
-        hapticFeedback = state
-    }
-    
     private func updateProcessSigned() {
         let calcState = calcStateStorage.safeGetData() as! CalcState
         processSigned = calcState.processSigned
-    }
-    
-    private func updateSettings() {
-        // get settings from UserDefaults and update settings
-        let settings = settingsStorage.safeGetData()
-        setTappingSounds(settings.tappingSounds)
-        setHapticFeedback(settings.hapticFeedback)
     }
     
     private func updateInputValue() {
@@ -183,7 +166,7 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     // MARK: - Actions
     
     @objc func tappingSoundHandler(_ sender: CalculatorButton) {
-        if tappingSounds {
+        if settings.tappingSounds {
             // play KeyPressed
             AudioServicesPlaySystemSound(1104)
         }
@@ -191,7 +174,7 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     
     // Haptic feedback action for all buttons
     @objc func hapticFeedbackHandler(_ sender: CalculatorButton) {
-        if hapticFeedback {
+        if settings.hapticFeedback {
             generator.prepare()
             // impact
             generator.impactOccurred()

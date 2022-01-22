@@ -29,7 +29,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Set all shared instances that stored in UserDefaults
         let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
         let wordSize = wordSizeStorage.safeGetData()
-        WordSize.shared.updateValue(with: wordSize.value)
+        WordSize.shared.setValue(newValue: wordSize.value)
+        
+        let settingsStorage: SettingsStorageProtocol = SettingsStorage()
+        let settings = settingsStorage.safeGetData()
+        Settings.shared.setSettings(newSettings: settings)
         
         /** Process the quick action if the user selected one to launch the app.
             Grab a reference to the shortcutItem to use in the scene.
@@ -60,7 +64,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             splashScreen.removeFromSuperview()
         })
   
-        
+
     }
     
     func windowScene(_ windowScene: UIWindowScene,

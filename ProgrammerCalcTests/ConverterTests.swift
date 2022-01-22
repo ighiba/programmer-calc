@@ -50,7 +50,7 @@ class ConverterTests: XCTestCase {
     func testOnesComplementUnsigned() throws {
         // 1. given
         calcStatetorage?.saveData(unsignedData)
-        wordSize.updateValue(with: 8)
+        wordSize.setValue(newValue: 8)
         let binary = Binary(stringLiteral: binaryStrInput) // 1100
         
         // 2. when
@@ -63,7 +63,7 @@ class ConverterTests: XCTestCase {
     func testOnesComplementSigned() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
-        wordSize.updateValue(with: 8)
+        wordSize.setValue(newValue: 8)
         let binary = Binary(stringLiteral: binaryStrInput)
         
         // 2. when
@@ -76,7 +76,7 @@ class ConverterTests: XCTestCase {
     func testTwosComplementUnsigned() throws {
         // 1. given
         calcStatetorage?.saveData(unsignedData)
-        wordSize.updateValue(with: 8)
+        wordSize.setValue(newValue: 8)
         let binary = Binary(stringLiteral: binaryStrInput)
         
         // 2. when
@@ -89,7 +89,7 @@ class ConverterTests: XCTestCase {
     func testTwosComplementSigned() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
-        wordSize.updateValue(with: 8)
+        wordSize.setValue(newValue: 8)
         let binary = Binary(stringLiteral: binaryStrInput)
         
         // 2. when

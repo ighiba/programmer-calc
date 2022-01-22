@@ -101,10 +101,9 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
         let menu = UIMenuController.shared
 
         if !menu.isMenuVisible {
-            let settingsStorage = SettingsStorage()
             // haptic feedback generator
-            let settings = settingsStorage.loadData()
-            if settings?.hapticFeedback ?? false {
+            let settings = Settings.shared
+            if settings.hapticFeedback {
                 let generator = UIImpactFeedbackGenerator(style: .medium)
                 generator.prepare()
                 // impact

@@ -32,7 +32,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     }
     
     // Storages
-    private let settingsStorage: SettingsStorageProtocol = SettingsStorage()
     private let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
     private let conversionStorage: ConversionStorageProtocol = ConversionStorage()
     private let styleStorage: StyleStorageProtocol = StyleStorage()
@@ -129,7 +128,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         }
         
         // Get data from UserDefaults
-        updateSettings()
         updateConversionState()
         updateCalcState()
         handleConversion()
@@ -295,27 +293,12 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         }
     }
     
-    private func updateSettings() {
-        // get data from UserDefaults
-        let data = settingsStorage.safeGetData()
-        // update vc of buttons
-        for vc in calcButtonsViewControllers {
-            vc.tappingSounds = data.tappingSounds
-            vc.hapticFeedback = data.hapticFeedback
-        }
-        // update bitwise keypad settings if exists
-        bitwiseKeypad?.setTappingSounds(data.tappingSounds)
-        bitwiseKeypad?.setHapticFeedback(data.hapticFeedback)
-    }
-    
     public func updateChangeWordSizeButton() {
         let wordSize = WordSize.shared
         // prepare title
         let newTitle: String = {
-            for item in WordSize.wordsDictionary {
-                if item.first?.value == wordSize.value {
-                    return item.first!.key
-                }
+            for item in WordSize.wordsDictionary where item.first?.value == wordSize.value {
+                return item.first!.key
             }
             return (calcView.changeWordSizeButton.titleLabel?.text)!
         }()
@@ -835,7 +818,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         vc.modalPresentationStyle = .pageSheet
         navigationController.presentationController?.delegate = self
         vc.updaterHandler = {
-            self.updateSettings()
             self.updateBitwiseKeypad()
         }
         navigationController.setViewControllers([vc], animated: false)
