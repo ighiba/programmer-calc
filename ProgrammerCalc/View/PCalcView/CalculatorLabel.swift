@@ -177,5 +177,12 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
         menu.hideMenu(from: self)
         undoHighlightLabel()
     }
+    
+    public func containsFloatValues() -> Bool {
+        if let text = self.text {
+            return text.contains(".")
+        }
+        return false
+    }
 
 }

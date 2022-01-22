@@ -412,20 +412,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         // update plusminus button state
         changeStatePlusMinus()
     }
-    
-    // Change clear button title
-    private func updateClearButton(hasInput state: Bool) {
-        if let clearButton = self.view.viewWithTag(100) as? CalculatorButton {
-            if state {
-                guard clearButton.titleLabel?.text != "C" else { return }
-                clearButton.setTitle("C", for: .normal)
-            } else {
-                guard clearButton.titleLabel?.text != "AC" else { return }
-                clearButton.setTitle("AC", for: .normal)
-            }
-        }
-    }
-    
+ 
     // Handle displaying of mainLabel
     public func handleDisplayingMainLabel() {
         // IF System == System then hide label
@@ -543,6 +530,21 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         
         return result
     }
+    
+    // Change clear button title
+    private func updateClearButton(hasInput state: Bool) {
+        if let clearButton = self.view.viewWithTag(100) as? CalculatorButton {
+            clearButton.changeTitleClearButtonFor(state)
+        }
+    }
+    
+    // Change state of plusminus button
+    private func changeStatePlusMinus() {
+        if let plusMinusButton = self.view.viewWithTag(101) as? CalculatorButton {
+            plusMinusButton.isEnabled = calculator.processSigned
+            plusMinusButton.alpha = plusMinusButton.isEnabled ? 1.0 : 0.5
+        }
+    }
         
     // Update signed button
     private func updateIsSignedButton() {
@@ -648,7 +650,9 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         // update conversion state
         updateConversionState()
         // if float then exit
-        guard !mainLabel.text!.contains(".") else { return }
+        if mainLabel.containsFloatValues() {
+            return
+        }
         // Check if error message in main label
         for error in MathErrors.allCases where error.localizedDescription == mainLabel.text {
             // clear labels
@@ -731,7 +735,9 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     // Negate button
     @objc func negateButtonTapped(_ sender: UIButton) {
         // if float then exit
-        guard !mainLabel.text!.contains(".") else { return }
+        if mainLabel.containsFloatValues() {
+            return
+        }
         // calculate result
         mainLabel.text = calculator.negateValue(value: calculator.inputValue, system: calculator.systemMain!)
         updateLabels()
