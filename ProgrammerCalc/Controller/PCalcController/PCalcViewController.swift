@@ -334,9 +334,8 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     // Clear mainLabel and update value in converter label
     public func clearLabels() {
         mainLabel.text = "0"
-        updateMainLabel()
+        updateLabels()
         updateMainLabelNumberValue()
-        updateConverterLabel()
     }
     
     func updateStyle() {
@@ -386,10 +385,13 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         updateIsSignedButton()
         // update plusminus button state
         changeStatePlusMinus()
-        // update main label
-        updateMainLabel()
+        // update main and converter labels
+        updateLabels()
         updateMainLabelNumberValue()
-        // update converter label
+    }
+    
+    private func updateLabels() {
+        updateMainLabel()
         updateConverterLabel()
     }
     
@@ -536,7 +538,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         }
         
         // check if can add more digits
-        let isOverflowed = calculator.isValueOverflowed(value: result, for: calculator.systemMain!, when: .input)
+        let isOverflowed = calculator.isValueOverflowed(value: result, for: calculator.systemMain!)
         guard !isOverflowed else { return labelText }
         
         return result
@@ -612,8 +614,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             mainLabel.text! = addDigitToMainLabel(labelText: mainLabel.text!, digit: buttonText)
         }
         
-        updateMainLabel()
-        updateConverterLabel()
+        updateLabels()
     }
     
     // Sign buttons actions
@@ -638,9 +639,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         // calculate
         mainLabel.text = calculator.calculateResult(inputValue: calculator.inputValue, operation: operation!)
 
-        // update all labels
-        updateMainLabel()
-        updateConverterLabel()
+        updateLabels()
     }
     
     // 1's or 2's button tapped
@@ -667,9 +666,8 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         default:
             break
         }
-        // update all labels
-        updateMainLabel()
-        updateConverterLabel()
+        
+        updateLabels()
     }
 
     // Bitwise operations
@@ -683,10 +681,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         guard operation != nil else { return }
         
         mainLabel.text = calculator.calculateResult(inputValue: calculator.inputValue, operation: operation!)
-
-        // update all labels
-        updateMainLabel()
-        updateConverterLabel()
+        updateLabels()
     }
     
     // Signed OFF/ON button
@@ -694,7 +689,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         // negate value if number is negative and processsigned == on
         if calculator.inputValue.isSigned && calculator.processSigned {
             mainLabel.text = calculator.negateValue(value: calculator.inputValue, system: calculator.systemMain!)
-        } else if calculator.isValueOverflowed(value: calculator.inputValue.value, for: calculator.systemMain!, when: .negate) {
+        } else if calculator.isValueOverflowed(value: calculator.inputValue.value, for: calculator.systemMain!) {
             clearLabels()
         }
         // invert value
@@ -705,9 +700,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         updateIsSignedButton()
         // save state processSigned
         saveCalcState()
-        // update labels
-        updateMainLabel()
-        updateConverterLabel()
+        updateLabels()
         // toggle plusminus button
         changeStatePlusMinus()
     }
@@ -740,13 +733,8 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         // if float then exit
         guard !mainLabel.text!.contains(".") else { return }
         // calculate result
-        let result = calculator.negateValue(value: calculator.inputValue, system: calculator.systemMain!)
-        // check for overflow
-        let isOverflowed = calculator.isValueOverflowed(value: result, for: calculator.systemMain!, when: .negate)
-        guard !isOverflowed else { return }
-        mainLabel.text = result
-        updateMainLabel()
-        updateConverterLabel()
+        mainLabel.text = calculator.negateValue(value: calculator.inputValue, system: calculator.systemMain!)
+        updateLabels()
     }
     
     // Change conversion button action

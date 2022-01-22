@@ -41,6 +41,7 @@
 		C06B7F102443B12E009642B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C06B7F0F2443B12E009642B9 /* Assets.xcassets */; };
 		C06B7F132443B12E009642B9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C06B7F112443B12E009642B9 /* LaunchScreen.storyboard */; };
 		C06B7F292443B12E009642B9 /* ProgrammerCalcUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F282443B12E009642B9 /* ProgrammerCalcUITests.swift */; };
+		C06D285527999B4D00C74888 /* DecimalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06D285427999B4D00C74888 /* DecimalTests.swift */; };
 		C06DFD5D24FC22C600255646 /* BinaryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06DFD5C24FC22C600255646 /* BinaryTests.swift */; };
 		C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C070ED2324DB0EC800A04463 /* SettingsViewController.swift */; };
 		C070ED2624DB0ED400A04463 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C070ED2524DB0ED400A04463 /* SettingsView.swift */; };
@@ -133,6 +134,7 @@
 		C06B7F242443B12E009642B9 /* ProgrammerCalcUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ProgrammerCalcUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C06B7F282443B12E009642B9 /* ProgrammerCalcUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerCalcUITests.swift; sourceTree = "<group>"; };
 		C06B7F2A2443B12E009642B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C06D285427999B4D00C74888 /* DecimalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalTests.swift; sourceTree = "<group>"; };
 		C06DFD5C24FC22C600255646 /* BinaryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryTests.swift; sourceTree = "<group>"; };
 		C070ED2324DB0EC800A04463 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		C070ED2524DB0ED400A04463 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -310,8 +312,9 @@
 				C06072B02501567E004CF6AA /* CalcMathTests.swift */,
 				C064A3AF24FD847B003DE683 /* ConverterTests.swift */,
 				C06DFD5C24FC22C600255646 /* BinaryTests.swift */,
-				C064A3A924FD55B8003DE683 /* HexadecimalTests.swift */,
 				C064A3AD24FD5B13003DE683 /* OctalTests.swift */,
+				C06D285427999B4D00C74888 /* DecimalTests.swift */,
+				C064A3A924FD55B8003DE683 /* HexadecimalTests.swift */,
 				C09631DD272D4FBE001DCD25 /* StringExtTests.swift */,
 				C06B7F1F2443B12E009642B9 /* Info.plist */,
 			);
@@ -666,6 +669,7 @@
 				C064A3AE24FD5B13003DE683 /* OctalTests.swift in Sources */,
 				C064A3AA24FD55B8003DE683 /* HexadecimalTests.swift in Sources */,
 				C064A3B024FD847B003DE683 /* ConverterTests.swift in Sources */,
+				C06D285527999B4D00C74888 /* DecimalTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -24,11 +24,6 @@ class Calculator: CalculatorProtocol {
     
     // MARK: - Properties
     
-    enum OverflowVariants {
-        case input
-        case negate
-    }
-    
     // Storages
     private let settingsStorage: SettingsStorageProtocol = SettingsStorage()
     private let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
@@ -112,12 +107,16 @@ class Calculator: CalculatorProtocol {
         return resultStr
     }
     
-    func calculateResult( inputValue: NumberSystemProtocol, operation: CalcMath.Operation) -> String {
-        if operation == .shiftLeft || operation == .shiftRight {
+    public func calculateResult( inputValue: NumberSystemProtocol, operation: CalcMath.Operation) -> String {
+        if isBitwiseOperation(operation) {
             return calculateSoloBitwise(inputValue, operation)
         } else {
             return calculateBuffWith(inputValue, operation)
         }
+    }
+    
+    private func isBitwiseOperation(_ operation: CalcMath.Operation) -> Bool {
+        return operation == .shiftLeft || operation == .shiftRight
     }
     
     fileprivate func calculateSoloBitwise(_ inputValue: NumberSystemProtocol, _ operation: CalcMath.Operation) -> String {
@@ -157,64 +156,85 @@ class Calculator: CalculatorProtocol {
     }
     
     // Check if given number more than current settings allows
-    func isValueOverflowed(value: String, for system: ConversionSystemsEnum, when variant: OverflowVariants) -> Bool {
-        let buffValue: NumberSystemProtocol
-        var binaryValue: Binary?
-
-        // Get number by string input
-        buffValue = numberSystemFactory.get(strValue: value, currentSystem: system)!
-        // Convert number to Binary without formatting
-        binaryValue = converter.convertValue(value: buffValue, to: .bin, format: false) as? Binary
-
-        if let bin = binaryValue {
-            let wordSizeValue = wordSizeStorage.getWordSizeValue()
+    public func isValueOverflowed(value: String, for system: ConversionSystemsEnum) -> Bool {
+        if hasFloatingPoint(value) {
+            return isFloatValueOverflowed(value)
+        } else {
+            let buffValue = numberSystemFactory.get(strValue: value, currentSystem: system)
+            guard buffValue != nil else { return true }
+            // Convert number to Binary without formatting
+            let bin = buffValue!.toBinary()
             bin.value = bin.value.removeAllSpaces()
-            // check for binary lenght for int part and fract part
-            if !value.contains(".") {
-                var testStr = String()
-                
-                // check if signed
-                if calcStateStorage.safeGetData().processSigned && bin.value.count >= wordSizeValue {
-                    let numIsSigned = bin.value.first! == "1" ? true : false
-                    if numIsSigned {
-                        let buffBin = Binary()
-                        buffBin.value = bin.value
-                        buffBin.twosComplement()
-                        // remove first bit
-                        buffBin.value.removeFirst(1)
-                        testStr = buffBin.removeZerosBefore(str: buffBin.value)
-                        // if == 0 then overflowed (min signed)
-                        guard testStr != "0" else { return true }
-                    }
-                }
-                // for unsigned
-                if testStr == "" { testStr = bin.removeZerosBefore(str: bin.value) }
-                   
-                if system == .dec {
-                    let oldValue = inputValue as? DecimalSystem ?? DecimalSystem(0)
-                    bin.updateSignedState()
-                    let newValue = converter.convertValue(value: bin, to: system, format: true) as! DecimalSystem
-                    // compare old value and new input value
-                    // overflow if signs don't match
-                    if oldValue.isSigned != newValue.isSigned && variant != .negate {
-                        return true
-                    } else if variant == .negate && !bin.isSigned {
-                        return testStr.count >= wordSizeValue ? true : false
-                    }
-                }
-                return testStr.count <= wordSizeValue ? false : true
-            // for binary with floating point
-            } else {
-                // input allowed if last symol is "."
-                guard value.last != "." else { return false }
-
-                // check if fract part fits in numbersAfterPoint setting
-                let testStr = value.removeAllSpaces()
-                let numbersAfterPoint = Int(conversionStorage.safeGetData().numbersAfterPoint)
-                let fractPartCount = testStr.getPartAfter(divider: ".").count
-                // compare values
-                return fractPartCount <= numbersAfterPoint ? false : true
-            }
+            
+            return isNonFloatBinOverflowed(bin)
+        }
+    }
+    
+    private func hasFloatingPoint(_ value: String) -> Bool {
+        return value.contains(".")
+    }
+    
+    private func isFloatValueOverflowed(_ value: String) -> Bool {
+        // input allowed if last symol is "."
+        guard value.last != "." else { return false }
+        // check if fract part fits in numbersAfterPoint setting
+        let testStr = value.removeAllSpaces()
+        let numbersAfterPoint = Int(conversionStorage.safeGetData().numbersAfterPoint)
+        let fractPartCount = testStr.getPartAfter(divider: ".").count
+        // compare values
+        return fractPartCount <= numbersAfterPoint ? false : true
+    }
+    
+    private func isNonFloatBinOverflowed(_ bin: Binary) -> Bool {
+        // check if binary has minimal possible signed value with current wordsize
+        // if true, then is overflowed
+        if checkIfMinSigned(bin) {
+            return true
+        }
+        
+        // check decimal overflowing
+        if systemMain == .dec && decChangedSign(bin) {
+            return true
+        }
+        
+        var testStr = bin.removeZerosBefore(str: bin.value)
+        let wordSizeValue = wordSizeStorage.getWordSizeValue()
+        
+        if bin.isSigned {
+            bin.twosComplement() // convert to positive value
+            testStr = bin.removeZerosBefore(str: bin.value)
+        }
+        
+        return testStr.count <= wordSizeValue ? false : true
+    }
+    
+    private func checkIfMinSigned(_ bin: Binary) -> Bool {
+        let wordSizeValue = wordSizeStorage.getWordSizeValue()
+        if processSigned && bin.value.count >= wordSizeValue && binIsSigned(bin) {
+            var testStr = String()
+            let binBuff = Binary(bin)
+            binBuff.twosComplement()
+            // remove first signed bit
+            binBuff.value.removeFirst(1)
+            testStr = binBuff.removeZerosBefore(str: binBuff.value)
+            // if == 0 then overflowed (min signed)
+            guard testStr != "0" else { return true }
+        }
+        return false
+    }
+    
+    private func binIsSigned(_ bin: Binary) -> Bool {
+        return bin.value.first! == "1" ? true : false
+    }
+    
+    private func decChangedSign(_ bin: Binary) -> Bool {
+        let oldValue = inputValue as? DecimalSystem ?? DecimalSystem(0)
+        bin.updateSignedState()
+        let newValue = converter.convertValue(value: bin, to: .dec, format: true) as? DecimalSystem ?? DecimalSystem(0)
+        // compare old value and new value
+        // overflow if signs don't match
+        if oldValue.isSigned != newValue.isSigned {
+            return true
         }
         return false
     }
@@ -222,7 +242,6 @@ class Calculator: CalculatorProtocol {
     func negateValue(value: NumberSystemProtocol, system: ConversionSystemsEnum) -> String {
         return calculationHandler.negate(value: value, system: system).value
     }
-    
     
     // For updating input main label
     func processStrInputToFormat(inputStr: String, for system: ConversionSystemsEnum) -> String {

@@ -258,6 +258,36 @@ class CalculatorTests: XCTestCase {
     
     // MARK: - isValueOverflowed
     
+    func testIsFloatValueOverflowed_OK() throws {
+        // 1. given
+        let conversionSettings = ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
+        conversionStorage?.saveData(conversionSettings)
+        calcStatetorage?.saveData(signedData)
+        wordSizeStorage?.saveData(byte)
+        let testValue = DecimalSystem(stringLiteral: "127.12345678")
+        
+        // 2. when
+        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
+        
+        // 3. then
+        XCTAssertEqual(result, false, "Calculation failure")
+    }
+    
+    func testIsFloatValueOverflowed_EROOR() throws {
+        // 1. given
+        let conversionSettings = ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
+        conversionStorage?.saveData(conversionSettings)
+        calcStatetorage?.saveData(signedData)
+        wordSizeStorage?.saveData(byte)
+        let testValue = DecimalSystem(stringLiteral: "127.123456789")
+        
+        // 2. when
+        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
+        
+        // 3. then
+        XCTAssertEqual(result, true, "Calculation failure")
+    }
+    
     func testIsValueOverflowed_BYTE_OK() throws {
         // 1. given
         calcStatetorage?.saveData(signedData)
@@ -265,7 +295,7 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "127")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec, when: .input)
+        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, false, "Calculation failure")
@@ -278,7 +308,7 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "128")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec, when: .input)
+        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, true, "Calculation failure")
@@ -291,7 +321,7 @@ class CalculatorTests: XCTestCase {
         let testValue = Binary(stringLiteral: "100000000")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .bin, when: .input)
+        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .bin)
         
         // 3. then
         XCTAssertEqual(result, true, "Calculation failure")
@@ -304,7 +334,7 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "32767")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec, when: .input)
+        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, false, "Calculation failure")
@@ -317,7 +347,7 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "32768")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec, when: .input)
+        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, true, "Calculation failure")
@@ -330,7 +360,7 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "2147483647")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec, when: .input)
+        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, false, "Calculation failure")
@@ -343,7 +373,7 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "2147483648")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec, when: .input)
+        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, true, "Calculation failure")
@@ -356,7 +386,7 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "9223372036854775807")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec, when: .input)
+        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, false, "Calculation failure")
@@ -369,7 +399,7 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "9223372036854775808")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec, when: .input)
+        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, true, "Calculation failure")
@@ -382,7 +412,7 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "18446744073709551615")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec, when: .input)
+        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, false, "Calculation failure")
@@ -395,7 +425,7 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "18446744073709551616")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec, when: .input)
+        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, true, "Calculation failure")
