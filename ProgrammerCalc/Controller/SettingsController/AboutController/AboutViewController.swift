@@ -14,6 +14,7 @@ protocol AboutViewControllerDelegate: AnyObject {
     func openDescription()
     func rateApp()
     func openContactForm()
+    func getIconTint() -> UIColor
 }
 
 // MARK: - About VC
@@ -46,6 +47,14 @@ class AboutViewController: PCalcTableViewController, AboutViewControllerDelegate
     }
     
     // MARK: - Methods
+    
+    func getIconTint() -> UIColor {
+        let styleStorage = StyleStorage()
+        let styleType = styleStorage.safeGetStyleData()
+        let styleFactory = StyleFactory()
+        let style = styleFactory.get(style: styleType)
+        return style.tintColor
+    }
     
     // Present Description
     func openDescription() {
@@ -90,8 +99,10 @@ class AboutViewController: PCalcTableViewController, AboutViewControllerDelegate
             return
         }
     }
+    
     // Dismissing contact us form
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Swift.Error?) {
         controller.dismiss(animated: true, completion: nil)
     }
+    
 }

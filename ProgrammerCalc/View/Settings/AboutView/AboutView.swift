@@ -17,12 +17,7 @@ class AboutView: UITableView {
                                NSLocalizedString("Rate app", comment: ""),
                                NSLocalizedString("Contact us", comment: "")]
     
-    var iconTint: UIColor {
-        let styleStorage = StyleStorage()
-        let styleType = styleStorage.safeGetStyleData()
-        let style = StyleFactory().get(style: styleType)
-        return style.tintColor
-    }
+    lazy var iconTint: UIColor = controllerDelegate!.getIconTint()
     
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
@@ -40,7 +35,7 @@ class AboutView: UITableView {
         // change cells view tint color
         for row in 0...cellLabels.count {
             let cell = cellForRow(at: IndexPath(row: row, section: 1))
-            cell?.imageView?.tintColor = iconTint
+            cell?.imageView?.tintColor = controllerDelegate!.getIconTint()
         }
     }
     
