@@ -45,7 +45,6 @@ class OctalTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-    // XCTAssert to test model
     func testOctalUnsignedInit() throws {
         // 1. given
         calcStatetorage?.saveData(unsignedData)
@@ -119,6 +118,18 @@ class OctalTests: XCTestCase {
         XCTAssertEqual(octalTest.value, "100357", "Converted values are wrong")
     }
     
+    func testToBinary() throws {
+        // 1. given
+        calcStatetorage?.saveData(signedData)
+        octalTest = Octal(stringLiteral: octalStrInput)
+        
+        // 2. when
+        let binary = octalTest.toBinary()
+        
+        // 3. then
+        XCTAssertEqual(binary.value, "0000000000000000000000000000000000000000000000000000000011101111", "Converted values are wrong")
+    }
+    
     func testOctalCovnertToBinaryUnsigned() throws {
         // 1. given
         calcStatetorage?.saveData(unsignedData)
@@ -128,7 +139,7 @@ class OctalTests: XCTestCase {
         let binary = octalTest.convertOctToBinary()
         
         // 3. then
-        XCTAssertEqual(binary.value, "000000000000000000000000000000000000000000000000000000011101111", "Converted values are wrong")
+        XCTAssertEqual(binary.value, "0000000000000000000000000000000000000000000000000000000011101111", "Converted values are wrong")
     }
     
     func testOctalCovnertToBinarySigned() throws {
@@ -140,7 +151,7 @@ class OctalTests: XCTestCase {
         let binary = octalTest.convertOctToBinary()
         
         // 3. then
-        XCTAssertEqual(binary.value, "000000000000000000000000000000000000000000000000000000011101111", "Converted values are wrong")
+        XCTAssertEqual(binary.value, "0000000000000000000000000000000000000000000000000000000011101111", "Converted values are wrong")
     }
     
     

@@ -48,6 +48,10 @@ class Octal: NumberSystemProtocol {
     // MARK: - Methods
     // ===============
     
+    func toBinary() -> Binary {
+        return self.convertOctToBinary()
+    }
+    
     // OCT -> BIN
     // Convert from oct to binary with table helper
     func convertOctToBinary() -> Binary {

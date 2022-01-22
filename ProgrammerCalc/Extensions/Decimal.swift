@@ -15,22 +15,12 @@ extension Decimal {
         var decimal = Decimal()
         var multiplier = str.count - 1
         for bit in str {
-            let bitDecimal = Decimal(string: String(bit))!
-            let powDecimal = decPow(Decimal(radix), Decimal(multiplier))
+            let bitDecimal: Decimal = bit == "1" ? 1 : 0
+            let powDecimal = pow(Decimal(radix), multiplier)
             decimal += bitDecimal * powDecimal
             multiplier -= 1
         }
         self = decimal
-    }
-    
-    // pow func for decimal values
-    func decPow(_ value: Decimal, _ power: Decimal) -> Decimal {
-        let powerInt = Int("\(power)") ?? 1
-        var result = Decimal(1.0)
-        for _ in 0..<powerInt {
-            result *= value
-        }
-        return result
     }
     
     // % for decimal values

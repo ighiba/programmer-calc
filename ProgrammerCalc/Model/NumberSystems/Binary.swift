@@ -36,7 +36,7 @@ class Binary: NumberSystemProtocol {
   
     /// Creates an instance initialized to the Binary  value / copying another instance
     init(_ valueBin: Binary) {
-        self.value = valueBin.value
+        self.value = valueBin.value.removeAllSpaces()
         self.isSigned = valueBin.isSigned
     }
     
@@ -73,6 +73,11 @@ class Binary: NumberSystemProtocol {
     // MARK: - Methods
     // ===============
     
+    func toBinary() -> Binary {
+        let bin = Binary(self)
+        bin.value = bin.fillUpZeros(str: bin.value, to: 64)
+        return bin
+    }
     
     // only for int or fract part of binary
     func removeZerosBefore( str: String) -> String {
@@ -139,7 +144,7 @@ class Binary: NumberSystemProtocol {
         }
         
         // to two's complement if value is signed and negative
-        if self.isSigned {
+        if isSigned {
             binary.twosComplement()
         }
         
@@ -157,11 +162,11 @@ class Binary: NumberSystemProtocol {
         // First: converting int part
 
         // remove signed bit
-        if self.isSigned {
+        if isSigned {
             binIntStrBuff?.removeFirst()
         }
         // set multipler to -1 or 1 for inverting value
-        if self.isSigned {
+        if isSigned {
             signedMultipler = -1
             // check if min signed
             if binIntStrBuff!.replacingOccurrences(of: "0", with: "").count == 0 {
@@ -501,14 +506,6 @@ class Binary: NumberSystemProtocol {
         // fills up binary to 7, 15, 31, 63
         binary.fillUpToMaxBitsCount()
         
-        // isSigned == true -> 1 else -> 0
-        // add signed bit by signed state
-        if isInputSigned {
-            binary.value = "1" + binary.value
-        } else {
-            binary.value = "0" + binary.value
-        }
-        
         if isInputSigned {
             binary.twosComplement()
             binary.changeSignedBit(to: "1")
@@ -572,10 +569,9 @@ class Binary: NumberSystemProtocol {
         }
         
         let wordSizeValue = 64
-        // let wordSizeValue = wordSizeStorage.getWordSizeValue()
         
         // fill up with zeros to needed bit position
-        binary.value = fillUpZeros(str: binary.value, to: wordSizeValue-1)
+        binary.value = fillUpZeros(str: binary.value, to: wordSizeValue)
         
     }
     
@@ -648,11 +644,11 @@ class Binary: NumberSystemProtocol {
                 // fills up binary to 7, 15, 31, 63 detends of wordSize
                 binary.fillUpToMaxBitsCount()
                 // isSigned == true -> 1 else -> 0
-                // add signed bit by signed state
+                // change signed bit by signed state
                 if binary.isSigned {
-                    binary.value = "1" + binary.value
+                    binary.changeSignedBit(to: "1")
                 } else {
-                    binary.value = "0" + binary.value
+                    binary.changeSignedBit(to: "0")
                 }
             } else {
                 // if doesnt process signed binary values
@@ -695,20 +691,11 @@ class Binary: NumberSystemProtocol {
     
     public func twosComplement() {
         let binary = self
-        var signedBit = String()
-        
-        let calcStateStorage = CalcStateStorage()
         // remove spaces
         binary.value = binary.value.removeAllSpaces()
         
         // convert to 1's complement
         binary.onesComplement()
-        // save signed bit and change to 0
-        if calcStateStorage.isProcessSigned() {
-            signedBit = String(binary.value.first!)
-            binary.updateSignedState()
-            binary.changeSignedBit(to: "0")
-        }
 
         // get the int part of binary
         let divided = divideIntFract(value: binary.value)
@@ -723,11 +710,6 @@ class Binary: NumberSystemProtocol {
         // add fract part to int part if exists
         if divided.1 != nil && divided.1!.count > 0 {
             binary.value = binary.value + "." + divided.1!
-        }
-        
-        // return signed bit if exists
-        if signedBit != "" {
-            binary.changeSignedBit(to: Character(signedBit))
         }
     }
     
