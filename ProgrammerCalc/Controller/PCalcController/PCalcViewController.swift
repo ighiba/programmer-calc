@@ -45,8 +45,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     // output label
     lazy var converterLabel: CalcualtorLabel = calcView.converterLabel
     // array of pages with calc buttons
-    private var arrayButtonsStack: [CalcButtonsPage] = [CalcButtonsAdditional(),
-                                                        CalcButtonsMain()]
+    private var arrayButtonsStack: [CalcButtonsPage] = [ CalcButtonsAdditional(), CalcButtonsMain() ]
     // additional bitwise keypad for input
     private var bitwiseKeypad: BitwiseKeypadController?
     
@@ -60,7 +59,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     private let converter: Converter = Converter()
     // Object "Calculator"
     let calculator: Calculator = Calculator()
-    
     
     // Array of button pages controllers
     lazy var calcButtonsViewControllers: [CalcButtonsViewController] = {
@@ -548,26 +546,45 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     private func updateIsSignedButton() {
         // get button by tag 102
         if let isSignedButton = self.view.viewWithTag(102) as? CalculatorButton {
-            if calculator.processSigned {
-                // if ON then disable
-                isSignedButton.setTitle("Signed\nON", for: .normal)
-            } else {
-                // if OFF then enable
-                isSignedButton.setTitle("Signed\nOFF", for: .normal)
-            }
+            isSignedButton.changeTitleIsSignedButtonFor(calculator.processSigned)
         }
     }
     
-    // Change state of plusminus button
-    private func changeStatePlusMinus() {
-        if let plusMinusButton = self.view.viewWithTag(101) as? CalculatorButton {
-            plusMinusButton.isEnabled = calculator.processSigned
-            if plusMinusButton.isEnabled {
-                plusMinusButton.alpha = 1.0
-            } else {
-                plusMinusButton.alpha = 0.5
-            }
+    
+    private func updateBitwiseKeypad() {
+        if let vc = bitwiseKeypad {
+            let bin = calculator.inputValue.toBinary()
+            let wordSize = wordSizeStorage.safeGetData() as! WordSize
+            vc.binary = bin
+            vc.setWordSize(wordSize)
+            vc.updateKeypad()
         }
+    }
+    
+    private func getBitwiseUpdateHandler() -> ((NumberSystemProtocol) -> Void) {
+        let handler: ((NumberSystemProtocol) -> Void) = { [self] newValue in
+            // set new NumberSystem value in inputValue
+            calculator.inputValue = converter.convertValue(value: newValue, to: calculator.systemMain!, format: true)
+            // set new String value in label
+            mainLabel.text = calculator.inputValue.value
+            updateLabels()
+        }
+        return handler
+    }
+    
+    private func refreshCalcButtons() {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1, execute: { [self] in
+            let currentPage = (viewControllers?.first as? CalcButtonsViewController) ?? calcButtonsViewControllers[1]
+            let currentPageCount = calcButtonsViewControllers.firstIndex(of: currentPage) ?? 1
+            
+            setViewControllers([currentPage], direction: .forward, animated: false, completion: nil)
+            // update selected dot for uipagecontrol
+            setPageControlCurrentPage(count: currentPageCount)
+        })
+    }
+    
+    private func isBitwiseKeypadExists() -> Bool {
+        return bitwiseKeypad != nil
     }
     
     // ===============
@@ -745,8 +762,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         vc.updaterHandler = {
             self.handleDisplayingMainLabel()
             self.updateButtonsState()
-            self.updateBitwiseKeypadState()
-            self.updateBitwiseKeypadValues()
+            self.updateBitwiseKeypad()
         }
         // show popover
         self.present(vc, animated: false, completion: nil)
@@ -760,7 +776,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         let bitwiseKeypadTransform = CGAffineTransform(translationX: UIScreen.main.bounds.width, y: 0)
                                                        
         calcView.freezeNavBar(by: animDuration * 1.5) // also freezes all navbar items
-        
         
         if isBitwiseKeypadExists() {
             
@@ -783,15 +798,14 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             sender.changeImage(named: "keypadIcon-default")
             
             // prepare input value for bitwise keypad
-            let dec = converter.convertValue(value: calculator.inputValue, to: .dec, format: true) as! DecimalSystem
-            let binary = converter.convertValue(value: dec, to: .bin, format: false) as! Binary
-            
-            bitwiseKeypad = BitwiseKeypadController(binary: binary)
+            let bin = calculator.inputValue.toBinary()
+
+            bitwiseKeypad = BitwiseKeypadController(binary: bin)
             
             self.addChild(bitwiseKeypad!)
             self.view.addSubview(bitwiseKeypad!.view)
             
-            bitwiseKeypad?.updateHandlder = bitwiseUpdateHandler()
+            bitwiseKeypad?.updateHandlder = getBitwiseUpdateHandler()
             bitwiseKeypad?.setContainerConstraintsFor(self.view)
 
             bitwiseKeypad?.view.transform = bitwiseKeypadTransform
@@ -806,53 +820,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             })
         }
     }
-    
-    private func isBitwiseKeypadExists() -> Bool {
-        return bitwiseKeypad != nil
-    }
-    
-//    private func hideBitwiseKeypad(_ animDuration: CGFloat,
-//                                   _ animOptions: UIView.AnimationOptions,
-//                                   _ calcButtonsTransform: CGAffineTransform,
-//                                   _ bitwiseKeypadTransform: CGAffineTransform) {
-//
-//        calcButtonsViewControllers.forEach({ $0.view?.transform = calcButtonsTransform })
-//
-//        UIView.animate(withDuration: animDuration, delay: 0, options: animOptions, animations: {
-//            self.bitwiseKeypad?.view.transform = bitwiseKeypadTransform
-//            self.calcButtonsViewControllers.forEach({ $0.view?.transform = .identity })
-//        }, completion: { _ in
-//            self.bitwiseKeypad?.willMove(toParent: nil)
-//            self.bitwiseKeypad?.view.removeFromSuperview()
-//            self.bitwiseKeypad?.removeFromParent()
-//            self.bitwiseKeypad = nil
-//        })
-//    }
-    
-    private func bitwiseUpdateHandler() -> ((NumberSystemProtocol) -> Void) {
-        let handler: ((NumberSystemProtocol) -> Void) = { [self] newValue in
-            // set new NumberSystem value in inputValue
-            calculator.inputValue = converter.convertValue(value: newValue, to: calculator.systemMain!, format: true)
-            // set new String value in label
-            mainLabel.text = calculator.inputValue.value
-            // update labels
-            updateMainLabel()
-            updateConverterLabel()
-        }
-        return handler
-    }
-    
-    private func refreshCalcButtons() {
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1, execute: { [self] in
-            let currentPage = (viewControllers?.first as? CalcButtonsViewController) ?? calcButtonsViewControllers[1]
-            let currentPageCount = calcButtonsViewControllers.firstIndex(of: currentPage) ?? 1
-            
-            setViewControllers([currentPage], direction: .forward, animated: false, completion: nil)
-            // update selected dot for uipagecontrol
-            setPageControlCurrentPage(count: currentPageCount)
-        })
-    }
-    
+
     // Change word size button action
     @objc func changeWordSizeButtonTapped(_ sender: UIButton) {
         touchHandleLabelHighlight()
@@ -861,8 +829,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         vc.modalPresentationStyle = .overFullScreen
         vc.updaterHandler = {
             self.updateAllLayout()
-            self.updateBitwiseKeypadState()
-            self.updateBitwiseKeypadValues()
+            self.updateBitwiseKeypad()
         }
         // show popover
         self.present(vc, animated: false, completion: nil)
@@ -878,32 +845,10 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         navigationController.presentationController?.delegate = self
         vc.updaterHandler = {
             self.updateSettings()
-            self.updateBitwiseKeypadState()
+            self.updateBitwiseKeypad()
         }
         navigationController.setViewControllers([vc], animated: false)
         self.present(navigationController, animated: true)
-    }
-    
-    func updateBitwiseKeypadState() {
-        if let vc = bitwiseKeypad {
-            let dec = converter.convertValue(value: calculator.inputValue, to: .dec, format: true) as! DecimalSystem
-            let binary = converter.convertValue(value: dec, to: .bin, format: false) as! Binary
-            let wordSize = wordSizeStorage.safeGetData() as! WordSize
-            vc.binary = binary
-            vc.setWordSize(wordSize)
-            vc.updateKeypadState()
-        }
-    }
-    
-    func updateBitwiseKeypadValues() {
-        if let vc = bitwiseKeypad {
-            let dec = converter.convertValue(value: calculator.inputValue, to: .dec, format: true) as! DecimalSystem
-            let binary = converter.convertValue(value: dec, to: .bin, format: false) as! Binary
-            let wordSize = wordSizeStorage.safeGetData() as! WordSize
-            vc.binary = binary
-            vc.setWordSize(wordSize)
-            vc.updateKeypadValues()
-        }
     }
      
     @objc func labelSwipeRight(_ sender: UISwipeGestureRecognizer) {
@@ -919,11 +864,10 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
                 // if only one digit in label (or 0) then replace it to "0"
                 mainLabel.text = "0"
             }
-            // update labels
-            updateMainLabel()
-            updateConverterLabel()
-            // update bitwise keyboard bitwise if exists
-            updateBitwiseKeypadValues()
+            
+            updateLabels()
+            // update bitwise keypad if exists
+            updateBitwiseKeypad()
         }
     }
     

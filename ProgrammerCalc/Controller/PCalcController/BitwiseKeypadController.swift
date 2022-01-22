@@ -10,11 +10,11 @@ import UIKit
 import AudioToolbox
 
 protocol BitwiseKeypadControllerDelegate: AnyObject {
-    var binary: Binary { get set }
-    var binaryValue: [Character] { get set }
-    var wordSize: WordSize { get set }
-    var tagOffset: Int { get }
+    var binaryValue: [Character] { get }
     var bitButtons: [UIButton] { get set }
+    func getTagOffset() -> Int
+    func getWordSizeValue() -> Int
+    func getStyle() -> Style
 }
 
 class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate {
@@ -42,6 +42,9 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     private let settingsStorage: SettingsStorageProtocol = SettingsStorage()
     private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
     private let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
+    private let styleStorage: StyleStorageProtocol = StyleStorage()
+    
+    private let styleFactory: StyleFactory = StyleFactory()
     
     // Sound of tapping bool setting
     private var tappingSounds = false
@@ -97,6 +100,12 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
         bitwiseKeypadView.applyStyle()
     }
     
+    func getStyle() -> Style {
+        let styleName = styleStorage.safeGetStyleData()
+        let style = styleFactory.get(style: styleName)
+        return style
+    }
+    
     private func updateWordSize() {
         let wordSize = wordSizeStorage.safeGetData() as! WordSize
         setWordSize(wordSize)
@@ -104,6 +113,22 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     
     public func setWordSize(_ size: WordSize) {
         wordSize = size
+    }
+    
+    func getWordSizeValue() -> Int {
+        return wordSize.value
+    }
+    
+    func getTagOffset() -> Int {
+        return tagOffset
+    }
+    
+    public func setTappingSounds(_ state: Bool) {
+        tappingSounds = state
+    }
+    
+    public func setHapticFeedback(_ state: Bool) {
+        hapticFeedback = state
     }
     
     private func updateProcessSigned() {
@@ -118,25 +143,18 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
         setHapticFeedback(settings.hapticFeedback)
     }
     
-    public func setTappingSounds(_ state: Bool) {
-        tappingSounds = state
-    }
-    
-    public func setHapticFeedback(_ state: Bool) {
-        hapticFeedback = state
-    }
-    
-    private func canChangeSignedBit(for button: UIButton) -> Bool {
-        return !(button.tag - tagOffset + 1 == wordSize.value && binary.value.contains(".") && processSigned)
-    }
-    
     private func updateInputValue() {
         if let updateWith = updateHandlder {
             updateWith(binary)
         }
     }
     
-    public func updateKeypadState() {
+    public func updateKeypad() {
+        updateKeypadState()
+        updateKeypadValues()
+    }
+    
+    private func updateKeypadState() {
         var buttonTag = 63
         
         for button in bitButtons {
@@ -157,17 +175,20 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
         return tag + 1 == wordSize.value && button.isEnabled || tag < wordSize.value && button.isEnabled
     }
     
-    public func updateKeypadValues() {
+    private func updateKeypadValues() {
         let newBinaryValue = [Character](binary.value)
         let buttonTag = 63
-        for i in 0...buttonTag {
-            if newBinaryValue[i] != binaryValue[i] && bitButtons[i].isEnabled {
-                let bit = newBinaryValue[i]
-                bitButtons[i].setTitle(String(bit), for: .normal)
-            }
+
+        for i in 0...buttonTag where bitButtons[i].isEnabled {
+            let bit = newBinaryValue[i]
+            bitButtons[i].setTitle(String(bit), for: .normal)
         }
         
         binaryValue = [Character](newBinaryValue)
+    }
+    
+    private func canChangeSignedBit(for button: UIButton) -> Bool {
+        return !(button.tag - tagOffset + 1 == wordSize.value && binary.value.contains(".") && processSigned)
     }
     
     // MARK: - Actions
@@ -200,8 +221,5 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
         
         updateInputValue()
     }
-    
-    
-    
-    
+
 }

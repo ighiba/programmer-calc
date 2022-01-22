@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import ProgrammerCalc
 
 class ProgrammerCalcUITests: XCTestCase {
     
@@ -32,55 +33,19 @@ class ProgrammerCalcUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-    func testMainVieController() throws {
+    func testMainViewController() throws {
         // 1. given
-        
         let scrollViewsQuery = app.scrollViews
         
-        var buttonsMain: [XCUIElement] = []
-        buttonsMain.append(scrollViewsQuery.otherElements.buttons["AC"])
-        buttonsMain.append(scrollViewsQuery.otherElements.buttons["0"])
-        buttonsMain.append(scrollViewsQuery.otherElements.buttons["1"])
-        buttonsMain.append(scrollViewsQuery.otherElements.buttons["2"])
-        buttonsMain.append(scrollViewsQuery.otherElements.buttons["3"])
-        buttonsMain.append(scrollViewsQuery.otherElements.buttons["4"])
-        buttonsMain.append(scrollViewsQuery.otherElements.buttons["5"])
-        buttonsMain.append(scrollViewsQuery.otherElements.buttons["6"])
-        buttonsMain.append(scrollViewsQuery.otherElements.buttons["7"])
-        buttonsMain.append(scrollViewsQuery.otherElements.buttons["8"])
-        buttonsMain.append(scrollViewsQuery.otherElements.buttons["9"])
-        buttonsMain.append(scrollViewsQuery.otherElements.buttons["."])
-        buttonsMain.append(scrollViewsQuery.otherElements.buttons["="])
-        buttonsMain.append(scrollViewsQuery.otherElements.buttons["+"])
-        buttonsMain.append(scrollViewsQuery.otherElements.buttons["-"])
-        buttonsMain.append(scrollViewsQuery.otherElements.buttons["×"])
-        buttonsMain.append(scrollViewsQuery.otherElements.buttons["÷"])
+        let mainButtons = ["AC","0","1", "2", "3", "4", "5", "6", "7", "8", "9", ".", "=", "+", "+", "-", "×", "÷"]
+        let additionalButtons = ["00","FF","A","B", "C", "D", "E", "F", "1's", "2's", "X<<Y", "X>>Y", "<<", ">>", "AND", "OR", "XOR", "NOR"]
         
-
-        var buttonsAdditional: [XCUIElement] = []
-        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["00"])
-        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["FF"])
-        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["A"])
-        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["B"])
-        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["C"])
-        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["D"])
-        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["E"])
-        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["F"])
-        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["1's"])
-        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["2's"])
-        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["X<<Y"])
-        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["X>>Y"])
-        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["<<"])
-        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons[">>"])
-        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["AND"])
-        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["OR"])
-        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["XOR"])
-        buttonsAdditional.append(scrollViewsQuery.otherElements.buttons["NOR"])
+        let buttonsFirstPage: [XCUIElement] = mainButtons.map({ scrollViewsQuery.otherElements.buttons[$0] })
+        let buttonsSecondPage: [XCUIElement] = additionalButtons.map({ scrollViewsQuery.otherElements.buttons[$0] })
         
-     
         // 2. then
         // Test main button sexisting
-        for button in buttonsMain {
+        for button in buttonsFirstPage {
             XCTAssert(button.exists)
             // try to tap
             button.tap()
@@ -88,7 +53,7 @@ class ProgrammerCalcUITests: XCTestCase {
         // Scroll to additional page
         scrollViewsQuery.children(matching: .other).element.children(matching: .other).element.swipeRight()
         // Test additional buttons existing
-        for button in buttonsAdditional {
+        for button in buttonsSecondPage {
             XCTAssert(button.exists)
             // try to tap
             button.tap()
@@ -216,18 +181,13 @@ class ProgrammerCalcUITests: XCTestCase {
         buttonsMain.append(scrollViewsQuery.otherElements.buttons["2"])
         buttonsMain.append(scrollViewsQuery.otherElements.buttons["3"])
         
-        let bitButtons = (0..<8).reversed().map({
-            return app.buttons["bitButton_\($0)"]
-        })
+        let bitButtons = (0..<8).reversed().map({ app.buttons["bitButton_\($0)"] })
         
         buttonsMain.forEach({ $0.tap() }) // input 123 (Dec) -> 0111 1011 (Bin)
         
         let bitwiseSwitch = XCUIApplication().navigationBars.children(matching: .button).element(boundBy: 1)
 
-        
-        
         // 2. then
-        
         XCTAssert( bitwiseSwitch.exists)
         bitwiseSwitch.tap()
         

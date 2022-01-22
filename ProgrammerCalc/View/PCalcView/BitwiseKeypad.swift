@@ -16,15 +16,12 @@ class BitwiseKeypad: UIView {
     private let fontSize: CGFloat = UIScreen.main.bounds.width / 13.5
     private var buttonTag: Int = 63 // buttons or bit tags, buttons created in reverse order from 63 to 0
     
-    lazy var wordSize: WordSize = getWordSize()
+    lazy var wordSizeValue: Int = getWordSizeValue()
     lazy var tagOffset: Int = getTagOffset()
     
     // Views
     lazy var container: UIView = UIView()
     lazy var allKeypadStack: UIStackView = getKeypadStack()
-    
-    private let styleStorage: StyleStorageProtocol = StyleStorage()
-    private let styleFactory: StyleFactory = StyleFactory()
     
     weak var controllerDelegate: BitwiseKeypadControllerDelegate?
     
@@ -87,12 +84,12 @@ class BitwiseKeypad: UIView {
     
     // MARK: - Methods
  
-    private func getWordSize() -> WordSize {
-        return controllerDelegate!.wordSize
+    private func getWordSizeValue() -> Int {
+        return controllerDelegate!.getWordSizeValue()
     }
     
     private func getTagOffset() -> Int {
-        return controllerDelegate!.tagOffset
+        return controllerDelegate!.getTagOffset()
     }
     
     public func setViews() {
@@ -102,8 +99,7 @@ class BitwiseKeypad: UIView {
     }
     
     public func applyStyle() {
-        let styleName = styleStorage.safeGetStyleData()
-        let style = styleFactory.get(style: styleName)
+        let style = controllerDelegate!.getStyle()
         container.backgroundColor = style.backgroundColor
         // Set colors for buttons - normal and when pressed
         for button in controllerDelegate!.bitButtons {
@@ -154,6 +150,7 @@ class BitwiseKeypad: UIView {
         let buttons: [UIButton] = (0..<4).map { _ in
             return getButton()
         }
+
         controllerDelegate?.bitButtons.append(contentsOf: buttons)
         
         let stack = UIStackView(arrangedSubviews: buttons)
@@ -198,7 +195,7 @@ class BitwiseKeypad: UIView {
         // tag processing
         button.tag = buttonTag + tagOffset
         
-        if buttonTag + 1 > wordSize.value {
+        if buttonTag + 1 > wordSizeValue {
             button.isEnabled = false
         }
         buttonTag -= 1
