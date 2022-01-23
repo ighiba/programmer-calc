@@ -259,8 +259,6 @@ class CalculatorTests: XCTestCase {
     
     func testIsFloatValueOverflowed_OK() throws {
         // 1. given
-        let conversionSettings = ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
-        conversionStorage?.saveData(conversionSettings)
         calcStatetorage?.saveData(signedData)
         wordSize.setValue(newValue: 8)
         let testValue = DecimalSystem(stringLiteral: "127.12345678")
@@ -274,8 +272,6 @@ class CalculatorTests: XCTestCase {
     
     func testIsFloatValueOverflowed_EROOR() throws {
         // 1. given
-        let conversionSettings = ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
-        conversionStorage?.saveData(conversionSettings)
         calcStatetorage?.saveData(signedData)
         wordSize.setValue(newValue: 8)
         let testValue = DecimalSystem(stringLiteral: "127.123456789")

@@ -18,6 +18,9 @@ protocol CalcStateProtocol {
 }
 
 class CalcState: CalcStateProtocol, Decodable, Encodable {
+    
+    static let shared: CalcState = CalcState(mainState: "0", convertState: "0", processSigned: false)
+    
     var mainLabelState: String
     var converterLabelState: String
     var processSigned: Bool
@@ -26,6 +29,12 @@ class CalcState: CalcStateProtocol, Decodable, Encodable {
         self.mainLabelState = mainState
         self.converterLabelState = convertState
         self.processSigned = processSigned
+    }
+    
+    func setCalcState(newCalcState: CalcStateProtocol) {
+        self.mainLabelState = newCalcState.mainLabelState
+        self.converterLabelState = newCalcState.converterLabelState
+        self.processSigned = newCalcState.processSigned
     }
     
 }

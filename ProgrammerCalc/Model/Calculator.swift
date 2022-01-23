@@ -26,7 +26,6 @@ class Calculator: CalculatorProtocol {
     
     // Storages
     private let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
-    private let conversionStorage: ConversionStorageProtocol = ConversionStorage()
     
     // Object "Converter"
     private let converter: Converter = Converter()
@@ -41,8 +40,9 @@ class Calculator: CalculatorProtocol {
     var systemMain: ConversionSystemsEnum?
     var systemConverter: ConversionSystemsEnum?
     
-    let wordSize: WordSize = WordSize.shared
-    let settings: Settings = Settings.shared
+    private let conversionSettings: ConversionSettings = ConversionSettings.shared
+    private let wordSize: WordSize = WordSize.shared
+    private let settings: Settings = Settings.shared
     
     // Taptic feedback generator for Errors
     private let errorGenerator = UINotificationFeedbackGenerator()
@@ -52,7 +52,6 @@ class Calculator: CalculatorProtocol {
     init() {
         // Load from storage
         let calcState = calcStateStorage.safeGetData()
-        let conversionSettings = conversionStorage.safeGetData()
         // Set states
         processSigned = calcState.processSigned
         systemMain = conversionSettings.systemMain
@@ -180,7 +179,7 @@ class Calculator: CalculatorProtocol {
         guard value.last != "." else { return false }
         // check if fract part fits in numbersAfterPoint setting
         let testStr = value.removeAllSpaces()
-        let numbersAfterPoint = Int(conversionStorage.safeGetData().numbersAfterPoint)
+        let numbersAfterPoint = Int(conversionSettings.numbersAfterPoint)
         let fractPartCount = testStr.getPartAfter(divider: ".").count
         // compare values
         return fractPartCount <= numbersAfterPoint ? false : true
@@ -256,7 +255,7 @@ class Calculator: CalculatorProtocol {
         var testLabelStr = inputStr.removeAllSpaces()
         let fractPartStr = testLabelStr.getPartAfter(divider: ".")
 
-        let numbersAfterPoint = Int(conversionStorage.safeGetData().numbersAfterPoint)
+        let numbersAfterPoint = Int(conversionSettings.numbersAfterPoint)
         // cut fract part if more then numbersAfterPoint
         if fractPartStr.count > numbersAfterPoint && testLabelStr.contains(".") {
             testLabelStr = cutFractPart(strValue: testLabelStr, by: numbersAfterPoint)

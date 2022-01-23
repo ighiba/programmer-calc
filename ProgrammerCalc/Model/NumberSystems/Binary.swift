@@ -591,14 +591,9 @@ class Binary: NumberSystemProtocol {
             let pointPos = testValue.firstIndex(of: ".")!
             let distance = testValue.distance(from: pointPos, to: testValue.endIndex)
         
-            let conversionStorage: ConversionStorageProtocol = ConversionStorage()
-            let conversionSettings = conversionStorage.loadData()
-            if let numbersAfterPoint = conversionSettings?.numbersAfterPoint {
-                // exit if numbers after point is already filled
-                if Int(numbersAfterPoint) >= Int(distance) {
-                    // do nothing
-                    binary.value.append(digit)
-                }
+            let conversionSettings = ConversionSettings.shared
+            if Int(conversionSettings.numbersAfterPoint) >= Int(distance) {
+                binary.value.append(digit)
             }
             return
         }

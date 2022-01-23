@@ -52,6 +52,7 @@ class WordSizeViewController: UIViewController {
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
     }
     
+    
     // MARK: - Methods
     
     fileprivate func setupGestures() {

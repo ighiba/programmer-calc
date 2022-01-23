@@ -33,8 +33,9 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     
     // Storages
     private let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
-    private let conversionStorage: ConversionStorageProtocol = ConversionStorage()
     private let styleStorage: StyleStorageProtocol = StyleStorage()
+    
+    private let conversionSettings: ConversionSettings = ConversionSettings.shared
     
     // Views
     let calcView: PCalcView = PCalcView()
@@ -127,8 +128,8 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             self.updateMainLabelNumberValue()
         }
         
-        // Get data from UserDefaults
         updateConversionState()
+        // Get data from UserDefaults
         updateCalcState()
         handleConversion()
         
@@ -269,11 +270,9 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     }
     	
     private func updateConversionState() {
-        // get data from UserDefaults
-        let data = conversionStorage.safeGetData()
         // properties update
-        calculator.systemMain = data.systemMain
-        calculator.systemConverter = data.systemConverter
+        calculator.systemMain = conversionSettings.systemMain
+        calculator.systemConverter = conversionSettings.systemConverter
         // labels info update
         mainLabel.setInfoLabelValue(calculator.systemMain!)
         converterLabel.setInfoLabelValue(calculator.systemConverter!)
@@ -282,7 +281,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     // Handle conversion issues
     public func handleConversion() {
         let labelText = mainLabel.text
-        let conversionSettings = conversionStorage.safeGetData()
         let forbidden = ConversionValues.getForbiddenValues()
         let systemMainFromEnum = conversionSettings.systemMain
         
@@ -691,7 +689,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     
     // AC/C button
     @objc func clearButtonTapped(_ sender: UIButton) {
-        print("clear")
+        print("Clear")
         // Clear buttons
         updateClearButton(hasInput: false)
         clearLabels()
@@ -734,6 +732,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         // set delegate and update handler
         vc.delegate = self
         vc.updaterHandler = {
+            self.updateConversionState()
             self.handleDisplayingMainLabel()
             self.updateButtonsState()
             self.updateBitwiseKeypad()

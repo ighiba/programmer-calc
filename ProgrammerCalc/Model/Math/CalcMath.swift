@@ -26,9 +26,9 @@ extension MathErrors: LocalizedError {
 final class CalcMath {
         
     // Storages
-    private let conversionStorage = ConversionStorage()
     private let calcStateStorage = CalcStateStorage()
     
+    private let conversionSettings: ConversionSettings = ConversionSettings.shared
     private let wordSize: WordSize = WordSize.shared
     
     // Object "Converter"
@@ -92,7 +92,7 @@ final class CalcMath {
         // get fract part if exists
         var decFractPart = newDecimal!.removeFractPart()
         var decFractPartCopy = decFractPart
-        let numbersAfterPoint = Int(conversionStorage.safeGetData().numbersAfterPoint)
+        let numbersAfterPoint = Int(conversionSettings.numbersAfterPoint)
         NSDecimalRound(&decFractPart, &decFractPartCopy, numbersAfterPoint, .down)
         // convert to formatted bin
         let formattedBin = converter.convertValue(value: newDecimal!, to: .bin, format: true)

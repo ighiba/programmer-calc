@@ -18,6 +18,9 @@ protocol ConversionSettingsProtocol {
 }
 
 class ConversionSettings: ConversionSettingsProtocol, Decodable, Encodable {
+    
+    static let shared: ConversionSettings = ConversionSettings(systMain: .dec, systConverter: .dec, number: 8)
+    
     var systemMain: ConversionSystemsEnum
     var systemConverter: ConversionSystemsEnum
     var numbersAfterPoint: Int
@@ -26,6 +29,12 @@ class ConversionSettings: ConversionSettingsProtocol, Decodable, Encodable {
         self.systemMain = systMain
         self.systemConverter = systConverter
         self.numbersAfterPoint = number
+    }
+    
+    func setSettings(newSettings: ConversionSettingsProtocol) {
+        self.systemMain = newSettings.systemMain
+        self.systemConverter = newSettings.systemConverter
+        self.numbersAfterPoint = newSettings.numbersAfterPoint
     }
 }
 

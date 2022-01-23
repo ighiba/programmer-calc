@@ -12,8 +12,8 @@ import Foundation
  
      // Storages
      private let calcStateStorage = CalcStateStorage()
-     private let conversionStorage: ConversionStorageProtocol = ConversionStorage()
- 
+
+     private let conversionSettings: ConversionSettings = ConversionSettings.shared
      private let wordSize: WordSize = WordSize.shared
  
      // ===============
@@ -197,7 +197,7 @@ import Foundation
  
          // process fract part
          if let fractPart = splittedBinary.1 {
-             let numAfterPoint = conversionStorage.safeGetData().numbersAfterPoint
+             let numAfterPoint = conversionSettings.numbersAfterPoint
              var buffFractPart = fractPart.removeTrailing(characters: ["0"])
  
              if fractPart != "" {

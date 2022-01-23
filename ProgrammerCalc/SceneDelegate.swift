@@ -35,6 +35,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let settings = settingsStorage.safeGetData()
         Settings.shared.setSettings(newSettings: settings)
         
+        let conversionStorage: ConversionStorageProtocol = ConversionStorage()
+        let conversionSettings = conversionStorage.safeGetData()
+        ConversionSettings.shared.setSettings(newSettings: conversionSettings)
+        
         /** Process the quick action if the user selected one to launch the app.
             Grab a reference to the shortcutItem to use in the scene.
         */
