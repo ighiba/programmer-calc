@@ -26,7 +26,7 @@ class WordSize: WordSizeProtocol, Decodable, Encodable  {
         self.value = size
     }
     
-    func setValue(newValue: Int) {
-        self.value = newValue
+    func setWordSize(_ newWordSize: WordSizeProtocol) {
+        self.value = newWordSize.value
     }
 }

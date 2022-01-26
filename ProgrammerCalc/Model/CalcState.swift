@@ -31,7 +31,7 @@ class CalcState: CalcStateProtocol, Decodable, Encodable {
         self.processSigned = processSigned
     }
     
-    func setCalcState(newCalcState: CalcStateProtocol) {
+    func setCalcState(_ newCalcState: CalcStateProtocol) {
         self.mainLabelState = newCalcState.mainLabelState
         self.converterLabelState = newCalcState.converterLabelState
         self.processSigned = newCalcState.processSigned

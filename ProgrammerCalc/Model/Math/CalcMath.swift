@@ -24,15 +24,12 @@ extension MathErrors: LocalizedError {
 }
 
 final class CalcMath {
-        
-    // Storages
-    private let calcStateStorage = CalcStateStorage()
     
     private let conversionSettings: ConversionSettings = ConversionSettings.shared
     private let wordSize: WordSize = WordSize.shared
     
     // Object "Converter"
-    let converter: Converter = Converter()
+    private let converter: Converter = Converter()
     
     enum Operation {
         // arithmetic

@@ -10,37 +10,26 @@ import UIKit
 
 protocol CalculatorProtocol {
     var inputValue: NumberSystemProtocol! { get set }
-    // State for processign signed values
-    var processSigned: Bool { get set }
     // State for calculating numbers
     var mathState: MathStateProtocol? { get set }
-    // State for conversion systems in labels
-    var systemMain: ConversionSystemsEnum? { get set }
-    var systemConverter: ConversionSystemsEnum? { get set }
-    
 }
 
 class Calculator: CalculatorProtocol {
     
     // MARK: - Properties
     
-    // Storages
-    private let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
-    
     // Object "Converter"
     private let converter: Converter = Converter()
-    
+    // Object "CalcMath"
     private let calculationHandler: CalcMath = CalcMath()
     // Factory for NumberSystem from String value
     let numberSystemFactory: NumberSystemFactory = NumberSystemFactory()
     
     var inputValue: NumberSystemProtocol!
-    var processSigned = false // default value
     var mathState: MathStateProtocol?
-    var systemMain: ConversionSystemsEnum?
-    var systemConverter: ConversionSystemsEnum?
     
     private let conversionSettings: ConversionSettings = ConversionSettings.shared
+    private let calcState: CalcState = CalcState.shared
     private let wordSize: WordSize = WordSize.shared
     private let settings: Settings = Settings.shared
     
@@ -50,14 +39,9 @@ class Calculator: CalculatorProtocol {
     // MARK: - Initialization
     
     init() {
-        // Load from storage
-        let calcState = calcStateStorage.safeGetData()
-        // Set states
-        processSigned = calcState.processSigned
-        systemMain = conversionSettings.systemMain
-        systemConverter = conversionSettings.systemConverter
+
         // update mainLabel numberValue (inputValue)
-        if let numValue = numberSystemFactory.get(strValue: calcState.mainLabelState, currentSystem: systemMain!) {
+        if let numValue = numberSystemFactory.get(strValue: calcState.mainLabelState, currentSystem: conversionSettings.systemMain) {
             inputValue = numValue
         }
     }
@@ -79,7 +63,7 @@ class Calculator: CalculatorProtocol {
         // And handle errors
         do {
             // process claculation buff values and previous operations
-            result = try calculationHandler.calculate(firstValue: self.mathState!.buffValue, operation: self.mathState!.operation, secondValue: inputValue, for: self.systemMain!)
+            result = try calculationHandler.calculate(firstValue: self.mathState!.buffValue, operation: self.mathState!.operation, secondValue: inputValue, for: conversionSettings.systemMain)
         } catch MathErrors.divByZero {
             // if division by zero
             self.mathState = nil
@@ -120,7 +104,7 @@ class Calculator: CalculatorProtocol {
     }
     
     fileprivate func calculateSoloBitwise(_ inputValue: NumberSystemProtocol, _ operation: CalcMath.Operation) -> String {
-        return calculationHandler.shiftBits(number: inputValue, mainSystem: systemMain!, shiftOperation: operation, shiftCount: DecimalSystem(1))!.value
+        return calculationHandler.shiftBits(number: inputValue, mainSystem: conversionSettings.systemMain, shiftOperation: operation, shiftCount: DecimalSystem(1))!.value
     }
     
     // Convert operation name from button title to enum
@@ -193,7 +177,7 @@ class Calculator: CalculatorProtocol {
         }
         
         // check decimal overflowing
-        if systemMain == .dec && decChangedSign(bin) {
+        if conversionSettings.systemMain == .dec && decChangedSign(bin) {
             return true
         }
         
@@ -208,7 +192,7 @@ class Calculator: CalculatorProtocol {
     }
     
     private func checkIfMinSigned(_ bin: Binary) -> Bool {
-        if processSigned && bin.value.count >= wordSize.value && binIsSigned(bin) {
+        if calcState.processSigned && bin.value.count >= wordSize.value && binIsSigned(bin) {
             var testStr = String()
             let binBuff = Binary(bin)
             binBuff.twosComplement()

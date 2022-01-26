@@ -15,13 +15,14 @@ class OctalTests: XCTestCase {
     
     // Storages
     var conversionStorage: ConversionStorageProtocol? = ConversionStorage()
-    var calcStatetorage: CalcStateStorageProtocol? = CalcStateStorage()
     
     var octalTest: Octal!
     var octalStrInput: String = "357" // dec = 239
     
     let unsignedData = CalcState(mainState: "0", convertState: "0", processSigned: false)
     let signedData = CalcState(mainState: "0", convertState: "0", processSigned: true)
+    
+    let calcState: CalcState = CalcState.shared
     
     override func setUp() {
         super.setUp()
@@ -47,7 +48,7 @@ class OctalTests: XCTestCase {
     
     func testOctalUnsignedInit() throws {
         // 1. given
-        calcStatetorage?.saveData(unsignedData)
+        calcState.setCalcState(unsignedData)
         
         // 2. when
         octalTest = Octal(stringLiteral: octalStrInput)
@@ -58,7 +59,7 @@ class OctalTests: XCTestCase {
     
     func testOctalSignedInit() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
+        calcState.setCalcState(signedData)
         
         // 2. when
         octalTest = Octal(stringLiteral: octalStrInput)
@@ -68,7 +69,7 @@ class OctalTests: XCTestCase {
     
     func testOctalBinaryUnsignedInit() throws {
         // 1. given
-        calcStatetorage?.saveData(unsignedData)
+        calcState.setCalcState(unsignedData)
         let binary = Binary(stringLiteral: "011101111")
         
         // 2. when
@@ -80,7 +81,7 @@ class OctalTests: XCTestCase {
     
     func testOctalBinarySignedInit() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
+        calcState.setCalcState(signedData)
         let binary = Binary(stringLiteral: "011101111")
         
         // 2. when
@@ -92,7 +93,7 @@ class OctalTests: XCTestCase {
     
     func testOctalBinarySignedInitWithMinus() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
+        calcState.setCalcState(signedData)
         let binary = Binary()
         binary.value = "1000000011101111"
         binary.isSigned = true
@@ -106,7 +107,7 @@ class OctalTests: XCTestCase {
     
     func testOctalBinaryUnsignedInitWithMinus() throws {
         // 1. given
-        calcStatetorage?.saveData(unsignedData)
+        calcState.setCalcState(unsignedData)
         let binary = Binary()
         binary.value = "1000000011101111"
         binary.isSigned = false
@@ -120,7 +121,7 @@ class OctalTests: XCTestCase {
     
     func testToBinary() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
+        calcState.setCalcState(signedData)
         octalTest = Octal(stringLiteral: octalStrInput)
         
         // 2. when
@@ -132,7 +133,7 @@ class OctalTests: XCTestCase {
     
     func testOctalCovnertToBinaryUnsigned() throws {
         // 1. given
-        calcStatetorage?.saveData(unsignedData)
+        calcState.setCalcState(unsignedData)
         octalTest = Octal(stringLiteral: octalStrInput)
         
         // 2. when
@@ -144,7 +145,7 @@ class OctalTests: XCTestCase {
     
     func testOctalCovnertToBinarySigned() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
+        calcState.setCalcState(signedData)
         octalTest = Octal(stringLiteral: octalStrInput)
         
         // 2. when

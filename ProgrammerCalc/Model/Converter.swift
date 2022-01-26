@@ -9,12 +9,10 @@
 import Foundation
 
  class Converter {
- 
-     // Storages
-     private let calcStateStorage = CalcStateStorage()
-
+     
      private let conversionSettings: ConversionSettings = ConversionSettings.shared
      private let wordSize: WordSize = WordSize.shared
+     private let calcState: CalcState = CalcState.shared
  
      // ===============
      // MARK: - Methods
@@ -95,7 +93,7 @@ import Foundation
          case .dec:
              // convert binary to dec
              let dec = DecimalSystem(binary)
-             if !calcStateStorage.isProcessSigned() {
+             if !calcState.processSigned {
                  if dec.decimalValue < 0 {
                      dec.setNewDecimal(with: dec.decimalValue * -1)
                  }
@@ -134,7 +132,7 @@ import Foundation
          // convert binary to one's complement
          binary.onesComplement()
  
-         if calcStateStorage.isProcessSigned() {
+         if calcState.processSigned {
              binary.updateSignedState()
          }
  
@@ -190,7 +188,7 @@ import Foundation
              resultBin.value = buffIntPart
  
              // update signed value
-             if calcStateStorage.isProcessSigned() {
+             if calcState.processSigned {
                  resultBin.updateSignedState()
              }
          }
@@ -222,7 +220,7 @@ import Foundation
              resultBin.value.append(buffFractPart)
          }
  
-         if !calcStateStorage.isProcessSigned() {
+         if !calcState.processSigned {
              resultBin.isSigned = false
          }
  

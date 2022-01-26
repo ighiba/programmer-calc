@@ -13,7 +13,7 @@ class CalculatorTests: XCTestCase {
 
     // Storages
     var conversionStorage: ConversionStorageProtocol? = ConversionStorage()
-    var calcStatetorage: CalcStateStorageProtocol? = CalcStateStorage()
+    let calcStateStorage: CalcStateStorageProtocol? = CalcStateStorage()
     
     var calculatorTest: Calculator!
     
@@ -26,12 +26,14 @@ class CalculatorTests: XCTestCase {
     let qword = WordSize(64)
     
     let wordSize = WordSize.shared
+    let calcState: CalcState = CalcState.shared
     
     override func setUp() {
         super.setUp()
         calculatorTest = Calculator()
         let dummyConversionSettings = ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
         conversionStorage?.saveData(dummyConversionSettings)
+        calcStateStorage?.saveData(signedData)
     }
     
     override func tearDown() {
@@ -43,8 +45,8 @@ class CalculatorTests: XCTestCase {
     
     func testNegateValueBIN_BYTE() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 8)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(byte)
         let testValue = Binary(stringLiteral: "00001100")
         
         // 2. when
@@ -56,8 +58,8 @@ class CalculatorTests: XCTestCase {
 
     func testNegateValueBIN_WORD() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 16)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(word)
         let testValue = Binary(stringLiteral: "00001100")
         
         // 2. when
@@ -69,8 +71,8 @@ class CalculatorTests: XCTestCase {
     
     func testNegateValueBIN_DWORD() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 32)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(dword)
         let testValue = Binary(stringLiteral: "00001100")
         
         // 2. when
@@ -82,8 +84,8 @@ class CalculatorTests: XCTestCase {
     
     func testNegateValueBIN_QWORD() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 64)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(qword)
         let testValue = Binary(stringLiteral: "00001100")
         
         // 2. when
@@ -97,8 +99,8 @@ class CalculatorTests: XCTestCase {
     
     func testNegateValueDEC_BYTE() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 8)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(byte)
         let testValue = DecimalSystem(12)
         
         // 2. when
@@ -110,8 +112,8 @@ class CalculatorTests: XCTestCase {
 
     func testNegateValueDEC_WORD() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 16)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(word)
         let testValue = DecimalSystem(-12)
         
         // 2. when
@@ -123,8 +125,8 @@ class CalculatorTests: XCTestCase {
     
     func testNegateValueDEC_DWORD() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 32)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(dword)
         let testValue = DecimalSystem(256)
         
         // 2. when
@@ -136,8 +138,8 @@ class CalculatorTests: XCTestCase {
     
     func testNegateValueDEC_QWORD() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 64)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(qword)
         let testValue = DecimalSystem(-123456789)
         
         // 2. when
@@ -151,8 +153,8 @@ class CalculatorTests: XCTestCase {
     
     func testNegateValueOCT_BYTE() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 8)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(byte)
         let testValue = Octal(stringLiteral: "357") // - 17
         
         // 2. when
@@ -164,8 +166,8 @@ class CalculatorTests: XCTestCase {
 
     func testNegateValueOCT_WORD() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 16)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(word)
         let testValue = Octal(stringLiteral: "357") // 239
         
         // 2. when
@@ -177,8 +179,8 @@ class CalculatorTests: XCTestCase {
     
     func testNegateValueOCT_DWORD() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 32)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(dword)
         let testValue = Octal(stringLiteral: "357") // 239
         
         // 2. when
@@ -190,8 +192,8 @@ class CalculatorTests: XCTestCase {
     
     func testNegateValueOCT_QWORD() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 64)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(qword)
         let testValue = Octal(stringLiteral: "1777777777777777777421") // -239
         
         // 2. when
@@ -205,8 +207,8 @@ class CalculatorTests: XCTestCase {
     
     func testNegateValueHEX_BYTE() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 8)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(byte)
         let testValue = Hexadecimal(stringLiteral: "AA") // - 86
         
         // 2. when
@@ -218,8 +220,8 @@ class CalculatorTests: XCTestCase {
 
     func testNegateValueHEX_WORD() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 16)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(word)
         let testValue = Hexadecimal(stringLiteral: "DAA9") // -9559
         
         // 2. when
@@ -231,8 +233,8 @@ class CalculatorTests: XCTestCase {
     
     func testNegateValueHEX_DWORD() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 32)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(dword)
         let testValue = Hexadecimal(stringLiteral: "89632557") // -1989991081
         
         // 2. when
@@ -244,8 +246,8 @@ class CalculatorTests: XCTestCase {
     
     func testNegateValueHEX_QWORD() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 64)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(qword)
         let testValue = Hexadecimal(stringLiteral: "FFFFFFFF769CDAA9") // -2304976215
         
         // 2. when
@@ -259,8 +261,8 @@ class CalculatorTests: XCTestCase {
     
     func testIsFloatValueOverflowed_OK() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 8)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(byte)
         let testValue = DecimalSystem(stringLiteral: "127.12345678")
         
         // 2. when
@@ -272,8 +274,8 @@ class CalculatorTests: XCTestCase {
     
     func testIsFloatValueOverflowed_EROOR() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 8)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(byte)
         let testValue = DecimalSystem(stringLiteral: "127.123456789")
         
         // 2. when
@@ -285,8 +287,8 @@ class CalculatorTests: XCTestCase {
     
     func testIsValueOverflowed_BYTE_OK() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 8)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(byte)
         let testValue = DecimalSystem(stringLiteral: "127")
         
         // 2. when
@@ -298,8 +300,8 @@ class CalculatorTests: XCTestCase {
     
     func testIsValueOverflowed_BYTE_ERROR() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 8)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(byte)
         let testValue = DecimalSystem(stringLiteral: "128")
         
         // 2. when
@@ -311,8 +313,8 @@ class CalculatorTests: XCTestCase {
     
     func testIsValueOverflowed_BIN_BYTE_ERROR() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 8)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(byte)
         let testValue = Binary(stringLiteral: "100000000")
         
         // 2. when
@@ -324,8 +326,8 @@ class CalculatorTests: XCTestCase {
     
     func testIsValueOverflowed_WORD_OK() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 16)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(word)
         let testValue = DecimalSystem(stringLiteral: "32767")
         
         // 2. when
@@ -337,8 +339,8 @@ class CalculatorTests: XCTestCase {
     
     func testIsValueOverflowed_WORD_ERROR() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 16)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(word)
         let testValue = DecimalSystem(stringLiteral: "32768")
         
         // 2. when
@@ -350,8 +352,8 @@ class CalculatorTests: XCTestCase {
     
     func testIsValueOverflowed_DWORD_OK() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 32)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(dword)
         let testValue = DecimalSystem(stringLiteral: "2147483647")
         
         // 2. when
@@ -363,8 +365,8 @@ class CalculatorTests: XCTestCase {
     
     func testIsValueOverflowed_DWORD_ERROR() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 32)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(dword)
         let testValue = DecimalSystem(stringLiteral: "2147483648")
         
         // 2. when
@@ -376,8 +378,8 @@ class CalculatorTests: XCTestCase {
     
     func testIsValueOverflowed_QWORD_OK() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 64)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(qword)
         let testValue = DecimalSystem(stringLiteral: "9223372036854775807")
         
         // 2. when
@@ -389,8 +391,8 @@ class CalculatorTests: XCTestCase {
     
     func testIsValueOverflowed_QWORD_ERROR() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 64)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(qword)
         let testValue = DecimalSystem(stringLiteral: "9223372036854775808")
         
         // 2. when
@@ -402,8 +404,8 @@ class CalculatorTests: XCTestCase {
     
     func testIsValueOverflowed_QWORD_UNSIGNED_OK() throws {
         // 1. given
-        calcStatetorage?.saveData(unsignedData)
-        wordSize.setValue(newValue: 64)
+        calcState.setCalcState(unsignedData)
+        wordSize.setWordSize(qword)
         let testValue = DecimalSystem(stringLiteral: "18446744073709551615")
         
         // 2. when
@@ -415,8 +417,8 @@ class CalculatorTests: XCTestCase {
     
     func testIsValueOverflowed_QWORD_UNSIGNED_ERROR() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 64)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(qword)
         let testValue = DecimalSystem(stringLiteral: "18446744073709551616")
         
         // 2. when
@@ -429,8 +431,8 @@ class CalculatorTests: XCTestCase {
     // MARK: - Process string inout
     func testProcessStrInput() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 16)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(word)
         let testValue = "000 1111"
         
         // 2. when

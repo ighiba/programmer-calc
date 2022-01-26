@@ -108,7 +108,7 @@ class ConversionViewController: UIViewController {
             let newConversionSettings = ConversionSettings(systMain: systemMainNew!, systConverter: systemConverterNew!, number: Int(sliderValue) * 4)
             // set data to UserDefaults
             conversionStorage.saveData(newConversionSettings)
-            conversionSettings.setSettings(newSettings: newConversionSettings)
+            conversionSettings.setConversionSettings(newConversionSettings)
             return
         }
         
@@ -117,10 +117,7 @@ class ConversionViewController: UIViewController {
         // set data to UserDefaults
         let newConversionSettings = ConversionSettings(systMain: systemMainNew!, systConverter: systemConverterNew!, number: Int(sliderValue) * 4)
         conversionStorage.saveData(newConversionSettings)
-        conversionSettings.setSettings(newSettings: newConversionSettings)
-        // set data to PCalcViewController system states
-        delegate?.updateSystemMain(with: systemMainNew!)
-        delegate?.updateSystemCoverter(with: systemConverterNew!)
+        conversionSettings.setConversionSettings(newConversionSettings)
         // Handle changing of systems
         if buffSavedMainLabel != systemMainNew! {
             // set labels to 0 and update

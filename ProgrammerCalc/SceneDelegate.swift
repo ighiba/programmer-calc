@@ -27,17 +27,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         
         // Set all shared instances that stored in UserDefaults
-        let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
-        let wordSize = wordSizeStorage.safeGetData()
-        WordSize.shared.setValue(newValue: wordSize.value)
-        
-        let settingsStorage: SettingsStorageProtocol = SettingsStorage()
-        let settings = settingsStorage.safeGetData()
-        Settings.shared.setSettings(newSettings: settings)
-        
-        let conversionStorage: ConversionStorageProtocol = ConversionStorage()
-        let conversionSettings = conversionStorage.safeGetData()
-        ConversionSettings.shared.setSettings(newSettings: conversionSettings)
+        let storages = PCalcStorage()
+        storages.loadAll()
         
         /** Process the quick action if the user selected one to launch the app.
             Grab a reference to the shortcutItem to use in the scene.
@@ -109,8 +100,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             inputResult = data.mainLabelState
             outputResult = data.converterLabelState
             
-            inputSystem = vc.calculator.systemMain?.rawValue ?? ""
-            outputSystem = vc.calculator.systemConverter?.rawValue ?? ""
+            let conversionSettings = ConversionSettings.shared
+            
+            inputSystem = conversionSettings.systemMain.rawValue
+            outputSystem = conversionSettings.systemConverter.rawValue
         }
         
         // Transform each favorite contact into a UIApplicationShortcutItem.

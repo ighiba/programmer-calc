@@ -577,11 +577,7 @@ class Binary: NumberSystemProtocol {
     
     // Appending digit to end
     func appendDigit(_ digit: String) {
-        // storage
-        let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
-        // calc state
-        let calcState = calcStateStorage.loadData()
-        
+        let calcState = CalcState.shared
         let binary = self
         
         // just add digit if point exits
@@ -602,57 +598,55 @@ class Binary: NumberSystemProtocol {
         binary.value = binary.value.removeAllSpaces()
         
         // get saved data
-        if let data = calcState?.processSigned {
-            let wordSizeValue = 64
+        let wordSizeValue = 64
+        
+        // if .processSigned == true
+        var testValue = binary.value
+        testValue.append(digit)
+        if testValue.count > wordSizeValue && testValue.first == "1" {
+            return
+        }
+        
+        if calcState.processSigned {
+            // calcualte signed state
+            binary.updateSignedState() // changes binary.isSigned state to true of false
             
-            // if .processSigned == true
-            var testValue = binary.value
-            testValue.append(digit)
-            if testValue.count > wordSizeValue && testValue.first == "1" {
+            // remove signed bit
+            binary.value.removeFirst()
+            
+            // remove zeros before
+            binary.value = binary.removeZerosBefore(str: binary.value)
+            
+            if binary.value == "0" {
+                // replace if 0
+                binary.value = digit
+            } else {
+                // append digit
+                binary.value.append(digit)
+            }
+            
+            // check for max word size
+            if binary.value.count == wordSizeValue {
                 return
             }
             
-            if data {
-                // calcualte signed state
-                binary.updateSignedState() // changes binary.isSigned state to true of false
-                
-                // remove signed bit
-                binary.value.removeFirst()
-                
-                // remove zeros before
-                binary.value = binary.removeZerosBefore(str: binary.value)
-                
-                if binary.value == "0" {
-                    // replace if 0
-                    binary.value = digit
-                } else {
-                    // append digit
-                    binary.value.append(digit)   
-                }
-                
-                // check for max word size
-                if binary.value.count == wordSizeValue {
-                    return
-                }
-                
-                // fills up binary to 7, 15, 31, 63 detends of wordSize
-                binary.fillUpToMaxBitsCount()
-                // isSigned == true -> 1 else -> 0
-                // change signed bit by signed state
-                if binary.isSigned {
-                    binary.changeSignedBit(to: "1")
-                } else {
-                    binary.changeSignedBit(to: "0")
-                }
+            // fills up binary to 7, 15, 31, 63 detends of wordSize
+            binary.fillUpToMaxBitsCount()
+            // isSigned == true -> 1 else -> 0
+            // change signed bit by signed state
+            if binary.isSigned {
+                binary.changeSignedBit(to: "1")
             } else {
-                // if doesnt process signed binary values
-                // just append
-                binary.value.append(digit)
-                
-                // just make binary code pretty
-                binary.value = fillUpParts(str: binary.value, by: 4)
+                binary.changeSignedBit(to: "0")
             }
-        }  
+        } else {
+            // if doesnt process signed binary values
+            // just append
+            binary.value.append(digit)
+            
+            // just make binary code pretty
+            binary.value = fillUpParts(str: binary.value, by: 4)
+        }
     }
     
     // inverting binary

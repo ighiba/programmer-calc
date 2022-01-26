@@ -31,7 +31,7 @@ class ConversionSettings: ConversionSettingsProtocol, Decodable, Encodable {
         self.numbersAfterPoint = number
     }
     
-    func setSettings(newSettings: ConversionSettingsProtocol) {
+    func setConversionSettings(_ newSettings: ConversionSettingsProtocol) {
         self.systemMain = newSettings.systemMain
         self.systemConverter = newSettings.systemConverter
         self.numbersAfterPoint = newSettings.numbersAfterPoint

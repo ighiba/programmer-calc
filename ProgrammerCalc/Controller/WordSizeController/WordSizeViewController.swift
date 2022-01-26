@@ -42,7 +42,7 @@ class WordSizeViewController: UIViewController {
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
         // load data from UserDefaults to table
         let loadedWordSize = wordSizeStorage.safeGetData() as! WordSize
-        wordSize.setValue(newValue: loadedWordSize.value)
+        wordSize.setWordSize(loadedWordSize)
         // animate popover
         wordSizeView.animateIn()
     }
@@ -169,7 +169,7 @@ extension WordSizeViewController: UITableViewDataSource, UITableViewDelegate {
         
         // update wordSize value
         let newValue = WordSize.wordsDictionary[indexPath.row].first!.value
-        wordSize.setValue(newValue: newValue)
+        wordSize.setWordSize(WordSize(newValue))
         
         // update user defaults
         wordSizeStorage.saveData(wordSize)

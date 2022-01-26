@@ -67,7 +67,6 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
         
         // Color for done item
         let style = styleFactory.get(style: styleStorage.safeGetStyleData())
-        //doneItem.tintColor = style.tintColor
         self.navigationController?.navigationBar.tintColor = style.tintColor
         
         // Setup navigation items
@@ -100,7 +99,7 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
     fileprivate func getSettings() {
         // get data from UserDefaults
         let loadedSettings = settingsStorage.safeGetData()
-        settings.setSettings(newSettings: loadedSettings)
+        settings.setSettings(loadedSettings)
         // loop table cells
         DispatchQueue.main.async { [self] in
             // loop table cells in firstSections

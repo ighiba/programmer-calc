@@ -12,6 +12,7 @@
 		C00616AF270666DD007BEF89 /* SettingsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00616AE270666DD007BEF89 /* SettingsStorage.swift */; };
 		C00616B127066C91007BEF89 /* ConversionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00616B027066C91007BEF89 /* ConversionStorage.swift */; };
 		C00616B327066CB1007BEF89 /* CalcStateStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00616B227066CB1007BEF89 /* CalcStateStorage.swift */; };
+		C0249849279DDC88005EA12A /* PCalcStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0249848279DDC88005EA12A /* PCalcStorage.swift */; };
 		C02705222715EF6F008B9C1E /* Calculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C02705212715EF6F008B9C1E /* Calculator.swift */; };
 		C04D34C227921BE200ED9867 /* BitwiseKeypad.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04D34C127921BE200ED9867 /* BitwiseKeypad.swift */; };
 		C052270F27978F6800B7E384 /* UIBarButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C052270E27978F6800B7E384 /* UIBarButtonItem.swift */; };
@@ -99,6 +100,7 @@
 		C00616AE270666DD007BEF89 /* SettingsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStorage.swift; sourceTree = "<group>"; };
 		C00616B027066C91007BEF89 /* ConversionStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionStorage.swift; sourceTree = "<group>"; };
 		C00616B227066CB1007BEF89 /* CalcStateStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcStateStorage.swift; sourceTree = "<group>"; };
+		C0249848279DDC88005EA12A /* PCalcStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcStorage.swift; sourceTree = "<group>"; };
 		C02705212715EF6F008B9C1E /* Calculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calculator.swift; sourceTree = "<group>"; };
 		C04D34C127921BE200ED9867 /* BitwiseKeypad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitwiseKeypad.swift; sourceTree = "<group>"; };
 		C052270E27978F6800B7E384 /* UIBarButtonItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBarButtonItem.swift; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 		C00616AD270666AD007BEF89 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
+				C0249848279DDC88005EA12A /* PCalcStorage.swift */,
 				C09631D327271A4D001DCD25 /* StyleStorage.swift */,
 				C00616B227066CB1007BEF89 /* CalcStateStorage.swift */,
 				C00616B027066C91007BEF89 /* ConversionStorage.swift */,
@@ -645,6 +648,7 @@
 				C0F5CF51270F4B970020CE14 /* WordSizeViewController.swift in Sources */,
 				C06B7F092443B12B009642B9 /* SceneDelegate.swift in Sources */,
 				C07267DD24E5ACB300D4B4A2 /* Binary.swift in Sources */,
+				C0249849279DDC88005EA12A /* PCalcStorage.swift in Sources */,
 				C0F5CF4D270E12100020CE14 /* WordSizeStorage.swift in Sources */,
 				C09631E027305315001DCD25 /* NumberSystemFactory.swift in Sources */,
 				C077CF7124DC987B008E5F0F /* Settings.swift in Sources */,

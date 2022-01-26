@@ -25,11 +25,9 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     var binary: Binary
     // inputValue in array for further processing
     lazy var binaryValue: [Character] = getBinaryValueString()
-    var wordSize: WordSize = WordSize.shared
-    var processSigned: Bool = false
     // tag offset for viewWithTag
     var tagOffset: Int = 300
-    
+
     var bitButtons: [UIButton] = []
     
     // Views
@@ -39,10 +37,13 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     var updateHandlder: ((NumberSystemProtocol) -> Void)?
     
     // Storages
-    private let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
     private let styleStorage: StyleStorageProtocol = StyleStorage()
     
     private let styleFactory: StyleFactory = StyleFactory()
+    
+    
+    private let calcState: CalcState = CalcState.shared
+    private let wordSize: WordSize = WordSize.shared
     
     // Sound of tapping bool setting
     // and
@@ -56,7 +57,6 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     init(binary: Binary) {
         self.binary = binary
         super.init(nibName: nil, bundle: nil)
-        self.updateProcessSigned()
         self.bitwiseKeypadView.controllerDelegate = self
         self.bitwiseKeypadView.setViews()
         self.view = bitwiseKeypadView
@@ -110,11 +110,6 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
         return tagOffset
     }
     
-    private func updateProcessSigned() {
-        let calcState = calcStateStorage.safeGetData() as! CalcState
-        processSigned = calcState.processSigned
-    }
-    
     private func updateInputValue() {
         if let updateWith = updateHandlder {
             updateWith(binary)
@@ -160,7 +155,7 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     }
     
     private func canChangeSignedBit(for button: UIButton) -> Bool {
-        return !(button.tag - tagOffset + 1 == wordSize.value && binary.value.contains(".") && processSigned)
+        return !(button.tag - tagOffset + 1 == wordSize.value && binary.value.contains(".") && calcState.processSigned)
     }
     
     // MARK: - Actions

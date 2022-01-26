@@ -15,13 +15,14 @@ class DecimalTests: XCTestCase {
     
     // Storages
     var conversionStorage: ConversionStorageProtocol? = ConversionStorage()
-    var calcStatetorage: CalcStateStorageProtocol? = CalcStateStorage()
     
     var decimalTest: DecimalSystem!
     var decimalStrInput: String = "12345"
     
     let unsignedData = CalcState(mainState: "0", convertState: "0", processSigned: false)
     let signedData = CalcState(mainState: "0", convertState: "0", processSigned: true)
+    
+    let calcState: CalcState = CalcState.shared
     
     override func setUp() {
         super.setUp()
@@ -46,7 +47,7 @@ class DecimalTests: XCTestCase {
 
     func testDecimalUnsignedInit() throws {
         // 1. given
-        calcStatetorage?.saveData(unsignedData)
+        calcState.setCalcState(unsignedData)
         
         // 2. when
         decimalTest = DecimalSystem(stringLiteral: decimalStrInput)
@@ -59,7 +60,7 @@ class DecimalTests: XCTestCase {
     
     func testDecimalSignedInit() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
+        calcState.setCalcState(signedData)
         
         // 2. when
         decimalTest = DecimalSystem(stringLiteral: "-\(decimalStrInput)")
@@ -72,7 +73,7 @@ class DecimalTests: XCTestCase {
     
     func testDecimalBinaryUnsignedInit() throws {
         // 1. given
-        calcStatetorage?.saveData(unsignedData)
+        calcState.setCalcState(unsignedData)
         let binary = Binary(stringLiteral: "0011000000111001") // 12345
 
         // 2. when
@@ -84,7 +85,7 @@ class DecimalTests: XCTestCase {
     
     func testDecimalBinarySignedInit() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
+        calcState.setCalcState(signedData)
         let binary = Binary(stringLiteral: "1111111111111111111111111111111111111111111111111100111111000111") // -12345
         
         // 2. when
@@ -98,7 +99,7 @@ class DecimalTests: XCTestCase {
     
     func testDecimalBinaryUnsignedInitWithMinus() throws {
         // 1. given
-        calcStatetorage?.saveData(unsignedData)
+        calcState.setCalcState(unsignedData)
         let binary = Binary(stringLiteral: "1111111111111111111111111111111111111111111111111100111111000111") // 18446744073709539271
         binary.isSigned = false
 
@@ -113,7 +114,7 @@ class DecimalTests: XCTestCase {
 
     func testToBinary() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
+        calcState.setCalcState(signedData)
         decimalTest = DecimalSystem(stringLiteral: decimalStrInput)
 
         // 2. when
@@ -125,7 +126,7 @@ class DecimalTests: XCTestCase {
 
     func testHexadecimalCovnertToBinaryUnsigned() throws {
         // 1. given
-        calcStatetorage?.saveData(unsignedData)
+        calcState.setCalcState(unsignedData)
         decimalTest = DecimalSystem(stringLiteral: "65536")
 
         // 2. when
@@ -137,7 +138,7 @@ class DecimalTests: XCTestCase {
 
     func testHexadecimalCovnertToBinarySigned() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
+        calcState.setCalcState(signedData)
         decimalTest = DecimalSystem(stringLiteral: "-65536")
 
         // 2. when

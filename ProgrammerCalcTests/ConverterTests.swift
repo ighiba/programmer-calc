@@ -15,7 +15,6 @@ class ConverterTests: XCTestCase {
     
     // Storages
     var conversionStorage: ConversionStorageProtocol? = ConversionStorage()
-    var calcStatetorage: CalcStateStorageProtocol? = CalcStateStorage()
     
     var converterTest: Converter?
     let binaryStrInput = "1100"
@@ -24,6 +23,12 @@ class ConverterTests: XCTestCase {
     let signedData = CalcState(mainState: "0", convertState: "0", processSigned: true)
     
     let wordSize: WordSize = WordSize.shared
+    let calcState: CalcState = CalcState.shared
+    
+    let byte = WordSize(8)
+    let word = WordSize(16)
+    let dword = WordSize(32)
+    let qword = WordSize(64)
     
     override func setUp() {
         super.setUp()
@@ -49,8 +54,8 @@ class ConverterTests: XCTestCase {
     // XCTAssert to test model
     func testOnesComplementUnsigned() throws {
         // 1. given
-        calcStatetorage?.saveData(unsignedData)
-        wordSize.setValue(newValue: 8)
+        calcState.setCalcState(unsignedData)
+        wordSize.setWordSize(byte)
         let binary = Binary(stringLiteral: binaryStrInput) // 1100
         
         // 2. when
@@ -62,8 +67,8 @@ class ConverterTests: XCTestCase {
     
     func testOnesComplementSigned() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 8)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(byte)
         let binary = Binary(stringLiteral: binaryStrInput)
         
         // 2. when
@@ -75,8 +80,8 @@ class ConverterTests: XCTestCase {
     
     func testTwosComplementUnsigned() throws {
         // 1. given
-        calcStatetorage?.saveData(unsignedData)
-        wordSize.setValue(newValue: 8)
+        calcState.setCalcState(unsignedData)
+        wordSize.setWordSize(byte)
         let binary = Binary(stringLiteral: binaryStrInput)
         
         // 2. when
@@ -88,8 +93,8 @@ class ConverterTests: XCTestCase {
     
     func testTwosComplementSigned() throws {
         // 1. given
-        calcStatetorage?.saveData(signedData)
-        wordSize.setValue(newValue: 8)
+        calcState.setCalcState(signedData)
+        wordSize.setWordSize(byte)
         let binary = Binary(stringLiteral: binaryStrInput)
         
         // 2. when

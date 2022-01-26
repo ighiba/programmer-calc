@@ -25,7 +25,7 @@ class Settings: SettingsProtocol, Decodable, Encodable {
         self.hapticFeedback = hapticFeedback
     }
     
-    func setSettings(newSettings: SettingsProtocol) {
+    func setSettings(_ newSettings: SettingsProtocol) {
         self.tappingSounds = newSettings.tappingSounds
         self.hapticFeedback = newSettings.hapticFeedback
     }
