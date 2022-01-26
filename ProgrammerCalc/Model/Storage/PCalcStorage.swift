@@ -27,4 +27,16 @@ class PCalcStorage {
         ConversionSettings.shared.setConversionSettings(conversionSettings)
         CalcState.shared.setCalcState(calcState)
     }
+    
+    public func saveAll() {
+        let wordSize = WordSize.shared
+        let settings = Settings.shared
+        let conversionSettings = ConversionSettings.shared
+        let calcState = CalcState.shared
+        // Save data
+        wordSizeStorage.saveData(wordSize)
+        settingsStorage.saveData(settings)
+        conversionStorage.saveData(conversionSettings)
+        calcStateStorage.saveData(calcState)
+    }
 }

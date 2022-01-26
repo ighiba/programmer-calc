@@ -122,14 +122,21 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         }
         
         // Add handler for main label
-        (mainLabel as UpdatableLabel).updateNumberValueHandler = { _ in
+        (mainLabel as UpdatableLabel).updateHandler = { _ in
             // update label numberValue
             self.updateMainLabelNumberValue()
+            // update calcState value
+            self.updateCalcStateMainLabel()
+        }
+        
+        // Add handler for converter label
+        (converterLabel as UpdatableLabel).updateHandler = { _ in
+            // update calcState value
+            self.updateCalcStateConverterLabel()
         }
         
         updateInfoSubLabels()
-        // Get data from UserDefaults
-        updateCalcState()
+        updateLabelsWithCalcState()
         handleConversion()
         
         // Update layout
@@ -147,12 +154,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         isAllowedLandscape = true
         // update shadows for buttons page
         calcButtonsViewControllers.forEach { $0.view.layoutSubviews() }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // save state to UserDefaults
-        saveCalcState()
     }
 
     // Handle orientation change for constraints
@@ -231,39 +232,43 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     // ===============
     // MARK: - Methods
     // ===============
+    
+    private func updateCalcStateMainLabel() {
+        // Handle error in labels
+        if mainLabelHasErrorMessage() {
+            calcState.mainLabelState = "0"
+            return
+        }
+        calcState.mainLabelState = mainLabel.text ?? "0"
+    }
+    
+    private func updateCalcStateConverterLabel() {
+        // Handle error in labels
+        if mainLabelHasErrorMessage() {
+            calcState.converterLabelState = "0"
+            return
+        }
+        calcState.converterLabelState = converterLabel.text ?? "0"
+    }
+    
+    private func mainLabelHasErrorMessage() -> Bool {
+        for error in MathErrors.allCases where mainLabel.text == error.localizedDescription {
+            return true
+        }
+        return false
+    }
         
-    // Update conversion values
-    private func updateCalcState() {
+    private func updateLabelsWithCalcState() {
         // apply data to view
         mainLabel.text = calcState.mainLabelState
         converterLabel.text = calcState.converterLabelState
-        var hasInput = true
-        if let mainValue = Int(calcState.mainLabelState.removeAllSpaces()) {
-            if mainValue == 0 {
-                hasInput = false
-            }
-        }
+        
+        let testValueStr = calcState.mainLabelState.removeAllSpaces()
+        let hasInput: Bool = {
+           return Int(testValueStr) != 0
+        }()
+        
         updateClearButton(hasInput: hasInput)
-    }
-    
-    public func saveCalcState() {
-        // Handle error in labels
-        for error in MathErrors.allCases {
-            if  mainLabel.text == error.localizedDescription {
-                // set default values
-                let newState = CalcState(mainState: "0", convertState: "0", processSigned: calcState.processSigned)
-                calcStateStorage.saveData(newState)
-                calcState.setCalcState(newState)
-                return
-            }
-        }
-        // process if no error
-        let mainState = mainLabel.text ?? "0"
-        let convertState = converterLabel.text ?? "0"
-        // set data to UserDefaults
-        let newState = CalcState(mainState: mainState, convertState: convertState, processSigned: calcState.processSigned)
-        calcStateStorage.saveData(newState)
-        calcState.setCalcState(newState)
     }
     	
     private func updateInfoSubLabels() {
@@ -421,12 +426,10 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         let labelText: String =  mainLabel.text!.removeAllSpaces() // remove spaces in mainLabel for converting
 
         // Check if error message in main label
-        for error in MathErrors.allCases {
-            if  mainLabel.text == error.localizedDescription {
-                // set converter to NaN if error in label
-                converterLabel.text = "NaN"
-                return
-            }
+        if mainLabelHasErrorMessage() {
+            // set converter to NaN if error in label
+            converterLabel.text = "NaN"
+            return
         }
         
         // Check if input is invalid (not allowed values in main label)
@@ -459,7 +462,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         var result = String()
         
         // Check if error message in main label
-        for error in MathErrors.allCases where error.localizedDescription == mainLabel.text {
+        if mainLabelHasErrorMessage() {
             // return digit
             return digit
         }
@@ -595,7 +598,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         guard operation != nil else { return }
         
         // Check if error message in main label
-        for error in MathErrors.allCases where error.localizedDescription == mainLabel.text {
+        if mainLabelHasErrorMessage() {
             // clear labels
             clearLabels()
         }
@@ -616,10 +619,11 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             return
         }
         // Check if error message in main label
-        for error in MathErrors.allCases where error.localizedDescription == mainLabel.text {
+        if mainLabelHasErrorMessage() {
             // clear labels
             clearLabels()
         }
+
         // localization for 1's and 2's
         let oneS = NSLocalizedString("1's", comment: "")
         let twoS = NSLocalizedString("2's", comment: "")
@@ -664,8 +668,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         
         // update value
         updateIsSignedButton()
-        // save state processSigned
-        saveCalcState()
+
         updateLabels()
         // toggle plusminus button
         changeStatePlusMinus()
@@ -691,7 +694,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             // update converter label
             updateConverterLabel()
         }
-        // else do nothing
     }
     
     // Negate button

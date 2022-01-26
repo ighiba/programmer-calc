@@ -10,7 +10,7 @@ import UIKit
 import QuartzCore
 
 protocol UpdatableLabel: UILabel {
-    var updateNumberValueHandler: ((UpdatableLabel) -> Void)? { get set }
+    var updateHandler: ((UpdatableLabel) -> Void)? { get set }
 }
 
 class CalcualtorLabel: UILabel, UpdatableLabel {
@@ -19,8 +19,8 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
     // MARK: - Properties
     // ==================
     
-    // numberValue update handler
-    var updateNumberValueHandler: ((UpdatableLabel) -> Void)?
+
+    var updateHandler: ((UpdatableLabel) -> Void)?
     var numberValue: NumberSystemProtocol?
     // Font
     let fontName: String = "HelveticaNeue-Thin"
@@ -33,8 +33,7 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
     
     override var text: String? {
         didSet {
-            // update number value every time text is changed
-            self.updateNumberValueHandler?(self)
+            self.updateHandler?(self)
         }
     }
     

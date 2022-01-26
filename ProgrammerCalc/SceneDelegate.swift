@@ -27,8 +27,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         
         // Set all shared instances that stored in UserDefaults
-        let storages = PCalcStorage()
-        storages.loadAll()
+        let storage = PCalcStorage()
+        storage.loadAll()
         
         /** Process the quick action if the user selected one to launch the app.
             Grab a reference to the shortcutItem to use in the scene.
@@ -83,30 +83,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
+        // Save to UserDefaults
+        let storage = PCalcStorage()
+        storage.saveAll()
 
-        var inputResult: String = ""
-        var outputResult: String = ""
+        let calcState = CalcState.shared
+        let conversionSettings = ConversionSettings.shared
         
-        var inputSystem: String = ""
-        var outputSystem: String = ""
+        // Get data for shortcuts
+        let inputResult = calcState.mainLabelState
+        let outputResult = calcState.converterLabelState
         
-        // Saving data from PCalcViewController
-        if let vc = window?.rootViewController as? PCalcViewController {
-            // Save
-            vc.saveCalcState()
-            // Get data for shortcuts
-            let calcStateStorage = CalcStateStorage()
-            let data = calcStateStorage.safeGetData()
-            inputResult = data.mainLabelState
-            outputResult = data.converterLabelState
-            
-            let conversionSettings = ConversionSettings.shared
-            
-            inputSystem = conversionSettings.systemMain.rawValue
-            outputSystem = conversionSettings.systemConverter.rawValue
-        }
+        let inputSystem = conversionSettings.systemMain.rawValue
+        let outputSystem = conversionSettings.systemConverter.rawValue
         
-        // Transform each favorite contact into a UIApplicationShortcutItem.
+        // Transform each favourite contact into a UIApplicationShortcutItem.
         let application = UIApplication.shared
         
         let icon = UIApplicationShortcutIcon(systemImageName: "doc.on.doc")
