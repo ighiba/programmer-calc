@@ -26,10 +26,8 @@ class AppearanceView: UITableView {
     
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
-
         self.dataSource = self
     }
-
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -37,7 +35,7 @@ class AppearanceView: UITableView {
     
     lazy var appearanceSwitch: UISwitch = {
         let switcher = UISwitch()
-        switcher.isOn = self.controllerDelegate?.isSystemAppearance ?? true
+        switcher.isOn = controllerDelegate?.isUsingSystemAppearance() ?? true
         switcher.addTarget(nil, action: #selector(AppearanceViewController.changeUseSystemStyle), for: .valueChanged)
         return switcher
     }()
@@ -50,7 +48,7 @@ extension AppearanceView: UITableViewDataSource {
     
     // Num of sections
     func numberOfSections(in tableView: UITableView) -> Int {
-        if let isSystemAppearance = self.controllerDelegate?.isSystemAppearance {
+        if let isSystemAppearance = controllerDelegate?.isUsingSystemAppearance() {
             return isSystemAppearance ? 1 : 2
         } else {
             return 1
@@ -84,7 +82,7 @@ extension AppearanceView: UITableViewDataSource {
             // Use system appearance
             cell.textLabel?.text = useSystemAppearanceCell[indexPath.row]
             // add switcher
-            cell.accessoryView = self.appearanceSwitch
+            cell.accessoryView = appearanceSwitch
             // disable selection style
             cell.selectionStyle = .none
             break

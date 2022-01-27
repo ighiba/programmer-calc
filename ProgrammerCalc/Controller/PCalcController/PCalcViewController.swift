@@ -318,28 +318,29 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     
     func updateStyle() {
         // Apply style
-        let isUsingSystemStyle = styleStorage.safeGetSystemStyle()
-        var styleName = styleStorage.safeGetStyleData()
+        let styleSettings = StyleSettings.shared
+        var styleType = styleSettings.currentStyle
         
         let interfaceStyle: UIUserInterfaceStyle
         // change style depends on state
-        if isUsingSystemStyle {
+        if styleSettings.isUsingSystemAppearance {
             switch UIScreen.main.traitCollection.userInterfaceStyle {
             case .light, .unspecified:
                 // light mode detected
-                styleStorage.saveData(.light)
+                styleSettings.currentStyle = .light
             case .dark:
                 // dark mode detected
-                styleStorage.saveData(.dark)
+                styleSettings.currentStyle = .dark
             @unknown default:
                 // light mode if unknown
-                styleStorage.saveData(.light)
+                styleSettings.currentStyle = .dark
             }
+            styleStorage.saveData(styleSettings)
             view.window?.overrideUserInterfaceStyle = .unspecified
-            styleName = styleStorage.safeGetStyleData()
+            styleType = styleSettings.currentStyle
 
         } else {
-            if styleName == .light {
+            if styleType == .light {
                 interfaceStyle = .light
             } else {
                 interfaceStyle = .dark
@@ -350,9 +351,9 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         // Update bitwise keypad style if exist
         bitwiseKeypad?.updateStyle()
         
-        let style = styleFactory.get(style: styleName)
+        let style = styleFactory.get(style: styleType)
         self.view.backgroundColor = style.backgroundColor
-        isDarkContentBackground = styleName == .light ? false : true
+        isDarkContentBackground = styleType == .light ? false : true
         self.setNeedsStatusBarAppearanceUpdate()
     }
 

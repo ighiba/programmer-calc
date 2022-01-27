@@ -50,7 +50,6 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
     
     // Storages
     private let settingsStorage: SettingsStorageProtocol = SettingsStorage()
-    private let styleStorage: StyleStorageProtocol = StyleStorage()
     
     private let styleFactory: StyleFactory = StyleFactory()
     
@@ -66,7 +65,8 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
         self.tableView = settingsView
         
         // Color for done item
-        let style = styleFactory.get(style: styleStorage.safeGetStyleData())
+        let styleType = StyleSettings.shared.currentStyle
+        let style = styleFactory.get(style: styleType)
         self.navigationController?.navigationBar.tintColor = style.tintColor
         
         // Setup navigation items

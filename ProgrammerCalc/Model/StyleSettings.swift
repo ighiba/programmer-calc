@@ -9,18 +9,26 @@
 import Foundation
 
 protocol StyleSettingsProtocol {
-    var isUsingSystemStyle: Bool { get set }
+    var isUsingSystemAppearance: Bool { get set }
     var currentStyle: StyleType { get set}
 }
 
 class StyleSettings: StyleSettingsProtocol, Decodable, Encodable {
     // MARK: - Properties
-    var isUsingSystemStyle: Bool
+    
+    static let shared: StyleSettings = StyleSettings(isUsingSystemAppearance: false, currentStyle: .dark)
+    
+    var isUsingSystemAppearance: Bool
     var currentStyle: StyleType
     
-    init(isUsingSystemStyle: Bool, currentStyle: StyleType) {
-        self.isUsingSystemStyle = isUsingSystemStyle
+    init(isUsingSystemAppearance: Bool, currentStyle: StyleType) {
+        self.isUsingSystemAppearance = isUsingSystemAppearance
         self.currentStyle = currentStyle
+    }
+    
+    func setStyleSettings(_ newStyleSettings: StyleSettingsProtocol) {
+        self.isUsingSystemAppearance = newStyleSettings.isUsingSystemAppearance
+        self.currentStyle = newStyleSettings.currentStyle
     }
     
 }

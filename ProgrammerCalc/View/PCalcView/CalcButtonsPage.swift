@@ -21,8 +21,6 @@ protocol CalcButtonPageProtocol: UIView {
 class CalcButtonsPage: UIView, CalcButtonPageProtocol {
     // Layout constraints
     var layoutConstraints: [NSLayoutConstraint]?
-    // Style storage
-    var styleStorage: StyleStorageProtocol = StyleStorage()
     // Style factory
     var styleFactory: StyleFactory = StyleFactory()
     
@@ -97,8 +95,8 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
     func updateStyle(for buttons: [CalculatorButton]) {
         
         // Apply style by button type
-        let styleName = styleStorage.safeGetStyleData()
-        let style = styleFactory.get(style: styleName)
+        let styleType = StyleSettings.shared.currentStyle
+        let style = styleFactory.get(style: styleType)
         
         // set background color and text color
         for button in buttons {

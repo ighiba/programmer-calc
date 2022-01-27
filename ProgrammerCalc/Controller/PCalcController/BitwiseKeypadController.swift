@@ -35,12 +35,9 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     
     // Update inputValue in parent vc and update labels
     var updateHandlder: ((NumberSystemProtocol) -> Void)?
-    
-    // Storages
-    private let styleStorage: StyleStorageProtocol = StyleStorage()
+
     
     private let styleFactory: StyleFactory = StyleFactory()
-    
     
     private let calcState: CalcState = CalcState.shared
     private let wordSize: WordSize = WordSize.shared
@@ -97,8 +94,8 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     }
     
     func getStyle() -> Style {
-        let styleName = styleStorage.safeGetStyleData()
-        let style = styleFactory.get(style: styleName)
+        let styleType = StyleSettings.shared.currentStyle
+        let style = styleFactory.get(style: styleType)
         return style
     }
     

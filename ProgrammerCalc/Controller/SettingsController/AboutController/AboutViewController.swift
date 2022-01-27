@@ -49,8 +49,7 @@ class AboutViewController: PCalcTableViewController, AboutViewControllerDelegate
     // MARK: - Methods
     
     func getIconTint() -> UIColor {
-        let styleStorage = StyleStorage()
-        let styleType = styleStorage.safeGetStyleData()
+        let styleType = StyleSettings.shared.currentStyle
         let styleFactory = StyleFactory()
         let style = styleFactory.get(style: styleType)
         return style.tintColor

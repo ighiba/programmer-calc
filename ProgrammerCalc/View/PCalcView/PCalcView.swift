@@ -29,8 +29,6 @@ class PCalcView: UIView {
         }
     }()
     
-    // Style storage
-    var styleStorage: StyleStorageProtocol = StyleStorage()
     // Style factory
     var styleFactory: StyleFactory = StyleFactory()
     
@@ -84,8 +82,8 @@ class PCalcView: UIView {
     
     func updateStyle() {
         // Apply style
-        let styleName = styleStorage.safeGetStyleData()
-        let style = styleFactory.get(style: styleName)
+        let styleType = StyleSettings.shared.currentStyle
+        let style = styleFactory.get(style: styleType)
         
         // Set colors
         // Labels

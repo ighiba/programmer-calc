@@ -9,11 +9,10 @@
 import UIKit
 
 protocol AppearanceViewControllerDelegate: AnyObject {
-    var isSystemAppearance: Bool { get set }
-    var currentStyle: StyleType { get set }
     var checkmarkedIndexPath: IndexPath { get set }
     func changeUseSystemStyle()
     func changeStyle(to: Int)
+    func isUsingSystemAppearance() -> Bool
 }
 
 class AppearanceViewController: PCalcTableViewController, AppearanceViewControllerDelegate {
@@ -24,29 +23,13 @@ class AppearanceViewController: PCalcTableViewController, AppearanceViewControll
     lazy var appearanceView = AppearanceView(frame: CGRect(), style: .insetGrouped)
     // Index of table checkmarks
     var checkmarkedIndexPath: IndexPath = IndexPath(row: 0, section: 0)
-    // Appearance state
-    var isSystemAppearance: Bool = false {
-        didSet {
-            // reload table
-            self.tableView.reloadData()
-        }
-    }
-    
-    // Appearance style
-    var currentStyle: StyleType {
-        get {
-            return styleStorage.safeGetStyleData()
-        }
-        set {
-            return styleStorage.saveData(newValue)
-        }
-    }
     
     // Style storage
     var styleStorage: StyleStorageProtocol = StyleStorage()
     // Style factory
     var styleFactory: StyleFactory = StyleFactory()
     
+    private let styleSettings: StyleSettings = StyleSettings.shared
     
     // MARK: - viewDidLoad
     override func viewDidLoad() {
@@ -55,10 +38,6 @@ class AppearanceViewController: PCalcTableViewController, AppearanceViewControll
         // Setup title
         self.title = NSLocalizedString("Appearance", comment: "")
         
-        // get style state
-        self.isSystemAppearance = styleStorage.safeGetSystemStyle()
-        // get style
-        self.currentStyle = styleStorage.safeGetStyleData()
         // get checkmark pos depends on style
         updateCheckMarkIndex()
         
@@ -72,31 +51,29 @@ class AppearanceViewController: PCalcTableViewController, AppearanceViewControll
         super.viewWillAppear(animated)
         // lock rotation
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
-        // get style state
-        self.isSystemAppearance = styleStorage.safeGetSystemStyle()
     }
         
     // MARK: - Methods
     
     func updateCheckMarkIndex() {
-        let row = StyleType.allCases.firstIndex(of: currentStyle) ?? 1
+        let row = StyleType.allCases.firstIndex(of: styleSettings.currentStyle) ?? 1
         checkmarkedIndexPath = IndexPath(row: row, section: 1)
     }
 
     @objc func changeUseSystemStyle() {
-        isSystemAppearance.toggle()
+        styleSettings.isUsingSystemAppearance.toggle()
         // save new value to storage
-        styleStorage.saveState(isSystemAppearance)
+        styleStorage.saveData(styleSettings)
         
         // change style depends on state
-        if isSystemAppearance {
+        if styleSettings.isUsingSystemAppearance {
             updateStyleBy(UIScreen.main.traitCollection.userInterfaceStyle)
         }
         updateCheckMarkIndex()
         self.tableView.reloadData()
         self.view.layoutSubviews()
         // change navbar tint
-        let style = styleFactory.get(style: currentStyle)
+        let style = styleFactory.get(style: styleSettings.currentStyle)
         self.navigationController?.navigationBar.tintColor = style.tintColor
         // update PCalcView
         updateRootViewLayoutSubviews()
@@ -105,38 +82,45 @@ class AppearanceViewController: PCalcTableViewController, AppearanceViewControll
     func changeStyle(to number: Int) {
         // change style in storage
         let styleTypeArray = StyleType.allCases
-        let styleType = styleTypeArray[number]
-        styleStorage.saveData(styleType)
+        let newStyle = styleTypeArray[number]
+        // change in shared instance
+        styleSettings.currentStyle = newStyle
+        styleStorage.saveData(styleSettings)
         updateStyle()
+    }
+    
+    func isUsingSystemAppearance() -> Bool {
+        return styleSettings.isUsingSystemAppearance
     }
     
     private func updateStyleBy(_ interface: UIUserInterfaceStyle) {
         switch interface {
         case .light, .unspecified:
             // light mode detected
-            styleStorage.saveData(.light)
+            styleSettings.currentStyle = .light
         case .dark:
             // dark mode detected
-            styleStorage.saveData(.dark)
+            styleSettings.currentStyle = .dark
         @unknown default:
             // light mode if unknown
-            styleStorage.saveData(.dark)
+            styleSettings.currentStyle = .dark
         }
+        styleStorage.saveData(styleSettings)
         self.view.window?.overrideUserInterfaceStyle = .unspecified
     }
     
     func updateStyle() {
         // Apply style
-        let styleName = styleStorage.safeGetStyleData()
-        let style = styleFactory.get(style: styleName)
+        let styleType = styleSettings.currentStyle
+        let style = styleFactory.get(style: styleType)
         
         let interfaceStyle: UIUserInterfaceStyle
         // change style depends on state
-        if isSystemAppearance {
+        if styleSettings.isUsingSystemAppearance {
             updateStyleBy(UIScreen.main.traitCollection.userInterfaceStyle)
             self.view.window?.layoutIfNeeded()
         } else {
-            if styleName == .light {
+            if styleType == .light {
                 interfaceStyle = .light
             } else {
                 interfaceStyle = .dark
