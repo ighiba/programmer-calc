@@ -105,6 +105,7 @@ class BitwiseKeypad: UIView {
         for button in controllerDelegate!.bitButtons {
             button.setTitleColor(style.bitButtonColor, for: .normal)
             button.setTitleColor(style.tintColor, for: .highlighted)
+            button.setTitleColor(style.tintColor, for: .selected)
         }
     }
     
@@ -147,7 +148,7 @@ class BitwiseKeypad: UIView {
     // Stack of 4 bit buttons
     private func getHalfByteStack() -> UIStackView {
         // Prepare buttons for stack
-        let buttons: [UIButton] = (0..<4).map { _ in
+        let buttons: [BitButton] = (0..<4).map { _ in
             return getButton()
         }
 
@@ -172,23 +173,19 @@ class BitwiseKeypad: UIView {
     }
     
     // Bit button
-    private func getButton() -> UIButton {
-        let button = UIButton()
+    private func getButton() -> BitButton {
+        let button = BitButton()
         let index = abs(buttonTag - 63)
-        let bit = controllerDelegate!.binaryValue[index]
-        // title settings
-        button.setTitle(String(bit), for: .normal)
-        button.setTitle("0", for: .disabled)
+        let bit = String(controllerDelegate!.binaryCharArray[index])
+        // set bitState
+        let bitState = bit == "1" ? true : false
+        
+        button.setBitState(bitState)
         
         button.titleLabel?.font = UIFont.systemFont(ofSize: fontSize, weight: UIFont.Weight.regular)
         
         button.setTitleColor(.systemOrange, for: .highlighted) // default before applyStyle
         button.setTitleColor(.systemGray.withAlphaComponent(0.7), for: .disabled) // for all styles
-
-        button.addTarget(nil, action: #selector(BitwiseKeypadController.buttonTapped), for: .touchUpInside)
-        button.addTarget(nil, action: #selector(BitwiseKeypadController.hapticFeedbackHandler), for: .touchUpInside)
-        button.addTarget(nil, action: #selector(BitwiseKeypadController.tappingSoundHandler), for: .touchUpInside)
-        
         // identifier for UITests
         button.accessibilityIdentifier = "bitButton_\(buttonTag)"
         

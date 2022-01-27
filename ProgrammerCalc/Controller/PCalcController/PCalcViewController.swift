@@ -817,10 +817,12 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
                 // check if "-" is only one symbol
                 if mainLabel.text == "-" {
                     mainLabel.text = "0"
+                    updateClearButton(hasInput: false)
                 }
             } else {
                 // if only one digit in label (or 0) then replace it to "0"
                 mainLabel.text = "0"
+                updateClearButton(hasInput: false)
             }
             
             updateLabels()

@@ -10,8 +10,8 @@ import UIKit
 import AudioToolbox
 
 protocol BitwiseKeypadControllerDelegate: AnyObject {
-    var binaryValue: [Character] { get }
-    var bitButtons: [UIButton] { get set }
+    var binaryCharArray: [Character] { get }
+    var bitButtons: [BitButton] { get set }
     func getTagOffset() -> Int
     func getWordSizeValue() -> Int
     func getStyle() -> Style
@@ -24,11 +24,11 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     // inputValue
     var binary: Binary
     // inputValue in array for further processing
-    lazy var binaryValue: [Character] = getBinaryValueString()
+    lazy var binaryCharArray: [Character] = getBinaryValueString()
     // tag offset for viewWithTag
     var tagOffset: Int = 300
 
-    var bitButtons: [UIButton] = []
+    var bitButtons: [BitButton] = []
     
     // Views
     lazy var bitwiseKeypadView = BitwiseKeypad(frame: CGRect())
@@ -36,7 +36,6 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     // Update inputValue in parent vc and update labels
     var updateHandlder: ((NumberSystemProtocol) -> Void)?
 
-    
     private let styleFactory: StyleFactory = StyleFactory()
     
     private let calcState: CalcState = CalcState.shared
@@ -129,13 +128,12 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
                 button.isEnabled = true
             } else if buttonTag >= wordSize.value && button.isEnabled {
                 button.isEnabled = false
-                button.setTitle("0", for: .normal)
             }
             buttonTag -= 1
         }
     }
     
-    private func isNextButtonAlreadyProcessed(currentButton button: UIButton, tag: Int) -> Bool {
+    private func isNextButtonAlreadyProcessed(currentButton button: BitButton, tag: Int) -> Bool {
         return tag + 1 == wordSize.value && button.isEnabled || tag < wordSize.value && button.isEnabled
     }
     
@@ -144,20 +142,20 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
         let buttonTag = 63
 
         for i in 0...buttonTag where bitButtons[i].isEnabled {
-            let bit = newBinaryValue[i]
-            bitButtons[i].setTitle(String(bit), for: .normal)
+            let bit = String(newBinaryValue[i])
+            let bitState = bit == "1" ? true : false
+            bitButtons[i].setBitState(bitState)
         }
         
-        binaryValue = [Character](newBinaryValue)
+        binaryCharArray = [Character](newBinaryValue)
     }
     
-    private func canChangeSignedBit(for button: UIButton) -> Bool {
+    private func canChangeSignedBit(for button: BitButton) -> Bool {
         return !(button.tag - tagOffset + 1 == wordSize.value && binary.value.contains(".") && calcState.processSigned)
     }
     
-    // MARK: - Actions
     
-    @objc func tappingSoundHandler(_ sender: CalculatorButton) {
+    private func tappingSoundHandler(_ sender: BitButton) {
         if settings.tappingSounds {
             // play KeyPressed
             AudioServicesPlaySystemSound(1104)
@@ -165,7 +163,7 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     }
     
     // Haptic feedback action for all buttons
-    @objc func hapticFeedbackHandler(_ sender: CalculatorButton) {
+    private func hapticFeedbackHandler(_ sender: BitButton) {
         if settings.hapticFeedback {
             generator.prepare()
             // impact
@@ -173,15 +171,20 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
         }
     }
     
-    @objc func buttonTapped(_ sender: UIButton) {
+    // MARK: - Actions
+    
+    @objc func buttonTapped(_ sender: BitButton) {
+        tappingSoundHandler(sender)
+        hapticFeedbackHandler(sender)
         guard canChangeSignedBit(for: sender) else  { return }
         
         let bit: Character = sender.titleLabel?.text == "0" ? "1" : "0"
-        sender.setTitle(String(bit), for: .normal)
+        let bitState = bit == "1" ? true : false
+        sender.setBitState(bitState)
         
         let bitIndex = 63 - sender.tag + tagOffset
         binary.value = binary.value.replaceAt(index: bitIndex, with: bit)
-        binaryValue[bitIndex] = bit
+        binaryCharArray[bitIndex] = bit
         
         updateInputValue()
     }
