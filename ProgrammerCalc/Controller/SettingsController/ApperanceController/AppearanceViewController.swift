@@ -120,7 +120,7 @@ class AppearanceViewController: PCalcTableViewController, AppearanceViewControll
             styleStorage.saveData(.dark)
         @unknown default:
             // light mode if unknown
-            styleStorage.saveData(.light)
+            styleStorage.saveData(.dark)
         }
         self.view.window?.overrideUserInterfaceStyle = .unspecified
     }

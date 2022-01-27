@@ -20,6 +20,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
     var savedShortCutItem: UIApplicationShortcutItem!
+    
+    private let storage = PCalcStorage()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -27,7 +29,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         
         // Set all shared instances that stored in UserDefaults
-        let storage = PCalcStorage()
         storage.loadAll()
         
         /** Process the quick action if the user selected one to launch the app.
@@ -84,7 +85,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func sceneWillResignActive(_ scene: UIScene) {
         // Save to UserDefaults
-        let storage = PCalcStorage()
         storage.saveAll()
 
         let calcState = CalcState.shared

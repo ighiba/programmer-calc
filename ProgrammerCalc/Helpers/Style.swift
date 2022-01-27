@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum StyleType: String, CaseIterable {
+enum StyleType: String, CaseIterable, Decodable, Encodable {
     case light = "light"
     case dark = "dark"
     case oldschool = "oldscool"

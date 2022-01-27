@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 protocol PCalcViewControllerDelegate: AnyObject {
     func clearLabels()
     func unhighlightLabels()
@@ -30,9 +29,8 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     }
     
     // Storages
-    private let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
     private let styleStorage: StyleStorageProtocol = StyleStorage()
-    
+    // Shared instances
     private let conversionSettings: ConversionSettings = ConversionSettings.shared
     private let calcState: CalcState = CalcState.shared
     
@@ -56,11 +54,11 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     // Object "Converter"
     private let converter: Converter = Converter()
     // Object "Calculator"
-    let calculator: Calculator = Calculator()
+    private let calculator: Calculator = Calculator()
     
     // Array of button pages controllers
     lazy var calcButtonsViewControllers: [CalcButtonsViewController] = {
-       var buttonsVC = [CalcButtonsViewController]()
+        var buttonsVC = [CalcButtonsViewController]()
         for buttonsPage in arrayButtonsStack {
             let vc = CalcButtonsViewController(buttonsPage: buttonsPage)
             vc.delegate = self
@@ -100,7 +98,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         // Constraints
         NSLayoutConstraint.deactivate(calcView.landscape!)
         NSLayoutConstraint.activate(calcView.portrait!)
-        // Add page control
+        // Setup page control
         let pageControl = UIPageControl.appearance()
         pageControl.pageIndicatorTintColor = .systemGray4
         pageControl.currentPageIndicatorTintColor = .systemGray
@@ -111,7 +109,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         // Set start vc for pages (CalcButtonsMain)
         setViewControllers([calcButtonsViewControllers[1]], direction: .forward, animated: false, completion: nil)
         
-        // Lock rotatiton in portrait mode
+        // Lock rotatiton in portrait mode while loading, unlocks in viewDidAppear
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
 
         // Add swipe left for deleting last value in main label
@@ -121,19 +119,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             label.addGestureRecognizer(swipeRight)
         }
         
-        // Add handler for main label
-        (mainLabel as UpdatableLabel).updateHandler = { _ in
-            // update label numberValue
-            self.updateMainLabelNumberValue()
-            // update calcState value
-            self.updateCalcStateMainLabel()
-        }
-        
-        // Add handler for converter label
-        (converterLabel as UpdatableLabel).updateHandler = { _ in
-            // update calcState value
-            self.updateCalcStateConverterLabel()
-        }
+        addLabelsUpdateHandlers()
         
         updateInfoSubLabels()
         updateLabelsWithCalcState()
@@ -213,7 +199,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             setPageControl(visibile: false)
             // set landscape calcView frame
             calcView.frame = UIScreen.main.bounds
-
         }
     }
     
@@ -232,6 +217,21 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     // ===============
     // MARK: - Methods
     // ===============
+    
+    private func addLabelsUpdateHandlers() {
+        // Add handler for main label
+        (mainLabel as UpdatableLabel).updateHandler = { _ in
+            // update label numberValue
+            self.updateMainLabelNumberValue()
+            // update calcState value
+            self.updateCalcStateMainLabel()
+        }
+        // Add handler for converter label
+        (converterLabel as UpdatableLabel).updateHandler = { _ in
+            // update calcState value
+            self.updateCalcStateConverterLabel()
+        }
+    }
     
     private func updateCalcStateMainLabel() {
         // Handle error in labels
@@ -272,12 +272,11 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     }
     	
     private func updateInfoSubLabels() {
-        // labels info update
+        // info labels(sub labels) update
         mainLabel.setInfoLabelValue(conversionSettings.systemMain)
         converterLabel.setInfoLabelValue(conversionSettings.systemConverter)
     }
     
-    // Handle conversion issues
     public func handleConversion() {
         let labelText = mainLabel.text
         let forbidden = ConversionValues.getForbiddenValues()
@@ -319,12 +318,12 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     
     func updateStyle() {
         // Apply style
-        let styleState = styleStorage.safeGetSystemStyle()
+        let isUsingSystemStyle = styleStorage.safeGetSystemStyle()
         var styleName = styleStorage.safeGetStyleData()
         
         let interfaceStyle: UIUserInterfaceStyle
         // change style depends on state
-        if styleState {
+        if isUsingSystemStyle {
             switch UIScreen.main.traitCollection.userInterfaceStyle {
             case .light, .unspecified:
                 // light mode detected
