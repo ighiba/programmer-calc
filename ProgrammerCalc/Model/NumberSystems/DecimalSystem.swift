@@ -64,10 +64,14 @@ class DecimalSystem: NumberSystemProtocol {
     // MARK: - Methods
     // ===============
     
+    func toBinary() -> Binary {
+        return self.convertDecToBinary()
+    }
+    
     // Handle converting values NumberSystem
     
     // DEC -> BIN
-    func convertDecToBinary() -> Binary? {
+    func convertDecToBinary() -> Binary {
         var decNumStr: String
         var binary = Binary()
         
@@ -96,35 +100,35 @@ class DecimalSystem: NumberSystemProtocol {
         }
         
         // process value
-            let splittedBinaryStr = binary.divideIntFract(value: binary.value)
-            
-            // process int part of binary
-            if let intPart = splittedBinaryStr.0 {
-                binary.value = intPart
-                // remove zeros
-                binary.value = binary.removeZerosBefore(str: binary.value)
-                // set signed state to binary
-                binary.isSigned = self.isSigned
-                // fill up to 63 bits
-                binary.fillUpToMaxBitsCount()
-                // isSigned == true -> 1 else -> 0
+        let splittedBinaryStr = binary.divideIntFract(value: binary.value)
+        
+        // process int part of binary
+        if let intPart = splittedBinaryStr.0 {
+            binary.value = intPart
+            // remove zeros
+            binary.value = binary.removeZerosBefore(str: binary.value)
+            // set signed state to binary
+            binary.isSigned = self.isSigned
+            // fill up to 63 bits
+            binary.fillUpToMaxBitsCount()
+            // isSigned == true -> 1 else -> 0
 
-                binary.value = "0" + binary.value
-                if self.isSigned {
-                    binary.twosComplement()
-                }
+            //binary.value = "0" + binary.value
+            if isSigned {
+                binary.twosComplement()
             }
-            
-            // add fract part if exists
-            if let fractPart = splittedBinaryStr.1 {
-                // invert fract part if isSigned
-                if isSigned {
-                    let invertedFractPart = fractPart.swap(first: "1", second: "0")
-                    binary.value = "\(binary.value).\(invertedFractPart)"
-                } else {
-                    binary.value = "\(binary.value).\(fractPart)"
-                }
+        }
+        
+        // add fract part if exists
+        if let fractPart = splittedBinaryStr.1 {
+            // invert fract part if isSigned
+            if isSigned {
+                let invertedFractPart = fractPart.swap(first: "1", second: "0")
+                binary.value = "\(binary.value).\(invertedFractPart)"
+            } else {
+                binary.value = "\(binary.value).\(fractPart)"
             }
+        }
 
         
         return binary

@@ -48,11 +48,12 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
     lazy var settingsView = SettingsView(frame: CGRect(), style: .insetGrouped)
     lazy var doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(SettingsViewController.closeButtonTapped))
     
-    // links to storages
+    // Storages
     private let settingsStorage: SettingsStorageProtocol = SettingsStorage()
-    private let styleStorage: StyleStorageProtocol = StyleStorage()
     
     private let styleFactory: StyleFactory = StyleFactory()
+    
+    private let settings: Settings = Settings.shared
     
     // updater settings in PCalcViewController
     var updaterHandler: (() -> Void)?
@@ -64,8 +65,8 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
         self.tableView = settingsView
         
         // Color for done item
-        let style = styleFactory.get(style: styleStorage.safeGetStyleData())
-        //doneItem.tintColor = style.tintColor
+        let styleType = StyleSettings.shared.currentStyle
+        let style = styleFactory.get(style: styleType)
         self.navigationController?.navigationBar.tintColor = style.tintColor
         
         // Setup navigation items
@@ -97,7 +98,8 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
     // Update settings values
     fileprivate func getSettings() {
         // get data from UserDefaults
-        let settings = settingsStorage.safeGetData()
+        let loadedSettings = settingsStorage.safeGetData()
+        settings.setSettings(loadedSettings)
         // loop table cells
         DispatchQueue.main.async { [self] in
             // loop table cells in firstSections
@@ -123,8 +125,6 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
     }
     
     fileprivate func saveSettings() {
-        // set data to UserDefaults
-        var newSettings = settingsStorage.safeGetData()
         // loop table cells in firstSections
         for cell in firstSection {
             // check if cell have switcher
@@ -134,17 +134,16 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
             // check cell reuseID
             switch cell.reuseIdentifier {
             case "tappingSounds":
-                newSettings.tappingSounds = cell.switcher!.isOn
+                settings.tappingSounds = cell.switcher!.isOn
             case "haptic":
-                newSettings.hapticFeedback = cell.switcher!.isOn
+                settings.hapticFeedback = cell.switcher!.isOn
             default:
                 // do nothing
                 break
             }
         }
-        // Apply settings
-        settingsStorage.saveData(newSettings)
-        
+        // Apply settings to UserDefaults
+        settingsStorage.saveData(settings)
     }
     
     // Appearance cell touch

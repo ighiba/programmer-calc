@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum StyleType: String, CaseIterable {
+enum StyleType: String, CaseIterable, Decodable, Encodable {
     case light = "light"
     case dark = "dark"
     case oldschool = "oldscool"
@@ -23,6 +23,7 @@ protocol StyleProtocol {
     var actionButtonStyle: ButtonStyleProtocol { get set }
     var miscButtonStyle: ButtonStyleProtocol { get set }
     var buttonBorderColor: UIColor { get set }
+    var bitButtonColor: UIColor { get set }
 }
 
 class Style: StyleProtocol {
@@ -34,6 +35,7 @@ class Style: StyleProtocol {
     var actionButtonStyle: ButtonStyleProtocol
     var miscButtonStyle: ButtonStyleProtocol
     var buttonBorderColor: UIColor
+    var bitButtonColor: UIColor
     
     
     init( backgroundColor:         UIColor,
@@ -43,7 +45,8 @@ class Style: StyleProtocol {
           numericButtonStyle:      ButtonStyleProtocol,
           actionButtonStyle:       ButtonStyleProtocol,
           miscButtonStyle:         ButtonStyleProtocol,
-          buttonBorderColor:       UIColor) {
+          buttonBorderColor:       UIColor,
+          bitButtonColor:          UIColor) {
         
         self.backgroundColor = backgroundColor
         self.labelTextColor = labelTextColor
@@ -53,6 +56,7 @@ class Style: StyleProtocol {
         self.actionButtonStyle = actionButtonStyle
         self.miscButtonStyle = miscButtonStyle
         self.buttonBorderColor = buttonBorderColor
+        self.bitButtonColor = bitButtonColor
     }
     
     

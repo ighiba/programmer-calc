@@ -19,17 +19,17 @@ class ConversionViewController: UIViewController {
     lazy var picker: ConversionPicker = conversionView.mainPicker
     lazy var slider: UISlider = conversionView.digitsAfterSlider
     lazy var labelValue: UILabel = conversionView.sliderValueDigit
-    var sliderOldValue: Float = 2.0
+    private var sliderOldValue: Float = 2.0
     
-    
-    // links to storages
-    private var settingsStorage: SettingsStorageProtocol = SettingsStorage()
+    // Storage
     private var conversionStorage: ConversionStorageProtocol = ConversionStorage()
     
+    private let conversionSettings: ConversionSettings = ConversionSettings.shared
+    private let settings: Settings = Settings.shared
     // Haptic feedback generator
     let generator = UIImpactFeedbackGenerator(style: .medium)
-    // Hapting settings
-    lazy var hapticFeedback = settingsStorage.safeGetData().hapticFeedback
+    
+    var updaterHandler: (() -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,8 +76,6 @@ class ConversionViewController: UIViewController {
     
     // Update conversion values
     fileprivate func getConversionSettings() {
-        // get data from UserDefaults
-        let conversionSettings = conversionStorage.safeGetData()
         let mainRow: Int = ConversionSystemsEnum.allCases.firstIndex(of: conversionSettings.systemMain) ?? 1 // default decimal for main
         let converterRow: Int = ConversionSystemsEnum.allCases.firstIndex(of: conversionSettings.systemConverter) ?? 0 // default binary for converter
         // Picker component
@@ -107,21 +105,19 @@ class ConversionViewController: UIViewController {
         
         // PCalcViewController delegate fo handling changing of mainSystem
         guard delegate != nil else {
-            // set data to UserDefaults
             let newConversionSettings = ConversionSettings(systMain: systemMainNew!, systConverter: systemConverterNew!, number: Int(sliderValue) * 4)
+            // set data to UserDefaults
             conversionStorage.saveData(newConversionSettings)
+            conversionSettings.setConversionSettings(newConversionSettings)
             return
         }
         
         // set last mainLabel system buffer
-        let conversionSettings = conversionStorage.loadData()
-        let buffSavedMainLabel = conversionSettings?.systemMain
+        let buffSavedMainLabel = conversionSettings.systemMain
         // set data to UserDefaults
         let newConversionSettings = ConversionSettings(systMain: systemMainNew!, systConverter: systemConverterNew!, number: Int(sliderValue) * 4)
         conversionStorage.saveData(newConversionSettings)
-        // set data to PCalcViewController system states
-        delegate?.updateSystemMain(with: systemMainNew!)
-        delegate?.updateSystemCoverter(with: systemConverterNew!)
+        conversionSettings.setConversionSettings(newConversionSettings)
         // Handle changing of systems
         if buffSavedMainLabel != systemMainNew! {
             // set labels to 0 and update
@@ -132,9 +128,7 @@ class ConversionViewController: UIViewController {
             delegate!.updateAllLayout()
         }
         
-        delegate!.handleDisplayingMainLabel()
-        delegate!.updateButtonsState()
-        
+        updaterHandler!()
     }
     
     // ViewConvtroller dismissing
@@ -185,9 +179,7 @@ class ConversionViewController: UIViewController {
         if sliderOldValue == sliderNewValue {
             // do nothing
         } else {
-
-            if hapticFeedback {
-                
+            if settings.hapticFeedback {
                 generator.prepare()
                 // impact
                 generator.impactOccurred()

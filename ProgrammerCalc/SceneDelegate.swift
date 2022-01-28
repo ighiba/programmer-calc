@@ -20,12 +20,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
     var savedShortCutItem: UIApplicationShortcutItem!
+    
+    private let storage = PCalcStorage()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         
+        // Set all shared instances that stored in UserDefaults
+        storage.loadAll()
         
         /** Process the quick action if the user selected one to launch the app.
             Grab a reference to the shortcutItem to use in the scene.
@@ -55,6 +59,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }, completion: { _ in
             splashScreen.removeFromSuperview()
         })
+  
+
     }
     
     func windowScene(_ windowScene: UIWindowScene,
@@ -78,28 +84,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
+        // Save to UserDefaults
+        storage.saveAll()
 
-        var inputResult: String = ""
-        var outputResult: String = ""
+        let calcState = CalcState.shared
+        let conversionSettings = ConversionSettings.shared
         
-        var inputSystem: String = ""
-        var outputSystem: String = ""
+        // Get data for shortcuts
+        let inputResult = calcState.mainLabelState
+        let outputResult = calcState.converterLabelState
         
-        // Saving data from PCalcViewController
-        if let vc = window?.rootViewController as? PCalcViewController {
-            // Save
-            vc.saveCalcState()
-            // Get data for shortcuts
-            let calcStateStorage = CalcStateStorage()
-            let data = calcStateStorage.safeGetData()
-            inputResult = data.mainLabelState
-            outputResult = data.converterLabelState
-            
-            inputSystem = vc.calculator.systemMain?.rawValue ?? ""
-            outputSystem = vc.calculator.systemConverter?.rawValue ?? ""
-        }
+        let inputSystem = conversionSettings.systemMain.rawValue
+        let outputSystem = conversionSettings.systemConverter.rawValue
         
-        // Transform each favorite contact into a UIApplicationShortcutItem.
+        // Transform each favourite contact into a UIApplicationShortcutItem.
         let application = UIApplication.shared
         
         let icon = UIApplicationShortcutIcon(systemImageName: "doc.on.doc")

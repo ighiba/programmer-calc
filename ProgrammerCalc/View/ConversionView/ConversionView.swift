@@ -248,7 +248,6 @@ class ConversionView: UIView {
             self.container.alpha = 0.01
             self.alpha = 0
         }, completion: { _ in
-            //print("completed")
             // dismiss vc
             finished()
         })

@@ -9,80 +9,50 @@
 import Foundation
 
 protocol StyleStorageProtocol {
-    func loadData() -> StyleType?
-    func saveData(_ style: StyleType)
-    func safeGetStyleData() -> StyleType
-    func loadState() -> Bool?
-    func saveState(_ state: Bool)
-    func safeGetSystemStyle() -> Bool
+    func loadData() -> StyleSettingsProtocol?
+    func saveData(_ styleSettings: StyleSettingsProtocol)
+    func safeGetData() -> StyleSettingsProtocol
 }
 
 class StyleStorage: StyleStorageProtocol {
     // MARK: - Properties
 
-    // storage keys
-    private var keyStyle = "style"
-    private var keyStyleState = "styleState"
+    // storage key
+    private var key = "styleSettings"
     
     // link to storage
     private var storage = UserDefaults.standard
     
-    // Load / Save style
-    func loadData() -> StyleType? {
-        guard let data = storage.object(forKey: keyStyle) as? String else {
+    // Load / Save style settings
+    func loadData() -> StyleSettingsProtocol? {
+        guard let data = storage.data(forKey: key) else {
             // if data doesn't exists
             return nil
         }
         // if data (stored value) exists
-        return StyleType(rawValue: data)
+        return try? JSONDecoder().decode(StyleSettings.self, from: data)
     }
     
-    func saveData(_ style: StyleType) {
-        let data = style.rawValue
-        storage.set(data, forKey: keyStyle)
-        storage.synchronize()
-    }
-    
-    // Load / Save state
-    func loadState() -> Bool? {
-        guard let data = storage.object(forKey: keyStyleState) as? Bool else {
-            // if data doesn't exists
-            return nil
+    func saveData(_ styleSettings: StyleSettingsProtocol) {
+        if let data = try? JSONEncoder().encode(styleSettings as? StyleSettings) {
+            storage.set(data, forKey: key)
+        } else {
+            // delete data if doesn't encode
+            storage.removeObject(forKey: key)
         }
-        // if data (stored value) exists
-        return data
-    }
-    
-    func saveState(_ state: Bool) {
-        storage.set(state, forKey: keyStyleState)
         storage.synchronize()
     }
 
-
-    func safeGetStyleData() -> StyleType {
-        if let style = self.loadData() {
-            return style
+    func safeGetData() -> StyleSettingsProtocol {
+        if let styleSettings = self.loadData() {
+            return styleSettings
         }  else {
-            // if no Style
-            print("no Style")
+            print("no Style Settings")
             // default values
-            let defaultStyle: StyleType = .dark
-            self.saveData(defaultStyle)
+            let defaultStyleSettings: StyleSettings = StyleSettings(isUsingSystemAppearance: false, currentStyle: .dark)
+            self.saveData(defaultStyleSettings)
             
-            return defaultStyle
-        }
-    }
-    
-    func safeGetSystemStyle() -> Bool {
-        if let state = self.loadState() {
-            return state
-        }  else {
-            // if no state
-            print("no Style")
-            // default values
-            self.saveState(false)
-            
-            return false
+            return defaultStyleSettings
         }
     }
 }

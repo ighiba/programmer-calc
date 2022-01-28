@@ -13,6 +13,8 @@ protocol WordSizeProtocol {
 }
 
 class WordSize: WordSizeProtocol, Decodable, Encodable  {
+    
+    static let shared: WordSize = WordSize(64)
 
     static let wordsDictionary = [["QWORD":64],
                                   ["DWORD":32],
@@ -22,5 +24,9 @@ class WordSize: WordSizeProtocol, Decodable, Encodable  {
     
     init(_ size: Int) {
         self.value = size
+    }
+    
+    func setWordSize(_ newWordSize: WordSizeProtocol) {
+        self.value = newWordSize.value
     }
 }

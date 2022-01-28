@@ -27,7 +27,7 @@
 "Change word size" = "Change word size";
 "Done" = "Done";
 "Description" = "Description";
-"DescriptionFullText" = "This app is intended for conversion of numbers between different number systems, as well as performing some arithmetic, logical and bitwise operations with these numbers. All this is on your phone and with the usual interface. If you learn a programmer, then it can be useful for you.\n\nYour suggestions and comments can be sent through the contact form.\n\nThank you for choosing this app.";
+"DescriptionFullText" = "This app is intended for the conversion of numbers between different number systems, as well as performing some arithmetic and bitwise operations with these numbers. All this is on your phone with the usual interface. If you are a beginner in programming or computer science, then this app could be useful for you.\n\nYour suggestions and comments can be sent through the contact form.\n\nThank you for choosing this app.";
 
 "Copy last input" = "Copy last input";
 "Copy last output" = "Copy last output";

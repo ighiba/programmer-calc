@@ -49,9 +49,9 @@ class CalculatorButton: UIButton {
         didSet {
             if isHighlighted {
                 // create button animation when button pressed
-                self.buffColor = self.backgroundColor!
+                buffColor = self.backgroundColor!
                 // set tint color
-                self.backgroundColor = self.frameTint
+                self.backgroundColor = frameTint
             } else {
                 // create button animation when button unpressed
                 UIView.transition(
@@ -132,27 +132,27 @@ class CalculatorButton: UIButton {
             completion: nil)
     }
     
-    func setActions(for buttonType: ButtonTypes){
-        
-        // label higliglht handling
-        self.addTarget(nil, action: #selector(PCalcViewController.touchHandleLabelHighlight), for: .touchDown)
-        // haptic feedback
-        self.addTarget(nil, action: #selector(CalcButtonsViewController.hapticFeedbackHandler), for: .touchUpInside)
-        // tapping sound
-        self.addTarget(nil, action: #selector(CalcButtonsViewController.tappingSoundHandler), for: .touchUpInside)
-        
-        switch buttonType {
-        case .numeric:
-            self.addTarget(nil, action: #selector(PCalcViewController.numericButtonTapped), for: .touchUpInside)
-        case .sign:
-            self.addTarget(nil, action: #selector(PCalcViewController.signButtonTapped), for: .touchUpInside)
-        case .complement:
-            self.addTarget(nil, action: #selector(PCalcViewController.complementButtonTapped), for: .touchUpInside)
-        case .bitwise:
-            self.addTarget(nil, action: #selector(PCalcViewController.bitwiseButtonTapped), for: .touchUpInside)
-        case .defaultBtn:
-            // do nothing
-            break
+    // For AC/C button
+    func changeTitleClearButtonFor(_ state: Bool) {
+        guard self.tag == 100 else { return }
+        if state {
+            guard self.titleLabel?.text != "C" else { return }
+            self.setTitle("C", for: .normal)
+        } else {
+            guard self.titleLabel?.text != "AC" else { return }
+            self.setTitle("AC", for: .normal)
+        }
+    }
+    
+    // For Signed ON/OFF button
+    func changeTitleIsSignedButtonFor(_ state: Bool) {
+        guard self.tag == 102 else { return }
+        if state {
+            // if ON then disable
+            self.setTitle("Signed\nON", for: .normal)
+        } else {
+            // if OFF then enable
+            self.setTitle("Signed\nOFF", for: .normal)
         }
     }
     
@@ -181,10 +181,10 @@ class CalculatorButton: UIButton {
             let previousTouchInside: Bool = outerBounds.contains(previousLocation)
             if previousTouchInside {
                 sendActions(for: .touchDragExit)
-                self.isHighlighted = false
+                isHighlighted = false
             } else {
                 sendActions(for: .touchDragOutside)
-                self.isHighlighted = false
+                isHighlighted = false
             }
         } else {
             let previousTouchOutside: Bool = !outerBounds.contains(previousLocation)
@@ -196,6 +196,30 @@ class CalculatorButton: UIButton {
             }
         }
 
+    }
+    
+    func setActions(for buttonType: ButtonTypes){
+        
+        // label higliglht handling
+        self.addTarget(nil, action: #selector(PCalcViewController.touchHandleLabelHighlight), for: .touchDown)
+        // haptic feedback
+        self.addTarget(nil, action: #selector(CalcButtonsViewController.hapticFeedbackHandler), for: .touchUpInside)
+        // tapping sound
+        self.addTarget(nil, action: #selector(CalcButtonsViewController.tappingSoundHandler), for: .touchUpInside)
+        
+        switch buttonType {
+        case .numeric:
+            self.addTarget(nil, action: #selector(PCalcViewController.numericButtonTapped), for: .touchUpInside)
+        case .sign:
+            self.addTarget(nil, action: #selector(PCalcViewController.signButtonTapped), for: .touchUpInside)
+        case .complement:
+            self.addTarget(nil, action: #selector(PCalcViewController.complementButtonTapped), for: .touchUpInside)
+        case .bitwise:
+            self.addTarget(nil, action: #selector(PCalcViewController.bitwiseButtonTapped), for: .touchUpInside)
+        case .defaultBtn:
+            // do nothing
+            break
+        }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {

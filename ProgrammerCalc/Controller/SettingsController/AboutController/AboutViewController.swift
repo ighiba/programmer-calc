@@ -14,6 +14,7 @@ protocol AboutViewControllerDelegate: AnyObject {
     func openDescription()
     func rateApp()
     func openContactForm()
+    func getIconTint() -> UIColor
 }
 
 // MARK: - About VC
@@ -46,6 +47,13 @@ class AboutViewController: PCalcTableViewController, AboutViewControllerDelegate
     }
     
     // MARK: - Methods
+    
+    func getIconTint() -> UIColor {
+        let styleType = StyleSettings.shared.currentStyle
+        let styleFactory = StyleFactory()
+        let style = styleFactory.get(style: styleType)
+        return style.tintColor
+    }
     
     // Present Description
     func openDescription() {
@@ -81,7 +89,7 @@ class AboutViewController: PCalcTableViewController, AboutViewControllerDelegate
             
             // Configure the fields of the interface
             composeVC.setToRecipients(["ighiba.dev@gmail.com"])
-            composeVC.setSubject("ProgrammerCalc support")
+            composeVC.setSubject("Programmer's Calculator support")
             composeVC.setMessageBody("Model - \(model), OS - \(systemVersion), App version - \(appVersion)(\(buildNumber))", isHTML: false)
             
             self.present(composeVC, animated: true, completion: nil)
@@ -90,8 +98,10 @@ class AboutViewController: PCalcTableViewController, AboutViewControllerDelegate
             return
         }
     }
+    
     // Dismissing contact us form
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Swift.Error?) {
         controller.dismiss(animated: true, completion: nil)
     }
+    
 }

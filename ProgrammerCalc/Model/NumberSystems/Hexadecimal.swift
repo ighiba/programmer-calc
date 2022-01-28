@@ -58,6 +58,10 @@ class Hexadecimal: NumberSystemProtocol {
     // MARK: - Methods
     // ===============
     
+    func toBinary() -> Binary {
+        return self.convertHexToBinary()
+    }
+    
     // HEX -> BIN
     // Convert form hex to binary with table helper
     func convertHexToBinary() -> Binary {

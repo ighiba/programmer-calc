@@ -36,7 +36,7 @@ class Binary: NumberSystemProtocol {
   
     /// Creates an instance initialized to the Binary  value / copying another instance
     init(_ valueBin: Binary) {
-        self.value = valueBin.value
+        self.value = valueBin.value.removeAllSpaces()
         self.isSigned = valueBin.isSigned
     }
     
@@ -45,35 +45,27 @@ class Binary: NumberSystemProtocol {
         self.init()
         // Get new DecimalSystem value
         let decNumber = DecimalSystem(valueInt)
-        if let binary = decNumber.convertDecToBinary() {
-            self.value = binary.value
-        } else {
-            self.value = "0"
-        }
+        let binary = decNumber.convertDecToBinary()
+        self.value = binary.value
     }
     
     /// Creates an instance initialized to the Decimal value
-    convenience init?(_ valueDec: DecimalSystem) {
+    convenience init(_ valueDec: DecimalSystem) {
         self.init()
-        if let binary = valueDec.convertDecToBinary() {
-            self.value = binary.value
-        } else {
-            return nil
-        }
+        let binary = valueDec.convertDecToBinary()
+        self.value = binary.value
     }
     
     /// Creates an instance initialized to the Hexadecimal value
     init(_ valueHex: Hexadecimal) {
         let binary = valueHex.convertHexToBinary()
         self.value = binary.value
-        
     }
     
     /// Creates an instance initialized to the Octal value
     init(_ valueOct: Octal) {
         let binary = valueOct.convertOctToBinary()
         self.value = binary.value
-        
     }
 
     
@@ -81,6 +73,11 @@ class Binary: NumberSystemProtocol {
     // MARK: - Methods
     // ===============
     
+    func toBinary() -> Binary {
+        let bin = Binary(self)
+        bin.value = bin.fillUpZeros(str: bin.value, to: 64)
+        return bin
+    }
     
     // only for int or fract part of binary
     func removeZerosBefore( str: String) -> String {
@@ -147,7 +144,7 @@ class Binary: NumberSystemProtocol {
         }
         
         // to two's complement if value is signed and negative
-        if self.isSigned {
+        if isSigned {
             binary.twosComplement()
         }
         
@@ -165,11 +162,11 @@ class Binary: NumberSystemProtocol {
         // First: converting int part
 
         // remove signed bit
-        if self.isSigned {
+        if isSigned {
             binIntStrBuff?.removeFirst()
         }
         // set multipler to -1 or 1 for inverting value
-        if self.isSigned {
+        if isSigned {
             signedMultipler = -1
             // check if min signed
             if binIntStrBuff!.replacingOccurrences(of: "0", with: "").count == 0 {
@@ -463,7 +460,6 @@ class Binary: NumberSystemProtocol {
         let binary = self
         
         let wordSizeValue = 64
-        //let wordSizeValue = wordSizeStorage.getWordSizeValue()
         
         if signed {
             // -12 => 1100 -> 11111100
@@ -495,12 +491,8 @@ class Binary: NumberSystemProtocol {
             isInputSigned = binary.isSigned
         }
 
-        // fill if needed to
         if !isInputSigned {
-            // remove signed bit
-//            if binary.value.first != "1" {
-//                binary.value.removeFirst()
-//            }
+            // fill if needed to
             binary.fillToFormat(upToZeros: true)
         } else {
             // invert binary if signed
@@ -513,14 +505,6 @@ class Binary: NumberSystemProtocol {
         
         // fills up binary to 7, 15, 31, 63
         binary.fillUpToMaxBitsCount()
-        
-        // isSigned == true -> 1 else -> 0
-        // add signed bit by signed state
-        if isInputSigned {
-            binary.value = "1" + binary.value
-        } else {
-            binary.value = "0" + binary.value
-        }
         
         if isInputSigned {
             binary.twosComplement()
@@ -585,20 +569,15 @@ class Binary: NumberSystemProtocol {
         }
         
         let wordSizeValue = 64
-        // let wordSizeValue = wordSizeStorage.getWordSizeValue()
         
         // fill up with zeros to needed bit position
-        binary.value = fillUpZeros(str: binary.value, to: wordSizeValue-1)
+        binary.value = fillUpZeros(str: binary.value, to: wordSizeValue)
         
     }
     
     // Appending digit to end
     func appendDigit(_ digit: String) {
-        // storage
-        let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
-        // calc state
-        let calcState = calcStateStorage.loadData()
-        
+        let calcState = CalcState.shared
         let binary = self
         
         // just add digit if point exits
@@ -608,14 +587,9 @@ class Binary: NumberSystemProtocol {
             let pointPos = testValue.firstIndex(of: ".")!
             let distance = testValue.distance(from: pointPos, to: testValue.endIndex)
         
-            let conversionStorage: ConversionStorageProtocol = ConversionStorage()
-            let conversionSettings = conversionStorage.loadData()
-            if let numbersAfterPoint = conversionSettings?.numbersAfterPoint {
-                // exit if numbers after point is already filled
-                if Int(numbersAfterPoint) >= Int(distance) {
-                    // do nothing
-                    binary.value.append(digit)
-                }
+            let conversionSettings = ConversionSettings.shared
+            if Int(conversionSettings.numbersAfterPoint) >= Int(distance) {
+                binary.value.append(digit)
             }
             return
         }
@@ -624,58 +598,55 @@ class Binary: NumberSystemProtocol {
         binary.value = binary.value.removeAllSpaces()
         
         // get saved data
-        if let data = calcState?.processSigned {
-            //let wordSizeValue = wordSizeStorage.getWordSizeValue()
-            let wordSizeValue = 64
+        let wordSizeValue = 64
+        
+        // if .processSigned == true
+        var testValue = binary.value
+        testValue.append(digit)
+        if testValue.count > wordSizeValue && testValue.first == "1" {
+            return
+        }
+        
+        if calcState.processSigned {
+            // calcualte signed state
+            binary.updateSignedState() // changes binary.isSigned state to true of false
             
-            // if .processSigned == true
-            var testValue = binary.value
-            testValue.append(digit)
-            if testValue.count > wordSizeValue && testValue.first == "1" {
+            // remove signed bit
+            binary.value.removeFirst()
+            
+            // remove zeros before
+            binary.value = binary.removeZerosBefore(str: binary.value)
+            
+            if binary.value == "0" {
+                // replace if 0
+                binary.value = digit
+            } else {
+                // append digit
+                binary.value.append(digit)
+            }
+            
+            // check for max word size
+            if binary.value.count == wordSizeValue {
                 return
             }
             
-            if data {
-                // calcualte signed state
-                binary.updateSignedState() // changes binary.isSigned state to true of false
-                
-                // remove signed bit
-                binary.value.removeFirst()
-                
-                // remove zeros before
-                binary.value = binary.removeZerosBefore(str: binary.value)
-                
-                if binary.value == "0" {
-                    // replace if 0
-                    binary.value = digit
-                } else {
-                    // append digit
-                    binary.value.append(digit)   
-                }
-                
-                // check for max word size
-                if binary.value.count == wordSizeValue {
-                    return
-                }
-                
-                // fills up binary to 7, 15, 31, 63 detends of wordSize
-                binary.fillUpToMaxBitsCount()
-                // isSigned == true -> 1 else -> 0
-                // add signed bit by signed state
-                if binary.isSigned {
-                    binary.value = "1" + binary.value
-                } else {
-                    binary.value = "0" + binary.value
-                }
+            // fills up binary to 7, 15, 31, 63 detends of wordSize
+            binary.fillUpToMaxBitsCount()
+            // isSigned == true -> 1 else -> 0
+            // change signed bit by signed state
+            if binary.isSigned {
+                binary.changeSignedBit(to: "1")
             } else {
-                // if doesnt process signed binary values
-                // just append
-                binary.value.append(digit)
-                
-                // just make binary code pretty
-                binary.value = fillUpParts(str: binary.value, by: 4)
+                binary.changeSignedBit(to: "0")
             }
-        }  
+        } else {
+            // if doesnt process signed binary values
+            // just append
+            binary.value.append(digit)
+            
+            // just make binary code pretty
+            binary.value = fillUpParts(str: binary.value, by: 4)
+        }
     }
     
     // inverting binary
@@ -708,20 +679,11 @@ class Binary: NumberSystemProtocol {
     
     public func twosComplement() {
         let binary = self
-        var signedBit = String()
-        
-        let calcStateStorage = CalcStateStorage()
         // remove spaces
         binary.value = binary.value.removeAllSpaces()
         
         // convert to 1's complement
         binary.onesComplement()
-        // save signed bit and change to 0
-        if calcStateStorage.isProcessSigned() {
-            signedBit = String(binary.value.first!)
-            binary.updateSignedState()
-            binary.changeSignedBit(to: "0")
-        }
 
         // get the int part of binary
         let divided = divideIntFract(value: binary.value)
@@ -736,11 +698,6 @@ class Binary: NumberSystemProtocol {
         // add fract part to int part if exists
         if divided.1 != nil && divided.1!.count > 0 {
             binary.value = binary.value + "." + divided.1!
-        }
-        
-        // return signed bit if exists
-        if signedBit != "" {
-            binary.changeSignedBit(to: Character(signedBit))
         }
     }
     
@@ -795,6 +752,25 @@ class Binary: NumberSystemProtocol {
         }
 
         return result
+    }
+    
+    // <<
+    func shiftOneRight() {
+        if self.value.count > 0 {
+            // remove right bit
+            self.value.removeLast(1)
+            // add left bit by signed state
+            let leftBit = self.isSigned ? "1" : "0"
+            self.value = leftBit + self.value
+        } else {
+            self.value = "0"
+        }
+    }
+    
+    // <<
+    func shiftOneLeft() {
+        // append from right
+        self.value.append("0")
     }
 
 }

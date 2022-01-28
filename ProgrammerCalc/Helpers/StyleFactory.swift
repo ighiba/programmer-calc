@@ -33,7 +33,8 @@ class StyleFactory {
                                                               frameTint:  UIColor(hex: 0xBDBDBD, alpha: 1).setDarker(by: 0.5),
                                                               textColor:  UIColor.white,
                                                               textTint:   UIColor.white),
-                         buttonBorderColor:       UIColor(hex: 0xE7E7E7, alpha: 1))
+                         buttonBorderColor:       UIColor(hex: 0xE7E7E7, alpha: 1),
+                         bitButtonColor:          UIColor.black)
             
         case .dark:
             return Style(backgroundColor:         UIColor.black,
@@ -52,7 +53,8 @@ class StyleFactory {
                                                               frameTint:  UIColor(hex: 0x929292, alpha: 1).setLighter(by: 0.25),
                                                               textColor:  UIColor.white,
                                                               textTint:   UIColor.white),
-                         buttonBorderColor:       UIColor.clear)
+                         buttonBorderColor:       UIColor.clear,
+                         bitButtonColor:          UIColor.white)
             
         case .oldschool:
             return Style(backgroundColor:         UIColor(hex: 0x010700, alpha: 1),
@@ -71,7 +73,8 @@ class StyleFactory {
                                                               frameTint:  UIColor(hex: 0x929292, alpha: 1).setDarker(by: 0.5),
                                                               textColor:  UIColor.black,
                                                               textTint:   UIColor.black),
-                         buttonBorderColor:       UIColor.clear)
+                         buttonBorderColor:       UIColor.clear,
+                         bitButtonColor:          UIColor.white)
         }
     }
 }
