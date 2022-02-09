@@ -86,7 +86,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Delegates
         self.delegate = self
         self.dataSource = self
 
@@ -103,7 +102,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         pageControl.pageIndicatorTintColor = .systemGray4
         pageControl.currentPageIndicatorTintColor = .systemGray
         
-        // Allow interaction with content without delay
+        // Allow interaction with content(buttons) without delay
         delaysContentTouches = false
         
         // Set start vc for pages (CalcButtonsMain)
@@ -174,7 +173,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             // unhide word size button
             calcView.changeWordSizeButton.isHidden = false
             // set default calcView frame
-            calcView.frame = CGRect( x: 0, y: 0, width: UIScreen.main.bounds.width, height: self.calcView.getViewHeight())
+            calcView.frame = CGRect( x: 0, y: 0, width: UIScreen.main.bounds.width, height: calcView.getViewHeight())
             
         } else if isLandscape && !isPortrait && isAllowedLandscape {
             // hide word size button
@@ -316,7 +315,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         updateMainLabelNumberValue()
     }
     
-    func updateStyle() {
+    private func updateStyle() {
         // Apply style
         let styleSettings = StyleSettings.shared
         var styleType = styleSettings.currentStyle
@@ -521,7 +520,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         }
     }
     
-    
     private func updateBitwiseKeypad() {
         if let vc = bitwiseKeypad {
             let bin = calculator.inputValue.toBinary()
@@ -563,7 +561,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     @objc func touchHandleLabelHighlight() {
         unhighlightLabels()
     }
-    
     
     // Numeric buttons actions
     @objc func numericButtonTapped(_ sender: UIButton) {
@@ -729,6 +726,8 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     
     // Keypad switch action Default/Bitwise
     @objc func switchKeypad(_ sender: UIBarButtonItem) {
+        touchHandleLabelHighlight()
+        
         let animDuration: CGFloat = 0.3
         let animOptions: UIView.AnimationOptions = [.curveEaseInOut]
         let calcButtonsTransform = CGAffineTransform(translationX: -UIScreen.main.bounds.width, y: 0)

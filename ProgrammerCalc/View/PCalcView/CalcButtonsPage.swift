@@ -19,6 +19,10 @@ protocol CalcButtonPageProtocol: UIView {
 
 // Parent Class
 class CalcButtonsPage: UIView, CalcButtonPageProtocol {
+
+    // Standart calculator buttons
+    var allButtons: [CalculatorButton] = []
+    
     // Layout constraints
     var layoutConstraints: [NSLayoutConstraint]?
     // Style factory
@@ -40,7 +44,6 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
         
         // Activate constraints
         layoutConstraints = [
-            // Constraints for buttons (Main)
             // width
             buttonsStackView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.90),
             // centering
@@ -52,10 +55,9 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
         ]
         NSLayoutConstraint.activate(layoutConstraints!)
         
-        
         // Buttons constraints
         for button in allButtons {
-            let title = button.titleLabel?.text // shorter name
+            let title = button.titleLabel?.text
             // set width and height by constraints
             button.translatesAutoresizingMaskIntoConstraints = false
             button.portrait = []
@@ -87,10 +89,7 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
         
         return stackView
     }()
-    
-    // Standart calculator buttons
-    var allButtons: [CalculatorButton] = []
-    
+
     // Style for buttons
     func updateStyle(for buttons: [CalculatorButton]) {
         
@@ -239,7 +238,7 @@ class CalcButtonsMain: CalcButtonsPage {
     
     
     // Standart calculator buttons
-    func getButtons() {
+    private func getButtons() {
         
         let allTitles = ["AC","±","Signed\nOFF","÷",
                          "7", "8", "9", "×",
@@ -352,7 +351,7 @@ class CalcButtonsAdditional: CalcButtonsPage {
     }
 
     // Standart calculator buttons
-    func getButtons() {
+    private func getButtons() {
         // localization for 1's and 2's
         let oneS = NSLocalizedString("1's", comment: "")
         let twoS = NSLocalizedString("2's", comment: "")
