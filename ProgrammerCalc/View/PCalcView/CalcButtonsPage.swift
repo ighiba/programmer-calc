@@ -39,6 +39,15 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
         // override in child class
     }
     
+    static func getTopMargin() -> CGFloat {
+        let screenWidth = UIScreen.main.bounds.width
+        let screenHeight = UIScreen.main.bounds.height
+        let height = screenHeight > screenWidth ? screenHeight : screenWidth
+        let buttonsStackHeight = (height / 3) * 2
+        
+        return (buttonsStackHeight / 2 + 2) * 1.089
+    }
+    
     fileprivate func setLayout() {
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -49,7 +58,7 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
             // centering
             buttonsStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             // top anchor
-            buttonsStackView.topAnchor.constraint(equalTo: self.topAnchor, constant: (buttonsStackHeight() / 2 + 2) * 1.089),
+            buttonsStackView.topAnchor.constraint(equalTo: self.topAnchor, constant: CalcButtonsPage.getTopMargin() ),
             // bottom anchor === spacing -3.5 for shadows
             buttonsStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -3.5),
         ]
@@ -157,13 +166,7 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
     }
     
     
-    // Dynamic butons stack height for autolayout
-    func buttonsStackHeight() -> CGFloat {
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
-        let height = screenHeight > screenWidth ? screenHeight : screenWidth
-        return (height / 3) * 2
-    }
+
     
     func updateButtonIsEnabled(by forbiddenValues: Set<String>) {
         allButtons.forEach { button in
