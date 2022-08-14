@@ -36,15 +36,15 @@ class PCalcView: UIView {
     // NavBar buttons
     private let changeItem = UIBarButtonItem(image: UIImage(systemName: "arrow.up.arrow.down.circle"),
                                                             style: .plain,
-                                                            target: self,
+                                                            target: nil,
                                                             action: #selector(PCalcViewController.changeConversionButtonTapped))
     private let keypadItem = UIBarButtonItem(image: UIImage(named: "keypadIcon-bitwise"),
                                                             style: .plain,
-                                                            target: self,
+                                                            target: nil,
                                                             action: #selector(PCalcViewController.switchKeypad))
     private let settingsItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"),
                                                               style: .plain,
-                                                              target: self,
+                                                              target: nil,
                                                               action: #selector(PCalcViewController.settingsButtonTapped))
     
     // MARK: - Initialization

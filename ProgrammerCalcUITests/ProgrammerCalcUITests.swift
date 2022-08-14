@@ -131,7 +131,7 @@ class ProgrammerCalcUITests: XCTestCase {
     func testChangeConversionButton() throws {
         // 1. given
         let changeConversionButton = app.navigationBars.buttons["sort"]
-        let maxNumberOfDigitsAfterPointStaticText = app.staticTexts["Max number of digits afrer point: "]
+        let maxNumberOfDigitsAfterPointStaticText = app.staticTexts["Max number of digits after point: "]
         let containerHeader = app.staticTexts["Conversion settings"]
         let doneButton = app.buttons["Done"]
         
