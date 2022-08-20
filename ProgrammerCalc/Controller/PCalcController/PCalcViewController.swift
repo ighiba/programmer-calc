@@ -86,7 +86,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Delegates
         self.delegate = self
         self.dataSource = self
 
@@ -103,14 +102,14 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         pageControl.pageIndicatorTintColor = .systemGray4
         pageControl.currentPageIndicatorTintColor = .systemGray
         
-        // Allow interaction with content without delay
+        // Allow interaction with content(buttons) without delay
         delaysContentTouches = false
         
         // Set start vc for pages (CalcButtonsMain)
         setViewControllers([calcButtonsViewControllers[1]], direction: .forward, animated: false, completion: nil)
         
         // Lock rotatiton in portrait mode while loading, unlocks in viewDidAppear
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+        lockRotation()
 
         // Add swipe left for deleting last value in main label
         [mainLabel,converterLabel].forEach { label in
@@ -135,8 +134,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        // unlock rotatiton
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
+        unlockRotation()
         isAllowedLandscape = true
         // update shadows for buttons page
         calcButtonsViewControllers.forEach { $0.view.layoutSubviews() }
@@ -151,7 +149,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         let isLandscape = UIDevice.current.orientation.isLandscape
         
         if isPortrait && !isLandscape {
-            // unhide button pages
+            // show button pages
             for page in calcButtonsViewControllers {
                 page.view.layoutSubviews()
                 UIView.animate(withDuration: 0.15, delay: 0.15, options: .curveEaseOut, animations: {
@@ -169,12 +167,12 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             mainLabel.infoSubLabel.sizeToFit()
             converterLabel.infoSubLabel.sizeToFit()
             converterLabel.sizeToFit()
-            // unhide pagecontrol
+            // show pagecontrol
             setPageControl(visibile: true)
-            // unhide word size button
+            // show word size button
             calcView.changeWordSizeButton.isHidden = false
             // set default calcView frame
-            calcView.frame = CGRect( x: 0, y: 0, width: UIScreen.main.bounds.width, height: self.calcView.getViewHeight())
+            calcView.frame = CGRect( x: 0, y: 0, width: UIScreen.main.bounds.width, height: calcView.getViewHeight())
             
         } else if isLandscape && !isPortrait && isAllowedLandscape {
             // hide word size button
@@ -205,8 +203,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     // Handle dismissing modal vc
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         // Update rotation settings
-        // unlock rotation
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
+        unlockRotation()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -217,6 +214,14 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     // ===============
     // MARK: - Methods
     // ===============
+    
+    private func lockRotation() {
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+    }
+    
+    private func unlockRotation() {
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
+    }
     
     private func addLabelsUpdateHandlers() {
         // Add handler for main label
@@ -316,7 +321,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         updateMainLabelNumberValue()
     }
     
-    func updateStyle() {
+    private func updateStyle() {
         // Apply style
         let styleSettings = StyleSettings.shared
         var styleType = styleSettings.currentStyle
@@ -521,7 +526,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         }
     }
     
-    
     private func updateBitwiseKeypad() {
         if let vc = bitwiseKeypad {
             let bin = calculator.inputValue.toBinary()
@@ -563,7 +567,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     @objc func touchHandleLabelHighlight() {
         unhighlightLabels()
     }
-    
     
     // Numeric buttons actions
     @objc func numericButtonTapped(_ sender: UIButton) {
@@ -729,6 +732,8 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     
     // Keypad switch action Default/Bitwise
     @objc func switchKeypad(_ sender: UIBarButtonItem) {
+        touchHandleLabelHighlight()
+        
         let animDuration: CGFloat = 0.3
         let animOptions: UIView.AnimationOptions = [.curveEaseInOut]
         let calcButtonsTransform = CGAffineTransform(translationX: -UIScreen.main.bounds.width, y: 0)
@@ -743,6 +748,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             calcButtonsViewControllers.forEach({ $0.view?.transform = calcButtonsTransform })
             
             UIView.animate(withDuration: animDuration, delay: 0, options: animOptions, animations: {
+                self.lockRotation()
                 self.bitwiseKeypad?.view.transform = bitwiseKeypadTransform
                 self.calcButtonsViewControllers.forEach({ $0.view?.transform = .identity })
             }, completion: { _ in
@@ -750,6 +756,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
                 self.bitwiseKeypad?.view.removeFromSuperview()
                 self.bitwiseKeypad?.removeFromParent()
                 self.bitwiseKeypad = nil
+                self.unlockRotation()
             })
             
         } else {

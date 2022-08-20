@@ -49,7 +49,7 @@ class SettingsStorage: SettingsStorageProtocol {
             return settings
         } else {
             // if no settings
-            print("no app settings")
+            print("no App settings")
             // default values
             let newSettings = Settings(tappingSounds: true, hapticFeedback: true)
             self.saveData(newSettings)

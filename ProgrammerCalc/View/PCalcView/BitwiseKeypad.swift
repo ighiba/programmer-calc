@@ -68,7 +68,7 @@ class BitwiseKeypad: UIView {
         portrait = [
             self.centerXAnchor.constraint(equalTo: parentView.centerXAnchor),
             self.widthAnchor.constraint(equalTo: parentView.widthAnchor),
-            self.topAnchor.constraint(equalTo: parentView.topAnchor, constant: (getContainerHeight() / 2 + 2) * 1.089 - 2),
+            self.topAnchor.constraint(equalTo: parentView.topAnchor, constant: CalcButtonsPage.getTopMargin() - 2),
             self.bottomAnchor.constraint(equalTo: parentView.bottomAnchor)
         ]
         
@@ -107,14 +107,6 @@ class BitwiseKeypad: UIView {
             button.setTitleColor(style.tintColor, for: .highlighted)
             button.setTitleColor(style.tintColor, for: .selected)
         }
-    }
-    
-    // Container height in default(portrait) orientation
-    private func getContainerHeight() -> CGFloat {
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
-        let height = screenHeight > screenWidth ? screenHeight : screenWidth
-        return (height / 3) * 2
     }
 
     private func getKeypadStack() -> UIStackView {
