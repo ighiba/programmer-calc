@@ -78,8 +78,7 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // lock rotation
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+        AppDelegate.AppUtility.lockPortraitOrientation()
         // get switch last state from UserDefaults
         getSettings()
     }
@@ -88,7 +87,7 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
         super.viewWillDisappear(animated)
         // save switch state to UserDefaults
         saveSettings()
-        // update settings in PCalcVC
+        // update settings in PCalcViewController
         updaterHandler?()
     }
     
@@ -114,9 +113,7 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
                     cell.switcher?.setOn(settings.tappingSounds, animated: false)
                 case "haptic":
                     cell.switcher?.setOn(settings.hapticFeedback, animated: false)
-                default:
-                    // do nothing
-                    break
+                default: break
                 }
             }
             self.tableView.reloadData()
@@ -137,9 +134,7 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
                 settings.tappingSounds = cell.switcher!.isOn
             case "haptic":
                 settings.hapticFeedback = cell.switcher!.isOn
-            default:
-                // do nothing
-                break
+            default: break
             }
         }
         // Apply settings to UserDefaults
@@ -163,14 +158,12 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
     // Close settings popover
     @objc func closeButtonTapped( sender: UIButton) {
         self.dismiss(animated: true, completion: {
-            // unlock rotation
-            AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
+            AppDelegate.AppUtility.unlockPortraitOrientation()
         })
     }
     
     // Switcher handler
     @objc func switcherToggled( sender: UISwitch) {
-        // save settings
         saveSettings()        
     }
     

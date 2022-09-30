@@ -266,7 +266,7 @@ class PCalcView: UIView {
             labelsStack.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: getScreenBounds().width * 0.05),
             labelsStack.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: getScreenBounds().width * -0.05),
             labelsStack.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: margin),
-            labelsStack.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.3, constant: -margin*3),
+            labelsStack.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.3, constant: -margin * 3),
             
             mainLabel.infoSubLabel.topAnchor.constraint(equalTo: mainLabel.bottomAnchor),
             mainLabel.infoSubLabel.trailingAnchor.constraint(equalTo: mainLabel.trailingAnchor, constant: -5),
@@ -278,8 +278,22 @@ class PCalcView: UIView {
         // Additional setups
         // add changeWordSizeButton to navigationBar title view(in center)
         navigationBar.items?.first?.titleView?.addSubview(changeWordSizeButton)
-        changeWordSizeButton.center =  (navigationBar.items?.first?.titleView!.center)!
-
+        changeWordSizeButton.center = (navigationBar.items?.first?.titleView!.center)!
+    }
+    
+    // MARK: - Methods
+    
+    func showNavigationBar() {
+        changNavigationBarIsHidden(to: false)
+    }
+    
+    func hideNavigationBar() {
+        changNavigationBarIsHidden(to: true)
+    }
+    
+    private func changNavigationBarIsHidden(to isHidden: Bool) {
+        navigationBar.translatesAutoresizingMaskIntoConstraints = isHidden
+        navigationBar.isHidden = isHidden
     }
     
     // MARK: - Calculated heights
@@ -289,16 +303,15 @@ class PCalcView: UIView {
     }
     
     func getScreenBounds() -> CGRect {
-        
         // caclculation for landscape and portrait orientations
         let screenWidth = UIScreen.main.bounds.width
         let screenHeight = UIScreen.main.bounds.height
         let width = screenWidth < screenHeight ? screenWidth : screenHeight
         let height = screenHeight > screenHeight ? screenHeight : screenWidth
         
-        
         return CGRect(x: 0, y: 0, width: width, height: height)
     }
+
 
 }
 

@@ -41,8 +41,7 @@ class ConversionViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // lock rotation
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+        AppDelegate.AppUtility.lockPortraitOrientation()
         // load data from UserDefaults to picker and slider
         getConversionSettings()
         // animate popover
@@ -53,8 +52,7 @@ class ConversionViewController: UIViewController {
         super.viewWillDisappear(animated)
         // save conversion data to UserDefaults
         saveConversionSettings()
-        // unlock rotation
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
+        AppDelegate.AppUtility.unlockPortraitOrientation()
     }
     
     // MARK: - Methods

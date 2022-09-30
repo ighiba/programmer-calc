@@ -18,7 +18,6 @@ class CalcButtonsViewController: UIViewController {
     // Taptic feedback generator
     private let generator = UIImpactFeedbackGenerator(style: .light)
     
-    // PCalcViewController delegate
     var delegate: PCalcViewControllerDelegate?
     
     init(buttonsPage: UIView) {
@@ -38,6 +37,23 @@ class CalcButtonsViewController: UIViewController {
         guard let delegate = delegate else { return }
         // handling label when tappging on PCalcViewController
         delegate.unhighlightLabels()
+    }
+    
+    // MARK: - Methods
+    
+    func showWithAnimation() {
+        view.layoutSubviews()
+        UIView.animate(withDuration: 0.15, delay: 0.15, options: .curveEaseOut, animations: {
+            self.view.alpha = 1
+            self.view.isHidden = false
+        }, completion: nil )
+    }
+    
+    func hideWithAnimation() {
+        UIView.animate(withDuration: 0.3, delay: 0.3, options: .curveEaseOut, animations: {
+            self.view.alpha = 0
+            self.view.isHidden = true
+        }, completion: nil )
     }
     
     // MARK: - Actions

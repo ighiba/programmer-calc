@@ -42,8 +42,7 @@ class AboutViewController: PCalcTableViewController, AboutViewControllerDelegate
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // lock rotation
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)        
+        AppDelegate.AppUtility.lockPortraitOrientation()
     }
     
     // MARK: - Methods
