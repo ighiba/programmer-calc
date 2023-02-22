@@ -88,6 +88,9 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         super.viewDidLoad()
         self.delegate = self
         self.dataSource = self
+        
+        // Locks screen rotatiton in portrait mode while loading, unlocks in viewDidAppear
+        AppDelegate.AppUtility.lockPortraitOrientation()
 
         // Add view from PCalcView
         calcView.setViews()
@@ -107,9 +110,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         
         // Set start vc for pages (CalcButtonsMain)
         setViewControllers([calcButtonsViewControllers[1]], direction: .forward, animated: false, completion: nil)
-        
-        // Lock rotatiton in portrait mode while loading, unlocks in viewDidAppear
-        lockRotation()
 
         // Add swipe left for deleting last value in main label
         [mainLabel,converterLabel].forEach { label in
@@ -134,7 +134,12 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        unlockRotation()
+        AppDelegate.AppUtility.unlockPortraitOrientation()
+        
+        if #available(iOS 16.0, *) {
+            setNeedsUpdateOfSupportedInterfaceOrientations()
+        }
+        
         isAllowedLandscape = true
         // update shadows for buttons page
         calcButtonsViewControllers.forEach { $0.view.layoutSubviews() }
@@ -145,22 +150,21 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         super.viewDidLayoutSubviews()
         updateStyle()
         // get current device orientation
-        let isPortrait = UIDevice.current.orientation.isPortrait
-        let isLandscape = UIDevice.current.orientation.isLandscape
+        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+        let isPortrait = windowScene?.interfaceOrientation.isPortrait ?? UIDevice.current.orientation.isPortrait
+        let isLandscape = windowScene?.interfaceOrientation.isLandscape ?? UIDevice.current.orientation.isLandscape
         
         if isPortrait && !isLandscape {
             // show button pages
             for page in calcButtonsViewControllers {
-                page.view.layoutSubviews()
-                UIView.animate(withDuration: 0.15, delay: 0.15, options: .curveEaseOut, animations: {
-                    page.view.alpha = 1
-                    page.view.isHidden = false
-                }, completion: nil )
+                page.showWithAnimation()
             }
             // change constraints
+            calcView.showNavigationBar()
             NSLayoutConstraint.deactivate(calcView.landscape!)
             NSLayoutConstraint.deactivate(calcView.landscapeWithBitKeypad!)
             NSLayoutConstraint.activate(calcView.portrait!)
+
             // update label layouts
             handleDisplayingMainLabel()
             mainLabel.sizeToFit()
@@ -179,13 +183,11 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             calcView.changeWordSizeButton.isHidden = true
             // hide button pages
             for page in calcButtonsViewControllers {
-                UIView.animate(withDuration: 0.3, delay: 0.3, options: .curveEaseOut, animations: {
-                    page.view.alpha = 0
-                    page.view.isHidden = true
-                }, completion: nil )
+                page.hideWithAnimation()
             }
             // change constraints
             NSLayoutConstraint.deactivate(calcView.portrait!)
+            calcView.hideNavigationBar()
             // landscape constraints by existing bitwiseKeypad
             if bitwiseKeypad != nil {
                 calcView.hideConverterLabel()
@@ -203,7 +205,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     // Handle dismissing modal vc
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         // Update rotation settings
-        unlockRotation()
+        AppDelegate.AppUtility.lockPortraitOrientation()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -214,14 +216,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     // ===============
     // MARK: - Methods
     // ===============
-    
-    private func lockRotation() {
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
-    }
-    
-    private func unlockRotation() {
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
-    }
     
     private func addLabelsUpdateHandlers() {
         // Add handler for main label
@@ -748,15 +742,15 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             calcButtonsViewControllers.forEach({ $0.view?.transform = calcButtonsTransform })
             
             UIView.animate(withDuration: animDuration, delay: 0, options: animOptions, animations: {
-                self.lockRotation()
+                AppDelegate.AppUtility.lockPortraitOrientation()
                 self.bitwiseKeypad?.view.transform = bitwiseKeypadTransform
                 self.calcButtonsViewControllers.forEach({ $0.view?.transform = .identity })
-            }, completion: { _ in
-                self.bitwiseKeypad?.willMove(toParent: nil)
-                self.bitwiseKeypad?.view.removeFromSuperview()
-                self.bitwiseKeypad?.removeFromParent()
-                self.bitwiseKeypad = nil
-                self.unlockRotation()
+            }, completion: { [weak self] _ in
+                self?.bitwiseKeypad?.willMove(toParent: nil)
+                self?.bitwiseKeypad?.view.removeFromSuperview()
+                self?.bitwiseKeypad?.removeFromParent()
+                self?.bitwiseKeypad = nil
+                AppDelegate.AppUtility.unlockPortraitOrientation()
             })
             
         } else {
@@ -779,10 +773,10 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             UIView.animate(withDuration: animDuration, delay: 0, options: animOptions, animations: {
                 self.bitwiseKeypad?.view.transform = .identity
                 self.calcButtonsViewControllers.forEach({ $0.view?.transform = calcButtonsTransform })
-            }, completion: { _ in
-                self.bitwiseKeypad?.didMove(toParent: self)
-                self.calcButtonsViewControllers.forEach({ $0.view?.transform = .identity })
-                self.refreshCalcButtons()
+            }, completion: { [weak self] _ in
+                self?.bitwiseKeypad?.didMove(toParent: self)
+                self?.calcButtonsViewControllers.forEach({ $0.view?.transform = .identity })
+                self?.refreshCalcButtons()
             })
         }
     }

@@ -88,7 +88,6 @@ class ProgrammerCalcUITests: XCTestCase {
         let darkTheme = tablesQuery_Appearance.staticTexts["Dark"]
         let oldSchoolTheme = tablesQuery_Appearance.staticTexts["Old School"]
         
-        
         // 2. then
         settingsButton.tap()
         XCTAssertTrue(appearanceRow.exists)

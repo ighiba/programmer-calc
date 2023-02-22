@@ -38,8 +38,7 @@ class WordSizeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // lock rotation
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+        AppDelegate.AppUtility.lockPortraitOrientation()
         // load data from UserDefaults to table
         let loadedWordSize = wordSizeStorage.safeGetData() as! WordSize
         wordSize.setWordSize(loadedWordSize)
@@ -48,8 +47,7 @@ class WordSizeViewController: UIViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        // unlock rotation
-        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.allButUpsideDown, andRotateTo: UIInterfaceOrientation.portrait)
+        AppDelegate.AppUtility.unlockPortraitOrientation()
     }
     
     
