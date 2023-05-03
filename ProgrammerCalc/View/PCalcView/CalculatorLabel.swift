@@ -19,7 +19,6 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
     // MARK: - Properties
     // ==================
     
-
     var updateHandler: ((UpdatableLabel) -> Void)?
     var numberValue: NumberSystemProtocol?
     // Font
@@ -35,6 +34,13 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
         didSet {
             self.updateHandler?(self)
         }
+    }
+    
+    var hasErrorMessage: Bool {
+        for error in MathErrors.allCases where self.text == error.localizedDescription {
+            return true
+        }
+        return false
     }
     
     // ======================

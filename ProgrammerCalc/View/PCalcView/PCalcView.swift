@@ -185,6 +185,8 @@ class PCalcView: UIView {
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.15
         
+        label.accessibilityIdentifier = "MainLabel"
+        
         return label
     }()
     
@@ -202,7 +204,9 @@ class PCalcView: UIView {
         // resizeble text
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.15
-   
+        
+        label.accessibilityIdentifier = "ConverterLabel"
+
         return label
     }()
     
@@ -289,6 +293,19 @@ class PCalcView: UIView {
     
     func hideNavigationBar() {
         changNavigationBarIsHidden(to: true)
+    }
+    
+    func updateCnageWordSizeButton(with wordSize: WordSize) {
+        // prepare title
+        let newTitle: String = {
+            for item in WordSize.wordsDictionary where item.first?.value == wordSize.value {
+                return item.first!.key
+            }
+            return (self.changeWordSizeButton.titleLabel?.text)!
+        }()
+        
+        // change button title
+        self.changeWordSizeButton.setTitle(newTitle, for: .normal)
     }
     
     private func changNavigationBarIsHidden(to isHidden: Bool) {
