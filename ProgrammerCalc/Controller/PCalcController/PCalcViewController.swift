@@ -234,7 +234,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     
     private func updateCalcStateMainLabel() {
         // Handle error in labels
-        if mainLabelHasErrorMessage() {
+        if mainLabel.hasErrorMessage {
             calcState.mainLabelState = "0"
             return
         }
@@ -243,19 +243,13 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     
     private func updateCalcStateConverterLabel() {
         // Handle error in labels
-        if mainLabelHasErrorMessage() {
+        if mainLabel.hasErrorMessage {
             calcState.converterLabelState = "0"
             return
         }
         calcState.converterLabelState = converterLabel.text ?? "0"
     }
-    
-    private func mainLabelHasErrorMessage() -> Bool {
-        for error in MathErrors.allCases where mainLabel.text == error.localizedDescription {
-            return true
-        }
-        return false
-    }
+
         
     private func updateLabelsWithCalcState() {
         // apply data to view
@@ -277,11 +271,9 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     }
     
     public func handleConversion() {
-        let labelText = mainLabel.text
-        let forbidden = ConversionValues.getForbiddenValues()
-        let systemMainFromEnum = conversionSettings.systemMain
+        let forbiddenValues = ConversionValues.getForbiddenValues()
         
-        if forbidden[systemMainFromEnum]!.contains(where: labelText!.contains) {
+        if forbiddenValues[conversionSettings.systemMain]!.contains(where: mainLabel.text!.contains) {
             print("Forbidden values at input")
             print("Reseting input")
             clearLabels()
@@ -289,17 +281,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     }
     
     public func updateChangeWordSizeButton() {
-        let wordSize = WordSize.shared
-        // prepare title
-        let newTitle: String = {
-            for item in WordSize.wordsDictionary where item.first?.value == wordSize.value {
-                return item.first!.key
-            }
-            return (calcView.changeWordSizeButton.titleLabel?.text)!
-        }()
-        
-        // change button title
-        calcView.changeWordSizeButton.setTitle(newTitle, for: .normal)
+        calcView.updateCnageWordSizeButton(with: WordSize.shared)
     }
     
     // Make labels .clear color
@@ -425,7 +407,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         let labelText: String =  mainLabel.text!.removeAllSpaces() // remove spaces in mainLabel for converting
 
         // Check if error message in main label
-        if mainLabelHasErrorMessage() {
+        if mainLabel.hasErrorMessage  {
             // set converter to NaN if error in label
             converterLabel.text = "NaN"
             return
@@ -461,7 +443,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         var result = String()
         
         // Check if error message in main label
-        if mainLabelHasErrorMessage() {
+        if mainLabel.hasErrorMessage  {
             // return digit
             return digit
         }
@@ -595,7 +577,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         guard operation != nil else { return }
         
         // Check if error message in main label
-        if mainLabelHasErrorMessage() {
+        if mainLabel.hasErrorMessage  {
             // clear labels
             clearLabels()
         }
@@ -616,7 +598,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             return
         }
         // Check if error message in main label
-        if mainLabelHasErrorMessage() {
+        if mainLabel.hasErrorMessage  {
             // clear labels
             clearLabels()
         }
