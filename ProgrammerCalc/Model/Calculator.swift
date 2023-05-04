@@ -164,7 +164,7 @@ class Calculator: CalculatorProtocol {
         // check if fract part fits in numbersAfterPoint setting
         let testStr = value.removeAllSpaces()
         let numbersAfterPoint = Int(conversionSettings.numbersAfterPoint)
-        let fractPartCount = testStr.getPartAfter(divider: ".").count
+        let fractPartCount = testStr.getPartAfter(separator: ".").count
         // compare values
         return fractPartCount <= numbersAfterPoint ? false : true
     }
@@ -237,7 +237,7 @@ class Calculator: CalculatorProtocol {
         var lastSymbolsIfExists: String = inputStr.last == "." ? "." : ""
         // get str fract part
         var testLabelStr = inputStr.removeAllSpaces()
-        let fractPartStr = testLabelStr.getPartAfter(divider: ".")
+        let fractPartStr = testLabelStr.getPartAfter(separator: ".")
 
         let numbersAfterPoint = Int(conversionSettings.numbersAfterPoint)
         // cut fract part if more then numbersAfterPoint
@@ -289,7 +289,7 @@ class Calculator: CalculatorProtocol {
                 intPart = intPart.removeLeading(characters: ["0"])
                 if intPart == "" { intPart = "0" }
                 // remove zeros in fract part
-                let fractPart = testLabelStr.removeAllSpaces().getPartAfter(divider: ".")
+                let fractPart = testLabelStr.removeAllSpaces().getPartAfter(separator: ".")
                 // fill zeros to word size
                 str = bin.fillUpZeros(str: intPart, to: wordSize.value)
                 str = str + "." + fractPart
@@ -323,7 +323,7 @@ class Calculator: CalculatorProtocol {
             // check if is negative float value
             if testDec.value.contains(".") && testDec.decimalValue < 0 {
                 // remove fract part from str
-                processedStr = processedStr.getPartBefore(divider: ".")
+                processedStr = processedStr.getPartBefore(separator: ".")
                 // if negative value is from 0.* then set it to zero
                 if testDec.decimalValue > -1 && testDec.decimalValue < 0 { processedStr = "0" }
             }
@@ -334,8 +334,8 @@ class Calculator: CalculatorProtocol {
     
     private func composePartsFrom(intPartFrom: String, fractPartFrom: String) -> String {
         if intPartFrom.contains(".") && fractPartFrom.last != "." {
-            let intPart = intPartFrom.getPartBefore(divider: ".")
-            let fractPart = fractPartFrom.getPartAfter(divider: ".")
+            let intPart = intPartFrom.getPartBefore(separator: ".")
+            let fractPart = fractPartFrom.getPartAfter(separator: ".")
             return intPart + "." + fractPart
         } else {
             return intPartFrom
@@ -345,12 +345,12 @@ class Calculator: CalculatorProtocol {
     // Cutting fract part of float number by max number of digits after .
     private func cutFractPart(strValue: String, by count: Int) -> String {
         var result = strValue
-        var fractPartStr: String = strValue.getPartAfter(divider: ".")
+        var fractPartStr: String = strValue.getPartAfter(separator: ".")
         while fractPartStr.count > count {
             fractPartStr.removeLast(1)
             if fractPartStr.count == count {
                 // create new inputStr
-                let intPart = strValue.getPartBefore(divider: ".")
+                let intPart = strValue.getPartBefore(separator: ".")
                 result = intPart + "." + fractPartStr
                 break
             }

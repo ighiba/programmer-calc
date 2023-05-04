@@ -92,43 +92,22 @@ extension String {
         return str
     }
     
-    func getPartAfter(divider: Character) -> String {
-        let str = String(self.reversed())
-        // get position fract part
-        let partAfter = str.getPart(from: str, divider: divider, for: str.startIndex, distance: 0)
-        return String(partAfter.reversed())
+    func getPartAfter(separator: Character) -> String {
+        let components = self.components(separatedBy: "\(separator)")
+        if components.count <= 1 {
+            return ""
+        } else {
+            return components[1]
+        }
     }
     
-    func getPartBefore(divider: Character) -> String {
-        let str = self
-        // get position int part
-        let partBefore = str.getPart(from: str, divider: divider, for: str.startIndex, distance: 0)
-        return partBefore
-    }
-    
-    fileprivate func getPart(from str: String, divider: Character, for index: String.Index, distance: Int) -> String {
-        // get position part
-        guard let pointPos = str.firstIndex(of: divider) else {
+    func getPartBefore(separator: Character) -> String {
+        let components = self.components(separatedBy: "\(separator)")
+        if components.count == 0 {
             return ""
+        } else {
+            return components[0]
         }
-        let partDistance = abs(Int(str.distance(from: pointPos, to: index)))
-        guard partDistance > distance else {
-            return ""
-        }
-        // get str part
-        let partStr: String = {
-            var buffStr = String()
-
-            for digit in str {
-                buffStr.append(digit)
-                if partDistance-distance == buffStr.count {
-                    return buffStr
-                }
-            }
-            
-            return buffStr
-        }()
-        
-        return partStr
     }
+ 
 }

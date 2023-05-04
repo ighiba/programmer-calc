@@ -233,7 +233,7 @@ import Foundation
          // Process fact part if exists and last digit is 0
          if decStr.last == "0" && decStr.contains(".") {
              // count how much zeros in back
-             let fractPart = decStr.getPartAfter(divider: ".")
+             let fractPart = decStr.getPartAfter(separator: ".")
  
              let buffFractPart = String(fractPart.reversed())
              var buffStr = ""

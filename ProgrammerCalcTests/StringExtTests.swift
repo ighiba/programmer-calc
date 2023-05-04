@@ -90,7 +90,7 @@ class StringExtTests: XCTestCase {
         let stringWithSpaces = "10001001.10011111"
 
         // 2. when
-        let result = stringWithSpaces.getPartAfter(divider: ".")
+        let result = stringWithSpaces.getPartAfter(separator: ".")
         
         // 3. then
         XCTAssertEqual(result, "10011111", "Failed getting part")
@@ -101,7 +101,7 @@ class StringExtTests: XCTestCase {
         let stringWithSpaces = "10001001.10011111"
 
         // 2. when
-        let result = stringWithSpaces.getPartBefore(divider: ".")
+        let result = stringWithSpaces.getPartBefore(separator: ".")
         
         // 3. then
         XCTAssertEqual(result, "10001001", "Failed getting part")
@@ -112,7 +112,7 @@ class StringExtTests: XCTestCase {
         let stringWithSpaces = "0."
 
         // 2. when
-        let result = stringWithSpaces.getPartAfter(divider: ".")
+        let result = stringWithSpaces.getPartAfter(separator: ".")
         
         // 3. then
         XCTAssertEqual(result, "", "Failed getting part")
@@ -123,7 +123,7 @@ class StringExtTests: XCTestCase {
         let stringWithSpaces = "0."
 
         // 2. when
-        let result = stringWithSpaces.getPartBefore(divider: ".")
+        let result = stringWithSpaces.getPartBefore(separator: ".")
         
         // 3. then
         XCTAssertEqual(result, "0", "Failed getting part")

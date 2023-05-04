@@ -577,7 +577,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         guard operation != nil else { return }
         
         // Check if error message in main label
-        if mainLabel.hasErrorMessage  {
+        if mainLabel.hasErrorMessage {
             // clear labels
             clearLabels()
         }
@@ -626,11 +626,10 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         updateInfoSubLabels()
         // if float then exit
         guard !mainLabel.text!.contains(".") else { return }
-        let operation = calculator.getOperationBy(string: buttonText!)
-        guard operation != nil else { return }
-        
-        mainLabel.text = calculator.calculateResult(inputValue: calculator.inputValue, operation: operation!)
-        updateLabels()
+        if let operation = calculator.getOperationBy(string: buttonText!) {
+            mainLabel.text = calculator.calculateResult(inputValue: calculator.inputValue, operation: operation)
+            updateLabels()
+        }
     }
     
     // Signed OFF/ON button
