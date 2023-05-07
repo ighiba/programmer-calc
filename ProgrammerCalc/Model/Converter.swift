@@ -48,6 +48,28 @@ import Foundation
  
          return result
      }
+     
+     public func convertValue(value: PCDecimal,
+                              to converterSystem: ConversionSystemsEnum,
+                              format processToFormat: Bool) -> NumberSystemProtocol? {
+         
+         let decimal = DecimalSystem(value)
+         
+         if converterSystem == .dec {
+             return decimal
+         }
+
+         var binary = convertAnyToBinary(value: decimal)
+ 
+         if processToFormat {
+             // Process binary to settings format
+             binary = processBinaryToFormat(binary)
+         }
+
+         let result = convertBinaryToAny(binary: binary, targetSystem: converterSystem)
+ 
+         return result
+     }
  
      // Converter from any to binary system
      fileprivate func convertAnyToBinary( value: NumberSystemProtocol) -> Binary {

@@ -13,7 +13,7 @@
 		C00616B127066C91007BEF89 /* ConversionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00616B027066C91007BEF89 /* ConversionStorage.swift */; };
 		C00616B327066CB1007BEF89 /* CalcStateStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00616B227066CB1007BEF89 /* CalcStateStorage.swift */; };
 		C0249849279DDC88005EA12A /* PCalcStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0249848279DDC88005EA12A /* PCalcStorage.swift */; };
-		C02705222715EF6F008B9C1E /* Calculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C02705212715EF6F008B9C1E /* Calculator.swift */; };
+		C02705222715EF6F008B9C1E /* LegacyCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C02705212715EF6F008B9C1E /* LegacyCalculator.swift */; };
 		C0287F7227A31FD2001489FE /* BitButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0287F7127A31FD2001489FE /* BitButton.swift */; };
 		C0287F7427A32250001489FE /* StyleSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0287F7327A32250001489FE /* StyleSettings.swift */; };
 		C04D34C227921BE200ED9867 /* BitwiseKeypad.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04D34C127921BE200ED9867 /* BitwiseKeypad.swift */; };
@@ -108,7 +108,7 @@
 		C00616B027066C91007BEF89 /* ConversionStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionStorage.swift; sourceTree = "<group>"; };
 		C00616B227066CB1007BEF89 /* CalcStateStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcStateStorage.swift; sourceTree = "<group>"; };
 		C0249848279DDC88005EA12A /* PCalcStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcStorage.swift; sourceTree = "<group>"; };
-		C02705212715EF6F008B9C1E /* Calculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calculator.swift; sourceTree = "<group>"; };
+		C02705212715EF6F008B9C1E /* LegacyCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyCalculator.swift; sourceTree = "<group>"; };
 		C0287F7127A31FD2001489FE /* BitButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitButton.swift; sourceTree = "<group>"; };
 		C0287F7327A32250001489FE /* StyleSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleSettings.swift; sourceTree = "<group>"; };
 		C04D34C127921BE200ED9867 /* BitwiseKeypad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitwiseKeypad.swift; sourceTree = "<group>"; };
@@ -231,6 +231,7 @@
 				C09631CD27270D6B001DCD25 /* Style.swift */,
 				C09631D527277066001DCD25 /* ButtonStyle.swift */,
 				C09631CF27270FCC001DCD25 /* StyleFactory.swift */,
+				C096231A2A04235700E6C08F /* OperationFactory.swift */,
 				C09631DF27305315001DCD25 /* NumberSystemFactory.swift */,
 				C00616A727064449007BEF89 /* OctHexHelper.swift */,
 				C09631D72728E9DC001DCD25 /* PCalcTableViewController.swift */,
@@ -368,7 +369,8 @@
 				C00616AD270666AD007BEF89 /* Storage */,
 				C065DB3824E3C89B0059B38D /* Math */,
 				C05B008A24E6B0F100F8A5E0 /* NumberSystems */,
-				C02705212715EF6F008B9C1E /* Calculator.swift */,
+				C02705212715EF6F008B9C1E /* LegacyCalculator.swift */,
+				C09623182A041A1800E6C08F /* Calculator.swift */,
 				C066756D24E2D83300F832F9 /* Converter.swift */,
 				C065DB3D24E41E610059B38D /* CalcState.swift */,
 				C077CF7024DC987B008E5F0F /* Settings.swift */,
@@ -650,11 +652,13 @@
 				C04D34C227921BE200ED9867 /* BitwiseKeypad.swift in Sources */,
 				C0287F7427A32250001489FE /* StyleSettings.swift in Sources */,
 				C05B008C24E6E0E100F8A5E0 /* Hexadecimal.swift in Sources */,
+				C09623172A04171B00E6C08F /* Int.swift in Sources */,
 				C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */,
 				C0E5FC7624BB9B8D00BA93CA /* PCalcView.swift in Sources */,
 				C06B7F0B2443B12B009642B9 /* PCalcViewController.swift in Sources */,
 				C068AFAA24FA40B900BFE754 /* PCalcViewControllerExtension.swift in Sources */,
-				C02705222715EF6F008B9C1E /* Calculator.swift in Sources */,
+				C02705222715EF6F008B9C1E /* LegacyCalculator.swift in Sources */,
+				C096231B2A04235700E6C08F /* OperationFactory.swift in Sources */,
 				C0619AC424D71240008A7291 /* ConversionViewController.swift in Sources */,
 				C0817788271D045E0068CF45 /* PopoverDoneButton.swift in Sources */,
 				C09631D027270FCC001DCD25 /* StyleFactory.swift in Sources */,
@@ -675,6 +679,7 @@
 				C09631E027305315001DCD25 /* NumberSystemFactory.swift in Sources */,
 				C077CF7124DC987B008E5F0F /* Settings.swift in Sources */,
 				C070ED2624DB0ED400A04463 /* SettingsView.swift in Sources */,
+				C09623192A041A1800E6C08F /* Calculator.swift in Sources */,
 				C09631D427271A4D001DCD25 /* StyleStorage.swift in Sources */,
 				C00616A827064449007BEF89 /* OctHexHelper.swift in Sources */,
 				C052270F27978F6800B7E384 /* UIBarButtonItem.swift in Sources */,

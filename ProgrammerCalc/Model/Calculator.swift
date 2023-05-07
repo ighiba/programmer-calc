@@ -2,231 +2,183 @@
 //  Calculator.swift
 //  ProgrammerCalc
 //
-//  Created by Ivan Ghiba on 12.10.2021.
-//  Copyright © 2021 ighiba. All rights reserved.
+//  Created by Ivan Ghiba on 04.05.2023.
+//  Copyright © 2023 ighiba. All rights reserved.
 //
 
 import UIKit
 
 protocol CalculatorProtocol {
-    var inputValue: NumberSystemProtocol! { get set }
-    // State for calculating numbers
-    var mathState: MathStateProtocol? { get set }
+    var currentValue: PCDecimal { get set }
+    var operation: Calculator.CalcOperation? { get set }
 }
 
 class Calculator: CalculatorProtocol {
     
+    class CalcOperation {
+        var current: CalcMath.OperationType
+        var previousValue: PCDecimal?
+        var inputStart: Bool = false
+        
+        init(previousValue: PCDecimal, current: CalcMath.OperationType) {
+            self.previousValue = previousValue
+            self.current = current
+        }
+    }
+    
     // MARK: - Properties
     
-    // Object "Converter"
-    private let converter: Converter = Converter()
-    // Object "CalcMath"
-    private let calculationHandler: CalcMath = CalcMath()
-    // Factory for NumberSystem from String value
-    let numberSystemFactory: NumberSystemFactory = NumberSystemFactory()
+    var hasPendingOperation: Bool {
+        if let operation = self.operation {
+            return operation.current != .none
+        } else {
+            return false
+        }
+    }
     
-    var inputValue: NumberSystemProtocol!
-    var mathState: MathStateProtocol?
+    private let converter: Converter = Converter()
+    private let calculationHandler: CalcMath = CalcMath()
+    
+    var mainLabelDelegate: CalcualtorLabelDelegate!
+    var converterLabelDelegate: CalcualtorLabelDelegate!
+
+    let numberSystemFactory: NumberSystemFactory = NumberSystemFactory()
+    let operationFactory: OperationFactory = OperationFactory()
+    
+    var currentValue: PCDecimal = PCDecimal(0)
+    var operation: CalcOperation?
     
     private let conversionSettings: ConversionSettings = ConversionSettings.shared
     private let calcState: CalcState = CalcState.shared
     private let wordSize: WordSize = WordSize.shared
     private let settings: Settings = Settings.shared
-    
-    // Taptic feedback generator for Errors
+
     private let errorGenerator = UINotificationFeedbackGenerator()
     
     // MARK: - Initialization
     
     init() {
-
-        // update mainLabel numberValue (inputValue)
+        self.currentValue = PCDecimal(0)
+        
         if let numValue = numberSystemFactory.get(strValue: calcState.mainLabelState, currentSystem: conversionSettings.systemMain) {
-            inputValue = numValue
+            let decValue = (converter.convertValue(value: numValue, to: .dec, format: true) as! DecimalSystem).decimalValue
+            self.currentValue.updateValue(decValue)
         }
     }
-    
     
     // MARK: - Methods
     
-    // Calculate result
-    fileprivate func calculateBuffWith(_ inputValue: NumberSystemProtocol, _  operation: CalcMath.Operation) -> String {
-        var resultStr = String()
-        // chek if math statate != nil
-        guard self.mathState != nil else {
-            self.mathState = MathState(buffValue: self.inputValue, operation: operation)
-            return inputValue.value
-        }
+    public func getOperation(with buttonText: String) -> CalcMath.OperationType {
+        return self.operationFactory.get(buttonLabel: buttonText)
+    }
+    
+    public func setOperation(with buttonText: String) {
+        let operationType = getOperation(with: buttonText)
+        self.operation = CalcOperation(previousValue: PCDecimal(value: self.currentValue.getDecimal()) , current: operationType)
+    }
+    
+    public func calculate() {
+        guard self.operation != nil else { return }
         
-        var result: NumberSystemProtocol?
-        // Try calculate
-        // And handle errors
         do {
-            // process claculation buff values and previous operations
-            result = try calculationHandler.calculate(firstValue: self.mathState!.buffValue, operation: self.mathState!.operation, secondValue: inputValue, for: conversionSettings.systemMain)
+            let result = try self.calculateCurrentValue()
+            result.fixOverflow(bitWidth: self.wordSize.value, processSigned: self.calcState.processSigned)
+            self.operation?.previousValue = PCDecimal(value: result.getDecimal())
+            self.operation?.inputStart = false
+            self.currentValue = result
         } catch MathErrors.divByZero {
-            // if division by zero
-            self.mathState = nil
-            self.inputValue = nil
-            // return message in labels
-            let errorStr = MathErrors.divByZero.localizedDescription ?? NSLocalizedString("Cannot divide by zero", comment: "")
-            // haptic feedback
-            if settings.hapticFeedback {
-                errorGenerator.notificationOccurred(.error)
-            }
-            
-            return errorStr
+            self.resetCalculation()
+            self.currentValue = PCDecimal(value: 0.0)
+            self.setErrorInLabels(.divByZero)
+            self.showErrorInLabels(.divByZero)
         } catch {
-            // else
+            
         }
-        
-        // if result not error and not nil
-        if let res = result {
-            self.mathState = nil
-            self.mathState = MathState(buffValue: inputValue, operation: operation)
-            self.mathState?.lastResult = res
-            resultStr = res.value
+    }
+    
+    private func showErrorInLabels(_ error: MathErrors) {
+        self.mainLabelDelegate.showErrorInLabel(error.localizedDescription!)
+        self.converterLabelDelegate.showErrorInLabel("NaN")
+    }
+    
+    private func setErrorInLabels(_ error: MathErrors) {
+        self.mainLabelDelegate.setError(error)
+        self.converterLabelDelegate.setError(error)
+    }
+    
+    func calculateCurrentValue() throws -> PCDecimal {
+        guard let currentOperation = self.operation?.current else {
+            return self.currentValue
         }
 
-        return resultStr
-    }
-    
-    public func calculateResult( inputValue: NumberSystemProtocol, operation: CalcMath.Operation) -> String {
-        if isBitwiseOperation(operation) {
-            return calculateSoloBitwise(inputValue, operation)
-        } else {
-            return calculateBuffWith(inputValue, operation)
-        }
-    }
-    
-    private func isBitwiseOperation(_ operation: CalcMath.Operation) -> Bool {
-        return operation == .shiftLeft || operation == .shiftRight
-    }
-    
-    fileprivate func calculateSoloBitwise(_ inputValue: NumberSystemProtocol, _ operation: CalcMath.Operation) -> String {
-        return calculationHandler.shiftBits(number: inputValue, mainSystem: conversionSettings.systemMain, shiftOperation: operation, shiftCount: DecimalSystem(1))!.value
-    }
-    
-    // Convert operation name from button title to enum
-    func getOperationBy(string: String) -> CalcMath.Operation? {
-        switch string {
-        case "÷":
-            return.div
-        case "×":
-            return .mul
-        case "-":
-            return .sub
-        case "+":
-            return .add
-        case "X<<Y":
-            return .shiftLeftBy
-        case "X>>Y":
-            return .shiftRightBy
-        case "<<":
-            return .shiftLeft
-        case ">>":
-            return .shiftRight
-        case "AND":
-            return .and
-        case "OR":
-            return .or
-        case "XOR":
-            return .xor
-        case "NOR":
-            return .nor
+        switch currentOperation {
+        case .shiftLeft:
+            return self.currentValue << 1
+        case .shiftRight:
+            return self.currentValue >> 1
         default:
-            return nil
-        }
-    }
-    
-    // Check if given number more than current settings allows
-    public func isValueOverflowed(value: String, for system: ConversionSystemsEnum) -> Bool {
-        if hasFloatingPoint(value) {
-            return isFloatValueOverflowed(value)
-        } else {
-            let buffValue = numberSystemFactory.get(strValue: value, currentSystem: system)
-            guard buffValue != nil else { return true }
-            // Convert number to Binary without formatting
-            let bin = buffValue!.toBinary()
-            bin.value = bin.value.removeAllSpaces()
-            
-            return isNonFloatBinOverflowed(bin)
-        }
-    }
-    
-    private func hasFloatingPoint(_ value: String) -> Bool {
-        return value.contains(".")
-    }
-    
-    private func isFloatValueOverflowed(_ value: String) -> Bool {
-        // input allowed if last symol is "."
-        guard value.last != "." else { return false }
-        // check if fract part fits in numbersAfterPoint setting
-        let testStr = value.removeAllSpaces()
-        let numbersAfterPoint = Int(conversionSettings.numbersAfterPoint)
-        let fractPartCount = testStr.getPartAfter(separator: ".").count
-        // compare values
-        return fractPartCount <= numbersAfterPoint ? false : true
-    }
-    
-    private func isNonFloatBinOverflowed(_ bin: Binary) -> Bool {
-        // check if binary has minimal possible signed value with current wordsize
-        // if true, then is overflowed
-        if checkIfMinSigned(bin) {
-            return true
+            break
         }
         
-        // check decimal overflowing
-        if conversionSettings.systemMain == .dec && decChangedSign(bin) {
-            return true
+        guard let previousValue = self.operation?.previousValue else {
+            return self.currentValue
         }
         
-        var testStr = bin.removeZerosBefore(str: bin.value)
-        
-        if bin.isSigned {
-            bin.twosComplement() // convert to positive value
-            testStr = bin.removeZerosBefore(str: bin.value)
+        switch currentOperation {
+        case .add:
+            return previousValue + self.currentValue
+        case .sub:
+            return previousValue - self.currentValue
+        case .mul:
+            return previousValue * self.currentValue
+        case .div:
+            if self.currentValue != PCDecimal(0) {
+                return previousValue / self.currentValue
+            } else {
+                throw MathErrors.divByZero
+            }
+        case .shiftLeftBy:
+            return previousValue << self.currentValue
+        case .shiftRightBy:
+            return previousValue >> self.currentValue
+        case .and:
+            return previousValue & self.currentValue
+        case .or:
+            return previousValue | self.currentValue
+        case .xor:
+            return previousValue ^ self.currentValue
+        case .nor:
+            return ~(previousValue ^ self.currentValue)
+        default:
+            return self.currentValue
         }
-        
-        return testStr.count <= wordSize.value ? false : true
     }
     
-    private func checkIfMinSigned(_ bin: Binary) -> Bool {
-        if calcState.processSigned && bin.value.count >= wordSize.value && binIsSigned(bin) {
-            var testStr = String()
-            let binBuff = Binary(bin)
-            binBuff.twosComplement()
-            // remove first signed bit
-            binBuff.value.removeFirst(1)
-            testStr = binBuff.removeZerosBefore(str: binBuff.value)
-            // if == 0 then overflowed (min signed)
-            guard testStr != "0" else { return true }
+    public func updateCurrentValue(_ value: NumberSystemProtocol) {
+        guard let decSystemValue = self.converter.convertValue(value: value, to: .dec, format: true) as? DecimalSystem else {
+            return
         }
-        return false
+        self.currentValue.updateValue(decSystemValue.decimalValue)
     }
     
-    private func binIsSigned(_ bin: Binary) -> Bool {
-        return bin.value.first! == "1" ? true : false
+    public func getMainLabelValue() -> NumberSystemProtocol? {
+        return converter.convertValue(value: self.currentValue, to: self.conversionSettings.systemMain, format: true)
     }
     
-    private func decChangedSign(_ bin: Binary) -> Bool {
-        let oldValue = inputValue as? DecimalSystem ?? DecimalSystem(0)
-        bin.updateSignedState()
-        let newValue = converter.convertValue(value: bin, to: .dec, format: true) as? DecimalSystem ?? DecimalSystem(0)
-        // compare old value and new value
-        // overflow if signs don't match
-        if oldValue.isSigned != newValue.isSigned {
-            return true
-        }
-        return false
+    public func getConvertedLabelValue() -> NumberSystemProtocol? {
+        return converter.convertValue(value: self.currentValue, to: self.conversionSettings.systemConverter, format: true)
     }
     
-    func negateValue(value: NumberSystemProtocol, system: ConversionSystemsEnum) -> String {
-        return calculationHandler.negate(value: value, system: system).value
+    public func resetCalculation() {
+        self.operation = nil
+    }
+    
+    public func negateCurrentValue() {
+        self.currentValue = -self.currentValue
     }
     
     // For updating input main label
-    func processStrInputToFormat(inputStr: String, for system: ConversionSystemsEnum) -> String {
+    public func processStrInputToFormat(inputStr: String, for system: ConversionSystemsEnum) -> String {
         var processedStr = String()
         
         // ==================
@@ -300,13 +252,16 @@ class Calculator: CalculatorProtocol {
             processedStr = bin.value
         } else if system == .dec && testLabelStr.contains(".") {
             // Updating dec for values with floating point
-            processedStr = converter.processDecFloatStrToFormat(decStr: inputValue.value, lastDotIfExists: lastSymbolsIfExists)
-        } else if inputValue != nil {
+            processedStr = converter.processDecFloatStrToFormat(decStr: self.currentValue.description, lastDotIfExists: lastSymbolsIfExists)
+        } else {
             // Convert value in binary
             // process binary raw string input in new binary with current settings: processSigned, wordSize etc.
             // convert back in systemMain value and set new value in mainLabel
-            let bin = converter.convertValue(value: inputValue, to: .bin, format: true) as! Binary
+            let value = self.numberSystemFactory.get(strValue: inputStr, currentSystem: self.conversionSettings.systemMain)!
+            let bin = converter.convertValue(value: value, to: .bin, format: true) as! Binary
             let updatedValue = converter.convertValue(value: bin, to: system, format: true)
+            let dec = converter.convertValue(value: bin, to: .dec, format: true) as! DecimalSystem
+            self.currentValue.updateValue(dec.decimalValue)
             processedStr = updatedValue!.value
             
             // compose new str value if exists
@@ -357,4 +312,87 @@ class Calculator: CalculatorProtocol {
         }
         return result
     }
+    
+    // Check if given number more than current settings allows
+    public func isInputOverflowed(value: String, for system: ConversionSystemsEnum) -> Bool {
+        if hasFloatingPoint(value) {
+            return isFloatInputOverflowed(value)
+        } else {
+            let buffValue = numberSystemFactory.get(strValue: value, currentSystem: system)
+            guard buffValue != nil else { return true }
+            // Convert number to Binary without formatting
+            let bin = buffValue!.toBinary()
+            bin.value = bin.value.removeAllSpaces()
+            
+            return isNonFloatBinOverflowed(bin)
+        }
+    }
+    
+    private func hasFloatingPoint(_ value: String) -> Bool {
+        return value.contains(".")
+    }
+    
+    private func isFloatInputOverflowed(_ value: String) -> Bool {
+        // input allowed if last symol is "."
+        guard value.last != "." else { return false }
+        // check if fract part fits in numbersAfterPoint setting
+        let testStr = value.removeAllSpaces()
+        let numbersAfterPoint = Int(conversionSettings.numbersAfterPoint)
+        let fractPartCount = testStr.getPartAfter(separator: ".").count
+        // compare values
+        return fractPartCount <= numbersAfterPoint ? false : true
+    }
+    
+    private func isNonFloatBinOverflowed(_ bin: Binary) -> Bool {
+        // check if binary has minimal possible signed value with current wordsize
+        // if true, then is overflowed
+        if checkIfMinSigned(bin) {
+            return true
+        }
+        
+        // check decimal overflowing
+        if conversionSettings.systemMain == .dec && decChangedSign(bin) {
+            return true
+        }
+        
+        var testStr = bin.removeZerosBefore(str: bin.value)
+        
+        if bin.isSigned {
+            bin.twosComplement() // convert to positive value
+            testStr = bin.removeZerosBefore(str: bin.value)
+        }
+        
+        return testStr.count <= wordSize.value ? false : true
+    }
+    
+    private func checkIfMinSigned(_ bin: Binary) -> Bool {
+        if calcState.processSigned && bin.value.count >= wordSize.value && binIsSigned(bin) {
+            var testStr = String()
+            let binBuff = Binary(bin)
+            binBuff.twosComplement()
+            // remove first signed bit
+            binBuff.value.removeFirst(1)
+            testStr = binBuff.removeZerosBefore(str: binBuff.value)
+            // if == 0 then overflowed (min signed)
+            guard testStr != "0" else { return true }
+        }
+        return false
+    }
+    
+    private func binIsSigned(_ bin: Binary) -> Bool {
+        return bin.value.first! == "1" ? true : false
+    }
+    
+    private func decChangedSign(_ bin: Binary) -> Bool {
+        let oldValue = DecimalSystem(self.currentValue)
+        bin.updateSignedState()
+        let newValue = converter.convertValue(value: bin, to: .dec, format: true) as? DecimalSystem ?? DecimalSystem(0)
+        // compare old value and new value
+        // overflow if signs don't match
+        if oldValue.isSigned != newValue.isSigned {
+            return true
+        }
+        return false
+    }
+    
 }

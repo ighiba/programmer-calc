@@ -15,6 +15,7 @@ class CalculatorTests: XCTestCase {
     var conversionStorage: ConversionStorageProtocol? = ConversionStorage()
     let calcStateStorage: CalcStateStorageProtocol? = CalcStateStorage()
     
+    var legacyCalculatorTest: LegacyCalculator!
     var calculatorTest: Calculator!
     
     let unsignedData = CalcState(mainState: "0", convertState: "0", processSigned: false)
@@ -30,6 +31,7 @@ class CalculatorTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
+        legacyCalculatorTest = LegacyCalculator()
         calculatorTest = Calculator()
         let dummyConversionSettings = ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
         conversionStorage?.saveData(dummyConversionSettings)
@@ -37,227 +39,74 @@ class CalculatorTests: XCTestCase {
     }
     
     override func tearDown() {
-        calculatorTest = nil
+        legacyCalculatorTest = nil
         super.tearDown()
     }
     
-    // MARK: - Negate BIN
+    // MARK: - Negate
     
-    func testNegateValueBIN_BYTE() throws {
+    func testNegateCurrentValue_BYTE() throws {
         // 1. given
         calcState.setCalcState(signedData)
         wordSize.setWordSize(byte)
-        let testValue = Binary(stringLiteral: "00001100")
+        let testValue = PCDecimal(12)
         
         // 2. when
-        let result = calculatorTest.negateValue(value: testValue, system: .bin)
-        
-        // 3. then
-        XCTAssertEqual(result, "11110100", "Negation failure")
-    }
+        calculatorTest.currentValue = testValue
+        calculatorTest.negateCurrentValue()
+        let result = calculatorTest.currentValue.getDecimal()
 
-    func testNegateValueBIN_WORD() throws {
+        // 3. then
+        XCTAssertEqual(result, -12.0, "Negation failure")
+    }
+    
+    func testNegateCurrentValue_WORD() throws {
         // 1. given
         calcState.setCalcState(signedData)
         wordSize.setWordSize(word)
-        let testValue = Binary(stringLiteral: "00001100")
+        let testValue = PCDecimal(32767)
         
         // 2. when
-        let result = calculatorTest.negateValue(value: testValue, system: .bin)
+        calculatorTest.currentValue = testValue
+        calculatorTest.negateCurrentValue()
+        let result = calculatorTest.currentValue.getDecimal()
         
         // 3. then
-        XCTAssertEqual(result, "1111111111110100", "Negation failure")
+        XCTAssertEqual(result, -32767.0, "Negation failure")
     }
     
-    func testNegateValueBIN_DWORD() throws {
+    func testNegateCurrentValue_DWORD() throws {
         // 1. given
         calcState.setCalcState(signedData)
         wordSize.setWordSize(dword)
-        let testValue = Binary(stringLiteral: "00001100")
+        let testValue = PCDecimal(2147483647)
         
         // 2. when
-        let result = calculatorTest.negateValue(value: testValue, system: .bin)
-        
+        calculatorTest.currentValue = testValue
+        calculatorTest.negateCurrentValue()
+        let result = calculatorTest.currentValue.getDecimal()
+
         // 3. then
-        XCTAssertEqual(result, "11111111111111111111111111110100", "Negation failure")
+        XCTAssertEqual(result, -2147483647.0, "Negation failure")
     }
     
-    func testNegateValueBIN_QWORD() throws {
+    func testNegateCurrentValueFail_QWORD() throws {
         // 1. given
         calcState.setCalcState(signedData)
         wordSize.setWordSize(qword)
-        let testValue = Binary(stringLiteral: "00001100")
+        let testValue = PCDecimal(value: Decimal(string: "-9223372036854775808")!)
         
         // 2. when
-        let result = calculatorTest.negateValue(value: testValue, system: .bin)
-        
+        calculatorTest.currentValue = testValue
+        calculatorTest.negateCurrentValue()
+        calculatorTest.currentValue.fixOverflow(bitWidth: qword.value, processSigned: true)
+        let result = calculatorTest.currentValue.getDecimal()
+
         // 3. then
-        XCTAssertEqual(result, "1111111111111111111111111111111111111111111111111111111111110100", "Negation failure")
-    }
-    
-    // MARK: - Negate DEC
-    
-    func testNegateValueDEC_BYTE() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(byte)
-        let testValue = DecimalSystem(12)
-        
-        // 2. when
-        let result = calculatorTest.negateValue(value: testValue, system: .dec)
-        
-        // 3. then
-        XCTAssertEqual(result, "-12", "Negation failure")
+        XCTAssertEqual(result.description, "-9223372036854775808", "Negation failure")
     }
 
-    func testNegateValueDEC_WORD() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(word)
-        let testValue = DecimalSystem(-12)
-        
-        // 2. when
-        let result = calculatorTest.negateValue(value: testValue, system: .dec)
-        
-        // 3. then
-        XCTAssertEqual(result, "12", "Negation failure")
-    }
-    
-    func testNegateValueDEC_DWORD() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(dword)
-        let testValue = DecimalSystem(256)
-        
-        // 2. when
-        let result = calculatorTest.negateValue(value: testValue, system: .dec)
-        
-        // 3. then
-        XCTAssertEqual(result, "-256", "Negation failure")
-    }
-    
-    func testNegateValueDEC_QWORD() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(qword)
-        let testValue = DecimalSystem(-123456789)
-        
-        // 2. when
-        let result = calculatorTest.negateValue(value: testValue, system: .dec)
-        
-        // 3. then
-        XCTAssertEqual(result, "123456789", "Negation failure")
-    }
-    
-    // MARK: - Negate OCT
-    
-    func testNegateValueOCT_BYTE() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(byte)
-        let testValue = Octal(stringLiteral: "357") // - 17
-        
-        // 2. when
-        let result = calculatorTest.negateValue(value: testValue, system: .oct)
-        
-        // 3. then
-        XCTAssertEqual(result, "21", "Negation failure")
-    }
-
-    func testNegateValueOCT_WORD() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(word)
-        let testValue = Octal(stringLiteral: "357") // 239
-        
-        // 2. when
-        let result = calculatorTest.negateValue(value: testValue, system: .oct)
-        
-        // 3. then
-        XCTAssertEqual(result, "177421", "Negation failure")
-    }
-    
-    func testNegateValueOCT_DWORD() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(dword)
-        let testValue = Octal(stringLiteral: "357") // 239
-        
-        // 2. when
-        let result = calculatorTest.negateValue(value: testValue, system: .oct)
-        
-        // 3. then
-        XCTAssertEqual(result, "37777777421", "Negation failure")
-    }
-    
-    func testNegateValueOCT_QWORD() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(qword)
-        let testValue = Octal(stringLiteral: "1777777777777777777421") // -239
-        
-        // 2. when
-        let result = calculatorTest.negateValue(value: testValue, system: .oct)
-        
-        // 3. then
-        XCTAssertEqual(result, "357", "Negation failure") // 239
-    }
-    
-    // MARK: - Negate HEX
-    
-    func testNegateValueHEX_BYTE() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(byte)
-        let testValue = Hexadecimal(stringLiteral: "AA") // - 86
-        
-        // 2. when
-        let result = calculatorTest.negateValue(value: testValue, system: .hex)
-        
-        // 3. then
-        XCTAssertEqual(result, "56", "Negation failure")
-    }
-
-    func testNegateValueHEX_WORD() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(word)
-        let testValue = Hexadecimal(stringLiteral: "DAA9") // -9559
-        
-        // 2. when
-        let result = calculatorTest.negateValue(value: testValue, system: .hex)
-        
-        // 3. then
-        XCTAssertEqual(result, "2557", "Negation failure")
-    }
-    
-    func testNegateValueHEX_DWORD() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(dword)
-        let testValue = Hexadecimal(stringLiteral: "89632557") // -1989991081
-        
-        // 2. when
-        let result = calculatorTest.negateValue(value: testValue, system: .hex)
-        
-        // 3. then
-        XCTAssertEqual(result, "769CDAA9", "Negation failure")
-    }
-    
-    func testNegateValueHEX_QWORD() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(qword)
-        let testValue = Hexadecimal(stringLiteral: "FFFFFFFF769CDAA9") // -2304976215
-        
-        // 2. when
-        let result = calculatorTest.negateValue(value: testValue, system: .hex)
-        
-        // 3. then
-        XCTAssertEqual(result, "89632557", "Negation failure") // 239
-    }
-    
-    // MARK: - isValueOverflowed
+    // MARK: - isInputOverflowed
     
     func testIsFloatValueOverflowed_OK() throws {
         // 1. given
@@ -266,20 +115,20 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "127.12345678")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
+        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, false, "Calculation failure")
     }
     
-    func testIsFloatValueOverflowed_EROOR() throws {
+    func testIsFloatValueOverflowed_ERROR() throws {
         // 1. given
         calcState.setCalcState(signedData)
         wordSize.setWordSize(byte)
         let testValue = DecimalSystem(stringLiteral: "127.123456789")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
+        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, true, "Calculation failure")
@@ -292,7 +141,7 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "127")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
+        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, false, "Calculation failure")
@@ -305,7 +154,7 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "128")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
+        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, true, "Calculation failure")
@@ -318,7 +167,7 @@ class CalculatorTests: XCTestCase {
         let testValue = Binary(stringLiteral: "100000000")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .bin)
+        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .bin)
         
         // 3. then
         XCTAssertEqual(result, true, "Calculation failure")
@@ -331,7 +180,7 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "32767")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
+        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, false, "Calculation failure")
@@ -344,7 +193,7 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "32768")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
+        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, true, "Calculation failure")
@@ -357,7 +206,7 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "2147483647")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
+        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, false, "Calculation failure")
@@ -370,7 +219,7 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "2147483648")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
+        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, true, "Calculation failure")
@@ -383,7 +232,7 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "9223372036854775807")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
+        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, false, "Calculation failure")
@@ -396,7 +245,7 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "9223372036854775808")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
+        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, true, "Calculation failure")
@@ -409,7 +258,7 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "18446744073709551615")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
+        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, false, "Calculation failure")
@@ -422,7 +271,7 @@ class CalculatorTests: XCTestCase {
         let testValue = DecimalSystem(stringLiteral: "18446744073709551616")
         
         // 2. when
-        let result = calculatorTest.isValueOverflowed(value: testValue.value, for: .dec)
+        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
         
         // 3. then
         XCTAssertEqual(result, true, "Calculation failure")

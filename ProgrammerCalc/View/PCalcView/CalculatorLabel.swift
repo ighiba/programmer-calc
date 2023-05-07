@@ -13,7 +13,12 @@ protocol UpdatableLabel: UILabel {
     var updateHandler: ((UpdatableLabel) -> Void)? { get set }
 }
 
-class CalcualtorLabel: UILabel, UpdatableLabel {
+protocol CalcualtorLabelDelegate {
+    func setError(_ error: MathErrors)
+    func showErrorInLabel(_ errorMessage: String)
+}
+
+class CalcualtorLabel: UILabel, UpdatableLabel, CalcualtorLabelDelegate {
 
     // ==================
     // MARK: - Properties
@@ -32,9 +37,12 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
     
     override var text: String? {
         didSet {
+            //print(self.text)
             self.updateHandler?(self)
         }
     }
+    
+    var error: MathErrors?
     
     var hasErrorMessage: Bool {
         for error in MathErrors.allCases where self.text == error.localizedDescription {
@@ -187,6 +195,27 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
             return text.contains(".")
         }
         return false
+    }
+    
+    func setError(_ error: MathErrors) {
+        self.error = error
+    }
+    
+    func resetError() {
+        self.error = nil
+    }
+
+    func showErrorInLabel(_ errorMessage: String = "Error") {
+        guard errorMessage == "Error" else {
+            self.text = errorMessage
+            return
+        }
+        
+        if let error = self.error {
+            self.text = error.localizedDescription!
+        } else {
+            self.text = errorMessage
+        }
     }
 
 }

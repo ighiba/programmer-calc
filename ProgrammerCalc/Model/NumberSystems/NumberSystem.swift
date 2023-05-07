@@ -18,4 +18,3 @@ protocol NumberSystemProtocol {
 
     func toBinary() -> Binary
 }
-
