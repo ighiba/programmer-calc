@@ -39,8 +39,8 @@ class Calculator: CalculatorProtocol {
     private let converter: Converter = Converter()
     private let calculationHandler: CalcMath = CalcMath()
     
-    var mainLabelDelegate: CalcualtorLabelDelegate!
-    var converterLabelDelegate: CalcualtorLabelDelegate!
+    var mainLabelDelegate: CalculatorLabelDelegate!
+    var converterLabelDelegate: CalculatorLabelDelegate!
 
     let numberSystemFactory: NumberSystemFactory = NumberSystemFactory()
     let operationFactory: OperationFactory = OperationFactory()

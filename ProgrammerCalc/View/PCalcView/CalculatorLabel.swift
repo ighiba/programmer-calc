@@ -13,12 +13,12 @@ protocol UpdatableLabel: UILabel {
     var updateHandler: ((UpdatableLabel) -> Void)? { get set }
 }
 
-protocol CalcualtorLabelDelegate {
+protocol CalculatorLabelDelegate {
     func setError(_ error: MathErrors)
     func showErrorInLabel(_ errorMessage: String)
 }
 
-class CalcualtorLabel: UILabel, UpdatableLabel, CalcualtorLabelDelegate {
+class CalculatorLabel: UILabel, UpdatableLabel, CalculatorLabelDelegate {
 
     // ==================
     // MARK: - Properties

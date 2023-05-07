@@ -172,8 +172,8 @@ class PCalcView: UIView {
     }()
    
     // Label wich shows user input
-    lazy var mainLabel: CalcualtorLabel = {
-        let label = CalcualtorLabel()
+    lazy var mainLabel: CalculatorLabel = {
+        let label = CalculatorLabel()
         
         label.frame = CGRect()
         label.text = "0"
@@ -191,8 +191,8 @@ class PCalcView: UIView {
     }()
     
     // Label wich shows converted values from user input
-    lazy var converterLabel: CalcualtorLabel = {
-        let label = CalcualtorLabel()
+    lazy var converterLabel: CalculatorLabel = {
+        let label = CalculatorLabel()
         
         label.frame = CGRect()
         label.text = "0"

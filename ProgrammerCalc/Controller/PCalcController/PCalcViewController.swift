@@ -37,9 +37,9 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     // Views
     let calcView: PCalcView = PCalcView()
     // input label
-    lazy var mainLabel: CalcualtorLabel = calcView.mainLabel
+    lazy var mainLabel: CalculatorLabel = calcView.mainLabel
     // output label
-    lazy var converterLabel: CalcualtorLabel = calcView.converterLabel
+    lazy var converterLabel: CalculatorLabel = calcView.converterLabel
     // array of pages with calc buttons
     private var arrayButtonsStack: [CalcButtonsPage] = [ CalcButtonsAdditional(), CalcButtonsMain() ]
     // additional bitwise keypad for input
