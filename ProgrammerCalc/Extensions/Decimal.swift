@@ -9,6 +9,29 @@
 import Foundation
 
 extension Decimal {
+    var fractPartDigitCount: Int {
+        return self.fractPart.count
+    }
+    
+    var fractPart: String {
+        let components = self.description.components(separatedBy: ".")
+        if components.count > 1 {
+            return components[1]
+        }
+        return ""
+    }
+    
+    var intPart: UInt64 {
+        let roundingBehavior = NSDecimalNumberHandler(roundingMode: .plain,
+                                                      scale: 0,
+                                                      raiseOnExactness: false,
+                                                      raiseOnOverflow: false,
+                                                      raiseOnUnderflow: false,
+                                                      raiseOnDivideByZero: false)
+        let roundedUInt64 = NSDecimalNumber(decimal: self).rounding(accordingToBehavior: roundingBehavior).uint64Value
+        return roundedUInt64
+    }
+    
     // Converting binary string in decimal number
     init(_ str: String, radix: Int) {
         self.init()
@@ -21,6 +44,17 @@ extension Decimal {
             multiplier -= 1
         }
         self = decimal
+    }
+    
+    func round(scale: Int16, roundingModeMode: NSDecimalNumber.RoundingMode) -> Decimal {
+        let roundingBehavior = NSDecimalNumberHandler(roundingMode: roundingModeMode,
+                                                      scale: scale,
+                                                      raiseOnExactness: false,
+                                                      raiseOnOverflow: false,
+                                                      raiseOnUnderflow: false,
+                                                      raiseOnDivideByZero: false)
+        let rounded = NSDecimalNumber(decimal: self).rounding(accordingToBehavior: roundingBehavior).decimalValue
+        return rounded
     }
     
     // % for decimal values
