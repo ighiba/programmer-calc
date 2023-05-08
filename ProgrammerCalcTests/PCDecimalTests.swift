@@ -44,7 +44,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(0)
         
         // 2. when
-        let result = lhs / rhs
+        var result = lhs / rhs
         result.fixOverflow(bitWidth: byte.value, processSigned: true)
         
         // 3. then
@@ -59,7 +59,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(10)
         
         // 2. when
-        let result = lhs + rhs
+        var result = lhs + rhs
         result.fixOverflow(bitWidth: byte.value, processSigned: true)
         
         // 3. then
@@ -74,7 +74,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(10)
         
         // 2. when
-        let result = lhs - rhs
+        var result = lhs - rhs
         result.fixOverflow(bitWidth: byte.value, processSigned: true)
         
         // 3. then
@@ -89,7 +89,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(10)
         
         // 2. when
-        let result = lhs * rhs
+        var result = lhs * rhs
         result.fixOverflow(bitWidth: byte.value, processSigned: true)
         
         // 3. then
@@ -104,7 +104,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(10)
         
         // 2. when
-        let result = lhs / rhs
+        var result = lhs / rhs
         result.fixOverflow(bitWidth: byte.value, processSigned: true)
         
         // 3. then
@@ -119,7 +119,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(10)
         
         // 2. when
-        let result = lhs & rhs
+        var result = lhs & rhs
         result.fixOverflow(bitWidth: byte.value, processSigned: false)
         
         // 3. then
@@ -132,7 +132,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(4)
         
         // 2. when
-        let result = lhs & rhs
+        var result = lhs & rhs
         result.fixOverflow(bitWidth: byte.value, processSigned: true)
         
         // 3. then
@@ -147,7 +147,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(10)
         
         // 2. when
-        let result = lhs | rhs
+        var result = lhs | rhs
         result.fixOverflow(bitWidth: byte.value, processSigned: false)
         
         // 3. then
@@ -160,7 +160,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(4)
         
         // 2. when
-        let result = lhs | rhs
+        var result = lhs | rhs
         result.fixOverflow(bitWidth: byte.value, processSigned: true)
         
         // 3. then
@@ -175,7 +175,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(10)
         
         // 2. when
-        let result = lhs ^ rhs
+        var result = lhs ^ rhs
         result.fixOverflow(bitWidth: byte.value, processSigned: false)
         
         // 3. then
@@ -188,7 +188,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(99)
         
         // 2. when
-        let result = lhs ^ rhs
+        var result = lhs ^ rhs
         result.fixOverflow(bitWidth: byte.value, processSigned: true)
         
         // 3. then
@@ -203,7 +203,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(10)
         
         // 2. when
-        let  result = ~(lhs | rhs)
+        var result = ~(lhs | rhs)
         result.fixOverflow(bitWidth: byte.value, processSigned: false)
 
         // 3. then
@@ -216,7 +216,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(99)
         
         // 2. when
-        let result = ~(lhs | rhs)
+        var result = ~(lhs | rhs)
         result.fixOverflow(bitWidth: byte.value, processSigned: true)
         
         // 3. then
@@ -230,7 +230,7 @@ class PCDecimalTests: XCTestCase {
          let lhs = PCDecimal(12)
 
          // 2. when
-         let result = ~lhs
+         var result = ~lhs
          result.fixOverflow(bitWidth: byte.value, processSigned: false)
          
          // 3. then
@@ -242,7 +242,7 @@ class PCDecimalTests: XCTestCase {
          let lhs = PCDecimal(value: -16)
          
          // 2. when
-         let result = ~lhs
+         var result = ~lhs
          result.fixOverflow(bitWidth: byte.value, processSigned: true)
          
          // 3. then
@@ -256,7 +256,7 @@ class PCDecimalTests: XCTestCase {
         let lhs = PCDecimal(12)
         
         // 2. when
-        let result = lhs << 1
+        var result = lhs << 1
         result.fixOverflow(bitWidth: byte.value, processSigned: false)
         
         // 3. then
@@ -268,7 +268,7 @@ class PCDecimalTests: XCTestCase {
         let lhs = PCDecimal(value: -12)
         
         // 2. when
-        let result = lhs << 1
+        var result = lhs << 1
         result.fixOverflow(bitWidth: byte.value, processSigned: true)
         
         // 3. then
@@ -280,7 +280,7 @@ class PCDecimalTests: XCTestCase {
         let lhs = PCDecimal(12)
         
         // 2. when
-        let result = lhs >> 1
+        var result = lhs >> 1
         result.fixOverflow(bitWidth: byte.value, processSigned: false)
         
         // 3. then
@@ -292,7 +292,7 @@ class PCDecimalTests: XCTestCase {
         let lhs = PCDecimal(value: -12)
         
         // 2. when
-        let result = lhs >> 1
+        var result = lhs >> 1
         result.fixOverflow(bitWidth: byte.value, processSigned: true)
         
         // 3. then
@@ -304,7 +304,7 @@ class PCDecimalTests: XCTestCase {
         let lhs = PCDecimal(123456)
         
         // 2. when
-        let result = lhs >> 12
+        var result = lhs >> 12
         result.fixOverflow(bitWidth: dword.value, processSigned: false)
         
         // 3. then
@@ -316,7 +316,7 @@ class PCDecimalTests: XCTestCase {
         let lhs = PCDecimal(12)
         
         // 2. when
-        let result = lhs >> 2
+        var result = lhs >> 2
         result.fixOverflow(bitWidth: byte.value, processSigned: false)
         
         // 3. then
@@ -328,7 +328,7 @@ class PCDecimalTests: XCTestCase {
         let lhs = PCDecimal(12)
         
         // 2. when
-        let result = lhs << 12
+        var result = lhs << 12
         result.fixOverflow(bitWidth: dword.value, processSigned: true)
         
         // 3. then
@@ -340,7 +340,7 @@ class PCDecimalTests: XCTestCase {
         let lhs = PCDecimal(12)
         
         // 2. when
-        let result = lhs >> 2
+        var result = lhs >> 2
         result.fixOverflow(bitWidth: byte.value, processSigned: true)
         
         // 3. then
@@ -355,7 +355,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(4)
         
         // 2. when
-        let result = lhs * rhs
+        var result = lhs * rhs
         result.fixOverflow(bitWidth: byte.value, processSigned: true)
         
         // 3. then
@@ -368,7 +368,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(321)
         
         // 2. when
-        let result = lhs * rhs
+        var result = lhs * rhs
         result.fixOverflow(bitWidth: word.value, processSigned: true)
         
         // 3. then
@@ -381,7 +381,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(value: 123456789)
         
         // 2. when
-        let result = lhs + rhs
+        var result = lhs + rhs
         result.fixOverflow(bitWidth: dword.value, processSigned: true)
         
         // 3. then
@@ -394,7 +394,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(value: Decimal(string: "999999999999999999")!)
 
         // 2. when
-        let result = lhs * rhs
+        var result = lhs * rhs
         result.fixOverflow(bitWidth: qword.value, processSigned: true)
         
         // 3. then
@@ -407,7 +407,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(4)
         
         // 2. when
-        let result = lhs * rhs
+        var result = lhs * rhs
         result.fixOverflow(bitWidth: byte.value, processSigned: false)
         
         // 3. then
@@ -420,7 +420,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(321)
         
         // 2. when
-        let result = lhs * rhs
+        var result = lhs * rhs
         result.fixOverflow(bitWidth: word.value, processSigned: false)
         
         // 3. then
@@ -433,7 +433,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(value: 123456789)
         
         // 2. when
-        let result = lhs + rhs
+        var result = lhs + rhs
         result.fixOverflow(bitWidth: dword.value, processSigned: false)
         
         // 3. then
@@ -446,7 +446,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(value: Decimal(string: "9999999999999999999")!)
         
         // 2. when
-        let result = lhs * rhs
+        var result = lhs * rhs
         result.fixOverflow(bitWidth: qword.value, processSigned: false)
         
         // 3. then
@@ -459,7 +459,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(4)
         
         // 2. when
-        let result = lhs * rhs
+        var result = lhs * rhs
         result.fixOverflow(bitWidth: byte.value, processSigned: true)
         
         // 3. then
@@ -472,7 +472,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(321)
         
         // 2. when
-        let result = lhs * rhs
+        var result = lhs * rhs
         result.fixOverflow(bitWidth: word.value, processSigned: true)
         
         // 3. then
@@ -485,7 +485,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(value: 123456789)
         
         // 2. when
-        let result = lhs + rhs
+        var result = lhs + rhs
         result.fixOverflow(bitWidth: dword.value, processSigned: true)
         
         // 3. then
@@ -498,7 +498,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(value: Decimal(string: "9876543210")!)
 
         // 2. when
-        let result = lhs * rhs
+        var result = lhs * rhs
         result.fixOverflow(bitWidth: qword.value, processSigned: true)
         
         // 3. then
@@ -511,7 +511,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(value: -123)
         
         // 2. when
-        let result = lhs * rhs
+        var result = lhs * rhs
         result.fixOverflow(bitWidth: byte.value, processSigned: false)
         
         // 3. then
@@ -524,7 +524,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(value: -2344)
         
         // 2. when
-        let result = lhs * rhs
+        var result = lhs * rhs
         result.fixOverflow(bitWidth: word.value, processSigned: false)
         
         // 3. then
@@ -537,7 +537,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(value: 2147483647)
         
         // 2. when
-        let result = lhs - rhs
+        var result = lhs - rhs
         result.fixOverflow(bitWidth: dword.value, processSigned: false)
         
         // 3. then
@@ -550,7 +550,7 @@ class PCDecimalTests: XCTestCase {
         let rhs = PCDecimal(value: Decimal(string: "9999999999999999999")!)
         
         // 2. when
-        let result = lhs * rhs
+        var result = lhs * rhs
         result.fixOverflow(bitWidth: qword.value, processSigned: false)
         
         // 3. then

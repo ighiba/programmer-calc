@@ -14,6 +14,9 @@ protocol UpdatableLabel: UILabel {
 }
 
 protocol CalculatorLabelDelegate {
+    var hasErrorMessage: Bool { get }
+    func getText(deleteSpaces: Bool) -> String
+    func setText(_ text: String)
     func setError(_ error: MathErrors)
     func showErrorInLabel(_ errorMessage: String)
 }
@@ -25,7 +28,7 @@ class CalculatorLabel: UILabel, UpdatableLabel, CalculatorLabelDelegate {
     // ==================
     
     var updateHandler: ((UpdatableLabel) -> Void)?
-    var numberValue: NumberSystemProtocol?
+
     // Font
     let fontName: String = "HelveticaNeue-Thin"
     // Sub label for displaying current system of label
@@ -72,10 +75,6 @@ class CalculatorLabel: UILabel, UpdatableLabel, CalculatorLabelDelegate {
     // ===============
     // MARK: - Methods
     // ===============
-    
-    func setNumberValue(_ value: NumberSystemProtocol) {
-        self.numberValue = value
-    }
     
     func addInfoLabel() {
         self.addSubview(infoSubLabel)
@@ -190,22 +189,27 @@ class CalculatorLabel: UILabel, UpdatableLabel, CalculatorLabelDelegate {
         undoHighlightLabel()
     }
     
-    public func containsFloatValues() -> Bool {
-        if let text = self.text {
-            return text.contains(".")
+    public func getText(deleteSpaces: Bool = false) -> String {
+        if deleteSpaces {
+            return self.text?.removeAllSpaces() ?? "0"
+        } else {
+            return self.text ?? "0"
         }
-        return false
     }
     
-    func setError(_ error: MathErrors) {
+    public func setText(_ text: String) {
+        self.text = text
+    }
+    
+    public func setError(_ error: MathErrors) {
         self.error = error
     }
     
-    func resetError() {
+    public func resetError() {
         self.error = nil
     }
 
-    func showErrorInLabel(_ errorMessage: String = "Error") {
+    public func showErrorInLabel(_ errorMessage: String = "Error") {
         guard errorMessage == "Error" else {
             self.text = errorMessage
             return

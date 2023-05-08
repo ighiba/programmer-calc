@@ -8,18 +8,23 @@
 
 import Foundation
 
-class PCDecimal: CustomStringConvertible, Equatable {
+struct PCDecimal: CustomStringConvertible, Equatable, Decodable, Encodable {
     
     // MARK: - Properties
+    
     var isSigned: Bool {
         return self.value < 0
     }
-
-    private var value: Decimal {
-        didSet {
-            //print("PCDecimal new value: \(self)")
-        }
+    
+    var hasFloatingPoint: Bool {
+        return self.value.description.contains(".")
     }
+    
+    var isSignedAndFloat: Bool {
+        return self.isSigned && self.hasFloatingPoint
+    }
+    
+    private var value: Decimal
 
     var description: String {
         return String(describing: value)
@@ -41,6 +46,10 @@ class PCDecimal: CustomStringConvertible, Equatable {
     
     static func + (lhs: PCDecimal, rhs: PCDecimal) -> PCDecimal {
         return PCDecimal(value: lhs.value + rhs.value)
+    }
+    
+    static func + (lhs: PCDecimal, rhs: Int) -> PCDecimal {
+        return PCDecimal(value: lhs.value + Decimal(rhs))
     }
     
     static func - (lhs: PCDecimal, rhs: PCDecimal) -> PCDecimal {
@@ -128,7 +137,7 @@ class PCDecimal: CustomStringConvertible, Equatable {
         return lhs.value < rhs.value
     }
     
-    public func fixOverflow(bitWidth: Int, processSigned: Bool) {
+    public mutating func fixOverflow(bitWidth: Int, processSigned: Bool) {
         let maxValue = processSigned ? pow(Decimal(2), bitWidth-1) - 1 : pow(Decimal(2), bitWidth) - 1
         let minValue = processSigned ? pow(Decimal(-2), bitWidth-1) : 0
         
@@ -151,7 +160,7 @@ class PCDecimal: CustomStringConvertible, Equatable {
         }
     }
     
-    public func updateValue(_ newValue: Decimal) {
+    public mutating func updateValue(_ newValue: Decimal) {
         self.value = newValue
     }
     

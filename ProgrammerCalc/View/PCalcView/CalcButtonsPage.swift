@@ -239,7 +239,6 @@ class CalcButtonsMain: CalcButtonsPage {
         self.addSubview(buttonsStackView)
     }
     
-    
     // Standart calculator buttons
     private func getButtons() {
         
@@ -257,7 +256,7 @@ class CalcButtonsMain: CalcButtonsPage {
             let button: CalculatorButton
 
             // initialize button by type
-            switch title{
+            switch title {
             case "0"..."9",".":
                 button = CalculatorButton(calcButtonType: .numeric)
             case "Signed\nOFF":
@@ -271,7 +270,6 @@ class CalcButtonsMain: CalcButtonsPage {
                 button.addTarget(nil, action: #selector(PCalcViewController.negateButtonTapped), for: .touchUpInside)
             case "=":
                 button = CalculatorButton(calcButtonType: .sign)
-                button.removeTarget(nil, action: #selector(PCalcViewController.signButtonTapped), for: .touchUpInside)
                 button.addTarget(nil, action: #selector(PCalcViewController.calculateButtonTapped), for: .touchUpInside)
             default:
                 button = CalculatorButton(calcButtonType: .sign)
@@ -293,6 +291,8 @@ class CalcButtonsMain: CalcButtonsPage {
             // button tags start from 100 to 118
             button.tag = buttonTag
             buttonTag += 1
+            
+            button.accessibilityIdentifier = title
             
             // add element to array
             buttons.append(button)
@@ -355,14 +355,11 @@ class CalcButtonsAdditional: CalcButtonsPage {
 
     // Standart calculator buttons
     private func getButtons() {
-        // localization for 1's and 2's
-        let oneS = NSLocalizedString("1's", comment: "")
-        let twoS = NSLocalizedString("2's", comment: "")
         
         let allTitles = ["AND","OR","XOR","NOR",
                          "X<<Y", "X>>Y", "<<", ">>",
-                         oneS, "D", "E", "F",
-                         twoS, "A", "B", "C",
+                         "1's", "D", "E", "F",
+                         "2's", "A", "B", "C",
                          "00", "FF"]
                     
         var buttonTag: Int = 200
@@ -376,7 +373,7 @@ class CalcButtonsAdditional: CalcButtonsPage {
             switch title{
             case "A","B","C","D","E","F","00","FF":
                 button = CalculatorButton(calcButtonType: .numeric)
-            case oneS, twoS:
+            case "1's", "2's":
                 button = CalculatorButton(calcButtonType: .complement)
             case "X<<Y", "X>>Y", "<<", ">>", "AND", "OR", "XOR", "NOR":
                 button = CalculatorButton(calcButtonType: .bitwise)
@@ -387,7 +384,13 @@ class CalcButtonsAdditional: CalcButtonsPage {
             button.setActions(for: button.calcButtonType)
             
             // set title and style
-            button.setTitle(title, for: .normal)
+            if title == "1's" || title == "2's" {
+                // localization for 1's and 2's
+                let localizedTitle = NSLocalizedString(title, comment: "")
+                button.setTitle(localizedTitle, for: .normal)
+            } else {
+                button.setTitle(title, for: .normal)
+            }
 
             button.setTitleColor(.systemGray, for: .disabled)
             button.applyStyle()
@@ -395,6 +398,8 @@ class CalcButtonsAdditional: CalcButtonsPage {
             // button tags start from 200 to 217
             button.tag = buttonTag
             buttonTag += 1
+            
+            button.accessibilityIdentifier = title
             
             // add element to array
             buttons.append(button)

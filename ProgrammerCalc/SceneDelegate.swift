@@ -81,13 +81,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let conversionSettings = ConversionSettings.shared
         
         // Get data for shortcuts
-        let inputResult = calcState.mainLabelState
-        let outputResult = calcState.converterLabelState
+        let inputResult = calcState.lastLabelValues.main
+        let outputResult = calcState.lastLabelValues.converter
         
         let inputSystem = conversionSettings.systemMain.rawValue
         let outputSystem = conversionSettings.systemConverter.rawValue
         
-        // Transform each favourite contact into a UIApplicationShortcutItem.
         let application = UIApplication.shared
         
         let icon = UIApplicationShortcutIcon(systemImageName: "doc.on.doc")

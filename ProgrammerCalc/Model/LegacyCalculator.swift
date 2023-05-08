@@ -42,7 +42,7 @@ class LegacyCalculator: LegacyCalculatorProtocol {
     init() {
 
         // update mainLabel numberValue (inputValue)
-        if let numValue = numberSystemFactory.get(strValue: calcState.mainLabelState, currentSystem: conversionSettings.systemMain) {
+        if let numValue = numberSystemFactory.get(strValue: "0", currentSystem: conversionSettings.systemMain) {
             //self.currentValue = numValue
             self.inputValue = numValue
         }

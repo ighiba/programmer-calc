@@ -41,11 +41,18 @@ class Calculator: CalculatorProtocol {
     
     var mainLabelDelegate: CalculatorLabelDelegate!
     var converterLabelDelegate: CalculatorLabelDelegate!
+    var pcalcViewControllerDelegate: PCalcViewControllerDelegate!
 
     let numberSystemFactory: NumberSystemFactory = NumberSystemFactory()
     let operationFactory: OperationFactory = OperationFactory()
     
-    var currentValue: PCDecimal = PCDecimal(0)
+    var currentValue: PCDecimal {
+        didSet {
+            print("PCDecimal new value: \(self.currentValue.getDecimal())")
+            self.calcState.lastValue = self.currentValue
+        }
+    }
+    
     var operation: CalcOperation?
     
     private let conversionSettings: ConversionSettings = ConversionSettings.shared
@@ -58,12 +65,7 @@ class Calculator: CalculatorProtocol {
     // MARK: - Initialization
     
     init() {
-        self.currentValue = PCDecimal(0)
-        
-        if let numValue = numberSystemFactory.get(strValue: calcState.mainLabelState, currentSystem: conversionSettings.systemMain) {
-            let decValue = (converter.convertValue(value: numValue, to: .dec, format: true) as! DecimalSystem).decimalValue
-            self.currentValue.updateValue(decValue)
-        }
+        self.currentValue = calcState.lastValue
     }
     
     // MARK: - Methods
@@ -72,16 +74,20 @@ class Calculator: CalculatorProtocol {
         return self.operationFactory.get(buttonLabel: buttonText)
     }
     
+    public func setOperation(_ operationType: CalcMath.OperationType) {
+        self.operation = CalcOperation(previousValue: PCDecimal(value: self.currentValue.getDecimal()) , current: operationType)
+    }
+    
     public func setOperation(with buttonText: String) {
         let operationType = getOperation(with: buttonText)
-        self.operation = CalcOperation(previousValue: PCDecimal(value: self.currentValue.getDecimal()) , current: operationType)
+        self.setOperation(operationType)
     }
     
     public func calculate() {
         guard self.operation != nil else { return }
         
         do {
-            let result = try self.calculateCurrentValue()
+            var result = try self.calculateCurrentValue()
             result.fixOverflow(bitWidth: self.wordSize.value, processSigned: self.calcState.processSigned)
             self.operation?.previousValue = PCDecimal(value: result.getDecimal())
             self.operation?.inputStart = false
@@ -111,7 +117,12 @@ class Calculator: CalculatorProtocol {
             return self.currentValue
         }
 
+        // Unary operations
         switch currentOperation {
+        case .oneS:
+            return ~self.currentValue
+        case .twoS:
+            return ~self.currentValue + 1
         case .shiftLeft:
             return self.currentValue << 1
         case .shiftRight:
@@ -124,6 +135,7 @@ class Calculator: CalculatorProtocol {
             return self.currentValue
         }
         
+        // Binary operations
         switch currentOperation {
         case .add:
             return previousValue + self.currentValue
@@ -154,6 +166,14 @@ class Calculator: CalculatorProtocol {
         }
     }
     
+    public func negateCurrentValue() {
+        self.currentValue = -self.currentValue
+    }
+    
+    public func resetCurrentValue() {
+        self.currentValue.updateValue(0.0)
+    }
+    
     public func updateCurrentValue(_ value: NumberSystemProtocol) {
         guard let decSystemValue = self.converter.convertValue(value: value, to: .dec, format: true) as? DecimalSystem else {
             return
@@ -173,9 +193,103 @@ class Calculator: CalculatorProtocol {
         self.operation = nil
     }
     
-    public func negateCurrentValue() {
-        self.currentValue = -self.currentValue
+    public func mainLabelUpdate() {
+        let mainLabelValue = self.getMainLabelValue()?.value ?? "0"
+        let formattedText = self.processStrInputToFormat(inputStr: mainLabelValue, for: self.conversionSettings.systemMain)
+        self.mainLabelDelegate.setText(formattedText)
     }
+    
+    public func converterLabelUpdate() {
+        let converterLabelValue = self.getConvertedLabelValue()?.value ?? "0"
+        var formattedText = self.processStrInputToFormat(inputStr: converterLabelValue, for: self.conversionSettings.systemConverter)
+        let mainLabelLastDigitIsDot = self.mainLabelDelegate.getText(deleteSpaces: true).last == "."
+        
+        if mainLabelLastDigitIsDot && !formattedText.contains(".")  {
+            formattedText.append(".")
+        }
+        self.converterLabelDelegate.setText(formattedText)
+    }
+    
+    public func mainLabelRemoveTrailing() {
+        var mainLabelText: String = mainLabelDelegate.getText(deleteSpaces: false)
+        
+        if mainLabelText.count > 1 {
+            mainLabelText.removeLast()
+            if mainLabelText == "-" {
+                mainLabelText = "0"
+                self.pcalcViewControllerDelegate.updateClearButton(hasInput: false)
+            } else if mainLabelText.last == " " {
+                mainLabelText.removeLast()
+            }
+        } else {
+            mainLabelText = "0"
+            self.pcalcViewControllerDelegate.updateClearButton(hasInput: false)
+        }
+
+        if let numValue = numberSystemFactory.get(strValue: mainLabelText, currentSystem: conversionSettings.systemMain) {
+            self.updateCurrentValue(numValue)
+        }
+        
+        if mainLabelText.contains(".") {
+            self.mainLabelDelegate.setText(mainLabelText)
+        } else {
+            self.mainLabelUpdate()
+        }
+        self.converterLabelUpdate()
+    }
+    
+    public func mainLabelAdd(digit: String, inputStart: Bool = false) {
+        let labelText = self.mainLabelDelegate.getText(deleteSpaces: false)
+        var newValue: String
+        
+        if self.mainLabelDelegate.hasErrorMessage || inputStart {
+            newValue = digit
+        } else {
+            newValue = self.addDigitToMainLabel(labelText: labelText, digit: digit)
+        }
+        
+        let formattedText = self.processStrInputToFormat(inputStr: newValue, for: self.conversionSettings.systemMain)
+        let newNumber = self.numberSystemFactory.get(strValue: formattedText, currentSystem: self.conversionSettings.systemMain)
+        
+        self.updateCurrentValue(newNumber!)
+        self.mainLabelDelegate.setText(formattedText)
+    }
+    
+    // Add digit to end of main label
+    private func addDigitToMainLabel(labelText: String, digit: String) -> String {
+        var result = String()
+
+        if digit == "." && !labelText.contains(".") {
+            // forbid float input when negative number
+            if self.currentValue.isSigned {
+                return labelText
+            }
+            return labelText + digit
+        } else if digit == "." && labelText.contains(".") {
+            return labelText
+        }
+        
+        // special formatting for binary
+        if conversionSettings.systemMain == .bin {
+            var binary = Binary()
+            binary.value = labelText
+            // append input digit
+            binary.appendDigit(digit)
+            // divide binary by parts
+            binary = binary.divideBinary(by: 4)
+            result = binary.value
+        } else {
+            // if other systems
+            result =  labelText + digit
+        }
+        
+        // check if can add more digits
+        let isOverflowed = self.isInputOverflowed(value: result, for: conversionSettings.systemMain)
+        guard !isOverflowed else { return labelText }
+
+        return result
+    }
+    
     
     // For updating input main label
     public func processStrInputToFormat(inputStr: String, for system: ConversionSystemsEnum) -> String {
@@ -252,16 +366,14 @@ class Calculator: CalculatorProtocol {
             processedStr = bin.value
         } else if system == .dec && testLabelStr.contains(".") {
             // Updating dec for values with floating point
-            processedStr = converter.processDecFloatStrToFormat(decStr: self.currentValue.description, lastDotIfExists: lastSymbolsIfExists)
+            processedStr = converter.processDecFloatStrToFormat(decStr: inputStr, lastDotIfExists: lastSymbolsIfExists)
         } else {
             // Convert value in binary
             // process binary raw string input in new binary with current settings: processSigned, wordSize etc.
             // convert back in systemMain value and set new value in mainLabel
-            let value = self.numberSystemFactory.get(strValue: inputStr, currentSystem: self.conversionSettings.systemMain)!
-            let bin = converter.convertValue(value: value, to: .bin, format: true) as! Binary
-            let updatedValue = converter.convertValue(value: bin, to: system, format: true)
-            let dec = converter.convertValue(value: bin, to: .dec, format: true) as! DecimalSystem
-            self.currentValue.updateValue(dec.decimalValue)
+            let value = self.numberSystemFactory.get(strValue: inputStr, currentSystem: system)!
+            let bin = self.converter.convertValue(value: value, to: .bin, format: true) as! Binary
+            let updatedValue = self.converter.convertValue(value: bin, to: system, format: true)
             processedStr = updatedValue!.value
             
             // compose new str value if exists

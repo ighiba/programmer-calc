@@ -19,8 +19,8 @@ class DecimalTests: XCTestCase {
     var decimalTest: DecimalSystem!
     var decimalStrInput: String = "12345"
     
-    let unsignedData = CalcState(mainState: "0", convertState: "0", processSigned: false)
-    let signedData = CalcState(mainState: "0", convertState: "0", processSigned: true)
+    let unsignedData = CalcState(lastValue: PCDecimal(0), lastLabelValues: LabelValues(main: "0", converter: "0"), processSigned: false)
+    let signedData = CalcState(lastValue: PCDecimal(0), lastLabelValues: LabelValues(main: "0", converter: "0"), processSigned: true)
     
     let calcState: CalcState = CalcState.shared
     

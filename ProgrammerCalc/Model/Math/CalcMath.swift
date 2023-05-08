@@ -38,6 +38,8 @@ final class CalcMath {
         case mul
         case div
         // bitwise
+        case oneS
+        case twoS
         case shiftLeft //  <<
         case shiftRight //  >>
         case shiftLeftBy //  X << Y
@@ -211,6 +213,8 @@ final class CalcMath {
                 return firstNum
             }
         case .none:
+            return secondNum
+        default:
             return secondNum
         }
         

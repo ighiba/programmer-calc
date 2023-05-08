@@ -19,8 +19,8 @@ class ConverterTests: XCTestCase {
     var converterTest: Converter?
     let binaryStrInput = "1100"
     
-    let unsignedData = CalcState(mainState: "0", convertState: "0", processSigned: false)
-    let signedData = CalcState(mainState: "0", convertState: "0", processSigned: true)
+    let unsignedData = CalcState(lastValue: PCDecimal(0), lastLabelValues: LabelValues(main: "0", converter: "0"), processSigned: false)
+    let signedData = CalcState(lastValue: PCDecimal(0), lastLabelValues: LabelValues(main: "0", converter: "0"), processSigned: true)
     
     let wordSize: WordSize = WordSize.shared
     let calcState: CalcState = CalcState.shared

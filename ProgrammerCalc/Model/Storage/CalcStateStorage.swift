@@ -54,7 +54,7 @@ class CalcStateStorage: CalcStateStorageProtocol {
             // if no CalcState
             print("no CalcState")
             // default values
-            let newState = CalcState(mainState: "0", convertState: "0", processSigned: false)
+            let newState = CalcState(lastValue: PCDecimal(0), lastLabelValues: LabelValues(main: "0", converter: "0"), processSigned: false)
             self.saveData(newState)
             
             return newState

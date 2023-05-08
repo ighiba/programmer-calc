@@ -24,6 +24,10 @@ class OperationFactory {
             return .shiftLeftBy
         case "X>>Y":
             return .shiftRightBy
+        case "1's":
+            return .oneS
+        case "2's":
+            return .twoS
         case "<<":
             return .shiftLeft
         case ">>":

@@ -8,33 +8,54 @@
 
 import Foundation
 
+
+
 protocol CalcStateProtocol {
-    // Last string value from mainLabel (Input)
-    var mainLabelState: String { get set }
-    // Last string value from converterLabel (Output)
-    var converterLabelState: String { get set }
+    // Last PCDecimal value from input (in Calculator)
+    var lastValue: PCDecimal { get set }
+    // Last string values from input/output labels
+    var lastLabelValues: LabelValues { get set }
     // State from signed on/off button
     var processSigned: Bool { get set }
 }
 
 class CalcState: CalcStateProtocol, Decodable, Encodable {
     
-    static let shared: CalcState = CalcState(mainState: "0", convertState: "0", processSigned: false)
+    static let shared: CalcState = CalcState(lastValue: PCDecimal(0),
+                                          lastLabelValues: LabelValues(main: "0", converter: "0"),
+                                          processSigned: false)
     
-    var mainLabelState: String
-    var converterLabelState: String
+    var lastValue: PCDecimal
+    var lastLabelValues: LabelValues
     var processSigned: Bool
     
-    init(mainState:String, convertState: String, processSigned: Bool) {
-        self.mainLabelState = mainState
-        self.converterLabelState = convertState
+    init(lastValue: PCDecimal, lastLabelValues: LabelValues, processSigned: Bool) {
+        self.lastValue = lastValue
+        self.lastLabelValues = lastLabelValues
         self.processSigned = processSigned
     }
     
     func setCalcState(_ newCalcState: CalcStateProtocol) {
-        self.mainLabelState = newCalcState.mainLabelState
-        self.converterLabelState = newCalcState.converterLabelState
+        self.lastValue = newCalcState.lastValue
+        self.lastLabelValues = newCalcState.lastLabelValues
         self.processSigned = newCalcState.processSigned
     }
     
+    func updateMainValue(_ main: String) {
+        self.lastLabelValues = LabelValues(main: main, converter: self.lastLabelValues.converter)
+    }
+    
+    func updateConverterValue(_ converter: String) {
+        self.lastLabelValues = LabelValues(main: self.lastLabelValues.main, converter: converter)
+    }
+
+}
+
+class LabelValues: Decodable, Encodable {
+    var main: String
+    var converter: String
+    init(main: String, converter: String) {
+        self.main = main
+        self.converter = converter
+    }
 }

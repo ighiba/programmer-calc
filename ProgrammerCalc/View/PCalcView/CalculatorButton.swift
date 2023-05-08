@@ -195,7 +195,6 @@ class CalculatorButton: UIButton {
                 sendActions(for: .touchDragInside)
             }
         }
-
     }
     
     func setActions(for buttonType: ButtonTypes){
