@@ -30,6 +30,8 @@ struct PCDecimal: CustomStringConvertible, Equatable, Decodable, Encodable {
         return String(describing: value)
     }
     
+    // MARK: - Initialization
+    
     init() {
         self.value = 0.0
     }
@@ -40,6 +42,14 @@ struct PCDecimal: CustomStringConvertible, Equatable, Decodable, Encodable {
     
     init(_ uintValue: UInt64) {
         self.value = Decimal(uintValue)
+    }
+    
+    init?(string: String) {
+        if let value = Decimal(string: string) {
+            self.value = value
+        } else {
+            return nil
+        }
     }
 
     // MARK: - Methods

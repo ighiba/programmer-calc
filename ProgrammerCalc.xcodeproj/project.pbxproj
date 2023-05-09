@@ -71,6 +71,8 @@
 		C09631DC272C581C001DCD25 /* CalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DB272C581B001DCD25 /* CalculatorTests.swift */; };
 		C09631DE272D4FBE001DCD25 /* StringExtTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DD272D4FBE001DCD25 /* StringExtTests.swift */; };
 		C09631E027305315001DCD25 /* NumberSystemFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DF27305315001DCD25 /* NumberSystemFactory.swift */; };
+		C097D09C2A09CCD5002FA1E6 /* LabelFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C097D09B2A09CCD5002FA1E6 /* LabelFormatter.swift */; };
+		C097D09E2A0A53D9002FA1E6 /* LabelFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C097D09D2A0A53D9002FA1E6 /* LabelFormatterTests.swift */; };
 		C0CC6DFF271F68AA00E59E64 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */; };
 		C0CC6E0127208EBB00E59E64 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CC6E0027208EBB00E59E64 /* AboutView.swift */; };
 		C0D919DA2731ABC900AD8C05 /* MathState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D919D92731ABC900AD8C05 /* MathState.swift */; };
@@ -174,6 +176,8 @@
 		C09631DB272C581B001DCD25 /* CalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorTests.swift; sourceTree = "<group>"; };
 		C09631DD272D4FBE001DCD25 /* StringExtTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtTests.swift; sourceTree = "<group>"; };
 		C09631DF27305315001DCD25 /* NumberSystemFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberSystemFactory.swift; sourceTree = "<group>"; };
+		C097D09B2A09CCD5002FA1E6 /* LabelFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelFormatter.swift; sourceTree = "<group>"; };
+		C097D09D2A0A53D9002FA1E6 /* LabelFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelFormatterTests.swift; sourceTree = "<group>"; };
 		C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		C0CC6E0027208EBB00E59E64 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		C0D919D92731ABC900AD8C05 /* MathState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathState.swift; sourceTree = "<group>"; };
@@ -235,6 +239,7 @@
 				C09631DF27305315001DCD25 /* NumberSystemFactory.swift */,
 				C00616A727064449007BEF89 /* OctHexHelper.swift */,
 				C09631D72728E9DC001DCD25 /* PCalcTableViewController.swift */,
+				C097D09B2A09CCD5002FA1E6 /* LabelFormatter.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -330,6 +335,7 @@
 			isa = PBXGroup;
 			children = (
 				C09631DB272C581B001DCD25 /* CalculatorTests.swift */,
+				C097D09D2A0A53D9002FA1E6 /* LabelFormatterTests.swift */,
 				C06072B02501567E004CF6AA /* CalcMathTests.swift */,
 				C096231C2A05650300E6C08F /* PCDecimalTests.swift */,
 				C064A3AF24FD847B003DE683 /* ConverterTests.swift */,
@@ -659,6 +665,7 @@
 				C068AFAA24FA40B900BFE754 /* PCalcViewControllerExtension.swift in Sources */,
 				C02705222715EF6F008B9C1E /* LegacyCalculator.swift in Sources */,
 				C096231B2A04235700E6C08F /* OperationFactory.swift in Sources */,
+				C097D09C2A09CCD5002FA1E6 /* LabelFormatter.swift in Sources */,
 				C0619AC424D71240008A7291 /* ConversionViewController.swift in Sources */,
 				C0817788271D045E0068CF45 /* PopoverDoneButton.swift in Sources */,
 				C09631D027270FCC001DCD25 /* StyleFactory.swift in Sources */,
@@ -702,6 +709,7 @@
 				C064A3AA24FD55B8003DE683 /* HexadecimalTests.swift in Sources */,
 				C064A3B024FD847B003DE683 /* ConverterTests.swift in Sources */,
 				C06D285527999B4D00C74888 /* DecimalTests.swift in Sources */,
+				C097D09E2A0A53D9002FA1E6 /* LabelFormatterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,7 +15,6 @@ class CalculatorTests: XCTestCase {
     var conversionStorage: ConversionStorageProtocol? = ConversionStorage()
     let calcStateStorage: CalcStateStorageProtocol? = CalcStateStorage()
     
-    var legacyCalculatorTest: LegacyCalculator!
     var calculatorTest: Calculator!
     
     let unsignedData = CalcState(lastValue: PCDecimal(0), lastLabelValues: LabelValues(main: "0", converter: "0"), processSigned: false)
@@ -31,7 +30,6 @@ class CalculatorTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        legacyCalculatorTest = LegacyCalculator()
         calculatorTest = Calculator()
         let dummyConversionSettings = ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
         conversionStorage?.saveData(dummyConversionSettings)
@@ -39,7 +37,7 @@ class CalculatorTests: XCTestCase {
     }
     
     override func tearDown() {
-        legacyCalculatorTest = nil
+        calculatorTest = nil
         super.tearDown()
     }
     
@@ -106,189 +104,5 @@ class CalculatorTests: XCTestCase {
         XCTAssertEqual(result.description, "-9223372036854775808", "Negation failure")
     }
 
-    // MARK: - isInputOverflowed
-    
-    func testIsFloatValueOverflowed_OK() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(byte)
-        let testValue = DecimalSystem(stringLiteral: "127.12345678")
-        
-        // 2. when
-        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
-        
-        // 3. then
-        XCTAssertEqual(result, false, "Calculation failure")
-    }
-    
-    func testIsFloatValueOverflowed_ERROR() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(byte)
-        let testValue = DecimalSystem(stringLiteral: "127.123456789")
-        
-        // 2. when
-        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
-        
-        // 3. then
-        XCTAssertEqual(result, true, "Calculation failure")
-    }
-    
-    func testIsValueOverflowed_BYTE_OK() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(byte)
-        let testValue = DecimalSystem(stringLiteral: "127")
-        
-        // 2. when
-        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
-        
-        // 3. then
-        XCTAssertEqual(result, false, "Calculation failure")
-    }
-    
-    func testIsValueOverflowed_BYTE_ERROR() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(byte)
-        let testValue = DecimalSystem(stringLiteral: "128")
-        
-        // 2. when
-        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
-        
-        // 3. then
-        XCTAssertEqual(result, true, "Calculation failure")
-    }
-    
-    func testIsValueOverflowed_BIN_BYTE_ERROR() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(byte)
-        let testValue = Binary(stringLiteral: "100000000")
-        
-        // 2. when
-        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .bin)
-        
-        // 3. then
-        XCTAssertEqual(result, true, "Calculation failure")
-    }
-    
-    func testIsValueOverflowed_WORD_OK() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(word)
-        let testValue = DecimalSystem(stringLiteral: "32767")
-        
-        // 2. when
-        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
-        
-        // 3. then
-        XCTAssertEqual(result, false, "Calculation failure")
-    }
-    
-    func testIsValueOverflowed_WORD_ERROR() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(word)
-        let testValue = DecimalSystem(stringLiteral: "32768")
-        
-        // 2. when
-        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
-        
-        // 3. then
-        XCTAssertEqual(result, true, "Calculation failure")
-    }
-    
-    func testIsValueOverflowed_DWORD_OK() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(dword)
-        let testValue = DecimalSystem(stringLiteral: "2147483647")
-        
-        // 2. when
-        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
-        
-        // 3. then
-        XCTAssertEqual(result, false, "Calculation failure")
-    }
-    
-    func testIsValueOverflowed_DWORD_ERROR() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(dword)
-        let testValue = DecimalSystem(stringLiteral: "2147483648")
-        
-        // 2. when
-        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
-        
-        // 3. then
-        XCTAssertEqual(result, true, "Calculation failure")
-    }
-    
-    func testIsValueOverflowed_QWORD_OK() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(qword)
-        let testValue = DecimalSystem(stringLiteral: "9223372036854775807")
-        
-        // 2. when
-        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
-        
-        // 3. then
-        XCTAssertEqual(result, false, "Calculation failure")
-    }
-    
-    func testIsValueOverflowed_QWORD_ERROR() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(qword)
-        let testValue = DecimalSystem(stringLiteral: "9223372036854775808")
-        
-        // 2. when
-        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
-        
-        // 3. then
-        XCTAssertEqual(result, true, "Calculation failure")
-    }
-    
-    func testIsValueOverflowed_QWORD_UNSIGNED_OK() throws {
-        // 1. given
-        calcState.setCalcState(unsignedData)
-        wordSize.setWordSize(qword)
-        let testValue = DecimalSystem(stringLiteral: "18446744073709551615")
-        
-        // 2. when
-        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
-        
-        // 3. then
-        XCTAssertEqual(result, false, "Calculation failure")
-    }
-    
-    func testIsValueOverflowed_QWORD_UNSIGNED_ERROR() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(qword)
-        let testValue = DecimalSystem(stringLiteral: "18446744073709551616")
-        
-        // 2. when
-        let result = calculatorTest.isInputOverflowed(value: testValue.value, for: .dec)
-        
-        // 3. then
-        XCTAssertEqual(result, true, "Calculation failure")
-    }
-    
-    // MARK: - Process string inout
-    func testProcessStrInput() throws {
-        // 1. given
-        calcState.setCalcState(signedData)
-        wordSize.setWordSize(word)
-        let testValue = "000 1111"
-        
-        // 2. when
-        let result = calculatorTest.processStrInputToFormat(inputStr: testValue, for: .bin)
-        
-        // 3. then
-        XCTAssertEqual(result, "0000 0000 0000 1111", "Processing failure")
-    }
 
 }
