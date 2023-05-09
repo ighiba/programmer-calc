@@ -56,7 +56,6 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
     private let converter: Converter = Converter()
     // Object "Calculator"
     private let calculator: Calculator = Calculator()
-    //private let legacyCalculator: LegacyCalculator = LegacyCalculator()
     
     // Array of button pages controllers
     lazy var calcButtonsViewControllers: [CalcButtonsViewController] = {
