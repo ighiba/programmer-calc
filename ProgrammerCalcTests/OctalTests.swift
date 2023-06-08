@@ -131,7 +131,7 @@ class OctalTests: XCTestCase {
         XCTAssertEqual(binary.value, "0000000000000000000000000000000000000000000000000000000011101111", "Converted values are wrong")
     }
     
-    func testOctalCovnertToBinaryUnsigned() throws {
+    func testOctalConvertToBinaryUnsigned() throws {
         // 1. given
         calcState.setCalcState(unsignedData)
         octalTest = Octal(stringLiteral: octalStrInput)
@@ -143,7 +143,7 @@ class OctalTests: XCTestCase {
         XCTAssertEqual(binary.value, "0000000000000000000000000000000000000000000000000000000011101111", "Converted values are wrong")
     }
     
-    func testOctalCovnertToBinarySigned() throws {
+    func testOctalConvertToBinarySigned() throws {
         // 1. given
         calcState.setCalcState(signedData)
         octalTest = Octal(stringLiteral: octalStrInput)

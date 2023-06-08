@@ -250,7 +250,5 @@ class BinaryTests: XCTestCase {
         // 3. then
         XCTAssertEqual(binaryTest.value, "1111111111111111111111111111111111111111111111111111111111110011", "Wrong inversion")
     }
-    
-
 
 }

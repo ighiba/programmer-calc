@@ -44,7 +44,6 @@ class HexadecimalTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-    // XCTAssert to test model
     func testHexadecimalUnsignedInit() throws {
         // 1. given
         calcState.setCalcState(unsignedData)
@@ -132,7 +131,7 @@ class HexadecimalTests: XCTestCase {
         XCTAssertEqual(binary.value, "0000000000000000000000000000000000000000000000000000101011110000", "Converted values are wrong")
     }
     
-    func testHexadecimalCovnertToBinaryUnsigned() throws {
+    func testHexadecimalConvertToBinaryUnsigned() throws {
         // 1. given
         calcState.setCalcState(unsignedData)
         hexadecimalTest = Hexadecimal(stringLiteral: hexadecimalStrInput)
@@ -144,7 +143,7 @@ class HexadecimalTests: XCTestCase {
         XCTAssertEqual(binary.value, "0000000000000000000000000000000000000000000000000000101011110000", "Converted values are wrong")
     }
     
-    func testHexadecimalCovnertToBinarySigned() throws {
+    func testHexadecimalConvertToBinarySigned() throws {
         // 1. given
         calcState.setCalcState(signedData)
         hexadecimalTest = Hexadecimal(stringLiteral: hexadecimalStrInput)

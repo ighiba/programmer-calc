@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 class NumberSystemFactory {
     
     func get(strValue value: String, currentSystem system: ConversionSystemsEnum) -> NumberSystemProtocol? {

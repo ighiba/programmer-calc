@@ -104,7 +104,7 @@ class LabelFormatter {
         // =======================
         
         if system == .bin {
-            // get dummy bin without formatiing
+            // get dummy bin without formatting
             var bin: Binary = {
                 let dummyBin = Binary()
                 dummyBin.value = testLabelStr
@@ -212,7 +212,7 @@ class LabelFormatter {
     }
     
     private func isFloatInputOverflowed(_ value: String) -> Bool {
-        // input allowed if last symol is "."
+        // input allowed if last symbol is "."
         guard value.last != "." else { return false }
         // check if fract part fits in numbersAfterPoint setting
         let testStr = value.removeAllSpaces()

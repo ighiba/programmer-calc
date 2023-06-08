@@ -51,7 +51,6 @@ class ConverterTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-    // XCTAssert to test model
     func testOnesComplementUnsigned() throws {
         // 1. given
         calcState.setCalcState(unsignedData)

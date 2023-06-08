@@ -25,7 +25,7 @@ class OctHexHelper {
             if num != "." {
                 for (key, value) in table {
                     if "\(num)" == value {
-                        // append balue from table
+                        // append value from table
                         resultBin.value.append("\(key)")
                         break
                     }
@@ -72,7 +72,7 @@ class OctHexHelper {
                 
                 partCounter += 1
             }
-            // convert these part into Octal or Hexadeicaml by using table
+            // convert these part into Octal or Hexadecimal by using table
             for (key, value) in table {
                 if buffPart == key {
                     // append index from table
