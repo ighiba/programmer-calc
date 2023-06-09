@@ -12,7 +12,10 @@ protocol WordSizeProtocol {
     var value: Int { get set }
 }
 
-class WordSize: WordSizeProtocol, Decodable, Encodable  {
+class WordSize: WordSizeProtocol, Storable  {
+    static var storageKey: String {
+        return "wordSize"
+    }
     
     static let shared: WordSize = WordSize(64)
 
@@ -28,5 +31,13 @@ class WordSize: WordSizeProtocol, Decodable, Encodable  {
     
     func setWordSize(_ newWordSize: WordSizeProtocol) {
         self.value = newWordSize.value
+    }
+    
+    static func getDefault() -> WordSize {
+        return WordSize(64)
+    }
+    
+    func set(_ data: WordSize) {
+        self.value = data.value
     }
 }

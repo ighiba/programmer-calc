@@ -35,7 +35,6 @@ class StyleSettings: StyleSettingsProtocol, Storable {
         self.currentStyle = newStyleSettings.currentStyle
     }
     
-    
     static func getDefault() -> StyleSettings {
         return StyleSettings(isUsingSystemAppearance: false, currentStyle: .dark)
     }
@@ -44,5 +43,4 @@ class StyleSettings: StyleSettingsProtocol, Storable {
         self.isUsingSystemAppearance = data.isUsingSystemAppearance
         self.currentStyle = data.currentStyle
     }
-    
 }

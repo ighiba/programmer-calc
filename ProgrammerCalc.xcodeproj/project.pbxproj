@@ -80,7 +80,6 @@
 		C0E5FC7624BB9B8D00BA93CA /* PCalcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */; };
 		C0F3D945273B0A7300EA3333 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F3D944273B0A7300EA3333 /* UIApplication.swift */; };
 		C0F5CF4B270E10870020CE14 /* WordSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF4A270E10870020CE14 /* WordSize.swift */; };
-		C0F5CF4D270E12100020CE14 /* WordSizeStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF4C270E12100020CE14 /* WordSizeStorage.swift */; };
 		C0F5CF4F270F394E0020CE14 /* Decimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF4E270F394E0020CE14 /* Decimal.swift */; };
 		C0F5CF51270F4B970020CE14 /* WordSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF50270F4B970020CE14 /* WordSizeViewController.swift */; };
 		C0F5CF53270F4C4C0020CE14 /* WordSizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF52270F4C4C0020CE14 /* WordSizeView.swift */; };
@@ -185,7 +184,6 @@
 		C0E5FC7524BB9B8D00BA93CA /* PCalcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcView.swift; sourceTree = "<group>"; };
 		C0F3D944273B0A7300EA3333 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
 		C0F5CF4A270E10870020CE14 /* WordSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSize.swift; sourceTree = "<group>"; };
-		C0F5CF4C270E12100020CE14 /* WordSizeStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSizeStorage.swift; sourceTree = "<group>"; };
 		C0F5CF4E270F394E0020CE14 /* Decimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decimal.swift; sourceTree = "<group>"; };
 		C0F5CF50270F4B970020CE14 /* WordSizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSizeViewController.swift; sourceTree = "<group>"; };
 		C0F5CF52270F4C4C0020CE14 /* WordSizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSizeView.swift; sourceTree = "<group>"; };
@@ -225,7 +223,6 @@
 				C00616B227066CB1007BEF89 /* CalcStateStorage.swift */,
 				C00616B027066C91007BEF89 /* ConversionStorage.swift */,
 				C00616AE270666DD007BEF89 /* SettingsStorage.swift */,
-				C0F5CF4C270E12100020CE14 /* WordSizeStorage.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -684,7 +681,6 @@
 				C06B7F092443B12B009642B9 /* SceneDelegate.swift in Sources */,
 				C07267DD24E5ACB300D4B4A2 /* Binary.swift in Sources */,
 				C0249849279DDC88005EA12A /* PCalcStorage.swift in Sources */,
-				C0F5CF4D270E12100020CE14 /* WordSizeStorage.swift in Sources */,
 				C09631E027305315001DCD25 /* NumberSystemFactory.swift in Sources */,
 				C077CF7124DC987B008E5F0F /* Settings.swift in Sources */,
 				C070ED2624DB0ED400A04463 /* SettingsView.swift in Sources */,

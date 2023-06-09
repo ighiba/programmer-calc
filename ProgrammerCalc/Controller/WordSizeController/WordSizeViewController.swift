@@ -14,8 +14,8 @@ class WordSizeViewController: UIViewController {
     
     lazy var wordSizeView = WordSizeView()
 
-    // links to storages
-    private var wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
+    // links to storage
+    private let storage = CalculatorStorage()
     // variable for filling and changing table checkmarks
     private let wordSize: WordSize = WordSize.shared
     // index of table checkmarks
@@ -40,7 +40,7 @@ class WordSizeViewController: UIViewController {
         super.viewWillAppear(animated)
         AppDelegate.AppUtility.lockPortraitOrientation()
         // load data from UserDefaults to table
-        let loadedWordSize = wordSizeStorage.safeGetData() as! WordSize
+        let loadedWordSize: WordSize = storage.loadData()
         wordSize.setWordSize(loadedWordSize)
         // animate popover
         wordSizeView.animateIn()
@@ -169,8 +169,8 @@ extension WordSizeViewController: UITableViewDataSource, UITableViewDelegate {
         let newValue = WordSize.wordsDictionary[indexPath.row].first!.value
         wordSize.setWordSize(WordSize(newValue))
         
-        // update user defaults
-        wordSizeStorage.saveData(wordSize)
+        // update userdefaults
+        storage.saveData(wordSize)
         
         //checkmarkedIndexPath
         tableView.deselectRow(at: indexPath, animated: true)
