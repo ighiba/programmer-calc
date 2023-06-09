@@ -11,15 +11,14 @@ import Foundation
 class PCalcStorage {
     
     private let storage = CalculatorStorage()
-    
-    private let conversionStorage: ConversionStorageProtocol = ConversionStorage()
+
     private let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
     
     // Call this before PCalcViewController init in SceneDelegate willConnectTo
     public func loadAll() {
         let wordSize: WordSize = storage.loadData()
         let settings: Settings = storage.loadData()
-        let conversionSettings = conversionStorage.safeGetData()
+        let conversionSettings: ConversionSettings = storage.loadData()
         let calcState = calcStateStorage.safeGetData()
         let styleSettigns: StyleSettings = storage.loadData()
         // Set shared instatnces
@@ -39,7 +38,7 @@ class PCalcStorage {
         // Save data
         storage.saveData(wordSize)
         storage.saveData(settings)
-        conversionStorage.saveData(conversionSettings)
+        storage.saveData(conversionSettings)
         calcStateStorage.saveData(calcState)
         
         storage.saveData(styleSettings)

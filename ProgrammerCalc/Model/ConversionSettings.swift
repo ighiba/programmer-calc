@@ -17,7 +17,7 @@ protocol ConversionSettingsProtocol {
     var numbersAfterPoint: Int { get set }
 }
 
-class ConversionSettings: ConversionSettingsProtocol, Decodable, Encodable {
+final class ConversionSettings: ConversionSettingsProtocol {
     
     static let shared: ConversionSettings = ConversionSettings(systMain: .dec, systConverter: .dec, number: 8)
     
@@ -35,6 +35,22 @@ class ConversionSettings: ConversionSettingsProtocol, Decodable, Encodable {
         self.systemMain = newSettings.systemMain
         self.systemConverter = newSettings.systemConverter
         self.numbersAfterPoint = newSettings.numbersAfterPoint
+    }
+}
+
+extension ConversionSettings: Storable {
+    static var storageKey: String {
+        return "conversionSettings"
+    }
+    
+    static func getDefault() -> ConversionSettings {
+        return ConversionSettings(systMain: .dec, systConverter: .dec, number: 8)
+    }
+    
+    func set(_ data: ConversionSettings) {
+        self.systemMain = data.systemMain
+        self.systemConverter = data.systemConverter
+        self.numbersAfterPoint = data.numbersAfterPoint
     }
 }
 

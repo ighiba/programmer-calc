@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		C00616A827064449007BEF89 /* OctHexHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00616A727064449007BEF89 /* OctHexHelper.swift */; };
 		C00616AC27065097007BEF89 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00616AB27065097007BEF89 /* String.swift */; };
-		C00616B127066C91007BEF89 /* ConversionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00616B027066C91007BEF89 /* ConversionStorage.swift */; };
 		C00616B327066CB1007BEF89 /* CalcStateStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00616B227066CB1007BEF89 /* CalcStateStorage.swift */; };
 		C0249849279DDC88005EA12A /* PCalcStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0249848279DDC88005EA12A /* PCalcStorage.swift */; };
 		C0287F7227A31FD2001489FE /* BitButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0287F7127A31FD2001489FE /* BitButton.swift */; };
@@ -104,7 +103,6 @@
 /* Begin PBXFileReference section */
 		C00616A727064449007BEF89 /* OctHexHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OctHexHelper.swift; sourceTree = "<group>"; };
 		C00616AB27065097007BEF89 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
-		C00616B027066C91007BEF89 /* ConversionStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionStorage.swift; sourceTree = "<group>"; };
 		C00616B227066CB1007BEF89 /* CalcStateStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcStateStorage.swift; sourceTree = "<group>"; };
 		C0249848279DDC88005EA12A /* PCalcStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcStorage.swift; sourceTree = "<group>"; };
 		C0287F7127A31FD2001489FE /* BitButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitButton.swift; sourceTree = "<group>"; };
@@ -219,7 +217,6 @@
 				C082FB842A33540800F3AA60 /* CalculatorStorage.swift */,
 				C0249848279DDC88005EA12A /* PCalcStorage.swift */,
 				C00616B227066CB1007BEF89 /* CalcStateStorage.swift */,
-				C00616B027066C91007BEF89 /* ConversionStorage.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -650,7 +647,6 @@
 				C0D919DC2731F80600AD8C05 /* DescriptionViewController.swift in Sources */,
 				C0F5CF53270F4C4C0020CE14 /* WordSizeView.swift in Sources */,
 				C0F5CF4B270E10870020CE14 /* WordSize.swift in Sources */,
-				C00616B127066C91007BEF89 /* ConversionStorage.swift in Sources */,
 				C04D34C227921BE200ED9867 /* BitwiseKeypad.swift in Sources */,
 				C0287F7427A32250001489FE /* StyleSettings.swift in Sources */,
 				C05B008C24E6E0E100F8A5E0 /* Hexadecimal.swift in Sources */,
