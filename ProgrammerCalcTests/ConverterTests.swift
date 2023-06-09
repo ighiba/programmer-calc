@@ -13,8 +13,7 @@ import XCTest
 
 class ConverterTests: XCTestCase {
     
-    // Storages
-    var conversionStorage: ConversionStorageProtocol? = ConversionStorage()
+    let storage = CalculatorStorage()
     
     var converterTest: Converter?
     let binaryStrInput = "1100"
@@ -34,7 +33,7 @@ class ConverterTests: XCTestCase {
         super.setUp()
         converterTest = Converter()
         let dummyConversionSettings = ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
-        conversionStorage?.saveData(dummyConversionSettings)
+        storage.saveData(dummyConversionSettings)
         
     }
     

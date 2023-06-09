@@ -13,8 +13,7 @@ import XCTest
 
 class CalcMathTests: XCTestCase {
     
-    // Storages
-    var conversionStorage: ConversionStorageProtocol? = ConversionStorage()
+    let storage = CalculatorStorage()
     
     var calcMathTest: CalcMath!
     
@@ -33,7 +32,7 @@ class CalcMathTests: XCTestCase {
         super.setUp()
         calcMathTest = CalcMath()
         let dummyConversionSettings = ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
-        conversionStorage?.saveData(dummyConversionSettings)
+        storage.saveData(dummyConversionSettings)
         
     }
     

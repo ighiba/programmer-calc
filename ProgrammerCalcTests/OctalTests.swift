@@ -13,8 +13,7 @@ import XCTest
 
 class OctalTests: XCTestCase {
     
-    // Storages
-    var conversionStorage: ConversionStorageProtocol? = ConversionStorage()
+    let storage = CalculatorStorage()
     
     var octalTest: Octal!
     var octalStrInput: String = "357" // dec = 239
@@ -28,13 +27,13 @@ class OctalTests: XCTestCase {
         super.setUp()
         octalTest = Octal()
         let dummyConversionSettings = ConversionSettings(systMain: .dec, systConverter: .oct, number: 8)
-        conversionStorage?.saveData(dummyConversionSettings)
+        storage.saveData(dummyConversionSettings)
         
     }
     
     override func tearDown() {
         octalTest = nil
-        conversionStorage?.saveData(ConversionSettings(systMain: .dec, systConverter: .bin, number: 8))
+        storage.saveData(ConversionSettings(systMain: .dec, systConverter: .bin, number: 8))
         super.tearDown()
     }
 

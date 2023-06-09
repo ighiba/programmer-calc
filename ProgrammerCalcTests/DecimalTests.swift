@@ -13,8 +13,7 @@ import XCTest
 
 class DecimalTests: XCTestCase {
     
-    // Storages
-    var conversionStorage: ConversionStorageProtocol? = ConversionStorage()
+    let storage = CalculatorStorage()
     
     var decimalTest: DecimalSystem!
     var decimalStrInput: String = "12345"
@@ -28,7 +27,7 @@ class DecimalTests: XCTestCase {
         super.setUp()
         decimalTest = DecimalSystem(stringLiteral: "0")
         let dummyConversionSettings = ConversionSettings(systMain: .bin, systConverter: .dec, number: 8)
-        conversionStorage?.saveData(dummyConversionSettings)
+        storage.saveData(dummyConversionSettings)
     }
     
     override func tearDown() {

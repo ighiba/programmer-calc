@@ -10,10 +10,8 @@ import XCTest
 @testable import ProgrammerCalc
 
 class CalculatorTests: XCTestCase {
-
-    // Storages
-    var conversionStorage: ConversionStorageProtocol? = ConversionStorage()
-    let calcStateStorage: CalcStateStorageProtocol? = CalcStateStorage()
+    
+    let storage = CalculatorStorage()
     
     var calculatorTest: Calculator!
     
@@ -32,8 +30,8 @@ class CalculatorTests: XCTestCase {
         super.setUp()
         calculatorTest = Calculator()
         let dummyConversionSettings = ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
-        conversionStorage?.saveData(dummyConversionSettings)
-        calcStateStorage?.saveData(signedData)
+        storage.saveData(dummyConversionSettings)
+        storage.saveData(signedData)
     }
     
     override func tearDown() {

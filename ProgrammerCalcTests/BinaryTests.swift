@@ -13,8 +13,7 @@ import XCTest
 
 class BinaryTests: XCTestCase {
     
-    // Storages
-    let conversionStorage: ConversionStorageProtocol? = ConversionStorage()
+    let storage = CalculatorStorage()
     
     var binaryTest: Binary!
     var binaryStrInput: String = "1100" // dec = 12
@@ -28,7 +27,7 @@ class BinaryTests: XCTestCase {
         super.setUp()
         binaryTest = Binary()
         let dummyConversionSettings = ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
-        conversionStorage?.saveData(dummyConversionSettings)
+        storage.saveData(dummyConversionSettings)
     }
     
     override func tearDown() {

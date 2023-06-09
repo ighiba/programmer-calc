@@ -13,8 +13,7 @@ import XCTest
 
 class HexadecimalTests: XCTestCase {
     
-    // Storages
-    var conversionStorage: ConversionStorageProtocol? = ConversionStorage()
+    let storage = CalculatorStorage()
     
     var hexadecimalTest: Hexadecimal!
     var hexadecimalStrInput: String = "AF0" // dec = 2800
@@ -28,7 +27,7 @@ class HexadecimalTests: XCTestCase {
         super.setUp()
         hexadecimalTest = Hexadecimal()
         let dummyConversionSettings = ConversionSettings(systMain: .dec, systConverter: .hex, number: 8)
-        conversionStorage?.saveData(dummyConversionSettings)
+        storage.saveData(dummyConversionSettings)
     }
     
     override func tearDown() {
