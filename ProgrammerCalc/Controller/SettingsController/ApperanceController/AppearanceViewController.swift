@@ -25,7 +25,8 @@ class AppearanceViewController: PCalcTableViewController, AppearanceViewControll
     var checkmarkedIndexPath: IndexPath = IndexPath(row: 0, section: 0)
     
     // Style storage
-    var styleStorage: StyleStorageProtocol = StyleStorage()
+    //var styleStorage: StyleStorageProtocol = StyleStorage()
+    private let storage = CalculatorStorage()
     // Style factory
     var styleFactory: StyleFactory = StyleFactory()
     
@@ -62,7 +63,7 @@ class AppearanceViewController: PCalcTableViewController, AppearanceViewControll
     @objc func changeUseSystemStyle() {
         styleSettings.isUsingSystemAppearance.toggle()
         // save new value to storage
-        styleStorage.saveData(styleSettings)
+        storage.saveData(styleSettings)
         
         // change style depends on state
         if styleSettings.isUsingSystemAppearance {
@@ -84,7 +85,7 @@ class AppearanceViewController: PCalcTableViewController, AppearanceViewControll
         let newStyle = styleTypeArray[number]
         // change in shared instance
         styleSettings.currentStyle = newStyle
-        styleStorage.saveData(styleSettings)
+        storage.saveData(styleSettings)
         updateStyle()
     }
     
@@ -104,7 +105,7 @@ class AppearanceViewController: PCalcTableViewController, AppearanceViewControll
             // light mode if unknown
             styleSettings.currentStyle = .dark
         }
-        styleStorage.saveData(styleSettings)
+        storage.saveData(styleSettings)
         self.view.window?.overrideUserInterfaceStyle = .unspecified
     }
     

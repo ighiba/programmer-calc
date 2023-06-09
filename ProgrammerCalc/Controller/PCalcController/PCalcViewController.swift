@@ -29,8 +29,8 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         }
     }
     
-    // Storages
-    private let styleStorage: StyleStorageProtocol = StyleStorage()
+    // Storage
+    private let storage = CalculatorStorage()
     // Shared instances
     private let conversionSettings: ConversionSettings = ConversionSettings.shared
     private let calcState: CalcState = CalcState.shared
@@ -292,7 +292,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
                 // light mode if unknown
                 styleSettings.currentStyle = .dark
             }
-            styleStorage.saveData(styleSettings)
+            storage.saveData(styleSettings)
             view.window?.overrideUserInterfaceStyle = .unspecified
             styleType = styleSettings.currentStyle
 
