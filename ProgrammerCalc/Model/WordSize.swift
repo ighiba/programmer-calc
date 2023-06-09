@@ -12,17 +12,16 @@ protocol WordSizeProtocol {
     var value: Int { get set }
 }
 
-class WordSize: WordSizeProtocol, Storable  {
-    static var storageKey: String {
-        return "wordSize"
-    }
+final class WordSize: WordSizeProtocol {
     
     static let shared: WordSize = WordSize(64)
 
+    // MARK: - Properties
+    
     static let wordsDictionary = [["QWORD":64],
-                                  ["DWORD":32],
-                                  ["WORD" :16],
-                                  ["BYTE" :8]]
+                                ["DWORD":32],
+                                ["WORD" :16],
+                                ["BYTE" :8]]
     var value: Int
     
     init(_ size: Int) {
@@ -31,6 +30,12 @@ class WordSize: WordSizeProtocol, Storable  {
     
     func setWordSize(_ newWordSize: WordSizeProtocol) {
         self.value = newWordSize.value
+    }
+}
+
+extension WordSize: Storable {
+    static var storageKey: String {
+        return "wordSize"
     }
     
     static func getDefault() -> WordSize {
