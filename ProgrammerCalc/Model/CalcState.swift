@@ -19,7 +19,7 @@ protocol CalcStateProtocol {
     var processSigned: Bool { get set }
 }
 
-class CalcState: CalcStateProtocol, Decodable, Encodable {
+final class CalcState: CalcStateProtocol {
     
     static let shared: CalcState = CalcState(lastValue: PCDecimal(0),
                                           lastLabelValues: LabelValues(main: "0", converter: "0"),
@@ -48,8 +48,26 @@ class CalcState: CalcStateProtocol, Decodable, Encodable {
     func updateConverterValue(_ converter: String) {
         self.lastLabelValues = LabelValues(main: self.lastLabelValues.main, converter: converter)
     }
-
 }
+
+extension CalcState: Storable {
+    static var storageKey: String {
+        return "calcState"
+    }
+    
+    static func getDefault() -> CalcState {
+        return CalcState(lastValue: PCDecimal(0),
+                        lastLabelValues: LabelValues(main: "0", converter: "0"),
+                        processSigned: false)
+    }
+    
+    func set(_ data: CalcState) {
+        self.lastValue = data.lastValue
+        self.lastLabelValues = data.lastLabelValues
+        self.processSigned = data.processSigned
+    }
+}
+
 
 class LabelValues: Decodable, Encodable {
     var main: String
