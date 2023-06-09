@@ -230,14 +230,14 @@
 		C05A169924DD7AF7007B7FB8 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				C09631CD27270D6B001DCD25 /* Style.swift */,
 				C09631D527277066001DCD25 /* ButtonStyle.swift */,
-				C09631CF27270FCC001DCD25 /* StyleFactory.swift */,
 				C096231A2A04235700E6C08F /* OperationFactory.swift */,
 				C09631DF27305315001DCD25 /* NumberSystemFactory.swift */,
 				C00616A727064449007BEF89 /* OctHexHelper.swift */,
 				C09631D72728E9DC001DCD25 /* PCalcTableViewController.swift */,
 				C097D09B2A09CCD5002FA1E6 /* LabelFormatter.swift */,
+				C09631CD27270D6B001DCD25 /* Style.swift */,
+				C09631CF27270FCC001DCD25 /* StyleFactory.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";

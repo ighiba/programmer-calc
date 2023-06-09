@@ -363,8 +363,8 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         self.calculator.converterLabelUpdate()
     }
     
-    private func mainLabelAdd(digit: String, inputStart: Bool = false) {
-        self.calculator.mainLabelAdd(digit: digit, inputStart: inputStart)
+    private func mainLabelAdd(digit: String) {
+        self.calculator.mainLabelAdd(digit: digit)
     }
     
     // Change clear button title
@@ -444,13 +444,13 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
  
         print("Button \(buttonText) touched")
         
-        if self.calculator.hasPendingOperation && !self.calculator.operation!.inputStart {
-            let digit = buttonText == "." ? "0." : buttonText
-            self.mainLabelAdd(digit: digit, inputStart: true)
-            self.calculator.operation!.inputStart = true
-        } else {
+//        if self.calculator.hasPendingOperation && !self.calculator.operation!.shouldStartNewInput {
+//            let digit = buttonText == "." ? "0." : buttonText
+//            self.mainLabelAdd(digit: digit, shouldStartNewInput: true)
+//            self.calculator.operation!.shouldStartNewInput = true
+//        } else {
             self.mainLabelAdd(digit: buttonText)
-        }
+//        }
         self.converterLabelUpdate()
     }
     
@@ -472,13 +472,31 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         
         let operation = calculator.getOperation(with: sender.accessibilityIdentifier ?? "")
         guard operation != .none else { return }
-
-        if calculator.hasPendingOperation && calculator.operation!.inputStart {
+        
+        if calculator.hasPendingOperation && calculator.shouldStartNewInput {
+            calculator.setOperation(operation)
+            return
+        } else if calculator.hasPendingOperation {
             calculator.calculate()
+            calculator.setOperation(operation)
+            updateLabels()
+        } else if isUnaryOperation(operation) {
+            calculator.setOperation(operation)
+            calculator.calculate()
+            calculator.resetCalculation()
+            calculator.shouldStartNewInput = true
             updateLabels()
         } else {
             calculator.setOperation(operation)
+            calculator.shouldStartNewInput = true
         }
+    }
+    
+    func isUnaryOperation(_ operation: CalcMath.OperationType) -> Bool {
+        return operation == .shiftRight ||
+               operation == .shiftLeft ||
+               operation == .oneS ||
+               operation == .twoS
     }
     
     // 1's or 2's button tapped
@@ -522,7 +540,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
             calculator.resetCalculation()
             updateLabels()
         } else {
-            if calculator.hasPendingOperation && calculator.operation!.inputStart {
+            if calculator.hasPendingOperation && calculator.shouldStartNewInput {
                 // calculate
                 calculator.calculate()
                 calculator.resetCalculation()
@@ -597,7 +615,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         vc.modalPresentationStyle = .overFullScreen
         // set delegate and update handler
         vc.delegate = self
-        vc.updaterHandler = {
+        vc.updateHandler = {
             self.updateInfoSubLabels()
             self.handleDisplayingMainLabel()
             self.updateButtonsState()
@@ -671,6 +689,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         let vc = WordSizeViewController()
         vc.modalPresentationStyle = .overFullScreen
         vc.updaterHandler = {
+            self.calculator.fixOverflowForCurrentValue()
             self.updateAllLayout()
             self.updateBitwiseKeypad()
         }

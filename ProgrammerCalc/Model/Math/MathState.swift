@@ -15,15 +15,12 @@ protocol MathStateProtocol {
     var operation: CalcMath.OperationType { get set }
     // Last result (after calcualtion)
     var lastResult: NumberSystemProtocol? { get set }
-    // Inputting state
-    var inputStart: Bool { get set }
 }
 
 class MathState: MathStateProtocol {
     var buffValue: NumberSystemProtocol
     var operation: CalcMath.OperationType
     var lastResult: NumberSystemProtocol?
-    var inputStart: Bool = false
     
     init(buffValue: NumberSystemProtocol, operation: CalcMath.OperationType) {
         self.buffValue = buffValue

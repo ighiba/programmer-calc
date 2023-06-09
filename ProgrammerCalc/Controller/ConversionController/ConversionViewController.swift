@@ -29,7 +29,7 @@ class ConversionViewController: UIViewController {
     // Haptic feedback generator
     let generator = UIImpactFeedbackGenerator(style: .medium)
     
-    var updaterHandler: (() -> Void)?
+    var updateHandler: (() -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -126,7 +126,7 @@ class ConversionViewController: UIViewController {
             delegate!.updateAllLayout()
         }
         
-        updaterHandler!()
+        updateHandler!()
     }
     
     // ViewConvtroller dismissing

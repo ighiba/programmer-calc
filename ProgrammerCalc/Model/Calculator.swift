@@ -18,7 +18,6 @@ class Calculator: CalculatorProtocol {
     class CalcOperation {
         var current: CalcMath.OperationType
         var previousValue: PCDecimal?
-        var inputStart: Bool = false
         
         init(previousValue: PCDecimal, current: CalcMath.OperationType) {
             self.previousValue = previousValue
@@ -55,12 +54,12 @@ class Calculator: CalculatorProtocol {
     }
     
     var operation: CalcOperation?
+    var shouldStartNewInput: Bool = true
     
     private let conversionSettings: ConversionSettings = ConversionSettings.shared
     private let calcState: CalcState = CalcState.shared
     private let wordSize: WordSize = WordSize.shared
-    private let settings: Settings = Settings.shared
-
+    
     private let errorGenerator = UINotificationFeedbackGenerator()
     
     // MARK: - Initialization
@@ -84,14 +83,14 @@ class Calculator: CalculatorProtocol {
         self.setOperation(operationType)
     }
     
-    public func calculate() {
+    public func calculate(shouldStartNewInput: Bool = true) {
         guard self.operation != nil else { return }
         
         do {
             var result = try self.calculateCurrentValue()
             result.fixOverflow(bitWidth: self.wordSize.value, processSigned: self.calcState.processSigned)
             self.operation?.previousValue = PCDecimal(value: result.getDecimal())
-            self.operation?.inputStart = false
+            self.shouldStartNewInput = shouldStartNewInput
             self.currentValue = result
         } catch MathErrors.divByZero {
             self.resetCalculation()
@@ -192,6 +191,7 @@ class Calculator: CalculatorProtocol {
     
     public func resetCalculation() {
         self.operation = nil
+        self.shouldStartNewInput = true
     }
     
     public func mainLabelUpdate() {
@@ -239,12 +239,13 @@ class Calculator: CalculatorProtocol {
         self.converterLabelUpdate()
     }
     
-    public func mainLabelAdd(digit: String, inputStart: Bool = false) {
+    public func mainLabelAdd(digit: String) {
         let labelText = self.mainLabelDelegate.getText(deleteSpaces: false)
         var newValue: String
         
-        if self.mainLabelDelegate.hasErrorMessage || inputStart {
-            newValue = digit
+        if self.mainLabelDelegate.hasErrorMessage || self.shouldStartNewInput {
+            newValue = digit == "." ? "0." : digit
+            self.shouldStartNewInput = false
         } else {
             newValue = self.labelFormatter.addDigitToMainLabel(labelText: labelText, digit: digit, currentValue: self.currentValue)
         }
@@ -256,5 +257,8 @@ class Calculator: CalculatorProtocol {
         self.mainLabelDelegate.setText(formattedText)
     }
 
+    public func fixOverflowForCurrentValue() {
+        self.currentValue.fixOverflow(bitWidth: self.wordSize.value, processSigned: self.calcState.processSigned)
+    }
     
 }

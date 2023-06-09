@@ -25,8 +25,7 @@ import Foundation
  
          // if value system == converterSystem, then return imput value
          // except binary (for processing it to normal format)
-         if getSystemBy(value) == converterSystem &&
-            !(value is Binary) {
+         if getSystemBy(value) == converterSystem && !(value is Binary) {
              return value
          }
  
