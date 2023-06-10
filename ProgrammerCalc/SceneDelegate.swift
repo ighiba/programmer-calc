@@ -35,9 +35,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             // Save it off for later when we become active.
             savedShortCutItem = shortcutItem
         }
-        
-        // Using scene without storyboard
-        // Main is PCalcViewController
+
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene

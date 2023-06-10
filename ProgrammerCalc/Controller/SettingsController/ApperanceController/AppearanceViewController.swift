@@ -75,7 +75,7 @@ class AppearanceViewController: PCalcTableViewController, AppearanceViewControll
         // change navbar tint
         let style = styleFactory.get(style: styleSettings.currentStyle)
         self.navigationController?.navigationBar.tintColor = style.tintColor
-        // update PCalcView
+        // update CalculatorDisplayView
         updateRootViewLayoutSubviews()
     }
     
@@ -133,7 +133,7 @@ class AppearanceViewController: PCalcTableViewController, AppearanceViewControll
         
         // change navbar tint
         self.navigationController?.navigationBar.tintColor = style.tintColor
-        // update PCalcView
+        // update CalculatorDisplayView
         UIView.animate(withDuration: 0.3, animations: {
             self.updateRootViewLayoutSubviews()
         })

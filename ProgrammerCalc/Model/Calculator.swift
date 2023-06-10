@@ -41,7 +41,7 @@ class Calculator: CalculatorProtocol {
     
     var mainLabelDelegate: CalculatorLabelDelegate!
     var converterLabelDelegate: CalculatorLabelDelegate!
-    var pcalcViewControllerDelegate: PCalcViewControllerDelegate!
+    var calculatorViewDelegate: CalculatorViewDelegate!
 
     let numberSystemFactory: NumberSystemFactory = NumberSystemFactory()
     let operationFactory: OperationFactory = OperationFactory()
@@ -218,13 +218,13 @@ class Calculator: CalculatorProtocol {
             mainLabelText.removeLast()
             if mainLabelText == "-" {
                 mainLabelText = "0"
-                self.pcalcViewControllerDelegate.updateClearButton(hasInput: false)
+                self.calculatorViewDelegate.updateClearButton(hasInput: false)
             } else if mainLabelText.last == " " {
                 mainLabelText.removeLast()
             }
         } else {
             mainLabelText = "0"
-            self.pcalcViewControllerDelegate.updateClearButton(hasInput: false)
+            self.calculatorViewDelegate.updateClearButton(hasInput: false)
         }
 
         if let numValue = numberSystemFactory.get(strValue: mainLabelText, currentSystem: conversionSettings.systemMain) {

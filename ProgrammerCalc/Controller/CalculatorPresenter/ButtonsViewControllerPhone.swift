@@ -112,3 +112,46 @@ extension ButtonsViewControllerPhone: UIPageViewControllerDataSource, UIPageView
         return 1
     }
 }
+
+// MARK: - UIPageViewController
+
+extension ButtonsViewControllerPhone {
+    // Allows or disallows scroll pages and interact with content
+    var delaysContentTouches: Bool {
+        get {
+            var isAllowed: Bool = true
+            for view in view.subviews {
+                if let subView = view as? UIScrollView {
+                    isAllowed = subView.delaysContentTouches
+                }
+            }
+            return isAllowed
+        }
+        set {
+            for view in view.subviews {
+                if let subView = view as? UIScrollView {
+                    subView.delaysContentTouches = newValue
+                }
+            }
+        }
+    }
+    
+    // Change page control visibility by bool
+    func setPageControl(visibile: Bool) {
+        for case let pageControl in self.view.subviews where pageControl is UIPageControl {
+            if visibile {
+                pageControl.isHidden = false
+            } else {
+                pageControl.isHidden = true
+            }
+        }
+    }
+    
+    // Change page control current page
+    func setPageControlCurrentPage(count currentPage: Int) {
+        for case let pageControl in self.view.subviews where pageControl is UIPageControl {
+            (pageControl as! UIPageControl).currentPage = currentPage
+        }
+    }
+}
+

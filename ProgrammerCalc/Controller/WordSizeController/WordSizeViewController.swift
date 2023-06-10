@@ -73,7 +73,7 @@ class WordSizeViewController: UIViewController {
         // anation
         wordSizeView.animateOut {
             self.dismiss(animated: false, completion: {
-                // update all layout in main vc (PCalcViewController)
+                // update all layout in main vc (CalculatorView)
                 guard self.updaterHandler != nil else {
                     return
                 }

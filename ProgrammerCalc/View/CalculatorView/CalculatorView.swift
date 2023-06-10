@@ -8,20 +8,27 @@
 
 import UIKit
 
+protocol CalculatorViewDelegate: AnyObject {
+    func clearLabels()
+    func unhighlightLabels()
+    func updateAllLayout()
+    func updateClearButton(hasInput: Bool)
+}
+
 protocol CalculatorInput: AnyObject {
     func clearLabels()
     func mainLabelHasNoError() -> Bool
 }
 
-class CalculatorView: UIViewController, CalculatorInput, PCalcViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
+class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate, UIAdaptivePresentationControllerDelegate {
     
     // MARK: - Properties
     
     var output: CalculatorOutput!
     
-    let calcView = PCalcView()
-    lazy var mainLabel = calcView.mainLabel
-    lazy var converterLabel = calcView.converterLabel
+    let displayView = CalculatorDisplayView()
+    lazy var mainLabel = displayView.mainLabel
+    lazy var converterLabel = displayView.converterLabel
 
     var buttonsContainerController: ButtonsContainerControllerProtocol!
     // additional bitwise keypad for input
@@ -45,13 +52,13 @@ class CalculatorView: UIViewController, CalculatorInput, PCalcViewControllerDele
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        calcView.setViews()
-        self.view.addSubview(calcView)
+        displayView.setViews()
+        self.view.addSubview(displayView)
         self.view.layoutIfNeeded()
-        calcView.layoutIfNeeded()
+        displayView.layoutIfNeeded()
 
-        NSLayoutConstraint.deactivate(calcView.landscape!)
-        NSLayoutConstraint.activate(calcView.portrait!)
+        NSLayoutConstraint.deactivate(displayView.landscape!)
+        NSLayoutConstraint.activate(displayView.portrait!)
         
         // Add swipe left for deleting last value in main label
         [mainLabel, converterLabel].forEach { label in
@@ -71,9 +78,9 @@ class CalculatorView: UIViewController, CalculatorInput, PCalcViewControllerDele
         buttonsContainerController.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             buttonsContainerController.view.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            buttonsContainerController.view.leadingAnchor.constraint(equalTo: self.calcView.leadingAnchor),
-            buttonsContainerController.view.trailingAnchor.constraint(equalTo: self.calcView.trailingAnchor),
-            buttonsContainerController.view.topAnchor.constraint(equalTo: self.calcView.bottomAnchor, constant: 30),
+            buttonsContainerController.view.leadingAnchor.constraint(equalTo: self.displayView.leadingAnchor),
+            buttonsContainerController.view.trailingAnchor.constraint(equalTo: self.displayView.trailingAnchor),
+            buttonsContainerController.view.topAnchor.constraint(equalTo: self.displayView.bottomAnchor, constant: 30),
             buttonsContainerController.view.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
@@ -123,10 +130,10 @@ class CalculatorView: UIViewController, CalculatorInput, PCalcViewControllerDele
                 page.showWithAnimation()
             }
             // change constraints
-            calcView.showNavigationBar()
-            NSLayoutConstraint.deactivate(calcView.landscape!)
-            NSLayoutConstraint.deactivate(calcView.landscapeWithBitKeypad!)
-            NSLayoutConstraint.activate(calcView.portrait!)
+            displayView.showNavigationBar()
+            NSLayoutConstraint.deactivate(displayView.landscape!)
+            NSLayoutConstraint.deactivate(displayView.landscapeWithBitKeypad!)
+            NSLayoutConstraint.activate(displayView.portrait!)
 
             // update label layouts
             handleDisplayingMainLabel()
@@ -137,31 +144,31 @@ class CalculatorView: UIViewController, CalculatorInput, PCalcViewControllerDele
             // show pagecontrol
             phoneVC.setPageControl(visibile: true)
             // show word size button
-            calcView.changeWordSizeButton.isHidden = false
+            displayView.changeWordSizeButton.isHidden = false
             // set default calcView frame
-            calcView.frame = CGRect( x: 0, y: 0, width: UIScreen.main.bounds.width, height: calcView.getViewHeight())
+            displayView.frame = CGRect( x: 0, y: 0, width: UIScreen.main.bounds.width, height: displayView.getViewHeight())
             
         } else if isLandscape && !isPortrait && isAllowedLandscape {
             // hide word size button
-            calcView.changeWordSizeButton.isHidden = true
+            displayView.changeWordSizeButton.isHidden = true
             // hide button pages
             for page in phoneVC.calcButtonsViewControllers {
                 page.hideWithAnimation()
             }
             // change constraints
-            NSLayoutConstraint.deactivate(calcView.portrait!)
-            calcView.hideNavigationBar()
+            NSLayoutConstraint.deactivate(displayView.portrait!)
+            displayView.hideNavigationBar()
             // landscape constraints by existing bitwiseKeypad
             if bitwiseKeypad != nil {
-                calcView.hideConverterLabel()
-                NSLayoutConstraint.activate(calcView.landscapeWithBitKeypad!)
+                displayView.hideConverterLabel()
+                NSLayoutConstraint.activate(displayView.landscapeWithBitKeypad!)
             } else {
-                NSLayoutConstraint.activate(calcView.landscape!)
+                NSLayoutConstraint.activate(displayView.landscape!)
             }
             // hide pagecontrol
             phoneVC.setPageControl(visibile: false)
             // set landscape calcView frame
-            calcView.frame = UIScreen.main.bounds
+            displayView.frame = UIScreen.main.bounds
         }
     }
     
@@ -178,7 +185,7 @@ class CalculatorView: UIViewController, CalculatorInput, PCalcViewControllerDele
     
     func layoutSubviews() {
         self.view.layoutSubviews()
-        self.calcView.layoutSubviews()
+        self.displayView.layoutSubviews()
         self.buttonsContainerController.layoutSubviews()
     }
     
@@ -196,7 +203,7 @@ class CalculatorView: UIViewController, CalculatorInput, PCalcViewControllerDele
     }
     
     public func updateChangeWordSizeButton() {
-        calcView.updateCnageWordSizeButton(with: WordSize.shared)
+        displayView.updateCnageWordSizeButton(with: WordSize.shared)
     }
     
     public func unhighlightLabels() {
@@ -300,9 +307,9 @@ class CalculatorView: UIViewController, CalculatorInput, PCalcViewControllerDele
     
     private func handleDisplayingMainLabel() {
         if mainSystem == converterSystem {
-            calcView.hideConverterLabel()
+            displayView.hideConverterLabel()
         } else {
-            calcView.showConverterLabel()
+            displayView.showConverterLabel()
             mainLabel.numberOfLines = mainSystem == .bin ? 2 : 1 // 2 if binary else 1
         }
     }
@@ -449,7 +456,7 @@ extension CalculatorView {
         let calcButtonsTransform = CGAffineTransform(translationX: -UIScreen.main.bounds.width, y: 0)
         let bitwiseKeypadTransform = CGAffineTransform(translationX: UIScreen.main.bounds.width, y: 0)
 
-        calcView.freezeNavBar(by: animDuration * 1.5) // also freezes all navbar items
+        displayView.freezeNavBar(by: animDuration * 1.5) // also freezes all navbar items
 
         if isBitwiseKeypadExists() {
 

@@ -1,5 +1,5 @@
 //
-//  PCalcView.swift
+//  CalculatorDisplayView.swift
 //  ProgrammerCalc
 //
 //  Created by Ivan Ghiba on 12.07.2020.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PCalcView: UIView {
+class CalculatorDisplayView: UIView {
     
     // MARK: - Properties
     

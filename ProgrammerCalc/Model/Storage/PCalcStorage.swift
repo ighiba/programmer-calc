@@ -12,7 +12,7 @@ class PCalcStorage {
     
     private let storage = CalculatorStorage()
     
-    // Call this before PCalcViewController init in SceneDelegate willConnectTo
+    // Call this before CalculatorModuleAssembly.configureModule() in SceneDelegate willConnectTo
     public func loadAll() {
         let wordSize: WordSize = storage.loadData()
         let settings: Settings = storage.loadData()

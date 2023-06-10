@@ -55,7 +55,7 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
     
     private let settings: Settings = Settings.shared
     
-    // updater settings in PCalcViewController
+    // updater settings in CalculatorView
     var updaterHandler: (() -> Void)?
     
     override func viewDidLoad() {
@@ -87,7 +87,7 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
         super.viewWillDisappear(animated)
         // save switch state to UserDefaults
         saveSettings()
-        // update settings in PCalcViewController
+        // update settings in CalculatorView
         updaterHandler?()
     }
     
