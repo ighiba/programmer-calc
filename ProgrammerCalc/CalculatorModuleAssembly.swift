@@ -12,7 +12,15 @@ class CalculatorModuleAssembly {
     class func configureModule() -> UIViewController {
         let view = CalculatorView()
         let presenter = CalculatorPresenter()
-        
+
+        // Layout choice for device type
+        switch UIDevice.currentDeviceType {
+        case .iPhone:
+            view.buttonsContainerController =  ButtonsViewControllerPhone()
+        case .iPad:
+            view.buttonsContainerController =  ButtonsViewControllerPad()
+        }
+
         view.output = presenter
         presenter.input = view
         presenter.calculator = Calculator()

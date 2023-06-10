@@ -39,7 +39,7 @@ class DescriptionViewController: UIViewController {
     
     // MARK: - Label
     lazy var descriptionLabel: UILabel = {
-        let label = UILabel(frame: CGRect(x: margin, y: margin+self.view.safeAreaInsets.top+44, width: UIScreen.main.bounds.width - margin*2, height: UIScreen.main.bounds.height - margin*2))
+        let label = UILabel(frame: CGRect(x: margin, y: margin+self.view.safeAreaInsets.top+44, width: UIScreen.main.bounds.width - margin * 2, height: UIScreen.main.bounds.height - margin * 2))
         
         // set attributes
         let paragraphStyle = NSMutableParagraphStyle()

@@ -53,7 +53,7 @@ class CalculatorPresenter: CalculatorOutput {
     func setDelegates(mainLabel: CalculatorLabel, converterLabel: CalculatorLabel) {
         calculator.mainLabelDelegate = mainLabel
         calculator.converterLabelDelegate = converterLabel
-        calculator.calculatorViewDelegate = input as! any CalculatorViewDelegate
+        calculator.calculatorViewDelegate = (input as! any CalculatorViewDelegate)
     }
     
     func getMainSystem() -> ConversionSystemsEnum {

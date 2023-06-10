@@ -31,7 +31,6 @@ class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate,
     lazy var converterLabel = displayView.converterLabel
 
     var buttonsContainerController: ButtonsContainerControllerProtocol!
-    // additional bitwise keypad for input
     private var bitwiseKeypad: BitwiseKeypadController?
     
     // Device states
@@ -69,9 +68,6 @@ class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate,
         
         output.setDelegates(mainLabel: mainLabel, converterLabel: converterLabel)
         
-        buttonsContainerController = ButtonsViewControllerPhone()
-        //buttonsContainerController = ButtonsViewControllerPad()
-        
         self.view.addSubview(buttonsContainerController.view)
         buttonsContainerController.didMove(toParent: self)
         
@@ -80,7 +76,7 @@ class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate,
             buttonsContainerController.view.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             buttonsContainerController.view.leadingAnchor.constraint(equalTo: self.displayView.leadingAnchor),
             buttonsContainerController.view.trailingAnchor.constraint(equalTo: self.displayView.trailingAnchor),
-            buttonsContainerController.view.topAnchor.constraint(equalTo: self.displayView.bottomAnchor, constant: 30),
+            buttonsContainerController.view.topAnchor.constraint(equalTo: self.displayView.labelsStack.bottomAnchor, constant: 30),
             buttonsContainerController.view.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
         ])
         
@@ -99,7 +95,12 @@ class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate,
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AppDelegate.AppUtility.unlockPortraitOrientation()
+        if UIDevice.currentDeviceType == .iPad {
+            AppDelegate.AppUtility.lockPortraitOrientation()
+        } else {
+            AppDelegate.AppUtility.unlockPortraitOrientation()
+        }
+
         
         if #available(iOS 16.0, *) {
             setNeedsUpdateOfSupportedInterfaceOrientations()

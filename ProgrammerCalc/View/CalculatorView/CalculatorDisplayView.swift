@@ -322,13 +322,7 @@ class CalculatorDisplayView: UIView {
     }
     
     func getScreenBounds() -> CGRect {
-        // caclculation for landscape and portrait orientations
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
-        let width = screenWidth < screenHeight ? screenWidth : screenHeight
-        let height = screenHeight > screenHeight ? screenHeight : screenWidth
-        
-        return CGRect(x: 0, y: 0, width: width, height: height)
+        return CGRect(origin: CGPoint(), size: UIScreen.mainRealSize())
     }
 
 

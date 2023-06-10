@@ -54,6 +54,7 @@ class ButtonsViewControllerPad: UIViewController, ButtonsContainerControllerProt
     
     func layoutSubviews() {
         self.view.layoutSubviews()
+        updateButtonsStyle()
     }
     
     // MARK: - Methods

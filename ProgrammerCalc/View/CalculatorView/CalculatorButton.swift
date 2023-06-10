@@ -167,9 +167,7 @@ class CalculatorButton: UIButton {
     //  0.9 - buttons stack view width
     //  4  - number of buttons
     func buttonWidth() -> CGFloat {
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
-        let width = screenWidth < screenHeight ? screenWidth : screenHeight
+        let width = UIScreen.mainRealSize().width
         if UIDevice.current.userInterfaceIdiom == .pad {
             // iPad
             return (width * 0.9 - 7 * CalculatorButton.spacingWidth) / 8
@@ -181,9 +179,7 @@ class CalculatorButton: UIButton {
     }
     
     func buttonWidthPad() -> CGFloat {
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
-        let width = screenWidth < screenHeight ? screenWidth : screenHeight
+        let width = UIScreen.mainRealSize().width
         return (width * 0.9 - 7 * CalculatorButton.spacingWidth) / 8
     }
     

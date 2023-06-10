@@ -56,6 +56,7 @@
 		C082FB8D2A33C08A00F3AA60 /* ButtonsViewControllerPhone.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082FB8C2A33C08A00F3AA60 /* ButtonsViewControllerPhone.swift */; };
 		C082FB8F2A33C0FC00F3AA60 /* ButtonsViewControllerPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082FB8E2A33C0FC00F3AA60 /* ButtonsViewControllerPad.swift */; };
 		C082FB912A34C0A400F3AA60 /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082FB902A34C0A400F3AA60 /* DeviceType.swift */; };
+		C082FB932A34D22C00F3AA60 /* UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082FB922A34D22C00F3AA60 /* UIScreen.swift */; };
 		C0905E712A080843004180A7 /* PCDecimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0905E702A080843004180A7 /* PCDecimal.swift */; };
 		C09623172A04171B00E6C08F /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09623162A04171B00E6C08F /* Int.swift */; };
 		C09623192A041A1800E6C08F /* Calculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09623182A041A1800E6C08F /* Calculator.swift */; };
@@ -159,6 +160,7 @@
 		C082FB8C2A33C08A00F3AA60 /* ButtonsViewControllerPhone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsViewControllerPhone.swift; sourceTree = "<group>"; };
 		C082FB8E2A33C0FC00F3AA60 /* ButtonsViewControllerPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsViewControllerPad.swift; sourceTree = "<group>"; };
 		C082FB902A34C0A400F3AA60 /* DeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceType.swift; sourceTree = "<group>"; };
+		C082FB922A34D22C00F3AA60 /* UIScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreen.swift; sourceTree = "<group>"; };
 		C0905E702A080843004180A7 /* PCDecimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCDecimal.swift; sourceTree = "<group>"; };
 		C09623162A04171B00E6C08F /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
 		C09623182A041A1800E6C08F /* Calculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calculator.swift; sourceTree = "<group>"; };
@@ -287,6 +289,7 @@
 				C00616AB27065097007BEF89 /* String.swift */,
 				C09631D12727121D001DCD25 /* UIColor.swift */,
 				C052270E27978F6800B7E384 /* UIBarButtonItem.swift */,
+				C082FB922A34D22C00F3AA60 /* UIScreen.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -670,6 +673,7 @@
 				C096231B2A04235700E6C08F /* OperationFactory.swift in Sources */,
 				C097D09C2A09CCD5002FA1E6 /* LabelFormatter.swift in Sources */,
 				C0619AC424D71240008A7291 /* ConversionViewController.swift in Sources */,
+				C082FB932A34D22C00F3AA60 /* UIScreen.swift in Sources */,
 				C082FB832A3353F000F3AA60 /* Storable.swift in Sources */,
 				C0817788271D045E0068CF45 /* PopoverDoneButton.swift in Sources */,
 				C09631D027270FCC001DCD25 /* StyleFactory.swift in Sources */,
@@ -883,7 +887,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = 586JQB45F3;
 				INFOPLIST_FILE = ProgrammerCalc/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Programmer's Calculator";
@@ -893,7 +897,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.2;
+				MARKETING_VERSION = 1.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.ighiba.ProgrammerCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -912,7 +916,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = 586JQB45F3;
 				INFOPLIST_FILE = ProgrammerCalc/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Programmer's Calculator";
@@ -922,7 +926,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.2;
+				MARKETING_VERSION = 1.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.ighiba.ProgrammerCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

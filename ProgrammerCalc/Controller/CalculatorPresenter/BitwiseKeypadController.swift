@@ -54,6 +54,9 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
         self.binary = binary
         super.init(nibName: nil, bundle: nil)
         self.bitwiseKeypadView.controllerDelegate = self
+    }
+    
+    override func loadView() {
         self.bitwiseKeypadView.setViews()
         self.view = bitwiseKeypadView
     }
