@@ -15,7 +15,7 @@ protocol PCalcViewControllerDelegate: AnyObject {
     func updateClearButton(hasInput: Bool)
 }
 
-class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
+class PCalcViewController_: UIPageViewController, PCalcViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
 
     // ==================
     // MARK: - Properties
@@ -109,12 +109,11 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
         // Allow interaction with content(buttons) without delay
         delaysContentTouches = false
         
-        // Set start vc for pages (CalcButtonsMain)
         setViewControllers([calcButtonsViewControllers[1]], direction: .forward, animated: false, completion: nil)
 
         // Add swipe left for deleting last value in main label
         [mainLabel,converterLabel].forEach { label in
-            let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(labelSwipeRight))
+            let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(CalculatorView.labelSwipeRight))
             swipeRight.direction = .right
             label.addGestureRecognizer(swipeRight)
         }
@@ -724,7 +723,7 @@ class PCalcViewController: UIPageViewController, PCalcViewControllerDelegate, UI
 
 // MARK: - DataSource
 
-extension PCalcViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+extension PCalcViewController_: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
     // Load vc before
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {

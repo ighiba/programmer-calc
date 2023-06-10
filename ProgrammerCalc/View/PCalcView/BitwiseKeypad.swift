@@ -68,7 +68,7 @@ class BitwiseKeypad: UIView {
         portrait = [
             self.centerXAnchor.constraint(equalTo: parentView.centerXAnchor),
             self.widthAnchor.constraint(equalTo: parentView.widthAnchor),
-            self.topAnchor.constraint(equalTo: parentView.topAnchor, constant: CalcButtonsPage.getTopMargin() - 2),
+            self.topAnchor.constraint(equalTo: parentView.topAnchor, constant: 20),
             self.bottomAnchor.constraint(equalTo: parentView.bottomAnchor)
         ]
         
@@ -199,6 +199,7 @@ class BitwiseKeypad: UIView {
         label.font = UIFont.systemFont(ofSize: 10, weight: .light)
         label.textAlignment = .right
         label.sizeToFit()
+        label.textColor = .systemGray
         return label
     }
 }

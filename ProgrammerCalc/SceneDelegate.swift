@@ -42,7 +42,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         // Set root vc
-        let rootVC = PCalcViewController()
+
+        let rootVC = CalculatorModuleAssembly.configureModule()
         window?.rootViewController = rootVC
         window?.makeKeyAndVisible()
         

@@ -39,15 +39,6 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
         // override in child class
     }
     
-    static func getTopMargin() -> CGFloat {
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
-        let height = screenHeight > screenWidth ? screenHeight : screenWidth
-        let buttonsStackHeight = (height / 3) * 2
-        
-        return (buttonsStackHeight / 2 + 2) * 1.089
-    }
-    
     fileprivate func setLayout() {
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -58,7 +49,7 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
             // centering
             buttonsStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             // top anchor
-            buttonsStackView.topAnchor.constraint(equalTo: self.topAnchor, constant: CalcButtonsPage.getTopMargin() ),
+            buttonsStackView.topAnchor.constraint(equalTo: self.topAnchor),
             // bottom anchor === spacing -3.5 for shadows
             buttonsStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -3.5),
         ]
@@ -162,23 +153,15 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
                                     transform: nil)
             button.layer.shadowPath = shadowPath
         }
-
     }
-    
-    
-
     
     func updateButtonIsEnabled(by forbiddenValues: Set<String>) {
         allButtons.forEach { button in
             let buttonLabel = String((button.titleLabel?.text)!)
             if forbiddenValues.contains(buttonLabel) && button.calcButtonType == .numeric {
-                // disable and set transparent
                 button.isEnabled = false
-                button.alpha = 0.5
             } else {
-                // enable button ans set normal opacity
                 button.isEnabled = true
-                button.alpha = 1
             }
         }
     }
@@ -261,16 +244,16 @@ class CalcButtonsMain: CalcButtonsPage {
                 button = CalculatorButton(calcButtonType: .numeric)
             case "Signed\nOFF":
                 button = CalculatorButton()
-                button.addTarget(nil, action: #selector(PCalcViewController.toggleIsSigned), for: .touchUpInside)
+                button.addTarget(nil, action: #selector(CalculatorView.toggleIsSigned), for: .touchUpInside)
             case "AC":
                 button = CalculatorButton()
-                button.addTarget(nil, action: #selector(PCalcViewController.clearButtonTapped), for: .touchUpInside)
+                button.addTarget(nil, action: #selector(CalculatorView.clearButtonTapped), for: .touchUpInside)
             case "±":
                 button = CalculatorButton()
-                button.addTarget(nil, action: #selector(PCalcViewController.negateButtonTapped), for: .touchUpInside)
+                button.addTarget(nil, action: #selector(CalculatorView.negateButtonTapped), for: .touchUpInside)
             case "=":
                 button = CalculatorButton(calcButtonType: .sign)
-                button.addTarget(nil, action: #selector(PCalcViewController.calculateButtonTapped), for: .touchUpInside)
+                button.addTarget(nil, action: #selector(CalculatorView.calculateButtonTapped), for: .touchUpInside)
             default:
                 button = CalculatorButton(calcButtonType: .sign)
             }
@@ -370,7 +353,7 @@ class CalcButtonsAdditional: CalcButtonsPage {
             let button: CalculatorButton
 
             // initialize button by type
-            switch title{
+            switch title {
             case "A","B","C","D","E","F","00","FF":
                 button = CalculatorButton(calcButtonType: .numeric)
             case "1's", "2's":

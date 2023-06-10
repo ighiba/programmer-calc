@@ -141,12 +141,8 @@ class AppearanceViewController: PCalcTableViewController, AppearanceViewControll
     }
     
     private func updateRootViewLayoutSubviews() {
-        if let PCalcVC = self.view.window?.rootViewController as? PCalcViewController {
-            PCalcVC.view.layoutSubviews()
-            PCalcVC.calcView.layoutSubviews()
-            PCalcVC.calcButtonsViewControllers.forEach { vc in
-                vc.view.layoutSubviews()
-            }
+        if let calcView = self.view.window?.rootViewController as? CalculatorView {
+            calcView.layoutSubviews()
         }
     }
 }

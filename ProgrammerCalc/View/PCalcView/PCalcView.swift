@@ -37,15 +37,15 @@ class PCalcView: UIView {
     private let changeItem = UIBarButtonItem(image: UIImage(systemName: "arrow.up.arrow.down.circle"),
                                                             style: .plain,
                                                             target: nil,
-                                                            action: #selector(PCalcViewController.changeConversionButtonTapped))
+                                                            action: #selector(CalculatorView.changeConversionButtonTapped))
     private let keypadItem = UIBarButtonItem(image: UIImage(named: "keypadIcon-bitwise"),
                                                             style: .plain,
                                                             target: nil,
-                                                            action: #selector(PCalcViewController.switchKeypad))
+                                                            action: #selector(CalculatorView.switchKeypad))
     private let settingsItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"),
                                                               style: .plain,
                                                               target: nil,
-                                                              action: #selector(PCalcViewController.settingsButtonTapped))
+                                                              action: #selector(CalculatorView.settingsButtonTapped))
     
     // MARK: - Initialization
     
@@ -76,6 +76,10 @@ class PCalcView: UIView {
         self.addSubview(converterLabel.infoSubLabel)
         
         navigationBar.subviews.forEach({ $0.isExclusiveTouch = true })
+        
+        
+        changeWordSizeButton.addTarget(nil, action: #selector(CalculatorView.changeWordSizeButtonTapped), for: .touchUpInside)
+        
         
         setupLayout()
     }
@@ -136,9 +140,7 @@ class PCalcView: UIView {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18.0, weight: UIFont.Weight.regular)
     
         button.sizeToFit()
-        
-        button.addTarget(nil, action: #selector(PCalcViewController.changeWordSizeButtonTapped), for: .touchUpInside)
-        
+       
         // for UI tests
         button.accessibilityIdentifier = "ChangeWordSizeButton"
         
