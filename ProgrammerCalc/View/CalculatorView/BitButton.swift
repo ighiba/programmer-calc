@@ -31,9 +31,9 @@ class BitButton: UIButton {
     }
     
     // MARK: - Initialization
+    
     init() {
         super.init(frame: CGRect())
-        setActions()
         self.setTitle(BIT_OFF, for: .disabled)
     }
     
@@ -46,10 +46,6 @@ class BitButton: UIButton {
     
     public func setBitState(_ bitState: Bool) {
         self.bitState = bitState
-    }
-    
-    private func setActions() {
-        self.addTarget(nil, action: #selector(BitwiseKeypadController.buttonTapped), for: .touchUpInside)
     }
     
     private func changeTitleByBitState() {

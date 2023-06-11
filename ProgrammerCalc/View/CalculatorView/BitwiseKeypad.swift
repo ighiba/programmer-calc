@@ -195,6 +195,9 @@ class BitwiseKeypad: UIView {
         // identifier for UITests
         button.accessibilityIdentifier = "bitButton_\(buttonTag)"
         
+        button.addTarget(nil, action: #selector(BitwiseKeypadController.buttonTapped), for: .touchUpInside)
+        button.addTarget(nil, action: #selector(CalculatorView.touchHandleLabelHighlight), for: .touchDown)
+        
         // tag processing
         button.tag = buttonTag + tagOffset
         

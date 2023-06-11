@@ -13,7 +13,7 @@ class CalculatorDisplayView: UIView {
     // MARK: - Properties
     
     private let margin: CGFloat = 10
-    private let navBarHeight: CGFloat = 44
+    private let navBarHeight: CGFloat = UIDevice.currentDeviceType == .iPad ? 50 : 44
     
     // Constraints
     var portrait: [NSLayoutConstraint]?
@@ -150,7 +150,7 @@ class CalculatorDisplayView: UIView {
     // Set navigation bar
     fileprivate lazy var navigationBar: UINavigationBar = {
         // Set navigation bar
-        let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44))
+        let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: navBarHeight))
         let navItem = UINavigationItem()
         let font = UIFont.systemFont(ofSize: 42.0)
         self.settingsItem.setTitleTextAttributes([NSAttributedString.Key.font: font], for: .normal)
@@ -160,7 +160,7 @@ class CalculatorDisplayView: UIView {
         navItem.rightBarButtonItem = settingsItem
         
         // title view for middle button "Change word size"
-        let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 44*2, height: 44))
+        let titleView = UIView(frame: CGRect(x: 0, y: 0, width: navBarHeight * 2, height: navBarHeight))
         navItem.titleView = titleView
 
         // set navigation items
