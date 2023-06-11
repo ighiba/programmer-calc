@@ -225,12 +225,8 @@ class CalculatorButton: UIButton {
         switch buttonType {
         case .numeric:
             self.addTarget(nil, action: #selector(CalculatorView.numericButtonTapped), for: .touchUpInside)
-        case .sign:
+        case .sign, .complement, .bitwise:
             self.addTarget(nil, action: #selector(CalculatorView.signButtonTapped), for: .touchUpInside)
-        case .complement:
-            self.addTarget(nil, action: #selector(CalculatorView.complementButtonTapped), for: .touchUpInside)
-        case .bitwise:
-            self.addTarget(nil, action: #selector(CalculatorView.bitwiseButtonTapped), for: .touchUpInside)
         case .defaultBtn:
             // do nothing
             break

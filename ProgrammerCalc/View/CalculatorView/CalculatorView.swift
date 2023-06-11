@@ -385,28 +385,6 @@ extension CalculatorView {
         
         output.doOperationFor(operationString: sender.accessibilityIdentifier ?? "")
     }
-  
-    @objc func complementButtonTapped(_ sender: UIButton) {
-        // update conversion state
-        updateInfoSubLabels()
-        
-        if mainLabel.hasErrorMessage {
-            mainLabel.resetError()
-            converterLabel.resetError()
-            clearLabels()
-            return
-        }
-        
-        output.doComplentOperationFor(operationString: sender.accessibilityIdentifier ?? "")
-
-    }
-
-    // Bitwise operations
-    @objc func bitwiseButtonTapped(_ sender: UIButton) {
-        updateInfoSubLabels()
-        guard !mainLabel.text!.contains(".") else { return }
-        output.doBitwiseOperationFor(operationString: sender.accessibilityIdentifier ?? "" )
-    }
     
     // Signed OFF/ON button
     @objc func toggleIsSigned(_ sender: UIButton) {

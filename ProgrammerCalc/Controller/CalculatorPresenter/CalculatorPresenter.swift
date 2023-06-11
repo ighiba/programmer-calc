@@ -25,8 +25,6 @@ protocol CalculatorOutput: AnyObject {
     func getCurrentValueBinary(format: Bool) -> Binary?
     func setNewCurrentValue(_ value: NumberSystemProtocol)
     func doOperationFor(operationString: String)
-    func doComplentOperationFor(operationString: String)
-    func doBitwiseOperationFor(operationString: String)
     func toggleProcessSigned()
     func resetCalculation()
     func doCalculation()
@@ -160,45 +158,6 @@ class CalculatorPresenter: CalculatorOutput {
                operation == .shiftLeft ||
                operation == .oneS ||
                operation == .twoS
-    }
-    
-    func doComplentOperationFor(operationString: String) {
-        if calculator.currentValue.hasFloatingPoint {
-            return
-        }
-        
-        let operation = calculator.getOperation(with: operationString)
-
-        guard operation != .none else { return }
-        if operation == .oneS || operation == .twoS {
-            calculator.setOperation(operation)
-            calculator.calculate()
-            calculator.resetCalculation()
-            calculator.mainLabelUpdate()
-            calculator.converterLabelUpdate()
-        }
-    }
-    
-    func doBitwiseOperationFor(operationString: String) {
-        let operation = calculator.getOperation(with: operationString)
-        guard operation != .none else { return }
-        if operation == .shiftLeft || operation == .shiftRight {
-            calculator.setOperation(operation)
-            calculator.calculate()
-            calculator.resetCalculation()
-            calculator.mainLabelUpdate()
-            calculator.converterLabelUpdate()
-        } else {
-            if calculator.hasPendingOperation && calculator.shouldStartNewInput {
-                // calculate
-                calculator.calculate()
-                calculator.resetCalculation()
-                calculator.mainLabelUpdate()
-                calculator.converterLabelUpdate()
-            } else {
-                calculator.setOperation(operation)
-            }
-        }
     }
     
     func toggleProcessSigned() {

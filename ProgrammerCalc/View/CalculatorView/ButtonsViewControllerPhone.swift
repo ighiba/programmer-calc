@@ -10,7 +10,7 @@ import UIKit
 
 protocol ButtonsContainerControllerProtocol: UIViewController {
     func layoutSubviews()
-    func refreshCalcButtons()
+    func refreshCalcButtons() // implement if UIPageViewController
     func updateButtonsIsEnabled(by forbiddenValues: Set<String>)
 }
 
