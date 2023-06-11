@@ -39,9 +39,7 @@ class Calculator: CalculatorProtocol {
     private let calculationHandler: CalcMath = CalcMath()
     private let labelFormatter: LabelFormatter = LabelFormatter()
     
-    var mainLabelDelegate: CalculatorLabelDelegate!
-    var converterLabelDelegate: CalculatorLabelDelegate!
-    var calculatorViewDelegate: CalculatorViewDelegate!
+    weak var calculatorPresenterDelegate: CalculatorPresenterDelegate!
 
     let numberSystemFactory: NumberSystemFactory = NumberSystemFactory()
     let operationFactory: OperationFactory = OperationFactory()
@@ -103,13 +101,11 @@ class Calculator: CalculatorProtocol {
     }
     
     private func showErrorInLabels(_ error: MathErrors) {
-        self.mainLabelDelegate.showErrorInLabel(error.localizedDescription!)
-        self.converterLabelDelegate.showErrorInLabel("NaN")
+        calculatorPresenterDelegate.showErrorInLabels(error)
     }
     
     private func setErrorInLabels(_ error: MathErrors) {
-        self.mainLabelDelegate.setError(error)
-        self.converterLabelDelegate.setError(error)
+        calculatorPresenterDelegate.setErrorInLabels(error)
     }
     
     func calculateCurrentValue() throws -> PCDecimal {
@@ -197,34 +193,34 @@ class Calculator: CalculatorProtocol {
     public func mainLabelUpdate() {
         let mainLabelValue = self.getMainLabelValue()?.value ?? "0"
         let formattedText = self.labelFormatter.processStrInputToFormat(inputStr: mainLabelValue, for: self.conversionSettings.systemMain)
-        self.mainLabelDelegate.setText(formattedText)
+        calculatorPresenterDelegate.setMainLabelText(formattedText)
     }
     
     public func converterLabelUpdate() {
         let converterLabelValue = self.getConvertedLabelValue()?.value ?? "0"
         var formattedText = self.labelFormatter.processStrInputToFormat(inputStr: converterLabelValue, for: self.conversionSettings.systemConverter)
-        let mainLabelLastDigitIsDot = self.mainLabelDelegate.getText(deleteSpaces: true).last == "."
+        let mainLabelLastDigitIsDot = calculatorPresenterDelegate.getMainLabelText(deleteSpaces: true).last == "."
         
         if mainLabelLastDigitIsDot && !formattedText.contains(".")  {
             formattedText.append(".")
         }
-        self.converterLabelDelegate.setText(formattedText)
+        calculatorPresenterDelegate.setConverterLabelText(formattedText)
     }
     
     public func mainLabelRemoveTrailing() {
-        var mainLabelText: String = mainLabelDelegate.getText(deleteSpaces: false)
+        var mainLabelText = calculatorPresenterDelegate.getMainLabelText(deleteSpaces: false)
         
         if mainLabelText.count > 1 {
             mainLabelText.removeLast()
             if mainLabelText == "-" {
                 mainLabelText = "0"
-                self.calculatorViewDelegate.updateClearButton(hasInput: false)
+                calculatorPresenterDelegate.updateClearButton(hasInput: false)
             } else if mainLabelText.last == " " {
                 mainLabelText.removeLast()
             }
         } else {
             mainLabelText = "0"
-            self.calculatorViewDelegate.updateClearButton(hasInput: false)
+            calculatorPresenterDelegate.updateClearButton(hasInput: false)
         }
 
         if let numValue = numberSystemFactory.get(strValue: mainLabelText, currentSystem: conversionSettings.systemMain) {
@@ -232,7 +228,7 @@ class Calculator: CalculatorProtocol {
         }
         
         if mainLabelText.contains(".") {
-            self.mainLabelDelegate.setText(mainLabelText)
+            calculatorPresenterDelegate.setMainLabelText(mainLabelText)
         } else {
             self.mainLabelUpdate()
         }
@@ -240,12 +236,13 @@ class Calculator: CalculatorProtocol {
     }
     
     public func mainLabelAdd(digit: String) {
-        let labelText = self.mainLabelDelegate.getText(deleteSpaces: false)
+        let labelText = calculatorPresenterDelegate.getMainLabelText(deleteSpaces: false)
         var newValue: String
         
-        if self.mainLabelDelegate.hasErrorMessage || self.shouldStartNewInput {
+        if calculatorPresenterDelegate.mainLabelHasError || self.shouldStartNewInput {
             newValue = digit == "." ? "0." : digit
             self.shouldStartNewInput = false
+            calculatorPresenterDelegate.resetErrorInLabels()
         } else {
             newValue = self.labelFormatter.addDigitToMainLabel(labelText: labelText, digit: digit, currentValue: self.currentValue)
         }
@@ -254,7 +251,7 @@ class Calculator: CalculatorProtocol {
         let newNumber = self.numberSystemFactory.get(strValue: formattedText, currentSystem: self.conversionSettings.systemMain)
         
         self.updateCurrentValue(newNumber!)
-        self.mainLabelDelegate.setText(formattedText)
+        calculatorPresenterDelegate.setMainLabelText(formattedText)
     }
 
     public func fixOverflowForCurrentValue() {

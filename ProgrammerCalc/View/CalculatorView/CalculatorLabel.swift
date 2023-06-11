@@ -14,7 +14,7 @@ protocol UpdatableLabel: UILabel {
 }
 
 protocol CalculatorLabelDelegate {
-    var hasErrorMessage: Bool { get }
+    var hasError: Bool { get }
     func getText(deleteSpaces: Bool) -> String
     func setText(_ text: String)
     func setError(_ error: MathErrors)
@@ -47,11 +47,8 @@ class CalculatorLabel: UILabel, UpdatableLabel, CalculatorLabelDelegate {
     
     var error: MathErrors?
     
-    var hasErrorMessage: Bool {
-        for error in MathErrors.allCases where self.text == error.localizedDescription {
-            return true
-        }
-        return false
+    var hasError: Bool {
+        return error != nil
     }
     
     // ======================

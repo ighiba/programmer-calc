@@ -8,8 +8,18 @@
 
 import UIKit
 
+protocol CalculatorPresenterDelegate: AnyObject {
+    var mainLabelHasError: Bool { get }
+    func updateClearButton(hasInput: Bool)
+    func showErrorInLabels(_ error: MathErrors)
+    func setErrorInLabels(_ error: MathErrors)
+    func resetErrorInLabels()
+    func getMainLabelText(deleteSpaces: Bool) -> String
+    func setMainLabelText(_ text: String)
+    func setConverterLabelText(_ text: String)
+}
+
 protocol CalculatorOutput: AnyObject {
-    func setDelegates(mainLabel: CalculatorLabel, converterLabel: CalculatorLabel)
     func getMainSystem() -> ConversionSystemsEnum
     func getConverterSystem() -> ConversionSystemsEnum
     func isInvalidMainLabelInput(_ text: String) -> Bool
@@ -48,12 +58,6 @@ class CalculatorPresenter: CalculatorOutput {
         
     }
     
-    func setDelegates(mainLabel: CalculatorLabel, converterLabel: CalculatorLabel) {
-        calculator.mainLabelDelegate = mainLabel
-        calculator.converterLabelDelegate = converterLabel
-        calculator.calculatorViewDelegate = (input as! any CalculatorViewDelegate)
-    }
-    
     func getMainSystem() -> ConversionSystemsEnum {
         return conversionSettings.systemMain
     }
@@ -74,8 +78,7 @@ class CalculatorPresenter: CalculatorOutput {
     
     func resetCurrentValueAndUpdateLabels() {
         calculator.resetCurrentValue()
-        mainLabelUpdate()
-        converterLabelUpdate()
+        updateLabels()
     }
     
     private func mainLabelUpdate() {
@@ -138,15 +141,13 @@ class CalculatorPresenter: CalculatorOutput {
         } else if calculator.hasPendingOperation {
             calculator.calculate()
             calculator.setOperation(operation)
-            calculator.mainLabelUpdate()
-            calculator.converterLabelUpdate()
+            updateLabels()
         } else if isUnaryOperation(operation) {
             calculator.setOperation(operation)
             calculator.calculate()
             calculator.resetCalculation()
             calculator.shouldStartNewInput = true
-            calculator.mainLabelUpdate()
-            calculator.converterLabelUpdate()
+            updateLabels()
         } else {
             calculator.setOperation(operation)
             calculator.shouldStartNewInput = true
@@ -158,6 +159,11 @@ class CalculatorPresenter: CalculatorOutput {
                operation == .shiftLeft ||
                operation == .oneS ||
                operation == .twoS
+    }
+    
+    private func updateLabels() {
+        mainLabelUpdate()
+        converterLabelUpdate()
     }
     
     func toggleProcessSigned() {
@@ -173,8 +179,7 @@ class CalculatorPresenter: CalculatorOutput {
             if calculator.currentValue.isSignedAndFloat {
                 input.clearLabels()
             } else if oldValue != calculator.currentValue {
-                calculator.mainLabelUpdate()
-                calculator.converterLabelUpdate()
+                updateLabels()
             }
         }
     }
@@ -196,9 +201,8 @@ class CalculatorPresenter: CalculatorOutput {
             calculator.calculate()
             calculator.resetCalculation()
             
-            guard input.mainLabelHasNoError() else { return }
-            calculator.mainLabelUpdate()
-            calculator.converterLabelUpdate()
+            guard !input.mainLabelHasError() else { return }
+            updateLabels()
         }
     }
     
@@ -207,12 +211,44 @@ class CalculatorPresenter: CalculatorOutput {
             return
         }
         calculator.negateCurrentValue()
-        calculator.mainLabelUpdate()
-        calculator.converterLabelUpdate()
+        updateLabels()
     }
     
     func fixOverflowForCurrentValue() {
         calculator.fixOverflowForCurrentValue()
     }
+}
 
+extension CalculatorPresenter: CalculatorPresenterDelegate {
+    var mainLabelHasError: Bool {
+        return input.mainLabelHasError()
+    }
+    
+    func updateClearButton(hasInput: Bool) {
+        input.updateClearButton(hasInput: hasInput)
+    }
+    
+    func showErrorInLabels(_ error: MathErrors) {
+        input.showErrorInLabels(error)
+    }
+    
+    func setErrorInLabels(_ error: MathErrors) {
+        input.setErrorInLabels(error)
+    }
+    
+    func resetErrorInLabels() {
+        input.resetErrorInLabels()
+    }
+    
+    func getMainLabelText(deleteSpaces: Bool) -> String {
+        return input.getMainLabelText(deleteSpaces: deleteSpaces)
+    }
+    
+    func setMainLabelText(_ text: String) {
+        input.setMainLabelText(text)
+    }
+    
+    func setConverterLabelText(_ text: String) {
+        input.setConverterLabelText(text)
+    }
 }

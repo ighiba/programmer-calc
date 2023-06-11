@@ -12,12 +12,19 @@ protocol CalculatorViewDelegate: AnyObject {
     func clearLabels()
     func unhighlightLabels()
     func updateAllLayout()
-    func updateClearButton(hasInput: Bool)
+    
 }
 
 protocol CalculatorInput: AnyObject {
     func clearLabels()
-    func mainLabelHasNoError() -> Bool
+    func updateClearButton(hasInput: Bool)
+    func mainLabelHasError() -> Bool
+    func showErrorInLabels(_ error: MathErrors)
+    func setErrorInLabels(_ error: MathErrors)
+    func resetErrorInLabels()
+    func getMainLabelText(deleteSpaces: Bool) -> String
+    func setMainLabelText(_ text: String)
+    func setConverterLabelText(_ text: String)
 }
 
 class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate, UIAdaptivePresentationControllerDelegate {
@@ -65,9 +72,7 @@ class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate,
             swipeRight.direction = .right
             label.addGestureRecognizer(swipeRight)
         }
-        
-        output.setDelegates(mainLabel: mainLabel, converterLabel: converterLabel)
-        
+
         self.view.addSubview(buttonsContainerController.view)
         buttonsContainerController.didMove(toParent: self)
         
@@ -339,8 +344,35 @@ class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate,
         return bitwiseKeypad != nil
     }
     
-    func mainLabelHasNoError() -> Bool {
-        return mainLabel.error == nil
+    func mainLabelHasError() -> Bool {
+        return mainLabel.hasError
+    }
+    
+    func showErrorInLabels(_ error: MathErrors) {
+        mainLabel.showErrorInLabel(error.localizedDescription!)
+        converterLabel.showErrorInLabel("NaN")
+    }
+    
+    func setErrorInLabels(_ error: MathErrors) {
+        mainLabel.setError(error)
+        converterLabel.setError(error)
+    }
+    
+    func resetErrorInLabels() {
+        mainLabel.resetError()
+        converterLabel.resetError()
+    }
+    
+    func getMainLabelText(deleteSpaces: Bool) -> String {
+        return mainLabel.getText(deleteSpaces: deleteSpaces)
+    }
+    
+    func setMainLabelText(_ text: String) {
+        mainLabel.setText(text)
+    }
+    
+    func setConverterLabelText(_ text: String) {
+        converterLabel.setText(text)
     }
 
 }
@@ -376,7 +408,7 @@ extension CalculatorView {
         
         print("Button \(buttonText) touched")
         
-        if mainLabel.hasErrorMessage {
+        if mainLabel.hasError {
             mainLabel.resetError()
             converterLabel.resetError()
             clearLabels()
@@ -417,7 +449,7 @@ extension CalculatorView {
         touchHandleLabelHighlight()
         let changeConversionVC = ConversionViewController()
         changeConversionVC.modalPresentationStyle = .overFullScreen
-        //changeConversionVC.delegate = self
+        changeConversionVC.delegate = self
         changeConversionVC.updateHandler = {
             self.updateInfoSubLabels()
             self.handleDisplayingMainLabel()
