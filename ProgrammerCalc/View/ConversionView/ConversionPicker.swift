@@ -9,8 +9,9 @@
 import UIKit
 
 class ConversionPicker: UIPickerView {
-    let screenWidth = UIScreen.main.bounds.width
-    
+    var pickerWidth: CGFloat {
+        return modalViewWidth / 2 - 35
+    }
 }
 
 extension ConversionPicker: UIPickerViewDataSource {
@@ -32,7 +33,7 @@ extension ConversionPicker: UIPickerViewDelegate {
     
     // Picker row width
     func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
-        return (screenWidth * 0.95) / 2 - 30
+        return pickerWidth + 5
     }
     
     // Picker row height
@@ -46,8 +47,8 @@ extension ConversionPicker: UIPickerViewDelegate {
         let label = UILabel()
         
         // Row bounds
-        view.frame = CGRect(x: 0, y: 0, width: (screenWidth * 0.95) / 2 - 35, height: 30)
-        label.frame = CGRect(x: 0, y: 0, width: (screenWidth * 0.95) / 2 - 35, height: 30)
+        view.frame = CGRect(x: 0, y: 0, width: pickerWidth, height: 30)
+        label.frame = CGRect(x: 0, y: 0, width: pickerWidth, height: 30)
         
         // Picker row text style
         label.text = self.pickerView(self, titleForRow: row, forComponent: component)

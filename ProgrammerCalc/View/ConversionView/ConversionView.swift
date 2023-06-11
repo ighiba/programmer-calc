@@ -42,7 +42,6 @@ class ConversionView: UIView {
         self.insertSubview(blurEffectView, at: 0)
     }
     
-    
     // Setup layout
     func setupLayout() {
         container.translatesAutoresizingMaskIntoConstraints = false
@@ -60,7 +59,7 @@ class ConversionView: UIView {
             // Set constraints for main container
             container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9),
+            container.widthAnchor.constraint(equalToConstant: modalViewWidth),
             container.heightAnchor.constraint(greaterThanOrEqualToConstant: 400),
             
             // Set constraints for label

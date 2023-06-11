@@ -57,6 +57,7 @@
 		C082FB912A34C0A400F3AA60 /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082FB902A34C0A400F3AA60 /* DeviceType.swift */; };
 		C082FB932A34D22C00F3AA60 /* UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082FB922A34D22C00F3AA60 /* UIScreen.swift */; };
 		C082FB952A35DAF000F3AA60 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C082FB942A35DAF000F3AA60 /* Assets.xcassets */; };
+		C082FB972A35E6FF00F3AA60 /* Values.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082FB962A35E6FF00F3AA60 /* Values.swift */; };
 		C0905E712A080843004180A7 /* PCDecimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0905E702A080843004180A7 /* PCDecimal.swift */; };
 		C09623172A04171B00E6C08F /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09623162A04171B00E6C08F /* Int.swift */; };
 		C09623192A041A1800E6C08F /* Calculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09623182A041A1800E6C08F /* Calculator.swift */; };
@@ -161,6 +162,7 @@
 		C082FB902A34C0A400F3AA60 /* DeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceType.swift; sourceTree = "<group>"; };
 		C082FB922A34D22C00F3AA60 /* UIScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreen.swift; sourceTree = "<group>"; };
 		C082FB942A35DAF000F3AA60 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C082FB962A35E6FF00F3AA60 /* Values.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Values.swift; sourceTree = "<group>"; };
 		C0905E702A080843004180A7 /* PCDecimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCDecimal.swift; sourceTree = "<group>"; };
 		C09623162A04171B00E6C08F /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
 		C09623182A041A1800E6C08F /* Calculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calculator.swift; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 				C097D09B2A09CCD5002FA1E6 /* LabelFormatter.swift */,
 				C09631CD27270D6B001DCD25 /* Style.swift */,
 				C09631CF27270FCC001DCD25 /* StyleFactory.swift */,
+				C082FB962A35E6FF00F3AA60 /* Values.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -681,6 +684,7 @@
 				C0CC6E0127208EBB00E59E64 /* AboutView.swift in Sources */,
 				C0CC6DFF271F68AA00E59E64 /* AboutViewController.swift in Sources */,
 				C066756E24E2D83300F832F9 /* Converter.swift in Sources */,
+				C082FB972A35E6FF00F3AA60 /* Values.swift in Sources */,
 				C05B009124E71B6E00F8A5E0 /* DecimalSystem.swift in Sources */,
 				C06B7F072443B12B009642B9 /* AppDelegate.swift in Sources */,
 				C09631D82728E9DC001DCD25 /* PCalcTableViewController.swift in Sources */,
