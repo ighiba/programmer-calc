@@ -25,8 +25,7 @@ import Foundation
  
          // if value system == converterSystem, then return imput value
          // except binary (for processing it to normal format)
-         if getSystemBy(value) == converterSystem &&
-            !(value is Binary) {
+         if getSystemBy(value) == converterSystem && !(value is Binary) {
              return value
          }
  
@@ -44,6 +43,28 @@ import Foundation
          // Second step: convert binary value to needed system
          // ==================================================
  
+         let result = convertBinaryToAny(binary: binary, targetSystem: converterSystem)
+ 
+         return result
+     }
+     
+     public func convertValue(value: PCDecimal,
+                              to converterSystem: ConversionSystemsEnum,
+                              format processToFormat: Bool) -> NumberSystemProtocol? {
+         
+         let decimal = DecimalSystem(value)
+         
+         if converterSystem == .dec {
+             return decimal
+         }
+
+         var binary = convertAnyToBinary(value: decimal)
+ 
+         if processToFormat {
+             // Process binary to settings format
+             binary = processBinaryToFormat(binary)
+         }
+
          let result = convertBinaryToAny(binary: binary, targetSystem: converterSystem)
  
          return result
@@ -233,7 +254,7 @@ import Foundation
          // Process fact part if exists and last digit is 0
          if decStr.last == "0" && decStr.contains(".") {
              // count how much zeros in back
-             let fractPart = decStr.getPartAfter(divider: ".")
+             let fractPart = decStr.getPartAfter(separator: ".")
  
              let buffFractPart = String(fractPart.reversed())
              var buffStr = ""

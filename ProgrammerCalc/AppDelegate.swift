@@ -53,6 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
          
         static func unlockPortraitOrientation() {
+            guard UIDevice.currentDeviceType != .iPad else { return }
             lockOrientation(.allButUpsideDown)
             rotateToPortrait()
         }

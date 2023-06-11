@@ -64,6 +64,12 @@ class CalculatorButton: UIButton {
         }
     }
     
+    override var isEnabled: Bool {
+        didSet {
+            self.alpha = isEnabled ? 1.0 : 0.5
+        }
+    }
+    
     // ======================
     // MARK: - Initialization
     // ======================
@@ -122,7 +128,7 @@ class CalculatorButton: UIButton {
         // round corners
         self.layer.cornerRadius = buttonWidth() / 2
     }
-    
+  
     private func animateHighlight() {
         UIView.transition(
             with: self,
@@ -161,10 +167,20 @@ class CalculatorButton: UIButton {
     //  0.9 - buttons stack view width
     //  4  - number of buttons
     func buttonWidth() -> CGFloat {
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
-        let width = screenWidth < screenHeight ? screenWidth : screenHeight
-        return (width * 0.9 - 3 * CalculatorButton.spacingWidth) / 4
+        let width = UIScreen.mainRealSize().width
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            // iPad
+            return (width * 0.9 - 7 * CalculatorButton.spacingWidth) / 8
+        } else {
+            // iOS
+            return (width * 0.9 - 3 * CalculatorButton.spacingWidth) / 4
+        }
+       
+    }
+    
+    func buttonWidthPad() -> CGFloat {
+        let width = UIScreen.mainRealSize().width
+        return (width * 0.9 - 7 * CalculatorButton.spacingWidth) / 8
     }
     
     // override for decrease control bounds of button
@@ -195,13 +211,12 @@ class CalculatorButton: UIButton {
                 sendActions(for: .touchDragInside)
             }
         }
-
     }
     
     func setActions(for buttonType: ButtonTypes){
         
         // label higliglht handling
-        self.addTarget(nil, action: #selector(PCalcViewController.touchHandleLabelHighlight), for: .touchDown)
+        self.addTarget(nil, action: #selector(CalculatorView.touchHandleLabelHighlight), for: .touchDown)
         // haptic feedback
         self.addTarget(nil, action: #selector(CalcButtonsViewController.hapticFeedbackHandler), for: .touchUpInside)
         // tapping sound
@@ -209,13 +224,9 @@ class CalculatorButton: UIButton {
         
         switch buttonType {
         case .numeric:
-            self.addTarget(nil, action: #selector(PCalcViewController.numericButtonTapped), for: .touchUpInside)
-        case .sign:
-            self.addTarget(nil, action: #selector(PCalcViewController.signButtonTapped), for: .touchUpInside)
-        case .complement:
-            self.addTarget(nil, action: #selector(PCalcViewController.complementButtonTapped), for: .touchUpInside)
-        case .bitwise:
-            self.addTarget(nil, action: #selector(PCalcViewController.bitwiseButtonTapped), for: .touchUpInside)
+            self.addTarget(nil, action: #selector(CalculatorView.numericButtonTapped), for: .touchUpInside)
+        case .sign, .complement, .bitwise:
+            self.addTarget(nil, action: #selector(CalculatorView.signButtonTapped), for: .touchUpInside)
         case .defaultBtn:
             // do nothing
             break
@@ -235,6 +246,91 @@ class CalculatorButton: UIButton {
             self.isHighlighted = false
             return sendActions(for: .touchUpOutside)
         }
+    }
+    
+}
+
+// MARK: - Constraints
+
+extension CalculatorButton {
+    func setDefaultConstraints(spacingBetweenButtons spacing: CGFloat) {
+        let button = self
+        let title = button.titleLabel?.text
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.portrait = []
+        button.portrait?.append( button.heightAnchor.constraint(equalToConstant: button.buttonWidth()) )
+        // special style for double button
+        if title == "00" || title == "FF" || title == "0" {
+            button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth() * 2 + spacing) )
+            button.titleLabel?.font = button.titleLabel?.font.withSize(button.defaultFontSize) // default
+        } else {
+            button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth()) )
+        }
+        // change priority for all constraints to 999 (for disable log noise when device is rotated)
+        button.portrait!.forEach { $0.priority = UILayoutPriority(999) }
+        NSLayoutConstraint.activate(button.portrait!)
+    }
+}
+
+
+// MARK: - Style
+
+extension CalculatorButton {
+    func updateStyle(_ style: Style) {
+        let button = self
+        
+        switch button.calcButtonType {
+        case .numeric:
+            button.backgroundColor = style.numericButtonStyle.frameColor
+            button.frameTint = style.numericButtonStyle.frameTint
+            button.setTitleColor(style.numericButtonStyle.textColor, for: .normal)
+            button.setTitleColor(style.numericButtonStyle.textTint, for: .highlighted)
+
+        case .sign:
+            button.backgroundColor = style.actionButtonStyle.frameColor
+            button.frameTint = style.actionButtonStyle.frameTint
+            button.setTitleColor(style.actionButtonStyle.textColor, for: .normal)
+            button.setTitleColor(style.actionButtonStyle.textTint, for: .highlighted)
+
+        case .complement:
+            button.backgroundColor = style.miscButtonStyle.frameColor
+            button.frameTint = style.miscButtonStyle.frameTint
+            button.setTitleColor(style.miscButtonStyle.textColor, for: .normal)
+            button.setTitleColor(style.miscButtonStyle.textTint, for: .highlighted)
+
+        case .bitwise:
+            button.backgroundColor = style.actionButtonStyle.frameColor
+            button.frameTint = style.actionButtonStyle.frameTint
+            button.setTitleColor(style.actionButtonStyle.textColor, for: .normal)
+            button.setTitleColor(style.actionButtonStyle.textTint, for: .highlighted)
+
+        case .defaultBtn:
+            button.backgroundColor = style.miscButtonStyle.frameColor
+            button.frameTint = style.miscButtonStyle.frameTint
+            button.setTitleColor(style.miscButtonStyle.textColor, for: .normal)
+            button.setTitleColor(style.miscButtonStyle.textTint, for: .highlighted)
+            button.setTitleColor(style.miscButtonStyle.textTint.setDarker(by: 0.7), for: .disabled)
+        }
+
+        if style.buttonBorderColor != .clear {
+            let borderColor = button.backgroundColor?.setDarker(by: 0.98)
+            button.layer.borderColor = borderColor?.cgColor
+        } else {
+            button.layer.borderColor = style.buttonBorderColor.cgColor
+        }
+        button.layer.borderWidth = 0.5
+
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.25
+        button.layer.shadowOffset = CGSize(width: 0, height: 1)
+        button.layer.shadowRadius = 1.5
+        
+        let shadowPath = CGPath(roundedRect: button.layer.bounds,
+                                cornerWidth: button.layer.cornerRadius,
+                                cornerHeight: button.layer.cornerRadius,
+                                transform: nil)
+        button.layer.shadowPath = shadowPath
+
     }
     
 }

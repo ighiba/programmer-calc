@@ -39,15 +39,6 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
         // override in child class
     }
     
-    static func getTopMargin() -> CGFloat {
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
-        let height = screenHeight > screenWidth ? screenHeight : screenWidth
-        let buttonsStackHeight = (height / 3) * 2
-        
-        return (buttonsStackHeight / 2 + 2) * 1.089
-    }
-    
     fileprivate func setLayout() {
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -58,7 +49,7 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
             // centering
             buttonsStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             // top anchor
-            buttonsStackView.topAnchor.constraint(equalTo: self.topAnchor, constant: CalcButtonsPage.getTopMargin() ),
+            buttonsStackView.topAnchor.constraint(equalTo: self.topAnchor),
             // bottom anchor === spacing -3.5 for shadows
             buttonsStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -3.5),
         ]
@@ -162,23 +153,15 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
                                     transform: nil)
             button.layer.shadowPath = shadowPath
         }
-
     }
-    
-    
-
     
     func updateButtonIsEnabled(by forbiddenValues: Set<String>) {
         allButtons.forEach { button in
             let buttonLabel = String((button.titleLabel?.text)!)
             if forbiddenValues.contains(buttonLabel) && button.calcButtonType == .numeric {
-                // disable and set transparent
                 button.isEnabled = false
-                button.alpha = 0.5
             } else {
-                // enable button ans set normal opacity
                 button.isEnabled = true
-                button.alpha = 1
             }
         }
     }
@@ -239,7 +222,6 @@ class CalcButtonsMain: CalcButtonsPage {
         self.addSubview(buttonsStackView)
     }
     
-    
     // Standart calculator buttons
     private func getButtons() {
         
@@ -257,22 +239,21 @@ class CalcButtonsMain: CalcButtonsPage {
             let button: CalculatorButton
 
             // initialize button by type
-            switch title{
+            switch title {
             case "0"..."9",".":
                 button = CalculatorButton(calcButtonType: .numeric)
             case "Signed\nOFF":
                 button = CalculatorButton()
-                button.addTarget(nil, action: #selector(PCalcViewController.toggleIsSigned), for: .touchUpInside)
+                button.addTarget(nil, action: #selector(CalculatorView.toggleIsSigned), for: .touchUpInside)
             case "AC":
                 button = CalculatorButton()
-                button.addTarget(nil, action: #selector(PCalcViewController.clearButtonTapped), for: .touchUpInside)
+                button.addTarget(nil, action: #selector(CalculatorView.clearButtonTapped), for: .touchUpInside)
             case "±":
                 button = CalculatorButton()
-                button.addTarget(nil, action: #selector(PCalcViewController.negateButtonTapped), for: .touchUpInside)
+                button.addTarget(nil, action: #selector(CalculatorView.negateButtonTapped), for: .touchUpInside)
             case "=":
                 button = CalculatorButton(calcButtonType: .sign)
-                button.removeTarget(nil, action: #selector(PCalcViewController.signButtonTapped), for: .touchUpInside)
-                button.addTarget(nil, action: #selector(PCalcViewController.calculateButtonTapped), for: .touchUpInside)
+                button.addTarget(nil, action: #selector(CalculatorView.calculateButtonTapped), for: .touchUpInside)
             default:
                 button = CalculatorButton(calcButtonType: .sign)
             }
@@ -293,6 +274,8 @@ class CalcButtonsMain: CalcButtonsPage {
             // button tags start from 100 to 118
             button.tag = buttonTag
             buttonTag += 1
+            
+            button.accessibilityIdentifier = title
             
             // add element to array
             buttons.append(button)
@@ -355,14 +338,11 @@ class CalcButtonsAdditional: CalcButtonsPage {
 
     // Standart calculator buttons
     private func getButtons() {
-        // localization for 1's and 2's
-        let oneS = NSLocalizedString("1's", comment: "")
-        let twoS = NSLocalizedString("2's", comment: "")
         
         let allTitles = ["AND","OR","XOR","NOR",
                          "X<<Y", "X>>Y", "<<", ">>",
-                         oneS, "D", "E", "F",
-                         twoS, "A", "B", "C",
+                         "1's", "D", "E", "F",
+                         "2's", "A", "B", "C",
                          "00", "FF"]
                     
         var buttonTag: Int = 200
@@ -373,10 +353,10 @@ class CalcButtonsAdditional: CalcButtonsPage {
             let button: CalculatorButton
 
             // initialize button by type
-            switch title{
+            switch title {
             case "A","B","C","D","E","F","00","FF":
                 button = CalculatorButton(calcButtonType: .numeric)
-            case oneS, twoS:
+            case "1's", "2's":
                 button = CalculatorButton(calcButtonType: .complement)
             case "X<<Y", "X>>Y", "<<", ">>", "AND", "OR", "XOR", "NOR":
                 button = CalculatorButton(calcButtonType: .bitwise)
@@ -387,7 +367,13 @@ class CalcButtonsAdditional: CalcButtonsPage {
             button.setActions(for: button.calcButtonType)
             
             // set title and style
-            button.setTitle(title, for: .normal)
+            if title == "1's" || title == "2's" {
+                // localization for 1's and 2's
+                let localizedTitle = NSLocalizedString(title, comment: "")
+                button.setTitle(localizedTitle, for: .normal)
+            } else {
+                button.setTitle(title, for: .normal)
+            }
 
             button.setTitleColor(.systemGray, for: .disabled)
             button.applyStyle()
@@ -395,6 +381,8 @@ class CalcButtonsAdditional: CalcButtonsPage {
             // button tags start from 200 to 217
             button.tag = buttonTag
             buttonTag += 1
+            
+            button.accessibilityIdentifier = title
             
             // add element to array
             buttons.append(button)

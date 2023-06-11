@@ -13,15 +13,22 @@ protocol UpdatableLabel: UILabel {
     var updateHandler: ((UpdatableLabel) -> Void)? { get set }
 }
 
-class CalcualtorLabel: UILabel, UpdatableLabel {
+protocol CalculatorLabelDelegate {
+    var hasError: Bool { get }
+    func getText(deleteSpaces: Bool) -> String
+    func setText(_ text: String)
+    func setError(_ error: MathErrors)
+    func showErrorInLabel(_ errorMessage: String)
+}
+
+class CalculatorLabel: UILabel, UpdatableLabel, CalculatorLabelDelegate {
 
     // ==================
     // MARK: - Properties
     // ==================
     
-
     var updateHandler: ((UpdatableLabel) -> Void)?
-    var numberValue: NumberSystemProtocol?
+
     // Font
     let fontName: String = "HelveticaNeue-Thin"
     // Sub label for displaying current system of label
@@ -33,8 +40,15 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
     
     override var text: String? {
         didSet {
+            //print(self.text)
             self.updateHandler?(self)
         }
+    }
+    
+    var error: MathErrors?
+    
+    var hasError: Bool {
+        return error != nil
     }
     
     // ======================
@@ -58,10 +72,6 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
     // ===============
     // MARK: - Methods
     // ===============
-    
-    func setNumberValue(_ value: NumberSystemProtocol) {
-        self.numberValue = value
-    }
     
     func addInfoLabel() {
         self.addSubview(infoSubLabel)
@@ -176,11 +186,37 @@ class CalcualtorLabel: UILabel, UpdatableLabel {
         undoHighlightLabel()
     }
     
-    public func containsFloatValues() -> Bool {
-        if let text = self.text {
-            return text.contains(".")
+    public func getText(deleteSpaces: Bool = false) -> String {
+        if deleteSpaces {
+            return self.text?.removeAllSpaces() ?? "0"
+        } else {
+            return self.text ?? "0"
         }
-        return false
+    }
+    
+    public func setText(_ text: String) {
+        self.text = text
+    }
+    
+    public func setError(_ error: MathErrors) {
+        self.error = error
+    }
+    
+    public func resetError() {
+        self.error = nil
+    }
+
+    public func showErrorInLabel(_ errorMessage: String = "Error") {
+        guard errorMessage == "Error" else {
+            self.text = errorMessage
+            return
+        }
+        
+        if let error = self.error {
+            self.text = error.localizedDescription!
+        } else {
+            self.text = errorMessage
+        }
     }
 
 }

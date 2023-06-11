@@ -31,13 +31,15 @@ final class CalcMath {
     // Object "Converter"
     private let converter: Converter = Converter()
     
-    enum Operation {
+    enum OperationType {
         // arithmetic
         case add
         case sub
         case mul
         case div
         // bitwise
+        case oneS
+        case twoS
         case shiftLeft //  <<
         case shiftRight //  >>
         case shiftLeftBy //  X << Y
@@ -47,13 +49,15 @@ final class CalcMath {
         case or
         case xor
         case nor
+        
+        case none
     }
     
     // ===============
     // MARK: - Methods
     // ===============
     
-    func calculate( firstValue: NumberSystemProtocol, operation: Operation ,secondValue: NumberSystemProtocol, for system: ConversionSystemsEnum) throws -> NumberSystemProtocol? {
+    func calculate( firstValue: NumberSystemProtocol, operation: OperationType ,secondValue: NumberSystemProtocol, for system: ConversionSystemsEnum) throws -> NumberSystemProtocol? {
   
         // ======================
         // Convert Any to Decimal
@@ -120,7 +124,7 @@ final class CalcMath {
     }
     
     // Calculation of 2 decimal numbers by .operation
-    fileprivate func calculateDecNumbers( firstNum: DecimalSystem, secondNum: DecimalSystem, operation: CalcMath.Operation) throws -> DecimalSystem? {
+    fileprivate func calculateDecNumbers( firstNum: DecimalSystem, secondNum: DecimalSystem, operation: CalcMath.OperationType) throws -> DecimalSystem? {
         var resultStr: String = String()
 
         let firstDecimal = firstNum.decimalValue
@@ -208,6 +212,10 @@ final class CalcMath {
             } else {
                 return firstNum
             }
+        case .none:
+            return secondNum
+        default:
+            return secondNum
         }
         
         // convert resultStr to DecimalSystem
@@ -275,7 +283,7 @@ final class CalcMath {
     // Shift to needed bit count
     public func shiftBits(number: NumberSystemProtocol,
                           mainSystem: ConversionSystemsEnum,
-                          shiftOperation: CalcMath.Operation,
+                          shiftOperation: CalcMath.OperationType,
                           shiftCount: DecimalSystem ) -> NumberSystemProtocol? {
         // Check if value is not float
         guard !number.value.contains(".") else {
@@ -298,7 +306,7 @@ final class CalcMath {
         }
 
         // get operation
-        let operation: CalcMath.Operation = {
+        let operation: CalcMath.OperationType = {
             if shiftCount.decimalValue < 0 {
                 // swap operation if shift count < 0
                 return shiftOperation == .shiftRight ? .shiftLeft : .shiftRight

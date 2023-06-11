@@ -14,7 +14,7 @@ class DecimalSystem: NumberSystemProtocol {
     // MARK: - Properties
     // ==================
     
-    // Decimal raw value for calculatiing
+    // Decimal raw value for calculating
     var decimalValue: Decimal
     
     var value: String
@@ -59,6 +59,12 @@ class DecimalSystem: NumberSystemProtocol {
         self.isSigned = valueDec.isSigned
     }
     
+    /// Creates an instance initialized to the PCDecimal value
+    init(_ value: PCDecimal) {
+        self.decimalValue = value.getDecimal()
+        self.value = "\(value.getDecimal())"
+        updateIsSignedState()
+    }
     
     // ===============
     // MARK: - Methods

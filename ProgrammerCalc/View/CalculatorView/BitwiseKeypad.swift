@@ -12,9 +12,16 @@ class BitwiseKeypad: UIView {
     
     // MARK: - Properties
     
-    private let spacing: CGFloat = 10
-    private let fontSize: CGFloat = UIScreen.main.bounds.width / 13.5
+    private let spacing: CGFloat = UIDevice.currentDeviceType == .iPad ? 20 : 10
+    private var fontSize: CGFloat {
+        let coef: CGFloat = UIDevice.currentDeviceType == .iPad ? 24 : 13.5
+        return UIScreen.mainRealSize().width / coef
+    }
+    private var infoFontSize: CGFloat {
+        return fontSize / 3
+    }
     private var buttonTag: Int = 63 // buttons or bit tags, buttons created in reverse order from 63 to 0
+    private let buttonsContainerMultiplier: CGFloat = UIDevice.currentDeviceType == .iPad ? 0.93 : 0.90
     
     lazy var wordSizeValue: Int = getWordSizeValue()
     lazy var tagOffset: Int = getTagOffset()
@@ -43,7 +50,7 @@ class BitwiseKeypad: UIView {
             
             allKeypadStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             allKeypadStack.centerYAnchor.constraint(equalTo: container.centerYAnchor, constant: -spacing * 2),
-            allKeypadStack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.90, constant: spacing * 3),
+            allKeypadStack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: buttonsContainerMultiplier, constant: spacing * 3),
             allKeypadStack.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.65, constant: spacing * 3)
         ])
         
@@ -68,14 +75,14 @@ class BitwiseKeypad: UIView {
         portrait = [
             self.centerXAnchor.constraint(equalTo: parentView.centerXAnchor),
             self.widthAnchor.constraint(equalTo: parentView.widthAnchor),
-            self.topAnchor.constraint(equalTo: parentView.topAnchor, constant: CalcButtonsPage.getTopMargin() - 2),
+            self.topAnchor.constraint(equalTo: parentView.topAnchor, constant: 20),
             self.bottomAnchor.constraint(equalTo: parentView.bottomAnchor)
         ]
         
         landscape = [
             self.centerXAnchor.constraint(equalTo: parentView.centerXAnchor),
-            self.widthAnchor.constraint(equalTo: parentView.widthAnchor),
-            self.heightAnchor.constraint(equalTo: parentView.heightAnchor, multiplier: 0.6),
+            self.widthAnchor.constraint(equalTo: parentView.widthAnchor, multiplier: 0.9),
+            self.topAnchor.constraint(equalTo: parentView.topAnchor),
             self.bottomAnchor.constraint(equalTo: parentView.safeAreaLayoutGuide.bottomAnchor, constant: -spacing * 2)
         ]
         
@@ -117,7 +124,7 @@ class BitwiseKeypad: UIView {
         let stack = UIStackView(arrangedSubviews: wordStacks)
         stack.axis = .vertical
         stack.distribution = .equalSpacing
-        stack.spacing = spacing
+        //stack.spacing = spacing
         
         return stack
     }
@@ -131,8 +138,8 @@ class BitwiseKeypad: UIView {
         
         let stack = UIStackView(arrangedSubviews: halfByteStacks)
         stack.axis = .horizontal
-        stack.distribution = .fillProportionally
-        stack.spacing = spacing
+        stack.distribution = .equalSpacing
+        //stack.spacing = spacing
 
         return stack
     }
@@ -149,6 +156,14 @@ class BitwiseKeypad: UIView {
         let stack = UIStackView(arrangedSubviews: buttons)
         stack.axis = .horizontal
         stack.distribution = .fillEqually
+        
+        let halfByteStackWidth = (UIScreen.mainRealSize().width - 5 * spacing) / 4
+        
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stack.widthAnchor.constraint(equalToConstant: halfByteStackWidth),
+            stack.heightAnchor.constraint(equalTo: buttons[0].heightAnchor),
+        ])
         
         let indexLabel = getInfoLabel()
 
@@ -173,13 +188,15 @@ class BitwiseKeypad: UIView {
         let bitState = bit == "1" ? true : false
         
         button.setBitState(bitState)
-        
         button.titleLabel?.font = UIFont.systemFont(ofSize: fontSize, weight: UIFont.Weight.regular)
         
         button.setTitleColor(.systemOrange, for: .highlighted) // default before applyStyle
         button.setTitleColor(.systemGray.withAlphaComponent(0.7), for: .disabled) // for all styles
         // identifier for UITests
         button.accessibilityIdentifier = "bitButton_\(buttonTag)"
+        
+        button.addTarget(nil, action: #selector(BitwiseKeypadController.buttonTapped), for: .touchUpInside)
+        button.addTarget(nil, action: #selector(CalculatorView.touchHandleLabelHighlight), for: .touchDown)
         
         // tag processing
         button.tag = buttonTag + tagOffset
@@ -196,9 +213,10 @@ class BitwiseKeypad: UIView {
         // info label for bit index
         let label = UILabel()
         label.text = String(buttonTag + 1)
-        label.font = UIFont.systemFont(ofSize: 10, weight: .light)
+        label.font = UIFont.systemFont(ofSize: infoFontSize, weight: .light)
         label.textAlignment = .right
         label.sizeToFit()
+        label.textColor = .systemGray
         return label
     }
 }

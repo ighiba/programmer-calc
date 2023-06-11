@@ -13,14 +13,13 @@ import XCTest
 
 class OctalTests: XCTestCase {
     
-    // Storages
-    var conversionStorage: ConversionStorageProtocol? = ConversionStorage()
+    let storage = CalculatorStorage()
     
     var octalTest: Octal!
     var octalStrInput: String = "357" // dec = 239
     
-    let unsignedData = CalcState(mainState: "0", convertState: "0", processSigned: false)
-    let signedData = CalcState(mainState: "0", convertState: "0", processSigned: true)
+    let unsignedData = CalcState(lastValue: PCDecimal(0), lastLabelValues: LabelValues(main: "0", converter: "0"), processSigned: false)
+    let signedData = CalcState(lastValue: PCDecimal(0), lastLabelValues: LabelValues(main: "0", converter: "0"), processSigned: true)
     
     let calcState: CalcState = CalcState.shared
     
@@ -28,13 +27,13 @@ class OctalTests: XCTestCase {
         super.setUp()
         octalTest = Octal()
         let dummyConversionSettings = ConversionSettings(systMain: .dec, systConverter: .oct, number: 8)
-        conversionStorage?.saveData(dummyConversionSettings)
+        storage.saveData(dummyConversionSettings)
         
     }
     
     override func tearDown() {
         octalTest = nil
-        conversionStorage?.saveData(ConversionSettings(systMain: .dec, systConverter: .bin, number: 8))
+        storage.saveData(ConversionSettings(systMain: .dec, systConverter: .bin, number: 8))
         super.tearDown()
     }
 
@@ -131,7 +130,7 @@ class OctalTests: XCTestCase {
         XCTAssertEqual(binary.value, "0000000000000000000000000000000000000000000000000000000011101111", "Converted values are wrong")
     }
     
-    func testOctalCovnertToBinaryUnsigned() throws {
+    func testOctalConvertToBinaryUnsigned() throws {
         // 1. given
         calcState.setCalcState(unsignedData)
         octalTest = Octal(stringLiteral: octalStrInput)
@@ -143,7 +142,7 @@ class OctalTests: XCTestCase {
         XCTAssertEqual(binary.value, "0000000000000000000000000000000000000000000000000000000011101111", "Converted values are wrong")
     }
     
-    func testOctalCovnertToBinarySigned() throws {
+    func testOctalConvertToBinarySigned() throws {
         // 1. given
         calcState.setCalcState(signedData)
         octalTest = Octal(stringLiteral: octalStrInput)

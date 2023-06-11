@@ -26,9 +26,9 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     // inputValue in array for further processing
     lazy var binaryCharArray: [Character] = getBinaryValueString()
     // tag offset for viewWithTag
-    var tagOffset: Int = 300
+    private var tagOffset: Int = 300
 
-    var bitButtons: [BitButton] = []
+    internal var bitButtons: [BitButton] = []
     
     // Views
     lazy var bitwiseKeypadView = BitwiseKeypad(frame: CGRect())
@@ -44,7 +44,7 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     // Sound of tapping bool setting
     // and
     // Haptic feedback setting
-    let settings = Settings.shared
+    private let settings = Settings.shared
     // Taptic feedback generator
     private let generator = UIImpactFeedbackGenerator(style: .light)
     
@@ -54,6 +54,9 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
         self.binary = binary
         super.init(nibName: nil, bundle: nil)
         self.bitwiseKeypadView.controllerDelegate = self
+    }
+    
+    override func loadView() {
         self.bitwiseKeypadView.setViews()
         self.view = bitwiseKeypadView
     }

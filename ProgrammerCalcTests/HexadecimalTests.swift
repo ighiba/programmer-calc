@@ -13,14 +13,13 @@ import XCTest
 
 class HexadecimalTests: XCTestCase {
     
-    // Storages
-    var conversionStorage: ConversionStorageProtocol? = ConversionStorage()
+    let storage = CalculatorStorage()
     
     var hexadecimalTest: Hexadecimal!
     var hexadecimalStrInput: String = "AF0" // dec = 2800
     
-    let unsignedData = CalcState(mainState: "0", convertState: "0", processSigned: false)
-    let signedData = CalcState(mainState: "0", convertState: "0", processSigned: true)
+    let unsignedData = CalcState(lastValue: PCDecimal(0), lastLabelValues: LabelValues(main: "0", converter: "0"), processSigned: false)
+    let signedData = CalcState(lastValue: PCDecimal(0), lastLabelValues: LabelValues(main: "0", converter: "0"), processSigned: true)
     
     let calcState: CalcState = CalcState.shared
     
@@ -28,7 +27,7 @@ class HexadecimalTests: XCTestCase {
         super.setUp()
         hexadecimalTest = Hexadecimal()
         let dummyConversionSettings = ConversionSettings(systMain: .dec, systConverter: .hex, number: 8)
-        conversionStorage?.saveData(dummyConversionSettings)
+        storage.saveData(dummyConversionSettings)
     }
     
     override func tearDown() {
@@ -44,7 +43,6 @@ class HexadecimalTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-    // XCTAssert to test model
     func testHexadecimalUnsignedInit() throws {
         // 1. given
         calcState.setCalcState(unsignedData)
@@ -132,7 +130,7 @@ class HexadecimalTests: XCTestCase {
         XCTAssertEqual(binary.value, "0000000000000000000000000000000000000000000000000000101011110000", "Converted values are wrong")
     }
     
-    func testHexadecimalCovnertToBinaryUnsigned() throws {
+    func testHexadecimalConvertToBinaryUnsigned() throws {
         // 1. given
         calcState.setCalcState(unsignedData)
         hexadecimalTest = Hexadecimal(stringLiteral: hexadecimalStrInput)
@@ -144,7 +142,7 @@ class HexadecimalTests: XCTestCase {
         XCTAssertEqual(binary.value, "0000000000000000000000000000000000000000000000000000101011110000", "Converted values are wrong")
     }
     
-    func testHexadecimalCovnertToBinarySigned() throws {
+    func testHexadecimalConvertToBinarySigned() throws {
         // 1. given
         calcState.setCalcState(signedData)
         hexadecimalTest = Hexadecimal(stringLiteral: hexadecimalStrInput)

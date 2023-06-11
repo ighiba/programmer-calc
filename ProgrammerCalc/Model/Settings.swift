@@ -13,7 +13,7 @@ protocol SettingsProtocol {
     var hapticFeedback: Bool { get set }
 }
 
-class Settings: SettingsProtocol, Decodable, Encodable {
+final class Settings: SettingsProtocol {
     
     static let shared: Settings = Settings(tappingSounds: false, hapticFeedback: false)
     
@@ -36,6 +36,21 @@ class Settings: SettingsProtocol, Decodable, Encodable {
     
     func setHapticFeedback(state: Bool) {
         self.hapticFeedback = state
+    }
+}
+
+extension Settings: Storable {
+    static var storageKey: String {
+        return "appSettings"
+    }
+    
+    static func getDefault() -> Settings {
+        return Settings(tappingSounds: false, hapticFeedback: false)
+    }
+    
+    func set(_ data: Settings) {
+        self.tappingSounds = data.tappingSounds
+        self.hapticFeedback = data.hapticFeedback
     }
 }
 

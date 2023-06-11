@@ -63,13 +63,13 @@ class WordSizeView: UIView {
             // Set constraints for main container
             container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9),
+            container.widthAnchor.constraint(equalToConstant: modalViewWidth),
             container.heightAnchor.constraint(equalToConstant: containerStackHeight+margin * 2),
             
             // Set constraints for done button
             containerStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             containerStack.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-            containerStack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.90),
+            containerStack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
             containerStack.heightAnchor.constraint(equalToConstant: containerStackHeight),
         ])
     }

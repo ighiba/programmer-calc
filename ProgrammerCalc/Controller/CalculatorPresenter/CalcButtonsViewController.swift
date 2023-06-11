@@ -18,7 +18,7 @@ class CalcButtonsViewController: UIViewController {
     // Taptic feedback generator
     private let generator = UIImpactFeedbackGenerator(style: .light)
     
-    var delegate: PCalcViewControllerDelegate?
+    var delegate: CalculatorViewDelegate?
     
     init(buttonsPage: UIView) {
         super.init(nibName: nil, bundle: nil)
@@ -35,7 +35,7 @@ class CalcButtonsViewController: UIViewController {
         super.touchesBegan(touches, with: event)
         
         guard let delegate = delegate else { return }
-        // handling label when tappging on PCalcViewController
+        // handling label when tappging on CalculatorView
         delegate.unhighlightLabels()
     }
     

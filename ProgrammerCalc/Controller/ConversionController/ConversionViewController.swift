@@ -12,8 +12,7 @@ class ConversionViewController: UIViewController {
     
     // MARK: - Properties
     
-    // PCalcViewController delegate
-    weak var delegate: PCalcViewControllerDelegate?
+    weak var delegate: CalculatorViewDelegate?
     
     lazy var conversionView = ConversionView()
     lazy var picker: ConversionPicker = conversionView.mainPicker
@@ -22,14 +21,14 @@ class ConversionViewController: UIViewController {
     private var sliderOldValue: Float = 2.0
     
     // Storage
-    private var conversionStorage: ConversionStorageProtocol = ConversionStorage()
+    private let storage = CalculatorStorage()
     
     private let conversionSettings: ConversionSettings = ConversionSettings.shared
     private let settings: Settings = Settings.shared
     // Haptic feedback generator
     let generator = UIImpactFeedbackGenerator(style: .medium)
     
-    var updaterHandler: (() -> Void)?
+    var updateHandler: (() -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,11 +100,11 @@ class ConversionViewController: UIViewController {
         // Slider
         let sliderValue = slider.value.rounded()
         
-        // PCalcViewController delegate fo handling changing of mainSystem
+        // CalculatorView delegate fo handling changing of mainSystem
         guard delegate != nil else {
             let newConversionSettings = ConversionSettings(systMain: systemMainNew!, systConverter: systemConverterNew!, number: Int(sliderValue) * 4)
             // set data to UserDefaults
-            conversionStorage.saveData(newConversionSettings)
+            storage.saveData(newConversionSettings)
             conversionSettings.setConversionSettings(newConversionSettings)
             return
         }
@@ -114,7 +113,7 @@ class ConversionViewController: UIViewController {
         let buffSavedMainLabel = conversionSettings.systemMain
         // set data to UserDefaults
         let newConversionSettings = ConversionSettings(systMain: systemMainNew!, systConverter: systemConverterNew!, number: Int(sliderValue) * 4)
-        conversionStorage.saveData(newConversionSettings)
+        storage.saveData(newConversionSettings)
         conversionSettings.setConversionSettings(newConversionSettings)
         // Handle changing of systems
         if buffSavedMainLabel != systemMainNew! {
@@ -126,7 +125,7 @@ class ConversionViewController: UIViewController {
             delegate!.updateAllLayout()
         }
         
-        updaterHandler!()
+        updateHandler!()
     }
     
     // ViewConvtroller dismissing

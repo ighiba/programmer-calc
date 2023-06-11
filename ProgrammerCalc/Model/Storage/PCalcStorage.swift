@@ -10,19 +10,15 @@ import Foundation
 
 class PCalcStorage {
     
-    private let wordSizeStorage: WordSizeStorageProtocol = WordSizeStorage()
-    private let settingsStorage: SettingsStorageProtocol = SettingsStorage()
-    private let conversionStorage: ConversionStorageProtocol = ConversionStorage()
-    private let calcStateStorage: CalcStateStorageProtocol = CalcStateStorage()
-    private let styleStorage: StyleStorageProtocol = StyleStorage()
-
-    // Call this before PCalcViewController init in SceneDelegate willConnectTo
+    private let storage = CalculatorStorage()
+    
+    // Call this before CalculatorModuleAssembly.configureModule() in SceneDelegate willConnectTo
     public func loadAll() {
-        let wordSize = wordSizeStorage.safeGetData()
-        let settings = settingsStorage.safeGetData()
-        let conversionSettings = conversionStorage.safeGetData()
-        let calcState = calcStateStorage.safeGetData()
-        let styleSettigns = styleStorage.safeGetData()
+        let wordSize: WordSize = storage.loadData()
+        let settings: Settings = storage.loadData()
+        let conversionSettings: ConversionSettings = storage.loadData()
+        let calcState: CalcState = storage.loadData()
+        let styleSettigns: StyleSettings = storage.loadData()
         // Set shared instatnces
         WordSize.shared.setWordSize(wordSize)
         Settings.shared.setSettings(settings)
@@ -37,11 +33,11 @@ class PCalcStorage {
         let conversionSettings = ConversionSettings.shared
         let calcState = CalcState.shared
         let styleSettings = StyleSettings.shared
-        // Save data
-        wordSizeStorage.saveData(wordSize)
-        settingsStorage.saveData(settings)
-        conversionStorage.saveData(conversionSettings)
-        calcStateStorage.saveData(calcState)
-        styleStorage.saveData(styleSettings)
+
+        storage.saveData(wordSize)
+        storage.saveData(settings)
+        storage.saveData(conversionSettings)
+        storage.saveData(calcState)
+        storage.saveData(styleSettings)
     }
 }

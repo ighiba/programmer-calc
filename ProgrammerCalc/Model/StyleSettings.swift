@@ -13,10 +13,11 @@ protocol StyleSettingsProtocol {
     var currentStyle: StyleType { get set}
 }
 
-class StyleSettings: StyleSettingsProtocol, Decodable, Encodable {
-    // MARK: - Properties
-    
+final class StyleSettings: StyleSettingsProtocol {
+
     static let shared: StyleSettings = StyleSettings(isUsingSystemAppearance: false, currentStyle: .dark)
+    
+    // MARK: - Properties
     
     var isUsingSystemAppearance: Bool
     var currentStyle: StyleType
@@ -30,5 +31,19 @@ class StyleSettings: StyleSettingsProtocol, Decodable, Encodable {
         self.isUsingSystemAppearance = newStyleSettings.isUsingSystemAppearance
         self.currentStyle = newStyleSettings.currentStyle
     }
+}
+
+extension StyleSettings: Storable {
+    static var storageKey: String {
+        return "styleSettings"
+    }
     
+    static func getDefault() -> StyleSettings {
+        return StyleSettings(isUsingSystemAppearance: false, currentStyle: .dark)
+    }
+    
+    func set(_ data: StyleSettings) {
+        self.isUsingSystemAppearance = data.isUsingSystemAppearance
+        self.currentStyle = data.currentStyle
+    }
 }

@@ -13,14 +13,13 @@ import XCTest
 
 class DecimalTests: XCTestCase {
     
-    // Storages
-    var conversionStorage: ConversionStorageProtocol? = ConversionStorage()
+    let storage = CalculatorStorage()
     
     var decimalTest: DecimalSystem!
     var decimalStrInput: String = "12345"
     
-    let unsignedData = CalcState(mainState: "0", convertState: "0", processSigned: false)
-    let signedData = CalcState(mainState: "0", convertState: "0", processSigned: true)
+    let unsignedData = CalcState(lastValue: PCDecimal(0), lastLabelValues: LabelValues(main: "0", converter: "0"), processSigned: false)
+    let signedData = CalcState(lastValue: PCDecimal(0), lastLabelValues: LabelValues(main: "0", converter: "0"), processSigned: true)
     
     let calcState: CalcState = CalcState.shared
     
@@ -28,7 +27,7 @@ class DecimalTests: XCTestCase {
         super.setUp()
         decimalTest = DecimalSystem(stringLiteral: "0")
         let dummyConversionSettings = ConversionSettings(systMain: .bin, systConverter: .dec, number: 8)
-        conversionStorage?.saveData(dummyConversionSettings)
+        storage.saveData(dummyConversionSettings)
     }
     
     override func tearDown() {
@@ -124,7 +123,7 @@ class DecimalTests: XCTestCase {
         XCTAssertEqual(binary.value, "0000000000000000000000000000000000000000000000000011000000111001", "Converted values are wrong")
     }
 
-    func testHexadecimalCovnertToBinaryUnsigned() throws {
+    func testHexadecimalConvertToBinaryUnsigned() throws {
         // 1. given
         calcState.setCalcState(unsignedData)
         decimalTest = DecimalSystem(stringLiteral: "65536")
@@ -136,7 +135,7 @@ class DecimalTests: XCTestCase {
         XCTAssertEqual(binary.value, "0000000000000000000000000000000000000000000000010000000000000000", "Converted values are wrong")
     }
 
-    func testHexadecimalCovnertToBinarySigned() throws {
+    func testHexadecimalConvertToBinarySigned() throws {
         // 1. given
         calcState.setCalcState(signedData)
         decimalTest = DecimalSystem(stringLiteral: "-65536")

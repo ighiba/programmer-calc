@@ -165,7 +165,7 @@ class Binary: NumberSystemProtocol {
         if isSigned {
             binIntStrBuff?.removeFirst()
         }
-        // set multipler to -1 or 1 for inverting value
+        // set multiplier to -1 or 1 for inverting value
         if isSigned {
             signedMultipler = -1
             // check if min signed
@@ -475,7 +475,7 @@ class Binary: NumberSystemProtocol {
         
     }
     
-    // Set fillig style for binary string
+    // Set filling style for binary string
     private func fillingStyleResult(for str: String) -> String {
         
         let binary = self
@@ -608,7 +608,7 @@ class Binary: NumberSystemProtocol {
         }
         
         if calcState.processSigned {
-            // calcualte signed state
+            // calculate signed state
             binary.updateSignedState() // changes binary.isSigned state to true of false
             
             // remove signed bit
@@ -630,7 +630,7 @@ class Binary: NumberSystemProtocol {
                 return
             }
             
-            // fills up binary to 7, 15, 31, 63 detends of wordSize
+            // fills up binary to 7, 15, 31, 63 depends of wordSize
             binary.fillUpToMaxBitsCount()
             // isSigned == true -> 1 else -> 0
             // change signed bit by signed state
@@ -640,7 +640,7 @@ class Binary: NumberSystemProtocol {
                 binary.changeSignedBit(to: "0")
             }
         } else {
-            // if doesnt process signed binary values
+            // if doesn't process signed binary values
             // just append
             binary.value.append(digit)
             

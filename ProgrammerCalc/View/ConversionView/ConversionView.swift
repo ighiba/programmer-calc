@@ -42,7 +42,6 @@ class ConversionView: UIView {
         self.insertSubview(blurEffectView, at: 0)
     }
     
-    
     // Setup layout
     func setupLayout() {
         container.translatesAutoresizingMaskIntoConstraints = false
@@ -60,7 +59,7 @@ class ConversionView: UIView {
             // Set constraints for main container
             container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9),
+            container.widthAnchor.constraint(equalToConstant: modalViewWidth),
             container.heightAnchor.constraint(greaterThanOrEqualToConstant: 400),
             
             // Set constraints for label
@@ -68,7 +67,6 @@ class ConversionView: UIView {
             popoverTitle.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.1),
             popoverTitle.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
             popoverTitle.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            
             
             // Set constraints for picker
             mainPicker.topAnchor.constraint(equalTo: popoverTitle.topAnchor, constant: 2 * margin),

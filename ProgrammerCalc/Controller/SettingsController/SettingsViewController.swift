@@ -48,14 +48,14 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
     lazy var settingsView = SettingsView(frame: CGRect(), style: .insetGrouped)
     lazy var doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(SettingsViewController.closeButtonTapped))
     
-    // Storages
-    private let settingsStorage: SettingsStorageProtocol = SettingsStorage()
+    // Storage
+    private let storage = CalculatorStorage()
     
     private let styleFactory: StyleFactory = StyleFactory()
     
     private let settings: Settings = Settings.shared
     
-    // updater settings in PCalcViewController
+    // updater settings in CalculatorView
     var updaterHandler: (() -> Void)?
     
     override func viewDidLoad() {
@@ -87,7 +87,7 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
         super.viewWillDisappear(animated)
         // save switch state to UserDefaults
         saveSettings()
-        // update settings in PCalcViewController
+        // update settings in CalculatorView
         updaterHandler?()
     }
     
@@ -97,7 +97,7 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
     // Update settings values
     fileprivate func getSettings() {
         // get data from UserDefaults
-        let loadedSettings = settingsStorage.safeGetData()
+        let loadedSettings: Settings = storage.loadData()
         settings.setSettings(loadedSettings)
         // loop table cells
         DispatchQueue.main.async { [self] in
@@ -138,7 +138,7 @@ class SettingsViewController: PCalcTableViewController, SettingsViewControllerDe
             }
         }
         // Apply settings to UserDefaults
-        settingsStorage.saveData(settings)
+        storage.saveData(settings)
     }
     
     // Appearance cell touch

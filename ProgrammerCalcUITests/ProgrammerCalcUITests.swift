@@ -65,10 +65,10 @@ class ProgrammerCalcUITests: XCTestCase {
         // 1. given
         let settingsButton = app.navigationBars.buttons["gearshape"]
         let tablesQuery = app.tables
-        let darkModeRow = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["Appearance"]/*[[".cells.matching(identifier: \"0\").staticTexts[\"Appearance\"]",".staticTexts[\"Appearance\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-        let tappingSoundsRow = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["Tapping sounds"]/*[[".cells.matching(identifier: \"0\").staticTexts[\"Tapping sounds\"]",".staticTexts[\"Tapping sounds\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-        let hapticFeedbackRow = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["Haptic feedback"]/*[[".cells[\"1\"].staticTexts[\"Haptic feedback\"]",".staticTexts[\"Haptic feedback\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
-        let aboutAppRow = tablesQuery/*@START_MENU_TOKEN@*/.staticTexts["About app"]/*[[".cells.staticTexts[\"About app\"]",".staticTexts[\"About app\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        let darkModeRow = tablesQuery.staticTexts["Appearance"]
+        let tappingSoundsRow = tablesQuery.staticTexts["Tapping sounds"]
+        let hapticFeedbackRow = tablesQuery.staticTexts["Haptic feedback"]
+        let aboutAppRow = tablesQuery.staticTexts["About app"]
                 
         // 2. then
         settingsButton.tap()
@@ -108,7 +108,7 @@ class ProgrammerCalcUITests: XCTestCase {
         let tablesQuery_About = app.tables
         let descriptionRow = tablesQuery_About.staticTexts["Description"]
         let rateAppRow = tablesQuery_About.staticTexts["Rate app"]
-        let contactUsRow = tablesQuery_About/*@START_MENU_TOKEN@*/.staticTexts["Contact us"]/*[[".cells.staticTexts[\"Contact us\"]",".staticTexts[\"Contact us\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        let contactUsRow = tablesQuery_About.staticTexts["Contact us"]
 
         let settingsButton = app.navigationBars.buttons["gearshape"]
         let tablesQuery_Settings = app.tables
@@ -213,13 +213,26 @@ class ProgrammerCalcUITests: XCTestCase {
             XCTAssert(bitButtons[i].label == thirdResult[i])
         }
     }
+    
+    func testDivByZeroErrorInLabels() throws {
+        // 1. given
+        let elementsQuery = app.scrollViews.otherElements
+        elementsQuery.staticTexts["1"].tap()
+        elementsQuery.buttons["÷"].tap()
+        elementsQuery.staticTexts["0"].tap()
+        elementsQuery.staticTexts["="].tap()
 
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
-            }
-        }
+        // 2. then
+        XCTAssert(NSLocalizedString("Cannot divide by zero", comment: "") == app.buttons["MainLabel"].label)
+        XCTAssert(NSLocalizedString("NaN", comment: "") == app.buttons["ConverterLabel"].label)
     }
+
+//    func testLaunchPerformance() throws {
+//        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, *) {
+//            // This measures how long it takes to launch your application.
+//            measure(metrics: [XCTApplicationLaunchMetric()]) {
+//                XCUIApplication().launch()
+//            }
+//        }
+//    }
 }
