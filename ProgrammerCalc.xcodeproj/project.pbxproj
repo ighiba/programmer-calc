@@ -271,6 +271,8 @@
 			children = (
 				C082FB8A2A33894500F3AA60 /* CalculatorView.swift */,
 				C0E5FC7524BB9B8D00BA93CA /* CalculatorDisplayView.swift */,
+				C082FB8C2A33C08A00F3AA60 /* ButtonsViewControllerPhone.swift */,
+				C082FB8E2A33C0FC00F3AA60 /* ButtonsViewControllerPad.swift */,
 				C061B7C1250FF9FF000E2EB6 /* CalculatorLabel.swift */,
 				C068AFAB24FA605800BFE754 /* CalculatorButton.swift */,
 				C0666EB924F9782F004809EF /* CalcButtonsPage.swift */,
@@ -437,8 +439,6 @@
 			isa = PBXGroup;
 			children = (
 				C082FB862A33705E00F3AA60 /* CalculatorPresenter.swift */,
-				C082FB8C2A33C08A00F3AA60 /* ButtonsViewControllerPhone.swift */,
-				C082FB8E2A33C0FC00F3AA60 /* ButtonsViewControllerPad.swift */,
 				C0666EB724F97774004809EF /* CalcButtonsViewController.swift */,
 				C0712FE827908B9700CF408A /* BitwiseKeypadController.swift */,
 			);

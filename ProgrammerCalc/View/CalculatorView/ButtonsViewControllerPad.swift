@@ -73,7 +73,7 @@ class ButtonsViewControllerPad: UIViewController, ButtonsContainerControllerProt
 
                 // initialize button by type
                 switch title {
-                case "A","B","C","D","E","F","00","FF","0"..."9",".":
+                case "A","B","C","D","E","F","00","FF","0","1","2","3","4","5","6","7","8","9",".":
                     button = CalculatorButton(calcButtonType: .numeric)
                 case "1's", "2's":
                     button = CalculatorButton(calcButtonType: .complement)
