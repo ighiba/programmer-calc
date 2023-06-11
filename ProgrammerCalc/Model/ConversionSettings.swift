@@ -19,7 +19,7 @@ protocol ConversionSettingsProtocol {
 
 final class ConversionSettings: ConversionSettingsProtocol {
     
-    static let shared: ConversionSettings = ConversionSettings(systMain: .dec, systConverter: .dec, number: 8)
+    static let shared: ConversionSettings = ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
     
     var systemMain: ConversionSystemsEnum
     var systemConverter: ConversionSystemsEnum
@@ -44,7 +44,7 @@ extension ConversionSettings: Storable {
     }
     
     static func getDefault() -> ConversionSettings {
-        return ConversionSettings(systMain: .dec, systConverter: .dec, number: 8)
+        return ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
     }
     
     func set(_ data: ConversionSettings) {
