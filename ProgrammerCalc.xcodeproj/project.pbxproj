@@ -35,7 +35,6 @@
 		C068AFAC24FA605800BFE754 /* CalculatorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C068AFAB24FA605800BFE754 /* CalculatorButton.swift */; };
 		C06B7F072443B12B009642B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F062443B12B009642B9 /* AppDelegate.swift */; };
 		C06B7F092443B12B009642B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F082443B12B009642B9 /* SceneDelegate.swift */; };
-		C06B7F102443B12E009642B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C06B7F0F2443B12E009642B9 /* Assets.xcassets */; };
 		C06B7F132443B12E009642B9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C06B7F112443B12E009642B9 /* LaunchScreen.storyboard */; };
 		C06B7F292443B12E009642B9 /* ProgrammerCalcUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F282443B12E009642B9 /* ProgrammerCalcUITests.swift */; };
 		C06D285527999B4D00C74888 /* DecimalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06D285427999B4D00C74888 /* DecimalTests.swift */; };
@@ -57,6 +56,7 @@
 		C082FB8F2A33C0FC00F3AA60 /* ButtonsViewControllerPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082FB8E2A33C0FC00F3AA60 /* ButtonsViewControllerPad.swift */; };
 		C082FB912A34C0A400F3AA60 /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082FB902A34C0A400F3AA60 /* DeviceType.swift */; };
 		C082FB932A34D22C00F3AA60 /* UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082FB922A34D22C00F3AA60 /* UIScreen.swift */; };
+		C082FB952A35DAF000F3AA60 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C082FB942A35DAF000F3AA60 /* Assets.xcassets */; };
 		C0905E712A080843004180A7 /* PCDecimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0905E702A080843004180A7 /* PCDecimal.swift */; };
 		C09623172A04171B00E6C08F /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09623162A04171B00E6C08F /* Int.swift */; };
 		C09623192A041A1800E6C08F /* Calculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09623182A041A1800E6C08F /* Calculator.swift */; };
@@ -134,7 +134,6 @@
 		C06B7F032443B12B009642B9 /* ProgrammerCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProgrammerCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C06B7F062443B12B009642B9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C06B7F082443B12B009642B9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		C06B7F0F2443B12E009642B9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C06B7F122443B12E009642B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C06B7F142443B12E009642B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C06B7F192443B12E009642B9 /* ProgrammerCalcTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ProgrammerCalcTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -161,6 +160,7 @@
 		C082FB8E2A33C0FC00F3AA60 /* ButtonsViewControllerPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsViewControllerPad.swift; sourceTree = "<group>"; };
 		C082FB902A34C0A400F3AA60 /* DeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceType.swift; sourceTree = "<group>"; };
 		C082FB922A34D22C00F3AA60 /* UIScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreen.swift; sourceTree = "<group>"; };
+		C082FB942A35DAF000F3AA60 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C0905E702A080843004180A7 /* PCDecimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCDecimal.swift; sourceTree = "<group>"; };
 		C09623162A04171B00E6C08F /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
 		C09623182A041A1800E6C08F /* Calculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calculator.swift; sourceTree = "<group>"; };
@@ -325,7 +325,7 @@
 				C0E5FC7424BB9B6100BA93CA /* View */,
 				C0D5BA4B24C340050038A378 /* Controller */,
 				C068AFA824FA409200BFE754 /* Extensions */,
-				C06B7F0F2443B12E009642B9 /* Assets.xcassets */,
+				C082FB942A35DAF000F3AA60 /* Assets.xcassets */,
 				C06B7F112443B12E009642B9 /* LaunchScreen.storyboard */,
 				C06B7F142443B12E009642B9 /* Info.plist */,
 				C09631C62725BA7C001DCD25 /* Localizable.strings */,
@@ -609,7 +609,7 @@
 			files = (
 				C06B7F132443B12E009642B9 /* LaunchScreen.storyboard in Resources */,
 				C09631C42725BA7C001DCD25 /* Localizable.strings in Resources */,
-				C06B7F102443B12E009642B9 /* Assets.xcassets in Resources */,
+				C082FB952A35DAF000F3AA60 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
