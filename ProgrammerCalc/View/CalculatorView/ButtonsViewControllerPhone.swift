@@ -14,10 +14,12 @@ protocol ButtonsContainerControllerProtocol: UIViewController {
     func updateButtonsIsEnabled(by forbiddenValues: Set<String>)
 }
 
-// MARK: - iOS
+// MARK: - iPhone
 
 class ButtonsViewControllerPhone: UIPageViewController, ButtonsContainerControllerProtocol {
 
+    // MARK: - Properties
+    
     let arrayButtonsStack: [CalcButtonsPage] = [ CalcButtonsAdditional(), CalcButtonsMain() ]
     lazy var calcButtonsViewControllers: [CalcButtonsViewController] = {
         var buttonsVC = [CalcButtonsViewController]()
@@ -29,6 +31,8 @@ class ButtonsViewControllerPhone: UIPageViewController, ButtonsContainerControll
         return buttonsVC
     }()
     
+    // MARK: - Init
+    
     init() {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal)
 
@@ -38,6 +42,10 @@ class ButtonsViewControllerPhone: UIPageViewController, ButtonsContainerControll
         
         // Allow interaction with content(buttons) without delay
         self.delaysContentTouches = false
+        
+        let pageControl = UIPageControl.appearance()
+        pageControl.pageIndicatorTintColor = .systemGray4
+        pageControl.currentPageIndicatorTintColor = .systemGray
     }
     
     required init?(coder: NSCoder) {
@@ -49,6 +57,8 @@ class ButtonsViewControllerPhone: UIPageViewController, ButtonsContainerControll
             controller.view.layoutSubviews()
         }
     }
+    
+    // MARK: - Methods
     
     func refreshCalcButtons() {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1, execute: { [self] in
@@ -62,7 +72,7 @@ class ButtonsViewControllerPhone: UIPageViewController, ButtonsContainerControll
     }
     
     func updateButtonsIsEnabled(by forbiddenValues: Set<String>) {
-        for page in arrayButtonsStack {
+        arrayButtonsStack.forEach { page in
             page.updateButtonIsEnabled(by: forbiddenValues)
         }
     }
@@ -74,14 +84,11 @@ extension ButtonsViewControllerPhone: UIPageViewControllerDataSource, UIPageView
     
     // Load vc before
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        // handle highlighting of labels when page changes
         //touchHandleLabelHighlight()
         
-        guard let viewController = viewController as? CalcButtonsViewController else {return nil}
-        if let index = calcButtonsViewControllers.firstIndex(of: viewController) {
-            if index > 0 {
-                return calcButtonsViewControllers[index - 1]
-            }
+        guard let viewController = viewController as? CalcButtonsViewController else { return nil }
+        if let index = calcButtonsViewControllers.firstIndex(of: viewController), index > 0 {
+            return calcButtonsViewControllers[index - 1]
         }
 
         return nil
@@ -92,11 +99,9 @@ extension ButtonsViewControllerPhone: UIPageViewControllerDataSource, UIPageView
         // handle highlighting of labels when page changes
         //touchHandleLabelHighlight()
         
-        guard let viewController = viewController as? CalcButtonsViewController else {return nil}
-        if let index = calcButtonsViewControllers.firstIndex(of: viewController) {
-            if index < arrayButtonsStack.count - 1 {
-                return calcButtonsViewControllers[index + 1]
-            }
+        guard let viewController = viewController as? CalcButtonsViewController else { return nil }
+        if let index = calcButtonsViewControllers.firstIndex(of: viewController), index < arrayButtonsStack.count - 1 {
+            return calcButtonsViewControllers[index + 1]
         }
         
         return nil
@@ -120,38 +125,22 @@ extension ButtonsViewControllerPhone {
     var delaysContentTouches: Bool {
         get {
             var isAllowed: Bool = true
-            for view in view.subviews {
-                if let subView = view as? UIScrollView {
-                    isAllowed = subView.delaysContentTouches
-                }
-            }
+            view.subviews.compactMap { $0 as? UIScrollView }.forEach { isAllowed = $0.delaysContentTouches }
             return isAllowed
         }
         set {
-            for view in view.subviews {
-                if let subView = view as? UIScrollView {
-                    subView.delaysContentTouches = newValue
-                }
-            }
+            view.subviews.compactMap { $0 as? UIScrollView }.forEach { $0.delaysContentTouches = newValue }
         }
     }
     
     // Change page control visibility by bool
     func setPageControl(visibile: Bool) {
-        for case let pageControl in self.view.subviews where pageControl is UIPageControl {
-            if visibile {
-                pageControl.isHidden = false
-            } else {
-                pageControl.isHidden = true
-            }
-        }
+        view.subviews.compactMap { $0 as? UIPageControl }.forEach { $0.isHidden = !visibile }
     }
     
     // Change page control current page
     func setPageControlCurrentPage(count currentPage: Int) {
-        for case let pageControl in self.view.subviews where pageControl is UIPageControl {
-            (pageControl as! UIPageControl).currentPage = currentPage
-        }
+        view.subviews.compactMap { $0 as? UIPageControl }.forEach { $0.currentPage = currentPage }
     }
 }
 

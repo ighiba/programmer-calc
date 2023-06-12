@@ -30,10 +30,8 @@ class CalcButtonsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        
         guard let delegate = delegate else { return }
         // handling label when tappging on CalculatorView
         delegate.unhighlightLabels()
@@ -69,7 +67,6 @@ class CalcButtonsViewController: UIViewController {
     @objc func hapticFeedbackHandler(_ sender: CalculatorButton) {
         if settings.hapticFeedback {
             generator.prepare()
-            // impact
             generator.impactOccurred()
         }
     }

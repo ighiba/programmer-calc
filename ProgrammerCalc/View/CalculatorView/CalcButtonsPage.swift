@@ -20,7 +20,7 @@ protocol CalcButtonPageProtocol: UIView {
 // Parent Class
 class CalcButtonsPage: UIView, CalcButtonPageProtocol {
 
-    // Standart calculator buttons
+    // Default calculator buttons
     var allButtons: [CalculatorButton] = []
     
     // Layout constraints
@@ -41,39 +41,17 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
     
     fileprivate func setLayout() {
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Activate constraints
         layoutConstraints = [
-            // width
             buttonsStackView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.90),
-            // centering
             buttonsStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            // top anchor
             buttonsStackView.topAnchor.constraint(equalTo: self.topAnchor),
-            // bottom anchor === spacing -3.5 for shadows
-            buttonsStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -3.5),
+            buttonsStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -3.5), // -3.5 for shadows
         ]
         NSLayoutConstraint.activate(layoutConstraints!)
         
-        // Buttons constraints
-        for button in allButtons {
-            let title = button.titleLabel?.text
-            // set width and height by constraints
-            button.translatesAutoresizingMaskIntoConstraints = false
-            button.portrait = []
-            button.portrait?.append( button.heightAnchor.constraint(equalToConstant: button.buttonWidth()) )
-            // special style for double button
-            if title == "00" || title == "FF" || title == "0" {
-                button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth() * 2 + spacing) )
-                button.titleLabel?.font = button.titleLabel?.font.withSize(button.defaultFontSize) // default
-            } else {
-                // width for default
-                button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth()) )
-            }
-            // change priority for all constraints to 999 (for disable log noise when device is rotated)
-            button.portrait!.forEach { $0.priority = UILayoutPriority(999) }
-            // activate portrait constraint
-            NSLayoutConstraint.activate(button.portrait!)
+        // Buttons individual constraints
+        allButtons.forEach { button in
+            button.setDefaultConstraints(spacingBetweenButtons: spacing)
         }
     }
     
@@ -92,77 +70,20 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
 
     // Style for buttons
     func updateStyle(for buttons: [CalculatorButton]) {
-        
         // Apply style by button type
         let styleType = StyleSettings.shared.currentStyle
         let style = styleFactory.get(style: styleType)
         
-        // set background color and text color
-        for button in buttons {
-            switch button.calcButtonType {
-            case .numeric:
-                button.backgroundColor = style.numericButtonStyle.frameColor
-                button.frameTint = style.numericButtonStyle.frameTint
-                button.setTitleColor(style.numericButtonStyle.textColor, for: .normal)
-                button.setTitleColor(style.numericButtonStyle.textTint, for: .highlighted)
-
-            case .sign:
-                button.backgroundColor = style.actionButtonStyle.frameColor
-                button.frameTint = style.actionButtonStyle.frameTint
-                button.setTitleColor(style.actionButtonStyle.textColor, for: .normal)
-                button.setTitleColor(style.actionButtonStyle.textTint, for: .highlighted)
-
-            case .complement:
-                button.backgroundColor = style.miscButtonStyle.frameColor
-                button.frameTint = style.miscButtonStyle.frameTint
-                button.setTitleColor(style.miscButtonStyle.textColor, for: .normal)
-                button.setTitleColor(style.miscButtonStyle.textTint, for: .highlighted)
-
-            case .bitwise:
-                button.backgroundColor = style.actionButtonStyle.frameColor
-                button.frameTint = style.actionButtonStyle.frameTint
-                button.setTitleColor(style.actionButtonStyle.textColor, for: .normal)
-                button.setTitleColor(style.actionButtonStyle.textTint, for: .highlighted)
-
-            case .defaultBtn:
-                button.backgroundColor = style.miscButtonStyle.frameColor
-                button.frameTint = style.miscButtonStyle.frameTint
-                button.setTitleColor(style.miscButtonStyle.textColor, for: .normal)
-                button.setTitleColor(style.miscButtonStyle.textTint, for: .highlighted)
-                button.setTitleColor(style.miscButtonStyle.textTint.setDarker(by: 0.7), for: .disabled)
-                
-            }
-            // set border color
-            if style.buttonBorderColor != .clear {
-                let borderColor = button.backgroundColor?.setDarker(by: 0.98)
-                button.layer.borderColor = borderColor?.cgColor
-            } else {
-                button.layer.borderColor = style.buttonBorderColor.cgColor
-            }
-            button.layer.borderWidth = 0.5
-            
-            // set shadow
-            button.layer.shadowColor = UIColor.black.cgColor
-            button.layer.shadowOpacity = 0.25
-            button.layer.shadowOffset = CGSize(width: 0, height: 1)
-            button.layer.shadowRadius = 1.5
-            
-            let shadowPath = CGPath(roundedRect: button.layer.bounds,
-                                    cornerWidth: button.layer.cornerRadius,
-                                    cornerHeight: button.layer.cornerRadius,
-                                    transform: nil)
-            button.layer.shadowPath = shadowPath
+        buttons.forEach { button in
+            button.updateStyle(style)
         }
     }
     
     func updateButtonIsEnabled(by forbiddenValues: Set<String>) {
         allButtons.forEach { button in
             let buttonLabel = String((button.titleLabel?.text)!)
-            if forbiddenValues.contains(buttonLabel) && button.calcButtonType == .numeric {
-                button.isEnabled = false
-            } else {
-                button.isEnabled = true
-            }
+            let shouldBeEnabled = !(forbiddenValues.contains(buttonLabel) && button.calcButtonType == .numeric)
+            button.isEnabled = shouldBeEnabled
         }
     }
     
@@ -173,7 +94,7 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
 
 // MARK: - Main Page
 
-class CalcButtonsMain: CalcButtonsPage {
+final class CalcButtonsMain: CalcButtonsPage {
     
     override init() {
         super.init()
@@ -231,7 +152,6 @@ class CalcButtonsMain: CalcButtonsPage {
                          "1", "2", "3", "+",
                          "0", ".", "="]
                     
-        var buttonTag: Int = 100
         var buttons: [CalculatorButton] = []
         
         // Create buttons by looping titles
@@ -242,15 +162,18 @@ class CalcButtonsMain: CalcButtonsPage {
             switch title {
             case "0"..."9",".":
                 button = CalculatorButton(calcButtonType: .numeric)
-            case "Signed\nOFF":
-                button = CalculatorButton()
-                button.addTarget(nil, action: #selector(CalculatorView.toggleIsSigned), for: .touchUpInside)
             case "AC":
                 button = CalculatorButton()
+                button.tag = tagCalculatorButtonClear
                 button.addTarget(nil, action: #selector(CalculatorView.clearButtonTapped), for: .touchUpInside)
             case "±":
                 button = CalculatorButton()
+                button.tag = tagCalculatorButtonNegate
                 button.addTarget(nil, action: #selector(CalculatorView.negateButtonTapped), for: .touchUpInside)
+            case "Signed\nOFF":
+                button = CalculatorButton()
+                button.tag = tagCalculatorButtonIsSigned
+                button.addTarget(nil, action: #selector(CalculatorView.toggleIsSigned), for: .touchUpInside)
             case "=":
                 button = CalculatorButton(calcButtonType: .sign)
                 button.addTarget(nil, action: #selector(CalculatorView.calculateButtonTapped), for: .touchUpInside)
@@ -271,10 +194,6 @@ class CalcButtonsMain: CalcButtonsPage {
                 button.titleLabel?.font = button.titleLabel?.font.withSize(button.buttonWidth() / 1.8)
             }
             
-            // button tags start from 100 to 118
-            button.tag = buttonTag
-            buttonTag += 1
-            
             button.accessibilityIdentifier = title
             
             // add element to array
@@ -288,7 +207,7 @@ class CalcButtonsMain: CalcButtonsPage {
 
 // MARK: - Additional page
 
-class CalcButtonsAdditional: CalcButtonsPage {
+final class CalcButtonsAdditional: CalcButtonsPage {
     
     override init() {
         super.init()
@@ -345,7 +264,6 @@ class CalcButtonsAdditional: CalcButtonsPage {
                          "2's", "A", "B", "C",
                          "00", "FF"]
                     
-        var buttonTag: Int = 200
         var buttons: [CalculatorButton] = []
         
         // Create buttons by looping titles
@@ -377,10 +295,6 @@ class CalcButtonsAdditional: CalcButtonsPage {
 
             button.setTitleColor(.systemGray, for: .disabled)
             button.applyStyle()
-            
-            // button tags start from 200 to 217
-            button.tag = buttonTag
-            buttonTag += 1
             
             button.accessibilityIdentifier = title
             

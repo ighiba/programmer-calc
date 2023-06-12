@@ -224,31 +224,23 @@ class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate,
     private func updateStyle() {
         let styleSettings = output.getCurrentStyleSettings()
         var styleType = styleSettings.currentStyle
-        
-        let interfaceStyle: UIUserInterfaceStyle
+
         // change style depends on state
         if styleSettings.isUsingSystemAppearance {
             switch UIScreen.main.traitCollection.userInterfaceStyle {
             case .light, .unspecified:
-                // light mode detected
                 styleSettings.currentStyle = .light
             case .dark:
-                // dark mode detected
                 styleSettings.currentStyle = .dark
             @unknown default:
-                // light mode if unknown
+                // dark mode if unknown
                 styleSettings.currentStyle = .dark
             }
             output.updateStyleSettings(styleSettings)
             view.window?.overrideUserInterfaceStyle = .unspecified
             styleType = styleSettings.currentStyle
-
         } else {
-            if styleType == .light {
-                interfaceStyle = .light
-            } else {
-                interfaceStyle = .dark
-            }
+            let interfaceStyle: UIUserInterfaceStyle = styleType == .light ? .light : .dark
             view.window?.overrideUserInterfaceStyle = interfaceStyle
         }
         
@@ -272,18 +264,18 @@ class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate,
         let forbidden: Set<String> = output.getForbiddenToInputDigits()
         buttonsContainerController.updateButtonsIsEnabled(by: forbidden)
         updateIsSignedButton(processSigned: output.isProcessSigned())
-        updatePlusMinusButton(processSigned: output.isProcessSigned())
+        updateNegateButton(processSigned: output.isProcessSigned())
     }
 
-    private func updatePlusMinusButton(processSigned: Bool) {
-        if let plusMinusButton = self.view.viewWithTag(101) as? CalculatorButton {
-            plusMinusButton.isEnabled = processSigned
-            plusMinusButton.alpha = plusMinusButton.isEnabled ? 1.0 : 0.5
+    private func updateNegateButton(processSigned: Bool) {
+        if let negateButton = self.view.viewWithTag(tagCalculatorButtonNegate) as? CalculatorButton {
+            negateButton.isEnabled = processSigned
+            negateButton.alpha = negateButton.isEnabled ? 1.0 : 0.5
         }
     }
 
     private func updateIsSignedButton(processSigned: Bool) {
-        if let isSignedButton = self.view.viewWithTag(102) as? CalculatorButton {
+        if let isSignedButton = self.view.viewWithTag(tagCalculatorButtonIsSigned) as? CalculatorButton {
             isSignedButton.changeTitleIsSignedButtonFor(processSigned)
         }
     }
@@ -306,7 +298,7 @@ class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate,
     }
     
     func updateClearButton(hasInput state: Bool) {
-        if let clearButton = self.view.viewWithTag(100) as? CalculatorButton {
+        if let clearButton = self.view.viewWithTag(tagCalculatorButtonClear) as? CalculatorButton {
             clearButton.changeTitleClearButtonFor(state)
         }
     }
@@ -423,7 +415,7 @@ extension CalculatorView {
         output.toggleProcessSigned()
         print("Signed - \(output.isProcessSigned())")
         self.updateIsSignedButton(processSigned: output.isProcessSigned())
-        self.updatePlusMinusButton(processSigned: output.isProcessSigned())
+        self.updateNegateButton(processSigned: output.isProcessSigned())
     }
     
     @objc func clearButtonTapped(_ sender: UIButton) {

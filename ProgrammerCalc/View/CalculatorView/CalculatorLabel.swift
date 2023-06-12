@@ -51,16 +51,10 @@ class CalculatorLabel: UILabel, UpdatableLabel, CalculatorLabelDelegate {
         return error != nil
     }
     
-    // ======================
     // MARK: - Initialization
-    // ======================
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.sharedInit() 
-    }
-    
-    func sharedInit() {
         self.isUserInteractionEnabled = true
         self.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(self.showMenu)))
     }
@@ -69,9 +63,7 @@ class CalculatorLabel: UILabel, UpdatableLabel, CalculatorLabelDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // ===============
     // MARK: - Methods
-    // ===============
     
     func addInfoLabel() {
         self.addSubview(infoSubLabel)
@@ -218,5 +210,4 @@ class CalculatorLabel: UILabel, UpdatableLabel, CalculatorLabelDelegate {
             self.text = errorMessage
         }
     }
-
 }

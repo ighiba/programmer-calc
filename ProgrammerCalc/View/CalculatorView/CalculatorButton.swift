@@ -9,6 +9,10 @@
 import UIKit
 import AudioToolbox
 
+let tagCalculatorButtonClear = 100
+let tagCalculatorButtonNegate = 101
+let tagCalculatorButtonIsSigned = 102
+
 class CalculatorButton: UIButton {
 
     // MARK: - Enumerations
@@ -140,26 +144,17 @@ class CalculatorButton: UIButton {
     
     // For AC/C button
     func changeTitleClearButtonFor(_ state: Bool) {
-        guard self.tag == 100 else { return }
-        if state {
-            guard self.titleLabel?.text != "C" else { return }
-            self.setTitle("C", for: .normal)
-        } else {
-            guard self.titleLabel?.text != "AC" else { return }
-            self.setTitle("AC", for: .normal)
-        }
+        guard self.tag == tagCalculatorButtonClear else { return }
+        let title = state ? "C" : "AC"
+        guard self.titleLabel?.text != title else { return }
+        self.setTitle(title, for: .normal)
     }
     
     // For Signed ON/OFF button
     func changeTitleIsSignedButtonFor(_ state: Bool) {
-        guard self.tag == 102 else { return }
-        if state {
-            // if ON then disable
-            self.setTitle("Signed\nON", for: .normal)
-        } else {
-            // if OFF then enable
-            self.setTitle("Signed\nOFF", for: .normal)
-        }
+        guard self.tag == tagCalculatorButtonIsSigned else { return }
+        let title = state ? "Signed\nON" : "Signed\nOFF"
+        self.setTitle(title, for: .normal)
     }
     
     // Dynamic button width (except zero button) and height for autolayout
@@ -214,7 +209,6 @@ class CalculatorButton: UIButton {
     }
     
     func setActions(for buttonType: ButtonTypes){
-        
         // label higliglht handling
         self.addTarget(nil, action: #selector(CalculatorView.touchHandleLabelHighlight), for: .touchDown)
         // haptic feedback
