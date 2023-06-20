@@ -66,8 +66,8 @@ class ButtonsViewControllerPad: UIViewController, ButtonsContainerControllerProt
                             ["2's",   "A",   "B",    "C",    "1",   "2",     "3",      "+"],
                             ["00",          "FF",            "0",           ".",      "="]]
 
-        let buttons: [[CalculatorButton]] = buttonTitles.map { titleRow in
-            titleRow.map { title in
+        let buttons: [[CalculatorButton]] = buttonTitles.map { titlesRow in
+            titlesRow.map { title in
                 let button: CalculatorButton
                 
                 switch title {
@@ -168,7 +168,7 @@ class ButtonsViewControllerPad: UIViewController, ButtonsContainerControllerProt
     
     func updateButtonsIsEnabled(by forbiddenValues: Set<String>) {
         allButtons.forEachButton { button in
-            let buttonLabel = String((button.titleLabel?.text)!)
+            let buttonLabel = button.titleLabel?.text ?? ""
             let shouldBeEnabled = !(forbiddenValues.contains(buttonLabel) && button.calcButtonType == .numeric)
             button.isEnabled = shouldBeEnabled
         }
