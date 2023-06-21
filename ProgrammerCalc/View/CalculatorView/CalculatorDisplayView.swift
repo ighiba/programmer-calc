@@ -61,41 +61,32 @@ class CalculatorDisplayView: UIView {
     // MARK: - Methods
     
     override func layoutSubviews() {
-        // update colors by style
         updateStyle()
     }
     
     func setViews() {
         self.backgroundColor = .clear
         self.frame = CGRect( x: 0, y: 0, width: UIScreen.main.bounds.width, height: getViewHeight())
-        // add navigation bar
         self.addSubview(navigationBar)
-        // add labels
         self.addSubview(labelsStack)
         self.addSubview(mainLabel.infoSubLabel)
         self.addSubview(converterLabel.infoSubLabel)
         
         navigationBar.subviews.forEach({ $0.isExclusiveTouch = true })
-        
-        
+
         changeWordSizeButton.addTarget(nil, action: #selector(CalculatorView.changeWordSizeButtonTapped), for: .touchUpInside)
-        
         
         setupLayout()
     }
     
     func updateStyle() {
-        // Apply style
         let styleType = StyleSettings.shared.currentStyle
         let style = styleFactory.get(style: styleType)
-        
-        // Set colors
-        // Labels
+
         mainLabel.textColor = style.labelTextColor
         converterLabel.textColor = style.labelTextColor
         mainLabel.infoSubLabel.textColor = .systemGray
         converterLabel.infoSubLabel.textColor = .systemGray
-        // NavBar items
         changeItem.tintColor = style.tintColor
         keypadItem.tintColor = style.tintColor
         settingsItem.tintColor = style.tintColor
@@ -103,21 +94,19 @@ class CalculatorDisplayView: UIView {
     }
     
     func hideConverterLabel() {
-        // hide
         mainLabel.isHidden = false
         converterLabel.infoSubLabel.isHidden = true
         converterLabel.isHidden = true
-        // bigger font for mainLabel
+
         mainLabel.font = mainLabel.font.withSize(82.0)
         mainLabel.numberOfLines = 2
     }
     
     func showConverterLabel() {
-        // unhide
         mainLabel.isHidden = false
         converterLabel.infoSubLabel.isHidden = false
         converterLabel.isHidden = false
-        // default font for mainLabel
+        
         mainLabel.font = mainLabel.font.withSize(70.0)
     }
     
@@ -130,42 +119,32 @@ class CalculatorDisplayView: UIView {
     
     // MARK: - Views
     
-    // Set change word size button
     lazy var changeWordSizeButton: UIButton = {
         let button = UIButton(type: .system)
         button.frame = CGRect(x: 0, y: 0, width: navBarHeight*2, height: navBarHeight)
-        // title adjustments
+
         button.setTitle("QWORD", for: .normal)
-        // change font size
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18.0, weight: UIFont.Weight.regular)
-    
         button.sizeToFit()
        
-        // for UI tests
         button.accessibilityIdentifier = "ChangeWordSizeButton"
         
         return button
     }()
     
-    // Set navigation bar
-    fileprivate lazy var navigationBar: UINavigationBar = {
-        // Set navigation bar
+    private lazy var navigationBar: UINavigationBar = {
         let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: navBarHeight))
         let navItem = UINavigationItem()
         let font = UIFont.systemFont(ofSize: 42.0)
         self.settingsItem.setTitleTextAttributes([NSAttributedString.Key.font: font], for: .normal)
         
-        // add buttons to navigation item
         navItem.leftBarButtonItems = [changeItem, keypadItem]
         navItem.rightBarButtonItem = settingsItem
         
-        // title view for middle button "Change word size"
         let titleView = UIView(frame: CGRect(x: 0, y: 0, width: navBarHeight * 2, height: navBarHeight))
         navItem.titleView = titleView
 
-        // set navigation items
         navBar.setItems([navItem], animated: false)
-        // set transparent
         navBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navBar.shadowImage = UIImage()
         navBar.isTranslucent = true
@@ -180,10 +159,8 @@ class CalculatorDisplayView: UIView {
         label.frame = CGRect()
         label.text = "0"
         label.backgroundColor = .clear
-        // set font size, font family, allignment
         label.font = UIFont(name: label.fontName, size: 70.0)
         label.textAlignment = .right
-        // resizeble text
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.15
         
@@ -200,10 +177,8 @@ class CalculatorDisplayView: UIView {
         label.text = "0"
         label.numberOfLines = 2
         label.backgroundColor = .clear
-        // set font size, font family
         label.font = UIFont(name: label.fontName, size: 70.0)
         label.textAlignment = .right
-        // resizeble text
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.15
         
@@ -214,7 +189,6 @@ class CalculatorDisplayView: UIView {
     
     lazy var labelsStack: UIStackView = {
         let labels = UIStackView(arrangedSubviews: [self.mainLabel, self.converterLabel])
-        // Display settings for labels UIStackView
         labels.axis = .vertical
         labels.distribution = .fillEqually
         
@@ -298,15 +272,13 @@ class CalculatorDisplayView: UIView {
     }
     
     func updateCnageWordSizeButton(with wordSize: WordSize) {
-        // prepare title
         let newTitle: String = {
             for item in WordSize.wordsDictionary where item.first?.value == wordSize.value {
                 return item.first!.key
             }
             return (self.changeWordSizeButton.titleLabel?.text)!
         }()
-        
-        // change button title
+
         self.changeWordSizeButton.setTitle(newTitle, for: .normal)
     }
     
@@ -324,8 +296,6 @@ class CalculatorDisplayView: UIView {
     func getScreenBounds() -> CGRect {
         return CGRect(origin: CGPoint(), size: UIScreen.mainRealSize())
     }
-
-
 }
 
 

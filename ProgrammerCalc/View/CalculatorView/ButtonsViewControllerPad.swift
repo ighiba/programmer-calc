@@ -14,8 +14,8 @@ class ButtonsViewControllerPad: UIViewController, ButtonsContainerControllerProt
     
     // MARK: - Properties
     
-    var allButtons: [[CalculatorButton]] = []
-    var buttonsStackView: UIStackView = UIStackView()
+    lazy var allButtons: [[CalculatorButton]] = obtainButtons()
+    lazy var buttonsStackView: UIStackView = obtainButtonsStackView(buttons: allButtons)
 
     var layoutConstraints: [NSLayoutConstraint] = []
     private var styleFactory: StyleFactory = StyleFactory()
@@ -27,13 +27,6 @@ class ButtonsViewControllerPad: UIViewController, ButtonsContainerControllerProt
     
     init() {
         super.init(nibName: nil, bundle: nil)
-        
-        self.allButtons = getButtons()
-        self.buttonsStackView = getButtonsStackView(buttons: allButtons)
-        
-        self.view.addSubview(buttonsStackView)
-        
-        self.setLayout()
     }
     
     required init?(coder: NSCoder) {
@@ -44,6 +37,8 @@ class ButtonsViewControllerPad: UIViewController, ButtonsContainerControllerProt
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.addSubview(buttonsStackView)
+        setLayout()
     }
     
     override func viewDidLayoutSubviews() {
@@ -58,7 +53,7 @@ class ButtonsViewControllerPad: UIViewController, ButtonsContainerControllerProt
     
     // MARK: - Methods
     
-    private func getButtons() -> [[CalculatorButton]] {
+    private func obtainButtons() -> [[CalculatorButton]] {
         
         let buttonTitles = [["AND",   "OR",  "XOR",  "NOR",  "AC"  ,"±", "Signed\nOFF", "÷"],
                             ["X<<Y", "X>>Y", "<<",   ">>",   "7",   "8",     "9",      "×"],
@@ -123,7 +118,7 @@ class ButtonsViewControllerPad: UIViewController, ButtonsContainerControllerProt
         return buttons
     }
     
-    func getButtonsStackView(buttons: [[CalculatorButton]]) -> UIStackView {
+    func obtainButtonsStackView(buttons: [[CalculatorButton]]) -> UIStackView {
         let buttonsStackRows = buttons.map { buttonsRow in
             let buttonsRowStack = UIStackView(arrangedSubviews: buttonsRow)
             buttonsRowStack.axis = .horizontal

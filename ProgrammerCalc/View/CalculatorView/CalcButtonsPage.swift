@@ -35,7 +35,7 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
     
     init() {
         super.init(frame: CGRect())
-        setViews()
+        self.addSubview(buttonsStackView)
         setLayout()
     }
     
@@ -48,10 +48,6 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
     override func layoutSubviews() {
         super.layoutSubviews()
         updateButtonsStyle()
-    }
-    
-    fileprivate func setViews() {
-        self.addSubview(buttonsStackView)
     }
     
     fileprivate func setLayout() {
