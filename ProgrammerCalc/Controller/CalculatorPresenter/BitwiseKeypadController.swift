@@ -13,7 +13,7 @@ protocol BitwiseKeypadControllerDelegate: AnyObject {
     var binaryCharArray: [Character] { get }
     var bitButtons: [BitButton] { get set }
     func getTagOffset() -> Int
-    func getWordSizeValue() -> Int
+    func getWordSizeIntValue() -> Int
     func getStyle() -> Style
 }
 
@@ -65,7 +65,6 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     // MARK: - Methods
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -101,8 +100,8 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
         return style
     }
     
-    func getWordSizeValue() -> Int {
-        return wordSize.value
+    func getWordSizeIntValue() -> Int {
+        return wordSize.intValue
     }
     
     func getTagOffset() -> Int {
@@ -127,9 +126,9 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
             if isNextButtonAlreadyProcessed(currentButton: button, tag: buttonTag) {
                 break
             }
-            if buttonTag < wordSize.value {
+            if buttonTag < wordSize.intValue {
                 button.isEnabled = true
-            } else if buttonTag >= wordSize.value && button.isEnabled {
+            } else if buttonTag >= wordSize.intValue && button.isEnabled {
                 button.isEnabled = false
             }
             buttonTag -= 1
@@ -137,7 +136,7 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     }
     
     private func isNextButtonAlreadyProcessed(currentButton button: BitButton, tag: Int) -> Bool {
-        return tag + 1 == wordSize.value && button.isEnabled || tag < wordSize.value && button.isEnabled
+        return tag + 1 == wordSize.intValue && button.isEnabled || tag < wordSize.intValue && button.isEnabled
     }
     
     private func updateKeypadValues() {
@@ -154,13 +153,11 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     }
     
     private func canChangeSignedBit(for button: BitButton) -> Bool {
-        return !(button.tag - tagOffset + 1 == wordSize.value && binary.value.contains(".") && calcState.processSigned)
+        return !(button.tag - tagOffset + 1 == wordSize.intValue && binary.value.contains(".") && calcState.processSigned)
     }
-    
     
     private func tappingSoundHandler(_ sender: BitButton) {
         if settings.tappingSounds {
-            // play KeyPressed
             AudioServicesPlaySystemSound(1104)
         }
     }
@@ -169,7 +166,6 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     private func hapticFeedbackHandler(_ sender: BitButton) {
         if settings.hapticFeedback {
             generator.prepare()
-            // impact
             generator.impactOccurred()
         }
     }
@@ -191,5 +187,4 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
         
         updateInputValue()
     }
-
 }

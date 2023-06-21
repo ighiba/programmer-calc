@@ -92,7 +92,7 @@ class BitwiseKeypad: UIView {
     // MARK: - Methods
  
     private func getWordSizeValue() -> Int {
-        return controllerDelegate!.getWordSizeValue()
+        return controllerDelegate!.getWordSizeIntValue()
     }
     
     private func getTagOffset() -> Int {

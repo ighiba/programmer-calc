@@ -15,10 +15,10 @@ class PCDecimalTests: XCTestCase {
 
     var pcDecimalTest: PCDecimal!
     
-    let byte = WordSize(8)
-    let word = WordSize(16)
-    let dword = WordSize(32)
-    let qword = WordSize(64)
+    let qword = WordSize(.qword)
+    let dword = WordSize(.dword)
+    let word = WordSize(.word)
+    let byte = WordSize(.byte)
 
     override func setUp() {
         super.setUp()
@@ -45,7 +45,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs / rhs
-        result.fixOverflow(bitWidth: byte.value, processSigned: true)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "NaN", "Calaculation failure")
@@ -60,7 +60,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs + rhs
-        result.fixOverflow(bitWidth: byte.value, processSigned: true)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "22", "Calaculation failure")
@@ -75,7 +75,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs - rhs
-        result.fixOverflow(bitWidth: byte.value, processSigned: true)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "2", "Calaculation failure")
@@ -90,7 +90,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs * rhs
-        result.fixOverflow(bitWidth: byte.value, processSigned: true)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "120", "Calaculation failure")
@@ -105,7 +105,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs / rhs
-        result.fixOverflow(bitWidth: byte.value, processSigned: true)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "1.2", "Calaculation failure")
@@ -120,7 +120,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs & rhs
-        result.fixOverflow(bitWidth: byte.value, processSigned: false)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: false)
         
         // 3. then
         XCTAssertEqual(result.description, "8", "Calaculation failure")
@@ -133,7 +133,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs & rhs
-        result.fixOverflow(bitWidth: byte.value, processSigned: true)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "4", "Calaculation failure")
@@ -148,7 +148,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs | rhs
-        result.fixOverflow(bitWidth: byte.value, processSigned: false)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: false)
         
         // 3. then
         XCTAssertEqual(result.description, "14", "Calaculation failure")
@@ -161,7 +161,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs | rhs
-        result.fixOverflow(bitWidth: byte.value, processSigned: true)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "-12", "Calaculation failure")
@@ -176,7 +176,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs ^ rhs
-        result.fixOverflow(bitWidth: byte.value, processSigned: false)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: false)
         
         // 3. then
         XCTAssertEqual(result.description, "6", "Calaculation failure")
@@ -189,7 +189,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs ^ rhs
-        result.fixOverflow(bitWidth: byte.value, processSigned: true)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "-109", "Calaculation failure")
@@ -204,7 +204,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = ~(lhs | rhs)
-        result.fixOverflow(bitWidth: byte.value, processSigned: false)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: false)
 
         // 3. then
         XCTAssertEqual(result.description, "241", "Calaculation failure")
@@ -217,7 +217,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = ~(lhs | rhs)
-        result.fixOverflow(bitWidth: byte.value, processSigned: true)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "-116", "Calaculation failure")
@@ -231,7 +231,7 @@ class PCDecimalTests: XCTestCase {
 
          // 2. when
          var result = ~lhs
-         result.fixOverflow(bitWidth: byte.value, processSigned: false)
+         result.fixOverflow(bitWidth: byte.intValue, processSigned: false)
          
          // 3. then
          XCTAssertEqual(result.description, "243", "Calaculation failure")
@@ -243,7 +243,7 @@ class PCDecimalTests: XCTestCase {
          
          // 2. when
          var result = ~lhs
-         result.fixOverflow(bitWidth: byte.value, processSigned: true)
+         result.fixOverflow(bitWidth: byte.intValue, processSigned: true)
          
          // 3. then
          XCTAssertEqual(result.description, "15", "Calaculation failure")
@@ -257,7 +257,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs << 1
-        result.fixOverflow(bitWidth: byte.value, processSigned: false)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: false)
         
         // 3. then
         XCTAssertEqual(result.description, "24", "Failed shifting left")
@@ -269,7 +269,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs << 1
-        result.fixOverflow(bitWidth: byte.value, processSigned: true)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "-24", "Failed shifting left")
@@ -281,7 +281,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs >> 1
-        result.fixOverflow(bitWidth: byte.value, processSigned: false)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: false)
         
         // 3. then
         XCTAssertEqual(result.description, "6", "Failed shifting right")
@@ -293,7 +293,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs >> 1
-        result.fixOverflow(bitWidth: byte.value, processSigned: true)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "-6", "Failed shifting right")
@@ -305,7 +305,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs >> 12
-        result.fixOverflow(bitWidth: dword.value, processSigned: false)
+        result.fixOverflow(bitWidth: dword.intValue, processSigned: false)
         
         // 3. then
         XCTAssertEqual(result.description, "30", "Failed shifting 12 right")
@@ -317,7 +317,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs >> 2
-        result.fixOverflow(bitWidth: byte.value, processSigned: false)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: false)
         
         // 3. then
         XCTAssertEqual(result.description, "3", "Failed shifting 2 right")
@@ -329,7 +329,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs << 12
-        result.fixOverflow(bitWidth: dword.value, processSigned: true)
+        result.fixOverflow(bitWidth: dword.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "49152", "Failed shifting 12 left")
@@ -341,7 +341,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs >> 2
-        result.fixOverflow(bitWidth: byte.value, processSigned: true)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "3", "Failed shifting 2 right")
@@ -356,7 +356,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs * rhs
-        result.fixOverflow(bitWidth: byte.value, processSigned: true)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "-84", "Failed fixing overflow")
@@ -369,7 +369,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs * rhs
-        result.fixOverflow(bitWidth: word.value, processSigned: true)
+        result.fixOverflow(bitWidth: word.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "-26730", "Failed fixing overflow")
@@ -382,7 +382,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs + rhs
-        result.fixOverflow(bitWidth: dword.value, processSigned: true)
+        result.fixOverflow(bitWidth: dword.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "-2024026860", "Failed fixing overflow")
@@ -395,7 +395,7 @@ class PCDecimalTests: XCTestCase {
 
         // 2. when
         var result = lhs * rhs
-        result.fixOverflow(bitWidth: qword.value, processSigned: true)
+        result.fixOverflow(bitWidth: qword.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "-7527149226598858751", "Failed fixing overflow")
@@ -408,7 +408,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs * rhs
-        result.fixOverflow(bitWidth: byte.value, processSigned: false)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: false)
         
         // 3. then
         XCTAssertEqual(result.description, "172", "Failed fixing overflow")
@@ -421,7 +421,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs * rhs
-        result.fixOverflow(bitWidth: word.value, processSigned: false)
+        result.fixOverflow(bitWidth: word.intValue, processSigned: false)
         
         // 3. then
         XCTAssertEqual(result.description, "38806", "Failed fixing overflow")
@@ -434,7 +434,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs + rhs
-        result.fixOverflow(bitWidth: dword.value, processSigned: false)
+        result.fixOverflow(bitWidth: dword.intValue, processSigned: false)
         
         // 3. then
         XCTAssertEqual(result.description, "2270940436", "Failed fixing overflow")
@@ -447,7 +447,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs * rhs
-        result.fixOverflow(bitWidth: qword.value, processSigned: false)
+        result.fixOverflow(bitWidth: qword.intValue, processSigned: false)
         
         // 3. then
         XCTAssertEqual(result.description, "17580887698819776513", "Failed fixing overflow")
@@ -460,7 +460,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs * rhs
-        result.fixOverflow(bitWidth: byte.value, processSigned: true)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "84", "Failed fixing overflow")
@@ -473,7 +473,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs * rhs
-        result.fixOverflow(bitWidth: word.value, processSigned: true)
+        result.fixOverflow(bitWidth: word.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "26730", "Failed fixing overflow")
@@ -486,7 +486,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs + rhs
-        result.fixOverflow(bitWidth: dword.value, processSigned: true)
+        result.fixOverflow(bitWidth: dword.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "-2024026858", "Failed fixing overflow")
@@ -499,7 +499,7 @@ class PCDecimalTests: XCTestCase {
 
         // 2. when
         var result = lhs * rhs
-        result.fixOverflow(bitWidth: qword.value, processSigned: true)
+        result.fixOverflow(bitWidth: qword.intValue, processSigned: true)
         
         // 3. then
         XCTAssertEqual(result.description, "-4546160997919353110", "Failed fixing overflow")
@@ -512,7 +512,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs * rhs
-        result.fixOverflow(bitWidth: byte.value, processSigned: false)
+        result.fixOverflow(bitWidth: byte.intValue, processSigned: false)
         
         // 3. then
         XCTAssertEqual(result.description, "151", "Failed fixing overflow")
@@ -525,7 +525,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs * rhs
-        result.fixOverflow(bitWidth: word.value, processSigned: false)
+        result.fixOverflow(bitWidth: word.intValue, processSigned: false)
         
         // 3. then
         XCTAssertEqual(result.description, "54928", "Failed fixing overflow")
@@ -538,7 +538,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs - rhs
-        result.fixOverflow(bitWidth: dword.value, processSigned: false)
+        result.fixOverflow(bitWidth: dword.intValue, processSigned: false)
         
         // 3. then
         XCTAssertEqual(result.description, "2382935995", "Failed fixing overflow")
@@ -551,7 +551,7 @@ class PCDecimalTests: XCTestCase {
         
         // 2. when
         var result = lhs * rhs
-        result.fixOverflow(bitWidth: qword.value, processSigned: false)
+        result.fixOverflow(bitWidth: qword.intValue, processSigned: false)
         
         // 3. then
         XCTAssertEqual(result.description, "17580887698819776513", "Failed fixing overflow")

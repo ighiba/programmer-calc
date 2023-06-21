@@ -121,9 +121,9 @@ class CalculatorDisplayView: UIView {
     
     lazy var changeWordSizeButton: UIButton = {
         let button = UIButton(type: .system)
-        button.frame = CGRect(x: 0, y: 0, width: navBarHeight*2, height: navBarHeight)
+        button.frame = CGRect(x: 0, y: 0, width: navBarHeight * 2, height: navBarHeight)
 
-        button.setTitle("QWORD", for: .normal)
+        button.setTitle("\(WordSizeType.qword.title)", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18.0, weight: UIFont.Weight.regular)
         button.sizeToFit()
        
@@ -136,7 +136,7 @@ class CalculatorDisplayView: UIView {
         let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: navBarHeight))
         let navItem = UINavigationItem()
         let font = UIFont.systemFont(ofSize: 42.0)
-        self.settingsItem.setTitleTextAttributes([NSAttributedString.Key.font: font], for: .normal)
+        settingsItem.setTitleTextAttributes([NSAttributedString.Key.font: font], for: .normal)
         
         navItem.leftBarButtonItems = [changeItem, keypadItem]
         navItem.rightBarButtonItem = settingsItem
@@ -188,11 +188,11 @@ class CalculatorDisplayView: UIView {
     }()
     
     lazy var labelsStack: UIStackView = {
-        let labels = UIStackView(arrangedSubviews: [self.mainLabel, self.converterLabel])
+        let labels = UIStackView(arrangedSubviews: [mainLabel, converterLabel])
         labels.axis = .vertical
         labels.distribution = .fillEqually
         
-        labels.spacing = self.mainLabel.infoSubLabel.frame.height
+        labels.spacing = mainLabel.infoSubLabel.frame.height
         
         return labels
     }()
@@ -272,14 +272,7 @@ class CalculatorDisplayView: UIView {
     }
     
     func updateCnageWordSizeButton(with wordSize: WordSize) {
-        let newTitle: String = {
-            for item in WordSize.wordsDictionary where item.first?.value == wordSize.value {
-                return item.first!.key
-            }
-            return (self.changeWordSizeButton.titleLabel?.text)!
-        }()
-
-        self.changeWordSizeButton.setTitle(newTitle, for: .normal)
+        self.changeWordSizeButton.setTitle(wordSize.value.title, for: .normal)
     }
     
     private func changNavigationBarIsHidden(to isHidden: Bool) {
@@ -297,7 +290,3 @@ class CalculatorDisplayView: UIView {
         return CGRect(origin: CGPoint(), size: UIScreen.mainRealSize())
     }
 }
-
-
-
-

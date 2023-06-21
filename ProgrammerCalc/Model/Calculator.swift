@@ -86,7 +86,7 @@ class Calculator: CalculatorProtocol {
         
         do {
             var result = try self.calculateCurrentValue()
-            result.fixOverflow(bitWidth: self.wordSize.value, processSigned: self.calcState.processSigned)
+            result.fixOverflow(bitWidth: wordSize.intValue, processSigned: calcState.processSigned)
             self.operation?.previousValue = PCDecimal(value: result.getDecimal())
             self.shouldStartNewInput = shouldStartNewInput
             self.currentValue = result
@@ -255,7 +255,7 @@ class Calculator: CalculatorProtocol {
     }
 
     public func fixOverflowForCurrentValue() {
-        self.currentValue.fixOverflow(bitWidth: self.wordSize.value, processSigned: self.calcState.processSigned)
+        currentValue.fixOverflow(bitWidth: wordSize.intValue, processSigned: calcState.processSigned)
     }
     
 }

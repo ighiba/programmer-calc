@@ -124,7 +124,7 @@ class LabelFormatter {
                 // remove zeros in fract part
                 let fractPart = testLabelStr.removeAllSpaces().getPartAfter(separator: ".")
                 // fill zeros to word size
-                str = bin.fillUpZeros(str: intPart, to: wordSize.value)
+                str = bin.fillUpZeros(str: intPart, to: wordSize.intValue)
                 str = str + "." + fractPart
                 bin.value = str
             }
@@ -241,11 +241,11 @@ class LabelFormatter {
             testStr = bin.removeZerosBefore(str: bin.value)
         }
         
-        return testStr.count <= wordSize.value ? false : true
+        return testStr.count <= wordSize.intValue ? false : true
     }
     
     private func checkIfMinSigned(_ bin: Binary) -> Bool {
-        if calcState.processSigned && bin.value.count >= wordSize.value && binIsSigned(bin) {
+        if calcState.processSigned && bin.value.count >= wordSize.intValue && binIsSigned(bin) {
             var testStr = String()
             let binBuff = Binary(bin)
             binBuff.twosComplement()

@@ -174,7 +174,7 @@ class CalculatorPresenter: CalculatorOutput {
 
         if valueIsNegativeAndWillProcessUnsigned || valueIsPositiveAndWillProcessSigned {
             let oldValue = calculator.currentValue
-            calculator.currentValue.fixOverflow(bitWidth: WordSize.shared.value, processSigned: calcState.processSigned)
+            calculator.currentValue.fixOverflow(bitWidth: WordSize.shared.intValue, processSigned: calcState.processSigned)
             
             if calculator.currentValue.isSignedAndFloat {
                 input.clearLabels()

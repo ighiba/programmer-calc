@@ -24,32 +24,30 @@ class WordSizeViewController: UIViewController {
     // update all layout in parent vc
     var updaterHandler: (() -> Void)?
     
+    override func loadView() {
+        self.view = wordSizeView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // delegate and dataSource for table
         wordSizeView.wordSizeTable.delegate = self
         wordSizeView.wordSizeTable.dataSource = self
-        
-        self.view = wordSizeView
-        
+
         setupGestures()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         AppDelegate.AppUtility.lockPortraitOrientation()
-        // load data from UserDefaults to table
         let loadedWordSize: WordSize = storage.loadData()
         wordSize.setWordSize(loadedWordSize)
-        // animate popover
         wordSizeView.animateIn()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         AppDelegate.AppUtility.unlockPortraitOrientation()
     }
-    
     
     // MARK: - Methods
     
@@ -118,31 +116,28 @@ class WordSizeViewController: UIViewController {
     }
 }
 
-// MARK: - TableView Data Source
+// MARK: - DataSource
 
 extension WordSizeViewController: UITableViewDataSource, UITableViewDelegate {
     
-    // Rows
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return WordSize.wordsDictionary.count
+        return WordSizeType.allCases.count
     }
     
-    // Sections
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    // Cell
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         
-        cell.textLabel?.text = WordSize.wordsDictionary[indexPath.row].keys.first
+        cell.textLabel?.text = WordSizeType.allCases[indexPath.row].title
         cell.textLabel?.font = UIFont(name: "HelveticaNeue-Light", size: 18.0)
         cell.textLabel?.textColor = .label
         cell.backgroundColor = .systemGray6
         cell.selectionStyle = .default
         
-        if WordSize.wordsDictionary[indexPath.row].values.first == wordSize.value {
+        if indexPath.row == WordSizeType.allCases.firstIndex(of: wordSize.value)! {
             cell.accessoryType = .checkmark
             checkmarkedIndexPath = indexPath
         }
@@ -150,29 +145,22 @@ extension WordSizeViewController: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
-    // Tap on cell
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if checkmarkedIndexPath == indexPath {
             tableView.deselectRow(at: indexPath, animated: true)
             return
         }
         
-        // set checkmark on new cell
         tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-        // remove from old
         tableView.cellForRow(at: checkmarkedIndexPath)?.accessoryType = .none
         
-        // update checkmarkedIndexPath
         checkmarkedIndexPath = indexPath
         
-        // update wordSize value
-        let newValue = WordSize.wordsDictionary[indexPath.row].first!.value
-        wordSize.setWordSize(WordSize(newValue))
+        let newValue = WordSizeType.allCases[indexPath.row]
+        wordSize.setWordSizeValue(newValue)
         
-        // update userdefaults
         storage.saveData(wordSize)
         
-        //checkmarkedIndexPath
         tableView.deselectRow(at: indexPath, animated: true)
     }
     

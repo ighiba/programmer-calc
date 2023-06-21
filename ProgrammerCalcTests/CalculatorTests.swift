@@ -18,10 +18,10 @@ class CalculatorTests: XCTestCase {
     let unsignedData = CalcState(lastValue: PCDecimal(0), lastLabelValues: LabelValues(main: "0", converter: "0"), processSigned: false)
     let signedData = CalcState(lastValue: PCDecimal(0), lastLabelValues: LabelValues(main: "0", converter: "0"), processSigned: true)
     
-    let byte = WordSize(8)
-    let word = WordSize(16)
-    let dword = WordSize(32)
-    let qword = WordSize(64)
+    let qword = WordSize(.qword)
+    let dword = WordSize(.dword)
+    let word = WordSize(.word)
+    let byte = WordSize(.byte)
     
     let wordSize = WordSize.shared
     let calcState: CalcState = CalcState.shared
@@ -95,7 +95,7 @@ class CalculatorTests: XCTestCase {
         // 2. when
         calculatorTest.currentValue = testValue
         calculatorTest.negateCurrentValue()
-        calculatorTest.currentValue.fixOverflow(bitWidth: qword.value, processSigned: true)
+        calculatorTest.currentValue.fixOverflow(bitWidth: qword.intValue, processSigned: true)
         let result = calculatorTest.currentValue.getDecimal()
 
         // 3. then
