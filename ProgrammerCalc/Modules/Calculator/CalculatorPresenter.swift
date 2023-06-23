@@ -10,6 +10,8 @@ import UIKit
 
 protocol CalculatorPresenterDelegate: AnyObject {
     var mainLabelHasError: Bool { get }
+    func clearLabels()
+    func updateAllLayout()
     func updateClearButton(hasInput: Bool)
     func showErrorInLabels(_ error: MathErrors)
     func setErrorInLabels(_ error: MathErrors)
@@ -17,6 +19,22 @@ protocol CalculatorPresenterDelegate: AnyObject {
     func getMainLabelText(deleteSpaces: Bool) -> String
     func setMainLabelText(_ text: String)
     func setConverterLabelText(_ text: String)
+}
+
+protocol CalculatorInput: AnyObject {
+    func clearLabels()
+//    func unhighlightLabels()
+    func updateAllLayout()
+    func updateClearButton(hasInput: Bool)
+    func mainLabelHasError() -> Bool
+    func showErrorInLabels(_ error: MathErrors)
+    func setErrorInLabels(_ error: MathErrors)
+    func resetErrorInLabels()
+    func getMainLabelText(deleteSpaces: Bool) -> String
+    func setMainLabelText(_ text: String)
+    func setConverterLabelText(_ text: String)
+    func updateAfterConversionChange()
+    func presentViewControlle(_ viewController: UIViewController, animated: Bool)
 }
 
 protocol CalculatorOutput: AnyObject {
@@ -40,6 +58,10 @@ protocol CalculatorOutput: AnyObject {
     func doCalculation()
     func doNegation()
     func fixOverflowForCurrentValue()
+    
+    func showConversion()
+    func showWordSize()
+    func showSettings()
 }
 
 class CalculatorPresenter: CalculatorOutput {
@@ -57,6 +79,8 @@ class CalculatorPresenter: CalculatorOutput {
     init() {
         
     }
+    
+    // MARK: - Methods
     
     func getMainSystem() -> ConversionSystemsEnum {
         return conversionSettings.systemMain
@@ -217,11 +241,59 @@ class CalculatorPresenter: CalculatorOutput {
     func fixOverflowForCurrentValue() {
         calculator.fixOverflowForCurrentValue()
     }
+    
+    func showConversion() {
+        guard let conversionView = ConversionModuleAssembly.configureModule() as? ConversionViewController else {
+            return
+        }
+        conversionView.modalPresentationStyle = .overFullScreen
+        conversionView.output.delegate = self
+        conversionView.output.updateHandler = { [weak self] in
+            self?.input.updateAfterConversionChange()
+        }
+        input.presentViewControlle(conversionView, animated: false)
+    }
+    
+    func showWordSize() {
+        guard let wordSizeView = WordSizeModuleAssembly.configureModule() as? WordSizeViewController else {
+            return
+        }
+        wordSizeView.modalPresentationStyle = .overFullScreen
+        wordSizeView.output.updateHandler = { [weak self] in
+            self?.fixOverflowForCurrentValue()
+            self?.input.updateAllLayout()
+        }
+        input.presentViewControlle(wordSizeView, animated: false)
+    }
+    
+    func showSettings() {
+        guard let settingsView = SettingsModuleAssembly.configureModule() as? SettingsViewController else {
+            return
+        }
+        let navigationController = UINavigationController()
+        settingsView.modalPresentationStyle = .pageSheet
+        navigationController.presentationController?.delegate = input as? UIAdaptivePresentationControllerDelegate
+        settingsView.output.updateHandler = { [weak self] in
+            self?.input.updateAllLayout()
+        }
+        navigationController.setViewControllers([settingsView], animated: false)
+        input.presentViewControlle(navigationController, animated: true)
+    }
 }
+
+// MARK: - Delegate
 
 extension CalculatorPresenter: CalculatorPresenterDelegate {
     var mainLabelHasError: Bool {
         return input.mainLabelHasError()
+    }
+    
+    func clearLabels() {
+        input.clearLabels()
+    }
+    
+    func updateAllLayout() {
+        input.updateAllLayout()
     }
     
     func updateClearButton(hasInput: Bool) {

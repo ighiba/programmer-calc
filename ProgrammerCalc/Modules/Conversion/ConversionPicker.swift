@@ -14,6 +14,8 @@ class ConversionPicker: UIPickerView {
     }
 }
 
+// MARK: - DataSource
+
 extension ConversionPicker: UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 2
@@ -24,11 +26,13 @@ extension ConversionPicker: UIPickerViewDataSource {
     }
 }
 
+// MARK: - Delegate
+
 extension ConversionPicker: UIPickerViewDelegate {
     
     // Process element from array to create picker row
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return ConversionSystemsEnum.allCases[row].rawValue
+        return ConversionSystemsEnum.allCases[row].title
     }
     
     // Picker row width

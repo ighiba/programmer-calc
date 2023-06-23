@@ -12,19 +12,6 @@ protocol CalculatorViewDelegate: AnyObject {
     func clearLabels()
     func unhighlightLabels()
     func updateAllLayout()
-    
-}
-
-protocol CalculatorInput: AnyObject {
-    func clearLabels()
-    func updateClearButton(hasInput: Bool)
-    func mainLabelHasError() -> Bool
-    func showErrorInLabels(_ error: MathErrors)
-    func setErrorInLabels(_ error: MathErrors)
-    func resetErrorInLabels()
-    func getMainLabelText(deleteSpaces: Bool) -> String
-    func setMainLabelText(_ text: String)
-    func setConverterLabelText(_ text: String)
 }
 
 class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate, UIAdaptivePresentationControllerDelegate {
@@ -257,6 +244,7 @@ class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate,
         updateChangeWordSizeButton()
         updateButtonsState()
         updateLabels()
+        updateBitwiseKeypad()
     }
     
     // Handle button enabled state for various conversion systems
@@ -366,7 +354,17 @@ class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate,
     func setConverterLabelText(_ text: String) {
         converterLabel.setText(text)
     }
-
+    
+    func updateAfterConversionChange() {
+        self.updateInfoSubLabels()
+        self.handleDisplayingMainLabel()
+        self.updateButtonsState()
+        self.updateBitwiseKeypad()
+    }
+    
+    func presentViewControlle(_ viewController: UIViewController, animated: Bool) {
+        self.present(viewController, animated: animated, completion: nil)
+    }
 }
 
 extension CalculatorView {
@@ -439,16 +437,7 @@ extension CalculatorView {
     
     @objc func changeConversionButtonTapped(_ sender: UIButton) {
         touchHandleLabelHighlight()
-        let changeConversionVC = ConversionViewController()
-        changeConversionVC.modalPresentationStyle = .overFullScreen
-        changeConversionVC.delegate = self
-        changeConversionVC.updateHandler = {
-            self.updateInfoSubLabels()
-            self.handleDisplayingMainLabel()
-            self.updateButtonsState()
-            self.updateBitwiseKeypad()
-        }
-        self.present(changeConversionVC, animated: false, completion: nil)
+        output.showConversion()
     }
     
     // Keypad switch action Default/Bitwise
@@ -509,27 +498,12 @@ extension CalculatorView {
 
     @objc func changeWordSizeButtonTapped(_ sender: UIButton) {
         touchHandleLabelHighlight()
-        let changeWordSizeVC = WordSizeViewController()
-        changeWordSizeVC.modalPresentationStyle = .overFullScreen
-        changeWordSizeVC.updaterHandler = {
-            self.output.fixOverflowForCurrentValue()
-            self.updateAllLayout()
-            self.updateBitwiseKeypad()
-        }
-        self.present(changeWordSizeVC, animated: false, completion: nil)
+        output.showWordSize()
     }
     
     @objc func settingsButtonTapped(_ sender: UIButton) {
         touchHandleLabelHighlight()
-        let settingsVC = SettingsViewController()
-        let navigationController = UINavigationController()
-        settingsVC.modalPresentationStyle = .pageSheet
-        navigationController.presentationController?.delegate = self
-        settingsVC.updaterHandler = {
-            self.updateBitwiseKeypad()
-        }
-        navigationController.setViewControllers([settingsVC], animated: false)
-        self.present(navigationController, animated: true)
+        output.showSettings()
     }
      
     @objc func labelSwipeRight(_ sender: UISwipeGestureRecognizer) {

@@ -26,22 +26,18 @@ class WordSizeView: UIView {
         self.addSubview(container)
 
         setupLayout()
-        
-        // Add blur effect
+
         let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.systemUltraThinMaterialDark)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = self.bounds
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.insertSubview(blurEffectView, at: 0)
     }
-    
-    
-    // Setup layout
+
     func setupLayout() {
         let popoverTitleHeight: CGFloat = popoverTitle.font.pointSize + 1
         let tableRowHeight: CGFloat = 44
         let doneButtonHeight: CGFloat = 50
-        // calculate container stack height
         let containerStackHeight: CGFloat =  popoverTitleHeight + margin * 2 + tableRowHeight * 4 + doneButtonHeight
         
         popoverTitle.translatesAutoresizingMaskIntoConstraints = false
@@ -49,24 +45,19 @@ class WordSizeView: UIView {
         containerStack.translatesAutoresizingMaskIntoConstraints = false
         wordSizeTable.translatesAutoresizingMaskIntoConstraints = false
         doneButton.translatesAutoresizingMaskIntoConstraints = false
-        // Activate constraints
+
         NSLayoutConstraint.activate([
-            // Set constraints for title
             popoverTitle.heightAnchor.constraint(equalToConstant: popoverTitleHeight),
             
-            // Set constraints for table
             wordSizeTable.heightAnchor.constraint(equalToConstant: tableRowHeight * 4),
             
-            // Set contraints for done button
             doneButton.heightAnchor.constraint(equalToConstant: doneButtonHeight),
-            
-            // Set constraints for main container
+
             container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             container.widthAnchor.constraint(equalToConstant: modalViewWidth),
             container.heightAnchor.constraint(equalToConstant: containerStackHeight+margin * 2),
-            
-            // Set constraints for done button
+
             containerStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             containerStack.centerYAnchor.constraint(equalTo: container.centerYAnchor),
             containerStack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
@@ -82,28 +73,24 @@ class WordSizeView: UIView {
 
         return view
     }()
-    
-    // Table view with word sizes
+
     let wordSizeTable: UITableView = {
         let table = UITableView(frame: CGRect(), style: .plain)
         
-        // disable scrolling
         table.isScrollEnabled = false
         
         return table
     }()
-    
-    // Done button for saving and dismissing vc
-    fileprivate let doneButton: UIButton = {
+
+    private let doneButton: UIButton = {
         let button = PopoverDoneButton(frame: CGRect())
-        
+
         button.addTarget(nil, action: #selector(WordSizeViewController.doneButtonTapped), for: .touchUpInside)
         
         return button
     }()
-    
-    // Popover title
-    fileprivate let popoverTitle: UILabel = {
+
+    private let popoverTitle: UILabel = {
         let label = UILabel()
         
         label.text = NSLocalizedString("Change word size", comment: "")
@@ -113,10 +100,8 @@ class WordSizeView: UIView {
                
         return label
     }()
-    
-    // stack with title and table. done button
-    fileprivate lazy var containerStack: UIStackView = {
-        // form stack with views
+
+    private lazy var containerStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [popoverTitle,wordSizeTable,doneButton])
         
         stack.axis = .vertical
@@ -124,25 +109,18 @@ class WordSizeView: UIView {
         stack.distribution = .fill
         
         let containerStackHeight = ((UIScreen.main.bounds.height * 0.55) * 0.9) * 0.9
-        
-        // Custom spacings
-        // after label
-        stack.setCustomSpacing(margin, after: self.popoverTitle)
-        // after table
-        stack.setCustomSpacing(margin, after: self.wordSizeTable)
+
+        stack.setCustomSpacing(margin, after: popoverTitle)
+        stack.setCustomSpacing(margin, after: wordSizeTable)
         
         return stack
     }()
     
-    
-    // Animation for presenting view
     func animateIn() {
         let moveUp = CGAffineTransform(translationX: 0, y: -300)
         let scaleDown = CGAffineTransform(scaleX: 0.01, y: 0.01)
         let transform = scaleDown.concatenating(moveUp)
 
-        // preparing container for animation
-        // making it hidden
         self.container.transform = transform
         self.alpha = 0
         
@@ -152,10 +130,7 @@ class WordSizeView: UIView {
         }, completion: nil)
     }
 
-
-    // Animation for dismissing view
     func animateOut( finished: @escaping () -> Void) {
-        // transforms for concatenating
         let moveUp = CGAffineTransform(translationX: 0, y: -300)
         let scaleDown = CGAffineTransform(scaleX: 0.01, y: 0.01)
 
@@ -166,7 +141,6 @@ class WordSizeView: UIView {
             self.container.alpha = 0.01
             self.alpha = 0
         }, completion: { _ in
-            // dismiss vc
             finished()
         })
     }
@@ -174,6 +148,5 @@ class WordSizeView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
 

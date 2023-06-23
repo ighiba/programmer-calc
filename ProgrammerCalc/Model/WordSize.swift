@@ -9,17 +9,26 @@
 import Foundation
 
 enum WordSizeType: Int, Codable, CaseIterable {
-    case qword = 64
-    case dword = 32
-    case word  = 16
-    case byte  = 8
+    case qword = 0
+    case dword = 1
+    case word  = 2
+    case byte  = 3
     
     var title: String {
         switch self {
         case .qword: return "QWORD"
         case .dword: return "DWORD"
-        case .word: return "WORD"
-        case .byte: return "BYTE"
+        case .word:  return "WORD"
+        case .byte:  return "BYTE"
+        }
+    }
+    
+    var intValue: Int {
+        switch self {
+        case .qword: return 64
+        case .dword: return 32
+        case .word:  return 16
+        case .byte:  return 8
         }
     }
 }
@@ -37,7 +46,7 @@ final class WordSize: WordSizeProtocol {
 
     var value: WordSizeType
     var intValue: Int {
-        return value.rawValue
+        return value.intValue
     }
     
     init(_ wordSizeType: WordSizeType) {
