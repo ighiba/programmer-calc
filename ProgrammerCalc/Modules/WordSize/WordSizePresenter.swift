@@ -32,7 +32,7 @@ class WordSizePresenter: WordSizeOutput {
     // MARK: - Methods
     
     func obtainCheckmarkIndex() {
-        //view.setCheckmarkedIndex(for: wordSize.value.rawValue)
+        view.setCheckmarkedIndex(for: wordSize.value.rawValue)
     }
     
     func setNewWordSize(by row: Int) {

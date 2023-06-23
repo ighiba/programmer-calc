@@ -29,6 +29,7 @@ class WordSizeViewController: UIViewController, WordSizeInput {
         wordSizeView.wordSizeTable.dataSource = self
 
         setupGestures()
+        output.obtainCheckmarkIndex()
     }
     
     override func viewWillAppear(_ animated: Bool) {
