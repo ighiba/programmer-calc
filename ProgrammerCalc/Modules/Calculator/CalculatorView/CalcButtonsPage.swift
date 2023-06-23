@@ -27,8 +27,6 @@ class CalcButtonsPage: StyledView, CalcButtonPageProtocol {
     
     var layoutConstraints: [NSLayoutConstraint]?
     
-    private let styleFactory: StyleFactory = StyleFactory()
-    
     private let buttonsHorizontalSpacing: CGFloat = CalculatorButton.spacingWidth
     
     // MARK: - Init

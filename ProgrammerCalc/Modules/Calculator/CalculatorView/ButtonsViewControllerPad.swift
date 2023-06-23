@@ -18,7 +18,6 @@ class ButtonsViewControllerPad: StyledViewController, ButtonsContainerController
     lazy var buttonsStackView: UIStackView = obtainButtonsStackView(buttons: allButtons)
 
     var layoutConstraints: [NSLayoutConstraint] = []
-    private var styleFactory: StyleFactory = StyleFactory()
 
     private let spacing: CGFloat = CalculatorButton.spacingWidth  // spacing between buttons in horizontal stack
     private let verticalMargin: CGFloat = 20

@@ -42,8 +42,6 @@ protocol CalculatorOutput: AnyObject {
     func getConverterSystem() -> ConversionSystemsEnum
     func isInvalidMainLabelInput(_ text: String) -> Bool
     func resetCurrentValueAndUpdateLabels()
-    func getCurrentStyleSettings() -> StyleSettings
-    func updateStyleSettings(_ styleSettings: StyleSettings)
     func updateMainLabelWithCurrentValue()
     func updateConverterLabelWithCurrentValue()
     func getForbiddenToInputDigits() -> Set<String>
@@ -111,15 +109,6 @@ class CalculatorPresenter: CalculatorOutput {
     
     private func converterLabelUpdate() {
         calculator.converterLabelUpdate()
-    }
-    
-    func getCurrentStyleSettings() -> StyleSettings {
-        return StyleSettings.shared
-    }
-    
-    func updateStyleSettings(_ styleSettings: StyleSettings) {
-        StyleSettings.shared.setStyleSettings(styleSettings)
-        storage.saveData(styleSettings)
     }
     
     func updateMainLabelWithCurrentValue() {
