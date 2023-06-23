@@ -14,7 +14,7 @@ protocol CalculatorViewDelegate: AnyObject {
     func updateAllLayout()
 }
 
-class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate, UIAdaptivePresentationControllerDelegate {
+class CalculatorView: StyledViewController, CalculatorInput, CalculatorViewDelegate, UIAdaptivePresentationControllerDelegate {
     
     // MARK: - Properties
     
@@ -29,10 +29,6 @@ class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate,
     
     // Device states
     private var isAllowedLandscape: Bool = false
-    private var isDarkContentBackground: Bool = false
-    
-    // Style Factory
-    private let styleFactory: StyleFactory = StyleFactory()
     
     private var mainSystem: ConversionSystemsEnum {
         return output.getMainSystem()
@@ -65,15 +61,12 @@ class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate,
         
         buttonsContainerController.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            buttonsContainerController.view.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             buttonsContainerController.view.leadingAnchor.constraint(equalTo: self.displayView.leadingAnchor),
             buttonsContainerController.view.trailingAnchor.constraint(equalTo: self.displayView.trailingAnchor),
             buttonsContainerController.view.topAnchor.constraint(equalTo: self.displayView.labelsStack.bottomAnchor, constant: 30),
             buttonsContainerController.view.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
         ])
-        
-        //addLabelsUpdateHandlers()
-        
+ 
         updateInfoSubLabels()
         handleConversion()
 
@@ -93,7 +86,6 @@ class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate,
             AppDelegate.AppUtility.unlockPortraitOrientation()
         }
 
-        
         if #available(iOS 16.0, *) {
             setNeedsUpdateOfSupportedInterfaceOrientations()
         }
@@ -101,74 +93,67 @@ class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate,
         isAllowedLandscape = true
         buttonsContainerController.view.layoutSubviews()
     }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        updateStyle()
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
         guard let phoneVC = self.buttonsContainerController as? ButtonsViewControllerPhone else { return }
         handleDeviceOrientationChange(phoneVC)
+    }
+    
+    override func styleWillUpdate(with style: Style) {
+        super.styleWillUpdate(with: style)
+        bitwiseKeypad?.updateStyle(style)
+        self.view.backgroundColor = style.backgroundColor
+        self.setNeedsStatusBarAppearanceUpdate()
     }
     
     // Only for Phone
     // Handle orientation change for constraints
     func handleDeviceOrientationChange(_ phoneVC: ButtonsViewControllerPhone) {
-        // get current device orientation
         let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
         let isPortrait = windowScene?.interfaceOrientation.isPortrait ?? UIDevice.current.orientation.isPortrait
         let isLandscape = windowScene?.interfaceOrientation.isLandscape ?? UIDevice.current.orientation.isLandscape
         
         if isPortrait && !isLandscape {
-            // show button pages
-            for page in phoneVC.calcButtonsViewControllers {
+
+            phoneVC.calcButtonsViewControllers.forEach { page in
                 page.showWithAnimation()
             }
-            // change constraints
+
             displayView.showNavigationBar()
+            
             NSLayoutConstraint.deactivate(displayView.landscape!)
             NSLayoutConstraint.deactivate(displayView.landscapeWithBitKeypad!)
             NSLayoutConstraint.activate(displayView.portrait!)
 
-            // update label layouts
             handleDisplayingMainLabel()
             mainLabel.sizeToFit()
             mainLabel.infoSubLabel.sizeToFit()
             converterLabel.infoSubLabel.sizeToFit()
             converterLabel.sizeToFit()
-            // show pagecontrol
             phoneVC.setPageControl(visibile: true)
-            // show word size button
             displayView.changeWordSizeButton.isHidden = false
-            // set default calcView frame
             displayView.frame = CGRect( x: 0, y: 0, width: UIScreen.main.bounds.width, height: displayView.getViewHeight())
             
         } else if isLandscape && !isPortrait && isAllowedLandscape {
-            // hide word size button
             displayView.changeWordSizeButton.isHidden = true
-            // hide button pages
-            for page in phoneVC.calcButtonsViewControllers {
+            
+            phoneVC.calcButtonsViewControllers.forEach { page in
                 page.hideWithAnimation()
             }
-            // change constraints
+            
             NSLayoutConstraint.deactivate(displayView.portrait!)
             displayView.hideNavigationBar()
-            // landscape constraints by existing bitwiseKeypad
             if bitwiseKeypad != nil {
                 displayView.hideConverterLabel()
                 NSLayoutConstraint.activate(displayView.landscapeWithBitKeypad!)
             } else {
                 NSLayoutConstraint.activate(displayView.landscape!)
             }
-            // hide pagecontrol
+            
             phoneVC.setPageControl(visibile: false)
-            // set landscape calcView frame
             displayView.frame = UIScreen.main.bounds
         }
-    }
-    
-    // Handle dismissing modal vc
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        // Update rotation settings
-        AppDelegate.AppUtility.lockPortraitOrientation()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -176,10 +161,10 @@ class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate,
         unhighlightLabels()
     }
     
-    func layoutSubviews() {
-        self.view.layoutSubviews()
-        self.displayView.layoutSubviews()
-        self.buttonsContainerController.layoutSubviews()
+    func subviewsSetNeedsLayout() {
+        self.view.setNeedsLayout()
+        self.displayView.setNeedsLayout()
+        self.buttonsContainerController.view.setNeedsLayout()
     }
     
     // MARK: - Methods
@@ -206,38 +191,6 @@ class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate,
 
     public func clearLabels() {
         output.resetCurrentValueAndUpdateLabels()
-    }
-    
-    private func updateStyle() {
-        let styleSettings = output.getCurrentStyleSettings()
-        var styleType = styleSettings.currentStyle
-
-        // change style depends on state
-        if styleSettings.isUsingSystemAppearance {
-            switch UIScreen.main.traitCollection.userInterfaceStyle {
-            case .light, .unspecified:
-                styleSettings.currentStyle = .light
-            case .dark:
-                styleSettings.currentStyle = .dark
-            @unknown default:
-                // dark mode if unknown
-                styleSettings.currentStyle = .dark
-            }
-            output.updateStyleSettings(styleSettings)
-            view.window?.overrideUserInterfaceStyle = .unspecified
-            styleType = styleSettings.currentStyle
-        } else {
-            let interfaceStyle: UIUserInterfaceStyle = styleType == .light ? .light : .dark
-            view.window?.overrideUserInterfaceStyle = interfaceStyle
-        }
-        
-        // Update bitwise keypad style if exist
-        bitwiseKeypad?.updateStyle()
-        
-        let style = styleFactory.get(style: styleType)
-        self.view.backgroundColor = style.backgroundColor
-        isDarkContentBackground = styleType == .light ? false : true
-        self.setNeedsStatusBarAppearanceUpdate()
     }
 
     public func updateAllLayout() {
@@ -356,10 +309,10 @@ class CalculatorView: UIViewController, CalculatorInput, CalculatorViewDelegate,
     }
     
     func updateAfterConversionChange() {
-        self.updateInfoSubLabels()
-        self.handleDisplayingMainLabel()
-        self.updateButtonsState()
-        self.updateBitwiseKeypad()
+        updateInfoSubLabels()
+        handleDisplayingMainLabel()
+        updateButtonsState()
+        updateBitwiseKeypad()
     }
     
     func presentViewControlle(_ viewController: UIViewController, animated: Bool) {
@@ -372,7 +325,7 @@ extension CalculatorView {
     // MARK: - Actions
     
     @objc func touchHandleLabelHighlight() {
-        self.unhighlightLabels()
+        unhighlightLabels()
     }
     
     @objc func numericButtonTapped(_ sender: UIButton) {
@@ -412,8 +365,8 @@ extension CalculatorView {
     @objc func toggleIsSigned(_ sender: UIButton) {
         output.toggleProcessSigned()
         print("Signed - \(output.isProcessSigned())")
-        self.updateIsSignedButton(processSigned: output.isProcessSigned())
-        self.updateNegateButton(processSigned: output.isProcessSigned())
+        updateIsSignedButton(processSigned: output.isProcessSigned())
+        updateNegateButton(processSigned: output.isProcessSigned())
     }
     
     @objc func clearButtonTapped(_ sender: UIButton) {
@@ -490,7 +443,6 @@ extension CalculatorView {
                 self.buttonsContainerController.view?.transform = calcButtonsTransform
             }, completion: { [weak self] _ in
                 self?.bitwiseKeypad?.didMove(toParent: self)
-                //self?.buttonsContainerController.view?.transform = .identity
                 self?.refreshCalcButtons()
             })
         }
@@ -510,7 +462,6 @@ extension CalculatorView {
         touchHandleLabelHighlight()
         guard sender.direction == .right else { return }
         output.mainLabelRemoveTrailing()
-        // update bitwise keypad if exists
         updateBitwiseKeypad()
     }
 }

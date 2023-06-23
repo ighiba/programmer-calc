@@ -279,6 +279,7 @@ class CalculatorPresenter: CalculatorOutput {
         navigationController.setViewControllers([settingsView], animated: false)
         input.presentViewControlle(navigationController, animated: true)
     }
+    
 }
 
 // MARK: - Delegate

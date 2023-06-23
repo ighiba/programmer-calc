@@ -16,8 +16,7 @@ class AboutModuleAssembly {
         view.output = presenter
         presenter.view = view
         
-        presenter.styleFactory = StyleFactory()
-        presenter.styleSettings = StyleSettings.shared
+        presenter.styleManager = StyleManager.shared
         
         return view
     }

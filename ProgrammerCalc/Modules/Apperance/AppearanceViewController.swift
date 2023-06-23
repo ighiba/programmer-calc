@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AppearanceViewController: PCalcTableViewController, AppearanceInput {
+class AppearanceViewController: StyledTableViewController, AppearanceInput {
     
     // MARK: - Properties
     
@@ -83,6 +83,7 @@ class AppearanceViewController: PCalcTableViewController, AppearanceInput {
     
     func updateInterfaceLayout(_ style: UIUserInterfaceStyle) {
         overrideUserInterfaceStyle(style)
+        self.view.window?.setNeedsLayout()
         self.view.window?.layoutIfNeeded()
     }
     
@@ -95,14 +96,10 @@ class AppearanceViewController: PCalcTableViewController, AppearanceInput {
     }
 
     func animateUpdateRootViewLayoutSubviews() {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.updateRootViewLayoutSubviews()
-        })
-    }
-
-    private func updateRootViewLayoutSubviews() {
         if let calcView = self.view.window?.rootViewController as? CalculatorView {
-            calcView.layoutSubviews()
+            UIView.animate(withDuration: 0.3, animations: {
+                calcView.subviewsSetNeedsLayout()
+            })
         }
     }
 

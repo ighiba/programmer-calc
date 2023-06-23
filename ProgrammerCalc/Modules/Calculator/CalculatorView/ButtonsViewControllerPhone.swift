@@ -9,7 +9,6 @@
 import UIKit
 
 protocol ButtonsContainerControllerProtocol: UIViewController {
-    func layoutSubviews()
     func refreshCalcButtons() // implement if UIPageViewController
     func updateButtonsIsEnabled(by forbiddenValues: Set<String>)
 }
@@ -40,7 +39,6 @@ class ButtonsViewControllerPhone: UIPageViewController, ButtonsContainerControll
         self.dataSource = self
         self.delegate = self
         
-        // Allow interaction with content(buttons) without delay
         self.delaysContentTouches = false
         
         let pageControl = UIPageControl.appearance()
@@ -52,12 +50,13 @@ class ButtonsViewControllerPhone: UIPageViewController, ButtonsContainerControll
         fatalError("init(coder:) has not been implemented")
     }
     
-    func layoutSubviews() {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         for controller in calcButtonsViewControllers {
             controller.view.layoutSubviews()
         }
     }
-    
+
     // MARK: - Methods
     
     func refreshCalcButtons() {

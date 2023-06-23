@@ -11,13 +11,12 @@ import StoreKit
 
 protocol AboutInput: AnyObject {
     func reloadTable()
-    func setTintColor(_ color: UIColor)
     func push(_ viewController: UIViewController)
     func openContactFormWith(recipients: [String], subject: String, message: String)
 }
 
 protocol AboutOutput: AnyObject {
-    func obtainTintColor()
+    func obtainTintColor() -> UIColor
     func openDescription()
     func openRateAppForm()
     func openContactForm()
@@ -29,15 +28,12 @@ class AboutPresenter: AboutOutput {
     
     weak var view: AboutInput!
     
-    var styleFactory: StyleFactory!
-    var styleSettings: StyleSettings!
+    var styleManager: StyleManager!
     
     // MARK: - Methods
-    
-    func obtainTintColor() {
-        let styleType = styleSettings.currentStyle
-        let style = styleFactory.get(style: styleType)
-        view.setTintColor(style.tintColor)
+
+    func obtainTintColor() -> UIColor {
+        return styleManager.obtainStyle().tintColor
     }
     
     func openDescription() {

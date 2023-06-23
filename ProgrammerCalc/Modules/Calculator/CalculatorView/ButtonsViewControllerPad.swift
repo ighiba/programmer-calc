@@ -10,7 +10,7 @@ import UIKit
 
 // MARK: - iPad
 
-class ButtonsViewControllerPad: UIViewController, ButtonsContainerControllerProtocol {
+class ButtonsViewControllerPad: StyledViewController, ButtonsContainerControllerProtocol {
     
     // MARK: - Properties
     
@@ -41,14 +41,9 @@ class ButtonsViewControllerPad: UIViewController, ButtonsContainerControllerProt
         setLayout()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        updateButtonsStyle()
-    }
-    
-    func layoutSubviews() {
-        self.view.layoutSubviews()
-        updateButtonsStyle()
+    override func styleWillUpdate(with style: Style) {
+        super.styleWillUpdate(with: style)
+        updateButtonsStyle(style)
     }
     
     // MARK: - Methods
@@ -152,9 +147,7 @@ class ButtonsViewControllerPad: UIViewController, ButtonsContainerControllerProt
         }
     }
     
-    private func updateButtonsStyle() {
-        let styleType = StyleSettings.shared.currentStyle
-        let style = styleFactory.get(style: styleType)
+    private func updateButtonsStyle(_ style: Style) {
         allButtons.forEachButton { $0.updateStyle(style) }
     }
     

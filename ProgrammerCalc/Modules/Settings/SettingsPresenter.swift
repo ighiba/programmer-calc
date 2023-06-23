@@ -10,7 +10,6 @@ import UIKit
 
 protocol SettingsInput: AnyObject {
     func reloadTable()
-    func setStyle(style: Style)
     func setTappingSoundsSwitcherState(_ isOn: Bool)
     func setHapticFeedbackSwitcherState(_ isOn: Bool)
     func push(_ viewController: UIViewController)
@@ -18,7 +17,6 @@ protocol SettingsInput: AnyObject {
 
 protocol SettingsOutput: AnyObject {
     var updateHandler: (() -> Void)? { get set }
-    func obtainStyle()
     func obtainSettings()
     func updateTappingSounds(_ state: Bool)
     func updateHapticFeedback(_ state: Bool)
@@ -36,16 +34,9 @@ class SettingsPresenter: SettingsOutput {
     var updateHandler: (() -> Void)?
     
     var storage: CalculatorStorage!
-    var styleFactory: StyleFactory!
     var settings: Settings!
     
     // MARK: - Methods
-    
-    func obtainStyle() {
-        let styleType = StyleSettings.shared.currentStyle
-        let style = styleFactory.get(style: styleType)
-        view.setStyle(style: style)
-    }
     
     func obtainSettings() {
         let loadedSettings: Settings = storage.loadData()

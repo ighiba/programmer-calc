@@ -51,14 +51,12 @@ class ConversionViewController: UIViewController, ConversionInput {
     // MARK: - Methods
     
     private func setupGestures() {
-        // tap outside popup(container)
         let tap = UITapGestureRecognizer(target: self, action: #selector(tappedOutside))
         tap.numberOfTapsRequired = 1
         tap.cancelsTouchesInView = false
         self.view.isUserInteractionEnabled = true
         self.view.addGestureRecognizer(tap)
-        
-        // swipe up for dismiss
+  
         let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         swipeUp.direction = .up
         swipeUp.cancelsTouchesInView = false

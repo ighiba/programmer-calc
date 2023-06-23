@@ -10,13 +10,11 @@ import UIKit
 import StoreKit
 import MessageUI
 
-class AboutViewController: PCalcTableViewController, AboutInput, MFMailComposeViewControllerDelegate {
+class AboutViewController: StyledTableViewController, AboutInput, MFMailComposeViewControllerDelegate {
     
     // MARK: - Properties
     
     var output: AboutOutput!
-    
-    var tintColor = UIColor.systemBlue
     
     lazy var cellModelList = [
         PreferenceCellModel(
@@ -61,13 +59,12 @@ class AboutViewController: PCalcTableViewController, AboutInput, MFMailComposeVi
         super.viewWillAppear(animated)
         AppDelegate.AppUtility.lockPortraitOrientation()
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        output.obtainTintColor()
+
+    override func styleWillUpdate(with style: Style) {
+        super.styleWillUpdate(with: style)
         for row in 0 ..< cellModelList.count {
             let cell = self.tableView.cellForRow(at: IndexPath(row: row, section: 1))
-            cell?.imageView?.tintColor = tintColor
+            cell?.imageView?.tintColor = style.tintColor
         }
     }
     
@@ -75,10 +72,6 @@ class AboutViewController: PCalcTableViewController, AboutInput, MFMailComposeVi
     
     func reloadTable() {
         self.tableView.reloadData()
-    }
-    
-    func setTintColor(_ color: UIColor) {
-        self.tintColor = color
     }
     
     func push(_ viewController: UIViewController) {
@@ -136,8 +129,7 @@ extension AboutViewController {
             return AboutAppCell(iconName: "icon-ios-about.png", appVersion: appVersion)
         } else {
             let cell = PreferenceCell(cellModelList[indexPath.row])
-            output.obtainTintColor()
-            cell.imageView?.tintColor = tintColor
+            cell.imageView?.tintColor = output.obtainTintColor()
             return cell
         }
     }

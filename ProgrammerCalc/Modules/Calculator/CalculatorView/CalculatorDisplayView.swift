@@ -8,14 +8,13 @@
 
 import UIKit
 
-class CalculatorDisplayView: UIView {
+class CalculatorDisplayView: StyledView {
     
     // MARK: - Properties
     
     private let margin: CGFloat = 10
     private let navBarHeight: CGFloat = UIDevice.currentDeviceType == .iPad ? 50 : 44
     
-    // Constraints
     var portrait: [NSLayoutConstraint]?
     var landscape: [NSLayoutConstraint]?
     var landscapeWithBitKeypad: [NSLayoutConstraint]?
@@ -29,11 +28,6 @@ class CalculatorDisplayView: UIView {
         }
     }()
     
-    // Style factory
-    var styleFactory: StyleFactory = StyleFactory()
-    
-    
-    // NavBar buttons
     private let changeItem = UIBarButtonItem(image: UIImage(systemName: "arrow.up.arrow.down.circle"),
                                                             style: .plain,
                                                             target: nil,
@@ -58,11 +52,12 @@ class CalculatorDisplayView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Methods
-    
-    override func layoutSubviews() {
-        updateStyle()
+    override func styleWillUpdate(with style: Style) {
+        super.styleWillUpdate(with: style)
+        updateStyle(with: style)
     }
+    
+    // MARK: - Methods
     
     func setViews() {
         self.backgroundColor = .clear
@@ -79,10 +74,7 @@ class CalculatorDisplayView: UIView {
         setupLayout()
     }
     
-    func updateStyle() {
-        let styleType = StyleSettings.shared.currentStyle
-        let style = styleFactory.get(style: styleType)
-
+    func updateStyle(with style: Style) {
         mainLabel.textColor = style.labelTextColor
         converterLabel.textColor = style.labelTextColor
         mainLabel.infoSubLabel.textColor = .systemGray
@@ -133,7 +125,14 @@ class CalculatorDisplayView: UIView {
     }()
     
     private lazy var navigationBar: UINavigationBar = {
-        let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: navBarHeight))
+        let width = UIScreen.mainRealSize().width
+        let frame = CGRect(
+            x: self.windowSafeAreaInsets.left,
+            y: self.windowSafeAreaInsets.top,
+            width: width,
+            height: navBarHeight
+        )
+        let navBar = UINavigationBar(frame: frame)
         let navItem = UINavigationItem()
         let font = UIFont.systemFont(ofSize: 42.0)
         settingsItem.setTitleTextAttributes([NSAttributedString.Key.font: font], for: .normal)
@@ -142,7 +141,7 @@ class CalculatorDisplayView: UIView {
         navItem.rightBarButtonItem = settingsItem
         
         let titleView = UIView(frame: CGRect(x: 0, y: 0, width: navBarHeight * 2, height: navBarHeight))
-        navItem.titleView = titleView
+        navItem.titleView = changeWordSizeButton
 
         navBar.setItems([navItem], animated: false)
         navBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
@@ -196,23 +195,16 @@ class CalculatorDisplayView: UIView {
         
         return labels
     }()
-    
 
     // MARK: - Layout
     
     private func setupLayout() {
-        navigationBar.translatesAutoresizingMaskIntoConstraints = false
         labelsStack.translatesAutoresizingMaskIntoConstraints = false
         mainLabel.infoSubLabel.translatesAutoresizingMaskIntoConstraints = false
         converterLabel.infoSubLabel.translatesAutoresizingMaskIntoConstraints = false
         
         // Constraints for portrait orientation
         portrait = [
-            navigationBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-            navigationBar.heightAnchor.constraint(equalToConstant: navBarHeight),
-            navigationBar.widthAnchor.constraint(equalTo: self.widthAnchor),
-            navigationBar.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            
             labelsStack.topAnchor.constraint(equalTo: navigationBar.bottomAnchor),
             labelsStack.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             labelsStack.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.95),
@@ -223,16 +215,14 @@ class CalculatorDisplayView: UIView {
             
             converterLabel.infoSubLabel.topAnchor.constraint(equalTo: converterLabel.bottomAnchor),
             converterLabel.infoSubLabel.trailingAnchor.constraint(equalTo: converterLabel.trailingAnchor, constant: -5),
-            
         ]
         
         // Constraints for landscape orientation
         landscape = [
-            labelsStack.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-
+            labelsStack.topAnchor.constraint(lessThanOrEqualTo: self.safeAreaLayoutGuide.topAnchor, constant: getScreenBounds().width * 0.05),
             labelsStack.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: getScreenBounds().width * 0.05),
             labelsStack.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: getScreenBounds().width * -0.05),
-            labelsStack.heightAnchor.constraint(equalToConstant: getScreenBounds().width * 0.85),
+            labelsStack.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.85),
             
             mainLabel.infoSubLabel.topAnchor.constraint(equalTo: mainLabel.bottomAnchor),
             mainLabel.infoSubLabel.trailingAnchor.constraint(equalTo: mainLabel.trailingAnchor, constant: -5),
@@ -254,29 +244,23 @@ class CalculatorDisplayView: UIView {
             converterLabel.infoSubLabel.topAnchor.constraint(equalTo: converterLabel.bottomAnchor),
             converterLabel.infoSubLabel.trailingAnchor.constraint(equalTo: converterLabel.trailingAnchor, constant: -5),
         ]
-        
-        // Additional setups
-        // add changeWordSizeButton to navigationBar title view(in center)
-        navigationBar.items?.first?.titleView?.addSubview(changeWordSizeButton)
-        changeWordSizeButton.center = (navigationBar.items?.first?.titleView!.center)!
     }
     
     // MARK: - Methods
     
     func showNavigationBar() {
-        changNavigationBarIsHidden(to: false)
+        setNavigationBarIsHidden(false)
     }
     
     func hideNavigationBar() {
-        changNavigationBarIsHidden(to: true)
+        setNavigationBarIsHidden(true)
     }
     
     func updateCnageWordSizeButton(with wordSize: WordSize) {
         self.changeWordSizeButton.setTitle(wordSize.value.title, for: .normal)
     }
     
-    private func changNavigationBarIsHidden(to isHidden: Bool) {
-        navigationBar.translatesAutoresizingMaskIntoConstraints = isHidden
+    private func setNavigationBarIsHidden(_ isHidden: Bool) {
         navigationBar.isHidden = isHidden
     }
     

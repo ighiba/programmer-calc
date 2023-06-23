@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol CalcButtonPageProtocol: UIView {
+protocol CalcButtonPageProtocol {
     // 2D Array with calcualtor buttons
     var allButtons: [[CalculatorButton]] { get set }
     // Constraitns for current orientation
@@ -18,7 +18,7 @@ protocol CalcButtonPageProtocol: UIView {
 }
 
 // Prototype Class
-class CalcButtonsPage: UIView, CalcButtonPageProtocol {
+class CalcButtonsPage: StyledView, CalcButtonPageProtocol {
     
     // MARK: - Properties
 
@@ -43,14 +43,14 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Methods
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        updateButtonsStyle()
+    override func styleWillUpdate(with style: Style) {
+        super.styleWillUpdate(with: style)
+        updateButtonsStyle(style)
     }
     
-    fileprivate func setLayout() {
+    // MARK: - Methods
+    
+    private func setLayout() {
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
         layoutConstraints = [
             buttonsStackView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.90),
@@ -89,9 +89,7 @@ class CalcButtonsPage: UIView, CalcButtonPageProtocol {
         return buttonStackView
     }
 
-    fileprivate func updateButtonsStyle() {
-        let styleType = StyleSettings.shared.currentStyle
-        let style = styleFactory.get(style: styleType)
+    private func updateButtonsStyle(_ style: Style) {
         allButtons.forEachButton { $0.updateStyle(style) }
     }
     

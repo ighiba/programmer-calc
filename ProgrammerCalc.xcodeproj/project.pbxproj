@@ -68,7 +68,7 @@
 		C09631D027270FCC001DCD25 /* StyleFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631CF27270FCC001DCD25 /* StyleFactory.swift */; };
 		C09631D22727121D001DCD25 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631D12727121D001DCD25 /* UIColor.swift */; };
 		C09631D627277066001DCD25 /* ButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631D527277066001DCD25 /* ButtonStyle.swift */; };
-		C09631D82728E9DC001DCD25 /* PCalcTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631D72728E9DC001DCD25 /* PCalcTableViewController.swift */; };
+		C09631D82728E9DC001DCD25 /* StyledViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631D72728E9DC001DCD25 /* StyledViewController.swift */; };
 		C09631DC272C581C001DCD25 /* CalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DB272C581B001DCD25 /* CalculatorTests.swift */; };
 		C09631DE272D4FBE001DCD25 /* StringExtTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DD272D4FBE001DCD25 /* StringExtTests.swift */; };
 		C09631E027305315001DCD25 /* NumberSystemFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DF27305315001DCD25 /* NumberSystemFactory.swift */; };
@@ -89,6 +89,10 @@
 		C0E0FF502A45963100E38DF9 /* AboutPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E0FF4F2A45963100E38DF9 /* AboutPresenter.swift */; };
 		C0E0FF522A4596AE00E38DF9 /* AboutModuleAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E0FF512A4596AE00E38DF9 /* AboutModuleAssembly.swift */; };
 		C0E0FF542A45B68F00E38DF9 /* AboutAppCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E0FF532A45B68F00E38DF9 /* AboutAppCell.swift */; };
+		C0E0FF562A45D8D900E38DF9 /* StyledTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E0FF552A45D8D900E38DF9 /* StyledTableViewController.swift */; };
+		C0E0FF582A45D8F000E38DF9 /* Styled.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E0FF572A45D8F000E38DF9 /* Styled.swift */; };
+		C0E0FF5A2A45EC5F00E38DF9 /* StyleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E0FF592A45EC5F00E38DF9 /* StyleManager.swift */; };
+		C0E0FF5C2A4638CB00E38DF9 /* StyledView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E0FF5B2A4638CB00E38DF9 /* StyledView.swift */; };
 		C0E5FC7624BB9B8D00BA93CA /* CalculatorDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E5FC7524BB9B8D00BA93CA /* CalculatorDisplayView.swift */; };
 		C0F3D945273B0A7300EA3333 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F3D944273B0A7300EA3333 /* UIApplication.swift */; };
 		C0F5CF4B270E10870020CE14 /* WordSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F5CF4A270E10870020CE14 /* WordSize.swift */; };
@@ -184,7 +188,7 @@
 		C09631CF27270FCC001DCD25 /* StyleFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleFactory.swift; sourceTree = "<group>"; };
 		C09631D12727121D001DCD25 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		C09631D527277066001DCD25 /* ButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyle.swift; sourceTree = "<group>"; };
-		C09631D72728E9DC001DCD25 /* PCalcTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcTableViewController.swift; sourceTree = "<group>"; };
+		C09631D72728E9DC001DCD25 /* StyledViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyledViewController.swift; sourceTree = "<group>"; };
 		C09631DB272C581B001DCD25 /* CalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorTests.swift; sourceTree = "<group>"; };
 		C09631DD272D4FBE001DCD25 /* StringExtTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtTests.swift; sourceTree = "<group>"; };
 		C09631DF27305315001DCD25 /* NumberSystemFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberSystemFactory.swift; sourceTree = "<group>"; };
@@ -205,6 +209,10 @@
 		C0E0FF4F2A45963100E38DF9 /* AboutPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutPresenter.swift; sourceTree = "<group>"; };
 		C0E0FF512A4596AE00E38DF9 /* AboutModuleAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutModuleAssembly.swift; sourceTree = "<group>"; };
 		C0E0FF532A45B68F00E38DF9 /* AboutAppCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAppCell.swift; sourceTree = "<group>"; };
+		C0E0FF552A45D8D900E38DF9 /* StyledTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyledTableViewController.swift; sourceTree = "<group>"; };
+		C0E0FF572A45D8F000E38DF9 /* Styled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Styled.swift; sourceTree = "<group>"; };
+		C0E0FF592A45EC5F00E38DF9 /* StyleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleManager.swift; sourceTree = "<group>"; };
+		C0E0FF5B2A4638CB00E38DF9 /* StyledView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyledView.swift; sourceTree = "<group>"; };
 		C0E5FC7524BB9B8D00BA93CA /* CalculatorDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorDisplayView.swift; sourceTree = "<group>"; };
 		C0F3D944273B0A7300EA3333 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
 		C0F5CF4A270E10870020CE14 /* WordSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSize.swift; sourceTree = "<group>"; };
@@ -256,10 +264,10 @@
 				C096231A2A04235700E6C08F /* OperationFactory.swift */,
 				C09631DF27305315001DCD25 /* NumberSystemFactory.swift */,
 				C00616A727064449007BEF89 /* OctHexHelper.swift */,
-				C09631D72728E9DC001DCD25 /* PCalcTableViewController.swift */,
 				C097D09B2A09CCD5002FA1E6 /* LabelFormatter.swift */,
 				C09631CD27270D6B001DCD25 /* Style.swift */,
 				C09631CF27270FCC001DCD25 /* StyleFactory.swift */,
+				C0E0FF592A45EC5F00E38DF9 /* StyleManager.swift */,
 				C082FB962A35E6FF00F3AA60 /* Values.swift */,
 			);
 			path = Helpers;
@@ -484,6 +492,10 @@
 		C0E5FC7424BB9B6100BA93CA /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C0E0FF572A45D8F000E38DF9 /* Styled.swift */,
+				C0E0FF5B2A4638CB00E38DF9 /* StyledView.swift */,
+				C09631D72728E9DC001DCD25 /* StyledViewController.swift */,
+				C0E0FF552A45D8D900E38DF9 /* StyledTableViewController.swift */,
 				C0817787271D045E0068CF45 /* PopoverDoneButton.swift */,
 				C077CF6E24DC8DEE008E5F0F /* PreferenceCell.swift */,
 			);
@@ -638,6 +650,7 @@
 				C0287F7227A31FD2001489FE /* BitButton.swift in Sources */,
 				C0746E0E24F45C6000A0BDF9 /* NumberSystem.swift in Sources */,
 				C05B008E24E701ED00F8A5E0 /* Octal.swift in Sources */,
+				C0E0FF562A45D8D900E38DF9 /* StyledTableViewController.swift in Sources */,
 				C061B7C2250FF9FF000E2EB6 /* CalculatorLabel.swift in Sources */,
 				C0D919DA2731ABC900AD8C05 /* MathState.swift in Sources */,
 				C09631CA2726FB12001DCD25 /* AppearanceViewController.swift in Sources */,
@@ -655,6 +668,7 @@
 				C082FB912A34C0A400F3AA60 /* DeviceType.swift in Sources */,
 				C0D919DC2731F80600AD8C05 /* DescriptionViewController.swift in Sources */,
 				C0E0FF4E2A44F93700E38DF9 /* AppearanceModuleAssembly.swift in Sources */,
+				C0E0FF582A45D8F000E38DF9 /* Styled.swift in Sources */,
 				C0E0FF3E2A44AB8400E38DF9 /* ConversionPresenter.swift in Sources */,
 				C0F5CF53270F4C4C0020CE14 /* WordSizeView.swift in Sources */,
 				C0F5CF4B270E10870020CE14 /* WordSize.swift in Sources */,
@@ -663,6 +677,7 @@
 				C082FB8D2A33C08A00F3AA60 /* ButtonsViewControllerPhone.swift in Sources */,
 				C05B008C24E6E0E100F8A5E0 /* Hexadecimal.swift in Sources */,
 				C0E0FF4A2A44F6CE00E38DF9 /* PreferenceCellModel.swift in Sources */,
+				C0E0FF5A2A45EC5F00E38DF9 /* StyleManager.swift in Sources */,
 				C082FB8B2A33894500F3AA60 /* CalculatorView.swift in Sources */,
 				C09623172A04171B00E6C08F /* Int.swift in Sources */,
 				C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */,
@@ -670,6 +685,7 @@
 				C096231B2A04235700E6C08F /* OperationFactory.swift in Sources */,
 				C097D09C2A09CCD5002FA1E6 /* LabelFormatter.swift in Sources */,
 				C0619AC424D71240008A7291 /* ConversionViewController.swift in Sources */,
+				C0E0FF5C2A4638CB00E38DF9 /* StyledView.swift in Sources */,
 				C082FB932A34D22C00F3AA60 /* UIScreen.swift in Sources */,
 				C082FB832A3353F000F3AA60 /* Storable.swift in Sources */,
 				C0817788271D045E0068CF45 /* PopoverDoneButton.swift in Sources */,
@@ -681,7 +697,7 @@
 				C082FB972A35E6FF00F3AA60 /* Values.swift in Sources */,
 				C05B009124E71B6E00F8A5E0 /* DecimalSystem.swift in Sources */,
 				C06B7F072443B12B009642B9 /* AppDelegate.swift in Sources */,
-				C09631D82728E9DC001DCD25 /* PCalcTableViewController.swift in Sources */,
+				C09631D82728E9DC001DCD25 /* StyledViewController.swift in Sources */,
 				C09631CE27270D6B001DCD25 /* Style.swift in Sources */,
 				C0F5CF51270F4B970020CE14 /* WordSizeViewController.swift in Sources */,
 				C06B7F092443B12B009642B9 /* SceneDelegate.swift in Sources */,

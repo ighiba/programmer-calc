@@ -12,13 +12,7 @@ import MessageUI
 fileprivate let tappingSoundsId = "tappingSounds"
 fileprivate let hapticFeedbackId = "hapticFeedback"
 
-protocol SettingsViewControllerDelegate: AnyObject {
-    var preferenceList: [[PreferenceCellModel]] { get }
-    func openAppearance()
-    func openAbout()
-}
-
-class SettingsViewController: PCalcTableViewController, SettingsInput, SettingsViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
+class SettingsViewController: StyledTableViewController, SettingsInput, UIAdaptivePresentationControllerDelegate {
     
     // MARK: - Properties
     
@@ -69,8 +63,6 @@ class SettingsViewController: PCalcTableViewController, SettingsInput, SettingsV
         self.tableView.dataSource = self
         self.tableView.delegate = self
 
-        output.obtainStyle()
-
         self.navigationController?.navigationBar.topItem?.rightBarButtonItem = doneItem
         self.navigationController?.navigationBar.topItem?.title = NSLocalizedString("Settings", comment: "")
         
@@ -87,21 +79,13 @@ class SettingsViewController: PCalcTableViewController, SettingsInput, SettingsV
         super.viewWillDisappear(animated)
         output.saveSettings()
         output.updateHandler?()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
+        AppDelegate.AppUtility.unlockPortraitOrientation()
     }
     
     // MARK: - Methods
     
     func reloadTable() {
         self.tableView.reloadData()
-    }
-    
-    func setStyle(style: Style) {
-        self.navigationController?.navigationBar.tintColor = style.tintColor
     }
     
     func setTappingSoundsSwitcherState(_ isOn: Bool) {
@@ -130,20 +114,10 @@ class SettingsViewController: PCalcTableViewController, SettingsInput, SettingsV
         self.navigationController?.pushViewController(viewController, animated: true)
     }
     
-    func openAppearance() {
-        output.openAppearance()
-    }
-
-    func openAbout() {        
-        output.openAbout()
-    }
-    
     // MARK: - Actions
 
     @objc func closeButtonTapped(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: {
-            AppDelegate.AppUtility.unlockPortraitOrientation()
-        })
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -168,8 +142,8 @@ extension SettingsViewController {
 extension SettingsViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath {
-        case [0,0]: openAppearance()
-        case [1,0]: openAbout()
+        case [0,0]: output.openAppearance()
+        case [1,0]: output.openAbout()
         default: break
         }
 

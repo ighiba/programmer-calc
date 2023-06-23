@@ -37,21 +37,20 @@ class WordSizeViewController: UIViewController, WordSizeInput {
         wordSizeView.animateIn()
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         AppDelegate.AppUtility.unlockPortraitOrientation()
     }
     
     // MARK: - Methods
     
     private func setupGestures() {
-        // tap outside popup(container)
         let tap = UITapGestureRecognizer(target: self, action: #selector(tappedOutside))
         tap.numberOfTapsRequired = 1
         tap.cancelsTouchesInView = false
         self.view.isUserInteractionEnabled = true
         self.view.addGestureRecognizer(tap)
-        
-        // swipe up for dismiss
+
         let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         swipeUp.direction = .up
         swipeUp.cancelsTouchesInView = false
@@ -86,7 +85,6 @@ class WordSizeViewController: UIViewController, WordSizeInput {
     
     @objc func tappedOutside( sender: UITapGestureRecognizer) {
         let notInContainer: Bool = isGestureNotInContainer(gesture: sender)
-        
         if notInContainer {
             dismissVC()
         }

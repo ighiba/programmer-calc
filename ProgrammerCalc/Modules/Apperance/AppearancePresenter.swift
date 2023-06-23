@@ -36,11 +36,8 @@ class AppearancePresenter: AppearanceOutput {
     var styleSettings: StyleSettings!
     
     // MARK: - Methods
-    
+
     func obtainStyleSettings() {
-        let loadedStyleSettings: StyleSettings = storage.loadData()
-        styleSettings.setStyleSettings(loadedStyleSettings)
-        
         view.setCheckmarkIndex(for: styleSettings.currentStyle.rawValue)
         view.setIsUseSystemAppearence(styleSettings.isUsingSystemAppearance)
     }
@@ -92,7 +89,7 @@ class AppearancePresenter: AppearanceOutput {
         if styleSettings.isUsingSystemAppearance {
             updateCurrentStyleBy(UIScreen.main.traitCollection.userInterfaceStyle)
         }
-        obtainCheckmarkIndex()
+        view.setCheckmarkIndex(for: styleSettings.currentStyle.rawValue)
         view.setIsUseSystemAppearence(state)
         view.reloadTable()
 

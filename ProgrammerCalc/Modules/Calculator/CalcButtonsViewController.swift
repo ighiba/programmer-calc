@@ -33,14 +33,13 @@ class CalcButtonsViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         guard let delegate = delegate else { return }
-        // handling label when tappging on CalculatorView
         delegate.unhighlightLabels()
     }
     
     // MARK: - Methods
     
     func showWithAnimation() {
-        view.layoutSubviews()
+        self.view.layoutSubviews()
         UIView.animate(withDuration: 0.15, delay: 0.15, options: .curveEaseOut, animations: {
             self.view.alpha = 1
             self.view.isHidden = false

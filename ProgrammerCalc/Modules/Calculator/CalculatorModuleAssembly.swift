@@ -23,6 +23,7 @@ class CalculatorModuleAssembly {
 
         view.output = presenter
         presenter.input = view
+
         let calculator = Calculator()
         presenter.calculator = calculator
         calculator.calculatorPresenterDelegate = presenter

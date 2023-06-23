@@ -30,9 +30,8 @@ class BitwiseKeypad: UIView {
     lazy var container: UIView = UIView()
     lazy var allKeypadStack: UIStackView = getKeypadStack()
     
-    weak var controllerDelegate: BitwiseKeypadControllerDelegate?
-    
-    // Constraints
+    weak var controllerDelegate: BitwiseKeypadControllerDelegate!
+
     var portrait: [NSLayoutConstraint]?
     var landscape: [NSLayoutConstraint]?
     
@@ -102,13 +101,12 @@ class BitwiseKeypad: UIView {
     public func setViews() {
         container.addSubview(allKeypadStack)
         self.addSubview(container)
-        applyStyle()
+        let style = controllerDelegate.getStyle()
+        applyStyle(style)
     }
     
-    public func applyStyle() {
-        let style = controllerDelegate!.getStyle()
+    func applyStyle(_ style: Style) {
         container.backgroundColor = style.backgroundColor
-        // Set colors for buttons - normal and when pressed
         for button in controllerDelegate!.bitButtons {
             button.setTitleColor(style.bitButtonColor, for: .normal)
             button.setTitleColor(style.tintColor, for: .highlighted)
@@ -117,37 +115,33 @@ class BitwiseKeypad: UIView {
     }
 
     private func getKeypadStack() -> UIStackView {
-        let wordStacks: [UIStackView] = (0..<4).map { _ in
+        let wordStacks: [UIStackView] = (0 ..< 4).map { _ in
             return getWordStack()
         }
         
         let stack = UIStackView(arrangedSubviews: wordStacks)
         stack.axis = .vertical
         stack.distribution = .equalSpacing
-        //stack.spacing = spacing
         
         return stack
     }
     
     // Stack of 16 bit buttons (4 stacks)
     private func getWordStack() -> UIStackView {
-        // Prepare stacks with buttons
-        let halfByteStacks: [UIStackView] = (0..<4).map { _ in
+        let halfByteStacks: [UIStackView] = (0 ..< 4).map { _ in
             return getHalfByteStack()
         }
         
         let stack = UIStackView(arrangedSubviews: halfByteStacks)
         stack.axis = .horizontal
         stack.distribution = .equalSpacing
-        //stack.spacing = spacing
 
         return stack
     }
     
     // Stack of 4 bit buttons
     private func getHalfByteStack() -> UIStackView {
-        // Prepare buttons for stack
-        let buttons: [BitButton] = (0..<4).map { _ in
+        let buttons: [BitButton] = (0 ..< 4).map { _ in
             return getButton()
         }
 
@@ -161,7 +155,7 @@ class BitwiseKeypad: UIView {
         
         stack.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            stack.widthAnchor.constraint(equalToConstant: halfByteStackWidth),
+            stack.widthAnchor.constraint(lessThanOrEqualToConstant: halfByteStackWidth),
             stack.heightAnchor.constraint(equalTo: buttons[0].heightAnchor),
         ])
         
@@ -198,7 +192,6 @@ class BitwiseKeypad: UIView {
         button.addTarget(nil, action: #selector(BitwiseKeypadController.buttonTapped), for: .touchUpInside)
         button.addTarget(nil, action: #selector(CalculatorView.touchHandleLabelHighlight), for: .touchDown)
         
-        // tag processing
         button.tag = buttonTag + tagOffset
         
         if buttonTag + 1 > wordSizeValue {
@@ -210,7 +203,6 @@ class BitwiseKeypad: UIView {
     }
     
     private func getInfoLabel() -> UILabel {
-        // info label for bit index
         let label = UILabel()
         label.text = String(buttonTag + 1)
         label.font = UIFont.systemFont(ofSize: infoFontSize, weight: .light)

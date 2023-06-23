@@ -15,8 +15,8 @@ class SettingsModuleAssembly {
         
         view.output = presenter
         presenter.view = view
+        
         presenter.storage = CalculatorStorage()
-        presenter.styleFactory = StyleFactory()
         presenter.settings = Settings.shared
         
         return view

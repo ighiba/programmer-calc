@@ -90,8 +90,8 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
         return [Character](binary.value.removeAllSpaces())
     }
     
-    public func updateStyle() {
-        bitwiseKeypadView.applyStyle()
+    public func updateStyle(_ style: Style) {
+        bitwiseKeypadView.applyStyle(style)
     }
     
     func getStyle() -> Style {
