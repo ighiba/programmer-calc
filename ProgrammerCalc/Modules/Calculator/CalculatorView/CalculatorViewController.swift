@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol CalculatorViewDelegate: AnyObject {
+protocol CalculatorViewControllerDelegate: AnyObject {
     func clearLabels()
     func unhighlightLabels()
     func updateAllLayout()
 }
 
-class CalculatorViewController: StyledViewController, CalculatorInput, CalculatorViewDelegate, UIAdaptivePresentationControllerDelegate {
+class CalculatorViewController: StyledViewController, CalculatorInput, CalculatorViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
     
     // MARK: - Properties
     
