@@ -69,18 +69,18 @@ class ButtonsViewControllerPad: StyledViewController, ButtonsContainerController
                 case "AC":
                     button = CalculatorButton()
                     button.tag = tagCalculatorButtonClear
-                    button.addTarget(nil, action: #selector(CalculatorView.clearButtonTapped), for: .touchUpInside)
+                    button.addTarget(nil, action: #selector(CalculatorViewController.clearButtonTapped), for: .touchUpInside)
                 case "±":
                     button = CalculatorButton()
                     button.tag = tagCalculatorButtonNegate
-                    button.addTarget(nil, action: #selector(CalculatorView.negateButtonTapped), for: .touchUpInside)
+                    button.addTarget(nil, action: #selector(CalculatorViewController.negateButtonTapped), for: .touchUpInside)
                 case "Signed\nOFF":
                     button = CalculatorButton()
                     button.tag = tagCalculatorButtonIsSigned
-                    button.addTarget(nil, action: #selector(CalculatorView.toggleIsSigned), for: .touchUpInside)
+                    button.addTarget(nil, action: #selector(CalculatorViewController.toggleIsSigned), for: .touchUpInside)
                 case "=":
                     button = CalculatorButton(calcButtonType: .sign)
-                    button.addTarget(nil, action: #selector(CalculatorView.calculateButtonTapped), for: .touchUpInside)
+                    button.addTarget(nil, action: #selector(CalculatorViewController.calculateButtonTapped), for: .touchUpInside)
                 default:
                     button = CalculatorButton(calcButtonType: .sign)
                 }

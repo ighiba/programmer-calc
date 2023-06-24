@@ -96,7 +96,7 @@ class AppearanceViewController: StyledTableViewController, AppearanceInput {
     }
 
     func animateUpdateRootViewLayoutSubviews() {
-        if let calcView = self.view.window?.rootViewController as? CalculatorView {
+        if let calcView = self.view.window?.rootViewController as? CalculatorViewController {
             UIView.animate(withDuration: 0.3, animations: {
                 calcView.subviewsSetNeedsLayout()
             })

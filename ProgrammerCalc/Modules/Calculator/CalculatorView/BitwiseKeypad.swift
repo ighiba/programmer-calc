@@ -190,7 +190,7 @@ class BitwiseKeypad: UIView {
         button.accessibilityIdentifier = "bitButton_\(buttonTag)"
         
         button.addTarget(nil, action: #selector(BitwiseKeypadController.buttonTapped), for: .touchUpInside)
-        button.addTarget(nil, action: #selector(CalculatorView.touchHandleLabelHighlight), for: .touchDown)
+        button.addTarget(nil, action: #selector(CalculatorViewController.touchHandleLabelHighlight), for: .touchDown)
         
         button.tag = buttonTag + tagOffset
         

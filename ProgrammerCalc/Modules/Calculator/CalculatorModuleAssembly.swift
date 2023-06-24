@@ -10,7 +10,7 @@ import UIKit
 
 class CalculatorModuleAssembly {
     class func configureModule() -> UIViewController {
-        let view = CalculatorView()
+        let view = CalculatorViewController()
         let presenter = CalculatorPresenter()
 
         // Layout choice for device type

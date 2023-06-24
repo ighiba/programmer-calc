@@ -210,7 +210,7 @@ class CalculatorButton: UIButton {
     
     func setActions(for buttonType: ButtonTypes){
         // label higliglht handling
-        self.addTarget(nil, action: #selector(CalculatorView.touchHandleLabelHighlight), for: .touchDown)
+        self.addTarget(nil, action: #selector(CalculatorViewController.touchHandleLabelHighlight), for: .touchDown)
         // haptic feedback
         self.addTarget(nil, action: #selector(CalcButtonsViewController.hapticFeedbackHandler), for: .touchUpInside)
         // tapping sound
@@ -218,9 +218,9 @@ class CalculatorButton: UIButton {
         
         switch buttonType {
         case .numeric:
-            self.addTarget(nil, action: #selector(CalculatorView.numericButtonTapped), for: .touchUpInside)
+            self.addTarget(nil, action: #selector(CalculatorViewController.numericButtonTapped), for: .touchUpInside)
         case .sign, .complement, .bitwise:
-            self.addTarget(nil, action: #selector(CalculatorView.signButtonTapped), for: .touchUpInside)
+            self.addTarget(nil, action: #selector(CalculatorViewController.signButtonTapped), for: .touchUpInside)
         case .defaultBtn:
             // do nothing
             break
