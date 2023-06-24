@@ -8,24 +8,53 @@
 
 import Foundation
 
+enum WordSizeType: Int, Codable, CaseIterable {
+    case qword = 0
+    case dword = 1
+    case word  = 2
+    case byte  = 3
+    
+    var title: String {
+        switch self {
+        case .qword: return "QWORD"
+        case .dword: return "DWORD"
+        case .word:  return "WORD"
+        case .byte:  return "BYTE"
+        }
+    }
+    
+    var intValue: Int {
+        switch self {
+        case .qword: return 64
+        case .dword: return 32
+        case .word:  return 16
+        case .byte:  return 8
+        }
+    }
+}
+
 protocol WordSizeProtocol {
-    var value: Int { get set }
+    var value: WordSizeType { get set }
+    var intValue: Int { get }
 }
 
 final class WordSize: WordSizeProtocol {
-    
-    static let shared: WordSize = WordSize(64)
+
+    static let shared: WordSize = WordSize(.qword)
 
     // MARK: - Properties
+
+    var value: WordSizeType
+    var intValue: Int {
+        return value.intValue
+    }
     
-    static let wordsDictionary = [["QWORD":64],
-                                ["DWORD":32],
-                                ["WORD" :16],
-                                ["BYTE" :8]]
-    var value: Int
+    init(_ wordSizeType: WordSizeType) {
+        self.value = wordSizeType
+    }
     
-    init(_ size: Int) {
-        self.value = size
+    func setWordSizeValue(_ newValue: WordSizeType) {
+        self.value = newValue
     }
     
     func setWordSize(_ newWordSize: WordSizeProtocol) {
@@ -39,7 +68,7 @@ extension WordSize: Storable {
     }
     
     static func getDefault() -> WordSize {
-        return WordSize(64)
+        return WordSize(.qword)
     }
     
     func set(_ data: WordSize) {

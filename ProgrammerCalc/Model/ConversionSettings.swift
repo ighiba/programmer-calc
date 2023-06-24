@@ -54,9 +54,18 @@ extension ConversionSettings: Storable {
     }
 }
 
-enum ConversionSystemsEnum: String, CaseIterable, Decodable, Encodable {
-     case bin = "Binary"
-     case dec = "Decimal"
-     case oct = "Octal"
-     case hex = "Hexadecimal"
+enum ConversionSystemsEnum: Int, CaseIterable, Codable {
+     case bin = 0
+     case dec = 1
+     case oct = 2
+     case hex = 3
+    
+    var title: String {
+        switch self {
+        case .bin: return "Binary"
+        case .dec: return "Decimal"
+        case .oct: return "Octal"
+        case .hex: return "Hexadecimal"
+        }
+    }
  }

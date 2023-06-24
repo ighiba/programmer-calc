@@ -230,10 +230,9 @@ final class CalcMath {
     // Filling binary number by 8, 16, 32, 64
     func fillUpBits( str: String) -> String {
         var resultStr = str
-        
-        
+
         // fill up bits (0) to current word size
-        resultStr = fillUpZeros(str: resultStr, to: wordSize.value)
+        resultStr = fillUpZeros(str: resultStr, to: wordSize.intValue)
         
         return resultStr
     }
@@ -363,8 +362,8 @@ final class CalcMath {
         
         // fill binarys for wordSize
         if left.value != right.value {
-            left.value = left.fillUpZeros(str: left.value, to: wordSize.value)
-            right.value = right.fillUpZeros(str: right.value, to: wordSize.value)
+            left.value = left.fillUpZeros(str: left.value, to: wordSize.intValue)
+            right.value = right.fillUpZeros(str: right.value, to: wordSize.intValue)
         }
         // reverse bin values
         let reversedLeftBin = left.value.reversed() as [Character]

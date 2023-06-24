@@ -192,17 +192,17 @@ import Foundation
          if let intPart = splittedBinary.0 {
              var buffIntPart = binary.removeZerosBefore(str: intPart)
              // fill or delete bits
-             if buffIntPart.count < wordSize.value {
+             if buffIntPart.count < wordSize.intValue {
                  // add bits
-                 while buffIntPart.count < wordSize.value {
+                 while buffIntPart.count < wordSize.intValue {
                      buffIntPart = "0" + buffIntPart
                  }
-             } else if buffIntPart.count > wordSize.value {
+             } else if buffIntPart.count > wordSize.intValue {
                  // delete bits down to wordSize.value
-                 while buffIntPart.count > wordSize.value {
+                 while buffIntPart.count > wordSize.intValue {
                      buffIntPart.removeFirst(1)
                  }
-             } else if buffIntPart.count == wordSize.value {
+             } else if buffIntPart.count == wordSize.intValue {
  
              }
  

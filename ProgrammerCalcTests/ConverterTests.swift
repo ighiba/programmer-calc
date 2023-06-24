@@ -24,10 +24,10 @@ class ConverterTests: XCTestCase {
     let wordSize: WordSize = WordSize.shared
     let calcState: CalcState = CalcState.shared
     
-    let byte = WordSize(8)
-    let word = WordSize(16)
-    let dword = WordSize(32)
-    let qword = WordSize(64)
+    let qword = WordSize(.qword)
+    let dword = WordSize(.dword)
+    let word = WordSize(.word)
+    let byte = WordSize(.byte)
     
     override func setUp() {
         super.setUp()

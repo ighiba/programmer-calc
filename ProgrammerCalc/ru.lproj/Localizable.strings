@@ -31,3 +31,6 @@
 
 "Copy last input" = "Скопировать ввод";
 "Copy last output" = "Скопировать вывод";
+
+"Error" = "Ошибка";
+"Mail services are not available" = "Почтовые сервисы недоступны";

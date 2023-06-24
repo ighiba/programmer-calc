@@ -8,10 +8,18 @@
 
 import UIKit
 
-enum StyleType: String, CaseIterable, Decodable, Encodable {
-    case light = "light"
-    case dark = "dark"
-    case oldschool = "oldscool"
+enum StyleType: Int, CaseIterable, Codable {
+    case light = 0
+    case dark = 1
+    case oldschool = 2
+    
+    var title: String {
+        switch self {
+        case .light: return "light"
+        case .dark: return "dark"
+        case .oldschool: return "oldscool"
+        }
+    }
 }
 
 protocol StyleProtocol {
@@ -37,7 +45,6 @@ class Style: StyleProtocol {
     var buttonBorderColor: UIColor
     var bitButtonColor: UIColor
     
-    
     init( backgroundColor:         UIColor,
           labelTextColor:          UIColor,
           secondayLabelTextColor:  UIColor,
@@ -58,6 +65,4 @@ class Style: StyleProtocol {
         self.buttonBorderColor = buttonBorderColor
         self.bitButtonColor = bitButtonColor
     }
-    
-    
 }
