@@ -1,7 +1,5 @@
 # Programmer's Calculator
 
-[![appstore](https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg)](https://apps.apple.com/us/app/programmers-сalculator/id1593924330)
-
 ![tag](https://img.shields.io/github/v/tag/ighiba/programmer-calc)
 ![license](https://img.shields.io/github/license/ighiba/programmer-calc)
 ![swift-ver](https://img.shields.io/badge/Swift-5.6-orange)
