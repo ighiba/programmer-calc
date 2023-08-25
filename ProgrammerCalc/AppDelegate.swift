@@ -44,9 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 delegate.orientationLock = orientation
             }
         }
-
-        // Lock/unlock screen orientation
-
+        
         static func lockPortraitOrientation() {
             lockOrientation(.portrait)
             rotateToPortrait()

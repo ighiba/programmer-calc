@@ -259,15 +259,8 @@
 		C05A169924DD7AF7007B7FB8 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				C09631D527277066001DCD25 /* ButtonStyle.swift */,
 				C082FB902A34C0A400F3AA60 /* DeviceType.swift */,
-				C096231A2A04235700E6C08F /* OperationFactory.swift */,
-				C09631DF27305315001DCD25 /* NumberSystemFactory.swift */,
-				C00616A727064449007BEF89 /* OctHexHelper.swift */,
 				C097D09B2A09CCD5002FA1E6 /* LabelFormatter.swift */,
-				C09631CD27270D6B001DCD25 /* Style.swift */,
-				C09631CF27270FCC001DCD25 /* StyleFactory.swift */,
-				C0E0FF592A45EC5F00E38DF9 /* StyleManager.swift */,
 				C082FB962A35E6FF00F3AA60 /* Values.swift */,
 			);
 			path = Helpers;
@@ -281,6 +274,8 @@
 				C05B008D24E701ED00F8A5E0 /* Octal.swift */,
 				C05B009024E71B6E00F8A5E0 /* DecimalSystem.swift */,
 				C05B008B24E6E0E100F8A5E0 /* Hexadecimal.swift */,
+				C09631DF27305315001DCD25 /* NumberSystemFactory.swift */,
+				C00616A727064449007BEF89 /* OctHexHelper.swift */,
 			);
 			path = NumberSystems;
 			sourceTree = "<group>";
@@ -288,6 +283,7 @@
 		C065DB3824E3C89B0059B38D /* Math */ = {
 			isa = PBXGroup;
 			children = (
+				C096231A2A04235700E6C08F /* OperationFactory.swift */,
 				C065DB3B24E3DC4F0059B38D /* CalcMath.swift */,
 				C0D919D92731ABC900AD8C05 /* MathState.swift */,
 				C0905E702A080843004180A7 /* PCDecimal.swift */,
@@ -298,15 +294,15 @@
 		C0666EBD24F991B8004809EF /* CalculatorView */ = {
 			isa = PBXGroup;
 			children = (
-				C082FB8A2A33894500F3AA60 /* CalculatorViewController.swift */,
-				C0E5FC7524BB9B8D00BA93CA /* CalculatorView.swift */,
-				C082FB8C2A33C08A00F3AA60 /* ButtonsViewControllerPhone.swift */,
-				C082FB8E2A33C0FC00F3AA60 /* ButtonsViewControllerPad.swift */,
 				C061B7C1250FF9FF000E2EB6 /* CalculatorLabel.swift */,
 				C068AFAB24FA605800BFE754 /* CalculatorButton.swift */,
+				C082FB8E2A33C0FC00F3AA60 /* ButtonsViewControllerPad.swift */,
+				C082FB8C2A33C08A00F3AA60 /* ButtonsViewControllerPhone.swift */,
 				C0666EB924F9782F004809EF /* CalcButtonsPage.swift */,
-				C04D34C127921BE200ED9867 /* BitwiseKeypad.swift */,
+				C0E5FC7524BB9B8D00BA93CA /* CalculatorView.swift */,
+				C082FB8A2A33894500F3AA60 /* CalculatorViewController.swift */,
 				C0287F7127A31FD2001489FE /* BitButton.swift */,
+				C04D34C127921BE200ED9867 /* BitwiseKeypad.swift */,
 			);
 			path = CalculatorView;
 			sourceTree = "<group>";
@@ -350,6 +346,7 @@
 			children = (
 				C06B7F062443B12B009642B9 /* AppDelegate.swift */,
 				C06B7F082443B12B009642B9 /* SceneDelegate.swift */,
+				C0E0FF5D2A46E93800E38DF9 /* Style */,
 				C068AFA824FA409200BFE754 /* Extensions */,
 				C05A169924DD7AF7007B7FB8 /* Helpers */,
 				C0D5BA4C24C340120038A378 /* Model */,
@@ -487,6 +484,17 @@
 				C0E0FF472A44D3B600E38DF9 /* SettingsModuleAssembly.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		C0E0FF5D2A46E93800E38DF9 /* Style */ = {
+			isa = PBXGroup;
+			children = (
+				C09631CD27270D6B001DCD25 /* Style.swift */,
+				C09631D527277066001DCD25 /* ButtonStyle.swift */,
+				C09631CF27270FCC001DCD25 /* StyleFactory.swift */,
+				C0E0FF592A45EC5F00E38DF9 /* StyleManager.swift */,
+			);
+			path = Style;
 			sourceTree = "<group>";
 		};
 		C0E5FC7424BB9B6100BA93CA /* Views */ = {
