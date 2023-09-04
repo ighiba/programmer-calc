@@ -9,9 +9,7 @@
 import Foundation
 
 extension Decimal {
-    var fractPartDigitCount: Int {
-        return self.fractPart.count
-    }
+    var fractPartDigitCount: Int { fractPart.count }
     
     var fractPart: String {
         let components = self.description.components(separatedBy: ".")
@@ -22,14 +20,15 @@ extension Decimal {
     }
     
     var intPart: UInt64 {
-        let roundingBehavior = NSDecimalNumberHandler(roundingMode: .plain,
-                                                      scale: 0,
-                                                      raiseOnExactness: false,
-                                                      raiseOnOverflow: false,
-                                                      raiseOnUnderflow: false,
-                                                      raiseOnDivideByZero: false)
-        let roundedUInt64 = NSDecimalNumber(decimal: self).rounding(accordingToBehavior: roundingBehavior).uint64Value
-        return roundedUInt64
+        let roundingBehavior = NSDecimalNumberHandler(
+            roundingMode: .plain,
+            scale: 0,
+            raiseOnExactness: false,
+            raiseOnOverflow: false,
+            raiseOnUnderflow: false,
+            raiseOnDivideByZero: false
+        )
+        return NSDecimalNumber(decimal: self).rounding(accordingToBehavior: roundingBehavior).uint64Value
     }
     
     // Converting binary string in decimal number
@@ -47,19 +46,20 @@ extension Decimal {
     }
     
     func round(scale: Int16, roundingModeMode: NSDecimalNumber.RoundingMode) -> Decimal {
-        let roundingBehavior = NSDecimalNumberHandler(roundingMode: roundingModeMode,
-                                                      scale: scale,
-                                                      raiseOnExactness: false,
-                                                      raiseOnOverflow: false,
-                                                      raiseOnUnderflow: false,
-                                                      raiseOnDivideByZero: false)
-        let rounded = NSDecimalNumber(decimal: self).rounding(accordingToBehavior: roundingBehavior).decimalValue
-        return rounded
+        let roundingBehavior = NSDecimalNumberHandler(
+            roundingMode: roundingModeMode,
+            scale: scale,
+            raiseOnExactness: false,
+            raiseOnOverflow: false,
+            raiseOnUnderflow: false,
+            raiseOnDivideByZero: false
+        )
+        return NSDecimalNumber(decimal: self).rounding(accordingToBehavior: roundingBehavior).decimalValue
     }
     
     // % for decimal values
     static func % (left: Decimal, right: Decimal) -> Decimal {
-        var reminder = Decimal()
+        let reminder: Decimal
         
         var dec = left / right
         var decCopy = dec
@@ -67,7 +67,6 @@ extension Decimal {
         if decCopy > dec {
             let buffDec = decCopy - dec
             reminder = buffDec * right
-            
         } else {
             reminder = Decimal(0)
         }

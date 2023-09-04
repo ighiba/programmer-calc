@@ -312,10 +312,10 @@
 		C068AFA824FA409200BFE754 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				C0F3D944273B0A7300EA3333 /* UIApplication.swift */,
 				C09623162A04171B00E6C08F /* Int.swift */,
 				C0F5CF4E270F394E0020CE14 /* Decimal.swift */,
 				C00616AB27065097007BEF89 /* String.swift */,
+				C0F3D944273B0A7300EA3333 /* UIApplication.swift */,
 				C09631D12727121D001DCD25 /* UIColor.swift */,
 				C052270E27978F6800B7E384 /* UIBarButtonItem.swift */,
 				C082FB922A34D22C00F3AA60 /* UIScreen.swift */,
