@@ -15,17 +15,17 @@ class BitButton: UIButton {
     private let BIT_ON: String = "1"
     private let BIT_OFF: String = "0"
     
-    private var bitState: Bool = false {
+    private var isBitOn: Bool = false {
         didSet {
             changeTitleByBitState()
-            self.isSelected = bitState
+            self.isSelected = isBitOn
         }
     }
     
     override var isEnabled: Bool {
         didSet {
             if !isEnabled {
-                bitState = false // disable bit state if button is disabled
+                isBitOn = false // disable bit state if button is disabled
             }
         }
     }
@@ -45,11 +45,11 @@ class BitButton: UIButton {
     // MARK: - Methods
     
     public func setBitState(_ bitState: Bool) {
-        self.bitState = bitState
+        self.isBitOn = bitState
     }
     
     private func changeTitleByBitState() {
-        if bitState {
+        if isBitOn {
             changeLabelText(with: BIT_ON)
         } else {
             changeLabelText(with: BIT_OFF)
@@ -57,9 +57,7 @@ class BitButton: UIButton {
     }
     
     private func changeLabelText(with bit: String) {
-        // do nothing if bit label already setted
-        guard self.titleLabel?.text != bit else { return }
-        self.setTitle(bit, for: .normal)
+        guard titleLabel?.text != bit else { return }
+        setTitle(bit, for: .normal)
     }
-
 }
