@@ -268,11 +268,11 @@ extension CalculatorButton {
             button.frameTint = style.miscButtonStyle.frameTint
             button.setTitleColor(style.miscButtonStyle.textColor, for: .normal)
             button.setTitleColor(style.miscButtonStyle.textTint, for: .highlighted)
-            button.setTitleColor(style.miscButtonStyle.textTint.setDarker(by: 0.7), for: .disabled)
+            button.setTitleColor(style.miscButtonStyle.textTint.darker(by: 0.7), for: .disabled)
         }
 
         if style.buttonBorderColor != .clear {
-            let borderColor = button.backgroundColor?.setDarker(by: 0.98)
+            let borderColor = button.backgroundColor?.darker(by: 0.98)
             button.layer.borderColor = borderColor?.cgColor
         } else {
             button.layer.borderColor = style.buttonBorderColor.cgColor

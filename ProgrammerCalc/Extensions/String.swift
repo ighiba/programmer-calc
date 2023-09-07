@@ -61,7 +61,7 @@ extension String {
         return resultStr
     }
     
-    // removes leading given chars in str until str.last != character
+    /// Removes leading given chars in str until str.last != character
     func removeLeading(characters: [Character]) -> String {
         var str = self.removeAllSpaces()
         while str.count > 0 && characters.contains(str.first!) {
@@ -71,7 +71,7 @@ extension String {
         return str
     }
     
-    // removes trailing given chars in str until str.last != character
+    /// Removes trailing given chars in str until str.last != character
     func removeTrailing(characters: [Character]) -> String {
         var str = self.removeAllSpaces()
         while str.count > 0 && characters.contains(str.last!)  {

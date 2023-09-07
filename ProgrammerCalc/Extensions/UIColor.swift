@@ -26,14 +26,14 @@ extension UIColor {
         return (coreImageColor.red, coreImageColor.green, coreImageColor.blue, coreImageColor.alpha)
     }
     
-    func setDarker(by number: CGFloat) -> UIColor {
+    func darker(by number: CGFloat) -> UIColor {
         let newRed = components.red * number
         let newGreen = components.green * number
         let newBlue = components.blue * number
         return UIColor(red: newRed, green: newGreen, blue: newBlue, alpha: components.alpha)
     }
     
-    func setLighter(by number: CGFloat) -> UIColor {
+    func lighter(by number: CGFloat) -> UIColor {
         let newRed = min(components.red + number, 1.0)
         let newGreen = min(components.green + number, 1.0)
         let newBlue = min(components.blue + number, 1.0)
