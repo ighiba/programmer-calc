@@ -12,23 +12,13 @@ struct PCDecimal: CustomStringConvertible, Equatable, Decodable, Encodable {
     
     // MARK: - Properties
     
-    var isSigned: Bool {
-        return self.value < 0
-    }
-    
-    var hasFloatingPoint: Bool {
-        return self.value.description.contains(".")
-    }
-    
-    var isSignedAndFloat: Bool {
-        return self.isSigned && self.hasFloatingPoint
-    }
+    var isSigned: Bool { value < 0 }
+    var hasFloatingPoint: Bool { value.description.contains(".") }
+    var isSignedAndFloat: Bool { isSigned && hasFloatingPoint }
     
     private var value: Decimal
 
-    var description: String {
-        return String(describing: value)
-    }
+    var description: String { String(describing: value) }
     
     // MARK: - Initialization
     
@@ -151,30 +141,30 @@ struct PCDecimal: CustomStringConvertible, Equatable, Decodable, Encodable {
         let maxValue = processSigned ? pow(Decimal(2), bitWidth-1) - 1 : pow(Decimal(2), bitWidth) - 1
         let minValue = processSigned ? pow(Decimal(-2), bitWidth-1) : 0
         
-        if self.value > maxValue {
-            var div = (self.value + maxValue + 1) / pow(Decimal(2), bitWidth)
+        if value > maxValue {
+            var div = (value + maxValue + 1) / pow(Decimal(2), bitWidth)
             div = div.round(scale: 0, roundingModeMode: .down)
-            self.value -= div * pow(Decimal(2), bitWidth)
+            value -= div * pow(Decimal(2), bitWidth)
             
-            if !processSigned && self.value < minValue {
-                self.value += pow(Decimal(2), bitWidth)
+            if !processSigned && value < minValue {
+                value += pow(Decimal(2), bitWidth)
             }
-        } else if self.value < minValue {
-            var div = (self.value - minValue) / pow(Decimal(2), bitWidth)
+        } else if value < minValue {
+            var div = (value - minValue) / pow(Decimal(2), bitWidth)
             div = div.round(scale: 0, roundingModeMode: .down)
-            self.value -= div * pow(Decimal(2), bitWidth)
+            value -= div * pow(Decimal(2), bitWidth)
             
-            if !processSigned && self.value > maxValue {
-                self.value -= pow(Decimal(2), bitWidth)
+            if !processSigned && value > maxValue {
+                value -= pow(Decimal(2), bitWidth)
             }
         }
     }
     
-    public mutating func updateValue(_ newValue: Decimal) {
-        self.value = newValue
+    public mutating func updateValue(_ value: Decimal) {
+        self.value = value
     }
     
     public func getDecimal() -> Decimal {
-        return self.value
+        return value
     }
 }

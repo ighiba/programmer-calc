@@ -45,17 +45,14 @@ extension String {
         let str = self
         var resultStr = String()
         
-        str.forEach { (bit) in
+        for bit in str {
             switch bit {
             case "0":
                 resultStr.append("1")
-                break
             case "1":
                 resultStr.append("0")
-                break
             default:
                 resultStr.append(bit)
-                break
             }
         }
         return resultStr

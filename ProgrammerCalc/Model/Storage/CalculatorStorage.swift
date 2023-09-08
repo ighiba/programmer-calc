@@ -34,4 +34,3 @@ class CalculatorStorage {
         storage.synchronize()
     }
 }
-
