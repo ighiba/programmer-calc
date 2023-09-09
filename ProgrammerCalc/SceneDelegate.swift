@@ -24,45 +24,32 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private let storage = PCalcStorage()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        
-        // Set all shared instances that stored in UserDefaults
         storage.loadAll()
-        
-        /** Process the quick action if the user selected one to launch the app.
-            Grab a reference to the shortcutItem to use in the scene.
-        */
+
         if let shortcutItem = connectionOptions.shortcutItem {
-            // Save it off for later when we become active.
             savedShortCutItem = shortcutItem
         }
 
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        // Set root vc
 
         let rootVC = CalculatorModuleAssembly.configureModule()
         window?.rootViewController = rootVC
         window?.makeKeyAndVisible()
         
-        // Splash screen (for smoother transition from launch screen)
         let splashScreen = UIView(frame: UIScreen.main.bounds)
         splashScreen.backgroundColor = .black
         rootVC.view.addSubview(splashScreen)
-        // animate transition
+
         UIView.animate(withDuration: 0.8, delay: 0.2, options: .curveLinear, animations: {
             splashScreen.alpha = 0
         }, completion: { _ in
             splashScreen.removeFromSuperview()
         })
-  
-
     }
     
-    func windowScene(_ windowScene: UIWindowScene,
-                     performActionFor shortcutItem: UIApplicationShortcutItem,
-                     completionHandler: @escaping (Bool) -> Void) {
-        // rewrite shortcut
+    func windowScene(_ windowScene: UIWindowScene, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
         savedShortCutItem = shortcutItem
     }
 
@@ -73,13 +60,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
-        // Save to UserDefaults
         storage.saveAll()
 
         let calcState = CalcState.shared
         let conversionSettings = ConversionSettings.shared
         
-        // Get data for shortcuts
         let inputResult = calcState.lastLabelValues.main
         let outputResult = calcState.lastLabelValues.converter
         
@@ -89,37 +74,36 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let application = UIApplication.shared
         
         let icon = UIApplicationShortcutIcon(systemImageName: "doc.on.doc")
-        let shortcutItems = [ UIApplicationShortcutItem(type: "ru.ighiba.ProgrammerCalc.copyInput",
-                                                        localizedTitle: NSLocalizedString("Copy last input", comment: "") + " (\(inputSystem))",
-                                                        localizedSubtitle: inputResult,
-                                                        icon: icon,
-                                                        userInfo: nil),
-                              UIApplicationShortcutItem(type: "ru.ighiba.ProgrammerCalc.copyOutput",
-                                                        localizedTitle: NSLocalizedString("Copy last output", comment: "") + " (\(outputSystem))",
-                                                        localizedSubtitle: outputResult,
-                                                        icon: icon,
-                                                        userInfo: nil)]
         
-        application.shortcutItems = shortcutItems
+        application.shortcutItems = [
+            UIApplicationShortcutItem(
+                type: "ru.ighiba.ProgrammerCalc.copyInput",
+                localizedTitle: NSLocalizedString("Copy last input", comment: "") + " (\(inputSystem))",
+                localizedSubtitle: inputResult,
+                icon: icon,
+                userInfo: nil
+            ),
+            UIApplicationShortcutItem(
+                type: "ru.ighiba.ProgrammerCalc.copyOutput",
+                localizedTitle: NSLocalizedString("Copy last output", comment: "") + " (\(outputSystem))",
+                localizedSubtitle: outputResult,
+                icon: icon,
+                userInfo: nil
+            )
+        ]
     }
     
     // MARK: - Application Shortcut Support
     
     func copyInputFor(shortcutItem: UIApplicationShortcutItem) {
-        // Pasteboard
-        let board = UIPasteboard.general
+        let pasteboard = UIPasteboard.general
         
         switch ActionType(rawValue: shortcutItem.type) {
         case .copyInput:
-            // Copy input
-            let board = UIPasteboard.general
-            // change clipboard with new value from subtitle and delete all spaces in string
-            board.string = shortcutItem.localizedSubtitle?.removeAllSpaces()
+            pasteboard.string = shortcutItem.localizedSubtitle?.removeAllSpaces()
         case .copyOutput:
-            // Copy output
-            board.string = shortcutItem.localizedSubtitle?.removeAllSpaces()
+            pasteboard.string = shortcutItem.localizedSubtitle?.removeAllSpaces()
         default:
-            // do nothing
             break
         }
     }
@@ -127,5 +111,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func handleShortCutItem(shortcutItem: UIApplicationShortcutItem) {
         copyInputFor(shortcutItem: shortcutItem)
     }
-
 }

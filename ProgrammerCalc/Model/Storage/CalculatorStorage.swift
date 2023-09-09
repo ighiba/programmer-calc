@@ -13,15 +13,15 @@ class CalculatorStorage {
     
     func loadData<T: Storable>() -> T {
         guard let data = storage.data(forKey: T.storageKey) else {
-            print("\(T.ReturnType.self) no saved data, return default data")
-            return T.getDefault() as! T
+            print("\(T.self) no saved data, return default data")
+            return T.getDefault()
         }
         
         if let decodedData = try? JSONDecoder().decode(T.self, from: data) {
             return decodedData
         } else {
-            print("\(T.ReturnType.self) stored data cannot be decoded, return default data")
-            return T.getDefault() as! T
+            print("\(T.self) stored data cannot be decoded, return default data")
+            return T.getDefault()
         }
     }
 

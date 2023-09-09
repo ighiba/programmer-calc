@@ -9,11 +9,9 @@
 import Foundation
 
 protocol NumberSystemProtocol {
-    // raw value
     var value: String { get set }
-    // is value signed
     var isSigned: Bool { get set }
-    // default init by string
+    
     init(stringLiteral: String)
 
     func toBinary() -> Binary
