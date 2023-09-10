@@ -15,7 +15,7 @@ class StyleManager {
     let styleSettings = StyleSettings.shared
     let styleFactory = StyleFactory()
     
-    private init () {}
+    private init() {}
     
     func updateStyle(for window: UIWindow?) {
         if styleSettings.isUsingSystemAppearance {
