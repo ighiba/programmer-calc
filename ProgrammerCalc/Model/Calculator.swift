@@ -27,32 +27,31 @@ class Calculator: CalculatorProtocol {
     
     // MARK: - Properties
     
-    var hasPendingOperation: Bool {
-        if let operation = self.operation {
-            return operation.current != .none
-        } else {
-            return false
-        }
-    }
+    weak var calculatorPresenterDelegate: CalculatorPresenterDelegate!
     
     private let converter: Converter = Converter()
     private let calculationHandler: CalcMath = CalcMath()
     private let labelFormatter: LabelFormatter = LabelFormatter()
-    
-    weak var calculatorPresenterDelegate: CalculatorPresenterDelegate!
 
     let numberSystemFactory: NumberSystemFactory = NumberSystemFactory()
     let operationFactory: OperationFactory = OperationFactory()
     
-    var currentValue: PCDecimal {
-        didSet {
-            print("PCDecimal new value: \(self.currentValue.getDecimal())")
-            self.calcState.lastValue = self.currentValue
-        }
-    }
-    
     var operation: CalcOperation?
     var shouldStartNewInput: Bool = true
+    
+    var currentValue: PCDecimal {
+        didSet {
+            print("PCDecimal new value: \(currentValue.getDecimal())")
+            calcState.lastValue = currentValue
+        }
+    }
+
+    var hasPendingOperation: Bool {
+        if let operation = self.operation {
+            return operation.current != CalcMath.OperationType.none
+        }
+        return false
+    }
     
     private let conversionSettings: ConversionSettings = ConversionSettings.shared
     private let calcState: CalcState = CalcState.shared
@@ -63,40 +62,40 @@ class Calculator: CalculatorProtocol {
     // MARK: - Initialization
     
     init() {
-        self.currentValue = calcState.lastValue
+        currentValue = calcState.lastValue
     }
     
     // MARK: - Methods
     
     public func getOperation(with buttonText: String) -> CalcMath.OperationType {
-        return self.operationFactory.get(buttonLabel: buttonText)
+        return operationFactory.get(buttonLabel: buttonText)
     }
     
     public func setOperation(_ operationType: CalcMath.OperationType) {
-        self.operation = CalcOperation(previousValue: PCDecimal(value: self.currentValue.getDecimal()) , current: operationType)
+        operation = CalcOperation(previousValue: PCDecimal(value: currentValue.getDecimal()) , current: operationType)
     }
     
     public func setOperation(with buttonText: String) {
         let operationType = getOperation(with: buttonText)
-        self.setOperation(operationType)
+        setOperation(operationType)
     }
     
-    public func calculate(shouldStartNewInput: Bool = true) {
-        guard self.operation != nil else { return }
+    public func calculate(shouldStartNewInput startNewInput: Bool = true) {
+        guard operation != nil else { return }
         
         do {
-            var result = try self.calculateCurrentValue()
+            var result = try calculateCurrentValue()
             result.fixOverflow(bitWidth: wordSize.intValue, processSigned: calcState.processSigned)
-            self.operation?.previousValue = PCDecimal(value: result.getDecimal())
-            self.shouldStartNewInput = shouldStartNewInput
-            self.currentValue = result
+            operation?.previousValue = PCDecimal(value: result.getDecimal())
+            shouldStartNewInput = startNewInput
+            currentValue = result
         } catch MathErrors.divByZero {
-            self.resetCalculation()
-            self.currentValue = PCDecimal(value: 0.0)
-            self.setErrorInLabels(.divByZero)
-            self.showErrorInLabels(.divByZero)
+            resetCalculation()
+            currentValue = PCDecimal(value: 0.0)
+            setErrorInLabels(.divByZero)
+            showErrorInLabels(.divByZero)
         } catch {
-            
+  
         }
     }
     
@@ -109,96 +108,96 @@ class Calculator: CalculatorProtocol {
     }
     
     func calculateCurrentValue() throws -> PCDecimal {
-        guard let currentOperation = self.operation?.current else {
-            return self.currentValue
+        guard let currentOperation = operation?.current else {
+            return currentValue
         }
 
         // Unary operations
         switch currentOperation {
         case .oneS:
-            return ~self.currentValue
+            return ~currentValue
         case .twoS:
-            return ~self.currentValue + 1
+            return ~currentValue + 1
         case .shiftLeft:
-            return self.currentValue << 1
+            return currentValue << 1
         case .shiftRight:
-            return self.currentValue >> 1
+            return currentValue >> 1
         default:
             break
         }
         
-        guard let previousValue = self.operation?.previousValue else {
-            return self.currentValue
+        guard let previousValue = operation?.previousValue else {
+            return currentValue
         }
         
         // Binary operations
         switch currentOperation {
         case .add:
-            return previousValue + self.currentValue
+            return previousValue + currentValue
         case .sub:
-            return previousValue - self.currentValue
+            return previousValue - currentValue
         case .mul:
-            return previousValue * self.currentValue
+            return previousValue * currentValue
         case .div:
             if self.currentValue != PCDecimal(0) {
-                return previousValue / self.currentValue
+                return previousValue / currentValue
             } else {
                 throw MathErrors.divByZero
             }
         case .shiftLeftBy:
-            return previousValue << self.currentValue
+            return previousValue << currentValue
         case .shiftRightBy:
-            return previousValue >> self.currentValue
+            return previousValue >> currentValue
         case .and:
-            return previousValue & self.currentValue
+            return previousValue & currentValue
         case .or:
-            return previousValue | self.currentValue
+            return previousValue | currentValue
         case .xor:
-            return previousValue ^ self.currentValue
+            return previousValue ^ currentValue
         case .nor:
-            return ~(previousValue ^ self.currentValue)
+            return ~(previousValue ^ currentValue)
         default:
-            return self.currentValue
+            return currentValue
         }
     }
     
     public func negateCurrentValue() {
-        self.currentValue = -self.currentValue
+        currentValue = -currentValue
     }
     
     public func resetCurrentValue() {
-        self.currentValue.updateValue(0.0)
+        currentValue.updateValue(0.0)
     }
     
     public func updateCurrentValue(_ value: NumberSystemProtocol) {
-        guard let decSystemValue = self.converter.convertValue(value: value, to: .dec, format: true) as? DecimalSystem else {
+        guard let decSystemValue = converter.convertValue(value: value, to: .dec, format: true) as? DecimalSystem else {
             return
         }
-        self.currentValue.updateValue(decSystemValue.decimalValue)
+        currentValue.updateValue(decSystemValue.decimalValue)
     }
     
     public func getMainLabelValue() -> NumberSystemProtocol? {
-        return converter.convertValue(value: self.currentValue, to: self.conversionSettings.systemMain, format: true)
+        return converter.convertValue(value: currentValue, to: conversionSettings.systemMain, format: true)
     }
     
     public func getConvertedLabelValue() -> NumberSystemProtocol? {
-        return converter.convertValue(value: self.currentValue, to: self.conversionSettings.systemConverter, format: true)
+        return converter.convertValue(value: currentValue, to: conversionSettings.systemConverter, format: true)
     }
     
     public func resetCalculation() {
-        self.operation = nil
-        self.shouldStartNewInput = true
+        operation = nil
+        shouldStartNewInput = true
     }
     
     public func mainLabelUpdate() {
-        let mainLabelValue = self.getMainLabelValue()?.value ?? "0"
-        let formattedText = self.labelFormatter.processStrInputToFormat(inputStr: mainLabelValue, for: self.conversionSettings.systemMain)
+        let mainLabelValue = getMainLabelValue()?.value ?? "0"
+        let formattedText = labelFormatter.processStrInputToFormat(inputStr: mainLabelValue, for: conversionSettings.systemMain)
         calculatorPresenterDelegate.setMainLabelText(formattedText)
     }
     
     public func converterLabelUpdate() {
-        let converterLabelValue = self.getConvertedLabelValue()?.value ?? "0"
-        var formattedText = self.labelFormatter.processStrInputToFormat(inputStr: converterLabelValue, for: self.conversionSettings.systemConverter)
+        let converterLabelValue = getConvertedLabelValue()?.value ?? "0"
+        var formattedText = labelFormatter.processStrInputToFormat(inputStr: converterLabelValue, for: conversionSettings.systemConverter)
         let mainLabelLastDigitIsDot = calculatorPresenterDelegate.getMainLabelText(deleteSpaces: true).last == "."
         
         if mainLabelLastDigitIsDot && !formattedText.contains(".")  {
@@ -224,38 +223,37 @@ class Calculator: CalculatorProtocol {
         }
 
         if let numValue = numberSystemFactory.get(strValue: mainLabelText, currentSystem: conversionSettings.systemMain) {
-            self.updateCurrentValue(numValue)
+            updateCurrentValue(numValue)
         }
         
         if mainLabelText.contains(".") {
             calculatorPresenterDelegate.setMainLabelText(mainLabelText)
         } else {
-            self.mainLabelUpdate()
+            mainLabelUpdate()
         }
-        self.converterLabelUpdate()
+        converterLabelUpdate()
     }
     
     public func mainLabelAdd(digit: String) {
         let labelText = calculatorPresenterDelegate.getMainLabelText(deleteSpaces: false)
         var newValue: String
         
-        if calculatorPresenterDelegate.mainLabelHasError || self.shouldStartNewInput {
+        if calculatorPresenterDelegate.mainLabelHasError || shouldStartNewInput {
             newValue = digit == "." ? "0." : digit
             self.shouldStartNewInput = false
             calculatorPresenterDelegate.resetErrorInLabels()
         } else {
-            newValue = self.labelFormatter.addDigitToMainLabel(labelText: labelText, digit: digit, currentValue: self.currentValue)
+            newValue = labelFormatter.addDigitToMainLabel(labelText: labelText, digit: digit, currentValue: currentValue)
         }
         
-        let formattedText = self.labelFormatter.processStrInputToFormat(inputStr: newValue, for: self.conversionSettings.systemMain)
-        let newNumber = self.numberSystemFactory.get(strValue: formattedText, currentSystem: self.conversionSettings.systemMain)
-        
-        self.updateCurrentValue(newNumber!)
-        calculatorPresenterDelegate.setMainLabelText(formattedText)
+        let formattedText = labelFormatter.processStrInputToFormat(inputStr: newValue, for: conversionSettings.systemMain)
+        if let newNumber = numberSystemFactory.get(strValue: formattedText, currentSystem: conversionSettings.systemMain) {
+            updateCurrentValue(newNumber)
+            calculatorPresenterDelegate.setMainLabelText(formattedText)
+        }
     }
 
     public func fixOverflowForCurrentValue() {
         currentValue.fixOverflow(bitWidth: wordSize.intValue, processSigned: calcState.processSigned)
     }
-    
 }
