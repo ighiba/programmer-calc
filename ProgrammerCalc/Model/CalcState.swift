@@ -8,26 +8,23 @@
 
 import Foundation
 
-
-
 protocol CalcStateProtocol {
-    // Last PCDecimal value from input (in Calculator)
     var lastValue: PCDecimal { get set }
-    // Last string values from input/output labels
     var lastLabelValues: LabelValues { get set }
-    // State from signed on/off button
     var processSigned: Bool { get set }
 }
 
 final class CalcState: CalcStateProtocol {
     
-    static let shared: CalcState = CalcState(lastValue: PCDecimal(0),
-                                          lastLabelValues: LabelValues(main: "0", converter: "0"),
-                                          processSigned: false)
+    static let shared: CalcState = CalcState()
     
     var lastValue: PCDecimal
     var lastLabelValues: LabelValues
     var processSigned: Bool
+    
+    convenience init() {
+        self.init(lastValue: PCDecimal(0), lastLabelValues: LabelValues(main: "0", converter: "0"), processSigned: false)
+    }
     
     init(lastValue: PCDecimal, lastLabelValues: LabelValues, processSigned: Bool) {
         self.lastValue = lastValue
@@ -36,42 +33,38 @@ final class CalcState: CalcStateProtocol {
     }
     
     func setCalcState(_ newCalcState: CalcStateProtocol) {
-        self.lastValue = newCalcState.lastValue
-        self.lastLabelValues = newCalcState.lastLabelValues
-        self.processSigned = newCalcState.processSigned
+        lastValue = newCalcState.lastValue
+        lastLabelValues = newCalcState.lastLabelValues
+        processSigned = newCalcState.processSigned
     }
     
     func updateMainValue(_ main: String) {
-        self.lastLabelValues = LabelValues(main: main, converter: self.lastLabelValues.converter)
+        lastLabelValues = LabelValues(main: main, converter: lastLabelValues.converter)
     }
     
     func updateConverterValue(_ converter: String) {
-        self.lastLabelValues = LabelValues(main: self.lastLabelValues.main, converter: converter)
+        lastLabelValues = LabelValues(main: lastLabelValues.main, converter: converter)
     }
 }
 
 extension CalcState: Storable {
-    static var storageKey: String {
-        return "calcState"
-    }
+    static var storageKey: String { "calcState" }
     
     static func getDefault() -> CalcState {
-        return CalcState(lastValue: PCDecimal(0),
-                        lastLabelValues: LabelValues(main: "0", converter: "0"),
-                        processSigned: false)
+        return CalcState()
     }
     
     func set(_ data: CalcState) {
-        self.lastValue = data.lastValue
-        self.lastLabelValues = data.lastLabelValues
-        self.processSigned = data.processSigned
+        lastValue = data.lastValue
+        lastLabelValues = data.lastLabelValues
+        processSigned = data.processSigned
     }
 }
-
 
 class LabelValues: Decodable, Encodable {
     var main: String
     var converter: String
+    
     init(main: String, converter: String) {
         self.main = main
         self.converter = converter
