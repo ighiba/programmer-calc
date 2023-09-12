@@ -139,7 +139,7 @@ class Calculator: CalculatorProtocol {
         case .mul:
             return previousValue * currentValue
         case .div:
-            if self.currentValue != PCDecimal(0) {
+            if currentValue != .zero {
                 return previousValue / currentValue
             } else {
                 throw MathErrors.divByZero

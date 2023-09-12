@@ -23,7 +23,7 @@ final class CalcState: CalcStateProtocol {
     var processSigned: Bool
     
     convenience init() {
-        self.init(lastValue: PCDecimal(0), lastLabelValues: LabelValues(main: "0", converter: "0"), processSigned: false)
+        self.init(lastValue: .zero, lastLabelValues: LabelValues(main: "0", converter: "0"), processSigned: false)
     }
     
     init(lastValue: PCDecimal, lastLabelValues: LabelValues, processSigned: Bool) {

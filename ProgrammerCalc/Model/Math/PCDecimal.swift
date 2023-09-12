@@ -168,3 +168,7 @@ struct PCDecimal: CustomStringConvertible, Equatable, Decodable, Encodable {
         return value
     }
 }
+
+extension PCDecimal {
+    static let zero: PCDecimal = PCDecimal(0)
+}
