@@ -15,43 +15,40 @@ protocol SettingsProtocol {
 
 final class Settings: SettingsProtocol {
     
-    static let shared: Settings = Settings(tappingSounds: false, hapticFeedback: false)
+    static let shared: Settings = Settings()
     
     var tappingSounds: Bool
     var hapticFeedback: Bool
     
-    init( tappingSounds: Bool, hapticFeedback: Bool) {
+    init(tappingSounds: Bool = false, hapticFeedback: Bool = false) {
         self.tappingSounds = tappingSounds
         self.hapticFeedback = hapticFeedback
     }
     
     func setSettings(_ newSettings: SettingsProtocol) {
-        self.tappingSounds = newSettings.tappingSounds
-        self.hapticFeedback = newSettings.hapticFeedback
+        tappingSounds = newSettings.tappingSounds
+        hapticFeedback = newSettings.hapticFeedback
     }
     
     func setTappingSounds(state: Bool) {
-        self.tappingSounds = state
+        tappingSounds = state
     }
     
     func setHapticFeedback(state: Bool) {
-        self.hapticFeedback = state
+        hapticFeedback = state
     }
 }
 
 extension Settings: Storable {
-    static var storageKey: String {
-        return "appSettings"
-    }
+    
+    static var storageKey: String { "appSettings" }
     
     static func getDefault() -> Settings {
-        return Settings(tappingSounds: false, hapticFeedback: false)
+        return Settings()
     }
     
     func set(_ data: Settings) {
-        self.tappingSounds = data.tappingSounds
-        self.hapticFeedback = data.hapticFeedback
+        tappingSounds = data.tappingSounds
+        hapticFeedback = data.hapticFeedback
     }
 }
-
-
