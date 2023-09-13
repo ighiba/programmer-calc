@@ -15,35 +15,33 @@ protocol StyleSettingsProtocol {
 
 final class StyleSettings: StyleSettingsProtocol {
 
-    static let shared: StyleSettings = StyleSettings(isUsingSystemAppearance: false, currentStyle: .dark)
+    static let shared: StyleSettings = StyleSettings()
     
     // MARK: - Properties
     
     var isUsingSystemAppearance: Bool
     var currentStyle: StyleType
     
-    init(isUsingSystemAppearance: Bool, currentStyle: StyleType) {
+    init(isUsingSystemAppearance: Bool = false, currentStyle: StyleType = .dark) {
         self.isUsingSystemAppearance = isUsingSystemAppearance
         self.currentStyle = currentStyle
     }
     
     func setStyleSettings(_ newStyleSettings: StyleSettingsProtocol) {
-        self.isUsingSystemAppearance = newStyleSettings.isUsingSystemAppearance
-        self.currentStyle = newStyleSettings.currentStyle
+        isUsingSystemAppearance = newStyleSettings.isUsingSystemAppearance
+        currentStyle = newStyleSettings.currentStyle
     }
 }
 
 extension StyleSettings: Storable {
-    static var storageKey: String {
-        return "styleSettings"
-    }
+    static var storageKey: String { "styleSettings" }
     
     static func getDefault() -> StyleSettings {
-        return StyleSettings(isUsingSystemAppearance: false, currentStyle: .dark)
+        return StyleSettings()
     }
     
     func set(_ data: StyleSettings) {
-        self.isUsingSystemAppearance = data.isUsingSystemAppearance
-        self.currentStyle = data.currentStyle
+        isUsingSystemAppearance = data.isUsingSystemAppearance
+        currentStyle = data.currentStyle
     }
 }
