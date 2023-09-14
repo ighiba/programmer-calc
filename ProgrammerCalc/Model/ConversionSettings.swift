@@ -9,11 +9,8 @@
 import Foundation
 
 protocol ConversionSettingsProtocol {
-    // Conversion system from
     var systemMain: ConversionSystemsEnum { get set }
-    // Conversion system to
     var systemConverter: ConversionSystemsEnum { get set }
-    // // Number of digits after point
     var numbersAfterPoint: Int { get set }
 }
 
@@ -39,33 +36,36 @@ final class ConversionSettings: ConversionSettingsProtocol {
 }
 
 extension ConversionSettings: Storable {
-    static var storageKey: String {
-        return "conversionSettings"
-    }
+    
+    static var storageKey: String { "conversionSettings" }
     
     static func getDefault() -> ConversionSettings {
         return ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
     }
     
     func set(_ data: ConversionSettings) {
-        self.systemMain = data.systemMain
-        self.systemConverter = data.systemConverter
-        self.numbersAfterPoint = data.numbersAfterPoint
+        systemMain = data.systemMain
+        systemConverter = data.systemConverter
+        numbersAfterPoint = data.numbersAfterPoint
     }
 }
 
 enum ConversionSystemsEnum: Int, CaseIterable, Codable {
-     case bin = 0
-     case dec = 1
-     case oct = 2
-     case hex = 3
+    case bin = 0
+    case dec = 1
+    case oct = 2
+    case hex = 3
     
     var title: String {
         switch self {
-        case .bin: return "Binary"
-        case .dec: return "Decimal"
-        case .oct: return "Octal"
-        case .hex: return "Hexadecimal"
+        case .bin:
+            return "Binary"
+        case .dec:
+            return "Decimal"
+        case .oct:
+            return "Octal"
+        case .hex:
+            return "Hexadecimal"
         }
     }
  }
