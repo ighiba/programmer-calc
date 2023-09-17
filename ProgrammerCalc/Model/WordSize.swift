@@ -16,19 +16,27 @@ enum WordSizeType: Int, Codable, CaseIterable {
     
     var title: String {
         switch self {
-        case .qword: return "QWORD"
-        case .dword: return "DWORD"
-        case .word:  return "WORD"
-        case .byte:  return "BYTE"
+        case .qword:
+            return "QWORD"
+        case .dword:
+            return "DWORD"
+        case .word:
+            return "WORD"
+        case .byte:
+            return "BYTE"
         }
     }
     
     var intValue: Int {
         switch self {
-        case .qword: return 64
-        case .dword: return 32
-        case .word:  return 16
-        case .byte:  return 8
+        case .qword:
+            return 64
+        case .dword:
+            return 32
+        case .word:
+            return 16
+        case .byte:
+            return 8
         }
     }
 }
@@ -45,33 +53,29 @@ final class WordSize: WordSizeProtocol {
     // MARK: - Properties
 
     var value: WordSizeType
-    var intValue: Int {
-        return value.intValue
-    }
+    var intValue: Int { value.intValue }
     
     init(_ wordSizeType: WordSizeType) {
         self.value = wordSizeType
     }
     
     func setWordSizeValue(_ newValue: WordSizeType) {
-        self.value = newValue
+        value = newValue
     }
     
     func setWordSize(_ newWordSize: WordSizeProtocol) {
-        self.value = newWordSize.value
+        value = newWordSize.value
     }
 }
 
 extension WordSize: Storable {
-    static var storageKey: String {
-        return "wordSize"
-    }
+    static var storageKey: String { "wordSize" }
     
     static func getDefault() -> WordSize {
         return WordSize(.qword)
     }
     
     func set(_ data: WordSize) {
-        self.value = data.value
+        value = data.value
     }
 }
