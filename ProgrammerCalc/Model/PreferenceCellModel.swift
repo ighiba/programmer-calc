@@ -23,11 +23,13 @@ final class PreferenceCellModel {
     var stateDidChanged: ((Bool) -> Void)?
     var systemImageName: String?
     
-    init(id: String,
-         label: String,
-         cellType: PreferenceCellType,
-         systemImageName: String? = nil,
-         stateDidChanged: ((Bool) -> Void)? = nil) {
+    init(
+        id: String,
+        label: String,
+        cellType: PreferenceCellType,
+        systemImageName: String? = nil,
+        stateDidChanged: ((Bool) -> Void)? = nil
+    ) {
         self.id = id
         self.label = label
         self.cellType = cellType
