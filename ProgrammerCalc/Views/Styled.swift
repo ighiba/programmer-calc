@@ -13,10 +13,7 @@ protocol Styled {
 }
 
 extension Styled {
-    var style: Style {
-        return StyleManager.shared.obtainStyle()
-    }
-    
+    var style: Style { StyleManager.shared.currentStyle }
 
     func updateStyle(for window: UIWindow?) {
         StyleManager.shared.updateStyle(for: window)

@@ -12,8 +12,10 @@ class StyleManager {
     
     static let shared = StyleManager()
     
-    let styleSettings = StyleSettings.shared
-    let styleFactory = StyleFactory()
+    var currentStyle: Style { styleFactory.get(style: styleSettings.currentStyle) }
+    
+    private let styleSettings = StyleSettings.shared
+    private let styleFactory = StyleFactory()
     
     private init() {}
     
@@ -31,9 +33,5 @@ class StyleManager {
         } else {
             window?.overrideUserInterfaceStyle = styleSettings.currentStyle == .light ? .light : .dark
         }
-    }
-    
-    func obtainStyle() -> Style {
-        return styleFactory.get(style: styleSettings.currentStyle)
     }
 }

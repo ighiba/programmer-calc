@@ -33,7 +33,7 @@ class AboutPresenter: AboutOutput {
     // MARK: - Methods
 
     func obtainTintColor() -> UIColor {
-        return styleManager.obtainStyle().tintColor
+        return styleManager.currentStyle.tintColor
     }
     
     func openDescription() {
