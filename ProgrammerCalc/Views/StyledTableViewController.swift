@@ -11,7 +11,7 @@ import UIKit
 class StyledTableViewController: UITableViewController, Styled {
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        styleWillUpdate(with: self.style)
+        styleWillUpdate(with: style)
     }
     
     /// Calls every viewDidLayoutSubviews call with `style` parameter.
@@ -29,7 +29,7 @@ class StyledTableViewController: UITableViewController, Styled {
     /// - Parameters:
     ///     - style: The style object with set of colors for view customization
     func styleWillUpdate(with style: Style) {
-        self.updateStyle(for: self.view.window)
-        self.navigationController?.navigationBar.tintColor = style.tintColor
+        updateStyle(for: view.window)
+        navigationController?.navigationBar.tintColor = style.tintColor
     }
 }
