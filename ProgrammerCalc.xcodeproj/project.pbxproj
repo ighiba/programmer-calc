@@ -10,6 +10,7 @@
 		C00616A827064449007BEF89 /* OctHexHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00616A727064449007BEF89 /* OctHexHelper.swift */; };
 		C00616AC27065097007BEF89 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00616AB27065097007BEF89 /* String.swift */; };
 		C0211CD92A9938E100464A44 /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0211CD82A9938E100464A44 /* UIFont.swift */; };
+		C021267A2ABC7F4F002B072C /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C02126792ABC7F4F002B072C /* Colors.xcassets */; };
 		C0249849279DDC88005EA12A /* PCalcStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0249848279DDC88005EA12A /* PCalcStorage.swift */; };
 		C0287F7227A31FD2001489FE /* BitButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0287F7127A31FD2001489FE /* BitButton.swift */; };
 		C0287F7427A32250001489FE /* StyleSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0287F7327A32250001489FE /* StyleSettings.swift */; };
@@ -56,7 +57,7 @@
 		C082FB8F2A33C0FC00F3AA60 /* ButtonsViewControllerPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082FB8E2A33C0FC00F3AA60 /* ButtonsViewControllerPad.swift */; };
 		C082FB912A34C0A400F3AA60 /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082FB902A34C0A400F3AA60 /* DeviceType.swift */; };
 		C082FB932A34D22C00F3AA60 /* UIScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082FB922A34D22C00F3AA60 /* UIScreen.swift */; };
-		C082FB952A35DAF000F3AA60 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C082FB942A35DAF000F3AA60 /* Assets.xcassets */; };
+		C082FB952A35DAF000F3AA60 /* Icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C082FB942A35DAF000F3AA60 /* Icons.xcassets */; };
 		C082FB972A35E6FF00F3AA60 /* Values.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082FB962A35E6FF00F3AA60 /* Values.swift */; };
 		C0905E712A080843004180A7 /* PCDecimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0905E702A080843004180A7 /* PCDecimal.swift */; };
 		C09623172A04171B00E6C08F /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09623162A04171B00E6C08F /* Int.swift */; };
@@ -123,6 +124,7 @@
 		C00616A727064449007BEF89 /* OctHexHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OctHexHelper.swift; sourceTree = "<group>"; };
 		C00616AB27065097007BEF89 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		C0211CD82A9938E100464A44 /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
+		C02126792ABC7F4F002B072C /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		C0249848279DDC88005EA12A /* PCalcStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcStorage.swift; sourceTree = "<group>"; };
 		C0287F7127A31FD2001489FE /* BitButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitButton.swift; sourceTree = "<group>"; };
 		C0287F7327A32250001489FE /* StyleSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleSettings.swift; sourceTree = "<group>"; };
@@ -175,7 +177,7 @@
 		C082FB8E2A33C0FC00F3AA60 /* ButtonsViewControllerPad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsViewControllerPad.swift; sourceTree = "<group>"; };
 		C082FB902A34C0A400F3AA60 /* DeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceType.swift; sourceTree = "<group>"; };
 		C082FB922A34D22C00F3AA60 /* UIScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreen.swift; sourceTree = "<group>"; };
-		C082FB942A35DAF000F3AA60 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C082FB942A35DAF000F3AA60 /* Icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icons.xcassets; sourceTree = "<group>"; };
 		C082FB962A35E6FF00F3AA60 /* Values.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Values.swift; sourceTree = "<group>"; };
 		C0905E702A080843004180A7 /* PCDecimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCDecimal.swift; sourceTree = "<group>"; };
 		C09623162A04171B00E6C08F /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
@@ -355,7 +357,8 @@
 				C0D5BA4C24C340120038A378 /* Model */,
 				C0E5FC7424BB9B6100BA93CA /* Views */,
 				C0E0FF382A44A8CA00E38DF9 /* Modules */,
-				C082FB942A35DAF000F3AA60 /* Assets.xcassets */,
+				C082FB942A35DAF000F3AA60 /* Icons.xcassets */,
+				C02126792ABC7F4F002B072C /* Colors.xcassets */,
 				C06B7F112443B12E009642B9 /* LaunchScreen.storyboard */,
 				C06B7F142443B12E009642B9 /* Info.plist */,
 				C09631C62725BA7C001DCD25 /* Localizable.strings */,
@@ -621,8 +624,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				C06B7F132443B12E009642B9 /* LaunchScreen.storyboard in Resources */,
+				C021267A2ABC7F4F002B072C /* Colors.xcassets in Resources */,
 				C09631C42725BA7C001DCD25 /* Localizable.strings in Resources */,
-				C082FB952A35DAF000F3AA60 /* Assets.xcassets in Resources */,
+				C082FB952A35DAF000F3AA60 /* Icons.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

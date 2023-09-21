@@ -10,7 +10,12 @@ import UIKit
 
 class PopoverDoneButton: UIButton {
     
-    
+    override open var isHighlighted: Bool {
+        didSet {
+            changeButtonHighlightAnimated(isHighlighted: isHighlighted)
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setupView()
@@ -21,33 +26,27 @@ class PopoverDoneButton: UIButton {
     }
     
     private func setupView() {
-        self.frame = CGRect(x: 0, y: 0, width: 100, height: 50)
+        frame = CGRect(x: 0, y: 0, width: 100, height: 50)
         
-        let doneTitle = NSLocalizedString("Done", comment: "")
+        setTitle(NSLocalizedString("Done", comment: ""), for: .normal)
+        setTitleColor(.white, for: .normal)
         
-        self.setTitle(doneTitle, for: .normal)
-
-        self.backgroundColor = .systemGreen
-        self.setTitleColor(.white, for: .normal)
-        self.layer.cornerRadius = 16
+        backgroundColor = .systemGreen
+        
+        layer.cornerRadius = 16
     }
     
-    override open var isHighlighted: Bool {
-        // if variable state changed
-        // change background color for calulator buttons while they pressed
-        didSet {
-            if isHighlighted {
-                // create button animation when button pressed
-                self.backgroundColor = #colorLiteral(red: 0.1159710638, green: 0.6013326163, blue: 0.1974542897, alpha: 1).withAlphaComponent(0.8)
-            } else {
-                // create button animation when button unpressed
-                UIView.transition(
-                    with: self,
-                    duration: 0.7,
-                    options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction],
-                    animations: { self.backgroundColor = .systemGreen },
-                    completion: nil)
-            }
+    private func changeButtonHighlightAnimated(isHighlighted: Bool) {
+        if isHighlighted {
+            backgroundColor = .popoverDoneButtonColorPressed
+        } else {
+            UIView.transition(
+                with: self,
+                duration: 0.3,
+                options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction],
+                animations: { self.backgroundColor = .popoverDoneButtonColor },
+                completion: nil
+            )
         }
     }
 }

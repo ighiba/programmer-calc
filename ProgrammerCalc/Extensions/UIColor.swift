@@ -43,3 +43,8 @@ extension UIColor {
         )
     }
 }
+
+extension UIColor {
+    static let popoverDoneButtonColor: UIColor = UIColor(named: "PopoverDoneButtonColor")!
+    static let popoverDoneButtonColorPressed: UIColor = UIColor(named: "PopoverDoneButtonColorPressed")!
+}
