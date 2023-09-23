@@ -10,37 +10,46 @@ import UIKit
 
 class PreferenceCell: UITableViewCell {
 
-    var preferenceModel: PreferenceCellModel
+    private let preferenceModel: PreferenceCellModel
 
     init(_ preferenceModel: PreferenceCellModel) {
         self.preferenceModel = preferenceModel
         super.init(style: .default, reuseIdentifier: preferenceModel.id)
-        
-        switch preferenceModel.cellType {
-        case .switcher:
-            let switcher = UISwitch()
-            switcher.addTarget(self, action: #selector(switcherValueChanged), for: .valueChanged)
-            switcher.isOn = preferenceModel.state ?? true
-            self.accessoryView = switcher
-            self.selectionStyle = .none
-        case .checkmark:
-            self.accessoryType = (preferenceModel.state ?? false) ? .checkmark : .none
-        case .button:
-            self.accessoryType = .disclosureIndicator
-        case .standart:
-            self.accessoryType = .none
-        }
-    
-        self.textLabel?.text = preferenceModel.label
-        if let systemImageName = preferenceModel.systemImageName {
-            self.imageView?.image = UIImage(systemName: systemImageName)
-        }
+        self.setupCell()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private func setupCell() {
+        configureAccessoryView(for: preferenceModel.cellType)
+    
+        textLabel?.text = preferenceModel.label
+        if let systemImageName = preferenceModel.systemImageName {
+            imageView?.image = UIImage(systemName: systemImageName)
+        }
+    }
+    
+    private func configureAccessoryView(for cellType: PreferenceCellType) {
+        switch cellType {
+        case .switcher:
+            let switcher = UISwitch()
+            switcher.addTarget(self, action: #selector(switcherValueChanged), for: .valueChanged)
+            switcher.isOn = preferenceModel.state ?? true
+            accessoryView = switcher
+            selectionStyle = .none
+        case .checkmark:
+            accessoryType = (preferenceModel.state ?? false) ? .checkmark : .none
+        case .button:
+            accessoryType = .disclosureIndicator
+        case .standart:
+            accessoryType = .none
+        }
+    }
+}
+
+extension PreferenceCell {
     @objc func switcherValueChanged(_ sender: UISwitch) {
         preferenceModel.state = sender.isOn
         preferenceModel.stateDidChanged?(sender.isOn)
