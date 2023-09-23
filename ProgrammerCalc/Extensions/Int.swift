@@ -9,7 +9,5 @@
 import Foundation
 
 extension Int {
-    var digitCount: Int {
-        return String(self).count
-    }
+    var digitCount: Int { String(self).count }
 }

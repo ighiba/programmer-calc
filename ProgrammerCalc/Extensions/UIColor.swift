@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIColor {
-    convenience init(hex: UInt64, alpha: CGFloat) {
+    convenience init(hex: UInt32, alpha: CGFloat) {
         let r, g, b: CGFloat
         
         r = CGFloat((hex & 0xff0000) >> 16) / 255
@@ -19,31 +19,32 @@ extension UIColor {
         self.init(red: r, green: g, blue: b, alpha: alpha)
     }
     
-    var coreImageColor: CIColor {
-        return CIColor(color: self)
-    }
+    var ciColor: CIColor { CIColor(color: self) }
     
     var components: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
-        let coreImageColor = self.coreImageColor
-        return (coreImageColor.red, coreImageColor.green, coreImageColor.blue, coreImageColor.alpha)
+        return (ciColor.red, ciColor.green, ciColor.blue, ciColor.alpha)
     }
     
-    func setDarker(by number: CGFloat) -> UIColor {
-        let newRed = self.components.red * number
-        let newGreen = self.components.green * number
-        let newBlue = self.components.blue * number
-        let alpha = self.components.alpha
-        let newColor = UIColor(red: newRed, green: newGreen, blue: newBlue, alpha: alpha)
-        return newColor
+    func darker(by value: CGFloat) -> UIColor {
+        return UIColor(
+            red: components.red * value,
+            green: components.green * value,
+            blue: components.blue * value,
+            alpha: components.alpha
+        )
     }
     
-    func setLighter(by number: CGFloat) -> UIColor {
-        let newRed = min(self.components.red + number, 1.0)
-        let newGreen = min(self.components.green + number, 1.0)
-        let newBlue = min(self.components.blue + number, 1.0)
-        let alpha = self.components.alpha
-        let newColor = UIColor(red: newRed, green: newGreen, blue: newBlue, alpha: alpha)
-        return newColor
+    func lighter(by value: CGFloat) -> UIColor {
+        return UIColor(
+            red: min(components.red + value, 1.0),
+            green: min(components.green + value, 1.0),
+            blue: min(components.blue + value, 1.0),
+            alpha: components.alpha
+        )
     }
 }
 
+extension UIColor {
+    static let popoverDoneButtonColor: UIColor = UIColor(named: "PopoverDoneButtonColor")!
+    static let popoverDoneButtonColorPressed: UIColor = UIColor(named: "PopoverDoneButtonColorPressed")!
+}

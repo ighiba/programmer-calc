@@ -29,58 +29,47 @@ class CalculatorButton: UIButton {
     // MARK: - Properties
 
     private let _boundsExtension: CGFloat = 0
-    // Spacing between buttons in horizontal stack (need for calculating width)
+
     static let spacingWidth: CGFloat = 15.83333333333333
-    // Button fontSize
-    var defaultFontSize: CGFloat {
-        return buttonWidth() / 1.65
-    }
+
+    var defaultFontSize: CGFloat { buttonWidth() / 1.65 }
     
-    // Button types
-    public var calcButtonType: ButtonTypes = .defaultBtn // default value
-    // Buff color
-    var buffColor: UIColor = .white
-    // Custom tint colors
+    public var calcButtonType: ButtonTypes = .defaultBtn
+    var buffColor: UIColor? = .white
+
     var frameTint: UIColor = .white
     var textTint: UIColor = .black
-    // Constraints
+
     var portrait: [NSLayoutConstraint]?
     
-    // override isHighlighted for calculator buttons
     override open var isHighlighted: Bool {
-        // if variable state changed
-        // change background color for calulator buttons while they pressed
         didSet {
             if isHighlighted {
-                // create button animation when button pressed
-                buffColor = self.backgroundColor!
-                // set tint color
-                self.backgroundColor = frameTint
+                buffColor = backgroundColor
+                backgroundColor = frameTint
             } else {
-                // create button animation when button unpressed
                 UIView.transition(
                     with: self,
                     duration: 0.7,
                     options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction],
                     animations: { self.backgroundColor = self.buffColor },
-                    completion: nil)
+                    completion: nil
+                )
             }
         }
     }
     
     override var isEnabled: Bool {
         didSet {
-            self.alpha = isEnabled ? 1.0 : 0.5
+            alpha = isEnabled ? 1.0 : 0.5
         }
     }
     
-    // ======================
     // MARK: - Initialization
-    // ======================
     
     init() {
         super.init(frame: CGRect())
-        self.calcButtonType = .defaultBtn
+        calcButtonType = .defaultBtn
     }
     
     convenience init(calcButtonType: ButtonTypes) {
@@ -92,45 +81,35 @@ class CalculatorButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // ===============
     // MARK: - Methods
-    // ===============
     
-    // Apply default style to the all buttons
     func applyStyle() {
-        // set title and background
-        self.setTitleColor(.black, for: .normal)
-        self.backgroundColor = .white
-        // set font size, font family
-        self.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: defaultFontSize)
-        self.titleLabel?.autoresizingMask = .flexibleWidth
-        // resizeble text
-        self.titleLabel?.adjustsFontSizeToFitWidth = true
-        self.titleLabel?.minimumScaleFactor = 0.75
+        setTitleColor(.black, for: .normal)
+        backgroundColor = .white
+
+        titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size: defaultFontSize)
+        titleLabel?.autoresizingMask = .flexibleWidth
+
+        titleLabel?.adjustsFontSizeToFitWidth = true
+        titleLabel?.minimumScaleFactor = 0.75
         
-        // content aligment for sign buttons
-        if self.calcButtonType == .sign {
-            self.contentVerticalAlignment = .top
+        if calcButtonType == .sign {
+            contentVerticalAlignment = .top
         }
         
-        // handle various button types by titleLabel text lenght
-        if let titleText = self.titleLabel?.text {
-            // if second line exists
+        if let titleText = titleLabel?.text {
             if titleText.contains("\n") {
-                self.titleLabel?.numberOfLines = 2
-                self.titleLabel?.textAlignment = .center
-                self.titleLabel?.font = self.titleLabel?.font.withSize(buttonWidth() / 3.916)
-            // if more than 3 char in title
+                titleLabel?.numberOfLines = 2
+                titleLabel?.textAlignment = .center
+                titleLabel?.font = titleLabel?.font.withSize(buttonWidth() / 3.916)
             } else if titleText.count > 3 {
-                self.titleLabel?.font = self.titleLabel?.font.withSize(buttonWidth() / 2.970)
-            // for 2 and 3 chars
+                titleLabel?.font = titleLabel?.font.withSize(buttonWidth() / 2.970)
             } else if titleText.count > 1 {
-                self.titleLabel?.font = self.titleLabel?.font.withSize(buttonWidth() / 2.65)
+                titleLabel?.font = titleLabel?.font.withSize(buttonWidth() / 2.65)
             }
         }
         
-        // round corners
-        self.layer.cornerRadius = buttonWidth() / 2
+        layer.cornerRadius = buttonWidth() / 2
     }
   
     private func animateHighlight() {
@@ -142,19 +121,16 @@ class CalculatorButton: UIButton {
             completion: nil)
     }
     
-    // For AC/C button
     func changeTitleClearButtonFor(_ state: Bool) {
-        guard self.tag == tagCalculatorButtonClear else { return }
         let title = state ? "C" : "AC"
-        guard self.titleLabel?.text != title else { return }
-        self.setTitle(title, for: .normal)
+        guard tag == tagCalculatorButtonClear, titleLabel?.text != title else { return }
+        setTitle(title, for: .normal)
     }
     
-    // For Signed ON/OFF button
     func changeTitleIsSignedButtonFor(_ state: Bool) {
-        guard self.tag == tagCalculatorButtonIsSigned else { return }
+        guard tag == tagCalculatorButtonIsSigned else { return }
         let title = state ? "Signed\nON" : "Signed\nOFF"
-        self.setTitle(title, for: .normal)
+        setTitle(title, for: .normal)
     }
     
     // Dynamic button width (except zero button) and height for autolayout
@@ -170,7 +146,6 @@ class CalculatorButton: UIButton {
             // iOS
             return (width * 0.9 - 3 * CalculatorButton.spacingWidth) / 4
         }
-       
     }
     
     func buttonWidthPad() -> CGFloat {
@@ -178,8 +153,6 @@ class CalculatorButton: UIButton {
         return (width * 0.9 - 7 * CalculatorButton.spacingWidth) / 8
     }
     
-    // override for decrease control bounds of button
-    // and for correct highlight animation
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch: UITouch = touches.first!
         let outerBounds: CGRect = bounds.insetBy(dx: -1 * _boundsExtension, dy: -1 * _boundsExtension)
@@ -209,20 +182,16 @@ class CalculatorButton: UIButton {
     }
     
     func setActions(for buttonType: ButtonTypes){
-        // label higliglht handling
-        self.addTarget(nil, action: #selector(CalculatorViewController.touchHandleLabelHighlight), for: .touchDown)
-        // haptic feedback
-        self.addTarget(nil, action: #selector(CalcButtonsViewController.hapticFeedbackHandler), for: .touchUpInside)
-        // tapping sound
-        self.addTarget(nil, action: #selector(CalcButtonsViewController.tappingSoundHandler), for: .touchUpInside)
+        addTarget(nil, action: #selector(CalculatorViewController.touchHandleLabelHighlight), for: .touchDown)
+        addTarget(nil, action: #selector(CalcButtonsViewController.hapticFeedbackHandler), for: .touchUpInside)
+        addTarget(nil, action: #selector(CalcButtonsViewController.tappingSoundHandler), for: .touchUpInside)
         
         switch buttonType {
         case .numeric:
-            self.addTarget(nil, action: #selector(CalculatorViewController.numericButtonTapped), for: .touchUpInside)
+            addTarget(nil, action: #selector(CalculatorViewController.numericButtonTapped), for: .touchUpInside)
         case .sign, .complement, .bitwise:
-            self.addTarget(nil, action: #selector(CalculatorViewController.signButtonTapped), for: .touchUpInside)
+            addTarget(nil, action: #selector(CalculatorViewController.signButtonTapped), for: .touchUpInside)
         case .defaultBtn:
-            // do nothing
             break
         }
     }
@@ -234,11 +203,11 @@ class CalculatorButton: UIButton {
         
         let touchInside: Bool = outerBounds.contains(currentLocation)
         if touchInside {
-            self.isHighlighted = false
+            isHighlighted = false
             return sendActions(for: .touchUpInside)
         } else {
-            self.isHighlighted = false
-            return sendActions(for: .touchUpOutside)
+            isHighlighted = false
+            sendActions(for: .touchUpOutside)
         }
     }
     
@@ -253,14 +222,14 @@ extension CalculatorButton {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.portrait = []
         button.portrait?.append( button.heightAnchor.constraint(equalToConstant: button.buttonWidth()) )
-        // special style for double button
+
         if title == "00" || title == "FF" || title == "0" {
             button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth() * 2 + spacing) )
             button.titleLabel?.font = button.titleLabel?.font.withSize(button.defaultFontSize) // default
         } else {
             button.portrait?.append( button.widthAnchor.constraint(equalToConstant: button.buttonWidth()) )
         }
-        // change priority for all constraints to 999 (for disable log noise when device is rotated)
+
         button.portrait!.forEach { $0.priority = UILayoutPriority(999) }
         NSLayoutConstraint.activate(button.portrait!)
     }
@@ -279,52 +248,47 @@ extension CalculatorButton {
             button.frameTint = style.numericButtonStyle.frameTint
             button.setTitleColor(style.numericButtonStyle.textColor, for: .normal)
             button.setTitleColor(style.numericButtonStyle.textTint, for: .highlighted)
-
         case .sign:
             button.backgroundColor = style.actionButtonStyle.frameColor
             button.frameTint = style.actionButtonStyle.frameTint
             button.setTitleColor(style.actionButtonStyle.textColor, for: .normal)
             button.setTitleColor(style.actionButtonStyle.textTint, for: .highlighted)
-
         case .complement:
             button.backgroundColor = style.miscButtonStyle.frameColor
             button.frameTint = style.miscButtonStyle.frameTint
             button.setTitleColor(style.miscButtonStyle.textColor, for: .normal)
             button.setTitleColor(style.miscButtonStyle.textTint, for: .highlighted)
-
         case .bitwise:
             button.backgroundColor = style.actionButtonStyle.frameColor
             button.frameTint = style.actionButtonStyle.frameTint
             button.setTitleColor(style.actionButtonStyle.textColor, for: .normal)
             button.setTitleColor(style.actionButtonStyle.textTint, for: .highlighted)
-
         case .defaultBtn:
             button.backgroundColor = style.miscButtonStyle.frameColor
             button.frameTint = style.miscButtonStyle.frameTint
             button.setTitleColor(style.miscButtonStyle.textColor, for: .normal)
             button.setTitleColor(style.miscButtonStyle.textTint, for: .highlighted)
-            button.setTitleColor(style.miscButtonStyle.textTint.setDarker(by: 0.7), for: .disabled)
+            button.setTitleColor(style.miscButtonStyle.textTint.darker(by: 0.7), for: .disabled)
         }
 
         if style.buttonBorderColor != .clear {
-            let borderColor = button.backgroundColor?.setDarker(by: 0.98)
+            let borderColor = button.backgroundColor?.darker(by: 0.98)
             button.layer.borderColor = borderColor?.cgColor
         } else {
             button.layer.borderColor = style.buttonBorderColor.cgColor
         }
         button.layer.borderWidth = 0.5
-
         button.layer.shadowColor = UIColor.black.cgColor
         button.layer.shadowOpacity = 0.25
         button.layer.shadowOffset = CGSize(width: 0, height: 1)
         button.layer.shadowRadius = 1.5
         
-        let shadowPath = CGPath(roundedRect: button.layer.bounds,
-                                cornerWidth: button.layer.cornerRadius,
-                                cornerHeight: button.layer.cornerRadius,
-                                transform: nil)
+        let shadowPath = CGPath(
+            roundedRect: button.layer.bounds,
+            cornerWidth: button.layer.cornerRadius,
+            cornerHeight: button.layer.cornerRadius,
+            transform: nil
+        )
         button.layer.shadowPath = shadowPath
-
     }
-    
 }

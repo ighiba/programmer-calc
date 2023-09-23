@@ -89,9 +89,7 @@ class CalculatorPresenter: CalculatorOutput {
     }
     
     func isInvalidMainLabelInput(_ text: String) -> Bool {
-        let forbiddenValues = ConversionValues.getForbiddenValues()
-        
-        if forbiddenValues[conversionSettings.systemMain]!.contains(where: text.contains) {
+        if ConversionValues.getForbidden(for: conversionSettings.systemMain).contains(where: text.contains) {
             print("Forbidden values at input")
             return true
         }
@@ -120,7 +118,7 @@ class CalculatorPresenter: CalculatorOutput {
     }
     
     func getForbiddenToInputDigits() -> Set<String> {
-        return ConversionValues.getForbiddenValues()[conversionSettings.systemMain]!
+        return ConversionValues.getForbidden(for: conversionSettings.systemMain)
     }
     
     func isProcessSigned() -> Bool {

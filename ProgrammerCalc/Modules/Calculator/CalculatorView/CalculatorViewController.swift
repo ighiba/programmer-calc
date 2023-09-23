@@ -30,16 +30,11 @@ class CalculatorViewController: StyledViewController, CalculatorInput, Calculato
     // Device states
     private var isAllowedLandscape: Bool = false
     
-    private var mainSystem: ConversionSystemsEnum {
-        return output.getMainSystem()
-    }
-    
-    private var converterSystem: ConversionSystemsEnum {
-        return output.getConverterSystem()
-    }
+    private var mainSystem: ConversionSystemsEnum { output.getMainSystem() }
+    private var converterSystem: ConversionSystemsEnum { output.getConverterSystem() }
     
     override func loadView() {
-        self.view = calculatorView
+        view = calculatorView
     }
 
     override func viewDidLoad() {
@@ -55,15 +50,15 @@ class CalculatorViewController: StyledViewController, CalculatorInput, Calculato
             label.addGestureRecognizer(swipeRight)
         }
 
-        self.view.addSubview(buttonsContainerController.view)
+        view.addSubview(buttonsContainerController.view)
         buttonsContainerController.didMove(toParent: self)
         
         buttonsContainerController.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            buttonsContainerController.view.leadingAnchor.constraint(equalTo: self.calculatorView.leadingAnchor),
-            buttonsContainerController.view.trailingAnchor.constraint(equalTo: self.calculatorView.trailingAnchor),
-            buttonsContainerController.view.topAnchor.constraint(equalTo: self.calculatorView.labelsStack.bottomAnchor, constant: 30),
-            buttonsContainerController.view.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+            buttonsContainerController.view.leadingAnchor.constraint(equalTo: calculatorView.leadingAnchor),
+            buttonsContainerController.view.trailingAnchor.constraint(equalTo: calculatorView.trailingAnchor),
+            buttonsContainerController.view.topAnchor.constraint(equalTo: calculatorView.labelsStack.bottomAnchor, constant: 30),
+            buttonsContainerController.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
  
         updateInfoSubLabels()
@@ -74,7 +69,7 @@ class CalculatorViewController: StyledViewController, CalculatorInput, Calculato
         updateButtonsState()
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(touchHandleLabelHighlight))
-        self.view.addGestureRecognizer(tap)
+        view.addGestureRecognizer(tap)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -95,15 +90,15 @@ class CalculatorViewController: StyledViewController, CalculatorInput, Calculato
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        guard let phoneVC = self.buttonsContainerController as? ButtonsViewControllerPhone else { return }
+        guard let phoneVC = buttonsContainerController as? ButtonsViewControllerPhone else { return }
         handleDeviceOrientationChange(phoneVC)
     }
     
     override func styleWillUpdate(with style: Style) {
         super.styleWillUpdate(with: style)
         bitwiseKeypad?.updateStyle(style)
-        self.view.backgroundColor = style.backgroundColor
-        self.setNeedsStatusBarAppearanceUpdate()
+        view.backgroundColor = style.backgroundColor
+        setNeedsStatusBarAppearanceUpdate()
     }
     
     // Only for Phone
@@ -156,9 +151,9 @@ class CalculatorViewController: StyledViewController, CalculatorInput, Calculato
     }
     
     func subviewsSetNeedsLayout() {
-        self.view.setNeedsLayout()
-        self.calculatorView.setNeedsLayout()
-        self.buttonsContainerController.view.setNeedsLayout()
+        view.setNeedsLayout()
+        calculatorView.setNeedsLayout()
+        buttonsContainerController.view.setNeedsLayout()
     }
     
     // MARK: - Methods
@@ -179,8 +174,12 @@ class CalculatorViewController: StyledViewController, CalculatorInput, Calculato
     }
     
     public func unhighlightLabels() {
-        if mainLabel.layer.backgroundColor != UIColor.clear.cgColor { mainLabel.hideLabelMenu() }
-        if converterLabel.layer.backgroundColor != UIColor.clear.cgColor { converterLabel.hideLabelMenu() }
+        if mainLabel.layer.backgroundColor != UIColor.clear.cgColor {
+            mainLabel.hideLabelMenu()
+        }
+        if converterLabel.layer.backgroundColor != UIColor.clear.cgColor {
+            converterLabel.hideLabelMenu()
+        }
     }
 
     public func clearLabels() {
@@ -203,7 +202,7 @@ class CalculatorViewController: StyledViewController, CalculatorInput, Calculato
     }
 
     private func updateNegateButton(processSigned: Bool) {
-        if let negateButton = self.view.viewWithTag(tagCalculatorButtonNegate) as? CalculatorButton {
+        if let negateButton = view.viewWithTag(tagCalculatorButtonNegate) as? CalculatorButton {
             negateButton.isEnabled = processSigned
             negateButton.alpha = negateButton.isEnabled ? 1.0 : 0.5
         }
@@ -233,7 +232,7 @@ class CalculatorViewController: StyledViewController, CalculatorInput, Calculato
     }
     
     func updateClearButton(hasInput state: Bool) {
-        if let clearButton = self.view.viewWithTag(tagCalculatorButtonClear) as? CalculatorButton {
+        if let clearButton = view.viewWithTag(tagCalculatorButtonClear) as? CalculatorButton {
             clearButton.changeTitleClearButtonFor(state)
         }
     }
@@ -248,19 +247,16 @@ class CalculatorViewController: StyledViewController, CalculatorInput, Calculato
     }
    
     private func updateBitwiseKeypad() {
-        guard let bitwiseKeypad = self.bitwiseKeypad,
-              let bin = output.getCurrentValueBinary(format: false) else { return }
+        guard let bitwiseKeypad = bitwiseKeypad, let bin = output.getCurrentValueBinary(format: false) else { return }
         bitwiseKeypad.binary = bin
         bitwiseKeypad.updateKeypad()
     }
     
     private func getBitwiseUpdateHandler() -> ((NumberSystemProtocol) -> Void) {
-        let handler: ((NumberSystemProtocol) -> Void) = { [weak self] newValue in
-            guard let strongSelf = self else { return }
-            strongSelf.output.setNewCurrentValue(newValue)
-            strongSelf.updateLabels()
+        return { [weak self] newValue in
+            self?.output.setNewCurrentValue(newValue)
+            self?.updateLabels()
         }
-        return handler
     }
     
     private func refreshCalcButtons() {
@@ -310,7 +306,7 @@ class CalculatorViewController: StyledViewController, CalculatorInput, Calculato
     }
     
     func presentViewControlle(_ viewController: UIViewController, animated: Bool) {
-        self.present(viewController, animated: animated, completion: nil)
+        present(viewController, animated: animated, completion: nil)
     }
 }
 
@@ -402,11 +398,10 @@ extension CalculatorViewController {
             sender.changeImage(named: "keypadIcon-bitwise")
 
             buttonsContainerController.view?.transform = calcButtonsTransform
-
-            UIView.animate(withDuration: animDuration, delay: 0, options: animOptions, animations: {
+            UIView.animate(withDuration: animDuration, delay: 0, options: animOptions, animations: { [weak self] in
                 AppDelegate.AppUtility.lockPortraitOrientation()
-                self.bitwiseKeypad?.view.transform = bitwiseKeypadTransform
-                self.buttonsContainerController.view?.transform = .identity
+                self?.bitwiseKeypad?.view.transform = bitwiseKeypadTransform
+                self?.buttonsContainerController.view?.transform = .identity
             }, completion: { [weak self] _ in
                 self?.bitwiseKeypad?.willMove(toParent: nil)
                 self?.bitwiseKeypad?.view.removeFromSuperview()
@@ -414,27 +409,21 @@ extension CalculatorViewController {
                 self?.bitwiseKeypad = nil
                 AppDelegate.AppUtility.unlockPortraitOrientation()
             })
-
         } else {
-
             sender.changeImage(named: "keypadIcon-default")
-
-            // prepare input value for bitwise keypad
             let bin = output.getCurrentValueBinary(format: false)!
-
             bitwiseKeypad = BitwiseKeypadController(binary: bin)
 
-            self.addChild(bitwiseKeypad!)
-            self.view.addSubview(bitwiseKeypad!.view)
+            addChild(bitwiseKeypad!)
+            view.addSubview(bitwiseKeypad!.view)
 
             bitwiseKeypad?.updateHandlder = getBitwiseUpdateHandler()
-            bitwiseKeypad?.setContainerConstraintsFor(self.buttonsContainerController.view)
-
+            bitwiseKeypad?.setContainerConstraintsFor(buttonsContainerController.view)
             bitwiseKeypad?.view.transform = bitwiseKeypadTransform
 
-            UIView.animate(withDuration: animDuration, delay: 0, options: animOptions, animations: {
-                self.bitwiseKeypad?.view.transform = .identity
-                self.buttonsContainerController.view?.transform = calcButtonsTransform
+            UIView.animate(withDuration: animDuration, delay: 0, options: animOptions, animations: { [weak self] in
+                self?.bitwiseKeypad?.view.transform = .identity
+                self?.buttonsContainerController.view?.transform = calcButtonsTransform
             }, completion: { [weak self] _ in
                 self?.bitwiseKeypad?.didMove(toParent: self)
                 self?.refreshCalcButtons()
@@ -459,4 +448,3 @@ extension CalculatorViewController {
         updateBitwiseKeypad()
     }
 }
-

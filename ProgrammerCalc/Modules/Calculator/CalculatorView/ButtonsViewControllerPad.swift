@@ -36,7 +36,7 @@ class ButtonsViewControllerPad: StyledViewController, ButtonsContainerController
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.addSubview(buttonsStackView)
+        view.addSubview(buttonsStackView)
         setLayout()
     }
     
@@ -135,10 +135,10 @@ class ButtonsViewControllerPad: StyledViewController, ButtonsContainerController
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            buttonsStackView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 0.95),
-            buttonsStackView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            buttonsStackView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: verticalMargin),
-            buttonsStackView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -verticalMargin),
+            buttonsStackView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.95),
+            buttonsStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            buttonsStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: verticalMargin),
+            buttonsStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -verticalMargin),
         ])
         
         allButtons.forEachButton { button in
@@ -151,6 +151,7 @@ class ButtonsViewControllerPad: StyledViewController, ButtonsContainerController
     }
     
     func refreshCalcButtons() {
+        
     }
     
     func updateButtonsIsEnabled(by forbiddenValues: Set<String>) {

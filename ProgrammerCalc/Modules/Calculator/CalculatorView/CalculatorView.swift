@@ -172,7 +172,7 @@ class CalculatorView: StyledView {
         label.frame = CGRect()
         label.text = "0"
         label.backgroundColor = .clear
-        label.font = UIFont(name: label.fontName, size: 70.0)
+        label.font = .calculatorLabelFont
         label.textAlignment = .right
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.15
@@ -190,7 +190,7 @@ class CalculatorView: StyledView {
         label.text = "0"
         label.numberOfLines = 2
         label.backgroundColor = .clear
-        label.font = UIFont(name: label.fontName, size: 70.0)
+        label.font = .calculatorLabelFont
         label.textAlignment = .right
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.15
