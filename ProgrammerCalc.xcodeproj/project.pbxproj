@@ -353,7 +353,7 @@
 				C06B7F082443B12B009642B9 /* SceneDelegate.swift */,
 				C0E0FF5D2A46E93800E38DF9 /* Style */,
 				C05A169924DD7AF7007B7FB8 /* Helpers */,
-				C0D5BA4C24C340120038A378 /* Model */,
+				C0D5BA4C24C340120038A378 /* Models */,
 				C0E0FF382A44A8CA00E38DF9 /* Modules */,
 				C0E5FC7424BB9B6100BA93CA /* UI */,
 				C068AFA824FA409200BFE754 /* Extensions */,
@@ -393,7 +393,7 @@
 			path = ProgrammerCalcUITests;
 			sourceTree = "<group>";
 		};
-		C0D5BA4C24C340120038A378 /* Model */ = {
+		C0D5BA4C24C340120038A378 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				C00616AD270666AD007BEF89 /* Storage */,
@@ -409,7 +409,7 @@
 				C0F5CF4A270E10870020CE14 /* WordSize.swift */,
 				C0E0FF492A44F6CE00E38DF9 /* PreferenceCellModel.swift */,
 			);
-			path = Model;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		C0D919E627320F9900AD8C05 /* Apperance */ = {
@@ -422,16 +422,16 @@
 			path = Apperance;
 			sourceTree = "<group>";
 		};
-		C0D919E727320FBD00AD8C05 /* AboutModule */ = {
+		C0D919E727320FBD00AD8C05 /* About */ = {
 			isa = PBXGroup;
 			children = (
+				C0D919DB2731F80600AD8C05 /* DescriptionViewController.swift */,
 				C0E0FF532A45B68F00E38DF9 /* AboutAppCell.swift */,
 				C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */,
 				C0E0FF4F2A45963100E38DF9 /* AboutPresenter.swift */,
 				C0E0FF512A4596AE00E38DF9 /* AboutModuleAssembly.swift */,
-				C0D919DB2731F80600AD8C05 /* DescriptionViewController.swift */,
 			);
-			path = AboutModule;
+			path = About;
 			sourceTree = "<group>";
 		};
 		C0E0FF382A44A8CA00E38DF9 /* Modules */ = {
@@ -442,7 +442,7 @@
 				C0E0FF3B2A44A99F00E38DF9 /* WordSize */,
 				C0E0FF3C2A44AA0A00E38DF9 /* Settings */,
 				C0D919E627320F9900AD8C05 /* Apperance */,
-				C0D919E727320FBD00AD8C05 /* AboutModule */,
+				C0D919E727320FBD00AD8C05 /* About */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
