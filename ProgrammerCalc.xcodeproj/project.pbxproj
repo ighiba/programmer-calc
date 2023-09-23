@@ -352,11 +352,11 @@
 				C06B7F062443B12B009642B9 /* AppDelegate.swift */,
 				C06B7F082443B12B009642B9 /* SceneDelegate.swift */,
 				C0E0FF5D2A46E93800E38DF9 /* Style */,
-				C068AFA824FA409200BFE754 /* Extensions */,
 				C05A169924DD7AF7007B7FB8 /* Helpers */,
 				C0D5BA4C24C340120038A378 /* Model */,
-				C0E5FC7424BB9B6100BA93CA /* Views */,
 				C0E0FF382A44A8CA00E38DF9 /* Modules */,
+				C0E5FC7424BB9B6100BA93CA /* UI */,
+				C068AFA824FA409200BFE754 /* Extensions */,
 				C082FB942A35DAF000F3AA60 /* Icons.xcassets */,
 				C02126792ABC7F4F002B072C /* Colors.xcassets */,
 				C06B7F112443B12E009642B9 /* LaunchScreen.storyboard */,
@@ -496,6 +496,7 @@
 			isa = PBXGroup;
 			children = (
 				C09631CD27270D6B001DCD25 /* Style.swift */,
+				C0E0FF572A45D8F000E38DF9 /* Styled.swift */,
 				C09631D527277066001DCD25 /* ButtonStyle.swift */,
 				C09631CF27270FCC001DCD25 /* StyleFactory.swift */,
 				C0E0FF592A45EC5F00E38DF9 /* StyleManager.swift */,
@@ -503,17 +504,16 @@
 			path = Style;
 			sourceTree = "<group>";
 		};
-		C0E5FC7424BB9B6100BA93CA /* Views */ = {
+		C0E5FC7424BB9B6100BA93CA /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				C0E0FF572A45D8F000E38DF9 /* Styled.swift */,
 				C0E0FF5B2A4638CB00E38DF9 /* StyledView.swift */,
 				C09631D72728E9DC001DCD25 /* StyledViewController.swift */,
 				C0E0FF552A45D8D900E38DF9 /* StyledTableViewController.swift */,
 				C0817787271D045E0068CF45 /* PopoverDoneButton.swift */,
 				C077CF6E24DC8DEE008E5F0F /* PreferenceCell.swift */,
 			);
-			path = Views;
+			path = UI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
