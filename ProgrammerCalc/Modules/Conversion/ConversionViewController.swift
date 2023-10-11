@@ -20,14 +20,13 @@ class ConversionViewController: UIViewController, ConversionInput {
     lazy var labelValue: UILabel = conversionView.sliderValueDigit
     private var sliderOldValue: Float = 2.0
 
-    // Haptic feedback generator
-    let generator = UIImpactFeedbackGenerator(style: .medium)
+    private let hapticGenerator = UIImpactFeedbackGenerator(style: .medium)
 
     
     // MARK: - Layout
     
     override func loadView() {
-        self.view = conversionView
+        view = conversionView
     }
     
     override func viewDidLoad() {
@@ -54,13 +53,13 @@ class ConversionViewController: UIViewController, ConversionInput {
         let tap = UITapGestureRecognizer(target: self, action: #selector(tappedOutside))
         tap.numberOfTapsRequired = 1
         tap.cancelsTouchesInView = false
-        self.view.isUserInteractionEnabled = true
-        self.view.addGestureRecognizer(tap)
+        view.isUserInteractionEnabled = true
+        view.addGestureRecognizer(tap)
   
         let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         swipeUp.direction = .up
         swipeUp.cancelsTouchesInView = false
-        self.view.addGestureRecognizer(swipeUp)
+        view.addGestureRecognizer(swipeUp)
     }
     
     func mainPickerSelect(row: Int) {
@@ -81,8 +80,8 @@ class ConversionViewController: UIViewController, ConversionInput {
     }
     
     func hapticImpact() {
-        generator.prepare()
-        generator.impactOccurred()
+        hapticGenerator.prepare()
+        hapticGenerator.impactOccurred()
     }
     
     private func saveConversionSettings() {
@@ -112,7 +111,6 @@ class ConversionViewController: UIViewController, ConversionInput {
         dismissVC()
     }
     
-    // Swipe up to exit
     @objc func handleSwipe( sender: UISwipeGestureRecognizer) {
         let swipeNotInContainer: Bool = isGestureNotInContainer(gesture: sender)
         if swipeNotInContainer {
