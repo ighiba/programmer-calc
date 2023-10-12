@@ -50,16 +50,12 @@ class ConversionViewController: UIViewController, ConversionInput {
     // MARK: - Methods
     
     private func setupGestures() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tappedOutside))
-        tap.numberOfTapsRequired = 1
-        tap.cancelsTouchesInView = false
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tappedOutside), cancelsTouchesInView: false)
+        let swipeUpGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe), direction: .up, cancelsTouchesInView: false)
+        view.addGestureRecognizer(tapGesture)
+        view.addGestureRecognizer(swipeUpGesture)
+        
         view.isUserInteractionEnabled = true
-        view.addGestureRecognizer(tap)
-  
-        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-        swipeUp.direction = .up
-        swipeUp.cancelsTouchesInView = false
-        view.addGestureRecognizer(swipeUp)
     }
     
     func mainPickerSelect(row: Int) {
@@ -107,25 +103,25 @@ class ConversionViewController: UIViewController, ConversionInput {
     
     // MARK: - Actions
     
-    @objc func doneButtonTapped( sender: UIButton) {
+    @objc func doneButtonTapped(_ sender: UIButton) {
         dismissVC()
     }
     
-    @objc func handleSwipe( sender: UISwipeGestureRecognizer) {
+    @objc func handleSwipe(_ sender: UISwipeGestureRecognizer) {
         let swipeNotInContainer: Bool = isGestureNotInContainer(gesture: sender)
         if swipeNotInContainer {
             dismissVC()
         }
     }
     
-    @objc func tappedOutside( sender: UITapGestureRecognizer) {
+    @objc func tappedOutside(_ sender: UITapGestureRecognizer) {
         let taphNotInContainer: Bool = isGestureNotInContainer(gesture: sender)
         if taphNotInContainer {
             dismissVC()
         }
     }
 
-    @objc func sliderValueChanged( sender: UISlider) {
+    @objc func sliderValueChanged(_ sender: UISlider) {
         let sliderNewValue = sender.value.rounded()
         if sliderOldValue != sliderNewValue {
             output.sliderValueDidChanged(sliderNewValue)
