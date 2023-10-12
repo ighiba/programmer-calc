@@ -8,7 +8,7 @@
 
 import UIKit
 
-class WordSizeView: UIView {
+class WordSizeView: UIView, ModalView {
     
     let margin: CGFloat = 20
     
@@ -82,12 +82,8 @@ class WordSizeView: UIView {
         return table
     }()
 
-    private let doneButton: UIButton = {
-        let button = PopoverDoneButton(frame: CGRect())
-
-        button.addTarget(nil, action: #selector(WordSizeViewController.doneButtonTapped), for: .touchUpInside)
-        
-        return button
+    var doneButton: UIButton = {
+        return PopoverDoneButton()
     }()
 
     private let popoverTitle: UILabel = {
@@ -130,7 +126,7 @@ class WordSizeView: UIView {
         }, completion: nil)
     }
 
-    func animateOut( finished: @escaping () -> Void) {
+    func animateOut(completion: @escaping () -> Void) {
         let moveUp = CGAffineTransform(translationX: 0, y: -300)
         let scaleDown = CGAffineTransform(scaleX: 0.01, y: 0.01)
 
@@ -141,7 +137,7 @@ class WordSizeView: UIView {
             self.container.alpha = 0.01
             self.alpha = 0
         }, completion: { _ in
-            finished()
+            completion()
         })
     }
 
@@ -149,4 +145,3 @@ class WordSizeView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 }
-

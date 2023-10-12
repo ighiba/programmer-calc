@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ConversionView: UIView {
+class ConversionView: UIView, ModalView {
     
     private let margin: CGFloat = 10
     
@@ -113,12 +113,8 @@ class ConversionView: UIView {
     }()
     
     // Done button for saving and dismissing vc
-    fileprivate let doneButton: UIButton = {
-        let button = PopoverDoneButton(frame: CGRect())
-        
-        button.addTarget(nil, action: #selector(ConversionViewController.doneButtonTapped), for: .touchUpInside)
-        
-        return button
+    var doneButton: UIButton = {
+        return PopoverDoneButton()
     }()
     
     // Popover title
@@ -210,8 +206,6 @@ class ConversionView: UIView {
         
         slider.tintColor = .systemGreen
         
-        slider.addTarget(nil, action: #selector(ConversionViewController.sliderValueChanged), for: .valueChanged)
-        
         return slider
     }()
     
@@ -234,7 +228,7 @@ class ConversionView: UIView {
 
 
     // Animation for dismissing view
-    func animateOut( finished: @escaping () -> Void) {
+    func animateOut(completion: @escaping () -> Void) {
         // transforms for concatenating
         let moveUp = CGAffineTransform(translationX: 0, y: -300)
         let scaleDown = CGAffineTransform(scaleX: 0.01, y: 0.01)
@@ -247,7 +241,7 @@ class ConversionView: UIView {
             self.alpha = 0
         }, completion: { _ in
             // dismiss vc
-            finished()
+            completion()
         })
     }
 
