@@ -8,14 +8,10 @@
 
 import Foundation
 
-protocol WordSizeInput: AnyObject {
-    func setCheckmarkedIndex(for row: Int)
-}
-
 protocol WordSizeOutput: AnyObject {
     var updateHandler: (() -> Void)? { get set }
-    func obtainCheckmarkIndex()
-    func setNewWordSize(by row: Int)
+    func updateCheckmarkIndex()
+    func didSelectRow(at index: Int)
 }
 
 class WordSizePresenter: WordSizeOutput {
@@ -25,19 +21,20 @@ class WordSizePresenter: WordSizeOutput {
     weak var view: WordSizeInput!
     
     var storage: CalculatorStorage!
-    var wordSize: WordSize!
+    var selectedWordSize: WordSize!
 
     var updateHandler: (() -> Void)?
     
     // MARK: - Methods
     
-    func obtainCheckmarkIndex() {
-        view.setCheckmarkedIndex(for: wordSize.value.rawValue)
+    func updateCheckmarkIndex() {
+        view.setCheckmarkedIndex(for: selectedWordSize.value.rawValue)
     }
     
-    func setNewWordSize(by row: Int) {
-        let newValue = WordSizeType(rawValue: row)!
-        wordSize.setWordSizeValue(newValue)
-        storage.saveData(wordSize)
+    func didSelectRow(at index: Int) {
+        if let newValue = WordSizeType(rawValue: index) {
+            selectedWordSize.setWordSizeValue(newValue)
+            storage.saveData(selectedWordSize)
+        }
     }
 }

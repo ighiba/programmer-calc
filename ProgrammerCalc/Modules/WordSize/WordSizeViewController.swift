@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol WordSizeInput: AnyObject {
+    func setCheckmarkedIndex(for row: Int)
+}
+
 class WordSizeViewController: ModalViewController, WordSizeInput {
 
     var output: WordSizeOutput!
@@ -31,7 +35,7 @@ class WordSizeViewController: ModalViewController, WordSizeInput {
         wordSizeView.wordSizeTableView.delegate = self
         wordSizeView.wordSizeTableView.dataSource = self
 
-        output.obtainCheckmarkIndex()
+        output.updateCheckmarkIndex()
     }
 
     override func updateHandler() {
@@ -78,8 +82,8 @@ extension WordSizeViewController: UITableViewDataSource, UITableViewDelegate {
         tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
         tableView.cellForRow(at: checkmarkedIndexPath)?.accessoryType = .none
 
-        output.setNewWordSize(by: indexPath.row)
-        output.obtainCheckmarkIndex()
+        output.didSelectRow(at: indexPath.row)
+        output.updateCheckmarkIndex()
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
