@@ -75,38 +75,6 @@ class WordSizeView: UIView, ModalView {
         titleLabel.textColor = .label
         titleLabel.font = .systemFont(ofSize: 24, weight: .bold)
     }
-
-    func animateIn() {
-        let duration: CGFloat = 0.35
-        
-        let moveUp = CGAffineTransform(translationX: 0, y: -300)
-        let scaleDown = CGAffineTransform(scaleX: 0.01, y: 0.01)
-        let transform = scaleDown.concatenating(moveUp)
-
-        alpha = 0
-        container.transform = transform
-        
-        UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: .curveEaseIn, animations: { [weak self] in
-            self?.alpha = 1
-            self?.container.transform = .identity
-        }, completion: nil)
-    }
-
-    func animateOut(completion: @escaping () -> Void) {
-        let duration: CGFloat = 0.2
-        
-        let moveUp = CGAffineTransform(translationX: 0, y: -300)
-        let scaleDown = CGAffineTransform(scaleX: 0.01, y: 0.01)
-        let transform = scaleDown.concatenating(moveUp)
-
-        UIView.animate(withDuration: duration, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
-            self?.alpha = 0
-            self?.container.alpha = 0.01
-            self?.container.transform = transform
-        }, completion: { _ in
-            completion()
-        })
-    }
     
     // MARK: - Views
 
