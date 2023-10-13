@@ -8,245 +8,212 @@
 
 import UIKit
 
+private let verticalSpacing: CGFloat = 10
+private let arrowSymbolWidth: CGFloat = 30
+private let labelStackHeight: CGFloat = 35
+private let doneButtonHeight: CGFloat = PopoverDoneButton.defaultHeight
+private let containerItemsWidthMultiplier: CGFloat = 0.9
+private let containerCornerRadius: CGFloat = 24
+private let containerMinimalHeight: CGFloat = 400
+
 class ConversionView: UIView, ModalView {
     
-    private let margin: CGFloat = 10
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setViews()
-    }
-
-    func setViews() {
-        self.frame = UIScreen.main.bounds
-        
-        self.backgroundColor = .clear
-
-        self.addSubview(container)
-        container.addSubview(popoverTitle)
-        container.addSubview(mainPicker)
-        mainPicker.addSubview(arrow)
-        container.addSubview(labelStack)
-        container.addSubview(digitsAfterSlider)
-        container.addSubview(doneButton)
-        
-        container.bringSubviewToFront(popoverTitle)
-        
+    init() {
+        super.init(frame: UIScreen.main.bounds)
+        setupView()
         setupLayout()
-        
-        // Add blur effect
-        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.systemUltraThinMaterialDark)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = self.bounds
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        self.insertSubview(blurEffectView, at: 0)
+        setupStyle()
     }
     
-    // Setup layout
-    func setupLayout() {
-        container.translatesAutoresizingMaskIntoConstraints = false
-        popoverTitle.translatesAutoresizingMaskIntoConstraints = false
-        mainPicker.translatesAutoresizingMaskIntoConstraints = false
-        arrow.translatesAutoresizingMaskIntoConstraints = false
-        labelStack.translatesAutoresizingMaskIntoConstraints = false
-        sliderValueDigit.translatesAutoresizingMaskIntoConstraints = false
-        digitsAfterLabel.translatesAutoresizingMaskIntoConstraints = false
-        digitsAfterSlider.translatesAutoresizingMaskIntoConstraints = false
-        doneButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Activate constraints
-        NSLayoutConstraint.activate([
-            // Set constraints for main container
-            container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            container.widthAnchor.constraint(equalToConstant: modalViewContainerWidth),
-            container.heightAnchor.constraint(greaterThanOrEqualToConstant: 400),
-            
-            // Set constraints for label
-            popoverTitle.topAnchor.constraint(equalTo: container.topAnchor, constant: margin),
-            popoverTitle.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.1),
-            popoverTitle.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
-            popoverTitle.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            
-            // Set constraints for picker
-            mainPicker.topAnchor.constraint(equalTo: popoverTitle.topAnchor, constant: 2 * margin),
-            mainPicker.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.52),
-            mainPicker.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
-            mainPicker.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            
-            // Set contraints for picker's arrow
-            arrow.centerYAnchor.constraint(equalTo: mainPicker.centerYAnchor),
-            arrow.centerXAnchor.constraint(equalTo: mainPicker.centerXAnchor),
-            arrow.widthAnchor.constraint(equalToConstant: 30),
-            arrow.heightAnchor.constraint(equalToConstant: 30),
-            
-            // Set constraints for digitsAfterLabel
-            labelStack.topAnchor.constraint(equalTo: mainPicker.bottomAnchor),
-            labelStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            labelStack.heightAnchor.constraint(equalToConstant: 35),
-            labelStack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
-            
-            digitsAfterLabel.widthAnchor.constraint(equalTo: labelStack.widthAnchor, multiplier: 0.9),
-            sliderValueDigit.widthAnchor.constraint(equalTo: labelStack.widthAnchor, multiplier: 0.1),
-            
-            // Set constraints for slider
-            digitsAfterSlider.topAnchor.constraint(equalTo: labelStack.bottomAnchor, constant: margin),
-            digitsAfterSlider.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -margin * 1.7),
-            digitsAfterSlider.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
-            digitsAfterSlider.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-
-            // Set contraints for done button
-            doneButton.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -margin * 1.7),
-            doneButton.heightAnchor.constraint(equalToConstant: 50),
-            doneButton.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.9),
-            doneButton.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-        ])
-    }
-    
-    let container: UIView = {
-        let view = UIView()
-
-        view.backgroundColor = .systemGray6
-        view.layer.cornerRadius = 24
-
-        return view
-    }()
-    
-    // Done button for saving and dismissing vc
-    var doneButton: UIButton = {
-        return PopoverDoneButton()
-    }()
-    
-    // Popover title
-    fileprivate let popoverTitle: UILabel = {
-        let label = UILabel()
-        
-        label.text = NSLocalizedString("Conversion settings", comment: "")
-        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        label.textAlignment = .center
-        label.textColor = .label
-        
-        return label
-    }()
-    
-    // Picker for mainLabel
-    let mainPicker: ConversionPicker = {
-        let picker = ConversionPicker()
-        
-        picker.delegate = picker
-        picker.dataSource = picker
-        
-        picker.backgroundColor = .systemGray6
-        
-        let selected = picker.selectedRow(inComponent: 0)
-        
-        return picker
-    }()
-    
-    // Dummy spacer for mainPicker components
-    fileprivate let arrow: UILabel = {
-        let label = UILabel()
-
-        label.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        label.text = "→"
-        label.font = UIFont(name: "HelveticaNeue-Thin", size: 22.0)
-        label.textAlignment = .center
-        label.textColor = .label
-        
-        return label
-    }()
-    
-    // Label with info of current digits after point
-    fileprivate let digitsAfterLabel: UILabel = {
-        let label = UILabel()
-        
-        label.frame = CGRect(x: 0, y: 0, width: 100, height: 30)
-        label.text = NSLocalizedString("Max number of digits after point: ", comment: "")
-        label.font = UIFont.systemFont(ofSize: 18, weight: .light)
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.15
-        label.textColor = .label
-        
-        return label
-    }()
-    
-    // Label for showing current value of the slider
-    let sliderValueDigit: UILabel = {
-        let label = UILabel()
-        
-        label.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        // default value
-        label.text = "8"
-        label.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.75
-        label.textColor = .label
-        
-        return label
-    }()
-    
-    // Stack for label
-    lazy var labelStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [digitsAfterLabel, sliderValueDigit])
-        stack.axis = .horizontal
-        stack.alignment = .fill
-        
-        return stack
-    }()
-    
-    // Slider for changing number of digits after point
-    let digitsAfterSlider: UISlider = {
-        let slider = UISlider()
-        
-        slider.minimumValue = 1
-        slider.maximumValue = 4
-        
-        // Initial value
-        slider.value = 3
-        
-        slider.tintColor = .systemGreen
-        
-        return slider
-    }()
-    
-    // Animation for presenting view
-    func animateIn() {
-        let moveUp = CGAffineTransform(translationX: 0, y: -300)
-        let scaleDown = CGAffineTransform(scaleX: 0.01, y: 0.01)
-        let transform = scaleDown.concatenating(moveUp)
-
-        // preparing container for animation
-        // making it hidden
-        self.container.transform = transform
-        self.alpha = 0
-        
-        UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: .curveEaseIn, animations: {
-            self.container.transform = .identity
-            self.alpha = 1
-        }, completion: nil)
-    }
-
-
-    // Animation for dismissing view
-    func animateOut(completion: @escaping () -> Void) {
-        // transforms for concatenating
-        let moveUp = CGAffineTransform(translationX: 0, y: -300)
-        let scaleDown = CGAffineTransform(scaleX: 0.01, y: 0.01)
-
-        let transform = scaleDown.concatenating(moveUp)
-
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
-            self.container.transform = transform
-            self.container.alpha = 0.01
-            self.alpha = 0
-        }, completion: { _ in
-            // dismiss vc
-            completion()
-        })
-    }
-
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Methods
+
+    private func setupView() {
+        let blurredBackgroundView = makeBlurredBackgroundView()
+        insertSubview(blurredBackgroundView, at: 0)
+        
+        addSubview(container)
+        container.addSubview(titleLabel)
+        container.addSubview(numberSystemsPicker)
+        container.addSubview(sliderLabelsStack)
+        container.addSubview(slider)
+        container.addSubview(doneButton)
+        container.bringSubviewToFront(titleLabel)
+        
+        numberSystemsPicker.addSubview(arrowSymbol)
+    }
+    
+    private func setupLayout() {
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        container.translatesAutoresizingMaskIntoConstraints = false
+        numberSystemsPicker.translatesAutoresizingMaskIntoConstraints = false
+        arrowSymbol.translatesAutoresizingMaskIntoConstraints = false
+        sliderLabelsStack.translatesAutoresizingMaskIntoConstraints = false
+        sliderTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        sliderValueLabel.translatesAutoresizingMaskIntoConstraints = false
+        slider.translatesAutoresizingMaskIntoConstraints = false
+        doneButton.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            titleLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            titleLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: verticalSpacing),
+            titleLabel.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.1),
+            titleLabel.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: containerItemsWidthMultiplier),
+
+            container.centerXAnchor.constraint(equalTo: centerXAnchor),
+            container.centerYAnchor.constraint(equalTo: centerYAnchor),
+            container.widthAnchor.constraint(equalToConstant: modalViewContainerWidth),
+            container.heightAnchor.constraint(greaterThanOrEqualToConstant: containerMinimalHeight),
+
+            numberSystemsPicker.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            numberSystemsPicker.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 2 * verticalSpacing),
+            numberSystemsPicker.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.52),
+            numberSystemsPicker.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: containerItemsWidthMultiplier),
+
+            arrowSymbol.centerYAnchor.constraint(equalTo: numberSystemsPicker.centerYAnchor),
+            arrowSymbol.centerXAnchor.constraint(equalTo: numberSystemsPicker.centerXAnchor),
+            arrowSymbol.widthAnchor.constraint(equalToConstant: arrowSymbolWidth),
+            arrowSymbol.heightAnchor.constraint(equalToConstant: arrowSymbolWidth),
+
+            sliderLabelsStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            sliderLabelsStack.topAnchor.constraint(equalTo: numberSystemsPicker.bottomAnchor),
+            sliderLabelsStack.heightAnchor.constraint(equalToConstant: labelStackHeight),
+            sliderLabelsStack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: containerItemsWidthMultiplier),
+            
+            sliderTitleLabel.widthAnchor.constraint(equalTo: sliderLabelsStack.widthAnchor, multiplier: containerItemsWidthMultiplier),
+            
+            sliderValueLabel.widthAnchor.constraint(equalTo: sliderLabelsStack.widthAnchor, multiplier: 0.1),
+            
+            slider.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            slider.topAnchor.constraint(equalTo: sliderLabelsStack.bottomAnchor, constant: verticalSpacing),
+            slider.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -verticalSpacing * 1.7),
+            slider.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: containerItemsWidthMultiplier),
+
+            doneButton.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            doneButton.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -verticalSpacing * 1.7),
+            doneButton.heightAnchor.constraint(equalToConstant: doneButtonHeight),
+            doneButton.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: containerItemsWidthMultiplier),
+        ])
+    }
+    
+    private func setupStyle() {
+        backgroundColor = .clear
+        
+        container.backgroundColor = .systemGray6
+
+        titleLabel.textColor = .label
+        titleLabel.font = .systemFont(ofSize: 24, weight: .bold)
+
+        numberSystemsPicker.backgroundColor = .systemGray6
+        
+        arrowSymbol.textColor = .label
+        arrowSymbol.font = UIFont(name: "HelveticaNeue-Thin", size: 22.0)
+        
+        sliderTitleLabel.textColor = .label
+        sliderTitleLabel.font = UIFont.systemFont(ofSize: 18, weight: .light)
+        
+        sliderValueLabel.textColor = .label
+        sliderValueLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
+        
+        slider.tintColor = .systemGreen
+    }
+
+    func animateIn() {
+        let duration: CGFloat = 0.35
+        
+        let moveUp = CGAffineTransform(translationX: 0, y: -300)
+        let scaleDown = CGAffineTransform(scaleX: 0.01, y: 0.01)
+        let transform = scaleDown.concatenating(moveUp)
+
+        alpha = 0
+        container.transform = transform
+        
+        UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, options: .curveEaseIn, animations: { [weak self] in
+            self?.alpha = 1
+            self?.container.transform = .identity
+        }, completion: nil)
+    }
+
+    func animateOut(completion: @escaping () -> Void) {
+        let duration: CGFloat = 0.2
+        
+        let moveUp = CGAffineTransform(translationX: 0, y: -300)
+        let scaleDown = CGAffineTransform(scaleX: 0.01, y: 0.01)
+        let transform = scaleDown.concatenating(moveUp)
+
+        UIView.animate(withDuration: duration, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
+            self?.alpha = 0
+            self?.container.alpha = 0.01
+            self?.container.transform = transform
+        }, completion: { _ in
+            completion()
+        })
+    }
+    
+    // MARK: - Views
+    
+    let container: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = containerCornerRadius
+        return view
+    }()
+
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = NSLocalizedString("Conversion settings", comment: "")
+        label.textAlignment = .center
+        return label
+    }()
+    
+    let numberSystemsPicker: ConversionPicker = {
+        let picker = ConversionPicker()
+        picker.delegate = picker
+        picker.dataSource = picker
+        return picker
+    }()
+    
+    private let arrowSymbol: UILabel = {
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: arrowSymbolWidth, height: arrowSymbolWidth))
+        label.text = "→"
+        label.textAlignment = .center
+        return label
+    }()
+    
+    lazy var sliderLabelsStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [sliderTitleLabel, sliderValueLabel])
+        stack.axis = .horizontal
+        stack.alignment = .fill
+        return stack
+    }()
+    
+    private let sliderTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = NSLocalizedString("Max number of digits after point: ", comment: "")
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.15
+        return label
+    }()
+
+    let sliderValueLabel: UILabel = {
+        let label = UILabel()
+        label.text = "8"
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.75
+        return label
+    }()
+
+    let slider: UISlider = {
+        let slider = UISlider()
+        slider.minimumValue = 1
+        slider.maximumValue = 4
+        slider.value = 3
+        return slider
+    }()
+
+    var doneButton: UIButton = {
+        return PopoverDoneButton()
+    }()
 }

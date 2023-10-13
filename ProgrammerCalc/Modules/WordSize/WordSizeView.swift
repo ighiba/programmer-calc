@@ -70,10 +70,10 @@ class WordSizeView: UIView, ModalView {
     private func setupStyle() {
         backgroundColor = .clear
 
+        container.backgroundColor = .systemGray6
+
         titleLabel.textColor = .label
         titleLabel.font = .systemFont(ofSize: 24, weight: .bold)
-        
-        container.backgroundColor = .systemGray6
     }
 
     func animateIn() {

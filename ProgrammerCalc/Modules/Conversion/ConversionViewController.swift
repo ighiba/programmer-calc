@@ -39,26 +39,26 @@ class ConversionViewController: ModalViewController, ConversionInput {
     
     override func setupTargets() {
         super.setupTargets()
-        conversionView.digitsAfterSlider.addTarget(self, action: #selector(sliderValueDidChange), for: .valueChanged)
+        conversionView.slider.addTarget(self, action: #selector(sliderValueDidChange), for: .valueChanged)
     }
     
     // MARK: - Methods
     
     func mainPickerSelectRow(_ row: Int) {
-        conversionView.mainPicker.selectRow(row, inComponent: 0, animated: false)
+        conversionView.numberSystemsPicker.selectRow(row, inComponent: 0, animated: false)
     }
     
     func converterPickerSelectRow(_ row: Int) {
-        conversionView.mainPicker.selectRow(row, inComponent: 1, animated: false)
+        conversionView.numberSystemsPicker.selectRow(row, inComponent: 1, animated: false)
     }
     
     func setLabelValueText(_ text: String) {
-        conversionView.sliderValueDigit.text = text
+        conversionView.sliderValueLabel.text = text
     }
     
     func setSliderValue(_ value: Float) {
-        conversionView.digitsAfterSlider.value = value
-        sliderValueOld = conversionView.digitsAfterSlider.value
+        conversionView.slider.value = value
+        sliderValueOld = conversionView.slider.value
     }
     
     func hapticImpact() {
@@ -67,9 +67,9 @@ class ConversionViewController: ModalViewController, ConversionInput {
     }
     
     private func saveConversionSettings() {
-        let mainSystemSelectedRow = conversionView.mainPicker.selectedRow(inComponent: 0)
-        let converterSystemSelectedRow = conversionView.mainPicker.selectedRow(inComponent: 1)
-        let sliderValue = conversionView.digitsAfterSlider.value.rounded()
+        let mainSystemSelectedRow = conversionView.numberSystemsPicker.selectedRow(inComponent: 0)
+        let converterSystemSelectedRow = conversionView.numberSystemsPicker.selectedRow(inComponent: 1)
+        let sliderValue = conversionView.slider.value.rounded()
         output.saveConversionSettings(mainRow: mainSystemSelectedRow, converterRow: converterSystemSelectedRow, sliderValue: sliderValue)
     }
     
