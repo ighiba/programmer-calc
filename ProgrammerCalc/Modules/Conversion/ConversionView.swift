@@ -59,7 +59,7 @@ class ConversionView: UIView, ModalView {
             // Set constraints for main container
             container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            container.widthAnchor.constraint(equalToConstant: modalViewWidth),
+            container.widthAnchor.constraint(equalToConstant: modalViewContainerWidth),
             container.heightAnchor.constraint(greaterThanOrEqualToConstant: 400),
             
             // Set constraints for label

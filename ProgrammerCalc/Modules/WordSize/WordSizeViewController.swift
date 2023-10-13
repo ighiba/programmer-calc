@@ -28,8 +28,8 @@ class WordSizeViewController: ModalViewController, WordSizeInput {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        wordSizeView.wordSizeTable.delegate = self
-        wordSizeView.wordSizeTable.dataSource = self
+        wordSizeView.wordSizeTableView.delegate = self
+        wordSizeView.wordSizeTableView.dataSource = self
 
         output.obtainCheckmarkIndex()
     }

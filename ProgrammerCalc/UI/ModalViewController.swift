@@ -15,6 +15,16 @@ protocol ModalView: UIView {
     func animateOut(completion: @escaping () -> Void)
 }
 
+extension ModalView {
+    func makeBlurredBackgroundView() -> UIView {
+        let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        return blurEffectView
+    }
+}
+
 class ModalViewController: UIViewController {
     
     var modalView: ModalView
