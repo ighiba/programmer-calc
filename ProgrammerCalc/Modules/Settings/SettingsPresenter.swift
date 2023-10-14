@@ -8,13 +8,6 @@
 
 import UIKit
 
-protocol SettingsInput: AnyObject {
-    func reloadTable()
-    func setTappingSoundsSwitcherState(_ isOn: Bool)
-    func setHapticFeedbackSwitcherState(_ isOn: Bool)
-    func push(_ viewController: UIViewController)
-}
-
 protocol SettingsOutput: AnyObject {
     var updateHandler: (() -> Void)? { get set }
     func obtainSettings()
@@ -42,8 +35,8 @@ class SettingsPresenter: SettingsOutput {
         let loadedSettings: Settings = storage.loadData()
         settings.setSettings(loadedSettings)
         
-        view.setTappingSoundsSwitcherState(settings.tappingSounds)
-        view.setHapticFeedbackSwitcherState(settings.hapticFeedback)
+        view.setTappingSoundsSwitcherState(isOn: settings.tappingSounds)
+        view.setHapticFeedbackSwitcherState(isOn: settings.hapticFeedback)
     }
     
     func updateTappingSounds(_ state: Bool) {

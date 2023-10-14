@@ -23,7 +23,7 @@ class AppearanceViewController: StyledTableViewController, AppearanceInput {
                 id: "useSystemAppearance",
                 label: NSLocalizedString("Use system appearance", comment: ""),
                 cellType: .switcher,
-                stateDidChanged: useSystemAppearanceDidChanged
+                stateChangeHandler: useSystemAppearanceDidChanged
             )
         ],
         [

@@ -28,12 +28,12 @@ final class PreferenceCellModel {
         label: String,
         cellType: PreferenceCellType,
         systemImageName: String? = nil,
-        stateDidChanged: ((Bool) -> Void)? = nil
+        stateChangeHandler: ((Bool) -> Void)? = nil
     ) {
         self.id = id
         self.label = label
         self.cellType = cellType
         self.systemImageName = systemImageName
-        self.stateDidChanged = stateDidChanged
+        self.stateDidChanged = stateChangeHandler
     }
 }
