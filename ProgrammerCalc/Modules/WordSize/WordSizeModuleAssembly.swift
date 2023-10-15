@@ -17,7 +17,7 @@ class WordSizeModuleAssembly {
         presenter.view = view
         
         presenter.storage = CalculatorStorage()
-        presenter.selectedWordSize = WordSize.shared
+        presenter.currentWordSize = WordSize.shared
         
         return view
     }

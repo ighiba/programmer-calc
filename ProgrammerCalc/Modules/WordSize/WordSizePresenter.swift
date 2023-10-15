@@ -21,20 +21,20 @@ class WordSizePresenter: WordSizeOutput {
     weak var view: WordSizeInput!
     
     var storage: CalculatorStorage!
-    var selectedWordSize: WordSize!
+    var currentWordSize: WordSize!
 
     var updateHandler: (() -> Void)?
     
     // MARK: - Methods
     
     func updateCheckmarkIndex() {
-        view.setCheckmarkedIndex(for: selectedWordSize.value.rawValue)
+        view.setCheckmarkedIndex(for: currentWordSize.value.rawValue)
     }
     
     func didSelectRow(at index: Int) {
         if let newValue = WordSizeType(rawValue: index) {
-            selectedWordSize.setWordSizeValue(newValue)
-            storage.saveData(selectedWordSize)
+            currentWordSize.setWordSizeValue(newValue)
+            storage.saveData(currentWordSize)
         }
     }
 }
