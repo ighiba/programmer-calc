@@ -27,7 +27,7 @@ class SettingsViewController: StyledTableViewController, SettingsInput, UIAdapti
     
     var output: SettingsOutput!
     
-    lazy var preferenceList = configurePreferenceCellModelList()
+    lazy var preferenceList = configurePreferenceList()
 
     // MARK: - Layout
 
@@ -42,7 +42,6 @@ class SettingsViewController: StyledTableViewController, SettingsInput, UIAdapti
         tableView.delegate = self
 
         setupNavigationBar()
-        
         reloadTable()
     }
    
@@ -61,7 +60,7 @@ class SettingsViewController: StyledTableViewController, SettingsInput, UIAdapti
     
     // MARK: - Methods
 
-    private func configurePreferenceCellModelList() -> [[PreferenceCellModel]] {
+    private func configurePreferenceList() -> [[PreferenceCellModel]] {
         return [
             [
                 PreferenceCellModel(

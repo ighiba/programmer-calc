@@ -8,16 +8,6 @@
 
 import UIKit
 
-protocol AppearanceInput: AnyObject {
-    func reloadTable()
-    func setIsUseSystemAppearence(_ state: Bool)
-    func setCheckmarkIndex(for row: Int)
-    func updateInterfaceLayout(_ style: UIUserInterfaceStyle)
-    func updateNavBarStyle(_ style: Style)
-    func overrideUserInterfaceStyle(_ style: UIUserInterfaceStyle)
-    func animateUpdateRootViewLayoutSubviews()
-}
-
 protocol AppearanceOutput: AnyObject {
     func obtainStyleSettings()
     func obtainCheckmarkIndex()
