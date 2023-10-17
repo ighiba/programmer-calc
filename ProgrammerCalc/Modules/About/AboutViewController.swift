@@ -9,6 +9,10 @@
 import UIKit
 import MessageUI
 
+private let descriptionIcon = UIImage(systemName: "doc.plaintext")
+private let rateAppIcon = UIImage(systemName: "star.square")
+private let contactUsIcon = UIImage(systemName: "envelope")
+
 class AboutViewController: StyledTableViewController, AboutInput, MFMailComposeViewControllerDelegate {
     
     // MARK: - Properties
@@ -58,19 +62,19 @@ class AboutViewController: StyledTableViewController, AboutInput, MFMailComposeV
                 id: "description",
                 label: NSLocalizedString("Description", comment: ""),
                 cellType: .standart,
-                systemImageName: "doc.plaintext"
+                cellIcon: descriptionIcon
             ),
             PreferenceCellModel(
                 id: "rateApp",
                 label: NSLocalizedString("Rate app", comment: ""),
                 cellType: .standart,
-                systemImageName: "star.square"
+                cellIcon: rateAppIcon
             ),
             PreferenceCellModel(
                 id: "contactUs",
                 label: NSLocalizedString("Contact us", comment: ""),
                 cellType: .standart,
-                systemImageName: "envelope"
+                cellIcon: contactUsIcon
             )
         ]
     }

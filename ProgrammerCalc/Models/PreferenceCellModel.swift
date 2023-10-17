@@ -6,7 +6,7 @@
 //  Copyright © 2023 ighiba. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 enum PreferenceCellType {
     case switcher
@@ -19,21 +19,21 @@ final class PreferenceCellModel {
     var id: String
     var label: String
     var cellType: PreferenceCellType
+    var cellIcon: UIImage?
     var state: Bool?
     var stateDidChanged: ((Bool) -> Void)?
-    var systemImageName: String?
-    
+
     init(
         id: String,
         label: String,
         cellType: PreferenceCellType,
-        systemImageName: String? = nil,
+        cellIcon: UIImage? = nil,
         stateChangeHandler: ((Bool) -> Void)? = nil
     ) {
         self.id = id
         self.label = label
         self.cellType = cellType
-        self.systemImageName = systemImageName
+        self.cellIcon = cellIcon
         self.stateDidChanged = stateChangeHandler
     }
 }
