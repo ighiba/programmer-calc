@@ -8,30 +8,19 @@
 
 import UIKit
 
-class AboutAppCell: UITableViewCell {
+private let iconWidth: CGFloat = 114
+private let verticalSpacing: CGFloat = 10
+
+final class AboutAppCell: UITableViewCell {
     
     private let appIcon = UIImageView()
     private let versionLabel = UILabel()
     
-    private let iconWidth: CGFloat = 114
-    
     init(iconName: String, appVersion: String) {
         super.init(style: .default, reuseIdentifier: "aboutAppCell")
-
-        appIcon.image = UIImage(named: iconName)
-        appIcon.layer.cornerRadius = 18
-        appIcon.layer.masksToBounds = true
-
-        versionLabel.text = "Programmer's Calculator \(appVersion)"
-        versionLabel.font = UIFont.systemFont(ofSize: 12, weight: .thin)
-        versionLabel.textColor = .systemGray
-        
-        self.addSubview(appIcon)
-        self.addSubview(versionLabel)
-
-        self.selectionStyle = .none
-        
-        self.setNeedsUpdateConstraints()
+        setupView(iconName: iconName, appVersion: appVersion)
+        setupStyle()
+        setNeedsUpdateConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -41,17 +30,37 @@ class AboutAppCell: UITableViewCell {
     override func updateConstraints() {
         appIcon.translatesAutoresizingMaskIntoConstraints = false
         versionLabel.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
+            appIcon.centerXAnchor.constraint(equalTo: centerXAnchor),
+            appIcon.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -verticalSpacing),
             appIcon.widthAnchor.constraint(equalToConstant: iconWidth),
             appIcon.heightAnchor.constraint(equalToConstant: iconWidth),
-            appIcon.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            appIcon.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: -10),
-            versionLabel.topAnchor.constraint(equalTo: appIcon.bottomAnchor, constant: 10),
-            versionLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+
+            versionLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            versionLabel.topAnchor.constraint(equalTo: appIcon.bottomAnchor, constant: verticalSpacing),
             versionLabel.widthAnchor.constraint(equalToConstant: versionLabel.intrinsicContentSize.width),
             versionLabel.heightAnchor.constraint(equalToConstant: versionLabel.intrinsicContentSize.height),
         ])
         
         super.updateConstraints()
+    }
+    
+    private func setupView(iconName: String, appVersion: String) {
+        selectionStyle = .none
+        
+        appIcon.image = UIImage(named: iconName)
+        appIcon.layer.cornerRadius = 18
+        appIcon.layer.masksToBounds = true
+
+        versionLabel.text = "Programmer's Calculator \(appVersion)"
+        
+        addSubview(appIcon)
+        addSubview(versionLabel)
+    }
+    
+    private func setupStyle() {
+        versionLabel.font = UIFont.systemFont(ofSize: 12, weight: .thin)
+        versionLabel.textColor = .systemGray
     }
 }
