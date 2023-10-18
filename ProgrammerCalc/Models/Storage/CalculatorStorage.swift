@@ -9,6 +9,7 @@
 import Foundation
 
 class CalculatorStorage {
+    
     private let storage = UserDefaults.standard
     
     func loadData<T: Storable>() -> T {

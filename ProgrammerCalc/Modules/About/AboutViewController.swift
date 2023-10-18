@@ -7,8 +7,11 @@
 //
 
 import UIKit
-import StoreKit
 import MessageUI
+
+private let descriptionIcon = UIImage(systemName: "doc.plaintext")
+private let rateAppIcon = UIImage(systemName: "star.square")
+private let contactUsIcon = UIImage(systemName: "envelope")
 
 class AboutViewController: StyledTableViewController, AboutInput, MFMailComposeViewControllerDelegate {
     
@@ -16,41 +19,23 @@ class AboutViewController: StyledTableViewController, AboutInput, MFMailComposeV
     
     var output: AboutOutput!
     
-    lazy var cellModelList = [
-        PreferenceCellModel(
-            id: "otherCell",
-            label: NSLocalizedString("Description", comment: ""),
-            cellType: .standart,
-            systemImageName: "doc.plaintext"
-        ),
-        PreferenceCellModel(
-            id: "otherCell",
-            label: NSLocalizedString("Rate app", comment: ""),
-            cellType: .standart,
-            systemImageName: "star.square"
-        ),
-        PreferenceCellModel(
-            id: "otherCell",
-            label: NSLocalizedString("Contact us", comment: ""),
-            cellType: .standart,
-            systemImageName: "envelope"
-        )
-    ]
+    lazy var preferenceList = configurePreferenceList()
     
     // MARK: - Layout
     
     override func loadView() {
-        self.tableView = UITableView(frame: .zero, style: .insetGrouped)
+        tableView = UITableView(frame: .zero, style: .insetGrouped)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.dataSource = self
-        self.tableView.delegate = self
-
-        self.title = NSLocalizedString("About app", comment: "")
         
-        self.tableView.tintColor = self.navigationController?.navigationBar.tintColor
+        tableView.dataSource = self
+        tableView.delegate = self
+
+        title = NSLocalizedString("About app", comment: "")
+        
+        tableView.tintColor = navigationController?.navigationBar.tintColor
         
         reloadTable()
     }
@@ -62,20 +47,44 @@ class AboutViewController: StyledTableViewController, AboutInput, MFMailComposeV
 
     override func styleWillUpdate(with style: Style) {
         super.styleWillUpdate(with: style)
-        for row in 0 ..< cellModelList.count {
-            let cell = self.tableView.cellForRow(at: IndexPath(row: row, section: 1))
+        for row in 0 ..< preferenceList.count {
+            let indexPath = IndexPath(row: row, section: 1)
+            let cell = tableView.cellForRow(at: indexPath)
             cell?.imageView?.tintColor = style.tintColor
         }
     }
     
     // MARK: - Methods
     
+    private func configurePreferenceList() -> [PreferenceCellModel] {
+        return [
+            PreferenceCellModel(
+                id: "description",
+                label: NSLocalizedString("Description", comment: ""),
+                cellType: .standart,
+                cellIcon: descriptionIcon
+            ),
+            PreferenceCellModel(
+                id: "rateApp",
+                label: NSLocalizedString("Rate app", comment: ""),
+                cellType: .standart,
+                cellIcon: rateAppIcon
+            ),
+            PreferenceCellModel(
+                id: "contactUs",
+                label: NSLocalizedString("Contact us", comment: ""),
+                cellType: .standart,
+                cellIcon: contactUsIcon
+            )
+        ]
+    }
+    
     func reloadTable() {
-        self.tableView.reloadData()
+        tableView.reloadData()
     }
     
     func push(_ viewController: UIViewController) {
-        self.navigationController?.pushViewController(viewController, animated: true)
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     func openContactFormWith(recipients: [String], subject: String, message: String) {
@@ -87,18 +96,17 @@ class AboutViewController: StyledTableViewController, AboutInput, MFMailComposeV
             mailController.setSubject(subject)
             mailController.setMessageBody(message, isHTML: false)
             
-            self.present(mailController, animated: true, completion: nil)
+            present(mailController, animated: true, completion: nil)
         } else {
-
-            let alert = UIAlertController(title:  NSLocalizedString("Error", comment: "Error alert title"),
-                                        message: NSLocalizedString("Mail services are not available", comment: ""),
-                                        preferredStyle: .alert)
+            let alert = UIAlertController(
+                title:  NSLocalizedString("Error", comment: "Error alert title"),
+                message: NSLocalizedString("Mail services are not available", comment: ""),
+                preferredStyle: .alert
+            )
             let okAction = UIAlertAction(title: "OK", style: .cancel)
             alert.addAction(okAction)
             
-            self.present(alert, animated: true)
-
-            return
+            present(alert, animated: true)
         }
     }
 
@@ -119,16 +127,18 @@ extension AboutViewController {
         case 0:
             return 1
         default:
-            return cellModelList.count
+            return preferenceList.count
         }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath == [0,0] {
+        let isAppIconCell = indexPath == [0, 0]
+        if isAppIconCell {
             let appVersion = UIApplication.appVersion ?? "1.0"
             return AboutAppCell(iconName: "icon-ios-about.png", appVersion: appVersion)
         } else {
-            let cell = PreferenceCell(cellModelList[indexPath.row])
+            let preferenceModel = preferenceList[indexPath.row]
+            let cell = PreferenceCell(preferenceModel)
             cell.imageView?.tintColor = output.obtainTintColor()
             return cell
         }
@@ -140,15 +150,21 @@ extension AboutViewController {
 extension AboutViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath {
-        case [1,0]: output.openDescription()
-        case [1,1]: output.openRateAppForm()
-        case [1,2]: output.openContactForm()
-        default: break
+        case [1,0]:
+            output.openDescription()
+        case [1,1]:
+            output.openRateAppForm()
+        case [1,2]:
+            output.openContactForm()
+        default:
+            break
         }
+        
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath == [0,0] ? 180 : 44
+        let isAppIconCell = indexPath == [0, 0]
+        return isAppIconCell ? 180 : 44
     }
 }

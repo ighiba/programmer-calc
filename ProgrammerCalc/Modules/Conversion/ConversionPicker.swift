@@ -9,7 +9,7 @@
 import UIKit
 
 class ConversionPicker: UIPickerView {
-    var pickerWidth: CGFloat { modalViewWidth / 2 - 35 }
+    var pickerWidth: CGFloat { modalViewContainerWidth / 2 - 35 }
 }
 
 // MARK: - DataSource

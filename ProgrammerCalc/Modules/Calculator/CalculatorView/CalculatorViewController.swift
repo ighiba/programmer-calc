@@ -209,7 +209,7 @@ class CalculatorViewController: StyledViewController, CalculatorInput, Calculato
     }
 
     private func updateIsSignedButton(processSigned: Bool) {
-        if let isSignedButton = self.view.viewWithTag(tagCalculatorButtonIsSigned) as? CalculatorButton {
+        if let isSignedButton = view.viewWithTag(tagCalculatorButtonIsSigned) as? CalculatorButton {
             isSignedButton.changeTitleIsSignedButtonFor(processSigned)
         }
     }

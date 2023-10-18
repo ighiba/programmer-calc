@@ -9,63 +9,39 @@
 import UIKit
 import MessageUI
 
-fileprivate let tappingSoundsId = "tappingSounds"
-fileprivate let hapticFeedbackId = "hapticFeedback"
+private let appearanceId = "appearance"
+private let tappingSoundsId = "tappingSounds"
+private let hapticFeedbackId = "hapticFeedback"
+private let aboutId = "about"
+
+protocol SettingsInput: AnyObject {
+    func reloadTable()
+    func setTappingSoundsSwitcherState(isOn: Bool)
+    func setHapticFeedbackSwitcherState(isOn: Bool)
+    func push(_ viewController: UIViewController)
+}
 
 class SettingsViewController: StyledTableViewController, SettingsInput, UIAdaptivePresentationControllerDelegate {
     
     // MARK: - Properties
     
     var output: SettingsOutput!
+    
+    lazy var preferenceList = configurePreferenceList()
 
-    lazy var doneItem = UIBarButtonItem(barButtonSystemItem: .done,
-                                      target: self,
-                                      action: #selector(SettingsViewController.closeButtonTapped))
-    
-    lazy var preferenceList = [
-        [
-            PreferenceCellModel(
-                id: "appearance",
-                label: NSLocalizedString("Appearance", comment: ""),
-                cellType: .button
-            ),
-            PreferenceCellModel(
-                id: tappingSoundsId,
-                label:  NSLocalizedString("Tapping sounds", comment: ""),
-                cellType: .switcher,
-                stateDidChanged: tappingSoundsDidChanged
-            ),
-            PreferenceCellModel(
-                id: hapticFeedbackId,
-                label: NSLocalizedString("Haptic feedback", comment: ""),
-                cellType: .switcher,
-                stateDidChanged: hapticFeedbackDidChanged
-            )
-        ],
-        [
-            PreferenceCellModel(
-                id: "about",
-                label: NSLocalizedString("About app", comment: ""),
-                cellType: .standart
-            )
-        ]
-    ]
-    
     // MARK: - Layout
 
     override func loadView() {
-        self.tableView = UITableView(frame: .zero, style: .insetGrouped)
+        tableView = UITableView(frame: .zero, style: .insetGrouped)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.dataSource = self
-        self.tableView.delegate = self
+        tableView.dataSource = self
+        tableView.delegate = self
 
-        self.navigationController?.navigationBar.topItem?.rightBarButtonItem = doneItem
-        self.navigationController?.navigationBar.topItem?.title = NSLocalizedString("Settings", comment: "")
-        
+        setupNavigationBar()
         reloadTable()
     }
    
@@ -83,41 +59,82 @@ class SettingsViewController: StyledTableViewController, SettingsInput, UIAdapti
     }
     
     // MARK: - Methods
-    
-    func reloadTable() {
-        self.tableView.reloadData()
+
+    private func configurePreferenceList() -> [[PreferenceCellModel]] {
+        return [
+            [
+                PreferenceCellModel(
+                    id: appearanceId,
+                    label: NSLocalizedString("Appearance", comment: ""),
+                    cellType: .button
+                ),
+                PreferenceCellModel(
+                    id: tappingSoundsId,
+                    label:  NSLocalizedString("Tapping sounds", comment: ""),
+                    cellType: .switcher,
+                    stateChangeHandler: tappingSoundsStateDidChange
+                ),
+                PreferenceCellModel(
+                    id: hapticFeedbackId,
+                    label: NSLocalizedString("Haptic feedback", comment: ""),
+                    cellType: .switcher,
+                    stateChangeHandler: hapticFeedbackStateDidChange
+                )
+            ],
+            [
+                PreferenceCellModel(
+                    id: aboutId,
+                    label: NSLocalizedString("About app", comment: ""),
+                    cellType: .standart
+                )
+            ]
+        ]
     }
     
-    func setTappingSoundsSwitcherState(_ isOn: Bool) {
+    private func setupNavigationBar() {
+        let doneItem = UIBarButtonItem(
+            barButtonSystemItem: .done,
+            target: self,
+            action: #selector(SettingsViewController.closeButtonTapped)
+        )
+        navigationController?.navigationBar.topItem?.rightBarButtonItem = doneItem
+        navigationController?.navigationBar.topItem?.title = NSLocalizedString("Settings", comment: "")
+    }
+    
+    func reloadTable() {
+        tableView.reloadData()
+    }
+    
+    func setTappingSoundsSwitcherState(isOn: Bool) {
         guard let settingsModel = preferenceList.flatMap({ $0 }).first(where: { $0.id == tappingSoundsId }) else {
             return
         }
         settingsModel.state = isOn
     }
     
-    func setHapticFeedbackSwitcherState(_ isOn: Bool) {
+    func setHapticFeedbackSwitcherState(isOn: Bool) {
         guard let settingsModel = preferenceList.flatMap({ $0 }).first(where: { $0.id == hapticFeedbackId }) else {
             return
         }
         settingsModel.state = isOn
     }
     
-    func tappingSoundsDidChanged(_ state: Bool) {
+    func tappingSoundsStateDidChange(_ state: Bool) {
         output.updateTappingSounds(state)
     }
     
-    func hapticFeedbackDidChanged(_ state: Bool) {
+    func hapticFeedbackStateDidChange(_ state: Bool) {
         output.updateHapticFeedback(state)
     }
     
     func push(_ viewController: UIViewController) {
-        self.navigationController?.pushViewController(viewController, animated: true)
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     // MARK: - Actions
 
     @objc func closeButtonTapped(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 }
 
@@ -141,14 +158,17 @@ extension SettingsViewController {
 
 extension SettingsViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch indexPath {
-        case [0,0]: output.openAppearance()
-        case [1,0]: output.openAbout()
-        default: break
+        let selectedId = preferenceList[indexPath.section][indexPath.row].id
+        
+        switch selectedId {
+        case appearanceId:
+            output.openAppearance()
+        case aboutId:
+            output.openAbout()
+        default:
+            break
         }
 
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
-
-

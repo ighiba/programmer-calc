@@ -8,98 +8,46 @@
 
 import UIKit
 
-class WordSizeViewController: UIViewController, WordSizeInput {
-    
-    // MARK: - Properties
-    
+protocol WordSizeInput: AnyObject {
+    func setCheckmarkedIndex(for row: Int)
+}
+
+class WordSizeViewController: ModalViewController, WordSizeInput {
+
     var output: WordSizeOutput!
     
-    var wordSizeView = WordSizeView()
+    private let wordSizeView: WordSizeView
 
     private var checkmarkedIndexPath = IndexPath(row: 0, section: 0)
     
-    override func loadView() {
-        self.view = wordSizeView
+    init() {
+        self.wordSizeView = WordSizeView()
+        super.init(modalView: wordSizeView)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        wordSizeView.wordSizeTable.delegate = self
-        wordSizeView.wordSizeTable.dataSource = self
+        wordSizeView.wordSizeTableView.delegate = self
+        wordSizeView.wordSizeTableView.dataSource = self
 
-        setupGestures()
-        output.obtainCheckmarkIndex()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        AppDelegate.AppUtility.lockPortraitOrientation()
-        wordSizeView.animateIn()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        AppDelegate.AppUtility.unlockPortraitOrientation()
-    }
-    
-    // MARK: - Methods
-    
-    private func setupGestures() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tappedOutside))
-        tap.numberOfTapsRequired = 1
-        tap.cancelsTouchesInView = false
-        self.view.isUserInteractionEnabled = true
-        self.view.addGestureRecognizer(tap)
-
-        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-        swipeUp.direction = .up
-        swipeUp.cancelsTouchesInView = false
-        self.view.addGestureRecognizer(swipeUp)
+        output.updateCheckmarkIndex()
     }
 
-    private func dismissVC() {
-        wordSizeView.animateOut {
-            self.dismiss(animated: false, completion: { [weak self] in
-                self?.output.updateHandler?()
-            })
-        }
-    }
-    
-    private func isGestureNotInContainer( gesture: UIGestureRecognizer) -> Bool {
-        wordSizeView.container.updateConstraints()
-        let currentLocation: CGPoint = gesture.location(in: wordSizeView.container)
-        let containerBounds: CGRect = wordSizeView.container.bounds
-
-        return !containerBounds.contains(currentLocation)
+    override func updateHandler() {
+        output.updateHandler?()
     }
     
     func setCheckmarkedIndex(for row: Int) {
         checkmarkedIndexPath = IndexPath(row: row, section: 0)
     }
-    
-    // MARK: - Actions
-
-    @objc func doneButtonTapped( sender: UIButton) {
-        dismissVC()
-    }
-    
-    @objc func tappedOutside( sender: UITapGestureRecognizer) {
-        let notInContainer: Bool = isGestureNotInContainer(gesture: sender)
-        if notInContainer {
-            dismissVC()
-        }
-    }
-    
-    @objc func handleSwipe( sender: UISwipeGestureRecognizer) {
-        let notInContainer: Bool = isGestureNotInContainer(gesture: sender)
-        if notInContainer {
-            dismissVC()
-        }
-    }
 }
 
-// MARK: - DataSource
+// MARK: - UITableViewDataSource
 
 extension WordSizeViewController: UITableViewDataSource, UITableViewDelegate {
     
@@ -134,10 +82,9 @@ extension WordSizeViewController: UITableViewDataSource, UITableViewDelegate {
         tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
         tableView.cellForRow(at: checkmarkedIndexPath)?.accessoryType = .none
 
-        output.setNewWordSize(by: indexPath.row)
-        output.obtainCheckmarkIndex()
+        output.didSelectRow(at: indexPath.row)
+        output.updateCheckmarkIndex()
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    
 }

@@ -9,8 +9,8 @@
 import Foundation
 
 protocol ConversionInput: AnyObject {
-    func mainPickerSelect(row: Int)
-    func converterPickerSelect(row: Int)
+    func mainPickerSelectRow(_ row: Int)
+    func converterPickerSelectRow(_ row: Int)
     func setLabelValueText(_ text: String)
     func setSliderValue(_ value: Float)
     func hapticImpact()
@@ -43,8 +43,8 @@ class ConversionPresenter: ConversionOutput {
     func obtainConversionSettings() {
         let mainRow: Int = ConversionSystemsEnum.allCases.firstIndex(of: conversionSettings.systemMain) ?? 1 // default decimal for main
         let converterRow: Int = ConversionSystemsEnum.allCases.firstIndex(of: conversionSettings.systemConverter) ?? 0 // default binary for converter
-        view.mainPickerSelect(row: mainRow)
-        view.converterPickerSelect(row: converterRow)
+        view.mainPickerSelectRow(mainRow)
+        view.converterPickerSelectRow(converterRow)
         view.setLabelValueText("\(Int(conversionSettings.numbersAfterPoint))")
         view.setSliderValue(Float(conversionSettings.numbersAfterPoint) / 4)
     }

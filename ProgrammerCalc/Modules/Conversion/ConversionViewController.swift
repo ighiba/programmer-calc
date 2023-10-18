@@ -8,130 +8,78 @@
 
 import UIKit
 
-class ConversionViewController: UIViewController, ConversionInput {
-    
-    // MARK: - Properties
-    
+class ConversionViewController: ModalViewController, ConversionInput {
+
     var output: ConversionOutput!
-
-    lazy var conversionView = ConversionView()
-    lazy var picker: ConversionPicker = conversionView.mainPicker
-    lazy var slider: UISlider = conversionView.digitsAfterSlider
-    lazy var labelValue: UILabel = conversionView.sliderValueDigit
-    private var sliderOldValue: Float = 2.0
-
-    // Haptic feedback generator
-    let generator = UIImpactFeedbackGenerator(style: .medium)
-
     
-    // MARK: - Layout
+    private let conversionView: ConversionView
     
-    override func loadView() {
-        self.view = conversionView
+    private var sliderValueOld: Float = 2.0
+
+    private let hapticGenerator = UIImpactFeedbackGenerator(style: .medium)
+    
+    init() {
+        self.conversionView = ConversionView()
+        super.init(modalView: conversionView)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupGestures()
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        AppDelegate.AppUtility.lockPortraitOrientation()
         output.obtainConversionSettings()
-        conversionView.animateIn()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         saveConversionSettings()
-        AppDelegate.AppUtility.unlockPortraitOrientation()
+    }
+    
+    override func setupTargets() {
+        super.setupTargets()
+        conversionView.slider.addTarget(self, action: #selector(sliderValueDidChange), for: .valueChanged)
     }
     
     // MARK: - Methods
     
-    private func setupGestures() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tappedOutside))
-        tap.numberOfTapsRequired = 1
-        tap.cancelsTouchesInView = false
-        self.view.isUserInteractionEnabled = true
-        self.view.addGestureRecognizer(tap)
-  
-        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
-        swipeUp.direction = .up
-        swipeUp.cancelsTouchesInView = false
-        self.view.addGestureRecognizer(swipeUp)
+    func mainPickerSelectRow(_ row: Int) {
+        conversionView.numberSystemsPicker.selectRow(row, inComponent: 0, animated: false)
     }
     
-    func mainPickerSelect(row: Int) {
-        picker.selectRow(row, inComponent: 0, animated: false)
-    }
-    
-    func converterPickerSelect(row: Int) {
-        picker.selectRow(row, inComponent: 1, animated: false)
+    func converterPickerSelectRow(_ row: Int) {
+        conversionView.numberSystemsPicker.selectRow(row, inComponent: 1, animated: false)
     }
     
     func setLabelValueText(_ text: String) {
-        labelValue.text = text
+        conversionView.sliderValueLabel.text = text
     }
     
     func setSliderValue(_ value: Float) {
-        slider.value = value
-        sliderOldValue = slider.value
+        conversionView.slider.value = value
+        sliderValueOld = conversionView.slider.value
     }
     
     func hapticImpact() {
-        generator.prepare()
-        generator.impactOccurred()
+        hapticGenerator.prepare()
+        hapticGenerator.impactOccurred()
     }
     
     private func saveConversionSettings() {
-        let mainRow = picker.selectedRow(inComponent: 0)
-        let selectedRow = picker.selectedRow(inComponent: 1)
-        let sliderValue = slider.value.rounded()
-        output.saveConversionSettings(mainRow: mainRow, converterRow: selectedRow, sliderValue: sliderValue)
-    }
-    
-    private func dismissVC() {
-        conversionView.animateOut {
-            self.dismiss(animated: false, completion: nil)
-        }
-    }
-    
-    private func isGestureNotInContainer( gesture: UIGestureRecognizer) -> Bool {
-        conversionView.container.updateConstraints()
-        let currentLocation: CGPoint = gesture.location(in: conversionView.container)
-        let containerBounds: CGRect = conversionView.container.bounds
-
-        return !containerBounds.contains(currentLocation)
+        let mainSystemSelectedRow = conversionView.numberSystemsPicker.selectedRow(inComponent: 0)
+        let converterSystemSelectedRow = conversionView.numberSystemsPicker.selectedRow(inComponent: 1)
+        let sliderValue = conversionView.slider.value.rounded()
+        output.saveConversionSettings(mainRow: mainSystemSelectedRow, converterRow: converterSystemSelectedRow, sliderValue: sliderValue)
     }
     
     // MARK: - Actions
-    
-    @objc func doneButtonTapped( sender: UIButton) {
-        dismissVC()
-    }
-    
-    // Swipe up to exit
-    @objc func handleSwipe( sender: UISwipeGestureRecognizer) {
-        let swipeNotInContainer: Bool = isGestureNotInContainer(gesture: sender)
-        if swipeNotInContainer {
-            dismissVC()
-        }
-    }
-    
-    @objc func tappedOutside( sender: UITapGestureRecognizer) {
-        let taphNotInContainer: Bool = isGestureNotInContainer(gesture: sender)
-        if taphNotInContainer {
-            dismissVC()
-        }
-    }
 
-    @objc func sliderValueChanged( sender: UISlider) {
-        let sliderNewValue = sender.value.rounded()
-        if sliderOldValue != sliderNewValue {
-            output.sliderValueDidChanged(sliderNewValue)
-            sliderOldValue = sliderNewValue
+    @objc func sliderValueDidChange(_ sender: UISlider) {
+        let sliderValueNew = sender.value.rounded()
+        if sliderValueOld != sliderValueNew {
+            output.sliderValueDidChanged(sliderValueNew)
+            sliderValueOld = sliderValueNew
         }
     }
 }

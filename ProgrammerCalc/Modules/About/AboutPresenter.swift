@@ -65,4 +65,3 @@ class AboutPresenter: AboutOutput {
         view.openContactFormWith(recipients: recipients, subject: subject, message: message)
     }
 }
-

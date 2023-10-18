@@ -77,6 +77,9 @@
 		C097D09C2A09CCD5002FA1E6 /* LabelFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C097D09B2A09CCD5002FA1E6 /* LabelFormatter.swift */; };
 		C097D09E2A0A53D9002FA1E6 /* LabelFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C097D09D2A0A53D9002FA1E6 /* LabelFormatterTests.swift */; };
 		C0CC6DFF271F68AA00E59E64 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */; };
+		C0D842D62AD8669400B85E9F /* UITapGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D842D52AD8669400B85E9F /* UITapGestureRecognizer.swift */; };
+		C0D842D82AD866A500B85E9F /* UISwipeGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D842D72AD866A500B85E9F /* UISwipeGestureRecognizer.swift */; };
+		C0D842DA2AD889C800B85E9F /* ModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D842D92AD889C800B85E9F /* ModalViewController.swift */; };
 		C0D919DA2731ABC900AD8C05 /* MathState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D919D92731ABC900AD8C05 /* MathState.swift */; };
 		C0D919DC2731F80600AD8C05 /* DescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D919DB2731F80600AD8C05 /* DescriptionViewController.swift */; };
 		C0E0FF3E2A44AB8400E38DF9 /* ConversionPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E0FF3D2A44AB8400E38DF9 /* ConversionPresenter.swift */; };
@@ -199,6 +202,9 @@
 		C097D09B2A09CCD5002FA1E6 /* LabelFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelFormatter.swift; sourceTree = "<group>"; };
 		C097D09D2A0A53D9002FA1E6 /* LabelFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelFormatterTests.swift; sourceTree = "<group>"; };
 		C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
+		C0D842D52AD8669400B85E9F /* UITapGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITapGestureRecognizer.swift; sourceTree = "<group>"; };
+		C0D842D72AD866A500B85E9F /* UISwipeGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UISwipeGestureRecognizer.swift; sourceTree = "<group>"; };
+		C0D842D92AD889C800B85E9F /* ModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewController.swift; sourceTree = "<group>"; };
 		C0D919D92731ABC900AD8C05 /* MathState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathState.swift; sourceTree = "<group>"; };
 		C0D919DB2731F80600AD8C05 /* DescriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionViewController.swift; sourceTree = "<group>"; };
 		C0E0FF3D2A44AB8400E38DF9 /* ConversionPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionPresenter.swift; sourceTree = "<group>"; };
@@ -322,6 +328,8 @@
 				C052270E27978F6800B7E384 /* UIBarButtonItem.swift */,
 				C082FB922A34D22C00F3AA60 /* UIScreen.swift */,
 				C0211CD82A9938E100464A44 /* UIFont.swift */,
+				C0D842D52AD8669400B85E9F /* UITapGestureRecognizer.swift */,
+				C0D842D72AD866A500B85E9F /* UISwipeGestureRecognizer.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -510,6 +518,7 @@
 				C0E0FF5B2A4638CB00E38DF9 /* StyledView.swift */,
 				C09631D72728E9DC001DCD25 /* StyledViewController.swift */,
 				C0E0FF552A45D8D900E38DF9 /* StyledTableViewController.swift */,
+				C0D842D92AD889C800B85E9F /* ModalViewController.swift */,
 				C0817787271D045E0068CF45 /* PopoverDoneButton.swift */,
 				C077CF6E24DC8DEE008E5F0F /* PreferenceCell.swift */,
 			);
@@ -684,6 +693,7 @@
 				C0D919DC2731F80600AD8C05 /* DescriptionViewController.swift in Sources */,
 				C0E0FF4E2A44F93700E38DF9 /* AppearanceModuleAssembly.swift in Sources */,
 				C0E0FF582A45D8F000E38DF9 /* Styled.swift in Sources */,
+				C0D842D62AD8669400B85E9F /* UITapGestureRecognizer.swift in Sources */,
 				C0211CD92A9938E100464A44 /* UIFont.swift in Sources */,
 				C0E0FF3E2A44AB8400E38DF9 /* ConversionPresenter.swift in Sources */,
 				C0F5CF53270F4C4C0020CE14 /* WordSizeView.swift in Sources */,
@@ -718,6 +728,7 @@
 				C0F5CF51270F4B970020CE14 /* WordSizeViewController.swift in Sources */,
 				C06B7F092443B12B009642B9 /* SceneDelegate.swift in Sources */,
 				C07267DD24E5ACB300D4B4A2 /* Binary.swift in Sources */,
+				C0D842DA2AD889C800B85E9F /* ModalViewController.swift in Sources */,
 				C0249849279DDC88005EA12A /* PCalcStorage.swift in Sources */,
 				C09631E027305315001DCD25 /* NumberSystemFactory.swift in Sources */,
 				C077CF7124DC987B008E5F0F /* Settings.swift in Sources */,
@@ -728,6 +739,7 @@
 				C0666EBA24F9782F004809EF /* CalcButtonsPage.swift in Sources */,
 				C0E0FF4C2A44F8C100E38DF9 /* AppearancePresenter.swift in Sources */,
 				C0E0FF522A4596AE00E38DF9 /* AboutModuleAssembly.swift in Sources */,
+				C0D842D82AD866A500B85E9F /* UISwipeGestureRecognizer.swift in Sources */,
 				C0F5CF4F270F394E0020CE14 /* Decimal.swift in Sources */,
 				C0E0FF462A44D03E00E38DF9 /* SettingsPresenter.swift in Sources */,
 			);
@@ -921,7 +933,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = 586JQB45F3;
 				INFOPLIST_FILE = ProgrammerCalc/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Programmer's Calculator";
@@ -950,7 +962,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = 586JQB45F3;
 				INFOPLIST_FILE = ProgrammerCalc/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Programmer's Calculator";

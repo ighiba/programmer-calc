@@ -19,7 +19,7 @@ class PCalcStorage {
         let conversionSettings: ConversionSettings = storage.loadData()
         let calcState: CalcState = storage.loadData()
         let styleSettigns: StyleSettings = storage.loadData()
-        // Set shared instatnces
+
         WordSize.shared.setWordSize(wordSize)
         Settings.shared.setSettings(settings)
         ConversionSettings.shared.setConversionSettings(conversionSettings)

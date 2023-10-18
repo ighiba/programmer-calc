@@ -12,6 +12,6 @@ var modalViewWidthMultiplier: CGFloat {
     return UIDevice.currentDeviceType == .iPad ? 0.5 : 0.9
 }
 
-var modalViewWidth: CGFloat {
+var modalViewContainerWidth: CGFloat {
     return UIScreen.mainRealSize().width * modalViewWidthMultiplier
 }

@@ -10,6 +10,8 @@ import UIKit
 
 class PopoverDoneButton: UIButton {
     
+    static let defaultHeight: CGFloat = 50
+    
     override open var isHighlighted: Bool {
         didSet {
             changeButtonHighlightAnimated(isHighlighted: isHighlighted)
@@ -26,7 +28,7 @@ class PopoverDoneButton: UIButton {
     }
     
     private func setupView() {
-        frame = CGRect(x: 0, y: 0, width: 100, height: 50)
+        frame = CGRect(x: 0, y: 0, width: 100, height: PopoverDoneButton.defaultHeight)
         
         setTitle(NSLocalizedString("Done", comment: ""), for: .normal)
         setTitleColor(.white, for: .normal)
@@ -40,13 +42,9 @@ class PopoverDoneButton: UIButton {
         if isHighlighted {
             backgroundColor = .popoverDoneButtonColorPressed
         } else {
-            UIView.transition(
-                with: self,
-                duration: 0.3,
-                options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction],
-                animations: { self.backgroundColor = .popoverDoneButtonColor },
-                completion: nil
-            )
+            UIView.transition(with: self, duration: 0.3,options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction],animations: {
+                self.backgroundColor = .popoverDoneButtonColor
+            }, completion: nil)
         }
     }
 }

@@ -26,9 +26,7 @@ class PreferenceCell: UITableViewCell {
         configureAccessoryView(for: preferenceModel.cellType)
     
         textLabel?.text = preferenceModel.label
-        if let systemImageName = preferenceModel.systemImageName {
-            imageView?.image = UIImage(systemName: systemImageName)
-        }
+        imageView?.image = preferenceModel.cellIcon
     }
     
     private func configureAccessoryView(for cellType: PreferenceCellType) {

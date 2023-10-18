@@ -8,13 +8,40 @@
 
 import UIKit
 
+private let margin: CGFloat = 20
+private let navBarHeight: CGFloat = 44
+
 class DescriptionViewController: StyledViewController {
-    
-    private let margin: CGFloat = 20
-    private let navBarHeight: CGFloat = 44
 
     private let descriptionText = NSLocalizedString("DescriptionFullText", comment: "")
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupView()
+    }
+    
+    // MARK: - Methods
+    
+    private func setupView() {
+        view.frame = UIScreen.main.bounds
+        view.backgroundColor = .systemBackground
+        
+        view.addSubview(descriptionLabel)
+        
+        descriptionLabel.text = descriptionText
+        descriptionLabel.sizeToFit()
+    }
+    
+    private func makeParagraphStyle() -> NSMutableParagraphStyle {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .justified
+        paragraphStyle.firstLineHeadIndent = 5.0
+        paragraphStyle.hyphenationFactor = 1.0
+        return paragraphStyle
+    }
+    
+    // MARK: - Views
+    
     lazy var descriptionLabel: UILabel = {
         let label = UILabel(frame: CGRect(
             x: margin,
@@ -32,30 +59,4 @@ class DescriptionViewController: StyledViewController {
 
         return label
     }()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupViews()
-        configureViews()
-    }
-    
-    private func setupViews() {
-        view.frame = UIScreen.main.bounds
-        view.backgroundColor = .systemBackground
-        
-        view.addSubview(descriptionLabel)
-    }
-    
-    private func configureViews() {
-        descriptionLabel.text = descriptionText
-        descriptionLabel.sizeToFit()
-    }
-    
-    private func makeParagraphStyle() -> NSMutableParagraphStyle {
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = .justified
-        paragraphStyle.firstLineHeadIndent = 5.0
-        paragraphStyle.hyphenationFactor = 1.0
-        return paragraphStyle
-    }
 }
