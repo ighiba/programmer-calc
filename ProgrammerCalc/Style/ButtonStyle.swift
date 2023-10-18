@@ -9,10 +9,10 @@
 import UIKit
 
 protocol ButtonStyleProtocol {
-    var frameColor: UIColor { get set }
-    var frameTint: UIColor { get set }
-    var textColor: UIColor { get set }
-    var textTint: UIColor { get set }
+    var frameColor: UIColor { get }
+    var frameTint: UIColor { get }
+    var textColor: UIColor { get }
+    var textTint: UIColor { get }
 }
 
 class ButtonStyle: ButtonStyleProtocol {
