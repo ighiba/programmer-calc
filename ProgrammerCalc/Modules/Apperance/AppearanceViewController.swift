@@ -64,23 +64,13 @@ class AppearanceViewController: StyledTableViewController, AppearanceInput {
                     stateChangeHandler: useSystemAppearanceDidChanged
                 )
             ],
-            [
+            StyleType.allCases.map { style in
                 PreferenceCellModel(
-                    id: "lightMode",
-                    label: NSLocalizedString("Light Mode", comment: ""),
-                    cellType: .checkmark
-                ),
-                PreferenceCellModel(
-                    id: "darkMode",
-                    label: NSLocalizedString("Dark Mode", comment: ""),
-                    cellType: .checkmark
-                ),
-                PreferenceCellModel(
-                    id: "oldSchool",
-                    label: NSLocalizedString("Old School", comment: ""),
+                    id: style.stringValue,
+                    label: style.localizedTitle,
                     cellType: .checkmark
                 )
-            ]
+            }
         ]
     }
     

@@ -37,10 +37,11 @@ class AppearancePresenter: AppearanceOutput {
     }
     
     func setNewStyle(by row: Int) {
-        let newStyle = StyleType(rawValue: row)!
-        styleSettings.currentStyle = newStyle
-        storage.saveData(styleSettings)
-        updateStyle()
+        if let newStyle = StyleType(rawValue: row) {
+            styleSettings.currentStyle = newStyle
+            storage.saveData(styleSettings)
+            updateStyle()
+        }
     }
     
     func updateStyle() {
