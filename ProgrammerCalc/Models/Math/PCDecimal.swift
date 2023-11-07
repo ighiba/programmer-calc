@@ -9,8 +9,10 @@
 import Foundation
 
 struct PCDecimal: CustomStringConvertible, Equatable, Decodable, Encodable {
-    
+
     // MARK: - Properties
+    
+    static let zero: PCDecimal = PCDecimal(0)
     
     var isSigned: Bool { value < 0 }
     var hasFloatingPoint: Bool { value.description.contains(".") }
@@ -167,8 +169,4 @@ struct PCDecimal: CustomStringConvertible, Equatable, Decodable, Encodable {
     public func getDecimal() -> Decimal {
         return value
     }
-}
-
-extension PCDecimal {
-    static let zero: PCDecimal = PCDecimal(0)
 }

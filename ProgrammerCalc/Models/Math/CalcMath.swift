@@ -57,7 +57,7 @@ final class CalcMath {
     // MARK: - Methods
     // ===============
     
-    func calculate( firstValue: NumberSystemProtocol, operation: OperationType ,secondValue: NumberSystemProtocol, for system: ConversionSystemsEnum) throws -> NumberSystemProtocol? {
+    func calculate( firstValue: NumberSystemProtocol, operation: OperationType ,secondValue: NumberSystemProtocol, for system: ConversionSystem) throws -> NumberSystemProtocol? {
   
         // ======================
         // Convert Any to Decimal
@@ -237,7 +237,7 @@ final class CalcMath {
         return resultStr
     }
     
-    public func negate(value: NumberSystemProtocol, system: ConversionSystemsEnum) -> NumberSystemProtocol {
+    public func negate(value: NumberSystemProtocol, system: ConversionSystem) -> NumberSystemProtocol {
         // ======================
         // Convert Any to Decimal
         // ======================
@@ -281,7 +281,7 @@ final class CalcMath {
     
     // Shift to needed bit count
     public func shiftBits(number: NumberSystemProtocol,
-                          mainSystem: ConversionSystemsEnum,
+                          mainSystem: ConversionSystem,
                           shiftOperation: CalcMath.OperationType,
                           shiftCount: DecimalSystem ) -> NumberSystemProtocol? {
         // Check if value is not float

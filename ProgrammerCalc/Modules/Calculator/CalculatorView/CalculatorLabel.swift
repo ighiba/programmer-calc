@@ -84,7 +84,7 @@ class CalculatorLabel: UILabel, UpdatableLabel, CalculatorLabelDelegate {
         ])
     }
     
-    func setInfoLabelValue(_ newValue: ConversionSystemsEnum) {
+    func setInfoLabelValue(_ newValue: ConversionSystem) {
         infoSubLabel.text = newValue.title
     }
     

@@ -20,7 +20,7 @@ extension ConversionPicker: UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return ConversionSystemsEnum.allCases.count
+        return ConversionSystem.allCases.count
     }
 }
 
@@ -29,7 +29,7 @@ extension ConversionPicker: UIPickerViewDataSource {
 extension ConversionPicker: UIPickerViewDelegate {
 
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return ConversionSystemsEnum.allCases[row].title
+        return ConversionSystem.allCases[row].title
     }
     
     func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {

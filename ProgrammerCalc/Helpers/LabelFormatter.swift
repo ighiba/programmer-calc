@@ -59,7 +59,7 @@ class LabelFormatter {
     
     
     // For updating input main label
-    public func processStrInputToFormat(inputStr: String, for system: ConversionSystemsEnum) -> String {
+    public func processStrInputToFormat(inputStr: String, for system: ConversionSystem) -> String {
         var processedStr = String()
         
         // ==================
@@ -193,7 +193,7 @@ class LabelFormatter {
     }
     
     // Check if given number more than current settings allows
-    public func isInputOverflowed(_ value: String, for system: ConversionSystemsEnum, currentValue: PCDecimal) -> Bool {
+    public func isInputOverflowed(_ value: String, for system: ConversionSystem, currentValue: PCDecimal) -> Bool {
         if hasFloatingPoint(value) {
             return isFloatInputOverflowed(value)
         } else {

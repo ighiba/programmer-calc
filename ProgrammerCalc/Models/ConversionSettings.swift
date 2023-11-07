@@ -9,8 +9,8 @@
 import Foundation
 
 protocol ConversionSettingsProtocol {
-    var systemMain: ConversionSystemsEnum { get set }
-    var systemConverter: ConversionSystemsEnum { get set }
+    var systemMain: ConversionSystem { get set }
+    var systemConverter: ConversionSystem { get set }
     var numbersAfterPoint: Int { get set }
 }
 
@@ -18,11 +18,11 @@ final class ConversionSettings: ConversionSettingsProtocol {
     
     static let shared: ConversionSettings = ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
     
-    var systemMain: ConversionSystemsEnum
-    var systemConverter: ConversionSystemsEnum
+    var systemMain: ConversionSystem
+    var systemConverter: ConversionSystem
     var numbersAfterPoint: Int
     
-    init(systMain: ConversionSystemsEnum, systConverter: ConversionSystemsEnum, number: Int) {
+    init(systMain: ConversionSystem, systConverter: ConversionSystem, number: Int) {
         self.systemMain = systMain
         self.systemConverter = systConverter
         self.numbersAfterPoint = number
@@ -50,7 +50,7 @@ extension ConversionSettings: Storable {
     }
 }
 
-enum ConversionSystemsEnum: Int, CaseIterable, Codable {
+enum ConversionSystem: Int, CaseIterable, Codable {
     case bin = 0
     case dec = 1
     case oct = 2

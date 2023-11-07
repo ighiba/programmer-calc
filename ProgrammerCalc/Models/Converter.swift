@@ -20,7 +20,7 @@ import Foundation
  
      // Main function for conversion values
      public func convertValue(value: NumberSystemProtocol,
-                              to converterSystem: ConversionSystemsEnum,
+                              to converterSystem: ConversionSystem,
                               format processToFormat: Bool) -> NumberSystemProtocol? {
  
          // if value system == converterSystem, then return imput value
@@ -49,7 +49,7 @@ import Foundation
      }
      
      public func convertValue(value: PCDecimal,
-                              to converterSystem: ConversionSystemsEnum,
+                              to converterSystem: ConversionSystem,
                               format processToFormat: Bool) -> NumberSystemProtocol? {
          
          let decimal = DecimalSystem(value)
@@ -102,7 +102,7 @@ import Foundation
      }
  
      // Converter from binary to any system
-     fileprivate func convertBinaryToAny( binary: Binary, targetSystem: ConversionSystemsEnum) -> NumberSystemProtocol {
+     fileprivate func convertBinaryToAny( binary: Binary, targetSystem: ConversionSystem) -> NumberSystemProtocol {
  
          switch targetSystem {
          case .bin:
@@ -127,7 +127,7 @@ import Foundation
      }
  
      // Returns enum value depends on input value type
-     fileprivate func getSystemBy(_ value: NumberSystemProtocol) -> ConversionSystemsEnum? {
+     fileprivate func getSystemBy(_ value: NumberSystemProtocol) -> ConversionSystem? {
          switch value {
          case is Binary:
              return .bin
@@ -144,7 +144,7 @@ import Foundation
      }
  
      // Convert value to one's complement
-     public func toOnesComplement( value: NumberSystemProtocol, mainSystem: ConversionSystemsEnum) -> NumberSystemProtocol {
+     public func toOnesComplement( value: NumberSystemProtocol, mainSystem: ConversionSystem) -> NumberSystemProtocol {
          var binary = Binary()
  
          // convert to Binary
@@ -165,7 +165,7 @@ import Foundation
      }
  
      // Convert value to two's complement
-     public func toTwosComplement( value: NumberSystemProtocol, mainSystem: ConversionSystemsEnum) -> NumberSystemProtocol {
+     public func toTwosComplement( value: NumberSystemProtocol, mainSystem: ConversionSystem) -> NumberSystemProtocol {
          var binary = Binary()
  
          // convert to Binary
