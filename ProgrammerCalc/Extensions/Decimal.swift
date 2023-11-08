@@ -9,15 +9,6 @@
 import Foundation
 
 extension Decimal {
-    var fractPartDigitCount: Int { fractPart.count }
-    
-    var fractPart: String {
-        let components = self.description.components(separatedBy: ".")
-        if components.count > 1 {
-            return components[1]
-        }
-        return ""
-    }
     
     var intPart: UInt64 {
         let roundingBehavior = NSDecimalNumberHandler(
@@ -29,6 +20,15 @@ extension Decimal {
             raiseOnDivideByZero: false
         )
         return NSDecimalNumber(decimal: self).rounding(accordingToBehavior: roundingBehavior).uint64Value
+    }
+    
+    var fractPartDigitCount: Int { fractPart.count }
+    var fractPart: String {
+        let components = self.description.components(separatedBy: ".")
+        if components.count > 1 {
+            return components[1]
+        }
+        return ""
     }
     
     // Converting binary string in decimal number

@@ -84,33 +84,33 @@ struct PCDecimal: CustomStringConvertible, Equatable, Decodable, Encodable {
         let lhsInt: UInt64 = lhs.value.intPart
         let rhsInt: UInt64 = rhs.value.intPart
 
-        return  PCDecimal(lhsInt ^ rhsInt)
+        return PCDecimal(lhsInt ^ rhsInt)
     }
     
     static func << (lhs: PCDecimal, rhs: PCDecimal) -> PCDecimal {
         let lhsInt: UInt64 = lhs.value.intPart
         let rhsInt: UInt64 = rhs.value.intPart
 
-        return  PCDecimal(lhsInt << rhsInt)
+        return PCDecimal(lhsInt << rhsInt)
     }
     
     static func << (lhs: PCDecimal, rhs: Int) -> PCDecimal {
         let lhsInt: UInt64 = lhs.value.intPart
 
-        return  PCDecimal(lhsInt << rhs)
+        return PCDecimal(lhsInt << rhs)
     }
     
     static func >> (lhs: PCDecimal, rhs: PCDecimal) -> PCDecimal {
         let lhsInt: UInt64 = lhs.value.intPart
         let rhsInt: UInt64 = rhs.value.intPart
 
-        return  PCDecimal(lhsInt >> rhsInt)
+        return PCDecimal(lhsInt >> rhsInt)
     }
     
     static func >> (lhs: PCDecimal, rhs: Int) -> PCDecimal {
         let lhsInt: UInt64 = lhs.value.intPart
 
-        return  PCDecimal(lhsInt >> rhs)
+        return PCDecimal(lhsInt >> rhs)
     }
     
     static prefix func ~ (number: PCDecimal) -> PCDecimal {
