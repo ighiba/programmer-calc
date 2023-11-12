@@ -65,7 +65,7 @@ class CalculatorLabel: UILabel, UpdatableLabel, CalculatorLabelDelegate {
                 textToBoard = text
                 break
             } else {
-                textToBoard = text?.removeAllSpaces()
+                textToBoard = text?.removedAllSpaces()
             }
         }
         
@@ -135,7 +135,7 @@ class CalculatorLabel: UILabel, UpdatableLabel, CalculatorLabelDelegate {
     
     func getText(deleteSpaces: Bool = false) -> String {
         if deleteSpaces {
-            return text?.removeAllSpaces() ?? "0"
+            return text?.removedAllSpaces() ?? "0"
         } else {
             return text ?? "0"
         }

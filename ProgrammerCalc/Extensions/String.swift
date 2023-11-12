@@ -9,90 +9,90 @@
 import Foundation
 
 extension String {
-    init(_ valueDec: Decimal, radix: Int) {
-        self.init()
-        var dec = valueDec
-        var decCopy = dec
+    
+    init(_ decimal: Decimal, radix: Int) {
+        var dec = decimal.round(scale: 0, roundingModeMode: .down)
 
-        NSDecimalRound(&dec, &decCopy, 0, .down)
-        
         var str = String()
-        
         while dec > 0 {
-            autoreleasepool {
-                let reminder =  dec % Decimal(radix)
-                str.append("\(reminder)")
-                dec = dec / Decimal(radix)
-                decCopy = dec
-                NSDecimalRound(&dec, &decCopy, 0, .down) 
-            }
+            let reminder = dec % Decimal(radix)
+            str.insert(contentsOf: "\(reminder)", at: str.startIndex)
+            dec = (dec / Decimal(radix))
+            dec = dec.round(scale: 0, roundingModeMode: .down)
         }
 
-        self = String(str.reversed())
+        self.init(stringLiteral: str)
     }
     
-    func replaceAt(index: Int, with char: Character) -> String {
+    func replace(atPosition position: Int, with char: Character) -> String {
+        guard position >= 0 && position < self.count else { return self }
+        
         var charArray = [Character](self)
-        charArray[index] = char
+        charArray[position] = char
+        
         return String(charArray)
     }
 
-    func removeAllSpaces() -> String {
+    func removedAllSpaces() -> String {
         return self.replacingOccurrences(of: " ", with: "")
     }
     
     func swap(first: Character, second: Character) -> String {
-        let str = self
         var resultStr = String()
         
-        for bit in str {
-            switch bit {
-            case "0":
-                resultStr.append("1")
-            case "1":
-                resultStr.append("0")
+        for char in self {
+            switch char {
+            case first:
+                resultStr.append(second)
+            case second:
+                resultStr.append(first)
             default:
-                resultStr.append(bit)
+                resultStr.append(char)
             }
         }
+        
         return resultStr
     }
     
     /// Removes leading given chars in str until str.last != character
-    func removeLeading(characters: [Character]) -> String {
-        var str = self.removeAllSpaces()
+    func removedLeading(characters: [Character]) -> String {
+        var str = self.removedAllSpaces()
+        
         while str.count > 0 && characters.contains(str.first!) {
-            str.removeFirst(1)
+            str.removeFirst()
             guard str != "" else { return str }
         }
+        
         return str
     }
     
     /// Removes trailing given chars in str until str.last != character
-    func removeTrailing(characters: [Character]) -> String {
-        var str = self.removeAllSpaces()
+    func removedTrailing(characters: [Character]) -> String {
+        var str = self.removedAllSpaces()
+        
         while str.count > 0 && characters.contains(str.last!)  {
-            str.removeLast(1)
+            str.removeLast()
             guard str != "" else { return str }
         }
+        
         return str
     }
+}
+
+extension String {
     
-    func getPartAfter(separator: Character) -> String {
-        let components = self.components(separatedBy: "\(separator)")
-        if components.count <= 1 {
-            return ""
-        } else {
-            return components[1]
-        }
+    enum Partition: Int {
+        case before = 0
+        case after = 1
     }
     
-    func getPartBefore(separator: Character) -> String {
+    func getPart(_ partition: Partition, separator: Character) -> String {
         let components = self.components(separatedBy: "\(separator)")
-        if components.count == 0 {
-            return ""
+        
+        if components.count > partition.rawValue {
+            return components[partition.rawValue]
         } else {
-            return components[0]
+            return ""
         }
     }
 }

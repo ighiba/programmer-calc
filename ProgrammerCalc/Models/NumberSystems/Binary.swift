@@ -36,7 +36,7 @@ class Binary: NumberSystemProtocol {
   
     /// Creates an instance initialized to the Binary  value / copying another instance
     init(_ valueBin: Binary) {
-        self.value = valueBin.value.removeAllSpaces()
+        self.value = valueBin.value.removedAllSpaces()
         self.isSigned = valueBin.isSigned
     }
     
@@ -149,7 +149,7 @@ class Binary: NumberSystemProtocol {
         }
         
         // remove all spaces
-        let str = binary.value.removeAllSpaces()
+        let str = binary.value.removedAllSpaces()
      
         // Dividing to int and fract parts
         let buffDividedStr = divideIntFract(value: str)
@@ -212,7 +212,7 @@ class Binary: NumberSystemProtocol {
    
         let partition: Int = 4
         
-        binary.value = binary.value.removeAllSpaces()
+        binary.value = binary.value.removedAllSpaces()
         
         var dividedBinary = divideIntFract(value: binary.value)
         
@@ -329,7 +329,7 @@ class Binary: NumberSystemProtocol {
     // Filling up BINARY number with zeros by num of zeros in 1 part
     func fillUpParts( str: String, by fillNum: Int) -> String {
         // remove all spaces
-        var buffStr = str.removeAllSpaces()
+        var buffStr = str.removedAllSpaces()
         
         if Int(buffStr) != 0 {
             // remove all zeros at beginning of string
@@ -381,7 +381,7 @@ class Binary: NumberSystemProtocol {
         if binary.value.count >= 1 && binary.value != "0" {
             var counter: Int = 0
             
-            binary.value = binary.value.removeAllSpaces()
+            binary.value = binary.value.removedAllSpaces()
 
             for char in binary.value {
                 // check if already point
@@ -483,7 +483,7 @@ class Binary: NumberSystemProtocol {
         
         binary.value = str
         // remove spaces
-        binary.value = binary.value.removeAllSpaces()
+        binary.value = binary.value.removedAllSpaces()
         
         // update signed state if filled by 8,16,32,64 bits
         if [8,16,32,64].contains(binary.value.count)  {
@@ -528,7 +528,7 @@ class Binary: NumberSystemProtocol {
         
         // process fract part
         if let fractPart = binaryDivided.1 {
-            let buffStr = fractPart.removeAllSpaces()
+            let buffStr = fractPart.removedAllSpaces()
             resultStr = resultStr + "." + buffStr
         }
         
@@ -583,7 +583,7 @@ class Binary: NumberSystemProtocol {
         // just add digit if point exits
         guard digit != "." && !binary.value.contains(".") else {
             // check bits count after point
-            let testValue = binary.value.removeAllSpaces()
+            let testValue = binary.value.removedAllSpaces()
             let pointPos = testValue.firstIndex(of: ".")!
             let distance = testValue.distance(from: pointPos, to: testValue.endIndex)
         
@@ -595,7 +595,7 @@ class Binary: NumberSystemProtocol {
         }
         
         // if binary not float
-        binary.value = binary.value.removeAllSpaces()
+        binary.value = binary.value.removedAllSpaces()
         
         // get saved data
         let wordSizeValue = 64
@@ -680,7 +680,7 @@ class Binary: NumberSystemProtocol {
     public func twosComplement() {
         let binary = self
         // remove spaces
-        binary.value = binary.value.removeAllSpaces()
+        binary.value = binary.value.removedAllSpaces()
         
         // convert to 1's complement
         binary.onesComplement()

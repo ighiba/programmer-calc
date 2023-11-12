@@ -183,7 +183,7 @@ import Foundation
          let resultBin = Binary()
  
          // remove spaces if exists
-         binary.value = binary.value.removeAllSpaces()
+         binary.value = binary.value.removedAllSpaces()
  
          // split binary
          let splittedBinary = binary.divideIntFract(value: binary.value)
@@ -217,7 +217,7 @@ import Foundation
          // process fract part
          if let fractPart = splittedBinary.1 {
              let numAfterPoint = conversionSettings.numbersAfterPoint
-             var buffFractPart = fractPart.removeTrailing(characters: ["0"])
+             var buffFractPart = fractPart.removedTrailing(characters: ["0"])
  
              if fractPart != "" {
                  // fill or delete bits
@@ -254,7 +254,7 @@ import Foundation
          // Process fact part if exists and last digit is 0
          if decStr.last == "0" && decStr.contains(".") {
              // count how much zeros in back
-             let fractPart = decStr.getPartAfter(separator: ".")
+             let fractPart = decStr.getPart(.after, separator: ".")
  
              let buffFractPart = String(fractPart.reversed())
              var buffStr = ""

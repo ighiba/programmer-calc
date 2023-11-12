@@ -47,7 +47,7 @@ class StringExtTests: XCTestCase {
         let stringWithSpaces = "0000 1111 0000 1111"
 
         // 2. when
-        let result = stringWithSpaces.removeAllSpaces()
+        let result = stringWithSpaces.removedAllSpaces()
         
         // 3. then
         XCTAssertEqual(result, "0000111100001111", "Failed at removing spaces")
@@ -69,7 +69,7 @@ class StringExtTests: XCTestCase {
         let stringWithSpaces = "0000000110001001"
 
         // 2. when
-        let result = stringWithSpaces.removeLeading(characters: ["0"])
+        let result = stringWithSpaces.removedLeading(characters: ["0"])
         
         // 3. then
         XCTAssertEqual(result, "110001001", "Failed removing")
@@ -79,7 +79,7 @@ class StringExtTests: XCTestCase {
         let stringWithSpaces = "1000 1001.1001 1000"
 
         // 2. when
-        let result = stringWithSpaces.removeTrailing(characters: ["0"])
+        let result = stringWithSpaces.removedTrailing(characters: ["0"])
         
         // 3. then
         XCTAssertEqual(result, "10001001.10011", "Failed removing")
@@ -90,7 +90,7 @@ class StringExtTests: XCTestCase {
         let stringWithSpaces = "10001001.10011111"
 
         // 2. when
-        let result = stringWithSpaces.getPartAfter(separator: ".")
+        let result = stringWithSpaces.getPart(.after, separator: ".")
         
         // 3. then
         XCTAssertEqual(result, "10011111", "Failed getting part")
@@ -101,7 +101,7 @@ class StringExtTests: XCTestCase {
         let stringWithSpaces = "10001001.10011111"
 
         // 2. when
-        let result = stringWithSpaces.getPartBefore(separator: ".")
+        let result = stringWithSpaces.getPart(.before, separator: ".")
         
         // 3. then
         XCTAssertEqual(result, "10001001", "Failed getting part")
@@ -112,7 +112,7 @@ class StringExtTests: XCTestCase {
         let stringWithSpaces = "0."
 
         // 2. when
-        let result = stringWithSpaces.getPartAfter(separator: ".")
+        let result = stringWithSpaces.getPart(.after, separator: ".")
         
         // 3. then
         XCTAssertEqual(result, "", "Failed getting part")
@@ -123,7 +123,7 @@ class StringExtTests: XCTestCase {
         let stringWithSpaces = "0."
 
         // 2. when
-        let result = stringWithSpaces.getPartBefore(separator: ".")
+        let result = stringWithSpaces.getPart(.before, separator: ".")
         
         // 3. then
         XCTAssertEqual(result, "0", "Failed getting part")

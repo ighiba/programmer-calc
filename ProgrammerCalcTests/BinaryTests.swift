@@ -111,7 +111,7 @@ class BinaryTests: XCTestCase {
         binaryTest = binaryTest.divideBinary(by: 4)
         
         // 2. when
-        let removedSpaces = binaryTest.value.removeAllSpaces()
+        let removedSpaces = binaryTest.value.removedAllSpaces()
 
         // 3. then
         XCTAssertEqual(removedSpaces, "0000000000000000000000000000000000000000000000000000000000001100", "Spaces not deleted")
