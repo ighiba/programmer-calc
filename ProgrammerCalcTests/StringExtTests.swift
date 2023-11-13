@@ -11,26 +11,14 @@ import XCTest
 
 class StringExtTests: XCTestCase {
 
-    var stringExtTest: String!
-
     override func setUp() {
         super.setUp()
-        stringExtTest = String()
     }
     
     override func tearDown() {
-        stringExtTest = nil
         super.tearDown()
     }
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-    
     func testRadixDecimal() throws {
         // 1. given
         let decimalValue: Decimal = 123
@@ -128,5 +116,4 @@ class StringExtTests: XCTestCase {
         // 3. then
         XCTAssertEqual(result, "0", "Failed getting part")
     }
-
 }

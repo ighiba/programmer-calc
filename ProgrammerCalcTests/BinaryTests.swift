@@ -34,14 +34,6 @@ class BinaryTests: XCTestCase {
         binaryTest = nil
         super.tearDown()
     }
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
     
     // XCTAssert to test model
     func testBinaryUnsignedInit() throws {
@@ -185,8 +177,6 @@ class BinaryTests: XCTestCase {
         
         // 2. when
         let decValue = DecimalSystem(binaryTest)
-        print(decValue.value)
-        print(decValue.decimalValue)
         
         // 3. then
         XCTAssertEqual(decValue.decimalValue, -9223372036854775796 as Decimal, "Wrong conversion")
@@ -211,6 +201,7 @@ class BinaryTests: XCTestCase {
         
         // 2. when
         let decValue = DecimalSystem(binaryTest)
+        
         // 3. then
         XCTAssertEqual(decValue.decimalValue, 76, "Wrong conversion")
     }
@@ -223,6 +214,7 @@ class BinaryTests: XCTestCase {
 
         // 2. when
         binaryTest.value = binaryTest.convertDoubleToBinaryStr(numberStr: (binaryInt, binaryFract))
+        
         // 3. then
         XCTAssertEqual(binaryTest.value, "01100.0100000000000000", "Wrong conversion")
     }
@@ -234,6 +226,7 @@ class BinaryTests: XCTestCase {
 
         // 2. when
         binaryTest.value = binaryTest.convertIntToBinary(intValue)
+        
         // 3. then
         XCTAssertEqual(binaryTest.value, "01100", "Wrong conversion")
     }
@@ -249,5 +242,4 @@ class BinaryTests: XCTestCase {
         // 3. then
         XCTAssertEqual(binaryTest.value, "1111111111111111111111111111111111111111111111111111111111110011", "Wrong inversion")
     }
-
 }

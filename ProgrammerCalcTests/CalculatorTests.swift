@@ -101,6 +101,4 @@ class CalculatorTests: XCTestCase {
         // 3. then
         XCTAssertEqual(result.description, "-9223372036854775808", "Negation failure")
     }
-
-
 }

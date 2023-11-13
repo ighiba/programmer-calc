@@ -161,7 +161,7 @@ class ProgrammerCalcUITests: XCTestCase {
         let secondResult = ["0","0","0","0","1","1","0","0"] // 12
         let thirdResult = ["0","0","0","0","0","0","0","1"] // 1
         
-        var buttonsMain: [XCUIElement] = [
+        let buttonsMain: [XCUIElement] = [
             scrollViewsQuery.otherElements.buttons["AC"],
             scrollViewsQuery.otherElements.buttons["1"],
             scrollViewsQuery.otherElements.buttons["2"],

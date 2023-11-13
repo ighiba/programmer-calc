@@ -41,14 +41,6 @@ class ConverterTests: XCTestCase {
         converterTest = nil
         super.tearDown()
     }
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
     
     func testOnesComplementUnsigned() throws {
         // 1. given
@@ -101,6 +93,4 @@ class ConverterTests: XCTestCase {
         // 3. then
         XCTAssertEqual(converted.value, "11110100", "Converted values are wrong")
     }
-    
-    
 }
