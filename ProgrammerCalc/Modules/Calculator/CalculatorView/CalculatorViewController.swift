@@ -30,8 +30,8 @@ class CalculatorViewController: StyledViewController, CalculatorInput, Calculato
     // Device states
     private var isAllowedLandscape: Bool = false
     
-    private var mainSystem: ConversionSystemsEnum { output.getMainSystem() }
-    private var converterSystem: ConversionSystemsEnum { output.getConverterSystem() }
+    private var mainSystem: ConversionSystem { output.getMainSystem() }
+    private var converterSystem: ConversionSystem { output.getConverterSystem() }
     
     override func loadView() {
         view = calculatorView

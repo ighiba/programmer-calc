@@ -100,9 +100,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         switch ActionType(rawValue: shortcutItem.type) {
         case .copyInput:
-            pasteboard.string = shortcutItem.localizedSubtitle?.removeAllSpaces()
+            pasteboard.string = shortcutItem.localizedSubtitle?.removedAllSpaces()
         case .copyOutput:
-            pasteboard.string = shortcutItem.localizedSubtitle?.removeAllSpaces()
+            pasteboard.string = shortcutItem.localizedSubtitle?.removedAllSpaces()
         default:
             break
         }

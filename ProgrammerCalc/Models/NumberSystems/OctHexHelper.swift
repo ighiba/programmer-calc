@@ -54,7 +54,7 @@ class OctHexHelper {
         var buffStr = valueBin
         
         // remove spaces
-        buffStr = buffStr.removeAllSpaces()
+        buffStr = buffStr.removedAllSpaces()
         
         // from binary to octal or hex
         // divide by part

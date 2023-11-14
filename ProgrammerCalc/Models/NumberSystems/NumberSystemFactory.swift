@@ -10,7 +10,7 @@ import Foundation
 
 class NumberSystemFactory {
     
-    func get(strValue value: String, currentSystem system: ConversionSystemsEnum) -> NumberSystemProtocol? {
+    func get(strValue value: String, currentSystem system: ConversionSystem) -> NumberSystemProtocol? {
         var buffValue: NumberSystemProtocol?
         
         switch system {

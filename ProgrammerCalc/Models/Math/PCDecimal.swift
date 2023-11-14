@@ -8,15 +8,18 @@
 
 import Foundation
 
-struct PCDecimal: CustomStringConvertible, Equatable, Decodable, Encodable {
-    
+struct PCDecimal: CustomStringConvertible, Equatable, Codable {
+
     // MARK: - Properties
+    
+    static let zero: PCDecimal = PCDecimal(0)
     
     var isSigned: Bool { value < 0 }
     var hasFloatingPoint: Bool { value.description.contains(".") }
     var isSignedAndFloat: Bool { isSigned && hasFloatingPoint }
     
     private var value: Decimal
+    fileprivate var intPart: UInt64 { value.intPart }
 
     var description: String { String(describing: value) }
     
@@ -48,12 +51,16 @@ struct PCDecimal: CustomStringConvertible, Equatable, Decodable, Encodable {
         return PCDecimal(value: lhs.value + rhs.value)
     }
     
-    static func + (lhs: PCDecimal, rhs: Int) -> PCDecimal {
-        return PCDecimal(value: lhs.value + Decimal(rhs))
+    static func + (lhs: PCDecimal, rhsInt: Int) -> PCDecimal {
+        return PCDecimal(value: lhs.value + Decimal(rhsInt))
     }
     
     static func - (lhs: PCDecimal, rhs: PCDecimal) -> PCDecimal {
         return PCDecimal(value: lhs.value - rhs.value)
+    }
+    
+    static func - (lhs: PCDecimal, rhsInt: Int) -> PCDecimal {
+        return PCDecimal(value: lhs.value - Decimal(rhsInt))
     }
     
     static func * (lhs: PCDecimal, rhs: PCDecimal) -> PCDecimal {
@@ -65,56 +72,35 @@ struct PCDecimal: CustomStringConvertible, Equatable, Decodable, Encodable {
     }
     
     static func & (lhs: PCDecimal, rhs: PCDecimal) -> PCDecimal {
-        let lhsInt: UInt64 = lhs.value.intPart
-        let rhsInt: UInt64 = rhs.value.intPart
-        
-        return PCDecimal(lhsInt & rhsInt)
+        return PCDecimal(lhs.intPart & rhs.intPart)
     }
     
     static func | (lhs: PCDecimal, rhs: PCDecimal) -> PCDecimal {
-        let lhsInt: UInt64 = lhs.value.intPart
-        let rhsInt: UInt64 = rhs.value.intPart
-        
-        return PCDecimal(lhsInt | rhsInt)
+        return PCDecimal(lhs.intPart | rhs.intPart)
     }
     
     static func ^ (lhs: PCDecimal, rhs: PCDecimal) -> PCDecimal {
-        let lhsInt: UInt64 = lhs.value.intPart
-        let rhsInt: UInt64 = rhs.value.intPart
-
-        return  PCDecimal(lhsInt ^ rhsInt)
+        return PCDecimal(lhs.intPart ^ rhs.intPart)
     }
     
     static func << (lhs: PCDecimal, rhs: PCDecimal) -> PCDecimal {
-        let lhsInt: UInt64 = lhs.value.intPart
-        let rhsInt: UInt64 = rhs.value.intPart
-
-        return  PCDecimal(lhsInt << rhsInt)
+        return PCDecimal(lhs.intPart << rhs.intPart)
     }
     
-    static func << (lhs: PCDecimal, rhs: Int) -> PCDecimal {
-        let lhsInt: UInt64 = lhs.value.intPart
-
-        return  PCDecimal(lhsInt << rhs)
+    static func << (lhs: PCDecimal, rhsInt: Int) -> PCDecimal {
+        return PCDecimal(lhs.intPart << rhsInt)
     }
     
     static func >> (lhs: PCDecimal, rhs: PCDecimal) -> PCDecimal {
-        let lhsInt: UInt64 = lhs.value.intPart
-        let rhsInt: UInt64 = rhs.value.intPart
-
-        return  PCDecimal(lhsInt >> rhsInt)
+        return PCDecimal(lhs.intPart >> rhs.intPart)
     }
     
-    static func >> (lhs: PCDecimal, rhs: Int) -> PCDecimal {
-        let lhsInt: UInt64 = lhs.value.intPart
-
-        return  PCDecimal(lhsInt >> rhs)
+    static func >> (lhs: PCDecimal, rhsInt: Int) -> PCDecimal {
+        return PCDecimal(lhs.intPart >> rhsInt)
     }
     
     static prefix func ~ (number: PCDecimal) -> PCDecimal {
-        let numberInt: UInt64 = number.value.intPart
- 
-        return PCDecimal(~numberInt)
+        return PCDecimal(~number.intPart)
     }
     
     static prefix func - (number: PCDecimal) -> PCDecimal {
@@ -138,8 +124,8 @@ struct PCDecimal: CustomStringConvertible, Equatable, Decodable, Encodable {
     }
     
     public mutating func fixOverflow(bitWidth: Int, processSigned: Bool) {
-        let maxValue = processSigned ? pow(Decimal(2), bitWidth-1) - 1 : pow(Decimal(2), bitWidth) - 1
-        let minValue = processSigned ? pow(Decimal(-2), bitWidth-1) : 0
+        let maxValue = processSigned ? pow(Decimal(2), bitWidth - 1) - 1 : pow(Decimal(2), bitWidth) - 1
+        let minValue = processSigned ? pow(Decimal(-2), bitWidth - 1) : 0
         
         if value > maxValue {
             var div = (value + maxValue + 1) / pow(Decimal(2), bitWidth)
@@ -167,8 +153,4 @@ struct PCDecimal: CustomStringConvertible, Equatable, Decodable, Encodable {
     public func getDecimal() -> Decimal {
         return value
     }
-}
-
-extension PCDecimal {
-    static let zero: PCDecimal = PCDecimal(0)
 }

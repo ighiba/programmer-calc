@@ -236,4 +236,3 @@ class LabelFormatterTests: XCTestCase {
         XCTAssertEqual(result, "0000 0000 0000 1111", "Processing failure")
     }
 }
-

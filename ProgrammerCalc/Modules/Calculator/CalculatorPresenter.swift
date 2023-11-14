@@ -38,8 +38,8 @@ protocol CalculatorInput: AnyObject {
 }
 
 protocol CalculatorOutput: AnyObject {
-    func getMainSystem() -> ConversionSystemsEnum
-    func getConverterSystem() -> ConversionSystemsEnum
+    func getMainSystem() -> ConversionSystem
+    func getConverterSystem() -> ConversionSystem
     func isInvalidMainLabelInput(_ text: String) -> Bool
     func resetCurrentValueAndUpdateLabels()
     func updateMainLabelWithCurrentValue()
@@ -80,11 +80,11 @@ class CalculatorPresenter: CalculatorOutput {
     
     // MARK: - Methods
     
-    func getMainSystem() -> ConversionSystemsEnum {
+    func getMainSystem() -> ConversionSystem {
         return conversionSettings.systemMain
     }
     
-    func getConverterSystem() -> ConversionSystemsEnum {
+    func getConverterSystem() -> ConversionSystem {
         return conversionSettings.systemConverter
     }
     

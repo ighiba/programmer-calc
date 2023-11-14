@@ -30,14 +30,6 @@ class PCDecimalTests: XCTestCase {
         super.tearDown()
     }
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
     func testDivisionByZero() throws {
         // 1. given
         let lhs = PCDecimal(12)
@@ -556,5 +548,4 @@ class PCDecimalTests: XCTestCase {
         // 3. then
         XCTAssertEqual(result.description, "17580887698819776513", "Failed fixing overflow")
     }
-    
 }

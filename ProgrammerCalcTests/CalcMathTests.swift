@@ -33,20 +33,11 @@ class CalcMathTests: XCTestCase {
         calcMathTest = CalcMath()
         let dummyConversionSettings = ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
         storage.saveData(dummyConversionSettings)
-        
     }
     
     override func tearDown() {
         calcMathTest = nil
         super.tearDown()
-    }
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
     func testFillUpBits() throws {

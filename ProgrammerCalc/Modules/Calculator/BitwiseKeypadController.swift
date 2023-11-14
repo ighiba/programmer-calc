@@ -87,7 +87,7 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
     }
     
     private func getBinaryValueString() -> [Character] {
-        return [Character](binary.value.removeAllSpaces())
+        return [Character](binary.value.removedAllSpaces())
     }
     
     public func updateStyle(_ style: Style) {
@@ -182,7 +182,7 @@ class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate
         sender.setBitState(bitState)
         
         let bitIndex = 63 - sender.tag + tagOffset
-        binary.value = binary.value.replaceAt(index: bitIndex, with: bit)
+        binary.value = binary.value.replace(atPosition: bitIndex, with: bit)
         binaryCharArray[bitIndex] = bit
         
         updateInputValue()

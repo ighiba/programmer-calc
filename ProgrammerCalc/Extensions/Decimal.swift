@@ -9,15 +9,6 @@
 import Foundation
 
 extension Decimal {
-    var fractPartDigitCount: Int { fractPart.count }
-    
-    var fractPart: String {
-        let components = self.description.components(separatedBy: ".")
-        if components.count > 1 {
-            return components[1]
-        }
-        return ""
-    }
     
     var intPart: UInt64 {
         let roundingBehavior = NSDecimalNumberHandler(
@@ -31,7 +22,15 @@ extension Decimal {
         return NSDecimalNumber(decimal: self).rounding(accordingToBehavior: roundingBehavior).uint64Value
     }
     
-    // Converting binary string in decimal number
+    var fractPartDigitCount: Int { fractPart.count }
+    var fractPart: String {
+        let components = self.description.components(separatedBy: ".")
+        if components.count > 1 {
+            return components[1]
+        }
+        return ""
+    }
+    
     init(_ str: String, radix: Int) {
         self.init()
         var decimal = Decimal()
@@ -57,20 +56,19 @@ extension Decimal {
         return NSDecimalNumber(decimal: self).rounding(accordingToBehavior: roundingBehavior).decimalValue
     }
     
-    // % for decimal values
-    static func % (left: Decimal, right: Decimal) -> Decimal {
-        let reminder: Decimal
+    static func % (lhs: Decimal, rhs: Decimal) -> Decimal {
+        let result: Decimal
+
+        let dec = lhs / rhs
+        let decRounded = dec.round(scale: 0, roundingModeMode: .down)
         
-        var dec = left / right
-        var decCopy = dec
-        NSDecimalRound(&dec, &decCopy, 0, .down)
-        if decCopy > dec {
-            let buffDec = decCopy - dec
-            reminder = buffDec * right
+        if dec > decRounded {
+            let roundDifference = dec - decRounded
+            result = roundDifference * rhs
         } else {
-            reminder = Decimal(0)
+            result = 0
         }
-        
-        return reminder
+
+        return result
     }
 }

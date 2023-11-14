@@ -12,7 +12,7 @@ private let digitValues: Set<String> = ["00", "0", "1", "2", "3", "4", "5", "6",
 private let charValues: Set<String> = ["A", "B", "C", "D", "E", "F", "FF"]
 
 class ConversionValues {
-    static var allowed: [ConversionSystemsEnum : Set<String>] {
+    static var allowed: [ConversionSystem : Set<String>] {
         return [
             .bin : digitValues.intersection(["00", "0", "1"]),
             .dec : digitValues,
@@ -21,7 +21,7 @@ class ConversionValues {
         ]
     }
     
-    static var forbidden: [ConversionSystemsEnum : Set<String>] {
+    static var forbidden: [ConversionSystem : Set<String>] {
         return [
             .bin : digitValues.union(charValues).subtracting(["1", "0", "00"]),
             .dec : charValues,
@@ -30,11 +30,11 @@ class ConversionValues {
         ]
     }
     
-    static func getForbidden(for system: ConversionSystemsEnum) -> Set<String> {
+    static func getForbidden(for system: ConversionSystem) -> Set<String> {
         return forbidden[system]!
     }
     
-    static func getAllowed(for system: ConversionSystemsEnum) -> Set<String> {
+    static func getAllowed(for system: ConversionSystem) -> Set<String> {
         return allowed[system]!
     }
 }

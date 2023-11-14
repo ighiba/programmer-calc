@@ -35,14 +35,6 @@ class HexadecimalTests: XCTestCase {
         super.tearDown()
     }
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-    
     func testHexadecimalUnsignedInit() throws {
         // 1. given
         calcState.setCalcState(unsignedData)
@@ -153,7 +145,4 @@ class HexadecimalTests: XCTestCase {
         // 3. then
         XCTAssertEqual(binary.value, "0000000000000000000000000000000000000000000000000000101011110000", "Converted values are wrong")
     }
-    
-    
-    
 }

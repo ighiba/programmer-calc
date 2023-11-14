@@ -59,7 +59,7 @@ class LabelFormatter {
     
     
     // For updating input main label
-    public func processStrInputToFormat(inputStr: String, for system: ConversionSystemsEnum) -> String {
+    public func processStrInputToFormat(inputStr: String, for system: ConversionSystem) -> String {
         var processedStr = String()
         
         // ==================
@@ -69,8 +69,8 @@ class LabelFormatter {
         // if last char is dot then append dot
         var lastSymbolsIfExists: String = inputStr.last == "." ? "." : ""
         // get str fract part
-        var testLabelStr = inputStr.removeAllSpaces()
-        let fractPartStr = testLabelStr.getPartAfter(separator: ".")
+        var testLabelStr = inputStr.removedAllSpaces()
+        let fractPartStr = testLabelStr.getPart(.after, separator: ".")
 
         let numbersAfterPoint = Int(conversionSettings.numbersAfterPoint)
         // cut fract part if more then numbersAfterPoint
@@ -115,14 +115,14 @@ class LabelFormatter {
             
             // delete trailing zeros if contains .
             if bin.value.contains(".") {
-                var str = bin.value.removeAllSpaces()
+                var str = bin.value.removedAllSpaces()
                 let splittedBinary = bin.divideIntFract(value: str)
                 // remove zeros in intpart
                 var intPart = splittedBinary.0!
-                intPart = intPart.removeLeading(characters: ["0"])
+                intPart = intPart.removedLeading(characters: ["0"])
                 if intPart == "" { intPart = "0" }
                 // remove zeros in fract part
-                let fractPart = testLabelStr.removeAllSpaces().getPartAfter(separator: ".")
+                let fractPart = testLabelStr.removedAllSpaces().getPart(.after, separator: ".")
                 // fill zeros to word size
                 str = bin.fillUpZeros(str: intPart, to: wordSize.intValue)
                 str = str + "." + fractPart
@@ -157,7 +157,7 @@ class LabelFormatter {
             // check if is negative float value
             if testDec.value.contains(".") && testDec.decimalValue < 0 {
                 // remove fract part from str
-                processedStr = processedStr.getPartBefore(separator: ".")
+                processedStr = processedStr.getPart(.before, separator: ".")
                 // if negative value is from 0.* then set it to zero
                 if testDec.decimalValue > -1 && testDec.decimalValue < 0 { processedStr = "0" }
             }
@@ -168,8 +168,8 @@ class LabelFormatter {
     
     private func composePartsFrom(intPartFrom: String, fractPartFrom: String) -> String {
         if intPartFrom.contains(".") && fractPartFrom.last != "." {
-            let intPart = intPartFrom.getPartBefore(separator: ".")
-            let fractPart = fractPartFrom.getPartAfter(separator: ".")
+            let intPart = intPartFrom.getPart(.before, separator: ".")
+            let fractPart = fractPartFrom.getPart(.after, separator: ".")
             return intPart + "." + fractPart
         } else {
             return intPartFrom
@@ -179,12 +179,12 @@ class LabelFormatter {
     // Cutting fract part of float number by max number of digits after .
     private func cutFractPart(strValue: String, by count: Int) -> String {
         var result = strValue
-        var fractPartStr: String = strValue.getPartAfter(separator: ".")
+        var fractPartStr: String = strValue.getPart(.after, separator: ".")
         while fractPartStr.count > count {
             fractPartStr.removeLast(1)
             if fractPartStr.count == count {
                 // create new inputStr
-                let intPart = strValue.getPartBefore(separator: ".")
+                let intPart = strValue.getPart(.before, separator: ".")
                 result = intPart + "." + fractPartStr
                 break
             }
@@ -193,7 +193,7 @@ class LabelFormatter {
     }
     
     // Check if given number more than current settings allows
-    public func isInputOverflowed(_ value: String, for system: ConversionSystemsEnum, currentValue: PCDecimal) -> Bool {
+    public func isInputOverflowed(_ value: String, for system: ConversionSystem, currentValue: PCDecimal) -> Bool {
         if hasFloatingPoint(value) {
             return isFloatInputOverflowed(value)
         } else {
@@ -201,7 +201,7 @@ class LabelFormatter {
             guard buffValue != nil else { return true }
             // Convert number to Binary without formatting
             let bin = buffValue!.toBinary()
-            bin.value = bin.value.removeAllSpaces()
+            bin.value = bin.value.removedAllSpaces()
             
             return isNonFloatBinOverflowed(bin, currentValue: currentValue)
         }
@@ -215,9 +215,9 @@ class LabelFormatter {
         // input allowed if last symbol is "."
         guard value.last != "." else { return false }
         // check if fract part fits in numbersAfterPoint setting
-        let testStr = value.removeAllSpaces()
+        let testStr = value.removedAllSpaces()
         let numbersAfterPoint = Int(conversionSettings.numbersAfterPoint)
-        let fractPartCount = testStr.getPartAfter(separator: ".").count
+        let fractPartCount = testStr.getPart(.after, separator: ".").count
         // compare values
         return fractPartCount <= numbersAfterPoint ? false : true
     }
