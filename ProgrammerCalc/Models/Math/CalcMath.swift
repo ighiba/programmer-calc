@@ -8,21 +8,6 @@
 
 import Foundation
 
-// Error types
-enum MathErrors: Error, CaseIterable {
-    case divByZero
-}
-
-extension MathErrors: LocalizedError {
-    // Error localization
-    public var localizedDescription: String? {
-        switch self {
-        case .divByZero:
-            return NSLocalizedString("Cannot divide by zero", comment: "")
-        }
-    }
-}
-
 final class CalcMath {
     
     private let conversionSettings: ConversionSettings = ConversionSettings.shared
@@ -82,9 +67,9 @@ final class CalcMath {
         var newDecimal: DecimalSystem?
         do {
             newDecimal = try calculateDecNumbers(firstNum: firstConverted, secondNum: secondConverted, operation: operation)!
-        } catch MathErrors.divByZero {
+        } catch MathError.divByZero {
             // Throw division by zero
-            throw MathErrors.divByZero
+            throw MathError.divByZero
         } catch {
             // else
         }
@@ -145,7 +130,7 @@ final class CalcMath {
             // if dvision by zero
             guard secondDecimal != 0 else {
                 // Throw division by zero
-                throw MathErrors.divByZero
+                throw MathError.divByZero
             }
             return DecimalSystem(firstDecimal / secondDecimal)
         // Bitwise shift left

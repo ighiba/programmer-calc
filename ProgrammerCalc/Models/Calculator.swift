@@ -89,7 +89,7 @@ class Calculator: CalculatorProtocol {
             operation?.previousValue = PCDecimal(value: result.getDecimal())
             shouldStartNewInput = startNewInput
             currentValue = result
-        } catch MathErrors.divByZero {
+        } catch MathError.divByZero {
             resetCalculation()
             currentValue = PCDecimal(value: 0.0)
             setErrorInLabels(.divByZero)
@@ -99,11 +99,11 @@ class Calculator: CalculatorProtocol {
         }
     }
     
-    private func showErrorInLabels(_ error: MathErrors) {
+    private func showErrorInLabels(_ error: MathError) {
         calculatorPresenterDelegate.showErrorInLabels(error)
     }
     
-    private func setErrorInLabels(_ error: MathErrors) {
+    private func setErrorInLabels(_ error: MathError) {
         calculatorPresenterDelegate.setErrorInLabels(error)
     }
     
@@ -142,7 +142,7 @@ class Calculator: CalculatorProtocol {
             if currentValue != .zero {
                 return previousValue / currentValue
             } else {
-                throw MathErrors.divByZero
+                throw MathError.divByZero
             }
         case .shiftLeftBy:
             return previousValue << currentValue

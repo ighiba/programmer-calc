@@ -271,12 +271,12 @@ class CalculatorViewController: StyledViewController, CalculatorInput, Calculato
         return mainLabel.hasError
     }
     
-    func showErrorInLabels(_ error: MathErrors) {
+    func showErrorInLabels(_ error: MathError) {
         mainLabel.showErrorInLabel(error.localizedDescription!)
         converterLabel.showErrorInLabel("NaN")
     }
     
-    func setErrorInLabels(_ error: MathErrors) {
+    func setErrorInLabels(_ error: MathError) {
         mainLabel.setError(error)
         converterLabel.setError(error)
     }

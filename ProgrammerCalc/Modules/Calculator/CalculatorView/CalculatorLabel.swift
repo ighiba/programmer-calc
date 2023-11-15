@@ -16,7 +16,7 @@ protocol CalculatorLabelDelegate {
     var hasError: Bool { get }
     func getText(deleteSpaces: Bool) -> String
     func setText(_ text: String)
-    func setError(_ error: MathErrors)
+    func setError(_ error: MathError)
     func showErrorInLabel(_ errorMessage: String)
 }
 
@@ -36,7 +36,7 @@ class CalculatorLabel: UILabel, UpdatableLabel, CalculatorLabelDelegate {
         }
     }
     
-    var error: MathErrors?
+    var error: MathError?
     var hasError: Bool { error != nil }
     
     // MARK: - Initialization
@@ -60,7 +60,7 @@ class CalculatorLabel: UILabel, UpdatableLabel, CalculatorLabelDelegate {
     override func copy(_ sender: Any?) {
         let board = UIPasteboard.general
         var textToBoard: String? = ""
-        for error in MathErrors.allCases {
+        for error in MathError.allCases {
             if text == error.localizedDescription {
                 textToBoard = text
                 break
@@ -145,7 +145,7 @@ class CalculatorLabel: UILabel, UpdatableLabel, CalculatorLabelDelegate {
         self.text = text
     }
     
-    func setError(_ error: MathErrors) {
+    func setError(_ error: MathError) {
         self.error = error
     }
     

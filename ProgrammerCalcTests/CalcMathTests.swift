@@ -64,8 +64,8 @@ class CalcMathTests: XCTestCase {
         // 2. when
         do {
             let _ = try calcMathTest.calculate(firstValue: decFirst, operation: .div, secondValue: decSecond, for: .dec)!
-        } catch MathErrors.divByZero {
-            result = MathErrors.divByZero.localizedDescription ?? ""
+        } catch MathError.divByZero {
+            result = MathError.divByZero.localizedDescription ?? ""
         } catch {
             // else
             result = "no error"
