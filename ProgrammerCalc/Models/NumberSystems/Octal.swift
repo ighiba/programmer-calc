@@ -8,26 +8,27 @@
 
 import Foundation
 
-class Octal: NumberSystemProtocol {
+final class Octal: NumberSystemProtocol {
     
-    // ==================
     // MARK: - Properties
-    // ==================
     
     private let octHexHelper = OctHexHelper()
     
-    var value: String = ""
-    var isSigned: Bool = false // default
+    var value: String = "0"
+    var isSigned: Bool = false
 
-    // table for converting from binary to oct
-    let table = [   "000":"0",
-                    "001":"1",
-                    "010":"2",
-                    "011":"3",
-                    "100":"4",
-                    "101":"5",
-                    "110":"6",
-                    "111":"7"]
+    // oct table for converting from binary to oct
+    // from 0 to 7
+    private let table: [String : String] = [
+        "000" : "0",
+        "001" : "1",
+        "010" : "2",
+        "011" : "3",
+        "100" : "4",
+        "101" : "5",
+        "110" : "6",
+        "111" : "7"
+    ]
     
     required public init(stringLiteral value: String) {
         self.value = value
@@ -35,7 +36,7 @@ class Octal: NumberSystemProtocol {
     
     /// Creates an empty instance
     init() {
-        self.value = "000"
+        self.value = "0"
     }
     
     /// Creates an instance initialized to the Binary value
@@ -44,25 +45,17 @@ class Octal: NumberSystemProtocol {
         self.value = octal.value
     }
     
-    // ===============
     // MARK: - Methods
-    // ===============
     
     func toBinary() -> Binary {
-        return self.convertOctToBinary()
+        return convertOctToBinary()
     }
     
-    // OCT -> BIN
-    // Convert from oct to binary with table helper
     func convertOctToBinary() -> Binary {
-        let octalValue = self.value
         let binary = Binary()
-        
-        // from oct to binary
-        // process each number and form parts
-        binary.value = octHexHelper.tableOctHexToBin(valueOctHex: octalValue, table: table)
+
+        binary.value = octHexHelper.tableOctHexToBin(valueOctHex: value, table: table)
 
         return binary
     }
-    
 }

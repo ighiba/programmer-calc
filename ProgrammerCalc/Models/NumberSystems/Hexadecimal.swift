@@ -18,8 +18,8 @@ final class Hexadecimal: NumberSystemProtocol {
     var isSigned: Bool = false
 
     // hex table for converting from binary to hex
-    // from 0 to 16
-    private let table = [
+    // from 0 to 15
+    private let table: [String : String] = [
         "0000" : "0",
         "0001" : "1",
         "0010" : "2",
@@ -60,10 +60,9 @@ final class Hexadecimal: NumberSystemProtocol {
     }
     
     func convertHexToBinary() -> Binary {
-        let hexadecimalValue = value
         let binary = Binary()
-
-        binary.value = octHexHelper.tableOctHexToBin(valueOctHex: hexadecimalValue, table: table)
+        
+        binary.value = octHexHelper.tableOctHexToBin(valueOctHex: value, table: table)
         
         return binary
     }
