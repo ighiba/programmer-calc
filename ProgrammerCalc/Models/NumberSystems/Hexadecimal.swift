@@ -48,18 +48,14 @@ final class Hexadecimal: NumberSystemProtocol {
     }
     
     /// Creates an instance initialized to the Binary value
-    init(_ valueBin: Binary) {
-        let hexadecimal = valueBin.convertBinaryToHex(hexTable: table)
+    init(_ binary: Binary) {
+        let hexadecimal = binary.convertBinaryToHex(hexTable: table)
         self.value = hexadecimal.value
     }
     
     // MARK: - Methods
     
     func toBinary() -> Binary {
-        return convertHexToBinary()
-    }
-    
-    func convertHexToBinary() -> Binary {
         let binary = Binary()
         
         binary.value = octHexHelper.tableOctHexToBin(valueOctHex: value, table: table)

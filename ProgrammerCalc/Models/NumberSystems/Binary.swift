@@ -58,13 +58,13 @@ class Binary: NumberSystemProtocol {
     
     /// Creates an instance initialized to the Hexadecimal value
     init(_ valueHex: Hexadecimal) {
-        let binary = valueHex.convertHexToBinary()
+        let binary = valueHex.toBinary()
         self.value = binary.value
     }
     
     /// Creates an instance initialized to the Octal value
     init(_ valueOct: Octal) {
-        let binary = valueOct.convertOctToBinary()
+        let binary = valueOct.toBinary()
         self.value = binary.value
     }
 

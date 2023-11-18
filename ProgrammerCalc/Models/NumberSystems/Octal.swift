@@ -40,18 +40,14 @@ final class Octal: NumberSystemProtocol {
     }
     
     /// Creates an instance initialized to the Binary value
-    init(_ valueBin: Binary) {
-        let octal = valueBin.convertBinaryToOct(octTable: table)
+    init(_ binary: Binary) {
+        let octal = binary.convertBinaryToOct(octTable: table)
         self.value = octal.value
     }
     
     // MARK: - Methods
     
     func toBinary() -> Binary {
-        return convertOctToBinary()
-    }
-    
-    func convertOctToBinary() -> Binary {
         let binary = Binary()
 
         binary.value = octHexHelper.tableOctHexToBin(valueOctHex: value, table: table)
