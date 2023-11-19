@@ -129,7 +129,7 @@ struct PCDecimal: CustomStringConvertible, Equatable, Codable {
         
         if value > maxValue {
             var div = (value + maxValue + 1) / pow(Decimal(2), bitWidth)
-            div = div.round(scale: 0, roundingModeMode: .down)
+            div = div.round(scale: 0, roundingMode: .down)
             value -= div * pow(Decimal(2), bitWidth)
             
             if !processSigned && value < minValue {
@@ -137,7 +137,7 @@ struct PCDecimal: CustomStringConvertible, Equatable, Codable {
             }
         } else if value < minValue {
             var div = (value - minValue) / pow(Decimal(2), bitWidth)
-            div = div.round(scale: 0, roundingModeMode: .down)
+            div = div.round(scale: 0, roundingMode: .down)
             value -= div * pow(Decimal(2), bitWidth)
             
             if !processSigned && value > maxValue {

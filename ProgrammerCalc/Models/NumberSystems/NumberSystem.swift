@@ -16,3 +16,27 @@ protocol NumberSystemProtocol {
 
     func toBinary() -> Binary
 }
+
+extension NumberSystemProtocol {
+    
+    typealias IntPart = String
+    typealias FractPart = String
+    
+    func divideIntFract(str: String) -> (intPart: IntPart?, fractPart: FractPart?) {
+        var intPartStr: String
+        var fractPartStr: String
+        
+        if let pointPosition = str.firstIndex(of: ".") {
+            let intPartRange = str.startIndex ..< pointPosition
+            let fractPartRange = pointPosition ..< str.endIndex
+            
+            intPartStr = String(str[intPartRange])
+            fractPartStr = String(str[fractPartRange])
+            fractPartStr.removeFirst()
+           
+            return (intPartStr, fractPartStr)
+        } else {
+            return (str, nil)
+        }
+    }
+}

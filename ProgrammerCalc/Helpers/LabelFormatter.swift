@@ -116,7 +116,7 @@ class LabelFormatter {
             // delete trailing zeros if contains .
             if bin.value.contains(".") {
                 var str = bin.value.removedAllSpaces()
-                let splittedBinary = bin.divideIntFract(value: str)
+                let splittedBinary = bin.divideIntFract(str: str)
                 // remove zeros in intpart
                 var intPart = splittedBinary.0!
                 intPart = intPart.removedLeading(characters: ["0"])

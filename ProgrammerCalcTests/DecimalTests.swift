@@ -114,29 +114,27 @@ class DecimalTests: XCTestCase {
         XCTAssertEqual(binary.value, "0000000000000000000000000000000000000000000000000011000000111001", "Converted values are wrong")
     }
 
-    func testHexadecimalConvertToBinaryUnsigned() throws {
+    func testHexadecimalToBinaryUnsigned() throws {
         // 1. given
         calcState.setCalcState(unsignedData)
         decimalTest = DecimalSystem(stringLiteral: "65536")
 
         // 2. when
-        let binary = decimalTest.convertDecToBinary()
+        let binary = decimalTest.toBinary()
 
         // 3. then
         XCTAssertEqual(binary.value, "0000000000000000000000000000000000000000000000010000000000000000", "Converted values are wrong")
     }
 
-    func testHexadecimalConvertToBinarySigned() throws {
+    func testHexadecimalToBinarySigned() throws {
         // 1. given
         calcState.setCalcState(signedData)
         decimalTest = DecimalSystem(stringLiteral: "-65536")
 
         // 2. when
-        let binary = decimalTest.convertDecToBinary()
+        let binary = decimalTest.toBinary()
 
         // 3. then
         XCTAssertEqual(binary.value, "1111111111111111111111111111111111111111111111110000000000000000", "Converted values are wrong")
     }
-
-    
 }

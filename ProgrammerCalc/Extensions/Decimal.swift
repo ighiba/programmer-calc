@@ -44,9 +44,9 @@ extension Decimal {
         self = decimal
     }
     
-    func round(scale: Int16, roundingModeMode: NSDecimalNumber.RoundingMode) -> Decimal {
+    func round(scale: Int16, roundingMode: NSDecimalNumber.RoundingMode) -> Decimal {
         let roundingBehavior = NSDecimalNumberHandler(
-            roundingMode: roundingModeMode,
+            roundingMode: roundingMode,
             scale: scale,
             raiseOnExactness: false,
             raiseOnOverflow: false,
@@ -60,7 +60,7 @@ extension Decimal {
         let result: Decimal
 
         let dec = lhs / rhs
-        let decRounded = dec.round(scale: 0, roundingModeMode: .down)
+        let decRounded = dec.round(scale: 0, roundingMode: .down)
         
         if dec > decRounded {
             let roundDifference = dec - decRounded

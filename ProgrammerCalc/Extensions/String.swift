@@ -11,14 +11,14 @@ import Foundation
 extension String {
     
     init(_ decimal: Decimal, radix: Int) {
-        var dec = decimal.round(scale: 0, roundingModeMode: .down)
+        var dec = decimal.round(scale: 0, roundingMode: .down)
 
         var str = String()
         while dec > 0 {
             let reminder = dec % Decimal(radix)
             str.insert(contentsOf: "\(reminder)", at: str.startIndex)
             dec = (dec / Decimal(radix))
-            dec = dec.round(scale: 0, roundingModeMode: .down)
+            dec = dec.round(scale: 0, roundingMode: .down)
         }
 
         self.init(stringLiteral: str)

@@ -8,137 +8,60 @@
 
 import Foundation
 
-class DecimalSystem: NumberSystemProtocol {
-    
-    // ==================
+final class DecimalSystem: NumberSystemProtocol {
+
     // MARK: - Properties
-    // ==================
-    
-    // Decimal raw value for calculating
+
     var decimalValue: Decimal
     
     var value: String
     var isSigned: Bool = false
-    
-    // ======================
-    // MARK: - Initialization
-    // ======================
+
+    // MARK: - Init
     
     /// Creates an instance initialized to the String
     required init(stringLiteral: String) {
         self.value = stringLiteral
         self.decimalValue = Decimal(string: stringLiteral) ?? Decimal(0)
-        updateIsSignedState()
+        self.updateIsSignedState()
     }
 
     /// Creates an instance initialized to the Decimal value
-    init(_ valueDec: Decimal) {
-        self.decimalValue = valueDec
+    init(_ decimal: Decimal) {
+        self.decimalValue = decimal
         self.value = "\(self.decimalValue)"
-        updateIsSignedState()
+        self.updateIsSignedState()
     }
     
     /// Creates an instance initialized to the Int  value
-    init(_ valueInt: Int) {
-        self.decimalValue = Decimal(valueInt)
+    init(_ int: Int) {
+        self.decimalValue = Decimal(int)
         self.value = "\(self.decimalValue)"
-        updateIsSignedState()
+        self.updateIsSignedState()
     }
     
     /// Creates an instance initialized to the Binary value
-    init(_ valueBin: Binary) {
-        self.decimalValue = valueBin.convertBinaryToDec()
+    init(_ binary: Binary) {
+        self.decimalValue = binary.convertBinaryToDec()
         self.value = "\(self.decimalValue)"
-        updateIsSignedState()
+        self.updateIsSignedState()
     }
     
     /// Creates an instance initialized to the DecimalSystem value
-    init(_ valueDec: DecimalSystem) {
-        self.decimalValue = valueDec.decimalValue
-        self.value = valueDec.value
-        self.isSigned = valueDec.isSigned
+    init(_ decimalSystem: DecimalSystem) {
+        self.decimalValue = decimalSystem.decimalValue
+        self.value = "\(self.decimalValue)"
+        self.isSigned = decimalSystem.isSigned
     }
     
     /// Creates an instance initialized to the PCDecimal value
-    init(_ value: PCDecimal) {
-        self.decimalValue = value.getDecimal()
-        self.value = "\(value.getDecimal())"
-        updateIsSignedState()
+    init(_ pcDecimal: PCDecimal) {
+        self.decimalValue = pcDecimal.getDecimal()
+        self.value = "\(self.decimalValue)"
+        self.updateIsSignedState()
     }
     
-    // ===============
     // MARK: - Methods
-    // ===============
-    
-    func toBinary() -> Binary {
-        return self.convertDecToBinary()
-    }
-    
-    // Handle converting values NumberSystem
-    
-    // DEC -> BIN
-    func convertDecToBinary() -> Binary {
-        var decNumStr: String
-        var binary = Binary()
-        
-        updateIsSignedState()
-
-        // if number is signed
-        // remove minus for converting
-        if isSigned {
-            decimalValue *= -1
-        }
-        
-        decNumStr = "\(decimalValue)"
-
-        if decNumStr.contains(".") {
-            // Process float numbers
-            let splittedDoubleStr = binary.divideIntFract(value: decNumStr)
-            let str = binary.convertDoubleToBinaryStr(numberStr: splittedDoubleStr)
-            binary = Binary(stringLiteral: str)
-        } else {
-            let str = binary.convertDecToBinary(decimalValue)
-            binary = Binary(stringLiteral: str)
-        }
-        // return sign to decimal
-        if isSigned {
-            decimalValue *= -1
-        }
-        
-        // process value
-        let splittedBinaryStr = binary.divideIntFract(value: binary.value)
-        
-        // process int part of binary
-        if let intPart = splittedBinaryStr.0 {
-            binary.value = intPart
-            // remove zeros
-            binary.value = binary.removeZerosBefore(str: binary.value)
-            // set signed state to binary
-            binary.isSigned = self.isSigned
-            // fill up to 63 bits
-            binary.fillUpToMaxBitsCount()
-            // isSigned == true -> 1 else -> 0
-
-            //binary.value = "0" + binary.value
-            if isSigned {
-                binary.twosComplement()
-            }
-        }
-        
-        // add fract part if exists
-        if let fractPart = splittedBinaryStr.1 {
-            // invert fract part if isSigned
-            if isSigned {
-                let invertedFractPart = fractPart.swap(first: "1", second: "0")
-                binary.value = "\(binary.value).\(invertedFractPart)"
-            } else {
-                binary.value = "\(binary.value).\(fractPart)"
-            }
-        }
-
-        
-        return binary
-    }
     
     private func updateIsSignedState() {
         if decimalValue < 0 {
@@ -148,28 +71,89 @@ class DecimalSystem: NumberSystemProtocol {
         }
     }
     
-    // Change raw decimal value and update sign state
-    func setNewDecimal(with decimalValue: Decimal) {
-        self.decimalValue = decimalValue
-        self.value = "\(decimalValue)"
+    func toBinary() -> Binary {
+        // if value is signed then remove minus for converting
         updateIsSignedState()
-    }
-    
-    func removeFractPart() -> Decimal {
-        let dec = DecimalSystem(self)
-        var decIntPart = dec.decimalValue
-        var decIntPartCopy = decIntPart
-        // round decimal
-        if dec.decimalValue > 0 {
-            NSDecimalRound(&decIntPart, &decIntPartCopy, 0, .down)
-        } else {
-            NSDecimalRound(&decIntPart, &decIntPartCopy, 0, .up)
+        if isSigned {
+            decimalValue = abs(decimalValue)
         }
         
-        // update self value
-        setNewDecimal(with: decIntPart)
+        let decimalValueStr = "\(decimalValue)"
+        var binary = Binary()
         
-        // return fract part of decimal
-        return decIntPartCopy - decIntPart
+        let binaryStr: String = {
+            if decimalValueStr.contains(".") {
+                let splittedDoubleStr = divideIntFract(str: decimalValueStr)
+                return binary.convertDoubleToBinaryStr(numberStr: splittedDoubleStr)
+            } else {
+                return binary.convertDecToBinary(decimalValue)
+            }
+        }()
+        
+        binary = Binary(stringLiteral: binaryStr)
+        
+        // return minus to decimal if isSigned
+        if isSigned {
+            decimalValue *= -1
+        }
+        
+        let splittedBinaryStr = divideIntFract(str: binary.value)
+        
+        if let intPart = splittedBinaryStr.intPart {
+            binary = processBinaryIntPart(binary, intPart: intPart)
+        }
+        
+        if let fractPart = splittedBinaryStr.fractPart {
+            binary = processBinaryFractPart(binary, fractPart: fractPart)
+        }
+
+        return binary
+    }
+    
+    private func processBinaryIntPart(_ binary: Binary, intPart: IntPart) -> Binary {
+        binary.value = binary.removeZerosBefore(str: intPart)
+        binary.isSigned = isSigned
+        binary.fillUpToMaxBitsCount()
+
+        if isSigned {
+            binary.twosComplement()
+        }
+        
+        return binary
+    }
+    
+    private func processBinaryFractPart(_ binary: Binary, fractPart: FractPart) -> Binary {
+        var resultFractPart = fractPart
+        
+        if isSigned {
+            let invertedFractPart = fractPart.swap(first: "1", second: "0")
+            resultFractPart = "\(invertedFractPart)"
+        }
+        
+        binary.value = "\(binary.value).\(resultFractPart)"
+        
+        return binary
+    }
+
+    func removeFractPart() -> Decimal {
+        let roundedDecimal: Decimal
+        
+        if decimalValue > 0 {
+            roundedDecimal = decimalValue.round(scale: 0, roundingMode: .down)
+        } else {
+            roundedDecimal = decimalValue.round(scale: 0, roundingMode: .up)
+        }
+        
+        let fractPart = decimalValue - roundedDecimal
+
+        setNewDecimal(with: roundedDecimal)
+
+        return fractPart
+    }
+    
+    func setNewDecimal(with newDecimalValue: Decimal) {
+        decimalValue = newDecimalValue
+        value = "\(newDecimalValue)"
+        updateIsSignedState()
     }
 }

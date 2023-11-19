@@ -10,10 +10,6 @@ import Foundation
 
 class Binary: NumberSystemProtocol {
     
-    // for divided numbers
-    typealias IntPart = String
-    typealias FractPart = String
-    
     // ==================
     // MARK: - Properties
     // ==================
@@ -45,14 +41,14 @@ class Binary: NumberSystemProtocol {
         self.init()
         // Get new DecimalSystem value
         let decNumber = DecimalSystem(valueInt)
-        let binary = decNumber.convertDecToBinary()
+        let binary = decNumber.toBinary()
         self.value = binary.value
     }
     
     /// Creates an instance initialized to the Decimal value
     convenience init(_ valueDec: DecimalSystem) {
         self.init()
-        let binary = valueDec.convertDecToBinary()
+        let binary = valueDec.toBinary()
         self.value = binary.value
     }
     
@@ -109,29 +105,6 @@ class Binary: NumberSystemProtocol {
         return resultStr
     }
     
-    // Dividing string variable and converting it to double without loss of precision
-    func divideIntFract( value: String) -> (IntPart?, FractPart?) {
-        let str = value
-        var strInt: String
-        var strFract: String
-        
-        // search index of floating pos
-        if let pointPos = str.firstIndex(of: ".") {
-            // fill strInt
-            strInt = String(str[str.startIndex..<pointPos])
-            // fill strFract
-            strFract = String(str[pointPos..<str.endIndex])
-            // delete .
-            strFract.removeFirst()
-           
-            return (strInt, strFract)
-            
-        } else {
-            // if is int
-            return (str, nil)
-        }
-    }
-    
     // BIN -> DEC
     func convertBinaryToDec() -> Decimal {
         let binary = Binary(self)
@@ -152,7 +125,7 @@ class Binary: NumberSystemProtocol {
         let str = binary.value.removedAllSpaces()
      
         // Dividing to int and fract parts
-        let buffDividedStr = divideIntFract(value: str)
+        let buffDividedStr = divideIntFract(str: str)
         var binIntStrBuff = buffDividedStr.0
        
         guard binIntStrBuff != nil else {
@@ -214,7 +187,7 @@ class Binary: NumberSystemProtocol {
         
         binary.value = binary.value.removedAllSpaces()
         
-        var dividedBinary = divideIntFract(value: binary.value)
+        var dividedBinary = divideIntFract(str: binary.value)
         
         // fill up to 3 or 4 digit in int part
         dividedBinary.0 = fillUpParts(str: dividedBinary.0!, by: partition)
@@ -244,7 +217,7 @@ class Binary: NumberSystemProtocol {
          
         let partition: Int = 3
         
-        var dividedBinary = divideIntFract(value: binary.value)
+        var dividedBinary = divideIntFract(str: binary.value)
         
         // fill up to 3 digit in int part
         dividedBinary.0 = fillUpParts(str: dividedBinary.0!, by: partition)
@@ -516,7 +489,7 @@ class Binary: NumberSystemProtocol {
     
     // Processing strings that initialized from stringLiteral
     func processStringInput( str: String) -> String {
-        let binaryDivided = self.divideIntFract(value: str)
+        let binaryDivided = self.divideIntFract(str: str)
         var resultStr = String()
         
         // process int part
@@ -686,7 +659,7 @@ class Binary: NumberSystemProtocol {
         binary.onesComplement()
 
         // get the int part of binary
-        let divided = divideIntFract(value: binary.value)
+        let divided = divideIntFract(str: binary.value)
         
         if let intPart = divided.0 {
             // fill up with zeros one bit

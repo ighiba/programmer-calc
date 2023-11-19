@@ -186,7 +186,7 @@ import Foundation
          binary.value = binary.value.removedAllSpaces()
  
          // split binary
-         let splittedBinary = binary.divideIntFract(value: binary.value)
+         let splittedBinary = binary.divideIntFract(str: binary.value)
  
          // process int part
          if let intPart = splittedBinary.0 {
