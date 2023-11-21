@@ -84,83 +84,83 @@ class Style: StyleProtocol {
 
 extension Style {
     static let light: Style = Style(
-        backgroundColor: UIColor(hex: 0xF8F8F8, alpha: 1),
-        labelTextColor: UIColor.black,
-        secondayLabelTextColor: UIColor(hex: 0xC4C4C4, alpha: 1),
-        tintColor: UIColor.systemBlue,
+        backgroundColor: UIColor(named: "LightTheme/BackgroundColor")!,
+        labelTextColor: UIColor(named: "LightTheme/LabelTextColor")!,
+        secondayLabelTextColor: UIColor(named: "LightTheme/SecondaryLabelTextColor")!,
+        tintColor: UIColor(named: "LightTheme/TintColor")!,
         numericButtonStyle: ButtonStyle(
-            frameColor: UIColor(hex: 0xEBEBEB, alpha: 1),
-            frameTint:  UIColor(hex: 0xEBEBEB, alpha: 1).darker(by: 0.5),
-            textColor:  UIColor.black,
-            textTint:   UIColor.black
+            frameColor: UIColor(named: "LightTheme/NumericButton/FrameColor")!,
+            frameTint:  UIColor(named: "LightTheme/NumericButton/FrameColor")!.darker(by: 0.5),
+            textColor:  UIColor(named: "LightTheme/NumericButton/TextColor")!,
+            textTint:   UIColor(named: "LightTheme/NumericButton/TextTintColor")!
         ),
         actionButtonStyle: ButtonStyle(
-            frameColor: UIColor.systemOrange,
-            frameTint:  UIColor.systemOrange.darker(by: 0.5),
-            textColor:  UIColor.white,
-            textTint:   UIColor.white
+            frameColor: UIColor(named: "LightTheme/ActionButton/FrameColor")!,
+            frameTint:  UIColor(named: "LightTheme/ActionButton/FrameColor")!.darker(by: 0.5),
+            textColor:  UIColor(named: "LightTheme/ActionButton/TextColor")!,
+            textTint:   UIColor(named: "LightTheme/ActionButton/TextTintColor")!
         ),
         miscButtonStyle: ButtonStyle(
-            frameColor: UIColor(hex: 0xBDBDBD, alpha: 1),
-            frameTint:  UIColor(hex: 0xBDBDBD, alpha: 1).darker(by: 0.5),
-            textColor:  UIColor.white,
-            textTint:   UIColor.white
+            frameColor: UIColor(named: "LightTheme/MiscButton/FrameColor")!,
+            frameTint:  UIColor(named: "LightTheme/MiscButton/FrameColor")!.darker(by: 0.5),
+            textColor:  UIColor(named: "LightTheme/MiscButton/TextColor")!,
+            textTint:   UIColor(named: "LightTheme/MiscButton/TextTintColor")!
         ),
-        buttonBorderColor: UIColor(hex: 0xE7E7E7, alpha: 1),
-        bitButtonColor: UIColor.black
+        buttonBorderColor: UIColor(named: "LightTheme/ButtonBorderColor")!,
+        bitButtonColor: UIColor(named: "LightTheme/BitButtonColor")!
     )
     
     static let dark: Style = Style(
-        backgroundColor: UIColor.black,
-        labelTextColor: UIColor.white,
-        secondayLabelTextColor: UIColor(hex: 0xC4C4C4, alpha: 1),
-        tintColor: UIColor.systemOrange,
+        backgroundColor: UIColor(named: "DarkTheme/BackgroundColor")!,
+        labelTextColor: UIColor(named: "DarkTheme/LabelTextColor")!,
+        secondayLabelTextColor: UIColor(named: "DarkTheme/SecondaryLabelTextColor")!,
+        tintColor: UIColor(named: "DarkTheme/TintColor")!,
         numericButtonStyle: ButtonStyle(
-            frameColor: UIColor(hex: 0x474747, alpha: 1),
-            frameTint:  UIColor(hex: 0x474747, alpha: 1).lighter(by: 0.5),
-            textColor:  UIColor.white,
-            textTint:   UIColor.white
+            frameColor: UIColor(named: "DarkTheme/NumericButton/FrameColor")!,
+            frameTint:  UIColor(named: "DarkTheme/NumericButton/FrameColor")!.lighter(by: 0.5),
+            textColor:  UIColor(named: "DarkTheme/NumericButton/TextColor")!,
+            textTint:   UIColor(named: "DarkTheme/NumericButton/TextTintColor")!
         ),
         actionButtonStyle: ButtonStyle(
-            frameColor: UIColor.systemOrange,
-            frameTint:  UIColor.systemOrange.lighter(by: 0.25),
-            textColor:  UIColor.white,
-            textTint:   UIColor.white
+            frameColor: UIColor(named: "DarkTheme/ActionButton/FrameColor")!,
+            frameTint:  UIColor(named: "DarkTheme/ActionButton/FrameColor")!.lighter(by: 0.25),
+            textColor:  UIColor(named: "DarkTheme/ActionButton/TextColor")!,
+            textTint:   UIColor(named: "DarkTheme/ActionButton/TextTintColor")!
         ),
         miscButtonStyle: ButtonStyle(
-            frameColor: UIColor(hex: 0x929292, alpha: 1),
-            frameTint:  UIColor(hex: 0x929292, alpha: 1).lighter(by: 0.25),
-            textColor:  UIColor.white,
-            textTint:   UIColor.white
+            frameColor: UIColor(named: "DarkTheme/MiscButton/FrameColor")!,
+            frameTint:  UIColor(named: "DarkTheme/MiscButton/FrameColor")!.lighter(by: 0.25),
+            textColor:  UIColor(named: "DarkTheme/MiscButton/TextColor")!,
+            textTint:   UIColor(named: "DarkTheme/MiscButton/TextTintColor")!
         ),
-        buttonBorderColor: UIColor.clear,
-        bitButtonColor: UIColor.white
+        buttonBorderColor: UIColor(named: "DarkTheme/ButtonBorderColor")!,
+        bitButtonColor: UIColor(named: "DarkTheme/BitButtonColor")!
     )
     
     static let oldSchool: Style = Style(
-        backgroundColor: UIColor(hex: 0x010700, alpha: 1),
-        labelTextColor: UIColor(hex: 0x4AF626, alpha: 1), // terminal green
-        secondayLabelTextColor: UIColor(hex: 0xC4C4C4, alpha: 1),
-        tintColor: UIColor(hex: 0x4AF626, alpha: 1),
+        backgroundColor: UIColor(named: "OldSchoolTheme/BackgroundColor")!,
+        labelTextColor: UIColor(named: "OldSchoolTheme/LabelTextColor")!,
+        secondayLabelTextColor: UIColor(named: "OldSchoolTheme/SecondaryLabelTextColor")!,
+        tintColor: UIColor(named: "OldSchoolTheme/TintColor")!,
         numericButtonStyle: ButtonStyle(
-            frameColor: UIColor(hex: 0xD7D8C6, alpha: 1),
-            frameTint:  UIColor(hex: 0xD7D8C6, alpha: 1).darker(by: 0.5),
-            textColor:  UIColor.black,
-            textTint:   UIColor.black
+            frameColor: UIColor(named: "OldSchoolTheme/NumericButton/FrameColor")!,
+            frameTint:  UIColor(named: "OldSchoolTheme/NumericButton/FrameColor")!.darker(by: 0.5),
+            textColor:  UIColor(named: "OldSchoolTheme/NumericButton/TextColor")!,
+            textTint:   UIColor(named: "OldSchoolTheme/NumericButton/TextTintColor")!
         ),
         actionButtonStyle: ButtonStyle(
-            frameColor: UIColor.systemOrange,
-            frameTint:  UIColor(hex: 0x474747, alpha: 1).darker(by: 0.5),
-            textColor:  UIColor.white,
-            textTint:   UIColor.white
+            frameColor: UIColor(named: "OldSchoolTheme/ActionButton/FrameColor")!,
+            frameTint:  UIColor(named: "OldSchoolTheme/ActionButton/FrameColor")!.darker(by: 0.5),
+            textColor:  UIColor(named: "OldSchoolTheme/ActionButton/TextColor")!,
+            textTint:   UIColor(named: "OldSchoolTheme/ActionButton/TextTintColor")!
         ),
         miscButtonStyle: ButtonStyle(
-            frameColor: UIColor(hex: 0x929292, alpha: 1),
-            frameTint:  UIColor(hex: 0x929292, alpha: 1).darker(by: 0.5),
-            textColor:  UIColor.black,
-            textTint:   UIColor.black
+            frameColor: UIColor(named: "OldSchoolTheme/MiscButton/FrameColor")!,
+            frameTint:  UIColor(named: "OldSchoolTheme/MiscButton/FrameColor")!.darker(by: 0.5),
+            textColor:  UIColor(named: "OldSchoolTheme/MiscButton/TextColor")!,
+            textTint:   UIColor(named: "OldSchoolTheme/MiscButton/TextTintColor")!
         ),
-        buttonBorderColor: UIColor.clear,
-        bitButtonColor: UIColor.white
+        buttonBorderColor: UIColor(named: "OldSchoolTheme/ButtonBorderColor")!,
+        bitButtonColor: UIColor(named: "OldSchoolTheme/BitButtonColor")!
     )
 }
