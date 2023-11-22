@@ -244,31 +244,31 @@ extension CalculatorButton {
         
         switch button.calcButtonType {
         case .numeric:
-            button.backgroundColor = style.numericButtonStyle.frameColor
-            button.frameTint = style.numericButtonStyle.frameTint
+            button.backgroundColor = style.numericButtonStyle.backgroundColor
+            button.frameTint = style.numericButtonStyle.backgroundTintColor
             button.setTitleColor(style.numericButtonStyle.textColor, for: .normal)
-            button.setTitleColor(style.numericButtonStyle.textTint, for: .highlighted)
+            button.setTitleColor(style.numericButtonStyle.textTintColor, for: .highlighted)
         case .sign:
-            button.backgroundColor = style.actionButtonStyle.frameColor
-            button.frameTint = style.actionButtonStyle.frameTint
+            button.backgroundColor = style.actionButtonStyle.backgroundColor
+            button.frameTint = style.actionButtonStyle.backgroundTintColor
             button.setTitleColor(style.actionButtonStyle.textColor, for: .normal)
-            button.setTitleColor(style.actionButtonStyle.textTint, for: .highlighted)
+            button.setTitleColor(style.actionButtonStyle.textTintColor, for: .highlighted)
         case .complement:
-            button.backgroundColor = style.miscButtonStyle.frameColor
-            button.frameTint = style.miscButtonStyle.frameTint
+            button.backgroundColor = style.miscButtonStyle.backgroundColor
+            button.frameTint = style.miscButtonStyle.backgroundTintColor
             button.setTitleColor(style.miscButtonStyle.textColor, for: .normal)
-            button.setTitleColor(style.miscButtonStyle.textTint, for: .highlighted)
+            button.setTitleColor(style.miscButtonStyle.textTintColor, for: .highlighted)
         case .bitwise:
-            button.backgroundColor = style.actionButtonStyle.frameColor
-            button.frameTint = style.actionButtonStyle.frameTint
+            button.backgroundColor = style.actionButtonStyle.backgroundColor
+            button.frameTint = style.actionButtonStyle.backgroundTintColor
             button.setTitleColor(style.actionButtonStyle.textColor, for: .normal)
-            button.setTitleColor(style.actionButtonStyle.textTint, for: .highlighted)
+            button.setTitleColor(style.actionButtonStyle.textTintColor, for: .highlighted)
         case .defaultBtn:
-            button.backgroundColor = style.miscButtonStyle.frameColor
-            button.frameTint = style.miscButtonStyle.frameTint
+            button.backgroundColor = style.miscButtonStyle.backgroundColor
+            button.frameTint = style.miscButtonStyle.backgroundTintColor
             button.setTitleColor(style.miscButtonStyle.textColor, for: .normal)
-            button.setTitleColor(style.miscButtonStyle.textTint, for: .highlighted)
-            button.setTitleColor(style.miscButtonStyle.textTint.darker(by: 0.7), for: .disabled)
+            button.setTitleColor(style.miscButtonStyle.textTintColor, for: .highlighted)
+            button.setTitleColor(style.miscButtonStyle.textTintColor.darker(by: 0.7), for: .disabled)
         }
 
         if style.buttonBorderColor != .clear {
