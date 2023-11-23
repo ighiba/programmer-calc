@@ -222,9 +222,8 @@ class Calculator: CalculatorProtocol {
             calculatorPresenterDelegate.updateClearButton(hasInput: false)
         }
 
-        if let numValue = numberSystemFactory.get(strValue: mainLabelText, currentSystem: conversionSettings.systemMain) {
-            updateCurrentValue(numValue)
-        }
+        let numValue = numberSystemFactory.get(strValue: mainLabelText, forSystem: conversionSettings.systemMain)
+        updateCurrentValue(numValue)
         
         if mainLabelText.contains(".") {
             calculatorPresenterDelegate.setMainLabelText(mainLabelText)
@@ -247,10 +246,10 @@ class Calculator: CalculatorProtocol {
         }
         
         let formattedText = labelFormatter.processStrInputToFormat(inputStr: newValue, for: conversionSettings.systemMain)
-        if let newNumber = numberSystemFactory.get(strValue: formattedText, currentSystem: conversionSettings.systemMain) {
-            updateCurrentValue(newNumber)
-            calculatorPresenterDelegate.setMainLabelText(formattedText)
-        }
+        let newNumber = numberSystemFactory.get(strValue: formattedText, forSystem: conversionSettings.systemMain)
+        updateCurrentValue(newNumber)
+        calculatorPresenterDelegate.setMainLabelText(formattedText)
+        
     }
 
     public func fixOverflowForCurrentValue() {

@@ -10,27 +10,20 @@ import Foundation
 
 class NumberSystemFactory {
     
-    func get(strValue value: String, currentSystem system: ConversionSystem) -> NumberSystemProtocol? {
-        var buffValue: NumberSystemProtocol?
+    func get(strValue value: String, forSystem system: ConversionSystem) -> NumberSystemProtocol {
+        let result: NumberSystemProtocol
         
         switch system {
         case .bin:
-            let dummyBin = Binary()
-            dummyBin.value = value
-            buffValue = Binary(dummyBin)
-            break
+            result = Binary(rawStringLiteral: value)
         case .oct:
-            buffValue = Octal(stringLiteral: value)
-            break
+            result = Octal(stringLiteral: value)
         case .dec:
-            buffValue = DecimalSystem(stringLiteral: value)
-            break
+            result = DecimalSystem(stringLiteral: value)
         case .hex:
-            buffValue = Hexadecimal(stringLiteral: value)
-            break
+            result = Hexadecimal(stringLiteral: value)
         }
         
-        return buffValue
+        return result
     }
 }
-

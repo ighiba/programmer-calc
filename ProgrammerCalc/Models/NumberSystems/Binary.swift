@@ -18,18 +18,22 @@ class Binary: NumberSystemProtocol {
     
     var value: String = "0"
     var isSigned: Bool = false // default
-
-    
-    required public init(stringLiteral value: String) {
-        // process string input and apply style for output
-        self.value = processStringInput(str: value)
-    }
     
     /// Creates an empty instance
     init() {
         self.value = "0"
     }
-  
+
+    /// Creates an instance initialized with String literal and process it to format
+    required public init(stringLiteral value: String) {
+        self.value = processStringInput(str: value)
+    }
+    
+    /// Creates an instance initialized with raw String literal and doesn't process it to format
+    init(rawStringLiteral value: String) {
+        self.value = value
+    }
+
     /// Creates an instance initialized to the Binary  value / copying another instance
     init(_ valueBin: Binary) {
         self.value = valueBin.value.removedAllSpaces()

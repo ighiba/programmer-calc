@@ -105,11 +105,7 @@ class LabelFormatter {
         
         if system == .bin {
             // get dummy bin without formatting
-            var bin: Binary = {
-                let dummyBin = Binary()
-                dummyBin.value = testLabelStr
-                return dummyBin
-            }()
+            var bin: Binary = Binary(rawStringLiteral: testLabelStr)
             
             bin = converter.convertValue(value: bin, to: .bin, format: true) as! Binary
             
@@ -138,7 +134,7 @@ class LabelFormatter {
             // Convert value in binary
             // process binary raw string input in new binary with current settings: processSigned, wordSize etc.
             // convert back in systemMain value and set new value in mainLabel
-            let value = self.numberSystemFactory.get(strValue: inputStr, currentSystem: system)!
+            let value = self.numberSystemFactory.get(strValue: inputStr, forSystem: system)
             let bin = self.converter.convertValue(value: value, to: .bin, format: true) as! Binary
             let updatedValue = self.converter.convertValue(value: bin, to: system, format: true)
             processedStr = updatedValue!.value
@@ -151,7 +147,7 @@ class LabelFormatter {
         // Check if value is float and negative
         // ====================================
         
-        let testProcessed: NumberSystemProtocol? = numberSystemFactory.get(strValue: processedStr, currentSystem: system)
+        let testProcessed: NumberSystemProtocol? = numberSystemFactory.get(strValue: processedStr, forSystem: system)
         
         if let testDec = converter.convertValue(value: testProcessed!, to: .dec, format: true) as? DecimalSystem {
             // check if is negative float value
@@ -197,10 +193,9 @@ class LabelFormatter {
         if hasFloatingPoint(value) {
             return isFloatInputOverflowed(value)
         } else {
-            let buffValue = numberSystemFactory.get(strValue: value, currentSystem: system)
-            guard buffValue != nil else { return true }
+            let buffValue = numberSystemFactory.get(strValue: value, forSystem: system)
             // Convert number to Binary without formatting
-            let bin = buffValue!.toBinary()
+            let bin = buffValue.toBinary()
             bin.value = bin.value.removedAllSpaces()
             
             return isNonFloatBinOverflowed(bin, currentValue: currentValue)
