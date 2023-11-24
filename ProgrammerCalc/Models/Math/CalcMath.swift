@@ -54,8 +54,8 @@ final class CalcMath {
         // Check if values is DecimalSystem
         // If not then convert to DecimalSystem
         if !(firstValue is DecimalSystem) || !(secondValue is DecimalSystem) {
-            firstConverted = converter.convertValue(value: firstValue, to: .dec, format: true)! as! DecimalSystem
-            secondConverted = converter.convertValue(value: secondValue, to: .dec, format: true)! as! DecimalSystem
+            firstConverted = converter.convertValue(value: firstValue, to: .dec, format: true) as! DecimalSystem
+            secondConverted = converter.convertValue(value: secondValue, to: .dec, format: true) as! DecimalSystem
         } else {
             firstConverted = firstValue as! DecimalSystem
             secondConverted = secondValue as! DecimalSystem
@@ -83,7 +83,7 @@ final class CalcMath {
         // convert to formatted bin
         let formattedBin = converter.convertValue(value: newDecimal!, to: .bin, format: true)
         // convert to decimal from bin
-        let formattedDec = converter.convertValue(value: formattedBin!, to: .dec, format: true) as! DecimalSystem
+        let formattedDec = converter.convertValue(value: formattedBin, to: .dec, format: true) as! DecimalSystem
         // add decimal fract part
         formattedDec.setNewDecimal(with: formattedDec.decimalValue + decFractPart)
         
@@ -227,7 +227,7 @@ final class CalcMath {
         // Convert Any to Decimal
         // ======================
         
-        let convertedDecimal = converter.convertValue(value: value, to: .dec, format: true)! as! DecimalSystem
+        let convertedDecimal = converter.convertValue(value: value, to: .dec, format: true) as! DecimalSystem
         
         // if 0 then return input value
         guard convertedDecimal.decimalValue != 0 else {
@@ -252,13 +252,7 @@ final class CalcMath {
         let newDecimal = DecimalSystem(newDecimalValue)
         // convert to system value if not decimal
         if system != .dec {
-            if let negatedValue = converter.convertValue(value: newDecimal, to: system, format: true) {
-                return negatedValue
-            } else {
-                // if return nil
-                return value
-            }
-        // for decimal return newDecimal
+            return converter.convertValue(value: newDecimal, to: system, format: true)
         } else {
             return newDecimal
         }

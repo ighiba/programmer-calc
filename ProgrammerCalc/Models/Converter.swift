@@ -21,7 +21,7 @@ import Foundation
      // Main function for conversion values
      public func convertValue(value: NumberSystemProtocol,
                               to converterSystem: ConversionSystem,
-                              format processToFormat: Bool) -> NumberSystemProtocol? {
+                              format processToFormat: Bool) -> NumberSystemProtocol {
  
          // if value system == converterSystem, then return imput value
          // except binary (for processing it to normal format)
@@ -158,7 +158,7 @@ import Foundation
          }
  
          // convert to binary input system (mainSystem)
-         let resultBin = convertValue(value: binary, to: mainSystem, format: true)!
+         let resultBin = convertValue(value: binary, to: mainSystem, format: true)
  
          return resultBin
  
@@ -175,7 +175,7 @@ import Foundation
          binary.twosComplement()
  
          // convert to binary input system (mainSystem)
-         return convertValue(value: binary, to: mainSystem, format: true)!
+         return convertValue(value: binary, to: mainSystem, format: true)
      }
  
      // Process binary with settings from User Defaults

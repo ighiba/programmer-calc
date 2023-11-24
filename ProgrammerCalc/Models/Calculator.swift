@@ -169,8 +169,8 @@ class Calculator: CalculatorProtocol {
         currentValue.updateValue(0.0)
     }
     
-    public func updateCurrentValue(_ value: NumberSystemProtocol) {
-        guard let decSystemValue = converter.convertValue(value: value, to: .dec, format: true) as? DecimalSystem else {
+    public func updateCurrentValue(withNumber number: NumberSystemProtocol) {
+        guard let decSystemValue = converter.convertValue(value: number, to: .dec, format: true) as? DecimalSystem else {
             return
         }
         currentValue.updateValue(decSystemValue.decimalValue)
@@ -222,8 +222,8 @@ class Calculator: CalculatorProtocol {
             calculatorPresenterDelegate.updateClearButton(hasInput: false)
         }
 
-        let numValue = numberSystemFactory.get(strValue: mainLabelText, forSystem: conversionSettings.systemMain)
-        updateCurrentValue(numValue)
+        let number = numberSystemFactory.get(strValue: mainLabelText, forSystem: conversionSettings.systemMain)
+        updateCurrentValue(withNumber: number)
         
         if mainLabelText.contains(".") {
             calculatorPresenterDelegate.setMainLabelText(mainLabelText)
@@ -246,10 +246,9 @@ class Calculator: CalculatorProtocol {
         }
         
         let formattedText = labelFormatter.processStrInputToFormat(inputStr: newValue, for: conversionSettings.systemMain)
-        let newNumber = numberSystemFactory.get(strValue: formattedText, forSystem: conversionSettings.systemMain)
-        updateCurrentValue(newNumber)
+        let number = numberSystemFactory.get(strValue: formattedText, forSystem: conversionSettings.systemMain)
+        updateCurrentValue(withNumber: number)
         calculatorPresenterDelegate.setMainLabelText(formattedText)
-        
     }
 
     public func fixOverflowForCurrentValue() {

@@ -137,7 +137,7 @@ class LabelFormatter {
             let value = self.numberSystemFactory.get(strValue: inputStr, forSystem: system)
             let bin = self.converter.convertValue(value: value, to: .bin, format: true) as! Binary
             let updatedValue = self.converter.convertValue(value: bin, to: system, format: true)
-            processedStr = updatedValue!.value
+            processedStr = updatedValue.value
             
             // compose new str value if exists
             processedStr = composePartsFrom(intPartFrom: processedStr, fractPartFrom: testLabelStr)
