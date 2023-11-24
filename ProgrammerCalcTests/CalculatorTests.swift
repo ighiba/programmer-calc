@@ -45,7 +45,7 @@ class CalculatorTests: XCTestCase {
         // 1. given
         calcState.setCalcState(signedData)
         wordSize.setWordSize(byte)
-        let testValue = PCDecimal(12)
+        let testValue: PCDecimal = 12
         
         // 2. when
         calculatorTest.currentValue = testValue
@@ -60,7 +60,7 @@ class CalculatorTests: XCTestCase {
         // 1. given
         calcState.setCalcState(signedData)
         wordSize.setWordSize(word)
-        let testValue = PCDecimal(32767)
+        let testValue: PCDecimal = 32767
         
         // 2. when
         calculatorTest.currentValue = testValue
@@ -75,7 +75,7 @@ class CalculatorTests: XCTestCase {
         // 1. given
         calcState.setCalcState(signedData)
         wordSize.setWordSize(dword)
-        let testValue = PCDecimal(2147483647)
+        let testValue: PCDecimal = 2147483647
         
         // 2. when
         calculatorTest.currentValue = testValue
@@ -90,7 +90,7 @@ class CalculatorTests: XCTestCase {
         // 1. given
         calcState.setCalcState(signedData)
         wordSize.setWordSize(qword)
-        let testValue = PCDecimal(value: Decimal(string: "-9223372036854775808")!)
+        let testValue = PCDecimal(string: "-9223372036854775808")!
         
         // 2. when
         calculatorTest.currentValue = testValue

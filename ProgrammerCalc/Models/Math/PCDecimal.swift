@@ -12,7 +12,7 @@ struct PCDecimal: CustomStringConvertible, Equatable, Codable {
 
     // MARK: - Properties
     
-    static let zero: PCDecimal = PCDecimal(0)
+    static let zero: PCDecimal = 0
     
     var isSigned: Bool { value < 0 }
     var hasFloatingPoint: Bool { value.description.contains(".") }
@@ -35,6 +35,10 @@ struct PCDecimal: CustomStringConvertible, Equatable, Codable {
     
     init(_ uintValue: UInt64) {
         self.value = Decimal(uintValue)
+    }
+    
+    init(_ int64Value: Int64) {
+        self.value = Decimal(int64Value)
     }
     
     init?(string: String) {
@@ -152,5 +156,13 @@ struct PCDecimal: CustomStringConvertible, Equatable, Codable {
     
     public func getDecimal() -> Decimal {
         return value
+    }
+}
+
+extension PCDecimal: ExpressibleByIntegerLiteral {
+    typealias IntegerLiteralType = Int64
+    
+    init(integerLiteral value: Int64) {
+        self.value = Decimal(value)
     }
 }

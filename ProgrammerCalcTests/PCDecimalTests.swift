@@ -32,8 +32,8 @@ class PCDecimalTests: XCTestCase {
 
     func testDivisionByZero() throws {
         // 1. given
-        let lhs = PCDecimal(12)
-        let rhs = PCDecimal(0)
+        let lhs: PCDecimal = 12
+        let rhs: PCDecimal = 0
         
         // 2. when
         var result = lhs / rhs
@@ -47,8 +47,8 @@ class PCDecimalTests: XCTestCase {
     
     func testCalcDecAdd() throws {
         // 1. given
-        let lhs = PCDecimal(12)
-        let rhs = PCDecimal(10)
+        let lhs: PCDecimal = 12
+        let rhs: PCDecimal = 10
         
         // 2. when
         var result = lhs + rhs
@@ -62,8 +62,8 @@ class PCDecimalTests: XCTestCase {
     
     func testCalcDecSub() throws {
         // 1. given
-        let lhs = PCDecimal(12)
-        let rhs = PCDecimal(10)
+        let lhs: PCDecimal = 12
+        let rhs: PCDecimal = 10
         
         // 2. when
         var result = lhs - rhs
@@ -77,8 +77,8 @@ class PCDecimalTests: XCTestCase {
     
     func testCalcDecMul() throws {
         // 1. given
-        let lhs = PCDecimal(12)
-        let rhs = PCDecimal(10)
+        let lhs: PCDecimal = 12
+        let rhs: PCDecimal = 10
         
         // 2. when
         var result = lhs * rhs
@@ -92,8 +92,8 @@ class PCDecimalTests: XCTestCase {
     
     func testCalcDecDiv() throws {
         // 1. given
-        let lhs = PCDecimal(12)
-        let rhs = PCDecimal(10)
+        let lhs: PCDecimal = 12
+        let rhs: PCDecimal = 10
         
         // 2. when
         var result = lhs / rhs
@@ -107,8 +107,8 @@ class PCDecimalTests: XCTestCase {
     
     func testUnsignedAND() throws {
         // 1. given
-        let lhs = PCDecimal(12)
-        let rhs = PCDecimal(10)
+        let lhs: PCDecimal = 12
+        let rhs: PCDecimal = 10
         
         // 2. when
         var result = lhs & rhs
@@ -120,8 +120,8 @@ class PCDecimalTests: XCTestCase {
     
     func testSignedAND() throws {
         // 1. given
-        let lhs = PCDecimal(value: -12)
-        let rhs = PCDecimal(4)
+        let lhs: PCDecimal = -12
+        let rhs: PCDecimal = 4
         
         // 2. when
         var result = lhs & rhs
@@ -135,8 +135,8 @@ class PCDecimalTests: XCTestCase {
     
     func testUnsignedOR() throws {
         // 1. given
-        let lhs = PCDecimal(12)
-        let rhs = PCDecimal(10)
+        let lhs: PCDecimal = 12
+        let rhs: PCDecimal = 10
         
         // 2. when
         var result = lhs | rhs
@@ -148,8 +148,8 @@ class PCDecimalTests: XCTestCase {
     
     func testSignedOR() throws {
         // 1. given
-        let lhs = PCDecimal(value: -12)
-        let rhs = PCDecimal(4)
+        let lhs: PCDecimal = -12
+        let rhs: PCDecimal = 4
         
         // 2. when
         var result = lhs | rhs
@@ -163,8 +163,8 @@ class PCDecimalTests: XCTestCase {
     
     func testUnsignedXOR() throws {
         // 1. given
-        let lhs = PCDecimal(12)
-        let rhs = PCDecimal(10)
+        let lhs: PCDecimal = 12
+        let rhs: PCDecimal = 10
         
         // 2. when
         var result = lhs ^ rhs
@@ -176,8 +176,8 @@ class PCDecimalTests: XCTestCase {
     
     func testSignedXOR() throws {
         // 1. given
-        let lhs = PCDecimal(value: -16)
-        let rhs = PCDecimal(99)
+        let lhs: PCDecimal = -16
+        let rhs: PCDecimal = 99
         
         // 2. when
         var result = lhs ^ rhs
@@ -191,8 +191,8 @@ class PCDecimalTests: XCTestCase {
     
     func testUnsignedNOR() throws {
         // 1. given
-        let lhs = PCDecimal(12)
-        let rhs = PCDecimal(10)
+        let lhs: PCDecimal = 12
+        let rhs: PCDecimal = 10
         
         // 2. when
         var result = ~(lhs | rhs)
@@ -204,8 +204,8 @@ class PCDecimalTests: XCTestCase {
     
     func testSignedNOR() throws {
         // 1. given
-        let lhs = PCDecimal(value: 16)
-        let rhs = PCDecimal(99)
+        let lhs: PCDecimal = 16
+        let rhs: PCDecimal = 99
         
         // 2. when
         var result = ~(lhs | rhs)
@@ -219,7 +219,7 @@ class PCDecimalTests: XCTestCase {
      
      func testUnsignedNOT() throws {
          // 1. given
-         let lhs = PCDecimal(12)
+         let lhs: PCDecimal = 12
 
          // 2. when
          var result = ~lhs
@@ -231,7 +231,7 @@ class PCDecimalTests: XCTestCase {
      
      func testSignedNOT() throws {
          // 1. given
-         let lhs = PCDecimal(value: -16)
+         let lhs: PCDecimal = -16
          
          // 2. when
          var result = ~lhs
@@ -245,7 +245,7 @@ class PCDecimalTests: XCTestCase {
     
     func testBitwiseShiftLeftUnsigned() throws {
         // 1. given
-        let lhs = PCDecimal(12)
+        let lhs: PCDecimal = 12
         
         // 2. when
         var result = lhs << 1
@@ -257,7 +257,7 @@ class PCDecimalTests: XCTestCase {
     
     func testBitwiseShiftLeftSigned() throws {
         // 1. given
-        let lhs = PCDecimal(value: -12)
+        let lhs: PCDecimal = -12
         
         // 2. when
         var result = lhs << 1
@@ -269,7 +269,7 @@ class PCDecimalTests: XCTestCase {
     
     func testBitwiseShiftRightUnsigned() throws {
         // 1. given
-        let lhs = PCDecimal(12)
+        let lhs: PCDecimal = 12
         
         // 2. when
         var result = lhs >> 1
@@ -281,7 +281,7 @@ class PCDecimalTests: XCTestCase {
     
     func testBitwiseShiftRightSigned() throws {
         // 1. given
-        let lhs = PCDecimal(value: -12)
+        let lhs: PCDecimal = -12
         
         // 2. when
         var result = lhs >> 1
@@ -293,7 +293,7 @@ class PCDecimalTests: XCTestCase {
     
     func testBitwiseShiftTwelveRightUnsigned() throws {
         // 1. given
-        let lhs = PCDecimal(123456)
+        let lhs: PCDecimal = 123456
         
         // 2. when
         var result = lhs >> 12
@@ -305,7 +305,7 @@ class PCDecimalTests: XCTestCase {
     
     func testBitwiseShiftTwoRightUnsigned() throws {
         // 1. given
-        let lhs = PCDecimal(12)
+        let lhs: PCDecimal = 12
         
         // 2. when
         var result = lhs >> 2
@@ -317,7 +317,7 @@ class PCDecimalTests: XCTestCase {
     
     func testBitwiseShiftTwelveLeftSigned() throws {
         // 1. given
-        let lhs = PCDecimal(12)
+        let lhs: PCDecimal = 12
         
         // 2. when
         var result = lhs << 12
@@ -329,7 +329,7 @@ class PCDecimalTests: XCTestCase {
     
     func testBitwiseShiftTwoRightSigned() throws {
         // 1. given
-        let lhs = PCDecimal(12)
+        let lhs: PCDecimal = 12
         
         // 2. when
         var result = lhs >> 2
@@ -343,8 +343,8 @@ class PCDecimalTests: XCTestCase {
     
     func testFixMaxSignedOverflowBYTE() throws {
         // 1. given
-        let lhs = PCDecimal(107)
-        let rhs = PCDecimal(4)
+        let lhs: PCDecimal = 107
+        let rhs: PCDecimal = 4
         
         // 2. when
         var result = lhs * rhs
@@ -356,8 +356,8 @@ class PCDecimalTests: XCTestCase {
 
     func testFixMaxSignedOverflowWORD() throws {
         // 1. given
-        let lhs = PCDecimal(value: 31766)
-        let rhs = PCDecimal(321)
+        let lhs: PCDecimal = 31766
+        let rhs: PCDecimal = 321
         
         // 2. when
         var result = lhs * rhs
@@ -369,8 +369,8 @@ class PCDecimalTests: XCTestCase {
     
     func testFixMaxSignedOverflowDWORD() throws {
         // 1. given
-        let lhs = PCDecimal(value: 2147483647)
-        let rhs = PCDecimal(value: 123456789)
+        let lhs: PCDecimal = 2147483647
+        let rhs: PCDecimal = 123456789
         
         // 2. when
         var result = lhs + rhs
@@ -382,8 +382,8 @@ class PCDecimalTests: XCTestCase {
     
     func testFixMaxSignedOverflowQWORD() throws {
         // 1. given
-        let lhs = PCDecimal(value: Decimal(string: "999999999999999999")!)
-        let rhs = PCDecimal(value: Decimal(string: "999999999999999999")!)
+        let lhs: PCDecimal = 999999999999999999
+        let rhs: PCDecimal = 999999999999999999
 
         // 2. when
         var result = lhs * rhs
@@ -395,8 +395,8 @@ class PCDecimalTests: XCTestCase {
     
     func testFixMaxUnsignedOverflowBYTE() throws {
         // 1. given
-        let lhs = PCDecimal(107)
-        let rhs = PCDecimal(4)
+        let lhs: PCDecimal = 107
+        let rhs: PCDecimal = 4
         
         // 2. when
         var result = lhs * rhs
@@ -408,8 +408,8 @@ class PCDecimalTests: XCTestCase {
     
     func testFixMaxUnsignedOverflowWORD() throws {
         // 1. given
-        let lhs = PCDecimal(value: 31766)
-        let rhs = PCDecimal(321)
+        let lhs: PCDecimal = 31766
+        let rhs: PCDecimal = 321
         
         // 2. when
         var result = lhs * rhs
@@ -421,8 +421,8 @@ class PCDecimalTests: XCTestCase {
     
     func testFixMaxUnsignedOverflowDWORD() throws {
         // 1. given
-        let lhs = PCDecimal(value: 2147483647)
-        let rhs = PCDecimal(value: 123456789)
+        let lhs: PCDecimal = 2147483647
+        let rhs: PCDecimal = 123456789
         
         // 2. when
         var result = lhs + rhs
@@ -434,8 +434,8 @@ class PCDecimalTests: XCTestCase {
     
     func testFixMaxUnsignedOverflowQWORD() throws {
         // 1. given
-        let lhs = PCDecimal(value: Decimal(string: "9999999999999999999")!)
-        let rhs = PCDecimal(value: Decimal(string: "9999999999999999999")!)
+        let lhs = PCDecimal(string: "9999999999999999999")!
+        let rhs = PCDecimal(string: "9999999999999999999")!
         
         // 2. when
         var result = lhs * rhs
@@ -447,8 +447,8 @@ class PCDecimalTests: XCTestCase {
     
     func testFixMinSignedOverflowBYTE() throws {
         // 1. given
-        let lhs = PCDecimal(value: -107)
-        let rhs = PCDecimal(4)
+        let lhs: PCDecimal = -107
+        let rhs: PCDecimal = 4
         
         // 2. when
         var result = lhs * rhs
@@ -460,8 +460,8 @@ class PCDecimalTests: XCTestCase {
 
     func testFixMinSignedOverflowWORD() throws {
         // 1. given
-        let lhs = PCDecimal(value: -31766)
-        let rhs = PCDecimal(321)
+        let lhs: PCDecimal = -31766
+        let rhs : PCDecimal = 321
         
         // 2. when
         var result = lhs * rhs
@@ -473,8 +473,8 @@ class PCDecimalTests: XCTestCase {
     
     func testFixMinSignedOverflowDWORD() throws {
         // 1. given
-        let lhs = PCDecimal(value: -2147483647)
-        let rhs = PCDecimal(value: 123456789)
+        let lhs: PCDecimal = -2147483647
+        let rhs : PCDecimal = 123456789
         
         // 2. when
         var result = lhs + rhs
@@ -486,8 +486,8 @@ class PCDecimalTests: XCTestCase {
     
     func testFixMinSignedOverflowQWORD() throws {
         // 1. given
-        let lhs = PCDecimal(value: Decimal(string: "-999999999999999999")!)
-        let rhs = PCDecimal(value: Decimal(string: "9876543210")!)
+        let lhs = PCDecimal(string: "-999999999999999999")!
+        let rhs = PCDecimal(string: "9876543210")!
 
         // 2. when
         var result = lhs * rhs
@@ -499,8 +499,8 @@ class PCDecimalTests: XCTestCase {
     
     func testFixMinUnsignedOverflowBYTE() throws {
         // 1. given
-        let lhs = PCDecimal(value: 107)
-        let rhs = PCDecimal(value: -123)
+        let lhs: PCDecimal = 107
+        let rhs: PCDecimal = -123
         
         // 2. when
         var result = lhs * rhs
@@ -512,8 +512,8 @@ class PCDecimalTests: XCTestCase {
     
     func testFixMinUnsignedOverflowWORD() throws {
         // 1. given
-        let lhs = PCDecimal(value: 31766)
-        let rhs = PCDecimal(value: -2344)
+        let lhs: PCDecimal = 31766
+        let rhs: PCDecimal = -2344
         
         // 2. when
         var result = lhs * rhs
@@ -525,8 +525,8 @@ class PCDecimalTests: XCTestCase {
     
     func testFixMinUnsignedOverflowDWORD() throws {
         // 1. given
-        let lhs = PCDecimal(value: 235452346)
-        let rhs = PCDecimal(value: 2147483647)
+        let lhs: PCDecimal = 235452346
+        let rhs: PCDecimal = 2147483647
         
         // 2. when
         var result = lhs - rhs
@@ -538,8 +538,8 @@ class PCDecimalTests: XCTestCase {
     
     func testFixMinUnsignedOverflowQWORD() throws {
         // 1. given
-        let lhs = PCDecimal(value: Decimal(string: "9999999999999999999")!)
-        let rhs = PCDecimal(value: Decimal(string: "9999999999999999999")!)
+        let lhs = PCDecimal(string: "9999999999999999999")!
+        let rhs = PCDecimal(string: "9999999999999999999")!
         
         // 2. when
         var result = lhs * rhs

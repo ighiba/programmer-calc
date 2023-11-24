@@ -91,7 +91,7 @@ class Calculator: CalculatorProtocol {
             currentValue = result
         } catch MathError.divByZero {
             resetCalculation()
-            currentValue = PCDecimal(value: 0.0)
+            currentValue = 0
             setErrorInLabels(.divByZero)
             showErrorInLabels(.divByZero)
         } catch {
