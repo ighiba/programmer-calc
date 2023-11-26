@@ -8,6 +8,9 @@
 
 import UIKit
 
+private let popoverDoneButtonColor: UIColor = UIColor(named: "PopoverDoneButtonColor")!
+private let popoverDoneButtonColorPressed: UIColor = UIColor(named: "PopoverDoneButtonColorPressed")!
+
 class PopoverDoneButton: UIButton {
     
     static let defaultHeight: CGFloat = 50
@@ -40,10 +43,10 @@ class PopoverDoneButton: UIButton {
     
     private func changeButtonHighlightAnimated(isHighlighted: Bool) {
         if isHighlighted {
-            backgroundColor = .popoverDoneButtonColorPressed
+            backgroundColor = popoverDoneButtonColorPressed
         } else {
             UIView.transition(with: self, duration: 0.3,options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction],animations: {
-                self.backgroundColor = .popoverDoneButtonColor
+                self.backgroundColor = popoverDoneButtonColor
             }, completion: nil)
         }
     }

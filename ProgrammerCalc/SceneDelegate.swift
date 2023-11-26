@@ -16,8 +16,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         case copyOutput = "ru.ighiba.ProgrammerCalc.copyOutput"
     }
     
-    static let favoriteIdentifierInfoKey = "FavoriteIdentifier"
-    
     var window: UIWindow?
     var savedShortCutItem: UIApplicationShortcutItem!
     
@@ -77,14 +75,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         application.shortcutItems = [
             UIApplicationShortcutItem(
-                type: "ru.ighiba.ProgrammerCalc.copyInput",
+                type: ActionType.copyInput.rawValue,
                 localizedTitle: NSLocalizedString("Copy last input", comment: "") + " (\(inputSystem))",
                 localizedSubtitle: inputResult,
                 icon: icon,
                 userInfo: nil
             ),
             UIApplicationShortcutItem(
-                type: "ru.ighiba.ProgrammerCalc.copyOutput",
+                type: ActionType.copyOutput.rawValue,
                 localizedTitle: NSLocalizedString("Copy last output", comment: "") + " (\(outputSystem))",
                 localizedSubtitle: outputResult,
                 icon: icon,
