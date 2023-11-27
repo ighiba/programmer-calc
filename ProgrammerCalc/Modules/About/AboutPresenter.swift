@@ -9,12 +9,6 @@
 import UIKit
 import StoreKit
 
-protocol AboutInput: AnyObject {
-    func reloadTable()
-    func push(_ viewController: UIViewController)
-    func openContactFormWith(recipients: [String], subject: String, message: String)
-}
-
 protocol AboutOutput: AnyObject {
     func obtainTintColor() -> UIColor
     func openDescription()

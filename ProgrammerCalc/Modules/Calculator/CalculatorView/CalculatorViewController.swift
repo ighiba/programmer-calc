@@ -14,6 +14,21 @@ protocol CalculatorViewControllerDelegate: AnyObject {
     func updateAllLayout()
 }
 
+protocol CalculatorInput: AnyObject {
+    func clearLabels()
+    func updateAllLayout()
+    func updateClearButton(hasInput: Bool)
+    func mainLabelHasError() -> Bool
+    func showErrorInLabels(_ error: MathError)
+    func setErrorInLabels(_ error: MathError)
+    func resetErrorInLabels()
+    func getMainLabelText(deleteSpaces: Bool) -> String
+    func setMainLabelText(_ text: String)
+    func setConverterLabelText(_ text: String)
+    func updateAfterConversionChange()
+    func presentViewControlle(_ viewController: UIViewController, animated: Bool)
+}
+
 class CalculatorViewController: StyledViewController, CalculatorInput, CalculatorViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
     
     // MARK: - Properties

@@ -21,22 +21,6 @@ protocol CalculatorPresenterDelegate: AnyObject {
     func setConverterLabelText(_ text: String)
 }
 
-protocol CalculatorInput: AnyObject {
-    func clearLabels()
-//    func unhighlightLabels()
-    func updateAllLayout()
-    func updateClearButton(hasInput: Bool)
-    func mainLabelHasError() -> Bool
-    func showErrorInLabels(_ error: MathError)
-    func setErrorInLabels(_ error: MathError)
-    func resetErrorInLabels()
-    func getMainLabelText(deleteSpaces: Bool) -> String
-    func setMainLabelText(_ text: String)
-    func setConverterLabelText(_ text: String)
-    func updateAfterConversionChange()
-    func presentViewControlle(_ viewController: UIViewController, animated: Bool)
-}
-
 protocol CalculatorOutput: AnyObject {
     func getMainSystem() -> ConversionSystem
     func getConverterSystem() -> ConversionSystem

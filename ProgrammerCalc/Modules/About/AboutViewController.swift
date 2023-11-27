@@ -13,6 +13,12 @@ private let descriptionIcon = UIImage(systemName: "doc.plaintext")
 private let rateAppIcon = UIImage(systemName: "star.square")
 private let contactUsIcon = UIImage(systemName: "envelope")
 
+protocol AboutInput: AnyObject {
+    func reloadTable()
+    func push(_ viewController: UIViewController)
+    func openContactFormWith(recipients: [String], subject: String, message: String)
+}
+
 class AboutViewController: StyledTableViewController, AboutInput, MFMailComposeViewControllerDelegate {
     
     // MARK: - Properties
