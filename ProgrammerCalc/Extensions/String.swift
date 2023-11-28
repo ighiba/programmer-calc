@@ -15,10 +15,9 @@ extension String {
 
         var str = String()
         while dec > 0 {
-            let reminder = dec % Decimal(radix)
-            str.insert(contentsOf: "\(reminder)", at: str.startIndex)
-            dec = (dec / Decimal(radix))
-            dec = dec.rounded(.down)
+            let remainder = dec % Decimal(radix)
+            str.insert(contentsOf: "\(remainder)", at: str.startIndex)
+            dec = (dec / Decimal(radix)).rounded(.down)
         }
 
         self.init(stringLiteral: str)
