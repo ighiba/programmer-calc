@@ -10,6 +10,8 @@ import Foundation
 
 extension Decimal {
     
+    typealias RoundingMode = NSDecimalNumber.RoundingMode
+
     var intPart: UInt64 {
         let roundingBehavior = NSDecimalNumberHandler(
             roundingMode: .plain,
@@ -44,7 +46,11 @@ extension Decimal {
         self = decimal
     }
     
-    func round(scale: Int16, roundingMode: NSDecimalNumber.RoundingMode) -> Decimal {
+    func rounded(_ roundingMode: RoundingMode) -> Decimal {
+        return rounded(scale: 0, roundingMode: roundingMode)
+    }
+
+    func rounded(scale: Int16, roundingMode: RoundingMode) -> Decimal {
         let roundingBehavior = NSDecimalNumberHandler(
             roundingMode: roundingMode,
             scale: scale,
@@ -60,7 +66,7 @@ extension Decimal {
         let result: Decimal
 
         let dec = lhs / rhs
-        let decRounded = dec.round(scale: 0, roundingMode: .down)
+        let decRounded = dec.rounded(.down)
         
         if dec > decRounded {
             let roundDifference = dec - decRounded

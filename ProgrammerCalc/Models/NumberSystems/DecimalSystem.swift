@@ -139,9 +139,9 @@ final class DecimalSystem: NumberSystemProtocol {
         let roundedDecimal: Decimal
         
         if decimalValue > 0 {
-            roundedDecimal = decimalValue.round(scale: 0, roundingMode: .down)
+            roundedDecimal = decimalValue.rounded(.down)
         } else {
-            roundedDecimal = decimalValue.round(scale: 0, roundingMode: .up)
+            roundedDecimal = decimalValue.rounded(.up)
         }
         
         let fractPart = decimalValue - roundedDecimal
