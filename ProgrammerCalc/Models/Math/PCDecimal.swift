@@ -19,6 +19,7 @@ struct PCDecimal: CustomStringConvertible, Equatable, Codable {
     var isSignedAndFloat: Bool { isSigned && hasFloatingPoint }
     
     private var value: Decimal
+    public var decimalValue: Decimal { value }
     fileprivate var intPart: UInt64 { value.intPart }
 
     var description: String { String(describing: value) }
@@ -152,10 +153,6 @@ struct PCDecimal: CustomStringConvertible, Equatable, Codable {
     
     public mutating func updateValue(_ value: Decimal) {
         self.value = value
-    }
-    
-    public func getDecimal() -> Decimal {
-        return value
     }
 }
 

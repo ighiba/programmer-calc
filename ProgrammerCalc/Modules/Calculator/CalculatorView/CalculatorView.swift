@@ -15,13 +15,9 @@ class CalculatorView: StyledView {
     private let margin: CGFloat = 10
     private let navBarHeight: CGFloat = UIDevice.currentDeviceType == .iPad ? 50 : 44
     
-    var screenBounds: CGRect {
-        return CGRect(origin: CGPoint(), size: UIScreen.mainRealSize())
-    }
+    var screenBounds: CGRect { CGRect(origin: .zero, size: UIScreen.mainRealSize()) }
     
-    var verticalOffsetFromTop: CGFloat {
-        return screenBounds.height / 3 - 2
-    }
+    var verticalOffsetFromTop: CGFloat { screenBounds.height / 3 - 2 }
     
     var portrait: [NSLayoutConstraint]?
     var landscape: [NSLayoutConstraint]?
@@ -75,13 +71,13 @@ class CalculatorView: StyledView {
     // MARK: - Methods
     
     func setViews() {
-        self.backgroundColor = .clear
-        self.addSubview(navigationBar)
-        self.addSubview(labelsStack)
-        self.addSubview(mainLabel.infoSubLabel)
-        self.addSubview(converterLabel.infoSubLabel)
+        backgroundColor = .clear
+        addSubview(navigationBar)
+        addSubview(labelsStack)
+        addSubview(mainLabel.infoSubLabel)
+        addSubview(converterLabel.infoSubLabel)
         
-        navigationBar.subviews.forEach({ $0.isExclusiveTouch = true })
+        navigationBar.subviews.forEach { $0.isExclusiveTouch = true }
 
         changeWordSizeButton.addTarget(nil, action: #selector(CalculatorViewController.changeWordSizeButtonTapped), for: .touchUpInside)
         
@@ -116,10 +112,10 @@ class CalculatorView: StyledView {
         mainLabel.font = mainLabel.font.withSize(70.0)
     }
     
-    func freezeNavBar(by duration: CGFloat) {
+    func freezeNavBar(duration: CGFloat) {
         navigationBar.isUserInteractionEnabled = false
-        Timer.scheduledTimer(withTimeInterval: duration, repeats: false, block: { _ in
-            self.navigationBar.isUserInteractionEnabled = true
+        Timer.scheduledTimer(withTimeInterval: duration, repeats: false, block: { [weak self] _ in
+            self?.navigationBar.isUserInteractionEnabled = true
         })
     }
     

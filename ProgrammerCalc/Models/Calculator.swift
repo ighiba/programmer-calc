@@ -41,7 +41,7 @@ class Calculator: CalculatorProtocol {
     
     var currentValue: PCDecimal {
         didSet {
-            print("PCDecimal new value: \(currentValue.getDecimal())")
+            print("PCDecimal new value: \(currentValue.decimalValue)")
             calcState.lastValue = currentValue
         }
     }
@@ -72,7 +72,7 @@ class Calculator: CalculatorProtocol {
     }
     
     public func setOperation(_ operationType: CalcMath.OperationType) {
-        operation = CalcOperation(previousValue: PCDecimal(value: currentValue.getDecimal()) , current: operationType)
+        operation = CalcOperation(previousValue: PCDecimal(value: currentValue.decimalValue) , current: operationType)
     }
     
     public func setOperation(with buttonText: String) {
@@ -86,7 +86,7 @@ class Calculator: CalculatorProtocol {
         do {
             var result = try calculateCurrentValue()
             result.fixOverflow(bitWidth: wordSize.intValue, processSigned: calcState.processSigned)
-            operation?.previousValue = PCDecimal(value: result.getDecimal())
+            operation?.previousValue = PCDecimal(value: result.decimalValue)
             shouldStartNewInput = startNewInput
             currentValue = result
         } catch MathError.divByZero {

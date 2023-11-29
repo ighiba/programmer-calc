@@ -50,7 +50,7 @@ class CalculatorTests: XCTestCase {
         // 2. when
         calculatorTest.currentValue = testValue
         calculatorTest.negateCurrentValue()
-        let result = calculatorTest.currentValue.getDecimal()
+        let result = calculatorTest.currentValue.decimalValue
 
         // 3. then
         XCTAssertEqual(result, -12.0, "Negation failure")
@@ -65,7 +65,7 @@ class CalculatorTests: XCTestCase {
         // 2. when
         calculatorTest.currentValue = testValue
         calculatorTest.negateCurrentValue()
-        let result = calculatorTest.currentValue.getDecimal()
+        let result = calculatorTest.currentValue.decimalValue
         
         // 3. then
         XCTAssertEqual(result, -32767.0, "Negation failure")
@@ -80,7 +80,7 @@ class CalculatorTests: XCTestCase {
         // 2. when
         calculatorTest.currentValue = testValue
         calculatorTest.negateCurrentValue()
-        let result = calculatorTest.currentValue.getDecimal()
+        let result = calculatorTest.currentValue.decimalValue
 
         // 3. then
         XCTAssertEqual(result, -2147483647.0, "Negation failure")
@@ -96,7 +96,7 @@ class CalculatorTests: XCTestCase {
         calculatorTest.currentValue = testValue
         calculatorTest.negateCurrentValue()
         calculatorTest.currentValue.fixOverflow(bitWidth: qword.intValue, processSigned: true)
-        let result = calculatorTest.currentValue.getDecimal()
+        let result = calculatorTest.currentValue.decimalValue
 
         // 3. then
         XCTAssertEqual(result.description, "-9223372036854775808", "Negation failure")

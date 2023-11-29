@@ -56,7 +56,7 @@ final class DecimalSystem: NumberSystemProtocol {
     
     /// Creates an instance initialized to the PCDecimal value
     init(_ pcDecimal: PCDecimal) {
-        self.decimalValue = pcDecimal.getDecimal()
+        self.decimalValue = pcDecimal.decimalValue
         self.value = "\(self.decimalValue)"
         self.updateIsSignedState()
     }

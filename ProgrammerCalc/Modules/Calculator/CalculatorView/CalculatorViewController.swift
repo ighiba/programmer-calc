@@ -406,7 +406,7 @@ extension CalculatorViewController {
         let calcButtonsTransform = CGAffineTransform(translationX: -UIScreen.main.bounds.width, y: 0)
         let bitwiseKeypadTransform = CGAffineTransform(translationX: UIScreen.main.bounds.width, y: 0)
 
-        calculatorView.freezeNavBar(by: animDuration * 1.5) // also freezes all navbar items
+        calculatorView.freezeNavBar(duration: animDuration * 1.5) // also freezes all navbar items
 
         if isBitwiseKeypadExists() {
 
