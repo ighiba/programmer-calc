@@ -749,5 +749,4 @@ class Binary: NumberSystemProtocol {
         // append from right
         self.value.append("0")
     }
-
 }

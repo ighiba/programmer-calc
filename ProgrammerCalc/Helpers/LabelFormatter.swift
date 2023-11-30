@@ -57,7 +57,6 @@ class LabelFormatter {
         return result
     }
     
-    
     // For updating input main label
     public func processStrInputToFormat(inputStr: String, for system: ConversionSystem) -> String {
         var processedStr = String()

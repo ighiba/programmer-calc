@@ -129,24 +129,24 @@ struct PCDecimal: CustomStringConvertible, Equatable, Codable {
     }
     
     public mutating func fixOverflow(bitWidth: Int, processSigned: Bool) {
-        let maxValue = processSigned ? pow(Decimal(2), bitWidth - 1) - 1 : pow(Decimal(2), bitWidth) - 1
-        let minValue = processSigned ? pow(Decimal(-2), bitWidth - 1) : 0
+        let maxValue = processSigned ? pow(2, bitWidth - 1) - 1 : pow(2, bitWidth) - 1
+        let minValue = processSigned ? pow(-2, bitWidth - 1) : 0
         
         if value > maxValue {
-            var div = (value + maxValue + 1) / pow(Decimal(2), bitWidth)
+            var div = (value + maxValue + 1) / pow(2, bitWidth)
             div = div.rounded(.down)
-            value -= div * pow(Decimal(2), bitWidth)
+            value -= div * pow(2, bitWidth)
             
             if !processSigned && value < minValue {
-                value += pow(Decimal(2), bitWidth)
+                value += pow(2, bitWidth)
             }
         } else if value < minValue {
-            var div = (value - minValue) / pow(Decimal(2), bitWidth)
+            var div = (value - minValue) / pow(2, bitWidth)
             div = div.rounded(.down)
-            value -= div * pow(Decimal(2), bitWidth)
+            value -= div * pow(2, bitWidth)
             
             if !processSigned && value > maxValue {
-                value -= pow(Decimal(2), bitWidth)
+                value -= pow(2, bitWidth)
             }
         }
     }

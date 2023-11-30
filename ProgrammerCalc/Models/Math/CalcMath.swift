@@ -1,5 +1,5 @@
 //
-//  HelpersMath.swift
+//  CalcMath.swift
 //  ProgrammerCalc
 //
 //  Created by Ivan Ghiba on 12.08.2020.
@@ -13,7 +13,6 @@ final class CalcMath {
     private let conversionSettings: ConversionSettings = ConversionSettings.shared
     private let wordSize: WordSize = WordSize.shared
     
-    // Object "Converter"
     private let converter: Converter = Converter()
     
     enum OperationType {
@@ -42,7 +41,7 @@ final class CalcMath {
     // MARK: - Methods
     // ===============
     
-    func calculate( firstValue: NumberSystemProtocol, operation: OperationType ,secondValue: NumberSystemProtocol, for system: ConversionSystem) throws -> NumberSystemProtocol? {
+    func calculate(firstValue: NumberSystemProtocol, operation: OperationType, secondValue: NumberSystemProtocol, for system: ConversionSystem) throws -> NumberSystemProtocol? {
   
         // ======================
         // Convert Any to Decimal

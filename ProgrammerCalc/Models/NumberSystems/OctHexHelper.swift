@@ -10,9 +10,7 @@ import Foundation
 
 class OctHexHelper {
     
-    // =========================================
     // MARK: - Octal / Hexadecimal Table Methods
-    // =========================================
     
     // Parsing tables dictionary hex or oct for converting to bin
     func tableOctHexToBin( valueOctHex: String, table: [String : String]) -> String {
@@ -84,5 +82,4 @@ class OctHexHelper {
         
         return resultStr
     }
-    
 }
