@@ -19,6 +19,10 @@ extension String {
             str.insert(contentsOf: "\(remainder)", at: str.startIndex)
             dec = (dec / Decimal(radix)).rounded(.down)
         }
+        
+        if str.isEmpty {
+            str = "0"
+        }
 
         self.init(stringLiteral: str)
     }
@@ -53,9 +57,18 @@ extension String {
         return resultStr
     }
     
-    /// Removes leading given chars in str until str.last != character
+    func removedLeadingSpaces() -> String {
+        return removedLeading(character: " ")
+    }
+    
+    /// Removes specified leading character until a non-matching character is found and returns a new String.
+    func removedLeading(character: Character) -> String {
+        return removedLeading(characters: [character])
+    }
+    
+    /// Removes specified leading characters until a non-matching character is found and returns a new String.
     func removedLeading(characters: [Character]) -> String {
-        var str = self.removedAllSpaces()
+        var str = self
         
         while str.count > 0 && characters.contains(str.first!) {
             str.removeFirst()
@@ -65,9 +78,14 @@ extension String {
         return str
     }
     
-    /// Removes trailing given chars in str until str.last != character
+    /// Removes specified trailing character until a non-matching character is found and returns a new String.
+    func removedTrailing(character: Character) -> String {
+        return removedTrailing(characters: [character])
+    }
+    
+    /// Removes specified trailing characters until a non-matching character is found and returns a new String.
     func removedTrailing(characters: [Character]) -> String {
-        var str = self.removedAllSpaces()
+        var str = self
         
         while str.count > 0 && characters.contains(str.last!)  {
             str.removeLast()
@@ -75,6 +93,33 @@ extension String {
         }
         
         return str
+    }
+    
+    func adjusted(toLenght targetLenght: Int, repeatingCharacter character: Character) -> String {
+        guard self.count != targetLenght else { return self }
+        
+        if self.count > targetLenght {
+            return contracted(toLenght: targetLenght)
+        } else {
+            return expanded(toLenght: targetLenght, repeatingCharacter: character)
+        }
+    }
+    
+    func contracted(toLenght targetLenght: Int) -> String {
+        guard self.count > targetLenght else { return self }
+        
+        let endIndex = self.index(self.startIndex, offsetBy: targetLenght)
+        let range = self.startIndex..<endIndex
+        
+        return String(self[range])
+    }
+    
+    func expanded(toLenght targetLenght: Int, repeatingCharacter character: Character) -> String {
+        guard self.count < targetLenght else { return self }
+        
+        let needToExpandCount = targetLenght - self.count
+        
+        return self + String(repeating: character, count: needToExpandCount)
     }
 }
 
