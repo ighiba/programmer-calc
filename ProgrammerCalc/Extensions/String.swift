@@ -121,6 +121,10 @@ extension String {
         
         return self + String(repeating: character, count: needToExpandCount)
     }
+    
+    func reversedString() -> String {
+        return String(self.reversed())
+    }
 }
 
 extension String {

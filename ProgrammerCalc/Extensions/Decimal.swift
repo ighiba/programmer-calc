@@ -24,6 +24,8 @@ extension Decimal {
         return NSDecimalNumber(decimal: self).rounding(accordingToBehavior: roundingBehavior).uint64Value
     }
     
+    var floatPart: Decimal { abs(self) - abs(self).rounded(.down) }
+    
     var fractPartDigitCount: Int { fractPart.count }
     var fractPart: String {
         let components = self.description.components(separatedBy: ".")
@@ -69,8 +71,8 @@ extension Decimal {
         let decRounded = dec.rounded(.down)
         
         if dec > decRounded {
-            let roundDifference = dec - decRounded
-            result = roundDifference * rhs
+            let roundingDifference = dec - decRounded
+            result = roundingDifference * rhs
         } else {
             result = 0
         }
