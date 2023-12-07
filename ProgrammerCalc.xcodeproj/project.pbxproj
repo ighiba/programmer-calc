@@ -22,7 +22,6 @@
 		C05B008C24E6E0E100F8A5E0 /* Hexadecimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B008B24E6E0E100F8A5E0 /* Hexadecimal.swift */; };
 		C05B008E24E701ED00F8A5E0 /* Octal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B008D24E701ED00F8A5E0 /* Octal.swift */; };
 		C05B009124E71B6E00F8A5E0 /* DecimalSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B009024E71B6E00F8A5E0 /* DecimalSystem.swift */; };
-		C06072B12501567E004CF6AA /* CalcMathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06072B02501567E004CF6AA /* CalcMathTests.swift */; };
 		C0619AC224D71227008A7291 /* ConversionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0619AC124D71227008A7291 /* ConversionView.swift */; };
 		C0619AC424D71240008A7291 /* ConversionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0619AC324D71240008A7291 /* ConversionViewController.swift */; };
 		C061B7C2250FF9FF000E2EB6 /* CalculatorLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C061B7C1250FF9FF000E2EB6 /* CalculatorLabel.swift */; };
@@ -40,9 +39,6 @@
 		C061FD0B2B22395B0094BF6A /* OperatorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C061FD0A2B22395B0094BF6A /* OperatorType.swift */; };
 		C0635A7924D9E0F6003855A9 /* ConversionPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */; };
 		C0635A7B24D9E2AA003855A9 /* ConversionSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0635A7A24D9E2AA003855A9 /* ConversionSettings.swift */; };
-		C064A3AA24FD55B8003DE683 /* HexadecimalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C064A3A924FD55B8003DE683 /* HexadecimalTests.swift */; };
-		C064A3AE24FD5B13003DE683 /* OctalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C064A3AD24FD5B13003DE683 /* OctalTests.swift */; };
-		C064A3B024FD847B003DE683 /* ConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C064A3AF24FD847B003DE683 /* ConverterTests.swift */; };
 		C065DB3C24E3DC4F0059B38D /* CalcMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C065DB3B24E3DC4F0059B38D /* CalcMath.swift */; };
 		C065DB3E24E41E610059B38D /* CalculatorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C065DB3D24E41E610059B38D /* CalculatorState.swift */; };
 		C0666EB824F97774004809EF /* CalcButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0666EB724F97774004809EF /* CalcButtonsViewController.swift */; };
@@ -54,8 +50,6 @@
 		C06B7F092443B12B009642B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F082443B12B009642B9 /* SceneDelegate.swift */; };
 		C06B7F132443B12E009642B9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C06B7F112443B12E009642B9 /* LaunchScreen.storyboard */; };
 		C06B7F292443B12E009642B9 /* ProgrammerCalcUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F282443B12E009642B9 /* ProgrammerCalcUITests.swift */; };
-		C06D285527999B4D00C74888 /* DecimalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06D285427999B4D00C74888 /* DecimalTests.swift */; };
-		C06DFD5D24FC22C600255646 /* BinaryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06DFD5C24FC22C600255646 /* BinaryTests.swift */; };
 		C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C070ED2324DB0EC800A04463 /* SettingsViewController.swift */; };
 		C0712FE927908B9700CF408A /* BitwiseKeypadController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0712FE827908B9700CF408A /* BitwiseKeypadController.swift */; };
 		C07267DD24E5ACB300D4B4A2 /* Binary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07267DC24E5ACB300D4B4A2 /* Binary.swift */; };
@@ -90,7 +84,6 @@
 		C09631DE272D4FBE001DCD25 /* StringExtTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DD272D4FBE001DCD25 /* StringExtTests.swift */; };
 		C09631E027305315001DCD25 /* NumberSystemFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DF27305315001DCD25 /* NumberSystemFactory.swift */; };
 		C097D09C2A09CCD5002FA1E6 /* LabelFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C097D09B2A09CCD5002FA1E6 /* LabelFormatter.swift */; };
-		C097D09E2A0A53D9002FA1E6 /* LabelFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C097D09D2A0A53D9002FA1E6 /* LabelFormatterTests.swift */; };
 		C097F43C2B193355009BF3D7 /* PCHexadecimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C097F43B2B193355009BF3D7 /* PCHexadecimal.swift */; };
 		C0CC6DFF271F68AA00E59E64 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */; };
 		C0D842D62AD8669400B85E9F /* UITapGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D842D52AD8669400B85E9F /* UITapGestureRecognizer.swift */; };
@@ -155,7 +148,6 @@
 		C05B008B24E6E0E100F8A5E0 /* Hexadecimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hexadecimal.swift; sourceTree = "<group>"; };
 		C05B008D24E701ED00F8A5E0 /* Octal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Octal.swift; sourceTree = "<group>"; };
 		C05B009024E71B6E00F8A5E0 /* DecimalSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalSystem.swift; sourceTree = "<group>"; };
-		C06072B02501567E004CF6AA /* CalcMathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcMathTests.swift; sourceTree = "<group>"; };
 		C0619AC124D71227008A7291 /* ConversionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionView.swift; sourceTree = "<group>"; };
 		C0619AC324D71240008A7291 /* ConversionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionViewController.swift; sourceTree = "<group>"; };
 		C061B7C1250FF9FF000E2EB6 /* CalculatorLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorLabel.swift; sourceTree = "<group>"; };
@@ -173,9 +165,6 @@
 		C061FD0A2B22395B0094BF6A /* OperatorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperatorType.swift; sourceTree = "<group>"; };
 		C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionPicker.swift; sourceTree = "<group>"; };
 		C0635A7A24D9E2AA003855A9 /* ConversionSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionSettings.swift; sourceTree = "<group>"; };
-		C064A3A924FD55B8003DE683 /* HexadecimalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexadecimalTests.swift; sourceTree = "<group>"; };
-		C064A3AD24FD5B13003DE683 /* OctalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OctalTests.swift; sourceTree = "<group>"; };
-		C064A3AF24FD847B003DE683 /* ConverterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterTests.swift; sourceTree = "<group>"; };
 		C065DB3B24E3DC4F0059B38D /* CalcMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcMath.swift; sourceTree = "<group>"; };
 		C065DB3D24E41E610059B38D /* CalculatorState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorState.swift; sourceTree = "<group>"; };
 		C0666EB724F97774004809EF /* CalcButtonsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcButtonsViewController.swift; sourceTree = "<group>"; };
@@ -193,8 +182,6 @@
 		C06B7F242443B12E009642B9 /* ProgrammerCalcUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ProgrammerCalcUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C06B7F282443B12E009642B9 /* ProgrammerCalcUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammerCalcUITests.swift; sourceTree = "<group>"; };
 		C06B7F2A2443B12E009642B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C06D285427999B4D00C74888 /* DecimalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalTests.swift; sourceTree = "<group>"; };
-		C06DFD5C24FC22C600255646 /* BinaryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryTests.swift; sourceTree = "<group>"; };
 		C070ED2324DB0EC800A04463 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		C0712FE827908B9700CF408A /* BitwiseKeypadController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitwiseKeypadController.swift; sourceTree = "<group>"; };
 		C07267DC24E5ACB300D4B4A2 /* Binary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binary.swift; sourceTree = "<group>"; };
@@ -231,7 +218,6 @@
 		C09631DD272D4FBE001DCD25 /* StringExtTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtTests.swift; sourceTree = "<group>"; };
 		C09631DF27305315001DCD25 /* NumberSystemFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberSystemFactory.swift; sourceTree = "<group>"; };
 		C097D09B2A09CCD5002FA1E6 /* LabelFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelFormatter.swift; sourceTree = "<group>"; };
-		C097D09D2A0A53D9002FA1E6 /* LabelFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelFormatterTests.swift; sourceTree = "<group>"; };
 		C097F43B2B193355009BF3D7 /* PCHexadecimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCHexadecimal.swift; sourceTree = "<group>"; };
 		C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		C0D842D52AD8669400B85E9F /* UITapGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITapGestureRecognizer.swift; sourceTree = "<group>"; };
@@ -353,6 +339,7 @@
 				C061FCF22B1F802B0094BF6A /* PCBinaryTests.swift */,
 				C061FCF42B1F8AF90094BF6A /* PCOctalTests.swift */,
 				C061FCF62B1F8DD40094BF6A /* PCHexadecimalTests.swift */,
+				C09631DD272D4FBE001DCD25 /* StringExtTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -450,14 +437,6 @@
 			children = (
 				C061FCF82B1FA0630094BF6A /* Mocks */,
 				C061FCFB2B1FA2C30094BF6A /* Tests */,
-				C097D09D2A0A53D9002FA1E6 /* LabelFormatterTests.swift */,
-				C06072B02501567E004CF6AA /* CalcMathTests.swift */,
-				C064A3AF24FD847B003DE683 /* ConverterTests.swift */,
-				C06DFD5C24FC22C600255646 /* BinaryTests.swift */,
-				C064A3AD24FD5B13003DE683 /* OctalTests.swift */,
-				C06D285427999B4D00C74888 /* DecimalTests.swift */,
-				C064A3A924FD55B8003DE683 /* HexadecimalTests.swift */,
-				C09631DD272D4FBE001DCD25 /* StringExtTests.swift */,
 				C06B7F1F2443B12E009642B9 /* Info.plist */,
 			);
 			path = ProgrammerCalcTests;
@@ -834,19 +813,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				C09631DC272C581C001DCD25 /* CalculatorTests.swift in Sources */,
-				C06072B12501567E004CF6AA /* CalcMathTests.swift in Sources */,
 				C09631DE272D4FBE001DCD25 /* StringExtTests.swift in Sources */,
 				C061FCF32B1F802B0094BF6A /* PCBinaryTests.swift in Sources */,
-				C06DFD5D24FC22C600255646 /* BinaryTests.swift in Sources */,
-				C064A3AE24FD5B13003DE683 /* OctalTests.swift in Sources */,
 				C061FCF52B1F8AF90094BF6A /* PCOctalTests.swift in Sources */,
 				C096231D2A05650300E6C08F /* PCDecimalTests.swift in Sources */,
 				C061FCFA2B1FA0720094BF6A /* CalculatorPresenterMock.swift in Sources */,
-				C064A3AA24FD55B8003DE683 /* HexadecimalTests.swift in Sources */,
-				C064A3B024FD847B003DE683 /* ConverterTests.swift in Sources */,
-				C06D285527999B4D00C74888 /* DecimalTests.swift in Sources */,
 				C061FCF72B1F8DD40094BF6A /* PCHexadecimalTests.swift in Sources */,
-				C097D09E2A0A53D9002FA1E6 /* LabelFormatterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
