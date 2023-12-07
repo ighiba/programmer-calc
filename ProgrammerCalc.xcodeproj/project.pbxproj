@@ -39,7 +39,6 @@
 		C061FD0B2B22395B0094BF6A /* OperatorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C061FD0A2B22395B0094BF6A /* OperatorType.swift */; };
 		C0635A7924D9E0F6003855A9 /* ConversionPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */; };
 		C0635A7B24D9E2AA003855A9 /* ConversionSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0635A7A24D9E2AA003855A9 /* ConversionSettings.swift */; };
-		C065DB3C24E3DC4F0059B38D /* CalcMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = C065DB3B24E3DC4F0059B38D /* CalcMath.swift */; };
 		C065DB3E24E41E610059B38D /* CalculatorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C065DB3D24E41E610059B38D /* CalculatorState.swift */; };
 		C0666EB824F97774004809EF /* CalcButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0666EB724F97774004809EF /* CalcButtonsViewController.swift */; };
 		C0666EBA24F9782F004809EF /* CalcButtonsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0666EB924F9782F004809EF /* CalcButtonsPage.swift */; };
@@ -164,7 +163,6 @@
 		C061FD0A2B22395B0094BF6A /* OperatorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperatorType.swift; sourceTree = "<group>"; };
 		C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionPicker.swift; sourceTree = "<group>"; };
 		C0635A7A24D9E2AA003855A9 /* ConversionSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionSettings.swift; sourceTree = "<group>"; };
-		C065DB3B24E3DC4F0059B38D /* CalcMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcMath.swift; sourceTree = "<group>"; };
 		C065DB3D24E41E610059B38D /* CalculatorState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorState.swift; sourceTree = "<group>"; };
 		C0666EB724F97774004809EF /* CalcButtonsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcButtonsViewController.swift; sourceTree = "<group>"; };
 		C0666EB924F9782F004809EF /* CalcButtonsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcButtonsPage.swift; sourceTree = "<group>"; };
@@ -346,7 +344,6 @@
 			isa = PBXGroup;
 			children = (
 				C096231A2A04235700E6C08F /* OperationFactory.swift */,
-				C065DB3B24E3DC4F0059B38D /* CalcMath.swift */,
 				C07659D32B053A6C004C93D1 /* MathError.swift */,
 				C061FD0A2B22395B0094BF6A /* OperatorType.swift */,
 			);
@@ -713,7 +710,6 @@
 				C09631D627277066001DCD25 /* ButtonStyle.swift in Sources */,
 				C0E0FF502A45963100E38DF9 /* AboutPresenter.swift in Sources */,
 				C0666EB824F97774004809EF /* CalcButtonsViewController.swift in Sources */,
-				C065DB3C24E3DC4F0059B38D /* CalcMath.swift in Sources */,
 				C0E0FF422A44BF7600E38DF9 /* WordSizePresenter.swift in Sources */,
 				C0619AC224D71227008A7291 /* ConversionView.swift in Sources */,
 				C082FB892A33722C00F3AA60 /* CalculatorModuleAssembly.swift in Sources */,
