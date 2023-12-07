@@ -89,7 +89,6 @@
 		C0D842D62AD8669400B85E9F /* UITapGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D842D52AD8669400B85E9F /* UITapGestureRecognizer.swift */; };
 		C0D842D82AD866A500B85E9F /* UISwipeGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D842D72AD866A500B85E9F /* UISwipeGestureRecognizer.swift */; };
 		C0D842DA2AD889C800B85E9F /* ModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D842D92AD889C800B85E9F /* ModalViewController.swift */; };
-		C0D919DA2731ABC900AD8C05 /* MathState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D919D92731ABC900AD8C05 /* MathState.swift */; };
 		C0D919DC2731F80600AD8C05 /* DescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D919DB2731F80600AD8C05 /* DescriptionViewController.swift */; };
 		C0E0FF3E2A44AB8400E38DF9 /* ConversionPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E0FF3D2A44AB8400E38DF9 /* ConversionPresenter.swift */; };
 		C0E0FF402A44ABFA00E38DF9 /* ConversionModuleAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0E0FF3F2A44ABFA00E38DF9 /* ConversionModuleAssembly.swift */; };
@@ -223,7 +222,6 @@
 		C0D842D52AD8669400B85E9F /* UITapGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITapGestureRecognizer.swift; sourceTree = "<group>"; };
 		C0D842D72AD866A500B85E9F /* UISwipeGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UISwipeGestureRecognizer.swift; sourceTree = "<group>"; };
 		C0D842D92AD889C800B85E9F /* ModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewController.swift; sourceTree = "<group>"; };
-		C0D919D92731ABC900AD8C05 /* MathState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathState.swift; sourceTree = "<group>"; };
 		C0D919DB2731F80600AD8C05 /* DescriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionViewController.swift; sourceTree = "<group>"; };
 		C0E0FF3D2A44AB8400E38DF9 /* ConversionPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionPresenter.swift; sourceTree = "<group>"; };
 		C0E0FF3F2A44ABFA00E38DF9 /* ConversionModuleAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionModuleAssembly.swift; sourceTree = "<group>"; };
@@ -349,7 +347,6 @@
 			children = (
 				C096231A2A04235700E6C08F /* OperationFactory.swift */,
 				C065DB3B24E3DC4F0059B38D /* CalcMath.swift */,
-				C0D919D92731ABC900AD8C05 /* MathState.swift */,
 				C07659D32B053A6C004C93D1 /* MathError.swift */,
 				C061FD0A2B22395B0094BF6A /* OperatorType.swift */,
 			);
@@ -730,7 +727,6 @@
 				C05B008E24E701ED00F8A5E0 /* Octal.swift in Sources */,
 				C0E0FF562A45D8D900E38DF9 /* StyledTableViewController.swift in Sources */,
 				C061B7C2250FF9FF000E2EB6 /* CalculatorLabel.swift in Sources */,
-				C0D919DA2731ABC900AD8C05 /* MathState.swift in Sources */,
 				C09631CA2726FB12001DCD25 /* AppearanceViewController.swift in Sources */,
 				C0635A7B24D9E2AA003855A9 /* ConversionSettings.swift in Sources */,
 				C065DB3E24E41E610059B38D /* CalculatorState.swift in Sources */,
