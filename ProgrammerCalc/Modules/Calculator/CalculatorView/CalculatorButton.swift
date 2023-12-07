@@ -182,15 +182,15 @@ class CalculatorButton: UIButton {
     }
     
     func setActions(for buttonType: ButtonTypes){
-        addTarget(nil, action: #selector(CalculatorViewController.touchHandleLabelHighlight), for: .touchDown)
+        addTarget(nil, action: #selector(CalculatorViewController.touchDidOccur), for: .touchDown)
         addTarget(nil, action: #selector(CalcButtonsViewController.hapticFeedbackHandler), for: .touchUpInside)
         addTarget(nil, action: #selector(CalcButtonsViewController.tappingSoundHandler), for: .touchUpInside)
         
         switch buttonType {
         case .numeric:
-            addTarget(nil, action: #selector(CalculatorViewController.numericButtonTapped), for: .touchUpInside)
+            addTarget(nil, action: #selector(CalculatorViewController.numericButtonDidPress), for: .touchUpInside)
         case .sign, .complement, .bitwise:
-            addTarget(nil, action: #selector(CalculatorViewController.signButtonTapped), for: .touchUpInside)
+            addTarget(nil, action: #selector(CalculatorViewController.operatorButtonDidPress), for: .touchUpInside)
         case .defaultBtn:
             break
         }
@@ -292,3 +292,18 @@ extension CalculatorButton {
         button.layer.shadowPath = shadowPath
     }
 }
+
+//class NumericButton: CalculatorButton {
+//    
+//    let digit: Character
+//    
+//    init(digit: Character) {
+//        self.digit = digit
+//        super.init()
+//        self.calcButtonType = .numeric
+//    }
+//    
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+//}

@@ -12,7 +12,7 @@ import Foundation
      
      private let conversionSettings: ConversionSettings = ConversionSettings.shared
      private let wordSize: WordSize = WordSize.shared
-     private let calcState: CalcState = CalcState.shared
+     private let calcState: CalculatorState = CalculatorState.shared
  
      // ===============
      // MARK: - Methods

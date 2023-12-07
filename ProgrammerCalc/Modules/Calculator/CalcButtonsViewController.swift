@@ -11,14 +11,10 @@ import AudioToolbox
 
 class CalcButtonsViewController: UIViewController {
     
-    // Sound of tapping bool setting
-    // and
-    // Haptic feedback setting
-    let settings = Settings.shared
-    // Taptic feedback generator
+    private let settings = Settings.shared
     private let generator = UIImpactFeedbackGenerator(style: .light)
     
-    var delegate: CalculatorViewControllerDelegate?
+    weak var delegate: CalculatorViewControllerDelegate?
     
     init(buttonsPage: UIView) {
         super.init(nibName: nil, bundle: nil)
@@ -32,7 +28,8 @@ class CalcButtonsViewController: UIViewController {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        delegate?.unhighlightLabels()
+        
+        delegate?.disableLabelsHighlight()
     }
     
     // MARK: - Methods

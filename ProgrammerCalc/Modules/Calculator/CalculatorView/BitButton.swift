@@ -10,54 +10,53 @@ import UIKit
 
 class BitButton: UIButton {
     
+    enum State: UInt8 {
+        case off = 0
+        case on = 1
+        
+        var boolValue: Bool { self == .on ? true : false }
+        var stringValue: String { self == .on ? "1" : "0" }
+    }
+    
     // MARK: - Properties
     
-    private let BIT_ON: String = "1"
-    private let BIT_OFF: String = "0"
-    
-    private var isBitOn: Bool = false {
+    var bitState: BitButton.State = .off {
         didSet {
-            changeTitleByBitState()
-            self.isSelected = isBitOn
+            setBitLabelText(bitState.stringValue)
+            isSelected = bitState.boolValue
         }
     }
     
     override var isEnabled: Bool {
         didSet {
             if !isEnabled {
-                isBitOn = false // disable bit state if button is disabled
+                bitState = .off
             }
         }
     }
     
+    let bitIndex: Int
+    
     // MARK: - Initialization
     
-    init() {
-        super.init(frame: CGRect())
-        self.setTitle(BIT_OFF, for: .disabled)
+    init(bitIndex: Int) {
+        self.bitIndex = bitIndex
+        super.init(frame: .zero)
+        self.setTitle(State.off.stringValue, for: .disabled)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     // MARK: - Methods
     
-    public func setBitState(_ bitState: Bool) {
-        self.isBitOn = bitState
+    func toggleState() {
+        bitState = bitState == .on ? .off : .on
     }
-    
-    private func changeTitleByBitState() {
-        if isBitOn {
-            changeLabelText(with: BIT_ON)
-        } else {
-            changeLabelText(with: BIT_OFF)
-        }
-    }
-    
-    private func changeLabelText(with bit: String) {
-        guard titleLabel?.text != bit else { return }
-        setTitle(bit, for: .normal)
+
+    private func setBitLabelText(_ text: String) {
+        guard titleLabel?.text != text else { return }
+        setTitle(text, for: .normal)
     }
 }

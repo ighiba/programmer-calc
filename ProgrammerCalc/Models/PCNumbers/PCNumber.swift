@@ -8,15 +8,9 @@
 
 import Foundation
 
-protocol PCNumber {
+protocol PCNumber: CustomStringConvertible {
     var pcDecimalValue: PCDecimal { get }
     init(pcDecimal: PCDecimal)
-}
-
-extension PCDecimal: PCNumber {
-    var pcDecimalValue: PCDecimal { self }
-    
-    init(pcDecimal: PCDecimal) {
-        self.init(value: pcDecimal.decimalValue)
-    }
+    init(pcDecimal: PCDecimal, bitWidth: UInt8, isSigned: Bool)
+    mutating func reset()
 }

@@ -14,7 +14,7 @@ class Binary: NumberSystemProtocol {
     // MARK: - Properties
     // ==================
     
-    private let octHexHelper = OctHexHelper()
+    private let octHexHelper = OctHexHelperOld()
     
     var value: String = "0"
     var isSigned: Bool = false // default
@@ -554,7 +554,7 @@ class Binary: NumberSystemProtocol {
     
     // Appending digit to end
     func appendDigit(_ digit: String) {
-        let calcState = CalcState.shared
+        let calcState = CalculatorState.shared
         let binary = self
         
         // just add digit if point exits

@@ -12,6 +12,7 @@ protocol ConversionSettingsProtocol {
     var systemMain: ConversionSystem { get set }
     var systemConverter: ConversionSystem { get set }
     var numbersAfterPoint: Int { get set }
+    var fractionalWidth: UInt8 { get }
 }
 
 final class ConversionSettings: ConversionSettingsProtocol {
@@ -21,6 +22,7 @@ final class ConversionSettings: ConversionSettingsProtocol {
     var systemMain: ConversionSystem
     var systemConverter: ConversionSystem
     var numbersAfterPoint: Int
+    var fractionalWidth: UInt8 { UInt8(numbersAfterPoint) }
     
     init(systMain: ConversionSystem, systConverter: ConversionSystem, number: Int) {
         self.systemMain = systMain

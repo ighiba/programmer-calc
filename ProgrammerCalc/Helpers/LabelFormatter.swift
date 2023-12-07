@@ -17,7 +17,7 @@ class LabelFormatter {
     private let numberSystemFactory: NumberSystemFactory = NumberSystemFactory()
     
     private let conversionSettings: ConversionSettings = ConversionSettings.shared
-    private let calcState: CalcState = CalcState.shared
+    private let calcState: CalculatorState = CalculatorState.shared
     private let wordSize: WordSize = WordSize.shared
     
     // MARK: - Methods
@@ -28,7 +28,7 @@ class LabelFormatter {
 
         if digit == "." && !labelText.contains(".") {
             // forbid float input when negative number
-            if currentValue.isSigned {
+            if currentValue.isNegative {
                 return labelText
             }
             return labelText + digit

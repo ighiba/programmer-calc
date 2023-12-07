@@ -60,11 +60,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillResignActive(_ scene: UIScene) {
         storage.saveAll()
 
-        let calcState = CalcState.shared
+        let calculatorState = CalculatorState.shared
         let conversionSettings = ConversionSettings.shared
         
-        let inputResult = calcState.lastLabelValues.main
-        let outputResult = calcState.lastLabelValues.converter
+        let inputResult = calculatorState.lastLabelValues.main
+        let outputResult = calculatorState.lastLabelValues.converter
         
         let inputSystem = conversionSettings.systemMain.title
         let outputSystem = conversionSettings.systemConverter.title

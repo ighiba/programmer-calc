@@ -1,5 +1,5 @@
 //
-//  OctHexHelper.swift
+//  OctHexHelperOld.swift
 //  ProgrammerCalc
 //
 //  Created by Ivan Ghiba on 30.09.2021.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class OctHexHelper {
+class OctHexHelperOld {
     
     // MARK: - Octal / Hexadecimal Table Methods
     

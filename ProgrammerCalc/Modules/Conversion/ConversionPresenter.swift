@@ -59,17 +59,9 @@ class ConversionPresenter: ConversionOutput {
             number: Int(sliderValue) * 4
         )
         
-        let mainSystemOld = conversionSettings.systemMain
-        
         storage.saveData(newConversionSettings)
         conversionSettings.setConversionSettings(newConversionSettings)
 
-        if mainSystemOld != mainSystemNew {
-            delegate!.clearLabels()
-        } else {
-            delegate!.updateAllLayout()
-        }
-        
         updateHandler?()
     }
     

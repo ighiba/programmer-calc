@@ -10,181 +10,139 @@ import UIKit
 import AudioToolbox
 
 protocol BitwiseKeypadControllerDelegate: AnyObject {
-    var binaryCharArray: [Character] { get }
-    var bitButtons: [BitButton] { get set }
-    func getTagOffset() -> Int
-    func getWordSizeIntValue() -> Int
-    func getStyle() -> Style
+    var wordSizeValue: Int { get }
+    var currentStyle: Style { get }
+    func bit(atIndex bitIndex: Int) -> Bit
 }
 
-class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate {
+final class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDelegate {
     
     // MARK: - Properties
     
-    // inputValue
-    var binary: Binary
-    // inputValue in array for further processing
-    lazy var binaryCharArray: [Character] = getBinaryValueString()
-    // tag offset for viewWithTag
-    private var tagOffset: Int = 300
-
-    internal var bitButtons: [BitButton] = []
+    var wordSizeValue: Int { wordSize.intValue }
+    var currentStyle: Style { getCurrentStyle() }
     
-    // Views
-    lazy var bitwiseKeypadView = BitwiseKeypad(frame: CGRect())
+    private var bits: [Bit]
     
-    // Update inputValue in parent vc and update labels
-    var updateHandlder: ((NumberSystemProtocol) -> Void)?
-
+    private let bitwiseKeypadView: BitwiseKeypad
+    private var bitButtons: [BitButton] { bitwiseKeypadView.bitButtons }
+    
     private let styleFactory: StyleFactory = StyleFactory()
     
-    private let calcState: CalcState = CalcState.shared
+    private let calculatorState: CalculatorState = CalculatorState.shared
     private let wordSize: WordSize = WordSize.shared
     
-    // Sound of tapping bool setting
-    // and
-    // Haptic feedback setting
     private let settings = Settings.shared
-    // Taptic feedback generator
-    private let generator = UIImpactFeedbackGenerator(style: .light)
+    private let hapticFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
+    
+    private let bitButtonDidPressHandler: (_ bitIsOn: Bool, _ bitIndex: UInt8) -> Void
     
     // MARK: - Initialization
     
-    init(binary: Binary) {
-        self.binary = binary
+    init(bits: [Bit], bitButtonDidPressHandler: @escaping (Bool, UInt8) -> Void) {
+        self.bits = bits.adjusted(toCount: 64, repeatingElement: 0)
+        self.bitButtonDidPressHandler = bitButtonDidPressHandler
+        self.bitwiseKeypadView = BitwiseKeypad()
         super.init(nibName: nil, bundle: nil)
-        self.bitwiseKeypadView.controllerDelegate = self
-    }
-    
-    override func loadView() {
-        self.bitwiseKeypadView.setViews()
-        self.view = bitwiseKeypadView
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Methods
+    override func loadView() {
+        bitwiseKeypadView.configureView(controllerDelegate: self)
+        view = bitwiseKeypadView
+    }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        // get current device orientation
+        
         let isPortrait = UIDevice.current.orientation.isPortrait
         let isLandscape = UIDevice.current.orientation.isLandscape
         
+        guard let landscape = bitwiseKeypadView.landscape, let portrait = bitwiseKeypadView.portrait else { return }
+        
         if isPortrait && !isLandscape {
-            NSLayoutConstraint.deactivate(bitwiseKeypadView.landscape!)
-            NSLayoutConstraint.activate(bitwiseKeypadView.portrait!)
+            NSLayoutConstraint.deactivate(landscape)
+            NSLayoutConstraint.activate(portrait)
         } else if isLandscape && !isPortrait {
-            NSLayoutConstraint.deactivate(bitwiseKeypadView.portrait!)
-            NSLayoutConstraint.activate(bitwiseKeypadView.landscape!)
+            NSLayoutConstraint.deactivate(portrait)
+            NSLayoutConstraint.activate(landscape)
         }
     }
     
-    public func setContainerConstraintsFor(_ parentView: UIView) {
+    // MARK: - Methods
+    
+    func setContainerConstraintsFor(_ parentView: UIView) {
         bitwiseKeypadView.setContainerConstraints(parentView)
     }
-    
-    private func getBinaryValueString() -> [Character] {
-        return [Character](binary.value.removedAllSpaces())
-    }
-    
-    public func updateStyle(_ style: Style) {
+
+    func updateStyle(_ style: Style) {
         bitwiseKeypadView.applyStyle(style)
     }
-    
-    func getStyle() -> Style {
+
+    private func getCurrentStyle() -> Style {
         let styleType = StyleSettings.shared.currentStyle
-        let style = styleFactory.get(style: styleType)
-        return style
+        return styleFactory.get(style: styleType)
     }
     
-    func getWordSizeIntValue() -> Int {
-        return wordSize.intValue
-    }
-    
-    func getTagOffset() -> Int {
-        return tagOffset
-    }
-    
-    private func updateInputValue() {
-        if let updateWith = updateHandlder {
-            updateWith(binary)
-        }
-    }
-    
-    public func updateKeypad() {
-        updateKeypadState()
-        updateKeypadValues()
-    }
-    
-    private func updateKeypadState() {
-        var buttonTag = 63
+    func bit(atIndex bitIndex: Int) -> Bit {
+        guard bitIndex >= 0 && bitIndex < bits.count else { return 0 }
         
-        for button in bitButtons {
-            if isNextButtonAlreadyProcessed(currentButton: button, tag: buttonTag) {
+        return bits[bitIndex]
+    }
+    
+    func update(withBits bits: [Bit]) {
+        let bitWidth = bitButtons.count
+        self.bits = bits.adjusted(toCount: bitWidth, repeatingElement: 0)
+        
+        for (index, bitButton) in bitButtons.enumerated().reversed() {
+            if index < wordSize.intValue && bitButton.isEnabled {
                 break
             }
-            if buttonTag < wordSize.intValue {
-                button.isEnabled = true
-            } else if buttonTag >= wordSize.intValue && button.isEnabled {
-                button.isEnabled = false
-            }
-            buttonTag -= 1
-        }
-    }
-    
-    private func isNextButtonAlreadyProcessed(currentButton button: BitButton, tag: Int) -> Bool {
-        return tag + 1 == wordSize.intValue && button.isEnabled || tag < wordSize.intValue && button.isEnabled
-    }
-    
-    private func updateKeypadValues() {
-        let newBinaryValue = [Character](binary.value)
-        let buttonTag = 63
 
-        for i in 0...buttonTag where bitButtons[i].isEnabled {
-            let bit = String(newBinaryValue[i])
-            let bitState = bit == "1" ? true : false
-            bitButtons[i].setBitState(bitState)
+            if index < wordSize.intValue {
+                bitButton.isEnabled = true
+            } else if index >= wordSize.intValue && bitButton.isEnabled {
+                bitButton.isEnabled = false
+            }
         }
         
-        binaryCharArray = [Character](newBinaryValue)
+        for (index, bit) in bits.enumerated() {
+            if index >= wordSize.intValue {
+                break
+            }
+
+            let bitState: BitButton.State = bit == 1 ? .on : .off
+            bitButtons[index].bitState = bitState
+        }
     }
     
-    private func canChangeSignedBit(for button: BitButton) -> Bool {
-        return !(button.tag - tagOffset + 1 == wordSize.intValue && binary.value.contains(".") && calcState.processSigned)
-    }
-    
-    private func tappingSoundHandler(_ sender: BitButton) {
+    private func playTappingSound() {
         if settings.tappingSounds {
             AudioServicesPlaySystemSound(1104)
         }
     }
     
-    // Haptic feedback action for all buttons
-    private func hapticFeedbackHandler(_ sender: BitButton) {
+    private func hapticFeedbackImpact() {
         if settings.hapticFeedback {
-            generator.prepare()
-            generator.impactOccurred()
+            hapticFeedbackGenerator.prepare()
+            hapticFeedbackGenerator.impactOccurred()
         }
     }
     
     // MARK: - Actions
     
-    @objc func buttonTapped(_ sender: BitButton) {
-        tappingSoundHandler(sender)
-        hapticFeedbackHandler(sender)
-        guard canChangeSignedBit(for: sender) else  { return }
+    @objc func bitButtonDidPress(_ bitButton: BitButton) {
+        playTappingSound()
+        hapticFeedbackImpact()
         
-        let bit: Character = sender.titleLabel?.text == "0" ? "1" : "0"
-        let bitState = bit == "1" ? true : false
-        sender.setBitState(bitState)
+        let bitState = !bitButton.bitState.boolValue
+        bitButton.toggleState()
         
-        let bitIndex = 63 - sender.tag + tagOffset
-        binary.value = binary.value.replace(atPosition: bitIndex, with: bit)
-        binaryCharArray[bitIndex] = bit
-        
-        updateInputValue()
+        let bitIndex = UInt8(bitButton.bitIndex)
+
+        bitButtonDidPressHandler(bitState, bitIndex)
     }
 }

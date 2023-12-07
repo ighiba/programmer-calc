@@ -17,13 +17,13 @@ class PCalcStorage {
         let wordSize: WordSize = storage.loadData()
         let settings: Settings = storage.loadData()
         let conversionSettings: ConversionSettings = storage.loadData()
-        let calcState: CalcState = storage.loadData()
+        let calcState: CalculatorState = storage.loadData()
         let styleSettigns: StyleSettings = storage.loadData()
 
         WordSize.shared.setWordSize(wordSize)
         Settings.shared.setSettings(settings)
         ConversionSettings.shared.setConversionSettings(conversionSettings)
-        CalcState.shared.setCalcState(calcState)
+        CalculatorState.shared.setCalcState(calcState)
         StyleSettings.shared.setStyleSettings(styleSettigns)
     }
     
@@ -31,7 +31,7 @@ class PCalcStorage {
         let wordSize = WordSize.shared
         let settings = Settings.shared
         let conversionSettings = ConversionSettings.shared
-        let calcState = CalcState.shared
+        let calcState = CalculatorState.shared
         let styleSettings = StyleSettings.shared
 
         storage.saveData(wordSize)

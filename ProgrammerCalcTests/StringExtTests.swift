@@ -64,7 +64,7 @@ class StringExtTests: XCTestCase {
     }
     func testRemoveTrailing() throws {
         // 1. given
-        let stringWithSpaces = "1000 1001.1001 1000"
+        let stringWithSpaces = "10001001.10011000"
 
         // 2. when
         let result = stringWithSpaces.removedTrailing(characters: ["0"])

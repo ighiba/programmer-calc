@@ -35,28 +35,28 @@ class CalculatorView: StyledView {
         image: UIImage(systemName: "arrow.up.arrow.down.circle"),
         style: .plain,
         target: nil,
-        action: #selector(CalculatorViewController.changeConversionButtonTapped)
+        action: #selector(CalculatorViewController.changeConversionButtonDidPress)
     )
     
     private let keypadItem = UIBarButtonItem(
         image: UIImage(named: "keypadIcon-bitwise"),
         style: .plain,
         target: nil,
-        action: #selector(CalculatorViewController.switchKeypad)
+        action: #selector(CalculatorViewController.switchKeypadButtonDidPress)
     )
     
     private let settingsItem = UIBarButtonItem(
         image: UIImage(systemName: "gearshape"),
         style: .plain,
         target: nil,
-        action: #selector(CalculatorViewController.settingsButtonTapped)
+        action: #selector(CalculatorViewController.settingsButtonDidPress)
     )
     
     // MARK: - Initialization
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setViews()
+        setupView()
     }
     
     required init?(coder: NSCoder) {
@@ -70,7 +70,7 @@ class CalculatorView: StyledView {
     
     // MARK: - Methods
     
-    func setViews() {
+    func setupView() {
         backgroundColor = .clear
         addSubview(navigationBar)
         addSubview(labelsStack)
@@ -79,7 +79,8 @@ class CalculatorView: StyledView {
         
         navigationBar.subviews.forEach { $0.isExclusiveTouch = true }
 
-        changeWordSizeButton.addTarget(nil, action: #selector(CalculatorViewController.changeWordSizeButtonTapped), for: .touchUpInside)
+        changeWordSizeButton.addTarget(nil, action: #selector(CalculatorViewController.changeWordSizeButtonDidPress), for: .touchUpInside)
+        changeWordSizeButton.addTarget(nil, action: #selector(CalculatorViewController.touchDidOccur), for: .touchDown)
         
         setupLayout()
     }
@@ -274,8 +275,8 @@ class CalculatorView: StyledView {
         setNavigationBarIsHidden(true)
     }
     
-    func updateCnageWordSizeButton(with wordSize: WordSize) {
-        self.changeWordSizeButton.setTitle(wordSize.value.title, for: .normal)
+    func setWordSizeButtonTitle(_ title: String) {
+        changeWordSizeButton.setTitle(title, for: .normal)
     }
     
     private func setNavigationBarIsHidden(_ isHidden: Bool) {

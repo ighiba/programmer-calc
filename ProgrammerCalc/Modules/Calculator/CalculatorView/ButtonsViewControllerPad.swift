@@ -69,18 +69,18 @@ class ButtonsViewControllerPad: StyledViewController, ButtonsContainerController
                 case "AC":
                     button = CalculatorButton()
                     button.tag = tagCalculatorButtonClear
-                    button.addTarget(nil, action: #selector(CalculatorViewController.clearButtonTapped), for: .touchUpInside)
+                    button.addTarget(nil, action: #selector(CalculatorViewController.clearButtonDidPress), for: .touchUpInside)
                 case "±":
                     button = CalculatorButton()
                     button.tag = tagCalculatorButtonNegate
-                    button.addTarget(nil, action: #selector(CalculatorViewController.negateButtonTapped), for: .touchUpInside)
+                    button.addTarget(nil, action: #selector(CalculatorViewController.negateButtonDidPress), for: .touchUpInside)
                 case "Signed\nOFF":
                     button = CalculatorButton()
                     button.tag = tagCalculatorButtonIsSigned
-                    button.addTarget(nil, action: #selector(CalculatorViewController.toggleIsSigned), for: .touchUpInside)
+                    button.addTarget(nil, action: #selector(CalculatorViewController.signedButtonDidPress), for: .touchUpInside)
                 case "=":
                     button = CalculatorButton(calcButtonType: .sign)
-                    button.addTarget(nil, action: #selector(CalculatorViewController.calculateButtonTapped), for: .touchUpInside)
+                    button.addTarget(nil, action: #selector(CalculatorViewController.calculateButtonDidPress), for: .touchUpInside)
                 default:
                     button = CalculatorButton(calcButtonType: .sign)
                 }
@@ -150,14 +150,10 @@ class ButtonsViewControllerPad: StyledViewController, ButtonsContainerController
         allButtons.forEachButton { $0.updateStyle(style) }
     }
     
-    func refreshCalcButtons() {
-        
-    }
-    
-    func updateButtonsIsEnabled(by forbiddenValues: Set<String>) {
+    func disableNumericButtons(withForbiddenDigits forbiddenDigits: Set<String>) {
         allButtons.forEachButton { button in
             let buttonLabel = button.titleLabel?.text ?? ""
-            let shouldBeEnabled = !(forbiddenValues.contains(buttonLabel) && button.calcButtonType == .numeric)
+            let shouldBeEnabled = !(forbiddenDigits.contains(buttonLabel) && button.calcButtonType == .numeric)
             button.isEnabled = shouldBeEnabled
         }
     }

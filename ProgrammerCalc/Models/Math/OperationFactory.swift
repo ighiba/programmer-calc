@@ -10,8 +10,8 @@ import Foundation
 
 class OperationFactory {
     
-    func get(buttonLabel: String) -> CalcMath.OperationType {
-        switch buttonLabel {
+    func get(byOperatorTitle stringValue: String) -> CalcMath.OperationType {
+        switch stringValue {
         case "÷":
             return .div
         case "×":

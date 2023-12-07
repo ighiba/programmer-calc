@@ -8,12 +8,10 @@
 
 import Foundation
 
-enum MathError: Error, CaseIterable {
+enum MathError: Error, LocalizedError, CaseIterable {
     case divByZero
-}
-
-extension MathError: LocalizedError {
-    public var localizedDescription: String? {
+    
+    var errorDescription: String? {
         switch self {
         case .divByZero:
             return NSLocalizedString("Cannot divide by zero", comment: "")

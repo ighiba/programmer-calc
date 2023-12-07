@@ -14,7 +14,7 @@ protocol CalcButtonPageProtocol {
     // Constraitns for current orientation
     var layoutConstraints: [NSLayoutConstraint]? { get set}
     // Updater method for disabling/enabling numeric buttons depends on covnersion system forbidden values
-    func updateButtonIsEnabled(by forbiddenValues: Set<String>)
+    func disableNumericButtons(withForbiddenDigits forbiddenDigits: Set<String>)
 }
 
 // Prototype Class
@@ -91,11 +91,13 @@ class CalcButtonsPage: StyledView, CalcButtonPageProtocol {
         allButtons.forEachButton { $0.updateStyle(style) }
     }
     
-    func updateButtonIsEnabled(by forbiddenValues: Set<String>) {
+    func disableNumericButtons(withForbiddenDigits forbiddenDigits: Set<String>) {
         allButtons.forEachButton { button in
-            let buttonLabel = button.titleLabel?.text ?? ""
-            let shouldBeEnabled = !(forbiddenValues.contains(buttonLabel) && button.calcButtonType == .numeric)
-            button.isEnabled = shouldBeEnabled
+            if button.calcButtonType == .numeric {
+                let buttonLabel = button.titleLabel?.text ?? ""
+                let shouldBeEnabled = !forbiddenDigits.contains(buttonLabel)
+                button.isEnabled = shouldBeEnabled
+            }
         }
     }
 }
@@ -122,18 +124,18 @@ final class CalcButtonsMain: CalcButtonsPage {
                 case "AC":
                     button = CalculatorButton()
                     button.tag = tagCalculatorButtonClear
-                    button.addTarget(nil, action: #selector(CalculatorViewController.clearButtonTapped), for: .touchUpInside)
+                    button.addTarget(nil, action: #selector(CalculatorViewController.clearButtonDidPress), for: .touchUpInside)
                 case "±":
                     button = CalculatorButton()
                     button.tag = tagCalculatorButtonNegate
-                    button.addTarget(nil, action: #selector(CalculatorViewController.negateButtonTapped), for: .touchUpInside)
+                    button.addTarget(nil, action: #selector(CalculatorViewController.negateButtonDidPress), for: .touchUpInside)
                 case "Signed\nOFF":
                     button = CalculatorButton()
                     button.tag = tagCalculatorButtonIsSigned
-                    button.addTarget(nil, action: #selector(CalculatorViewController.toggleIsSigned), for: .touchUpInside)
+                    button.addTarget(nil, action: #selector(CalculatorViewController.signedButtonDidPress), for: .touchUpInside)
                 case "=":
                     button = CalculatorButton(calcButtonType: .sign)
-                    button.addTarget(nil, action: #selector(CalculatorViewController.calculateButtonTapped), for: .touchUpInside)
+                    button.addTarget(nil, action: #selector(CalculatorViewController.calculateButtonDidPress), for: .touchUpInside)
                 default:
                     button = CalculatorButton(calcButtonType: .sign)
                 }

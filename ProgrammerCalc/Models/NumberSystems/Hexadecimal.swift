@@ -12,7 +12,7 @@ final class Hexadecimal: NumberSystemProtocol {
     
     // MARK: - Properties
     
-    private let octHexHelper = OctHexHelper()
+    private let octHexHelper = OctHexHelperOld()
     
     var value: String = "0"
     var isSigned: Bool = false

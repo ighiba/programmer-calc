@@ -8,146 +8,117 @@
 
 import UIKit
 
-class BitwiseKeypad: UIView {
+final class BitwiseKeypad: UIView {
     
     // MARK: - Properties
     
-    private let spacing: CGFloat = UIDevice.currentDeviceType == .iPad ? 20 : 10
-    private var fontSize: CGFloat {
-        let coef: CGFloat = UIDevice.currentDeviceType == .iPad ? 24 : 13.5
-        return UIScreen.mainRealSize().width / coef
-    }
-    private var infoFontSize: CGFloat {
-        return fontSize / 3
-    }
-    private var buttonTag: Int = 63 // buttons or bit tags, buttons created in reverse order from 63 to 0
-    private let buttonsContainerMultiplier: CGFloat = UIDevice.currentDeviceType == .iPad ? 0.93 : 0.90
-    
-    lazy var wordSizeValue: Int = getWordSizeValue()
-    lazy var tagOffset: Int = getTagOffset()
-    
-    // Views
-    lazy var container: UIView = UIView()
-    lazy var allKeypadStack: UIStackView = getKeypadStack()
-    
     weak var controllerDelegate: BitwiseKeypadControllerDelegate!
+    
+    private let spacing: CGFloat = UIDevice.currentDeviceType == .iPad ? 20 : 10
+    private var fontSize: CGFloat { calculateFontSize(forDeviceType: UIDevice.currentDeviceType) }
+    private var infoFontSize: CGFloat { fontSize / 3 }
+    
+    private let keypadPortraitWidthMultiplier: CGFloat = UIDevice.currentDeviceType == .iPad ? 0.93 : 0.9
+    private let keypadLandscapeWidthMultiplier: CGFloat = 0.9
+    
+    private var keypadStack: UIStackView!
+    private(set) var bitButtons: [BitButton] = []
 
-    var portrait: [NSLayoutConstraint]?
-    var landscape: [NSLayoutConstraint]?
+    private(set) var portrait: [NSLayoutConstraint]?
+    private(set) var landscape: [NSLayoutConstraint]?
     
     // MARK: - Layout
     
-    private func setupLayout() {
-        container.translatesAutoresizingMaskIntoConstraints = false
-        allKeypadStack.translatesAutoresizingMaskIntoConstraints = false
+    func configureView(controllerDelegate delegate: BitwiseKeypadControllerDelegate) {
+        controllerDelegate = delegate
+        keypadStack = configureKeypadStack()
         
-        portrait?.append(contentsOf: [
-            container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            container.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            container.topAnchor.constraint(equalTo: self.topAnchor),
-            container.widthAnchor.constraint(equalTo: self.widthAnchor),
-            
-            allKeypadStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            allKeypadStack.centerYAnchor.constraint(equalTo: container.centerYAnchor, constant: -spacing * 2),
-            allKeypadStack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: buttonsContainerMultiplier, constant: spacing * 3),
-            allKeypadStack.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.65, constant: spacing * 3)
-        ])
-        
-        landscape?.append(contentsOf: [
-            container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            container.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            container.topAnchor.constraint(equalTo: self.topAnchor),
-            container.widthAnchor.constraint(equalTo: self.widthAnchor),
-            
-            allKeypadStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            allKeypadStack.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-            allKeypadStack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.90),
-            allKeypadStack.heightAnchor.constraint(equalTo: container.heightAnchor)
-        ])
-        
-        NSLayoutConstraint.activate(portrait!)
-    }
-    
-    public func setContainerConstraints(_ parentView: UIView) {
-        self.translatesAutoresizingMaskIntoConstraints = false
-        
-        portrait = [
-            self.centerXAnchor.constraint(equalTo: parentView.centerXAnchor),
-            self.widthAnchor.constraint(equalTo: parentView.widthAnchor),
-            self.topAnchor.constraint(equalTo: parentView.topAnchor, constant: 20),
-            self.bottomAnchor.constraint(equalTo: parentView.bottomAnchor)
-        ]
-        
-        landscape = [
-            self.centerXAnchor.constraint(equalTo: parentView.centerXAnchor),
-            self.widthAnchor.constraint(equalTo: parentView.widthAnchor, multiplier: 0.9),
-            self.topAnchor.constraint(equalTo: parentView.topAnchor),
-            self.bottomAnchor.constraint(equalTo: parentView.safeAreaLayoutGuide.bottomAnchor, constant: -spacing * 2)
-        ]
-        
-        setupLayout()
-    }
-    
-    // MARK: - Methods
- 
-    private func getWordSizeValue() -> Int {
-        return controllerDelegate!.getWordSizeIntValue()
-    }
-    
-    private func getTagOffset() -> Int {
-        return controllerDelegate!.getTagOffset()
-    }
-    
-    public func setViews() {
-        container.addSubview(allKeypadStack)
-        self.addSubview(container)
-        let style = controllerDelegate.getStyle()
-        applyStyle(style)
+        addSubview(keypadStack)
+        applyStyle(controllerDelegate.currentStyle)
     }
     
     func applyStyle(_ style: Style) {
-        container.backgroundColor = style.backgroundColor
-        for button in controllerDelegate!.bitButtons {
+        backgroundColor = style.backgroundColor
+        
+        for button in bitButtons {
             button.setTitleColor(style.bitButtonColor, for: .normal)
             button.setTitleColor(style.tintColor, for: .highlighted)
             button.setTitleColor(style.tintColor, for: .selected)
         }
     }
-
-    private func getKeypadStack() -> UIStackView {
-        let wordStacks: [UIStackView] = (0 ..< 4).map { _ in
-            return getWordStack()
+    
+    func setContainerConstraints(_ parentView: UIView) {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        keypadStack.translatesAutoresizingMaskIntoConstraints = false
+        
+        portrait = [
+            self.centerXAnchor.constraint(equalTo: parentView.centerXAnchor),
+            self.widthAnchor.constraint(equalTo: parentView.widthAnchor),
+            self.topAnchor.constraint(equalTo: parentView.topAnchor, constant: 20),
+            self.bottomAnchor.constraint(equalTo: parentView.bottomAnchor),
+            
+            keypadStack.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            keypadStack.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: -spacing * 2),
+            keypadStack.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: keypadPortraitWidthMultiplier, constant: spacing * 3),
+            keypadStack.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.65, constant: spacing * 3)
+        ]
+        
+        landscape = [
+            self.centerXAnchor.constraint(equalTo: parentView.centerXAnchor),
+            self.widthAnchor.constraint(equalTo: parentView.widthAnchor, multiplier: keypadLandscapeWidthMultiplier),
+            self.topAnchor.constraint(equalTo: parentView.topAnchor),
+            self.bottomAnchor.constraint(equalTo: parentView.safeAreaLayoutGuide.bottomAnchor, constant: -spacing * 2),
+            
+            keypadStack.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            keypadStack.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            keypadStack.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: keypadLandscapeWidthMultiplier),
+            keypadStack.heightAnchor.constraint(equalTo: self.heightAnchor)
+        ]
+        
+        NSLayoutConstraint.activate(portrait!)
+    }
+    
+    // MARK: - Methods
+    
+    private func calculateFontSize(forDeviceType deviceType: DeviceType) -> CGFloat {
+        let widthCoef: CGFloat = deviceType == .iPad ? 24 : 13.5
+        return UIScreen.mainRealSize().width / widthCoef
+    }
+    
+    private func configureKeypadStack() -> UIStackView {
+        let wordStacks: [UIStackView] = (0..<4).map { wordRow in
+            return configureWordStack(wordRow: wordRow)
         }
         
-        let stack = UIStackView(arrangedSubviews: wordStacks)
+        let stack = UIStackView(arrangedSubviews: wordStacks.reversed())
         stack.axis = .vertical
         stack.distribution = .equalSpacing
         
         return stack
     }
     
-    // Stack of 16 bit buttons (4 stacks)
-    private func getWordStack() -> UIStackView {
-        let halfByteStacks: [UIStackView] = (0 ..< 4).map { _ in
-            return getHalfByteStack()
+    private func configureWordStack(wordRow: Int) -> UIStackView {
+        let halfByteStacks: [UIStackView] = (0..<4).map { i in
+            let halfByteStackIndex = i + (wordRow * 4)
+            return configureHalfByteStack(halfByteStackIndex: halfByteStackIndex)
         }
         
-        let stack = UIStackView(arrangedSubviews: halfByteStacks)
+        let stack = UIStackView(arrangedSubviews: halfByteStacks.reversed())
         stack.axis = .horizontal
         stack.distribution = .equalSpacing
 
         return stack
     }
     
-    // Stack of 4 bit buttons
-    private func getHalfByteStack() -> UIStackView {
-        let buttons: [BitButton] = (0 ..< 4).map { _ in
-            return getButton()
+    private func configureHalfByteStack(halfByteStackIndex: Int) -> UIStackView {
+        let buttons: [BitButton] = (0..<4).map { i in
+            let bitIndex = i + (halfByteStackIndex * 4)
+            return configureBitButton(bitIndex: bitIndex)
         }
-
-        controllerDelegate?.bitButtons.append(contentsOf: buttons)
         
-        let stack = UIStackView(arrangedSubviews: buttons)
+        bitButtons.append(contentsOf: buttons)
+        
+        let stack = UIStackView(arrangedSubviews: buttons.reversed())
         stack.axis = .horizontal
         stack.distribution = .fillEqually
         
@@ -159,7 +130,8 @@ class BitwiseKeypad: UIView {
             stack.heightAnchor.constraint(equalTo: buttons[0].heightAnchor),
         ])
         
-        let indexLabel = getInfoLabel()
+        let index = halfByteStackIndex * 4 - 1
+        let indexLabel = configureBitIndexLabel(index: index)
 
         stack.addSubview(indexLabel)
         
@@ -173,42 +145,38 @@ class BitwiseKeypad: UIView {
         return stack
     }
     
-    // Bit button
-    private func getButton() -> BitButton {
-        let button = BitButton()
-        let index = abs(buttonTag - 63)
-        let bit = String(controllerDelegate!.binaryCharArray[index])
-        // set bitState
-        let bitState = bit == "1" ? true : false
+    private func configureBitButton(bitIndex: Int) -> BitButton {
+        let bit = controllerDelegate.bit(atIndex: bitIndex)
+        let bitButton = BitButton(bitIndex: bitIndex)
+        let bitState: BitButton.State = bit == 1 ? .on : .off
         
-        button.setBitState(bitState)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: fontSize, weight: UIFont.Weight.regular)
+        bitButton.bitState = bitState
+        bitButton.titleLabel?.font = UIFont.systemFont(ofSize: fontSize, weight: .regular)
         
-        button.setTitleColor(.systemOrange, for: .highlighted) // default before applyStyle
-        button.setTitleColor(.systemGray.withAlphaComponent(0.7), for: .disabled) // for all styles
-        // identifier for UITests
-        button.accessibilityIdentifier = "bitButton_\(buttonTag)"
+        bitButton.setTitleColor(.systemOrange, for: .highlighted)
+        bitButton.setTitleColor(.systemGray.withAlphaComponent(0.7), for: .disabled)
+
+        bitButton.accessibilityIdentifier = "bitButton_\(bitIndex)" // identifier for UITests
         
-        button.addTarget(nil, action: #selector(BitwiseKeypadController.buttonTapped), for: .touchUpInside)
-        button.addTarget(nil, action: #selector(CalculatorViewController.touchHandleLabelHighlight), for: .touchDown)
+        bitButton.addTarget(nil, action: #selector(BitwiseKeypadController.bitButtonDidPress), for: .touchUpInside)
+        bitButton.addTarget(nil, action: #selector(CalculatorViewController.touchDidOccur), for: .touchDown)
         
-        button.tag = buttonTag + tagOffset
-        
-        if buttonTag + 1 > wordSizeValue {
-            button.isEnabled = false
+        if bitIndex > controllerDelegate.wordSizeValue - 1 {
+            bitButton.isEnabled = false
         }
-        buttonTag -= 1
         
-        return button
+        return bitButton
     }
     
-    private func getInfoLabel() -> UILabel {
+    private func configureBitIndexLabel(index: Int) -> UILabel {
         let label = UILabel()
-        label.text = String(buttonTag + 1)
-        label.font = UIFont.systemFont(ofSize: infoFontSize, weight: .light)
+        
+        label.text = String(index + 1)
+        label.font = .systemFont(ofSize: infoFontSize, weight: .light)
         label.textAlignment = .right
-        label.sizeToFit()
         label.textColor = .systemGray
+        label.sizeToFit()
+        
         return label
     }
 }

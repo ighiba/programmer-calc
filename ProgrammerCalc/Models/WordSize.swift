@@ -54,6 +54,7 @@ final class WordSize: WordSizeProtocol {
 
     var value: WordSizeType
     var intValue: Int { value.intValue }
+    var bitWidth: UInt8 { UInt8(value.intValue) }
     
     init(_ wordSizeType: WordSizeType) {
         self.value = wordSizeType

@@ -9,38 +9,24 @@
 import UIKit
 
 protocol CalculatorPresenterDelegate: AnyObject {
-    var mainLabelHasError: Bool { get }
-    func clearLabels()
-    func updateAllLayout()
-    func updateClearButton(hasInput: Bool)
-    func showErrorInLabels(_ error: MathError)
-    func setErrorInLabels(_ error: MathError)
-    func resetErrorInLabels()
-    func getMainLabelText(deleteSpaces: Bool) -> String
-    func setMainLabelText(_ text: String)
-    func setConverterLabelText(_ text: String)
+    func setInputLabelText(_ text: String)
+    func setOutputLabelText(_ text: String)
 }
 
 protocol CalculatorOutput: AnyObject {
-    func getMainSystem() -> ConversionSystem
-    func getConverterSystem() -> ConversionSystem
-    func isInvalidMainLabelInput(_ text: String) -> Bool
-    func resetCurrentValueAndUpdateLabels()
-    func updateMainLabelWithCurrentValue()
-    func updateConverterLabelWithCurrentValue()
-    func getForbiddenToInputDigits() -> Set<String>
-    func isProcessSigned() -> Bool
-    func mainLabelAddAndUpdate(digit: String)
-    func mainLabelRemoveTrailing()
-    func getCurrentValueBinary(format: Bool) -> Binary?
-    func setNewCurrentValue(_ value: NumberSystemProtocol)
-    func doOperationFor(operationString: String)
-    func toggleProcessSigned()
-    func resetCalculation()
-    func doCalculation()
-    func doNegation()
-    func fixOverflowForCurrentValue()
-    
+    func viewDidLoad()
+    func clearButtonDidPress()
+    func labelDidSwipeRight()
+    func negateButtonDidPress()
+    func signedButtonDidPress()
+    func numericButtonDidPress(digit: Character)
+    func dotButtonDidPress()
+    func operatorButtonDidPress(operatorString: String)
+    func calculateButtonDidPress()
+    func getInputValueBits() -> [Bit]
+    func bitButtonDidPress(bitIsOn: Bool, atIndex bitIndex: UInt8)
+    func didEnterPhonePortraitOrientation()
+    func didEnterPhoneLandscapeOrientation(isBitwiseKeypadActive: Bool)
     func showConversion()
     func showWordSize()
     func showSettings()
@@ -48,251 +34,187 @@ protocol CalculatorOutput: AnyObject {
 
 class CalculatorPresenter: CalculatorOutput {
     
+    // MARK: - Properties
+    
     weak var input: CalculatorInput!
     
     var calculator: Calculator!
-    var converter: Converter!
+    var operatorFactory: OperatorFactory!
     
-    var storage: CalculatorStorage!
-    
-    private let conversionSettings = ConversionSettings.shared
-    private let calcState = CalcState.shared
-    
-    init() {
-        
-    }
+    var wordSize: WordSize!
+    var calculatorState: CalculatorState!
+    var conversionSettings: ConversionSettings!
     
     // MARK: - Methods
     
-    func getMainSystem() -> ConversionSystem {
-        return conversionSettings.systemMain
-    }
-    
-    func getConverterSystem() -> ConversionSystem {
-        return conversionSettings.systemConverter
-    }
-    
-    func isInvalidMainLabelInput(_ text: String) -> Bool {
-        if ConversionValues.getForbidden(for: conversionSettings.systemMain).contains(where: text.contains) {
-            print("Forbidden values at input")
-            return true
-        }
-        return false
-    }
-    
-    func resetCurrentValueAndUpdateLabels() {
-        calculator.resetCurrentValue()
-        updateLabels()
-    }
-    
-    private func mainLabelUpdate() {
-        calculator.mainLabelUpdate()
-    }
-    
-    private func converterLabelUpdate() {
-        calculator.converterLabelUpdate()
-    }
-    
-    func updateMainLabelWithCurrentValue() {
-        calculator.mainLabelUpdate()
-    }
-    
-    func updateConverterLabelWithCurrentValue() {
-        calculator.converterLabelUpdate()
-    }
-    
-    func getForbiddenToInputDigits() -> Set<String> {
-        return ConversionValues.getForbidden(for: conversionSettings.systemMain)
-    }
-    
-    func isProcessSigned() -> Bool {
-        return calcState.processSigned
-    }
-    
-    func mainLabelAddAndUpdate(digit: String) {
-        calculator.mainLabelAdd(digit: digit)
-    }
-    
-    func mainLabelRemoveTrailing() {
-        calculator.mainLabelRemoveTrailing()
-    }
-    
-    func getCurrentValueBinary(format: Bool) -> Binary? {
-        return converter.convertValue(value: calculator.currentValue, to: .bin, format: false) as? Binary
-    }
-    
-    func setNewCurrentValue(_ value: NumberSystemProtocol) {
-        let dec = converter.convertValue(value: value, to: .dec, format: true) as! DecimalSystem
-        calculator.currentValue.updateValue(dec.decimalValue)
-    }
-    
-    func doOperationFor(operationString: String) {
-        let operation = calculator.getOperation(with: operationString)
-        guard operation != .none else { return }
+    func viewDidLoad() {
+        calculator.load()
         
-        if calculator.hasPendingOperation && calculator.shouldStartNewInput {
-            calculator.setOperation(operation)
-            return
-        } else if calculator.hasPendingOperation {
-            calculator.calculate()
-            calculator.setOperation(operation)
-            updateLabels()
-        } else if isUnaryOperation(operation) {
-            calculator.setOperation(operation)
-            calculator.calculate()
-            calculator.resetCalculation()
-            calculator.shouldStartNewInput = true
-            updateLabels()
-        } else {
-            calculator.setOperation(operation)
-            calculator.shouldStartNewInput = true
-        }
+        updateWordSizeButtonTitle()
+        updateConversionSystemTitles()
+        updateNumericButtonsIsEnabled()
+        updateSignedButtons()
     }
-    
-    private func isUnaryOperation(_ operation: CalcMath.OperationType) -> Bool {
-        return operation == .shiftRight ||
-               operation == .shiftLeft ||
-               operation == .oneS ||
-               operation == .twoS
-    }
-    
-    private func updateLabels() {
-        mainLabelUpdate()
-        converterLabelUpdate()
-    }
-    
-    func toggleProcessSigned() {
-        let valueIsNegativeAndWillProcessUnsigned = isValueIsNegativeAndWillProcessUnsigned()
-        let valueIsPositiveAndWillProcessSigned =  isValueIsPositiveAndWillProcessSigned()
-        
-        calcState.processSigned.toggle()
 
-        if valueIsNegativeAndWillProcessUnsigned || valueIsPositiveAndWillProcessSigned {
-            let oldValue = calculator.currentValue
-            calculator.currentValue.fixOverflow(bitWidth: WordSize.shared.intValue, processSigned: calcState.processSigned)
-            
-            if calculator.currentValue.isSignedAndFloat {
-                input.clearLabels()
-            } else if oldValue != calculator.currentValue {
-                updateLabels()
-            }
+    func clearButtonDidPress() {
+        calculator.clearButtonDidPress()
+        input.setClearButtonTitle(inputHasStarted: false)
+    }
+    
+    func labelDidSwipeRight() {
+        calculator.removeLeastSignificantDigit()
+        updateBitwiseKeypad()
+    }
+    
+    func negateButtonDidPress() {
+        calculator.negateInputValue()
+    }
+    
+    func signedButtonDidPress() {
+        calculatorState.processSigned.toggle()
+        
+        updateSignedButtons()
+        
+        calculator.reload()
+    }
+
+    func numericButtonDidPress(digit: Character) {
+        calculator.numericButtonDidPress(digit: digit)
+        input.setClearButtonTitle(inputHasStarted: true)
+    }
+    
+    func dotButtonDidPress() {
+        calculator.dotButtonDidPress()
+        input.setClearButtonTitle(inputHasStarted: true)
+    }
+    
+    func operatorButtonDidPress(operatorString: String) {
+        let operatorType = operatorFactory.get(byStringValue: operatorString)
+
+        if operatorType.isUnaryOperator {
+            calculator.unaryOperatorButtonDidPress(operatorType: operatorType)
+        } else {
+            calculator.binaryOperatorButtonDidPress(operatorType: operatorType)
         }
     }
     
-    private func isValueIsNegativeAndWillProcessUnsigned() -> Bool {
-        return calculator.currentValue.isSigned && (calcState.processSigned == true)
+    func calculateButtonDidPress() {
+        calculator.calculateButtonDidPress()
     }
     
-    private func isValueIsPositiveAndWillProcessSigned() -> Bool {
-        return !calculator.currentValue.isSigned && (calcState.processSigned == false)
+    func getInputValueBits() -> [Bit] {
+        calculator.getInputValueBits()
+    }
+
+    func bitButtonDidPress(bitIsOn: Bool, atIndex bitIndex: UInt8) {
+        calculator.bitButtonDidPress(bitIsOn: bitIsOn, atIndex: bitIndex)
     }
     
-    func resetCalculation() {
-        calculator.resetCalculation()
+    func didEnterPhonePortraitOrientation() {
+        updateLabelsDisplayMode()
     }
     
-    func doCalculation() {
-        if calculator.hasPendingOperation {
-            calculator.calculate()
-            calculator.resetCalculation()
-            
-            guard !input.mainLabelHasError() else { return }
-            updateLabels()
+    func didEnterPhoneLandscapeOrientation(isBitwiseKeypadActive: Bool) {
+        let inputNumberOfLines = conversionSettings.systemMain == .bin ? 2 : 1
+
+        if isBitwiseKeypadActive {
+            let displayMode: CalculatorLabelsDisplayMode = .onlyInputLabel(numberOfLines: inputNumberOfLines)
+            input.setLabelsDisplayMode(displayMode)
         }
-    }
-    
-    func doNegation() {
-        if calculator.currentValue.hasFloatingPoint {
-            return
-        }
-        calculator.negateCurrentValue()
-        updateLabels()
-    }
-    
-    func fixOverflowForCurrentValue() {
-        calculator.fixOverflowForCurrentValue()
     }
     
     func showConversion() {
-        guard let conversionView = ConversionModuleAssembly.configureModule() as? ConversionViewController else {
-            return
-        }
+        guard let conversionView = ConversionModuleAssembly.configureModule() as? ConversionViewController else { return }
+        
         conversionView.modalPresentationStyle = .overFullScreen
         conversionView.output.delegate = self
         conversionView.output.updateHandler = { [weak self] in
-            self?.input.updateAfterConversionChange()
+            self?.calculator.reload()
+            self?.updateConversionSystemTitles()
+            self?.updateNumericButtonsIsEnabled()
+            self?.updateLabelsDisplayMode()
+            self?.updateBitwiseKeypad()
         }
-        input.presentViewControlle(conversionView, animated: false)
+        
+        input.presentViewController(conversionView, animated: false)
     }
-    
+
     func showWordSize() {
-        guard let wordSizeView = WordSizeModuleAssembly.configureModule() as? WordSizeViewController else {
-            return
-        }
+        guard let wordSizeView = WordSizeModuleAssembly.configureModule() as? WordSizeViewController else { return }
+        
         wordSizeView.modalPresentationStyle = .overFullScreen
         wordSizeView.output.updateHandler = { [weak self] in
-            self?.fixOverflowForCurrentValue()
-            self?.input.updateAllLayout()
+            self?.calculator.reload()
+            self?.updateWordSizeButtonTitle()
+            self?.updateBitwiseKeypad()
         }
-        input.presentViewControlle(wordSizeView, animated: false)
+        
+        input.presentViewController(wordSizeView, animated: false)
     }
     
     func showSettings() {
-        guard let settingsView = SettingsModuleAssembly.configureModule() as? SettingsViewController else {
-            return
-        }
+        guard let settingsView = SettingsModuleAssembly.configureModule() as? SettingsViewController else { return }
+        
         let navigationController = UINavigationController()
         settingsView.modalPresentationStyle = .pageSheet
         navigationController.presentationController?.delegate = input as? UIAdaptivePresentationControllerDelegate
-        settingsView.output.updateHandler = { [weak self] in
-            self?.input.updateAllLayout()
-        }
         navigationController.setViewControllers([settingsView], animated: false)
-        input.presentViewControlle(navigationController, animated: true)
+        
+        input.presentViewController(navigationController, animated: true)
     }
     
+    private func updateWordSizeButtonTitle() {
+        input.setWordSizeButtonTitle(wordSize.value.title)
+    }
+    
+    private func updateConversionSystemTitles() {
+        let inputConversionSystemTitle = conversionSettings.systemMain.title
+        let outputConversionSystemTitle = conversionSettings.systemConverter.title
+        
+        input.setInputConversionSystemLabelText(inputConversionSystemTitle)
+        input.setOutputConversionSystemLabelText(outputConversionSystemTitle)
+    }
+    
+    private func updateNumericButtonsIsEnabled() {
+        let forbiddenDigits = ConversionValues.getForbidden(for: conversionSettings.systemMain)
+        input.disableNumericButtons(withForbiddenDigits: forbiddenDigits)
+    }
+    
+    private func updateSignedButtons() {
+        let isSigned = calculatorState.processSigned
+        input.setNegateButtonIsEnabled(isSigned)
+        input.changeSignedButtonLabel(isSigned: isSigned)
+    }
+    
+    private func updateLabelsDisplayMode() {
+        let inputNumberOfLines = conversionSettings.systemMain == .bin ? 2 : 1
+        let outputNumberOfLines = conversionSettings.systemConverter == .bin ? 2 : 1
+        
+        let displayMode: CalculatorLabelsDisplayMode
+        if conversionSettings.systemMain == conversionSettings.systemConverter {
+            displayMode = .onlyInputLabel(numberOfLines: inputNumberOfLines)
+        } else {
+            displayMode = .standart(inputNumberOfLines: inputNumberOfLines, outputNumberOfLines: outputNumberOfLines)
+        }
+        
+        input.setLabelsDisplayMode(displayMode)
+    }
+    
+    private func updateBitwiseKeypad() {
+        let bits = calculator.getInputValueBits()
+        input.updateBitwiseKeypad(withBits: bits)
+    }
 }
 
 // MARK: - Delegate
 
 extension CalculatorPresenter: CalculatorPresenterDelegate {
-    var mainLabelHasError: Bool {
-        return input.mainLabelHasError()
-    }
     
-    func clearLabels() {
-        input.clearLabels()
-    }
-    
-    func updateAllLayout() {
-        input.updateAllLayout()
-    }
-    
-    func updateClearButton(hasInput: Bool) {
-        input.updateClearButton(hasInput: hasInput)
-    }
-    
-    func showErrorInLabels(_ error: MathError) {
-        input.showErrorInLabels(error)
-    }
-    
-    func setErrorInLabels(_ error: MathError) {
-        input.setErrorInLabels(error)
-    }
-    
-    func resetErrorInLabels() {
-        input.resetErrorInLabels()
-    }
-    
-    func getMainLabelText(deleteSpaces: Bool) -> String {
-        return input.getMainLabelText(deleteSpaces: deleteSpaces)
-    }
-    
-    func setMainLabelText(_ text: String) {
+    func setInputLabelText(_ text: String) {
         input.setMainLabelText(text)
     }
     
-    func setConverterLabelText(_ text: String) {
+    func setOutputLabelText(_ text: String) {
         input.setConverterLabelText(text)
     }
 }

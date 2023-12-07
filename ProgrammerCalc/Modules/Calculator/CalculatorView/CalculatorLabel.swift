@@ -160,7 +160,7 @@ class CalculatorLabel: UILabel, UpdatableLabel, CalculatorLabelDelegate {
         }
         
         if let error = self.error {
-            text = error.localizedDescription!
+            text = error.errorDescription!
         } else {
             text = errorMessage
         }
