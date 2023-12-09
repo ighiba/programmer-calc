@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class SignedButton: CalculatorButton_ {
+final class SignedButton: CalculatorButton {
     
     enum State: String {
         case on = "Signed\nON"

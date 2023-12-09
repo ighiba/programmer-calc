@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class DotButton: CalculatorButton_ {
+final class DotButton: CalculatorButton {
     
     override var buttonStyleType: ButtonStyleType { .numeric }
     

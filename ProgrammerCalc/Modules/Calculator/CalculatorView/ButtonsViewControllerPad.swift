@@ -10,12 +10,12 @@ import UIKit
 
 // MARK: - iPad
 
-class ButtonsViewControllerPad: StyledViewController, ButtonsContainerControllerProtocol {
+final class ButtonsViewControllerPad: StyledViewController, ButtonsContainerControllerProtocol {
     
     // MARK: - Properties
     
-    lazy var allButtons: [[CalculatorButton]] = obtainButtons()
-    lazy var buttonsStackView: UIStackView = obtainButtonsStackView(buttons: allButtons)
+    lazy var buttons: [[CalculatorButton]] = configureButtons()
+    lazy var buttonsStackView: UIStackView = configureButtonsStackView(buttons: buttons)
 
     var layoutConstraints: [NSLayoutConstraint] = []
 
@@ -36,83 +36,85 @@ class ButtonsViewControllerPad: StyledViewController, ButtonsContainerController
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.addSubview(buttonsStackView)
-        setLayout()
+        setupLayout()
     }
     
     override func styleWillUpdate(with style: Style) {
         super.styleWillUpdate(with: style)
+        
         updateButtonsStyle(style)
     }
     
     // MARK: - Methods
     
-    private func obtainButtons() -> [[CalculatorButton]] {
+    private func setupLayout() {
+        buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            buttonsStackView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.95),
+            buttonsStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            buttonsStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: verticalMargin),
+            buttonsStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -verticalMargin),
+        ])
         
-        let buttonTitles = [["AND",   "OR",  "XOR",  "NOR",  "AC"  ,"±", "Signed\nOFF", "÷"],
-                            ["X<<Y", "X>>Y", "<<",   ">>",   "7",   "8",     "9",      "×"],
-                            ["1's",   "D",   "E",    "F",    "4",   "5",     "6",      "-"],
-                            ["2's",   "A",   "B",    "C",    "1",   "2",     "3",      "+"],
-                            ["00",          "FF",            "0",           ".",      "="]]
-
-        let buttons: [[CalculatorButton]] = buttonTitles.map { titlesRow in
-            titlesRow.map { title in
-                let button: CalculatorButton
-                
-                switch title {
-                case "A","B","C","D","E","F","FF","00","0","1","2","3","4","5","6","7","8","9",".":
-                    button = CalculatorButton(calcButtonType: .numeric)
-                case "1's", "2's":
-                    button = CalculatorButton(calcButtonType: .complement)
-                case "X<<Y", "X>>Y", "<<", ">>", "AND", "OR", "XOR", "NOR":
-                    button = CalculatorButton(calcButtonType: .bitwise)
-                case "AC":
-                    button = CalculatorButton()
-                    button.tag = clearButtonTag
-                    button.addTarget(nil, action: #selector(CalculatorViewController.clearButtonDidPress), for: .touchUpInside)
-                case "±":
-                    button = CalculatorButton()
-                    button.tag = negateButtonTag
-                    button.addTarget(nil, action: #selector(CalculatorViewController.negateButtonDidPress), for: .touchUpInside)
-                case "Signed\nOFF":
-                    button = CalculatorButton()
-                    button.tag = signedButtonTag
-                    button.addTarget(nil, action: #selector(CalculatorViewController.signedButtonDidPress), for: .touchUpInside)
-                case "=":
-                    button = CalculatorButton(calcButtonType: .sign)
-                    button.addTarget(nil, action: #selector(CalculatorViewController.calculateButtonDidPress), for: .touchUpInside)
-                default:
-                    button = CalculatorButton(calcButtonType: .sign)
-                }
-
-                button.setActions(for: button.calcButtonType)
-                
-                // set title and style
-                if title == "1's" || title == "2's" {
-                    // localization for 1's and 2's
-                    let localizedTitle = NSLocalizedString(title, comment: "")
-                    button.setTitle(localizedTitle, for: .normal)
-                } else {
-                    button.setTitle(title, for: .normal)
-                }
-
-                button.setTitleColor(.systemGray, for: .disabled)
-                button.applyStyle()
-                
-                // apply font style for AC button
-                if title == "AC" {
-                    button.titleLabel?.font = button.titleLabel?.font.withSize(button.buttonWidth() / 1.8)
-                }
-                
-                button.accessibilityIdentifier = title
-                
-                return button
-            }
-        }
-        return buttons
+        buttons.forEachButton { $0.setConstraints(spacingBetweenButtons: spacing) }
     }
     
-    func obtainButtonsStackView(buttons: [[CalculatorButton]]) -> UIStackView {
+    private func configureButtons() -> [[CalculatorButton]] {
+        let andButton = OperatorButton(.binary(.and))
+        let orButton = OperatorButton(.binary(.or))
+        let xorButton = OperatorButton(.binary(.xor))
+        let norButton = OperatorButton(.binary(.nor))
+        let clearButton = ClearButton()
+        let negateButton = NegateButton()
+        let signedButton = SignedButton()
+        let divButton = OperatorButton(.binary(.div))
+        
+        let shLByButton = OperatorButton(.binary(.shiftLeftBy))
+        let shRByButton = OperatorButton(.binary(.shiftRightBy))
+        let shLButton = OperatorButton(.unary(.shiftLeft))
+        let shRButton = OperatorButton(.unary(.shiftRight))
+        let sevenButton = NumericButton(.single("7"))
+        let eightButton = NumericButton(.single("8"))
+        let nineButton = NumericButton(.single("9"))
+        let mulButton = OperatorButton(.binary(.mul))
+        
+        let oneS = ComplementButton(.oneS)
+        let dButton = NumericButton(.single("D"))
+        let eButton = NumericButton(.single("E"))
+        let fButton = NumericButton(.single("F"))
+        let fourButton = NumericButton(.single("4"))
+        let fiveButton = NumericButton(.single("5"))
+        let sixButton = NumericButton(.single("6"))
+        let subButton = OperatorButton(.binary(.sub))
+        
+        let twoS = ComplementButton(.twoS)
+        let aButton = NumericButton(.single("A"))
+        let bButton = NumericButton(.single("B"))
+        let cButton = NumericButton(.single("C"))
+        let oneButton = NumericButton(.single("1"))
+        let twoButton = NumericButton(.single("2"))
+        let threeButton = NumericButton(.single("3"))
+        let addButton = OperatorButton(.binary(.add))
+        
+        let doubleZeroButton = NumericButton(.double("0", "0"), size: .double)
+        let doubleFButton = NumericButton(.double("F", "F"), size: .double)
+        let zeroButton = NumericButton(.single("0"), size: .double)
+        let dotButton = DotButton()
+        let calculateButton = CalculateButton()
+        
+        return [
+            [andButton, orButton, xorButton, norButton, clearButton, negateButton, signedButton, divButton],
+            [shLByButton, shRByButton, shLButton, shRButton, sevenButton, eightButton, nineButton, mulButton],
+            [oneS, dButton, eButton, fButton, fourButton, fiveButton, sixButton, subButton],
+            [twoS, aButton, bButton, cButton, oneButton, twoButton, threeButton, addButton],
+            [doubleZeroButton, doubleFButton, zeroButton, dotButton, calculateButton]
+        ]
+    }
+    
+    private func configureButtonsStackView(buttons: [[CalculatorButton]]) -> UIStackView {
         let buttonsStackRows = buttons.map { buttonsRow in
             let buttonsRowStack = UIStackView(arrangedSubviews: buttonsRow)
             buttonsRowStack.axis = .horizontal
@@ -131,42 +133,26 @@ class ButtonsViewControllerPad: StyledViewController, ButtonsContainerController
         return buttonStackView
     }
     
-    private func setLayout() {
-        buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
-
-        NSLayoutConstraint.activate([
-            buttonsStackView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.95),
-            buttonsStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            buttonsStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: verticalMargin),
-            buttonsStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -verticalMargin),
-        ])
-        
-        allButtons.forEachButton { button in
-            button.setDefaultConstraints(spacingBetweenButtons: spacing)
+    private func updateButtonsStyle(_ style: Style) {
+        buttons.forEachButton { button in
+            let buttonStyle = style.buttonStyle(for: button.buttonStyleType)
+            button.updateStyle(buttonStyle: buttonStyle, borderColor: style.buttonBorderColor)
         }
     }
     
-    private func updateButtonsStyle(_ style: Style) {
-        allButtons.forEachButton { $0.updateStyle(style) }
-    }
-    
     func disableNumericButtons(withForbiddenDigits forbiddenDigits: Set<String>) {
-        allButtons.forEachButton { button in
-            let buttonLabel = button.titleLabel?.text ?? ""
-            let shouldBeEnabled = !(forbiddenDigits.contains(buttonLabel) && button.calcButtonType == .numeric)
-            button.isEnabled = shouldBeEnabled
+        buttons.forEachButton { button in
+            if button is NumericButton {
+                let buttonLabel = button.titleLabel?.text ?? ""
+                let shouldBeEnabled = !forbiddenDigits.contains(buttonLabel)
+                button.isEnabled = shouldBeEnabled
+            }
         }
     }
 }
 
 extension [[CalculatorButton]] {
     func forEachButton(_ body: (CalculatorButton) -> Void) {
-        self.forEach { row in row.forEach { button in body(button) } }
-    }
-}
-
-extension [[CalculatorButton_]] {
-    func forEachButton(_ body: (CalculatorButton_) -> Void) {
         self.forEach { row in row.forEach { button in body(button) } }
     }
 }

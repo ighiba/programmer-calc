@@ -14,7 +14,7 @@ protocol ButtonsContainerControllerProtocol: UIViewController {
 
 // MARK: - iPhone
 
-class ButtonsViewControllerPhone: UIPageViewController, ButtonsContainerControllerProtocol {
+final class ButtonsViewControllerPhone: UIPageViewController, ButtonsContainerControllerProtocol {
 
     // MARK: - Properties
     

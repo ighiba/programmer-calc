@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class ClearButton: CalculatorButton_ {
+final class ClearButton: CalculatorButton {
     
     enum State: String {
         case inputNotStarted = "AC"

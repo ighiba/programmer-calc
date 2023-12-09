@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class NumericButton: CalculatorButton_ {
+final class NumericButton: CalculatorButton {
     
     enum Digit {
         case single(Character)

@@ -40,7 +40,6 @@ class CalculatorPresenter: CalculatorOutput {
     weak var input: CalculatorInput!
     
     var calculator: Calculator!
-    var operatorFactory: OperatorFactory!
     
     var wordSize: WordSize!
     var calculatorState: CalculatorState!

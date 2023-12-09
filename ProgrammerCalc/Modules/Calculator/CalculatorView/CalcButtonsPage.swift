@@ -10,7 +10,7 @@ import UIKit
 
 protocol CalcButtonPageProtocol {
     // 2D Array with calcualtor buttons
-    var allButtons: [[CalculatorButton_]] { get set }
+    var buttons: [[CalculatorButton]] { get set }
     // Constraitns for current orientation
     var layoutConstraints: [NSLayoutConstraint]? { get set}
     // Updater method for disabling/enabling numeric buttons depends on covnersion system forbidden values
@@ -22,8 +22,8 @@ class CalcButtonsPage: StyledView, CalcButtonPageProtocol {
     
     // MARK: - Properties
 
-    lazy var allButtons: [[CalculatorButton_]] = obtainButtons()
-    lazy var buttonsStackView: UIStackView = obtainButtonsStackView(buttons: allButtons)
+    lazy var buttons: [[CalculatorButton]] = configureButtons()
+    lazy var buttonsStackView: UIStackView = configureButtonsStackView(buttons: buttons)
     
     var layoutConstraints: [NSLayoutConstraint]?
     
@@ -34,7 +34,7 @@ class CalcButtonsPage: StyledView, CalcButtonPageProtocol {
     init() {
         super.init(frame: CGRect())
         self.addSubview(buttonsStackView)
-        setLayout()
+        self.setupLayout()
     }
     
     required init(coder: NSCoder) {
@@ -43,31 +43,31 @@ class CalcButtonsPage: StyledView, CalcButtonPageProtocol {
     
     override func styleWillUpdate(with style: Style) {
         super.styleWillUpdate(with: style)
+        
         updateButtonsStyle(style)
     }
     
     // MARK: - Methods
     
-    private func setLayout() {
+    private func setupLayout() {
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
+        
         layoutConstraints = [
-            buttonsStackView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.90),
+            buttonsStackView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9),
             buttonsStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             buttonsStackView.topAnchor.constraint(equalTo: self.topAnchor),
             buttonsStackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -3.5), // -3.5 for shadows
         ]
         NSLayoutConstraint.activate(layoutConstraints!)
         
-        allButtons.forEachButton { button in
-            button.setDefaultConstraints(spacingBetweenButtons: buttonsHorizontalSpacing)
-        }
+        buttons.forEachButton { $0.setConstraints(spacingBetweenButtons: buttonsHorizontalSpacing) }
     }
     
-    fileprivate func obtainButtons() -> [[CalculatorButton_]] {
+    fileprivate func configureButtons() -> [[CalculatorButton]] {
         return [] // should be implemented in child classes
     }
     
-    private func obtainButtonsStackView(buttons: [[CalculatorButton_]]) -> UIStackView {
+    private func configureButtonsStackView(buttons: [[CalculatorButton]]) -> UIStackView {
         guard !buttons.isEmpty else { return UIStackView() }
         let buttonsStackRows = buttons.map { buttonsRow in
             let buttonsRowStack = UIStackView(arrangedSubviews: buttonsRow)
@@ -88,14 +88,14 @@ class CalcButtonsPage: StyledView, CalcButtonPageProtocol {
     }
 
     private func updateButtonsStyle(_ style: Style) {
-        allButtons.forEachButton { button in
+        buttons.forEachButton { button in
             let buttonStyle = style.buttonStyle(for: button.buttonStyleType)
             button.updateStyle(buttonStyle: buttonStyle, borderColor: style.buttonBorderColor)
         }
     }
     
     func disableNumericButtons(withForbiddenDigits forbiddenDigits: Set<String>) {
-        allButtons.forEachButton { button in
+        buttons.forEachButton { button in
             if button is NumericButton {
                 let buttonLabel = button.titleLabel?.text ?? ""
                 let shouldBeEnabled = !forbiddenDigits.contains(buttonLabel)
@@ -108,62 +108,8 @@ class CalcButtonsPage: StyledView, CalcButtonPageProtocol {
 // MARK: - Main Page
 
 final class CalcButtonsMain: CalcButtonsPage {
-
-//    fileprivate override func obtainButtons() -> [[CalculatorButton]] {
-//        
-//        let buttonTitles = [["AC",  "±", "Signed\nOFF",  "÷"],
-//                            ["7",   "8",     "9",       "×"],
-//                            ["4",   "5",     "6",       "-"],
-//                            ["1",   "2",     "3",       "+"],
-//                            ["0",            ".",       "="]]
-//                    
-//        let buttons: [[CalculatorButton]] = buttonTitles.map { titlesRow in
-//            titlesRow.map { title in
-//                let button: CalculatorButton
-//                
-//                switch title {
-//                case "0"..."9",".":
-//                    button = CalculatorButton(calcButtonType: .numeric)
-//                case "AC":
-//                    button = CalculatorButton()
-//                    button.tag = tagCalculatorButtonClear
-//                    button.addTarget(nil, action: #selector(CalculatorViewController.clearButtonDidPress), for: .touchUpInside)
-//                case "±":
-//                    button = CalculatorButton()
-//                    button.tag = tagCalculatorButtonNegate
-//                    button.addTarget(nil, action: #selector(CalculatorViewController.negateButtonDidPress), for: .touchUpInside)
-//                case "Signed\nOFF":
-//                    button = CalculatorButton()
-//                    button.tag = tagCalculatorButtonIsSigned
-//                    button.addTarget(nil, action: #selector(CalculatorViewController.signedButtonDidPress), for: .touchUpInside)
-//                case "=":
-//                    button = CalculatorButton(calcButtonType: .sign)
-//                    button.addTarget(nil, action: #selector(CalculatorViewController.calculateButtonDidPress), for: .touchUpInside)
-//                default:
-//                    button = CalculatorButton(calcButtonType: .sign)
-//                }
-//                
-//                button.setActions(for: button.calcButtonType)
-//                
-//                button.setTitle(title, for: .normal)
-//                
-//                button.setTitleColor(.systemGray, for: .disabled)
-//                button.applyStyle()
-//                
-//                // apply font style for AC button
-//                if title == "AC" {
-//                    button.titleLabel?.font = button.titleLabel?.font.withSize(button.buttonWidth() / 1.8)
-//                }
-//                
-//                button.accessibilityIdentifier = title
-//                
-//                return button
-//            }
-//        }
-//        return buttons
-//    }
     
-    fileprivate override func obtainButtons() -> [[CalculatorButton_]] {
+    fileprivate override func configureButtons() -> [[CalculatorButton]] {
         let clearButton = ClearButton()
         let negateButton = NegateButton()
         let signedButton = SignedButton()
@@ -188,18 +134,12 @@ final class CalcButtonsMain: CalcButtonsPage {
         let dotButton = DotButton()
         let calculateButton = CalculateButton()
         
-        let firstRow: [CalculatorButton_] = [clearButton, negateButton, signedButton, divButton]
-        let secondRow: [CalculatorButton_] = [sevenButton, eightButton, nineButton, mulButton]
-        let thirdRow: [CalculatorButton_] = [fourButton, fiveButton, sixButton, subButton]
-        let fourthRow: [CalculatorButton_] = [oneButton, twoButton, threeButton, addButton]
-        let fifthRow: [CalculatorButton_] = [zeroButton, dotButton, calculateButton]
-        
         return [
-            firstRow,
-            secondRow,
-            thirdRow,
-            fourthRow,
-            fifthRow
+            [clearButton, negateButton, signedButton, divButton],
+            [sevenButton, eightButton, nineButton, mulButton],
+            [fourButton, fiveButton, sixButton, subButton],
+            [oneButton, twoButton, threeButton, addButton],
+            [zeroButton, dotButton, calculateButton]
         ]
     }
 }
@@ -208,52 +148,7 @@ final class CalcButtonsMain: CalcButtonsPage {
 
 final class CalcButtonsAdditional: CalcButtonsPage {
     
-//    fileprivate override func obtainButtons() -> [[CalculatorButton]] {
-//        
-//        let buttonTitles = [["AND",  "OR",  "XOR", "NOR"],
-//                           ["X<<Y", "X>>Y",  "<<",  ">>"],
-//                           ["1's",   "D",    "E",    "F"],
-//                           ["2's",   "A",    "B",    "C"],
-//                           ["00",            "FF"      ]]
-//                    
-//        let buttons: [[CalculatorButton]] = buttonTitles.map { titlesRow in
-//            titlesRow.map { title in
-//                let button: CalculatorButton
-//                
-//                switch title {
-//                case "A","B","C","D","E","F","00","FF":
-//                    button = CalculatorButton(calcButtonType: .numeric)
-//                case "1's", "2's":
-//                    button = CalculatorButton(calcButtonType: .complement)
-//                case "X<<Y", "X>>Y", "<<", ">>", "AND", "OR", "XOR", "NOR":
-//                    button = CalculatorButton(calcButtonType: .bitwise)
-//                default:
-//                    button = CalculatorButton(calcButtonType: .numeric)
-//                }
-//
-//                button.setActions(for: button.calcButtonType)
-//                
-//                // set title and style
-//                if title == "1's" || title == "2's" {
-//                    // localization for 1's and 2's
-//                    let localizedTitle = NSLocalizedString(title, comment: "")
-//                    button.setTitle(localizedTitle, for: .normal)
-//                } else {
-//                    button.setTitle(title, for: .normal)
-//                }
-//                
-//                button.setTitleColor(.systemGray, for: .disabled)
-//                button.applyStyle()
-//                
-//                button.accessibilityIdentifier = title
-//
-//                return button
-//            }
-//        }
-//        return buttons
-//    }
-    
-    fileprivate override func obtainButtons() -> [[CalculatorButton_]] {
+    fileprivate override func configureButtons() -> [[CalculatorButton]] {
         let andButton = OperatorButton(.binary(.and))
         let orButton = OperatorButton(.binary(.or))
         let xorButton = OperatorButton(.binary(.xor))
@@ -277,18 +172,12 @@ final class CalcButtonsAdditional: CalcButtonsPage {
         let doubleZeroButton = NumericButton(.double("0", "0"), size: .double)
         let doubleFButton = NumericButton(.double("F", "F"), size: .double)
         
-        let firstRow: [CalculatorButton_] = [andButton, orButton, xorButton, norButton]
-        let secondRow: [CalculatorButton_] = [shLByButton, shRByButton, shLButton, shRButton]
-        let thirdRow: [CalculatorButton_] = [oneS, dButton, eButton, fButton]
-        let fourthRow: [CalculatorButton_] = [twoS, aButton, bButton, cButton]
-        let fifthRow: [CalculatorButton_] = [doubleZeroButton, doubleFButton]
-        
         return [
-            firstRow,
-            secondRow,
-            thirdRow,
-            fourthRow,
-            fifthRow
+            [andButton, orButton, xorButton, norButton],
+            [shLByButton, shRByButton, shLButton, shRButton],
+            [oneS, dButton, eButton, fButton],
+            [twoS, aButton, bButton, cButton],
+            [doubleZeroButton, doubleFButton]
         ]
     }
 }

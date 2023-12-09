@@ -30,7 +30,6 @@ class CalculatorModuleAssembly {
         presenter.wordSize = wordSize
         presenter.calculatorState = calculatorState
         presenter.conversionSettings = conversionSettings
-        presenter.operatorFactory = OperatorFactory()
         
         let calculator = CalculatorImpl(wordSize: wordSize, calculatorState: calculatorState, conversionSettings: conversionSettings)
         presenter.calculator = calculator

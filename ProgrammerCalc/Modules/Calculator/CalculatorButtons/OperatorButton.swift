@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class OperatorButton: CalculatorButton_ {
+final class OperatorButton: CalculatorButton {
     
     enum OperatorType {
         case unary(UnaryOperator)

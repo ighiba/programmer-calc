@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class NegateButton: CalculatorButton_ {
+final class NegateButton: CalculatorButton {
     override func setupButton() {
         setTitle("±", for: .normal)
         

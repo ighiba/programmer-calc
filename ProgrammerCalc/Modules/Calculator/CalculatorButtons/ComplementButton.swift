@@ -12,7 +12,7 @@ extension ComplementOperator {
     fileprivate var title: String { NSLocalizedString(self.rawValue, comment: "") }
 }
 
-final class ComplementButton: CalculatorButton_ {
+final class ComplementButton: CalculatorButton {
 
     let operatorType: ComplementOperator
     
