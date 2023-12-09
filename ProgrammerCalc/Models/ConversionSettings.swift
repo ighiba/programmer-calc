@@ -9,31 +9,29 @@
 import Foundation
 
 protocol ConversionSettingsProtocol {
-    var systemMain: ConversionSystem { get set }
-    var systemConverter: ConversionSystem { get set }
-    var numbersAfterPoint: Int { get set }
-    var fractionalWidth: UInt8 { get }
+    var inputSystem: ConversionSystem { get set }
+    var outputSystem: ConversionSystem { get set }
+    var fractionalWidth: UInt8 { get set }
 }
 
 final class ConversionSettings: ConversionSettingsProtocol {
     
-    static let shared: ConversionSettings = ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
+    static let shared: ConversionSettings = ConversionSettings(inputSystem: .dec, outputSystem: .bin, fractionalWidth: 8)
     
-    var systemMain: ConversionSystem
-    var systemConverter: ConversionSystem
-    var numbersAfterPoint: Int
-    var fractionalWidth: UInt8 { UInt8(numbersAfterPoint) }
+    var inputSystem: ConversionSystem
+    var outputSystem: ConversionSystem
+    var fractionalWidth: UInt8
     
-    init(systMain: ConversionSystem, systConverter: ConversionSystem, number: Int) {
-        self.systemMain = systMain
-        self.systemConverter = systConverter
-        self.numbersAfterPoint = number
+    init(inputSystem: ConversionSystem, outputSystem: ConversionSystem, fractionalWidth: UInt8) {
+        self.inputSystem = inputSystem
+        self.outputSystem = outputSystem
+        self.fractionalWidth = fractionalWidth
     }
     
     func setConversionSettings(_ newSettings: ConversionSettingsProtocol) {
-        self.systemMain = newSettings.systemMain
-        self.systemConverter = newSettings.systemConverter
-        self.numbersAfterPoint = newSettings.numbersAfterPoint
+        self.inputSystem = newSettings.inputSystem
+        self.outputSystem = newSettings.outputSystem
+        self.fractionalWidth = newSettings.fractionalWidth
     }
 }
 
@@ -42,13 +40,13 @@ extension ConversionSettings: Storable {
     static var storageKey: String { "conversionSettings" }
     
     static func getDefault() -> ConversionSettings {
-        return ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
+        return ConversionSettings(inputSystem: .dec, outputSystem: .bin, fractionalWidth: 8)
     }
     
     func set(_ data: ConversionSettings) {
-        systemMain = data.systemMain
-        systemConverter = data.systemConverter
-        numbersAfterPoint = data.numbersAfterPoint
+        inputSystem = data.inputSystem
+        outputSystem = data.outputSystem
+        fractionalWidth = data.fractionalWidth
     }
 }
 

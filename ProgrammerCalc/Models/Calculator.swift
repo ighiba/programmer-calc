@@ -67,13 +67,13 @@ final class CalculatorImpl: Calculator {
     // MARK: - Methods
     
     func load() {
-        inputValue = convert(calculatorState.lastValue, to: conversionSettings.systemMain)
+        inputValue = convert(calculatorState.lastValue, to: conversionSettings.inputSystem)
         
         updateLabels(withInputValue: inputValue)
     }
     
     func reload() {
-        inputValue = convert(inputValue, to: conversionSettings.systemMain)
+        inputValue = convert(inputValue, to: conversionSettings.inputSystem)
         
         updateLabels(withInputValue: inputValue)
     }
@@ -86,7 +86,7 @@ final class CalculatorImpl: Calculator {
     }
     
     func negateInputValue() {
-        inputValue = convert(-inputValue.pcDecimalValue, to: conversionSettings.systemMain)
+        inputValue = convert(-inputValue.pcDecimalValue, to: conversionSettings.inputSystem)
 
         updateLabels(withInputValue: inputValue)
     }
@@ -137,7 +137,7 @@ final class CalculatorImpl: Calculator {
         let result = calculateUnaryOperation(inputValue, operatorType: operatorType)
         
         currentOperation = nil
-        inputValue = convert(result, to: conversionSettings.systemMain)
+        inputValue = convert(result, to: conversionSettings.inputSystem)
         
         updateLabels(withInputValue: inputValue)
     }
@@ -169,7 +169,7 @@ final class CalculatorImpl: Calculator {
             let calculatedValue = try calculateBinaryOperation(lhs: pendingOperation.bufferValue, rhs: inputValue, operatorType: pendingOperation.operatorType)
             
             currentOperation = nil
-            inputValue = convert(calculatedValue, to: conversionSettings.systemMain)
+            inputValue = convert(calculatedValue, to: conversionSettings.inputSystem)
             
             updateLabels(withInputValue: inputValue)
         } catch(let error) {
@@ -253,13 +253,13 @@ final class CalculatorImpl: Calculator {
         var binary = PCBinary(pcDecimal: decimal)
         binary.switchBit(bit, atIndex: bitIndex)
         
-        inputValue = convert(binary, to: conversionSettings.systemMain)
+        inputValue = convert(binary, to: conversionSettings.inputSystem)
         
         updateLabels(withInputValue: inputValue)
     }
 
     private func updateLabels(withInputValue inputValue: PCNumberInput) {
-        let outputValue = convert(inputValue, to: conversionSettings.systemConverter)
+        let outputValue = convert(inputValue, to: conversionSettings.outputSystem)
         
         let bitWidth = wordSize.bitWidth
         let fractionalWidth = conversionSettings.fractionalWidth

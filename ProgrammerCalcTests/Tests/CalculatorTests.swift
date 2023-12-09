@@ -16,7 +16,7 @@ final class CalculatorTests: XCTestCase {
 
     let wordSize = WordSize(.byte)
     let calculatorState = CalculatorState(lastValue: .zero, lastLabelValues: LabelValues(main: "", converter: ""), processSigned: true)
-    let conversionSettings = ConversionSettings(systMain: .dec, systConverter: .bin, number: 8)
+    let conversionSettings = ConversionSettings(inputSystem: .dec, outputSystem: .bin, fractionalWidth: 8)
     
     override func setUp() {
         super.setUp()

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ConversionViewController: ModalViewController, ConversionInput {
+final class ConversionViewController: ModalViewController, ConversionInput {
 
     var output: ConversionOutput!
     
@@ -44,12 +44,12 @@ class ConversionViewController: ModalViewController, ConversionInput {
     
     // MARK: - Methods
     
-    func mainPickerSelectRow(_ row: Int) {
-        conversionView.numberSystemsPicker.selectRow(row, inComponent: 0, animated: false)
+    func inputPickerSelect(row: Int) {
+        conversionView.conversionSystemsPicker.selectRow(row, inComponent: 0, animated: false)
     }
     
-    func converterPickerSelectRow(_ row: Int) {
-        conversionView.numberSystemsPicker.selectRow(row, inComponent: 1, animated: false)
+    func outputPickerSelect(row: Int) {
+        conversionView.conversionSystemsPicker.selectRow(row, inComponent: 1, animated: false)
     }
     
     func setLabelValueText(_ text: String) {
@@ -67,10 +67,10 @@ class ConversionViewController: ModalViewController, ConversionInput {
     }
     
     private func saveConversionSettings() {
-        let mainSystemSelectedRow = conversionView.numberSystemsPicker.selectedRow(inComponent: 0)
-        let converterSystemSelectedRow = conversionView.numberSystemsPicker.selectedRow(inComponent: 1)
+        let inputSystemSelectedRow = conversionView.conversionSystemsPicker.selectedRow(inComponent: 0)
+        let outputSystemSelectedRow = conversionView.conversionSystemsPicker.selectedRow(inComponent: 1)
         let sliderValue = conversionView.slider.value.rounded()
-        output.saveConversionSettings(mainRow: mainSystemSelectedRow, converterRow: converterSystemSelectedRow, sliderValue: sliderValue)
+        output.saveConversionSettings(inputSystemRow: inputSystemSelectedRow, outputSystemRow: outputSystemSelectedRow, sliderValue: sliderValue)
     }
     
     // MARK: - Actions

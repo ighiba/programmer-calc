@@ -16,7 +16,7 @@ private let containerItemsWidthMultiplier: CGFloat = 0.9
 private let containerCornerRadius: CGFloat = 24
 private let containerMinimalHeight: CGFloat = 400
 
-class ConversionView: UIView, ModalView {
+final class ConversionView: UIView, ModalView {
     
     init() {
         super.init(frame: UIScreen.main.bounds)
@@ -37,19 +37,19 @@ class ConversionView: UIView, ModalView {
         
         addSubview(container)
         container.addSubview(titleLabel)
-        container.addSubview(numberSystemsPicker)
+        container.addSubview(conversionSystemsPicker)
         container.addSubview(sliderLabelsStack)
         container.addSubview(slider)
         container.addSubview(doneButton)
         container.bringSubviewToFront(titleLabel)
         
-        numberSystemsPicker.addSubview(arrowSymbol)
+        conversionSystemsPicker.addSubview(arrowSymbol)
     }
     
     private func setupLayout() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         container.translatesAutoresizingMaskIntoConstraints = false
-        numberSystemsPicker.translatesAutoresizingMaskIntoConstraints = false
+        conversionSystemsPicker.translatesAutoresizingMaskIntoConstraints = false
         arrowSymbol.translatesAutoresizingMaskIntoConstraints = false
         sliderLabelsStack.translatesAutoresizingMaskIntoConstraints = false
         sliderTitleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -68,18 +68,18 @@ class ConversionView: UIView, ModalView {
             container.widthAnchor.constraint(equalToConstant: modalViewContainerWidth),
             container.heightAnchor.constraint(greaterThanOrEqualToConstant: containerMinimalHeight),
 
-            numberSystemsPicker.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            numberSystemsPicker.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 2 * verticalSpacing),
-            numberSystemsPicker.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.52),
-            numberSystemsPicker.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: containerItemsWidthMultiplier),
+            conversionSystemsPicker.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            conversionSystemsPicker.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 2 * verticalSpacing),
+            conversionSystemsPicker.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.52),
+            conversionSystemsPicker.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: containerItemsWidthMultiplier),
 
-            arrowSymbol.centerYAnchor.constraint(equalTo: numberSystemsPicker.centerYAnchor),
-            arrowSymbol.centerXAnchor.constraint(equalTo: numberSystemsPicker.centerXAnchor),
+            arrowSymbol.centerYAnchor.constraint(equalTo: conversionSystemsPicker.centerYAnchor),
+            arrowSymbol.centerXAnchor.constraint(equalTo: conversionSystemsPicker.centerXAnchor),
             arrowSymbol.widthAnchor.constraint(equalToConstant: arrowSymbolWidth),
             arrowSymbol.heightAnchor.constraint(equalToConstant: arrowSymbolWidth),
 
             sliderLabelsStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            sliderLabelsStack.topAnchor.constraint(equalTo: numberSystemsPicker.bottomAnchor),
+            sliderLabelsStack.topAnchor.constraint(equalTo: conversionSystemsPicker.bottomAnchor),
             sliderLabelsStack.heightAnchor.constraint(equalToConstant: labelStackHeight),
             sliderLabelsStack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: containerItemsWidthMultiplier),
             
@@ -107,7 +107,7 @@ class ConversionView: UIView, ModalView {
         titleLabel.textColor = .label
         titleLabel.font = .systemFont(ofSize: 24, weight: .bold)
 
-        numberSystemsPicker.backgroundColor = .systemGray6
+        conversionSystemsPicker.backgroundColor = .systemGray6
         
         arrowSymbol.textColor = .label
         arrowSymbol.font = UIFont(name: "HelveticaNeue-Thin", size: 22.0)
@@ -136,7 +136,7 @@ class ConversionView: UIView, ModalView {
         return label
     }()
     
-    let numberSystemsPicker: ConversionPicker = {
+    let conversionSystemsPicker: ConversionPicker = {
         let picker = ConversionPicker()
         picker.delegate = picker
         picker.dataSource = picker

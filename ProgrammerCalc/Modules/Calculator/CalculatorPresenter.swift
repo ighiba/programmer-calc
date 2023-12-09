@@ -112,7 +112,7 @@ class CalculatorPresenter: CalculatorOutput {
     }
     
     func didEnterPhoneLandscapeOrientation(isBitwiseKeypadActive: Bool) {
-        let inputNumberOfLines = conversionSettings.systemMain == .bin ? 2 : 1
+        let inputNumberOfLines = conversionSettings.inputSystem == .bin ? 2 : 1
 
         if isBitwiseKeypadActive {
             let displayMode: CalculatorLabelsDisplayMode = .onlyInputLabel(numberOfLines: inputNumberOfLines)
@@ -165,15 +165,15 @@ class CalculatorPresenter: CalculatorOutput {
     }
     
     private func updateConversionSystemTitles() {
-        let inputConversionSystemTitle = conversionSettings.systemMain.title
-        let outputConversionSystemTitle = conversionSettings.systemConverter.title
+        let inputConversionSystemTitle = conversionSettings.inputSystem.title
+        let outputConversionSystemTitle = conversionSettings.outputSystem.title
         
         input.setInputConversionSystemLabelText(inputConversionSystemTitle)
         input.setOutputConversionSystemLabelText(outputConversionSystemTitle)
     }
     
     private func updateNumericButtonsIsEnabled() {
-        let forbiddenDigits = ConversionValues.getForbidden(for: conversionSettings.systemMain)
+        let forbiddenDigits = ConversionValues.getForbidden(for: conversionSettings.inputSystem)
         input.disableNumericButtons(withForbiddenDigits: forbiddenDigits)
     }
     
@@ -184,11 +184,11 @@ class CalculatorPresenter: CalculatorOutput {
     }
     
     private func updateLabelsDisplayMode() {
-        let inputNumberOfLines = conversionSettings.systemMain == .bin ? 2 : 1
-        let outputNumberOfLines = conversionSettings.systemConverter == .bin ? 2 : 1
+        let inputNumberOfLines = conversionSettings.inputSystem == .bin ? 2 : 1
+        let outputNumberOfLines = conversionSettings.outputSystem == .bin ? 2 : 1
         
         let displayMode: CalculatorLabelsDisplayMode
-        if conversionSettings.systemMain == conversionSettings.systemConverter {
+        if conversionSettings.inputSystem == conversionSettings.outputSystem {
             displayMode = .onlyInputLabel(numberOfLines: inputNumberOfLines)
         } else {
             displayMode = .standart(inputNumberOfLines: inputNumberOfLines, outputNumberOfLines: outputNumberOfLines)

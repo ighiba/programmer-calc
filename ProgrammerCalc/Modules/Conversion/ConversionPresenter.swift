@@ -9,8 +9,8 @@
 import Foundation
 
 protocol ConversionInput: AnyObject {
-    func mainPickerSelectRow(_ row: Int)
-    func converterPickerSelectRow(_ row: Int)
+    func inputPickerSelect(row: Int)
+    func outputPickerSelect(row: Int)
     func setLabelValueText(_ text: String)
     func setSliderValue(_ value: Float)
     func hapticImpact()
@@ -20,11 +20,11 @@ protocol ConversionOutput: AnyObject {
     var delegate: CalculatorPresenterDelegate! { get set }
     var updateHandler: (() -> Void)? { get set }
     func obtainConversionSettings()
-    func saveConversionSettings(mainRow: Int, converterRow: Int, sliderValue: Float)
+    func saveConversionSettings(inputSystemRow: Int, outputSystemRow: Int, sliderValue: Float)
     func sliderValueDidChanged(_ sliderValue: Float)
 }
 
-class ConversionPresenter: ConversionOutput {
+final class ConversionPresenter: ConversionOutput {
     
     // MARK: - Properties
     
@@ -41,22 +41,22 @@ class ConversionPresenter: ConversionOutput {
     // MARK: - Methods
     
     func obtainConversionSettings() {
-        let mainRow: Int = ConversionSystem.allCases.firstIndex(of: conversionSettings.systemMain) ?? 1 // default decimal for input
-        let converterRow: Int = ConversionSystem.allCases.firstIndex(of: conversionSettings.systemConverter) ?? 0 // default binary for output
-        view.mainPickerSelectRow(mainRow)
-        view.converterPickerSelectRow(converterRow)
-        view.setLabelValueText("\(Int(conversionSettings.numbersAfterPoint))")
-        view.setSliderValue(Float(conversionSettings.numbersAfterPoint) / 4)
+        let inputSystemRow = ConversionSystem.allCases.firstIndex(of: conversionSettings.inputSystem) ?? 1 // default decimal for input
+        let outputSystemRow = ConversionSystem.allCases.firstIndex(of: conversionSettings.outputSystem) ?? 0 // default binary for output
+        view.inputPickerSelect(row: inputSystemRow)
+        view.outputPickerSelect(row: outputSystemRow)
+        view.setLabelValueText("\(conversionSettings.fractionalWidth)")
+        view.setSliderValue(Float(conversionSettings.fractionalWidth) / 4)
     }
     
-    func saveConversionSettings(mainRow: Int, converterRow: Int, sliderValue: Float) {
-        let mainSystemNew = ConversionSystem(rawValue: mainRow)!
-        let converterSystemNew = ConversionSystem(rawValue: converterRow)!
+    func saveConversionSettings(inputSystemRow: Int, outputSystemRow: Int, sliderValue: Float) {
+        let inputSystemNew = ConversionSystem(rawValue: inputSystemRow)!
+        let outputSystemNew = ConversionSystem(rawValue: outputSystemRow)!
         
         let newConversionSettings = ConversionSettings(
-            systMain: mainSystemNew,
-            systConverter: converterSystemNew,
-            number: Int(sliderValue) * 4
+            inputSystem: inputSystemNew,
+            outputSystem: outputSystemNew,
+            fractionalWidth: UInt8(sliderValue * 4)
         )
         
         storage.saveData(newConversionSettings)

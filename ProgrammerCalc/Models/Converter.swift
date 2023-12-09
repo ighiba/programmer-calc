@@ -216,7 +216,7 @@ import Foundation
  
          // process fract part
          if let fractPart = splittedBinary.1 {
-             let numAfterPoint = conversionSettings.numbersAfterPoint
+             let numAfterPoint = conversionSettings.fractionalWidth
              var buffFractPart = fractPart.removedTrailing(characters: ["0"])
  
              if fractPart != "" {

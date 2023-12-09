@@ -565,7 +565,7 @@ class Binary: NumberSystemProtocol {
             let distance = testValue.distance(from: pointPos, to: testValue.endIndex)
         
             let conversionSettings = ConversionSettings.shared
-            if Int(conversionSettings.numbersAfterPoint) >= Int(distance) {
+            if Int(conversionSettings.fractionalWidth) >= Int(distance) {
                 binary.value.append(digit)
             }
             return
