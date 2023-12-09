@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AudioToolbox
 
 enum CalculatorLabelsDisplayMode {
     case standart(inputNumberOfLines: Int, outputNumberOfLines: Int)
@@ -42,6 +43,9 @@ final class CalculatorViewController: StyledViewController, CalculatorInput, UIA
     private var bitwiseKeypad: BitwiseKeypadController?
     
     private var isAllowedLandscape: Bool = false
+    
+    private let settings = Settings.shared
+    private let generator = UIImpactFeedbackGenerator(style: .light)
     
     override func loadView() {
         view = calculatorView
@@ -337,6 +341,19 @@ extension CalculatorViewController {
             }, completion: { [weak self] _ in
                 self?.bitwiseKeypad?.didMove(toParent: self)
             })
+        }
+    }
+    
+    @objc func tappingSoundHandler(_ sender: CalculatorButton) {
+        if settings.tappingSounds {
+            AudioServicesPlaySystemSound(1104)
+        }
+    }
+    
+    @objc func hapticFeedbackHandler(_ sender: CalculatorButton) {
+        if settings.hapticFeedback {
+            generator.prepare()
+            generator.impactOccurred()
         }
     }
 }

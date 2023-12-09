@@ -7,12 +7,8 @@
 //
 
 import UIKit
-import AudioToolbox
 
 class CalcButtonsViewController: UIViewController {
-    
-    private let settings = Settings.shared
-    private let generator = UIImpactFeedbackGenerator(style: .light)
     
     init(buttonsPage: UIView) {
         super.init(nibName: nil, bundle: nil)
@@ -39,20 +35,5 @@ class CalcButtonsViewController: UIViewController {
             self?.view.alpha = 0
             self?.view.isHidden = true
         }, completion: nil)
-    }
-    
-    // MARK: - Actions
-    
-    @objc func tappingSoundHandler(_ sender: CalculatorButton) {
-        if settings.tappingSounds {
-            AudioServicesPlaySystemSound(1104)
-        }
-    }
-    
-    @objc func hapticFeedbackHandler(_ sender: CalculatorButton) {
-        if settings.hapticFeedback {
-            generator.prepare()
-            generator.impactOccurred()
-        }
     }
 }

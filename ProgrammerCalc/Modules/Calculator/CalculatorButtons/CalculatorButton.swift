@@ -65,8 +65,8 @@ class CalculatorButton: UIButton {
     }
     
     func setupActions() {
-        addTarget(nil, action: #selector(CalcButtonsViewController.hapticFeedbackHandler), for: .touchUpInside)
-        addTarget(nil, action: #selector(CalcButtonsViewController.tappingSoundHandler), for: .touchUpInside)
+        addTarget(nil, action: #selector(CalculatorViewController.hapticFeedbackHandler), for: .touchUpInside)
+        addTarget(nil, action: #selector(CalculatorViewController.tappingSoundHandler), for: .touchUpInside)
     }
     
     func applyStyle() {
