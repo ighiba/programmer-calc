@@ -8,6 +8,12 @@
 
 import UIKit
 
+enum ButtonStyleType {
+    case misc
+    case numeric
+    case action
+}
+
 protocol ButtonStyleProtocol {
     var backgroundColor: UIColor { get }
     var backgroundTintColor: UIColor { get }
@@ -26,5 +32,18 @@ class ButtonStyle: ButtonStyleProtocol {
         self.backgroundTintColor = backgroundTintColor
         self.textColor = textColor
         self.textTintColor = textTintColor
+    }
+}
+
+extension Style {
+    func buttonStyle(for buttonStyleType: ButtonStyleType) -> ButtonStyleProtocol {
+        switch buttonStyleType {
+        case .misc:
+            return miscButtonStyle
+        case .numeric:
+            return numericButtonStyle
+        case .action:
+            return actionButtonStyle
+        }
     }
 }

@@ -32,8 +32,8 @@ final class CalculatorTests: XCTestCase {
     
     func testInput() throws {
         // 1. given
-        let integerDigits: [Character] = ["1", "2", "3"]
-        let fractionalDigits: [Character] = ["0", "0", "5"]
+        let integerDigits: [NumericButton.Digit] = [.single("1"), .single("2"), .single("3")]
+        let fractionalDigits: [NumericButton.Digit] = [.single("0"), .single("0"), .single("5")]
         
         // 2. when
         for digit in integerDigits {
@@ -56,7 +56,7 @@ final class CalculatorTests: XCTestCase {
 
     func testInvalidInput() throws {
         // 1. given
-        let integerDigits: [Character] = ["1", "i", "^", "2"]
+        let integerDigits: [NumericButton.Digit] = [.single("1"), .single("i"), .double("0", "0"), .single("^")]
         
         // 2. when
         for digit in integerDigits {
@@ -67,13 +67,13 @@ final class CalculatorTests: XCTestCase {
         let outputText = calculatorPresenterMock.outputText
         
         // 3. then
-        XCTAssertEqual(inputText, "12", "Input text failure")
-        XCTAssertEqual(outputText, "0000 1100", "Output text failure")
+        XCTAssertEqual(inputText, "100", "Input text failure")
+        XCTAssertEqual(outputText, "0110 0100", "Output text failure")
     }
     
     func testNegate() throws {
         // 1. given
-        let integerDigits: [Character] = ["1", "2", "3"]
+        let integerDigits: [NumericButton.Digit] = [.single("1"), .single("2"), .single("3")]
         
         // 2. when
         for digit in integerDigits {
@@ -92,8 +92,8 @@ final class CalculatorTests: XCTestCase {
     
     func testRemoveLeastSignificantDigit() throws {
         // 1. given
-        let integerDigits: [Character] = ["1", "2", "3"]
-        let fractionalDigits: [Character] = ["5"]
+        let integerDigits: [NumericButton.Digit] = [.single("1"), .single("2"), .single("3")]
+        let fractionalDigits: [NumericButton.Digit] = [.single("5")]
         
         // 2. when
         for digit in integerDigits {
@@ -119,15 +119,15 @@ final class CalculatorTests: XCTestCase {
     
     func testCalculation() throws {
         // 1. given
-        let lhsIntegerDigits: [Character] = ["4", "0"]
-        let rhsIntegerDigits: [Character] = ["2"]
+        let lhsIntegerDigits: [NumericButton.Digit] = [.single("4"), .single("0")]
+        let rhsIntegerDigits: [NumericButton.Digit] = [.single("2")]
         
         // 2. when
         for digit in lhsIntegerDigits {
             calculatorTest.numericButtonDidPress(digit: digit)
         }
         
-        calculatorTest.binaryOperatorButtonDidPress(operatorType: .add)
+        calculatorTest.binaryOperatorButtonDidPress(binaryOperator: .add)
         
         for digit in rhsIntegerDigits {
             calculatorTest.numericButtonDidPress(digit: digit)
@@ -145,15 +145,15 @@ final class CalculatorTests: XCTestCase {
 
     func testErrorOutput() throws {
         // 1. given
-        let lhsIntegerDigits: [Character] = ["1"]
-        let rhsIntegerDigits: [Character] = ["0"]
+        let lhsIntegerDigits: [NumericButton.Digit] = [.single("1")]
+        let rhsIntegerDigits: [NumericButton.Digit] = [.single("0")]
         
         // 2. when
         for digit in lhsIntegerDigits {
             calculatorTest.numericButtonDidPress(digit: digit)
         }
         
-        calculatorTest.binaryOperatorButtonDidPress(operatorType: .div)
+        calculatorTest.binaryOperatorButtonDidPress(binaryOperator: .div)
         
         for digit in rhsIntegerDigits {
             calculatorTest.numericButtonDidPress(digit: digit)

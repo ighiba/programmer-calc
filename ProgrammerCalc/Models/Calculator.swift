@@ -12,11 +12,11 @@ typealias PCNumberInput = PCNumber & PCNumberDigits
 
 class PCOperation {
     var bufferValue: PCNumber
-    var operatorType: OperatorType
+    var binaryOperator: BinaryOperator
     
-    init(bufferValue: PCNumber, operatorType: OperatorType) {
+    init(bufferValue: PCNumber, binaryOperator: BinaryOperator) {
         self.bufferValue = bufferValue
-        self.operatorType = operatorType
+        self.binaryOperator = binaryOperator
     }
 }
 
@@ -28,9 +28,10 @@ protocol Calculator {
     func negateInputValue()
     func removeLeastSignificantDigit()
     func dotButtonDidPress()
-    func numericButtonDidPress(digit: Character)
-    func unaryOperatorButtonDidPress(operatorType: OperatorType)
-    func binaryOperatorButtonDidPress(operatorType: OperatorType)
+    func numericButtonDidPress(digit: NumericButton.Digit)
+    func complementButtonDidPress(complementOperator: ComplementOperator)
+    func unaryOperatorButtonDidPress(unaryOperator: UnaryOperator)
+    func binaryOperatorButtonDidPress(binaryOperator: BinaryOperator)
     func calculateButtonDidPress()
     func getInputValueBits() -> [Bit]
     func bitButtonDidPress(bitIsOn: Bool, atIndex bitIndex: UInt8)
@@ -79,6 +80,7 @@ final class CalculatorImpl: Calculator {
     }
     
     func clearButtonDidPress() {
+        isFractionalInputStarted = false
         currentOperation = nil
         inputValue.reset()
         
@@ -116,25 +118,24 @@ final class CalculatorImpl: Calculator {
         calculatorPresenterDelegate.setInputLabelText(inputText)
     }
     
-    func numericButtonDidPress(digit: Character) {
+    func numericButtonDidPress(digit: NumericButton.Digit) {
         let bitWidth = wordSize.bitWidth
         let fractionalWidth = conversionSettings.fractionalWidth
         let isSigned = calculatorState.processSigned
         
         let isIntegerInput = !(isFractionalInputStarted || !inputValue.fractDigits.isEmpty)
-        
         if isIntegerInput {
-            inputValue.appendIntegerDigit(digit, bitWidth: bitWidth, isSigned: isSigned)
+            inputValue.appendIntegerDigits(digit.digitsToAppend, bitWidth: bitWidth, isSigned: isSigned)
         } else {
-            inputValue.appendFractionalDigit(digit, fractionalWidth: fractionalWidth)
+            inputValue.appendFractionalDigits(digit.digitsToAppend, fractionalWidth: fractionalWidth)
             isFractionalInputStarted = false
         }
         
         updateLabels(withInputValue: inputValue)
     }
-
-    func unaryOperatorButtonDidPress(operatorType: OperatorType) {
-        let result = calculateUnaryOperation(inputValue, operatorType: operatorType)
+    
+    func complementButtonDidPress(complementOperator: ComplementOperator) {
+        let result = calculateComplementOperation(inputValue, complementOperator: complementOperator)
         
         currentOperation = nil
         inputValue = convert(result, to: conversionSettings.inputSystem)
@@ -142,13 +143,22 @@ final class CalculatorImpl: Calculator {
         updateLabels(withInputValue: inputValue)
     }
     
-    func binaryOperatorButtonDidPress(operatorType: OperatorType) {
+    func unaryOperatorButtonDidPress(unaryOperator: UnaryOperator) {
+        let result = calculateUnaryOperation(inputValue, unaryOperator: unaryOperator)
+        
+        currentOperation = nil
+        inputValue = convert(result, to: conversionSettings.inputSystem)
+        
+        updateLabels(withInputValue: inputValue)
+    }
+    
+    func binaryOperatorButtonDidPress(binaryOperator: BinaryOperator) {
         if let pendingOperation = currentOperation {
             do {
-                let newBufferValue = try calculateBinaryOperation(lhs: pendingOperation.bufferValue, rhs: inputValue, operatorType: pendingOperation.operatorType)
+                let newBufferValue = try calculateBinaryOperation(lhs: pendingOperation.bufferValue, rhs: inputValue, binaryOperator: pendingOperation.binaryOperator)
                 
                 currentOperation?.bufferValue = newBufferValue
-                currentOperation?.operatorType = operatorType
+                currentOperation?.binaryOperator = binaryOperator
                 
                 inputValue.reset()
                 
@@ -157,7 +167,7 @@ final class CalculatorImpl: Calculator {
                 handleCalculationError(error)
             }
         } else {
-            currentOperation = PCOperation(bufferValue: inputValue, operatorType: operatorType)
+            currentOperation = PCOperation(bufferValue: inputValue, binaryOperator: binaryOperator)
             inputValue.reset()
         }
     }
@@ -166,7 +176,7 @@ final class CalculatorImpl: Calculator {
         guard let pendingOperation = currentOperation else { return }
         
         do {
-            let calculatedValue = try calculateBinaryOperation(lhs: pendingOperation.bufferValue, rhs: inputValue, operatorType: pendingOperation.operatorType)
+            let calculatedValue = try calculateBinaryOperation(lhs: pendingOperation.bufferValue, rhs: inputValue, binaryOperator: pendingOperation.binaryOperator)
             
             currentOperation = nil
             inputValue = convert(calculatedValue, to: conversionSettings.inputSystem)
@@ -177,34 +187,42 @@ final class CalculatorImpl: Calculator {
         }
     }
     
-    private func calculateUnaryOperation(_ pcNumber: PCNumber, operatorType: OperatorType) -> PCNumberInput {
+    private func calculateComplementOperation(_ pcNumber: PCNumber, complementOperator: ComplementOperator) -> PCNumberInput {
+        let bitWidth = wordSize.bitWidth
+        let isSigned = calculatorState.processSigned
+        
+        let decimal = pcNumber.pcDecimalValue.fixedOverflow(bitWidth: bitWidth, isSigned: isSigned)
+        
+        switch complementOperator {
+        case .oneS:
+            return ~decimal
+        case .twoS:
+            return ~decimal + 1
+        }
+    }
+    
+    private func calculateUnaryOperation(_ pcNumber: PCNumber, unaryOperator: UnaryOperator) -> PCNumberInput {
         let bitWidth = wordSize.bitWidth
         let isSigned = calculatorState.processSigned
         
         let decimal = pcNumber.pcDecimalValue.fixedOverflow(bitWidth: bitWidth, isSigned: isSigned)
 
-        switch operatorType {
-        case .oneS:
-            return ~decimal
-        case .twoS:
-            return ~decimal + 1
+        switch unaryOperator {
         case .shiftLeft:
             return decimal << 1
         case .shiftRight:
             return decimal >> 1
-        default:
-            return decimal
         }
     }
     
-    private func calculateBinaryOperation(lhs: PCNumber, rhs: PCNumber, operatorType: OperatorType) throws -> PCNumberInput {
+    private func calculateBinaryOperation(lhs: PCNumber, rhs: PCNumber, binaryOperator: BinaryOperator) throws -> PCNumberInput {
         let bitWidth = wordSize.bitWidth
         let isSigned = calculatorState.processSigned
         
         let lhsDecimal = lhs.pcDecimalValue.fixedOverflow(bitWidth: bitWidth, isSigned: isSigned)
         let rhsDecimal = rhs.pcDecimalValue.fixedOverflow(bitWidth: bitWidth, isSigned: isSigned)
         
-        switch operatorType {
+        switch binaryOperator {
         case .add:
             return lhsDecimal + rhsDecimal
         case .sub:
@@ -226,8 +244,6 @@ final class CalculatorImpl: Calculator {
             return lhsDecimal ^ rhsDecimal
         case .nor:
             return ~(lhsDecimal ^ rhsDecimal)
-        default:
-            return rhsDecimal
         }
     }
     
@@ -290,6 +306,20 @@ extension ConversionSystem {
             return PCDecimal.self
         case .hex:
             return PCHexadecimal.self
+        }
+    }
+}
+
+extension PCNumberDigits {
+    mutating func appendIntegerDigits(_ digits: [Digit], bitWidth: UInt8, isSigned: Bool) {
+        for digit in digits {
+            appendIntegerDigit(digit, bitWidth: bitWidth, isSigned: isSigned)
+        }
+    }
+    
+    mutating func appendFractionalDigits(_ digits: [Digit], fractionalWidth: UInt8) {
+        for digit in digits {
+            appendFractionalDigit(digit, fractionalWidth: fractionalWidth)
         }
     }
 }

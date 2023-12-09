@@ -20,9 +20,9 @@ protocol CalculatorInput: AnyObject {
     func setOutputConversionSystemLabelText(_ text: String)
     func setLabelsDisplayMode(_ displayMode: CalculatorLabelsDisplayMode)
     func setWordSizeButtonTitle(_ title: String)
-    func setClearButtonTitle(inputHasStarted: Bool)
+    func changeClearButtonTitle(inputState: ClearButton.State)
+    func changeSignedButtonTitle(signedState: SignedButton.State)
     func setNegateButton(isEnabled: Bool)
-    func changeSignedButtonLabel(isSigned: Bool)
     func disableNumericButtons(withForbiddenDigits forbiddenDigits: Set<String>)
     func updateBitwiseKeypad(withBits bits: [Bit])
     func presentViewController(_ viewController: UIViewController, animated: Bool)
@@ -197,20 +197,20 @@ final class CalculatorViewController: StyledViewController, CalculatorInput, UIA
         calculatorView.setWordSizeButtonTitle(title)
     }
     
-    func setClearButtonTitle(inputHasStarted state: Bool) {
-        let clearButton = view.viewWithTag(tagCalculatorButtonClear) as? CalculatorButton
-        clearButton?.changeTitleClearButtonFor(state)
+    func changeClearButtonTitle(inputState: ClearButton.State) {
+        let clearButton = view.viewWithTag(clearButtonTag) as? ClearButton
+        clearButton?.changeButtonTitle(inputState)
+    }
+    
+    func changeSignedButtonTitle(signedState: SignedButton.State) {
+        let signedButton = view.viewWithTag(signedButtonTag) as? SignedButton
+        signedButton?.changeButtonTitle(signedState)
     }
     
     func setNegateButton(isEnabled: Bool) {
-        let negateButton = view.viewWithTag(tagCalculatorButtonNegate) as? CalculatorButton
+        let negateButton = view.viewWithTag(negateButtonTag) as? NegateButton
         negateButton?.isEnabled = isEnabled
         negateButton?.alpha = isEnabled ? 1.0 : 0.5
-    }
-    
-    func changeSignedButtonLabel(isSigned: Bool) {
-        let signedButton = view.viewWithTag(tagCalculatorButtonIsSigned) as? CalculatorButton
-        signedButton?.changeTitleIsSignedButtonFor(isSigned)
     }
     
     func disableNumericButtons(withForbiddenDigits forbiddenDigits: Set<String>) {
@@ -229,57 +229,65 @@ final class CalculatorViewController: StyledViewController, CalculatorInput, UIA
 // MARK: - Actions
 
 extension CalculatorViewController {
+    
+    @objc func labelSwipeRight(_ sender: UISwipeGestureRecognizer) {
+        print("labelSwipeRight")
+        output.labelDidSwipeRight()
+    }
 
-    @objc func clearButtonDidPress(_ sender: UIButton) {
+    @objc func clearButtonDidPress(_ sender: ClearButton) {
         print("clearButtonDidPress")
         output.clearButtonDidPress()
     }
     
-    @objc func negateButtonDidPress(_ sender: UIButton) {
+    @objc func negateButtonDidPress(_ sender: NegateButton) {
         print("negateButtonDidPress")
         output.negateButtonDidPress()
     }
     
-    @objc func signedButtonDidPress(_ sender: UIButton) {
+    @objc func signedButtonDidPress(_ sender: SignedButton) {
         print("signedButtonDidPress")
         output.signedButtonDidPress()
     }
     
-    @objc func numericButtonDidPress(_ sender: UIButton) {
-        guard let buttonLabel = sender.titleLabel?.text else { return }
-        
-        print("numericButtonDidPress \(buttonLabel)")
-        
-        // TODO: FF and 00
-        if buttonLabel == "FF" || buttonLabel == "00" {
-            return
-        }
-        
-        let digit = Character("\(buttonLabel)")
-        
-        // TODO: Separate target action for dot button
-        if digit == "." {
-            output.dotButtonDidPress()
-        } else {
-            output.numericButtonDidPress(digit: digit)
-        }
+    @objc func numericButtonDidPress(_ sender: NumericButton) {
+        print("numericButtonDidPress \(sender.digit)")
+        output.numericButtonDidPress(digit: sender.digit)
     }
     
-    @objc func operatorButtonDidPress(_ sender: UIButton) {
-        guard sender.accessibilityIdentifier != "=", let operatorString = sender.titleLabel?.text else { return }
-        
+    @objc func dotButtonDidPress(_ sender: ComplementButton) {
+        print("dotButtonDidPress")
+        output.dotButtonDidPress()
+    }
+    
+    @objc func operatorButtonDidPress(_ sender: OperatorButton) {
         print("operatorButtonDidPress")
-        output.operatorButtonDidPress(operatorString: operatorString)
+        output.operatorButtonDidPress(operatorType: sender.operatorType)
     }
     
-    @objc func calculateButtonDidPress(_ sender: UIButton) {
+    @objc func calculateButtonDidPress(_ sender: CalculateButton) {
         print("calculateButtonDidPress")
         output.calculateButtonDidPress()
+    }
+    
+    @objc func complementButtonDidPress(_ sender: ComplementButton) {
+        print("complementButtonDidPress")
+        output.complementButtonDidPress(complementOperator: sender.operatorType)
     }
     
     @objc func changeConversionButtonDidPress(_ sender: UIButton) {
         print("changeConversionButtonDidPress")
         output.showConversion()
+    }
+    
+    @objc func changeWordSizeButtonDidPress(_ sender: UIButton) {
+        print("changeWordSizeButtonDidPress")
+        output.showWordSize()
+    }
+    
+    @objc func settingsButtonDidPress(_ sender: UIButton) {
+        print("settingsButtonDidPress")
+        output.showSettings()
     }
     
     @objc func switchKeypadButtonDidPress(_ sender: UIBarButtonItem) {
@@ -293,9 +301,7 @@ extension CalculatorViewController {
         calculatorView.freezeNavigationBar(duration: animDuration * 1.5) // also freezes all navbar items
 
         let isBitwiseKeypadActive = bitwiseKeypad != nil
-        
         if isBitwiseKeypadActive {
-
             sender.changeImage(named: "keypadIcon-bitwise")
 
             buttonsContainerController.view?.transform = calcButtonsTransform
@@ -332,20 +338,5 @@ extension CalculatorViewController {
                 self?.bitwiseKeypad?.didMove(toParent: self)
             })
         }
-    }
-    
-    @objc func changeWordSizeButtonDidPress(_ sender: UIButton) {
-        print("changeWordSizeButtonDidPress")
-        output.showWordSize()
-    }
-    
-    @objc func settingsButtonDidPress(_ sender: UIButton) {
-        print("settingsButtonDidPress")
-        output.showSettings()
-    }
-    
-    @objc func labelSwipeRight(_ sender: UISwipeGestureRecognizer) {
-        print("labelSwipeRight")
-        output.labelDidSwipeRight()
     }
 }

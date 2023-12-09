@@ -68,15 +68,15 @@ class ButtonsViewControllerPad: StyledViewController, ButtonsContainerController
                     button = CalculatorButton(calcButtonType: .bitwise)
                 case "AC":
                     button = CalculatorButton()
-                    button.tag = tagCalculatorButtonClear
+                    button.tag = clearButtonTag
                     button.addTarget(nil, action: #selector(CalculatorViewController.clearButtonDidPress), for: .touchUpInside)
                 case "±":
                     button = CalculatorButton()
-                    button.tag = tagCalculatorButtonNegate
+                    button.tag = negateButtonTag
                     button.addTarget(nil, action: #selector(CalculatorViewController.negateButtonDidPress), for: .touchUpInside)
                 case "Signed\nOFF":
                     button = CalculatorButton()
-                    button.tag = tagCalculatorButtonIsSigned
+                    button.tag = signedButtonTag
                     button.addTarget(nil, action: #selector(CalculatorViewController.signedButtonDidPress), for: .touchUpInside)
                 case "=":
                     button = CalculatorButton(calcButtonType: .sign)
@@ -161,6 +161,12 @@ class ButtonsViewControllerPad: StyledViewController, ButtonsContainerController
 
 extension [[CalculatorButton]] {
     func forEachButton(_ body: (CalculatorButton) -> Void) {
+        self.forEach { row in row.forEach { button in body(button) } }
+    }
+}
+
+extension [[CalculatorButton_]] {
+    func forEachButton(_ body: (CalculatorButton_) -> Void) {
         self.forEach { row in row.forEach { button in body(button) } }
     }
 }

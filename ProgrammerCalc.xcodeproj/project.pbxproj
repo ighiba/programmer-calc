@@ -36,6 +36,14 @@
 		C061FD072B2233960094BF6A /* PCNumberBinaryRepresentatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C061FD062B2233960094BF6A /* PCNumberBinaryRepresentatable.swift */; };
 		C061FD092B2234C10094BF6A /* PCNumberDigits.swift in Sources */ = {isa = PBXBuildFile; fileRef = C061FD082B2234C10094BF6A /* PCNumberDigits.swift */; };
 		C061FD0B2B22395B0094BF6A /* OperatorType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C061FD0A2B22395B0094BF6A /* OperatorType.swift */; };
+		C061FD0E2B250BDC0094BF6A /* ComplementButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C061FD0D2B250BDC0094BF6A /* ComplementButton.swift */; };
+		C061FD102B250BFE0094BF6A /* DotButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C061FD0F2B250BFE0094BF6A /* DotButton.swift */; };
+		C061FD122B250C240094BF6A /* CalculateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C061FD112B250C240094BF6A /* CalculateButton.swift */; };
+		C061FD142B250C690094BF6A /* OperatorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C061FD132B250C690094BF6A /* OperatorButton.swift */; };
+		C061FD162B250D2E0094BF6A /* SignedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C061FD152B250D2E0094BF6A /* SignedButton.swift */; };
+		C061FD182B250D670094BF6A /* NegateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C061FD172B250D670094BF6A /* NegateButton.swift */; };
+		C061FD1A2B250DC60094BF6A /* ClearButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C061FD192B250DC60094BF6A /* ClearButton.swift */; };
+		C061FD1C2B250E1F0094BF6A /* NumericButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C061FD1B2B250E1F0094BF6A /* NumericButton.swift */; };
 		C0635A7924D9E0F6003855A9 /* ConversionPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */; };
 		C0635A7B24D9E2AA003855A9 /* ConversionSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0635A7A24D9E2AA003855A9 /* ConversionSettings.swift */; };
 		C065DB3E24E41E610059B38D /* CalculatorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C065DB3D24E41E610059B38D /* CalculatorState.swift */; };
@@ -156,6 +164,14 @@
 		C061FD062B2233960094BF6A /* PCNumberBinaryRepresentatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCNumberBinaryRepresentatable.swift; sourceTree = "<group>"; };
 		C061FD082B2234C10094BF6A /* PCNumberDigits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCNumberDigits.swift; sourceTree = "<group>"; };
 		C061FD0A2B22395B0094BF6A /* OperatorType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperatorType.swift; sourceTree = "<group>"; };
+		C061FD0D2B250BDC0094BF6A /* ComplementButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplementButton.swift; sourceTree = "<group>"; };
+		C061FD0F2B250BFE0094BF6A /* DotButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotButton.swift; sourceTree = "<group>"; };
+		C061FD112B250C240094BF6A /* CalculateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculateButton.swift; sourceTree = "<group>"; };
+		C061FD132B250C690094BF6A /* OperatorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperatorButton.swift; sourceTree = "<group>"; };
+		C061FD152B250D2E0094BF6A /* SignedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedButton.swift; sourceTree = "<group>"; };
+		C061FD172B250D670094BF6A /* NegateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NegateButton.swift; sourceTree = "<group>"; };
+		C061FD192B250DC60094BF6A /* ClearButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearButton.swift; sourceTree = "<group>"; };
+		C061FD1B2B250E1F0094BF6A /* NumericButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericButton.swift; sourceTree = "<group>"; };
 		C0635A7824D9E0F6003855A9 /* ConversionPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionPicker.swift; sourceTree = "<group>"; };
 		C0635A7A24D9E2AA003855A9 /* ConversionSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionSettings.swift; sourceTree = "<group>"; };
 		C065DB3D24E41E610059B38D /* CalculatorState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorState.swift; sourceTree = "<group>"; };
@@ -329,6 +345,21 @@
 			path = Tests;
 			sourceTree = "<group>";
 		};
+		C061FD0C2B250BC30094BF6A /* CalculatorButtons */ = {
+			isa = PBXGroup;
+			children = (
+				C061FD112B250C240094BF6A /* CalculateButton.swift */,
+				C061FD192B250DC60094BF6A /* ClearButton.swift */,
+				C061FD0D2B250BDC0094BF6A /* ComplementButton.swift */,
+				C061FD0F2B250BFE0094BF6A /* DotButton.swift */,
+				C061FD172B250D670094BF6A /* NegateButton.swift */,
+				C061FD1B2B250E1F0094BF6A /* NumericButton.swift */,
+				C061FD132B250C690094BF6A /* OperatorButton.swift */,
+				C061FD152B250D2E0094BF6A /* SignedButton.swift */,
+			);
+			path = CalculatorButtons;
+			sourceTree = "<group>";
+		};
 		C065DB3824E3C89B0059B38D /* Math */ = {
 			isa = PBXGroup;
 			children = (
@@ -491,6 +522,7 @@
 		C0E0FF392A44A8D900E38DF9 /* Calculator */ = {
 			isa = PBXGroup;
 			children = (
+				C061FD0C2B250BC30094BF6A /* CalculatorButtons */,
 				C0666EBD24F991B8004809EF /* CalculatorView */,
 				C0712FE827908B9700CF408A /* BitwiseKeypadController.swift */,
 				C0666EB724F97774004809EF /* CalcButtonsViewController.swift */,
@@ -702,6 +734,7 @@
 				C0619AC224D71227008A7291 /* ConversionView.swift in Sources */,
 				C082FB892A33722C00F3AA60 /* CalculatorModuleAssembly.swift in Sources */,
 				C00563FA2B1780F6003CCC29 /* PCNumber.swift in Sources */,
+				C061FD0E2B250BDC0094BF6A /* ComplementButton.swift in Sources */,
 				C082FB872A33705E00F3AA60 /* CalculatorPresenter.swift in Sources */,
 				C09631D22727121D001DCD25 /* UIColor.swift in Sources */,
 				C0287F7227A31FD2001489FE /* BitButton.swift in Sources */,
@@ -711,6 +744,8 @@
 				C05B008E24E701ED00F8A5E0 /* Octal.swift in Sources */,
 				C0E0FF562A45D8D900E38DF9 /* StyledTableViewController.swift in Sources */,
 				C061B7C2250FF9FF000E2EB6 /* CalculatorLabel.swift in Sources */,
+				C061FD122B250C240094BF6A /* CalculateButton.swift in Sources */,
+				C061FD102B250BFE0094BF6A /* DotButton.swift in Sources */,
 				C09631CA2726FB12001DCD25 /* AppearanceViewController.swift in Sources */,
 				C0635A7B24D9E2AA003855A9 /* ConversionSettings.swift in Sources */,
 				C065DB3E24E41E610059B38D /* CalculatorState.swift in Sources */,
@@ -729,6 +764,7 @@
 				C0E0FF4E2A44F93700E38DF9 /* AppearanceModuleAssembly.swift in Sources */,
 				C0E0FF582A45D8F000E38DF9 /* Styled.swift in Sources */,
 				C0D842D62AD8669400B85E9F /* UITapGestureRecognizer.swift in Sources */,
+				C061FD142B250C690094BF6A /* OperatorButton.swift in Sources */,
 				C0211CD92A9938E100464A44 /* UIFont.swift in Sources */,
 				C0E0FF3E2A44AB8400E38DF9 /* ConversionPresenter.swift in Sources */,
 				C0F5CF53270F4C4C0020CE14 /* WordSizeView.swift in Sources */,
@@ -741,16 +777,20 @@
 				C0E0FF5A2A45EC5F00E38DF9 /* StyleManager.swift in Sources */,
 				C082FB8B2A33894500F3AA60 /* CalculatorViewController.swift in Sources */,
 				C09623172A04171B00E6C08F /* Int.swift in Sources */,
+				C061FD1A2B250DC60094BF6A /* ClearButton.swift in Sources */,
 				C00564012B192FB8003CCC29 /* PCOctal.swift in Sources */,
 				C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */,
 				C0E5FC7624BB9B8D00BA93CA /* CalculatorView.swift in Sources */,
 				C0619AC424D71240008A7291 /* ConversionViewController.swift in Sources */,
 				C0E0FF5C2A4638CB00E38DF9 /* StyledView.swift in Sources */,
+				C061FD182B250D670094BF6A /* NegateButton.swift in Sources */,
 				C061FD032B2230F40094BF6A /* OctHexHelper.swift in Sources */,
 				C082FB932A34D22C00F3AA60 /* UIScreen.swift in Sources */,
+				C061FD1C2B250E1F0094BF6A /* NumericButton.swift in Sources */,
 				C082FB832A3353F000F3AA60 /* Storable.swift in Sources */,
 				C0817788271D045E0068CF45 /* PopoverDoneButton.swift in Sources */,
 				C09631D027270FCC001DCD25 /* StyleFactory.swift in Sources */,
+				C061FD162B250D2E0094BF6A /* SignedButton.swift in Sources */,
 				C0905E712A080843004180A7 /* PCDecimal.swift in Sources */,
 				C061FCF12B1E50820094BF6A /* Array.swift in Sources */,
 				C0CC6DFF271F68AA00E59E64 /* AboutViewController.swift in Sources */,

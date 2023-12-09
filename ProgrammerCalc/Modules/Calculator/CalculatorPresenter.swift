@@ -19,9 +19,10 @@ protocol CalculatorOutput: AnyObject {
     func labelDidSwipeRight()
     func negateButtonDidPress()
     func signedButtonDidPress()
-    func numericButtonDidPress(digit: Character)
+    func numericButtonDidPress(digit: NumericButton.Digit)
     func dotButtonDidPress()
-    func operatorButtonDidPress(operatorString: String)
+    func complementButtonDidPress(complementOperator: ComplementOperator)
+    func operatorButtonDidPress(operatorType: OperatorButton.OperatorType)
     func calculateButtonDidPress()
     func getInputValueBits() -> [Bit]
     func bitButtonDidPress(bitIsOn: Bool, atIndex bitIndex: UInt8)
@@ -57,7 +58,7 @@ class CalculatorPresenter: CalculatorOutput {
 
     func clearButtonDidPress() {
         calculator.clearButtonDidPress()
-        input.setClearButtonTitle(inputHasStarted: false)
+        input.changeClearButtonTitle(inputState: .inputNotStarted)
     }
     
     func labelDidSwipeRight() {
@@ -75,23 +76,26 @@ class CalculatorPresenter: CalculatorOutput {
         calculator.reload()
     }
 
-    func numericButtonDidPress(digit: Character) {
+    func numericButtonDidPress(digit: NumericButton.Digit) {
         calculator.numericButtonDidPress(digit: digit)
-        input.setClearButtonTitle(inputHasStarted: true)
+        input.changeClearButtonTitle(inputState: .inputStarted)
     }
     
     func dotButtonDidPress() {
         calculator.dotButtonDidPress()
-        input.setClearButtonTitle(inputHasStarted: true)
+        input.changeClearButtonTitle(inputState: .inputStarted)
     }
     
-    func operatorButtonDidPress(operatorString: String) {
-        let operatorType = operatorFactory.get(byStringValue: operatorString)
-
-        if operatorType.isUnaryOperator {
-            calculator.unaryOperatorButtonDidPress(operatorType: operatorType)
-        } else {
-            calculator.binaryOperatorButtonDidPress(operatorType: operatorType)
+    func complementButtonDidPress(complementOperator: ComplementOperator) {
+        calculator.complementButtonDidPress(complementOperator: complementOperator)
+    }
+    
+    func operatorButtonDidPress(operatorType: OperatorButton.OperatorType) {
+        switch operatorType {
+        case .unary(let unaryOperator):
+            calculator.unaryOperatorButtonDidPress(unaryOperator: unaryOperator)
+        case .binary(let binaryOperator):
+            calculator.binaryOperatorButtonDidPress(binaryOperator: binaryOperator)
         }
     }
     
@@ -179,8 +183,9 @@ class CalculatorPresenter: CalculatorOutput {
     
     private func updateSignedButtons() {
         let isSigned = calculatorState.processSigned
+        let signedState: SignedButton.State = isSigned ? .on : .off
         input.setNegateButton(isEnabled: isSigned)
-        input.changeSignedButtonLabel(isSigned: isSigned)
+        input.changeSignedButtonTitle(signedState: signedState)
     }
     
     private func updateLabelsDisplayMode() {
