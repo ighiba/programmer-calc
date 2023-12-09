@@ -182,7 +182,6 @@ class CalculatorButton: UIButton {
     }
     
     func setActions(for buttonType: ButtonTypes){
-        addTarget(nil, action: #selector(CalculatorViewController.touchDidOccur), for: .touchDown)
         addTarget(nil, action: #selector(CalcButtonsViewController.hapticFeedbackHandler), for: .touchUpInside)
         addTarget(nil, action: #selector(CalcButtonsViewController.tappingSoundHandler), for: .touchUpInside)
         

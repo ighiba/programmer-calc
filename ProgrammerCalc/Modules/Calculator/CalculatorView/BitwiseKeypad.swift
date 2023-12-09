@@ -16,7 +16,7 @@ final class BitwiseKeypad: UIView {
     
     private let spacing: CGFloat = UIDevice.currentDeviceType == .iPad ? 20 : 10
     private var fontSize: CGFloat { calculateFontSize(forDeviceType: UIDevice.currentDeviceType) }
-    private var infoFontSize: CGFloat { fontSize / 3 }
+    private var bitIndexFontSize: CGFloat { fontSize / 3 }
     
     private let keypadPortraitWidthMultiplier: CGFloat = UIDevice.currentDeviceType == .iPad ? 0.93 : 0.9
     private let keypadLandscapeWidthMultiplier: CGFloat = 0.9
@@ -159,7 +159,6 @@ final class BitwiseKeypad: UIView {
         bitButton.accessibilityIdentifier = "bitButton_\(bitIndex)" // identifier for UITests
         
         bitButton.addTarget(nil, action: #selector(BitwiseKeypadController.bitButtonDidPress), for: .touchUpInside)
-        bitButton.addTarget(nil, action: #selector(CalculatorViewController.touchDidOccur), for: .touchDown)
         
         if bitIndex > controllerDelegate.wordSizeValue - 1 {
             bitButton.isEnabled = false
@@ -172,7 +171,7 @@ final class BitwiseKeypad: UIView {
         let label = UILabel()
         
         label.text = String(index + 1)
-        label.font = .systemFont(ofSize: infoFontSize, weight: .light)
+        label.font = .systemFont(ofSize: bitIndexFontSize, weight: .light)
         label.textAlignment = .right
         label.textColor = .systemGray
         label.sizeToFit()

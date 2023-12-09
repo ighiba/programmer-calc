@@ -63,8 +63,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let calculatorState = CalculatorState.shared
         let conversionSettings = ConversionSettings.shared
         
-        let inputResult = calculatorState.lastLabelValues.main
-        let outputResult = calculatorState.lastLabelValues.converter
+        let inputResult = calculatorState.lastLabelValues.input
+        let outputResult = calculatorState.lastLabelValues.output
         
         let inputSystem = conversionSettings.systemMain.title
         let outputSystem = conversionSettings.systemConverter.title

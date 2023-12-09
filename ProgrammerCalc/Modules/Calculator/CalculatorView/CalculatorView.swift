@@ -8,11 +8,12 @@
 
 import UIKit
 
-class CalculatorView: StyledView {
+final class CalculatorView: StyledView {
     
     // MARK: - Properties
     
-    private let margin: CGFloat = 10
+    private let verticalSpacing: CGFloat = 10
+    private let horizontalSpacing: CGFloat = -5
     private let navBarHeight: CGFloat = UIDevice.currentDeviceType == .iPad ? 50 : 44
     
     var screenBounds: CGRect { CGRect(origin: .zero, size: UIScreen.mainRealSize()) }
@@ -52,11 +53,13 @@ class CalculatorView: StyledView {
         action: #selector(CalculatorViewController.settingsButtonDidPress)
     )
     
-    // MARK: - Initialization
+    // MARK: - Init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setupView()
+        setupGestures()
     }
     
     required init?(coder: NSCoder) {
@@ -65,6 +68,7 @@ class CalculatorView: StyledView {
     
     override func styleWillUpdate(with style: Style) {
         super.styleWillUpdate(with: style)
+        
         updateStyle(with: style)
     }
     
@@ -74,50 +78,120 @@ class CalculatorView: StyledView {
         backgroundColor = .clear
         addSubview(navigationBar)
         addSubview(labelsStack)
-        addSubview(mainLabel.infoSubLabel)
-        addSubview(converterLabel.infoSubLabel)
+        addSubview(inputLabel.conversionSystemLabel)
+        addSubview(outputLabel.conversionSystemLabel)
         
         navigationBar.subviews.forEach { $0.isExclusiveTouch = true }
-
-        changeWordSizeButton.addTarget(nil, action: #selector(CalculatorViewController.changeWordSizeButtonDidPress), for: .touchUpInside)
-        changeWordSizeButton.addTarget(nil, action: #selector(CalculatorViewController.touchDidOccur), for: .touchDown)
         
         setupLayout()
     }
     
+    private func setupLayout() {
+        navigationBar.translatesAutoresizingMaskIntoConstraints = false
+        labelsStack.translatesAutoresizingMaskIntoConstraints = false
+        inputLabel.conversionSystemLabel.translatesAutoresizingMaskIntoConstraints = false
+        outputLabel.conversionSystemLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        portrait = [
+            navigationBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
+            navigationBar.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            navigationBar.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            navigationBar.heightAnchor.constraint(equalToConstant: navBarHeight),
+            
+            labelsStack.topAnchor.constraint(equalTo: navigationBar.bottomAnchor),
+            labelsStack.bottomAnchor.constraint(equalTo: self.topAnchor, constant: verticalOffsetFromTop + verticalSpacing),
+            labelsStack.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.95),
+            labelsStack.centerXAnchor.constraint(equalTo: navigationBar.centerXAnchor),
+            
+            inputLabel.conversionSystemLabel.topAnchor.constraint(equalTo: inputLabel.bottomAnchor),
+            inputLabel.conversionSystemLabel.trailingAnchor.constraint(equalTo: inputLabel.trailingAnchor, constant: horizontalSpacing),
+            
+            outputLabel.conversionSystemLabel.topAnchor.constraint(equalTo: outputLabel.bottomAnchor),
+            outputLabel.conversionSystemLabel.trailingAnchor.constraint(equalTo: outputLabel.trailingAnchor, constant: horizontalSpacing),
+        ]
+        
+        landscape = [
+            labelsStack.topAnchor.constraint(lessThanOrEqualTo: self.safeAreaLayoutGuide.topAnchor, constant: screenBounds.width * 0.05),
+            labelsStack.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: screenBounds.width * 0.05),
+            labelsStack.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: screenBounds.width * -0.05),
+            labelsStack.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.85),
+            
+            inputLabel.conversionSystemLabel.topAnchor.constraint(equalTo: inputLabel.bottomAnchor),
+            inputLabel.conversionSystemLabel.trailingAnchor.constraint(equalTo: inputLabel.trailingAnchor, constant: horizontalSpacing),
+            
+            outputLabel.conversionSystemLabel.topAnchor.constraint(equalTo: outputLabel.bottomAnchor),
+            outputLabel.conversionSystemLabel.trailingAnchor.constraint(equalTo: outputLabel.trailingAnchor, constant: horizontalSpacing),
+        ]
+        
+        landscapeWithBitKeypad = [
+            labelsStack.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: screenBounds.width * 0.05),
+            labelsStack.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: screenBounds.width * -0.05),
+            labelsStack.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: verticalSpacing),
+            labelsStack.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.3, constant: -verticalSpacing * 3),
+            
+            inputLabel.conversionSystemLabel.topAnchor.constraint(equalTo: inputLabel.bottomAnchor),
+            inputLabel.conversionSystemLabel.trailingAnchor.constraint(equalTo: inputLabel.trailingAnchor, constant: horizontalSpacing),
+            
+            outputLabel.conversionSystemLabel.topAnchor.constraint(equalTo: outputLabel.bottomAnchor),
+            outputLabel.conversionSystemLabel.trailingAnchor.constraint(equalTo: outputLabel.trailingAnchor, constant: horizontalSpacing),
+        ]
+    }
+    
+    private func setupGestures() {
+        changeWordSizeButton.addTarget(nil, action: #selector(CalculatorViewController.changeWordSizeButtonDidPress), for: .touchUpInside)
+    }
+    
     func updateStyle(with style: Style) {
-        mainLabel.textColor = style.labelTextColor
-        converterLabel.textColor = style.labelTextColor
-        mainLabel.infoSubLabel.textColor = .systemGray
-        converterLabel.infoSubLabel.textColor = .systemGray
+        inputLabel.textColor = style.labelTextColor
+        outputLabel.textColor = style.labelTextColor
+        inputLabel.conversionSystemLabel.textColor = .systemGray
+        outputLabel.conversionSystemLabel.textColor = .systemGray
         changeItem.tintColor = style.tintColor
         keypadItem.tintColor = style.tintColor
         settingsItem.tintColor = style.tintColor
         changeWordSizeButton.tintColor = style.tintColor
     }
     
-    func hideConverterLabel() {
-        mainLabel.isHidden = false
-        converterLabel.infoSubLabel.isHidden = true
-        converterLabel.isHidden = true
-
-        mainLabel.font = mainLabel.font.withSize(82.0)
-        mainLabel.numberOfLines = 2
-    }
-    
-    func showConverterLabel() {
-        mainLabel.isHidden = false
-        converterLabel.infoSubLabel.isHidden = false
-        converterLabel.isHidden = false
+    func showOutputLabel() {
+        inputLabel.isHidden = false
+        outputLabel.isHidden = false
+        outputLabel.conversionSystemLabel.isHidden = false
         
-        mainLabel.font = mainLabel.font.withSize(70.0)
+        inputLabel.font = inputLabel.font.withSize(70.0)
     }
     
-    func freezeNavBar(duration: CGFloat) {
+    func hideOutputLabel() {
+        inputLabel.isHidden = false
+        outputLabel.isHidden = true
+        outputLabel.conversionSystemLabel.isHidden = true
+
+        inputLabel.font = inputLabel.font.withSize(82.0)
+        inputLabel.numberOfLines = 2
+    }
+    
+    func freezeNavigationBar(duration: TimeInterval) {
         navigationBar.isUserInteractionEnabled = false
         Timer.scheduledTimer(withTimeInterval: duration, repeats: false, block: { [weak self] _ in
             self?.navigationBar.isUserInteractionEnabled = true
         })
+    }
+    
+    func showNavigationBar() {
+        navigationBar.translatesAutoresizingMaskIntoConstraints = false
+        setNavigationBar(isHidden: false)
+    }
+    
+    func hideNavigationBar() {
+        navigationBar.translatesAutoresizingMaskIntoConstraints = true
+        setNavigationBar(isHidden: true)
+    }
+    
+    func setWordSizeButtonTitle(_ title: String) {
+        changeWordSizeButton.setTitle(title, for: .normal)
+    }
+    
+    private func setNavigationBar(isHidden: Bool) {
+        navigationBar.isHidden = isHidden
     }
     
     // MARK: - Views
@@ -161,9 +235,18 @@ class CalculatorView: StyledView {
 
         return navBar
     }()
-   
-    // Label wich shows user input
-    lazy var mainLabel: CalculatorLabel = {
+    
+    lazy var labelsStack: UIStackView = {
+        let labels = UIStackView(arrangedSubviews: [inputLabel, outputLabel])
+        labels.axis = .vertical
+        labels.distribution = .fillEqually
+        
+        labels.spacing = inputLabel.conversionSystemLabel.frame.height
+        
+        return labels
+    }()
+    
+    lazy var inputLabel: CalculatorLabel = {
         let label = CalculatorLabel()
         
         label.frame = CGRect()
@@ -174,13 +257,12 @@ class CalculatorView: StyledView {
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.15
         
-        label.accessibilityIdentifier = "MainLabel"
+        label.accessibilityIdentifier = "InputLabel"
         
         return label
     }()
     
-    // Label wich shows converted values from user input
-    lazy var converterLabel: CalculatorLabel = {
+    lazy var outputLabel: CalculatorLabel = {
         let label = CalculatorLabel()
         
         label.frame = CGRect()
@@ -192,94 +274,8 @@ class CalculatorView: StyledView {
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.15
         
-        label.accessibilityIdentifier = "ConverterLabel"
+        label.accessibilityIdentifier = "OutputLabel"
 
         return label
     }()
-    
-    lazy var labelsStack: UIStackView = {
-        let labels = UIStackView(arrangedSubviews: [mainLabel, converterLabel])
-        labels.axis = .vertical
-        labels.distribution = .fillEqually
-        
-        labels.spacing = mainLabel.infoSubLabel.frame.height
-        
-        return labels
-    }()
-
-    // MARK: - Layout
-    
-    private func setupLayout() {
-        navigationBar.translatesAutoresizingMaskIntoConstraints = false
-        labelsStack.translatesAutoresizingMaskIntoConstraints = false
-        mainLabel.infoSubLabel.translatesAutoresizingMaskIntoConstraints = false
-        converterLabel.infoSubLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Constraints for portrait orientation
-        portrait = [
-            navigationBar.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
-            navigationBar.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            navigationBar.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            navigationBar.heightAnchor.constraint(equalToConstant: navBarHeight),
-            
-            labelsStack.topAnchor.constraint(equalTo: navigationBar.bottomAnchor),
-            labelsStack.bottomAnchor.constraint(equalTo: self.topAnchor, constant: verticalOffsetFromTop + margin),
-            labelsStack.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.95),
-            labelsStack.centerXAnchor.constraint(equalTo: navigationBar.centerXAnchor),
-            
-            mainLabel.infoSubLabel.topAnchor.constraint(equalTo: mainLabel.bottomAnchor),
-            mainLabel.infoSubLabel.trailingAnchor.constraint(equalTo: mainLabel.trailingAnchor, constant: -5),
-            
-            converterLabel.infoSubLabel.topAnchor.constraint(equalTo: converterLabel.bottomAnchor),
-            converterLabel.infoSubLabel.trailingAnchor.constraint(equalTo: converterLabel.trailingAnchor, constant: -5),
-        ]
-        
-        // Constraints for landscape orientation
-        landscape = [
-            labelsStack.topAnchor.constraint(lessThanOrEqualTo: self.safeAreaLayoutGuide.topAnchor, constant: screenBounds.width * 0.05),
-            labelsStack.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: screenBounds.width * 0.05),
-            labelsStack.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: screenBounds.width * -0.05),
-            labelsStack.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.85),
-            
-            mainLabel.infoSubLabel.topAnchor.constraint(equalTo: mainLabel.bottomAnchor),
-            mainLabel.infoSubLabel.trailingAnchor.constraint(equalTo: mainLabel.trailingAnchor, constant: -5),
-            
-            converterLabel.infoSubLabel.topAnchor.constraint(equalTo: converterLabel.bottomAnchor),
-            converterLabel.infoSubLabel.trailingAnchor.constraint(equalTo: converterLabel.trailingAnchor, constant: -5),
-        ]
-        
-        // Constraints for landscape orientation (with bitwise keypad enabled)
-        landscapeWithBitKeypad = [
-            labelsStack.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: screenBounds.width * 0.05),
-            labelsStack.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: screenBounds.width * -0.05),
-            labelsStack.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: margin),
-            labelsStack.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.3, constant: -margin * 3),
-            
-            mainLabel.infoSubLabel.topAnchor.constraint(equalTo: mainLabel.bottomAnchor),
-            mainLabel.infoSubLabel.trailingAnchor.constraint(equalTo: mainLabel.trailingAnchor, constant: -5),
-            
-            converterLabel.infoSubLabel.topAnchor.constraint(equalTo: converterLabel.bottomAnchor),
-            converterLabel.infoSubLabel.trailingAnchor.constraint(equalTo: converterLabel.trailingAnchor, constant: -5),
-        ]
-    }
-    
-    // MARK: - Methods
-    
-    func showNavigationBar() {
-        navigationBar.translatesAutoresizingMaskIntoConstraints = false
-        setNavigationBarIsHidden(false)
-    }
-    
-    func hideNavigationBar() {
-        navigationBar.translatesAutoresizingMaskIntoConstraints = true
-        setNavigationBarIsHidden(true)
-    }
-    
-    func setWordSizeButtonTitle(_ title: String) {
-        changeWordSizeButton.setTitle(title, for: .normal)
-    }
-    
-    private func setNavigationBarIsHidden(_ isHidden: Bool) {
-        navigationBar.isHidden = isHidden
-    }
 }

@@ -41,8 +41,8 @@ class ConversionPresenter: ConversionOutput {
     // MARK: - Methods
     
     func obtainConversionSettings() {
-        let mainRow: Int = ConversionSystem.allCases.firstIndex(of: conversionSettings.systemMain) ?? 1 // default decimal for main
-        let converterRow: Int = ConversionSystem.allCases.firstIndex(of: conversionSettings.systemConverter) ?? 0 // default binary for converter
+        let mainRow: Int = ConversionSystem.allCases.firstIndex(of: conversionSettings.systemMain) ?? 1 // default decimal for input
+        let converterRow: Int = ConversionSystem.allCases.firstIndex(of: conversionSettings.systemConverter) ?? 0 // default binary for output
         view.mainPickerSelectRow(mainRow)
         view.converterPickerSelectRow(converterRow)
         view.setLabelValueText("\(Int(conversionSettings.numbersAfterPoint))")

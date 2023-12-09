@@ -10,5 +10,5 @@ import UIKit
 
 extension UIFont {
     static let calculatorLabelFont = UIFont(name: "HelveticaNeue-Thin", size: 70.0)
-    static let infoLabelFont = UIFont(name: "HelveticaNeue-Thin", size: 12.0)
+    static let conversionSystemLabelFont = UIFont(name: "HelveticaNeue-Thin", size: 12.0)
 }

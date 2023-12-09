@@ -13,33 +13,30 @@ enum CalculatorLabelsDisplayMode {
     case onlyInputLabel(numberOfLines: Int)
 }
 
-protocol CalculatorViewControllerDelegate: AnyObject {
-    func disableLabelsHighlight()
-}
-
-protocol CalculatorInput: AnyObject {func setMainLabelText(_ text: String)
-    func setConverterLabelText(_ text: String)
+protocol CalculatorInput: AnyObject {
+    func setInputLabelText(_ text: String)
+    func setOutputLabelText(_ text: String)
     func setInputConversionSystemLabelText(_ text: String)
     func setOutputConversionSystemLabelText(_ text: String)
     func setLabelsDisplayMode(_ displayMode: CalculatorLabelsDisplayMode)
     func setWordSizeButtonTitle(_ title: String)
     func setClearButtonTitle(inputHasStarted: Bool)
-    func setNegateButtonIsEnabled(_ isEnabled: Bool)
+    func setNegateButton(isEnabled: Bool)
     func changeSignedButtonLabel(isSigned: Bool)
     func disableNumericButtons(withForbiddenDigits forbiddenDigits: Set<String>)
     func updateBitwiseKeypad(withBits bits: [Bit])
     func presentViewController(_ viewController: UIViewController, animated: Bool)
 }
 
-class CalculatorViewController: StyledViewController, CalculatorInput, UIAdaptivePresentationControllerDelegate {
+final class CalculatorViewController: StyledViewController, CalculatorInput, UIAdaptivePresentationControllerDelegate {
     
     // MARK: - Properties
     
     var output: CalculatorOutput!
     
     private let calculatorView = CalculatorView()
-    lazy var mainLabel = calculatorView.mainLabel
-    lazy var converterLabel = calculatorView.converterLabel
+    private lazy var inputLabel = calculatorView.inputLabel
+    private lazy var outputLabel = calculatorView.outputLabel
 
     var buttonsContainerController: ButtonsContainerControllerProtocol!
     private var bitwiseKeypad: BitwiseKeypadController?
@@ -55,10 +52,6 @@ class CalculatorViewController: StyledViewController, CalculatorInput, UIAdaptiv
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // TODO: Refactor in CalculatorLabel class
-        mainLabel.addGestureRecognizer(configureSwipeRightGesture())
-        converterLabel.addGestureRecognizer(configureSwipeRightGesture())
-
         setupViews()
         setupGestures()
         
@@ -115,10 +108,10 @@ class CalculatorViewController: StyledViewController, CalculatorInput, UIAdaptiv
             NSLayoutConstraint.deactivate(calculatorView.landscapeWithBitKeypad!)
             NSLayoutConstraint.activate(calculatorView.portrait!)
 
-            mainLabel.sizeToFit()
-            mainLabel.infoSubLabel.sizeToFit()
-            converterLabel.infoSubLabel.sizeToFit()
-            converterLabel.sizeToFit()
+            inputLabel.sizeToFit()
+            outputLabel.sizeToFit()
+            inputLabel.conversionSystemLabel.sizeToFit()
+            outputLabel.conversionSystemLabel.sizeToFit()
             
             phoneVC.setPageControl(isVisible: true)
         } else if willEnterLandscapeOrientation {
@@ -142,12 +135,6 @@ class CalculatorViewController: StyledViewController, CalculatorInput, UIAdaptiv
         }
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        
-        disableLabelsHighlight()
-    }
-    
     func subviewsSetNeedsLayout() {
         view.setNeedsLayout()
         calculatorView.setNeedsLayout()
@@ -155,12 +142,6 @@ class CalculatorViewController: StyledViewController, CalculatorInput, UIAdaptiv
     }
     
     // MARK: - Methods
-    
-    private func configureSwipeRightGesture() -> UISwipeGestureRecognizer {
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(CalculatorViewController.labelSwipeRight))
-        swipeRight.direction = .right
-        return swipeRight
-    }
     
     private func setupViews() {
         NSLayoutConstraint.deactivate(calculatorView.landscape!)
@@ -180,35 +161,35 @@ class CalculatorViewController: StyledViewController, CalculatorInput, UIAdaptiv
     }
     
     private func setupGestures() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(touchDidOccur))
-        view.addGestureRecognizer(tap)
+        inputLabel.addSwipeRightGesture(target: self, action: #selector(labelSwipeRight))
+        outputLabel.addSwipeRightGesture(target: self, action: #selector(labelSwipeRight))
     }
     
-    func setMainLabelText(_ text: String) {
-        mainLabel.setText(text)
+    func setInputLabelText(_ text: String) {
+        inputLabel.setText(text)
     }
     
-    func setConverterLabelText(_ text: String) {
-        converterLabel.setText(text)
+    func setOutputLabelText(_ text: String) {
+        outputLabel.setText(text)
     }
     
     func setInputConversionSystemLabelText(_ text: String) {
-        mainLabel.infoSubLabel.text = text
+        inputLabel.conversionSystemLabel.text = text
     }
     
     func setOutputConversionSystemLabelText(_ text: String) {
-        converterLabel.infoSubLabel.text = text
+        outputLabel.conversionSystemLabel.text = text
     }
     
     func setLabelsDisplayMode(_ displayMode: CalculatorLabelsDisplayMode) {
         switch displayMode {
         case .standart(let inputNumberOfLines, let outputNumberOfLines):
-            calculatorView.showConverterLabel()
-            mainLabel.numberOfLines = inputNumberOfLines
-            converterLabel.numberOfLines = outputNumberOfLines
+            calculatorView.showOutputLabel()
+            inputLabel.numberOfLines = inputNumberOfLines
+            outputLabel.numberOfLines = outputNumberOfLines
         case .onlyInputLabel(let numberOfLines):
-            calculatorView.hideConverterLabel()
-            mainLabel.numberOfLines = numberOfLines
+            calculatorView.hideOutputLabel()
+            inputLabel.numberOfLines = numberOfLines
         }
     }
     
@@ -221,7 +202,7 @@ class CalculatorViewController: StyledViewController, CalculatorInput, UIAdaptiv
         clearButton?.changeTitleClearButtonFor(state)
     }
     
-    func setNegateButtonIsEnabled(_ isEnabled: Bool) {
+    func setNegateButton(isEnabled: Bool) {
         let negateButton = view.viewWithTag(tagCalculatorButtonNegate) as? CalculatorButton
         negateButton?.isEnabled = isEnabled
         negateButton?.alpha = isEnabled ? 1.0 : 0.5
@@ -245,27 +226,9 @@ class CalculatorViewController: StyledViewController, CalculatorInput, UIAdaptiv
     }
 }
 
-// MARK: - Delegate
-
-extension CalculatorViewController: CalculatorViewControllerDelegate {
-    func disableLabelsHighlight() {
-        if mainLabel.layer.backgroundColor != UIColor.clear.cgColor {
-            mainLabel.hideLabelMenu()
-        }
-        
-        if converterLabel.layer.backgroundColor != UIColor.clear.cgColor {
-            converterLabel.hideLabelMenu()
-        }
-    }
-}
-
 // MARK: - Actions
 
 extension CalculatorViewController {
-    
-    @objc func touchDidOccur() {
-        disableLabelsHighlight()
-    }
 
     @objc func clearButtonDidPress(_ sender: UIButton) {
         print("clearButtonDidPress")
@@ -316,20 +279,18 @@ extension CalculatorViewController {
     
     @objc func changeConversionButtonDidPress(_ sender: UIButton) {
         print("changeConversionButtonDidPress")
-        disableLabelsHighlight()
         output.showConversion()
     }
     
     @objc func switchKeypadButtonDidPress(_ sender: UIBarButtonItem) {
         print("switchKeypadButtonDidPress")
-        disableLabelsHighlight()
         
         let animDuration: CGFloat = 0.3
         let animOptions: UIView.AnimationOptions = [.curveEaseInOut]
         let calcButtonsTransform = CGAffineTransform(translationX: -UIScreen.main.bounds.width, y: 0)
         let bitwiseKeypadTransform = CGAffineTransform(translationX: UIScreen.main.bounds.width, y: 0)
 
-        calculatorView.freezeNavBar(duration: animDuration * 1.5) // also freezes all navbar items
+        calculatorView.freezeNavigationBar(duration: animDuration * 1.5) // also freezes all navbar items
 
         let isBitwiseKeypadActive = bitwiseKeypad != nil
         
@@ -380,7 +341,6 @@ extension CalculatorViewController {
     
     @objc func settingsButtonDidPress(_ sender: UIButton) {
         print("settingsButtonDidPress")
-        disableLabelsHighlight()
         output.showSettings()
     }
     

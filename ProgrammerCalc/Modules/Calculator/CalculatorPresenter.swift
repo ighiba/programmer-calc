@@ -49,7 +49,6 @@ class CalculatorPresenter: CalculatorOutput {
     
     func viewDidLoad() {
         calculator.load()
-        
         updateWordSizeButtonTitle()
         updateConversionSystemTitles()
         updateNumericButtonsIsEnabled()
@@ -72,9 +71,7 @@ class CalculatorPresenter: CalculatorOutput {
     
     func signedButtonDidPress() {
         calculatorState.processSigned.toggle()
-        
         updateSignedButtons()
-        
         calculator.reload()
     }
 
@@ -182,7 +179,7 @@ class CalculatorPresenter: CalculatorOutput {
     
     private func updateSignedButtons() {
         let isSigned = calculatorState.processSigned
-        input.setNegateButtonIsEnabled(isSigned)
+        input.setNegateButton(isEnabled: isSigned)
         input.changeSignedButtonLabel(isSigned: isSigned)
     }
     
@@ -211,10 +208,10 @@ class CalculatorPresenter: CalculatorOutput {
 extension CalculatorPresenter: CalculatorPresenterDelegate {
     
     func setInputLabelText(_ text: String) {
-        input.setMainLabelText(text)
+        input.setInputLabelText(text)
     }
     
     func setOutputLabelText(_ text: String) {
-        input.setConverterLabelText(text)
+        input.setOutputLabelText(text)
     }
 }

@@ -39,11 +39,11 @@ final class CalculatorState: CalcStateProtocol {
     }
     
     func updateMainValue(_ main: String) {
-        lastLabelValues = LabelValues(main: main, converter: lastLabelValues.converter)
+        lastLabelValues = LabelValues(main: main, converter: lastLabelValues.output)
     }
     
     func updateConverterValue(_ converter: String) {
-        lastLabelValues = LabelValues(main: lastLabelValues.main, converter: converter)
+        lastLabelValues = LabelValues(main: lastLabelValues.input, converter: converter)
     }
 }
 
@@ -62,11 +62,11 @@ extension CalculatorState: Storable {
 }
 
 class LabelValues: Decodable, Encodable {
-    var main: String
-    var converter: String
+    var input: String
+    var output: String
     
     init(main: String, converter: String) {
-        self.main = main
-        self.converter = converter
+        self.input = main
+        self.output = converter
     }
 }

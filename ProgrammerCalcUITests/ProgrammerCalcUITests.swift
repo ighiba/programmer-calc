@@ -211,7 +211,7 @@ class ProgrammerCalcUITests: XCTestCase {
         elementsQuery.staticTexts["="].tap()
 
         // 2. then
-        XCTAssert(NSLocalizedString("Cannot divide by zero", comment: "") == app.buttons["MainLabel"].label)
-        XCTAssert(NSLocalizedString("NaN", comment: "") == app.buttons["ConverterLabel"].label)
+        XCTAssert(NSLocalizedString("Cannot divide by zero", comment: "") == app.buttons["InputLabel"].label)
+        XCTAssert(NSLocalizedString("NaN", comment: "") == app.buttons["OutputLabel"].label)
     }
 }
