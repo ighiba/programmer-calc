@@ -12,7 +12,7 @@ final class Hexadecimal: NumberSystemProtocol {
     
     // MARK: - Properties
     
-    private let octHexHelper = OctHexHelperOld()
+    //private let octHexHelper = OctHexHelperOld()
     
     var value: String = "0"
     var isSigned: Bool = false
@@ -58,7 +58,7 @@ final class Hexadecimal: NumberSystemProtocol {
     func toBinary() -> Binary {
         let binary = Binary()
         
-        binary.value = octHexHelper.tableOctHexToBin(valueOctHex: value, table: table)
+        //binary.value = octHexHelper.tableOctHexToBin(valueOctHex: value, table: table)
         
         return binary
     }

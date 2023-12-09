@@ -14,7 +14,7 @@ class Binary: NumberSystemProtocol {
     // MARK: - Properties
     // ==================
     
-    private let octHexHelper = OctHexHelperOld()
+    //private let octHexHelper = OctHexHelperOld()
     
     var value: String = "0"
     var isSigned: Bool = false // default
@@ -198,7 +198,7 @@ class Binary: NumberSystemProtocol {
         
         // from binary to oct
         // process each number and form parts
-        hexadecimal.value = octHexHelper.tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: hexTable)
+        //hexadecimal.value = octHexHelper.tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: hexTable)
         
         guard dividedBinary.1 != nil else { return hexadecimal }
         
@@ -208,7 +208,7 @@ class Binary: NumberSystemProtocol {
         dividedBinary.1 = String(dividedBinary.1!.reversed())
         // process fract part
         hexadecimal.value += "."
-        hexadecimal.value +=  octHexHelper.tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: hexTable)
+        //hexadecimal.value +=  octHexHelper.tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: hexTable)
         
         return hexadecimal
     }
@@ -228,7 +228,7 @@ class Binary: NumberSystemProtocol {
         
         // from binary to oct
         // process each number and form parts
-        octal.value = octHexHelper.tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: octTable)
+        //octal.value = octHexHelper.tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: octTable)
         
         guard dividedBinary.1 != nil else { return octal }
         
@@ -238,7 +238,7 @@ class Binary: NumberSystemProtocol {
         dividedBinary.1 = String(dividedBinary.1!.reversed())
         // process fract part
         octal.value += "."
-        octal.value +=  octHexHelper.tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: octTable)
+        //octal.value +=  octHexHelper.tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: octTable)
          
         return octal
     }

@@ -79,7 +79,6 @@
 		C09631D82728E9DC001DCD25 /* StyledViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631D72728E9DC001DCD25 /* StyledViewController.swift */; };
 		C09631DC272C581C001DCD25 /* CalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DB272C581B001DCD25 /* CalculatorTests.swift */; };
 		C09631DE272D4FBE001DCD25 /* StringExtTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DD272D4FBE001DCD25 /* StringExtTests.swift */; };
-		C097D09C2A09CCD5002FA1E6 /* LabelFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C097D09B2A09CCD5002FA1E6 /* LabelFormatter.swift */; };
 		C097F43C2B193355009BF3D7 /* PCHexadecimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C097F43B2B193355009BF3D7 /* PCHexadecimal.swift */; };
 		C0CC6DFF271F68AA00E59E64 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */; };
 		C0D842D62AD8669400B85E9F /* UITapGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D842D52AD8669400B85E9F /* UITapGestureRecognizer.swift */; };
@@ -208,7 +207,6 @@
 		C09631D72728E9DC001DCD25 /* StyledViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyledViewController.swift; sourceTree = "<group>"; };
 		C09631DB272C581B001DCD25 /* CalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorTests.swift; sourceTree = "<group>"; };
 		C09631DD272D4FBE001DCD25 /* StringExtTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtTests.swift; sourceTree = "<group>"; };
-		C097D09B2A09CCD5002FA1E6 /* LabelFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelFormatter.swift; sourceTree = "<group>"; };
 		C097F43B2B193355009BF3D7 /* PCHexadecimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCHexadecimal.swift; sourceTree = "<group>"; };
 		C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		C0D842D52AD8669400B85E9F /* UITapGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITapGestureRecognizer.swift; sourceTree = "<group>"; };
@@ -293,7 +291,6 @@
 			isa = PBXGroup;
 			children = (
 				C082FB902A34C0A400F3AA60 /* DeviceType.swift */,
-				C097D09B2A09CCD5002FA1E6 /* LabelFormatter.swift */,
 				C082FB962A35E6FF00F3AA60 /* Values.swift */,
 			);
 			path = Helpers;
@@ -747,7 +744,6 @@
 				C00564012B192FB8003CCC29 /* PCOctal.swift in Sources */,
 				C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */,
 				C0E5FC7624BB9B8D00BA93CA /* CalculatorView.swift in Sources */,
-				C097D09C2A09CCD5002FA1E6 /* LabelFormatter.swift in Sources */,
 				C0619AC424D71240008A7291 /* ConversionViewController.swift in Sources */,
 				C0E0FF5C2A4638CB00E38DF9 /* StyledView.swift in Sources */,
 				C061FD032B2230F40094BF6A /* OctHexHelper.swift in Sources */,
