@@ -584,7 +584,7 @@ class Binary: NumberSystemProtocol {
             return
         }
         
-        if calcState.processSigned {
+        if calcState.isSigned {
             // calculate signed state
             binary.updateSignedState() // changes binary.isSigned state to true of false
             

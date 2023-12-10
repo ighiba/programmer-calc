@@ -10,8 +10,9 @@ import Foundation
 
 protocol CalcStateProtocol {
     var lastValue: PCDecimal { get set }
-    var lastLabelValues: LabelValues { get set }
-    var processSigned: Bool { get set }
+    var isSigned: Bool { get set }
+    var inputText: String { get set }
+    var outputText: String { get set }
 }
 
 final class CalculatorState: CalcStateProtocol {
@@ -19,31 +20,26 @@ final class CalculatorState: CalcStateProtocol {
     static let shared: CalculatorState = CalculatorState()
     
     var lastValue: PCDecimal
-    var lastLabelValues: LabelValues
-    var processSigned: Bool
+    var isSigned: Bool
+    var inputText: String
+    var outputText: String
     
     convenience init() {
-        self.init(lastValue: .zero, lastLabelValues: LabelValues(main: "0", converter: "0"), processSigned: false)
+        self.init(lastValue: .zero, isSigned: true, inputText: "0", outputText: "0")
     }
     
-    init(lastValue: PCDecimal, lastLabelValues: LabelValues, processSigned: Bool) {
+    init(lastValue: PCDecimal, isSigned: Bool, inputText: String, outputText: String) {
         self.lastValue = lastValue
-        self.lastLabelValues = lastLabelValues
-        self.processSigned = processSigned
+        self.isSigned = isSigned
+        self.inputText = inputText
+        self.outputText = outputText
     }
     
-    func setCalcState(_ newCalcState: CalcStateProtocol) {
-        lastValue = newCalcState.lastValue
-        lastLabelValues = newCalcState.lastLabelValues
-        processSigned = newCalcState.processSigned
-    }
-    
-    func updateMainValue(_ main: String) {
-        lastLabelValues = LabelValues(main: main, converter: lastLabelValues.output)
-    }
-    
-    func updateConverterValue(_ converter: String) {
-        lastLabelValues = LabelValues(main: lastLabelValues.input, converter: converter)
+    func setCalculatorState(_ newCalculatorState: CalcStateProtocol) {
+        lastValue = newCalculatorState.lastValue
+        isSigned = newCalculatorState.isSigned
+        inputText = newCalculatorState.inputText
+        outputText = newCalculatorState.outputText
     }
 }
 
@@ -56,17 +52,8 @@ extension CalculatorState: Storable {
     
     func set(_ data: CalculatorState) {
         lastValue = data.lastValue
-        lastLabelValues = data.lastLabelValues
-        processSigned = data.processSigned
-    }
-}
-
-class LabelValues: Decodable, Encodable {
-    var input: String
-    var output: String
-    
-    init(main: String, converter: String) {
-        self.input = main
-        self.output = converter
+        isSigned = data.isSigned
+        inputText = data.inputText
+        outputText = data.outputText
     }
 }

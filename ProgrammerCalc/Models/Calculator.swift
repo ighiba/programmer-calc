@@ -10,7 +10,7 @@ import Foundation
 
 typealias PCNumberInput = PCNumber & PCNumberDigits
 
-class PCOperation {
+final class PCOperation {
     var bufferValue: PCNumber
     var binaryOperator: BinaryOperator
     
@@ -43,7 +43,7 @@ final class CalculatorImpl: Calculator {
     
     private var inputValue: PCNumberInput {
         didSet {
-            calculatorState.lastValue = inputValue.pcDecimalValue.fixedOverflow(bitWidth: wordSize.bitWidth, isSigned: calculatorState.processSigned)
+            calculatorState.lastValue = inputValue.pcDecimalValue.fixedOverflow(bitWidth: wordSize.bitWidth, isSigned: calculatorState.isSigned)
         }
     }
     
@@ -121,7 +121,7 @@ final class CalculatorImpl: Calculator {
     func numericButtonDidPress(digit: NumericButton.Digit) {
         let bitWidth = wordSize.bitWidth
         let fractionalWidth = conversionSettings.fractionalWidth
-        let isSigned = calculatorState.processSigned
+        let isSigned = calculatorState.isSigned
         
         let isIntegerInput = !(isFractionalInputStarted || !inputValue.fractDigits.isEmpty)
         if isIntegerInput {
@@ -189,7 +189,7 @@ final class CalculatorImpl: Calculator {
     
     private func calculateComplementOperation(_ pcNumber: PCNumber, complementOperator: ComplementOperator) -> PCNumberInput {
         let bitWidth = wordSize.bitWidth
-        let isSigned = calculatorState.processSigned
+        let isSigned = calculatorState.isSigned
         
         let decimal = pcNumber.pcDecimalValue.fixedOverflow(bitWidth: bitWidth, isSigned: isSigned)
         
@@ -203,7 +203,7 @@ final class CalculatorImpl: Calculator {
     
     private func calculateUnaryOperation(_ pcNumber: PCNumber, unaryOperator: UnaryOperator) -> PCNumberInput {
         let bitWidth = wordSize.bitWidth
-        let isSigned = calculatorState.processSigned
+        let isSigned = calculatorState.isSigned
         
         let decimal = pcNumber.pcDecimalValue.fixedOverflow(bitWidth: bitWidth, isSigned: isSigned)
 
@@ -217,7 +217,7 @@ final class CalculatorImpl: Calculator {
     
     private func calculateBinaryOperation(lhs: PCNumber, rhs: PCNumber, binaryOperator: BinaryOperator) throws -> PCNumberInput {
         let bitWidth = wordSize.bitWidth
-        let isSigned = calculatorState.processSigned
+        let isSigned = calculatorState.isSigned
         
         let lhsDecimal = lhs.pcDecimalValue.fixedOverflow(bitWidth: bitWidth, isSigned: isSigned)
         let rhsDecimal = rhs.pcDecimalValue.fixedOverflow(bitWidth: bitWidth, isSigned: isSigned)
@@ -256,7 +256,7 @@ final class CalculatorImpl: Calculator {
     }
     
     func getInputValueBits() -> [Bit] {
-        let decimal = inputValue.pcDecimalValue.fixedOverflow(bitWidth: wordSize.bitWidth, isSigned: calculatorState.processSigned)
+        let decimal = inputValue.pcDecimalValue.fixedOverflow(bitWidth: wordSize.bitWidth, isSigned: calculatorState.isSigned)
         let binary = PCBinary(pcDecimal: decimal)
         
         return binary.intPart.bits
@@ -265,7 +265,7 @@ final class CalculatorImpl: Calculator {
     func bitButtonDidPress(bitIsOn: Bool, atIndex bitIndex: UInt8) {
         let bit: UInt8 = bitIsOn ? 1 : 0
         
-        let decimal = inputValue.pcDecimalValue.fixedOverflow(bitWidth: wordSize.bitWidth, isSigned: calculatorState.processSigned)
+        let decimal = inputValue.pcDecimalValue.fixedOverflow(bitWidth: wordSize.bitWidth, isSigned: calculatorState.isSigned)
         var binary = PCBinary(pcDecimal: decimal)
         binary.switchBit(bit, atIndex: bitIndex)
         
@@ -285,11 +285,14 @@ final class CalculatorImpl: Calculator {
         
         calculatorPresenterDelegate.setInputLabelText(inputText)
         calculatorPresenterDelegate.setOutputLabelText(outputText)
+        
+        calculatorState.inputText = inputText
+        calculatorState.outputText = outputText
     }
     
     private func convert<T: PCNumber>(_ pcNumber: T, to conversionSystem: ConversionSystem) -> PCNumberInput {
         let bitWidth = wordSize.bitWidth
-        let isSigned = calculatorState.processSigned
+        let isSigned = calculatorState.isSigned
         
         return conversionSystem.pcNumberInputType.init(pcDecimal: pcNumber.pcDecimalValue, bitWidth: bitWidth, isSigned: isSigned)
     }

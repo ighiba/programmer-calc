@@ -20,11 +20,11 @@ class PCalcStorage {
         let calcState: CalculatorState = storage.loadData()
         let styleSettigns: StyleSettings = storage.loadData()
 
-        WordSize.shared.setWordSize(wordSize)
-        Settings.shared.setSettings(settings)
-        ConversionSettings.shared.setConversionSettings(conversionSettings)
-        CalculatorState.shared.setCalcState(calcState)
-        StyleSettings.shared.setStyleSettings(styleSettigns)
+        WordSize.shared.set(wordSize)
+        Settings.shared.set(settings)
+        ConversionSettings.shared.set(conversionSettings)
+        CalculatorState.shared.set(calcState)
+        StyleSettings.shared.set(styleSettigns)
     }
     
     public func saveAll() {

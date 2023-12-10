@@ -70,7 +70,7 @@ class CalculatorPresenter: CalculatorOutput {
     }
     
     func signedButtonDidPress() {
-        calculatorState.processSigned.toggle()
+        calculatorState.isSigned.toggle()
         updateSignedButtons()
         calculator.reload()
     }
@@ -181,7 +181,7 @@ class CalculatorPresenter: CalculatorOutput {
     }
     
     private func updateSignedButtons() {
-        let isSigned = calculatorState.processSigned
+        let isSigned = calculatorState.isSigned
         let signedState: SignedButton.State = isSigned ? .on : .off
         input.setNegateButton(isEnabled: isSigned)
         input.changeSignedButtonTitle(signedState: signedState)
