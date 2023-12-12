@@ -68,4 +68,17 @@ enum ConversionSystem: Int, CaseIterable, Codable {
             return "Hexadecimal"
         }
     }
+    
+    var shortTitle: String {
+        switch self {
+        case .bin:
+            return "BIN"
+        case .dec:
+            return "DEC"
+        case .oct:
+            return "OCT"
+        case .hex:
+            return "HEX"
+        }
+    }
  }

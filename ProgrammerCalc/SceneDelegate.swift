@@ -17,7 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     var window: UIWindow?
-    var savedShortCutItem: UIApplicationShortcutItem!
+    var savedShortCutItem: UIApplicationShortcutItem?
     
     private let storage = PCalcStorage()
 
@@ -29,6 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
 
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
 
@@ -52,7 +53,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        if savedShortCutItem != nil {
+        if let savedShortCutItem {
             handleShortCutItem(shortcutItem: savedShortCutItem)
         }
     }
@@ -66,8 +67,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let inputResult = calculatorState.inputText
         let outputResult = calculatorState.outputText
         
-        let inputSystem = conversionSettings.inputSystem.title
-        let outputSystem = conversionSettings.outputSystem.title
+        let inputSystem = conversionSettings.inputSystem.shortTitle
+        let outputSystem = conversionSettings.outputSystem.shortTitle
         
         let application = UIApplication.shared
         
