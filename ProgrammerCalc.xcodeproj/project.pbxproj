@@ -56,7 +56,6 @@
 		C06B7F292443B12E009642B9 /* ProgrammerCalcUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F282443B12E009642B9 /* ProgrammerCalcUITests.swift */; };
 		C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C070ED2324DB0EC800A04463 /* SettingsViewController.swift */; };
 		C0712FE927908B9700CF408A /* BitwiseKeypadController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0712FE827908B9700CF408A /* BitwiseKeypadController.swift */; };
-		C07267DD24E5ACB300D4B4A2 /* Binary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07267DC24E5ACB300D4B4A2 /* Binary.swift */; };
 		C0746E0E24F45C6000A0BDF9 /* NumberSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0746E0D24F45C5F00A0BDF9 /* NumberSystem.swift */; };
 		C07659D42B053A6C004C93D1 /* MathError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07659D32B053A6C004C93D1 /* MathError.swift */; };
 		C077CF6F24DC8DEE008E5F0F /* PreferenceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C077CF6E24DC8DEE008E5F0F /* PreferenceCell.swift */; };
@@ -188,7 +187,6 @@
 		C06B7F2A2443B12E009642B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C070ED2324DB0EC800A04463 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		C0712FE827908B9700CF408A /* BitwiseKeypadController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitwiseKeypadController.swift; sourceTree = "<group>"; };
-		C07267DC24E5ACB300D4B4A2 /* Binary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binary.swift; sourceTree = "<group>"; };
 		C0746E0D24F45C5F00A0BDF9 /* NumberSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberSystem.swift; sourceTree = "<group>"; };
 		C07659D32B053A6C004C93D1 /* MathError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathError.swift; sourceTree = "<group>"; };
 		C077CF6E24DC8DEE008E5F0F /* PreferenceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceCell.swift; sourceTree = "<group>"; };
@@ -312,7 +310,6 @@
 			isa = PBXGroup;
 			children = (
 				C0746E0D24F45C5F00A0BDF9 /* NumberSystem.swift */,
-				C07267DC24E5ACB300D4B4A2 /* Binary.swift */,
 			);
 			path = NumberSystems;
 			sourceTree = "<group>";
@@ -800,7 +797,6 @@
 				C0F5CF51270F4B970020CE14 /* WordSizeViewController.swift in Sources */,
 				C097F43C2B193355009BF3D7 /* PCHexadecimal.swift in Sources */,
 				C06B7F092443B12B009642B9 /* SceneDelegate.swift in Sources */,
-				C07267DD24E5ACB300D4B4A2 /* Binary.swift in Sources */,
 				C0D842DA2AD889C800B85E9F /* ModalViewController.swift in Sources */,
 				C0249849279DDC88005EA12A /* PCalcStorage.swift in Sources */,
 				C077CF7124DC987B008E5F0F /* Settings.swift in Sources */,

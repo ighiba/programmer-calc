@@ -13,8 +13,6 @@ protocol NumberSystemProtocol {
     var isSigned: Bool { get set }
     
     init(stringLiteral: String)
-
-    func toBinary() -> Binary
 }
 
 extension NumberSystemProtocol {
