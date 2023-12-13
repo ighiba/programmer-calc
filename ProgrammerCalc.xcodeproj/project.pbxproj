@@ -56,7 +56,6 @@
 		C06B7F292443B12E009642B9 /* ProgrammerCalcUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06B7F282443B12E009642B9 /* ProgrammerCalcUITests.swift */; };
 		C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C070ED2324DB0EC800A04463 /* SettingsViewController.swift */; };
 		C0712FE927908B9700CF408A /* BitwiseKeypadController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0712FE827908B9700CF408A /* BitwiseKeypadController.swift */; };
-		C0746E0E24F45C6000A0BDF9 /* NumberSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0746E0D24F45C5F00A0BDF9 /* NumberSystem.swift */; };
 		C07659D42B053A6C004C93D1 /* MathError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07659D32B053A6C004C93D1 /* MathError.swift */; };
 		C077CF6F24DC8DEE008E5F0F /* PreferenceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C077CF6E24DC8DEE008E5F0F /* PreferenceCell.swift */; };
 		C077CF7124DC987B008E5F0F /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C077CF7024DC987B008E5F0F /* Settings.swift */; };
@@ -187,7 +186,6 @@
 		C06B7F2A2443B12E009642B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C070ED2324DB0EC800A04463 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		C0712FE827908B9700CF408A /* BitwiseKeypadController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitwiseKeypadController.swift; sourceTree = "<group>"; };
-		C0746E0D24F45C5F00A0BDF9 /* NumberSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberSystem.swift; sourceTree = "<group>"; };
 		C07659D32B053A6C004C93D1 /* MathError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathError.swift; sourceTree = "<group>"; };
 		C077CF6E24DC8DEE008E5F0F /* PreferenceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceCell.swift; sourceTree = "<group>"; };
 		C077CF7024DC987B008E5F0F /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -304,14 +302,6 @@
 				C082FB962A35E6FF00F3AA60 /* Values.swift */,
 			);
 			path = Helpers;
-			sourceTree = "<group>";
-		};
-		C05B008A24E6B0F100F8A5E0 /* NumberSystems */ = {
-			isa = PBXGroup;
-			children = (
-				C0746E0D24F45C5F00A0BDF9 /* NumberSystem.swift */,
-			);
-			path = NumberSystems;
 			sourceTree = "<group>";
 		};
 		C061FCF82B1FA0630094BF6A /* Mocks */ = {
@@ -462,7 +452,6 @@
 				C00616AD270666AD007BEF89 /* Storage */,
 				C065DB3824E3C89B0059B38D /* Math */,
 				C00563FD2B178325003CCC29 /* PCNumbers */,
-				C05B008A24E6B0F100F8A5E0 /* NumberSystems */,
 				C061FCFC2B1FB4B60094BF6A /* Calculator.swift */,
 				C065DB3D24E41E610059B38D /* CalculatorState.swift */,
 				C077CF7024DC987B008E5F0F /* Settings.swift */,
@@ -731,7 +720,6 @@
 				C0287F7227A31FD2001489FE /* BitButton.swift in Sources */,
 				C07659D42B053A6C004C93D1 /* MathError.swift in Sources */,
 				C00563FC2B17813E003CCC29 /* PCBinary.swift in Sources */,
-				C0746E0E24F45C6000A0BDF9 /* NumberSystem.swift in Sources */,
 				C0E0FF562A45D8D900E38DF9 /* StyledTableViewController.swift in Sources */,
 				C061B7C2250FF9FF000E2EB6 /* CalculatorLabel.swift in Sources */,
 				C061FD122B250C240094BF6A /* CalculateButton.swift in Sources */,
