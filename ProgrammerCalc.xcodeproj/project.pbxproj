@@ -19,7 +19,6 @@
 		C04D34C227921BE200ED9867 /* BitwiseKeypad.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04D34C127921BE200ED9867 /* BitwiseKeypad.swift */; };
 		C052270F27978F6800B7E384 /* UIBarButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C052270E27978F6800B7E384 /* UIBarButtonItem.swift */; };
 		C05B008E24E701ED00F8A5E0 /* Octal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B008D24E701ED00F8A5E0 /* Octal.swift */; };
-		C05B009124E71B6E00F8A5E0 /* DecimalSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05B009024E71B6E00F8A5E0 /* DecimalSystem.swift */; };
 		C0619AC224D71227008A7291 /* ConversionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0619AC124D71227008A7291 /* ConversionView.swift */; };
 		C0619AC424D71240008A7291 /* ConversionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0619AC324D71240008A7291 /* ConversionViewController.swift */; };
 		C061B7C2250FF9FF000E2EB6 /* CalculatorLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C061B7C1250FF9FF000E2EB6 /* CalculatorLabel.swift */; };
@@ -147,7 +146,6 @@
 		C04D34C127921BE200ED9867 /* BitwiseKeypad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitwiseKeypad.swift; sourceTree = "<group>"; };
 		C052270E27978F6800B7E384 /* UIBarButtonItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBarButtonItem.swift; sourceTree = "<group>"; };
 		C05B008D24E701ED00F8A5E0 /* Octal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Octal.swift; sourceTree = "<group>"; };
-		C05B009024E71B6E00F8A5E0 /* DecimalSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalSystem.swift; sourceTree = "<group>"; };
 		C0619AC124D71227008A7291 /* ConversionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionView.swift; sourceTree = "<group>"; };
 		C0619AC324D71240008A7291 /* ConversionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionViewController.swift; sourceTree = "<group>"; };
 		C061B7C1250FF9FF000E2EB6 /* CalculatorLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorLabel.swift; sourceTree = "<group>"; };
@@ -318,7 +316,6 @@
 				C0746E0D24F45C5F00A0BDF9 /* NumberSystem.swift */,
 				C07267DC24E5ACB300D4B4A2 /* Binary.swift */,
 				C05B008D24E701ED00F8A5E0 /* Octal.swift */,
-				C05B009024E71B6E00F8A5E0 /* DecimalSystem.swift */,
 			);
 			path = NumberSystems;
 			sourceTree = "<group>";
@@ -798,7 +795,6 @@
 				C0CC6DFF271F68AA00E59E64 /* AboutViewController.swift in Sources */,
 				C0E0FF402A44ABFA00E38DF9 /* ConversionModuleAssembly.swift in Sources */,
 				C082FB972A35E6FF00F3AA60 /* Values.swift in Sources */,
-				C05B009124E71B6E00F8A5E0 /* DecimalSystem.swift in Sources */,
 				C06B7F072443B12B009642B9 /* AppDelegate.swift in Sources */,
 				C09631D82728E9DC001DCD25 /* StyledViewController.swift in Sources */,
 				C061FCFD2B1FB4B60094BF6A /* Calculator.swift in Sources */,

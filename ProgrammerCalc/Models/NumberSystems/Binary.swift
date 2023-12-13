@@ -40,22 +40,6 @@ class Binary: NumberSystemProtocol {
         self.isSigned = valueBin.isSigned
     }
     
-    /// Creates an instance initialized to the Int value
-    convenience init(_ valueInt: Int) {
-        self.init()
-        // Get new DecimalSystem value
-        let decNumber = DecimalSystem(valueInt)
-        let binary = decNumber.toBinary()
-        self.value = binary.value
-    }
-    
-    /// Creates an instance initialized to the Decimal value
-    convenience init(_ valueDec: DecimalSystem) {
-        self.init()
-        let binary = valueDec.toBinary()
-        self.value = binary.value
-    }
-    
     /// Creates an instance initialized to the Octal value
     init(_ valueOct: Octal) {
         let binary = valueOct.toBinary()
