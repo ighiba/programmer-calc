@@ -56,12 +56,6 @@ class Binary: NumberSystemProtocol {
         self.value = binary.value
     }
     
-    /// Creates an instance initialized to the Hexadecimal value
-    init(_ valueHex: Hexadecimal) {
-        let binary = valueHex.toBinary()
-        self.value = binary.value
-    }
-    
     /// Creates an instance initialized to the Octal value
     init(_ valueOct: Octal) {
         let binary = valueOct.toBinary()
@@ -179,38 +173,6 @@ class Binary: NumberSystemProtocol {
         }
         
         return result * signedMultipler
-    }
-    
-    // BIN -> HEX
-    // Convert form binary to hex with table helper
-    func convertBinaryToHex( hexTable: [String : String]) -> Hexadecimal {
-        let binary = self
-        let hexadecimal = Hexadecimal()
-   
-        let partition: Int = 4
-        
-        binary.value = binary.value.removedAllSpaces()
-        
-        var dividedBinary = divideIntFract(str: binary.value)
-        
-        // fill up to 3 or 4 digit in int part
-        dividedBinary.0 = fillUpParts(str: dividedBinary.0!, by: partition)
-        
-        // from binary to oct
-        // process each number and form parts
-        //hexadecimal.value = octHexHelper.tableOctHexFromBin(valueBin: dividedBinary.0!, partition: partition, table: hexTable)
-        
-        guard dividedBinary.1 != nil else { return hexadecimal }
-        
-        // fill up to 3 digit in fract part
-        dividedBinary.1 = String(dividedBinary.1!.reversed())
-        dividedBinary.1 = fillUpParts(str: dividedBinary.1!, by: partition)
-        dividedBinary.1 = String(dividedBinary.1!.reversed())
-        // process fract part
-        hexadecimal.value += "."
-        //hexadecimal.value +=  octHexHelper.tableOctHexFromBin(valueBin: dividedBinary.1!, partition: partition, table: hexTable)
-        
-        return hexadecimal
     }
     
     // BIN -> OCT
