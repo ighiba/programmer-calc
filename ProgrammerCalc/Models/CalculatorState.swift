@@ -34,13 +34,6 @@ final class CalculatorState: CalcStateProtocol {
         self.inputText = inputText
         self.outputText = outputText
     }
-    
-    func setCalculatorState(_ newCalculatorState: CalcStateProtocol) {
-        lastValue = newCalculatorState.lastValue
-        isSigned = newCalculatorState.isSigned
-        inputText = newCalculatorState.inputText
-        outputText = newCalculatorState.outputText
-    }
 }
 
 extension CalculatorState: Storable {

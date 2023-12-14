@@ -26,11 +26,6 @@ final class StyleSettings: StyleSettingsProtocol {
         self.isUsingSystemAppearance = isUsingSystemAppearance
         self.currentStyle = currentStyle
     }
-    
-    func setStyleSettings(_ newStyleSettings: StyleSettingsProtocol) {
-        isUsingSystemAppearance = newStyleSettings.isUsingSystemAppearance
-        currentStyle = newStyleSettings.currentStyle
-    }
 }
 
 extension StyleSettings: Storable {

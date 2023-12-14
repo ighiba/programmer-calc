@@ -59,14 +59,6 @@ final class WordSize: WordSizeProtocol {
     init(_ wordSizeType: WordSizeType) {
         self.value = wordSizeType
     }
-    
-    func setWordSizeValue(_ newValue: WordSizeType) {
-        value = newValue
-    }
-    
-    func setWordSize(_ newWordSize: WordSizeProtocol) {
-        value = newWordSize.value
-    }
 }
 
 extension WordSize: Storable {

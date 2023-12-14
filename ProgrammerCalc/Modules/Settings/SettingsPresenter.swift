@@ -33,7 +33,7 @@ class SettingsPresenter: SettingsOutput {
     
     func obtainSettings() {
         let loadedSettings: Settings = storage.loadData()
-        settings.setSettings(loadedSettings)
+        settings.set(loadedSettings)
         
         view.setTappingSoundsSwitcherState(isOn: settings.tappingSounds)
         view.setHapticFeedbackSwitcherState(isOn: settings.hapticFeedback)

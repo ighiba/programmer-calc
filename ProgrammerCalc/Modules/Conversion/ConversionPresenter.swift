@@ -60,7 +60,7 @@ final class ConversionPresenter: ConversionOutput {
         )
         
         storage.saveData(newConversionSettings)
-        conversionSettings.setConversionSettings(newConversionSettings)
+        conversionSettings.set(newConversionSettings)
 
         updateHandler?()
     }

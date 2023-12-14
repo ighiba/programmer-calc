@@ -25,11 +25,6 @@ final class Settings: SettingsProtocol {
         self.hapticFeedback = hapticFeedback
     }
     
-    func setSettings(_ newSettings: SettingsProtocol) {
-        tappingSounds = newSettings.tappingSounds
-        hapticFeedback = newSettings.hapticFeedback
-    }
-    
     func setTappingSounds(state: Bool) {
         tappingSounds = state
     }

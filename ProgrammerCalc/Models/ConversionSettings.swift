@@ -27,12 +27,6 @@ final class ConversionSettings: ConversionSettingsProtocol {
         self.outputSystem = outputSystem
         self.fractionalWidth = fractionalWidth
     }
-    
-    func setConversionSettings(_ newSettings: ConversionSettingsProtocol) {
-        self.inputSystem = newSettings.inputSystem
-        self.outputSystem = newSettings.outputSystem
-        self.fractionalWidth = newSettings.fractionalWidth
-    }
 }
 
 extension ConversionSettings: Storable {
