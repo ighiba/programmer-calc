@@ -16,7 +16,7 @@ protocol ModalView: UIView {
 }
 
 extension ModalView {
-    func makeBlurredBackgroundView() -> UIView {
+    func configureBlurredBackgroundView() -> UIView {
         let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = bounds

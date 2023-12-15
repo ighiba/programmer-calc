@@ -20,9 +20,9 @@ final class ConversionView: UIView, ModalView {
     
     init() {
         super.init(frame: UIScreen.main.bounds)
-        setupView()
-        setupLayout()
-        setupStyle()
+        self.setupView()
+        self.setupLayout()
+        self.setupStyle()
     }
     
     required init?(coder: NSCoder) {
@@ -32,14 +32,14 @@ final class ConversionView: UIView, ModalView {
     // MARK: - Methods
 
     private func setupView() {
-        let blurredBackgroundView = makeBlurredBackgroundView()
+        let blurredBackgroundView = configureBlurredBackgroundView()
         insertSubview(blurredBackgroundView, at: 0)
         
         addSubview(container)
         container.addSubview(titleLabel)
         container.addSubview(conversionSystemsPicker)
-        container.addSubview(sliderLabelsStack)
-        container.addSubview(slider)
+        container.addSubview(fractionalLabelsStack)
+        container.addSubview(fractionalWidthSlider)
         container.addSubview(doneButton)
         container.bringSubviewToFront(titleLabel)
         
@@ -51,10 +51,10 @@ final class ConversionView: UIView, ModalView {
         container.translatesAutoresizingMaskIntoConstraints = false
         conversionSystemsPicker.translatesAutoresizingMaskIntoConstraints = false
         arrowSymbol.translatesAutoresizingMaskIntoConstraints = false
-        sliderLabelsStack.translatesAutoresizingMaskIntoConstraints = false
-        sliderTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        sliderValueLabel.translatesAutoresizingMaskIntoConstraints = false
-        slider.translatesAutoresizingMaskIntoConstraints = false
+        fractionalLabelsStack.translatesAutoresizingMaskIntoConstraints = false
+        fractionalWidthTitle.translatesAutoresizingMaskIntoConstraints = false
+        fractionalWidthLabel.translatesAutoresizingMaskIntoConstraints = false
+        fractionalWidthSlider.translatesAutoresizingMaskIntoConstraints = false
         doneButton.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
@@ -78,19 +78,19 @@ final class ConversionView: UIView, ModalView {
             arrowSymbol.widthAnchor.constraint(equalToConstant: arrowSymbolWidth),
             arrowSymbol.heightAnchor.constraint(equalToConstant: arrowSymbolWidth),
 
-            sliderLabelsStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            sliderLabelsStack.topAnchor.constraint(equalTo: conversionSystemsPicker.bottomAnchor),
-            sliderLabelsStack.heightAnchor.constraint(equalToConstant: labelStackHeight),
-            sliderLabelsStack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: containerItemsWidthMultiplier),
+            fractionalLabelsStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            fractionalLabelsStack.topAnchor.constraint(equalTo: conversionSystemsPicker.bottomAnchor),
+            fractionalLabelsStack.heightAnchor.constraint(equalToConstant: labelStackHeight),
+            fractionalLabelsStack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: containerItemsWidthMultiplier),
             
-            sliderTitleLabel.widthAnchor.constraint(equalTo: sliderLabelsStack.widthAnchor, multiplier: containerItemsWidthMultiplier),
+            fractionalWidthTitle.widthAnchor.constraint(equalTo: fractionalLabelsStack.widthAnchor, multiplier: containerItemsWidthMultiplier),
             
-            sliderValueLabel.widthAnchor.constraint(equalTo: sliderLabelsStack.widthAnchor, multiplier: 0.1),
+            fractionalWidthLabel.widthAnchor.constraint(equalTo: fractionalLabelsStack.widthAnchor, multiplier: 0.1),
             
-            slider.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            slider.topAnchor.constraint(equalTo: sliderLabelsStack.bottomAnchor, constant: verticalSpacing),
-            slider.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -verticalSpacing * 1.7),
-            slider.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: containerItemsWidthMultiplier),
+            fractionalWidthSlider.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            fractionalWidthSlider.topAnchor.constraint(equalTo: fractionalLabelsStack.bottomAnchor, constant: verticalSpacing),
+            fractionalWidthSlider.bottomAnchor.constraint(equalTo: doneButton.topAnchor, constant: -verticalSpacing * 1.7),
+            fractionalWidthSlider.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: containerItemsWidthMultiplier),
 
             doneButton.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             doneButton.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -verticalSpacing * 1.7),
@@ -112,13 +112,13 @@ final class ConversionView: UIView, ModalView {
         arrowSymbol.textColor = .label
         arrowSymbol.font = UIFont(name: "HelveticaNeue-Thin", size: 22.0)
         
-        sliderTitleLabel.textColor = .label
-        sliderTitleLabel.font = UIFont.systemFont(ofSize: 18, weight: .light)
+        fractionalWidthTitle.textColor = .label
+        fractionalWidthTitle.font = UIFont.systemFont(ofSize: 18, weight: .light)
         
-        sliderValueLabel.textColor = .label
-        sliderValueLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
+        fractionalWidthLabel.textColor = .label
+        fractionalWidthLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
         
-        slider.tintColor = .systemGreen
+        fractionalWidthSlider.tintColor = .systemGreen
     }
     
     // MARK: - Views
@@ -150,14 +150,14 @@ final class ConversionView: UIView, ModalView {
         return label
     }()
     
-    lazy var sliderLabelsStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [sliderTitleLabel, sliderValueLabel])
+    lazy var fractionalLabelsStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [fractionalWidthTitle, fractionalWidthLabel])
         stack.axis = .horizontal
         stack.alignment = .fill
         return stack
     }()
     
-    private let sliderTitleLabel: UILabel = {
+    private let fractionalWidthTitle: UILabel = {
         let label = UILabel()
         label.text = NSLocalizedString("Max number of digits after point: ", comment: "")
         label.adjustsFontSizeToFitWidth = true
@@ -165,7 +165,7 @@ final class ConversionView: UIView, ModalView {
         return label
     }()
 
-    let sliderValueLabel: UILabel = {
+    let fractionalWidthLabel: UILabel = {
         let label = UILabel()
         label.text = "8"
         label.adjustsFontSizeToFitWidth = true
@@ -173,7 +173,7 @@ final class ConversionView: UIView, ModalView {
         return label
     }()
 
-    let slider: UISlider = {
+    let fractionalWidthSlider: UISlider = {
         let slider = UISlider()
         slider.minimumValue = 1
         slider.maximumValue = 4
