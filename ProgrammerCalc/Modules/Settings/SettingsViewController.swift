@@ -21,7 +21,7 @@ protocol SettingsInput: AnyObject {
     func push(_ viewController: UIViewController)
 }
 
-class SettingsViewController: StyledTableViewController, SettingsInput, UIAdaptivePresentationControllerDelegate {
+final class SettingsViewController: StyledTableViewController, SettingsInput, UIAdaptivePresentationControllerDelegate {
     
     // MARK: - Properties
     
@@ -47,12 +47,14 @@ class SettingsViewController: StyledTableViewController, SettingsInput, UIAdapti
    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         AppDelegate.AppUtility.lockPortraitOrientation()
         output.obtainSettings()
     }
  
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
         output.saveSettings()
         output.updateHandler?()
         AppDelegate.AppUtility.unlockPortraitOrientation()
@@ -72,13 +74,13 @@ class SettingsViewController: StyledTableViewController, SettingsInput, UIAdapti
                     id: tappingSoundsId,
                     label:  NSLocalizedString("Tapping sounds", comment: ""),
                     cellType: .switcher,
-                    stateChangeHandler: tappingSoundsStateDidChange
+                    stateChangeHandler: tappingSoundsSwitchStateDidChange
                 ),
                 PreferenceCellModel(
                     id: hapticFeedbackId,
                     label: NSLocalizedString("Haptic feedback", comment: ""),
                     cellType: .switcher,
-                    stateChangeHandler: hapticFeedbackStateDidChange
+                    stateChangeHandler: hapticFeedbackSwitchStateDidChange
                 )
             ],
             [
@@ -109,6 +111,7 @@ class SettingsViewController: StyledTableViewController, SettingsInput, UIAdapti
         guard let settingsModel = preferenceList.flatMap({ $0 }).first(where: { $0.id == tappingSoundsId }) else {
             return
         }
+        
         settingsModel.state = isOn
     }
     
@@ -116,15 +119,16 @@ class SettingsViewController: StyledTableViewController, SettingsInput, UIAdapti
         guard let settingsModel = preferenceList.flatMap({ $0 }).first(where: { $0.id == hapticFeedbackId }) else {
             return
         }
+        
         settingsModel.state = isOn
     }
     
-    func tappingSoundsStateDidChange(_ state: Bool) {
-        output.updateTappingSounds(state)
+    func tappingSoundsSwitchStateDidChange(_ isOn: Bool) {
+        output.updateTappingSounds(isOn)
     }
     
-    func hapticFeedbackStateDidChange(_ state: Bool) {
-        output.updateHapticFeedback(state)
+    func hapticFeedbackSwitchStateDidChange(_ isOn: Bool) {
+        output.updateHapticFeedback(isOn)
     }
     
     func push(_ viewController: UIViewController) {

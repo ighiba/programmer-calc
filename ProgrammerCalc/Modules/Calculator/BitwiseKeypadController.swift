@@ -120,13 +120,13 @@ final class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDe
     }
     
     private func playTappingSound() {
-        if settings.tappingSounds {
+        if settings.isTappingSoundsEnabled {
             AudioServicesPlaySystemSound(1104)
         }
     }
     
     private func hapticFeedbackImpact() {
-        if settings.hapticFeedback {
+        if settings.isHapticFeedbackEnabled {
             hapticFeedbackGenerator.prepare()
             hapticFeedbackGenerator.impactOccurred()
         }

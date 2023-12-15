@@ -9,28 +9,20 @@
 import Foundation
 
 protocol SettingsProtocol {
-    var tappingSounds: Bool { get set }
-    var hapticFeedback: Bool { get set }
+    var isTappingSoundsEnabled: Bool { get set }
+    var isHapticFeedbackEnabled: Bool { get set }
 }
 
 final class Settings: SettingsProtocol {
     
     static let shared: Settings = Settings()
     
-    var tappingSounds: Bool
-    var hapticFeedback: Bool
+    var isTappingSoundsEnabled: Bool
+    var isHapticFeedbackEnabled: Bool
     
-    init(tappingSounds: Bool = false, hapticFeedback: Bool = false) {
-        self.tappingSounds = tappingSounds
-        self.hapticFeedback = hapticFeedback
-    }
-    
-    func setTappingSounds(state: Bool) {
-        tappingSounds = state
-    }
-    
-    func setHapticFeedback(state: Bool) {
-        hapticFeedback = state
+    init(isTappingSoundsEnabled: Bool = false, isHapticFeedbackEnabled: Bool = false) {
+        self.isTappingSoundsEnabled = isTappingSoundsEnabled
+        self.isHapticFeedbackEnabled = isHapticFeedbackEnabled
     }
 }
 
@@ -43,7 +35,7 @@ extension Settings: Storable {
     }
     
     func set(_ data: Settings) {
-        tappingSounds = data.tappingSounds
-        hapticFeedback = data.hapticFeedback
+        isTappingSoundsEnabled = data.isTappingSoundsEnabled
+        isHapticFeedbackEnabled = data.isHapticFeedbackEnabled
     }
 }

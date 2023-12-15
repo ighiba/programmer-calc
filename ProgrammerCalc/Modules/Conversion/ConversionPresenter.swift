@@ -64,7 +64,7 @@ final class ConversionPresenter: ConversionOutput {
     }
     
     func sliderValueDidChange(_ sliderValue: Float) {
-        if settings.hapticFeedback {
+        if settings.isHapticFeedbackEnabled {
             view.hapticImpact()
         }
         

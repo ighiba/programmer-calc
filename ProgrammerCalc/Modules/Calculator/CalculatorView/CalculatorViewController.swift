@@ -345,13 +345,13 @@ extension CalculatorViewController {
     }
     
     @objc func tappingSoundHandler(_ sender: CalculatorButton) {
-        if settings.tappingSounds {
+        if settings.isTappingSoundsEnabled {
             AudioServicesPlaySystemSound(1104)
         }
     }
     
     @objc func hapticFeedbackHandler(_ sender: CalculatorButton) {
-        if settings.hapticFeedback {
+        if settings.isHapticFeedbackEnabled {
             generator.prepare()
             generator.impactOccurred()
         }

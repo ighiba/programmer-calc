@@ -116,7 +116,7 @@ extension CalculatorLabel {
         let menu = UIMenuController.shared
         if !menu.isMenuVisible {
             let settings = Settings.shared
-            if settings.hapticFeedback {
+            if settings.isHapticFeedbackEnabled {
                 let generator = UIImpactFeedbackGenerator(style: .medium)
                 generator.prepare()
                 generator.impactOccurred()
