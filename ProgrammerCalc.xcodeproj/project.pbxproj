@@ -300,6 +300,7 @@
 			children = (
 				C082FB902A34C0A400F3AA60 /* DeviceType.swift */,
 				C082FB962A35E6FF00F3AA60 /* Values.swift */,
+				C066756824E27AE700F832F9 /* ConversionValues.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -458,7 +459,6 @@
 				C0287F7327A32250001489FE /* StyleSettings.swift */,
 				C0635A7A24D9E2AA003855A9 /* ConversionSettings.swift */,
 				C0F5CF4A270E10870020CE14 /* WordSize.swift */,
-				C066756824E27AE700F832F9 /* ConversionValues.swift */,
 				C0E0FF492A44F6CE00E38DF9 /* PreferenceCellModel.swift */,
 			);
 			path = Models;

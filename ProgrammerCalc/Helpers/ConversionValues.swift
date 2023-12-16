@@ -11,7 +11,7 @@ import Foundation
 private let digitValues: Set<String> = ["00", "0", "1", "2", "3", "4", "5", "6", "7", "8", "8", "9"]
 private let charValues: Set<String> = ["A", "B", "C", "D", "E", "F", "FF"]
 
-class ConversionValues {
+final class ConversionValues {
     static var allowed: [ConversionSystem : Set<String>] {
         return [
             .bin : digitValues.intersection(["00", "0", "1"]),
