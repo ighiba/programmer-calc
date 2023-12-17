@@ -83,8 +83,8 @@ final class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDe
     }
 
     private func getCurrentStyle() -> Style {
-        let styleType = StyleSettings.shared.currentStyle
-        return styleFactory.get(style: styleType)
+        let styleType = StyleSettings.shared.styleType
+        return styleFactory.get(styleType: styleType)
     }
     
     func bit(atIndex bitIndex: Int) -> Bit {

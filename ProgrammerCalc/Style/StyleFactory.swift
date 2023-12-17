@@ -9,8 +9,8 @@
 import UIKit
 
 final class StyleFactory {
-    func get(style: StyleType) -> Style {
-        switch style {
+    func get(styleType: StyleType) -> Style {
+        switch styleType {
         case .light:
             return .light
         case .dark:
