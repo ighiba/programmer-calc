@@ -11,7 +11,7 @@ import UIKit
 protocol AppearanceOutput: AnyObject {
     func obtainStyleSettings()
     func obtainCheckmarkIndex()
-    func setNewStyle(by row: Int)
+    func setNewTheme(by row: Int)
     func useSystemAppearance(_ state: Bool)
 }
 
@@ -28,35 +28,34 @@ class AppearancePresenter: AppearanceOutput {
     // MARK: - Methods
 
     func obtainStyleSettings() {
-        view.setCheckmarkIndex(for: styleSettings.styleType.rawValue)
+        view.setCheckmarkIndex(for: styleSettings.theme.rawValue)
         view.setIsUseSystemAppearence(styleSettings.isUsingSystemAppearance)
     }
     
     func obtainCheckmarkIndex() {
-        view.setCheckmarkIndex(for: styleSettings.styleType.rawValue)
+        view.setCheckmarkIndex(for: styleSettings.theme.rawValue)
     }
     
-    func setNewStyle(by row: Int) {
-        if let newStyle = StyleType(rawValue: row) {
-            styleSettings.styleType = newStyle
-            storage.saveData(styleSettings)
-            updateStyle()
-        }
+    func setNewTheme(by row: Int) {
+        guard let theme = Theme(rawValue: row) else { return }
+        
+        styleSettings.theme = theme
+        storage.saveData(styleSettings)
+        updateStyle()
     }
     
     func updateStyle() {
         let interfaceStyle: UIUserInterfaceStyle
-
         if styleSettings.isUsingSystemAppearance {
             interfaceStyle = UIScreen.main.traitCollection.userInterfaceStyle
             updateCurrentStyleBy(interfaceStyle)
         } else {
-            interfaceStyle = styleSettings.styleType == .light ? .light : .dark
+            interfaceStyle = styleSettings.theme == .light ? .light : .dark
         }
         
         view.updateInterfaceLayout(interfaceStyle)
 
-        let style = styleFactory.get(styleType: styleSettings.styleType)
+        let style = styleFactory.get(theme: styleSettings.theme)
         view.updateNavBarStyle(style)
         view.animateUpdateRootViewLayoutSubviews()
     }
@@ -64,12 +63,13 @@ class AppearancePresenter: AppearanceOutput {
     private func updateCurrentStyleBy(_ interface: UIUserInterfaceStyle) {
         switch interface {
         case .light, .unspecified:
-            styleSettings.styleType = .light
+            styleSettings.theme = .light
         case .dark:
-            styleSettings.styleType = .dark
+            styleSettings.theme = .dark
         @unknown default:
-            styleSettings.styleType = .dark
+            styleSettings.theme = .dark
         }
+        
         storage.saveData(styleSettings)
     }
     
@@ -80,13 +80,13 @@ class AppearancePresenter: AppearanceOutput {
         if styleSettings.isUsingSystemAppearance {
             updateCurrentStyleBy(UIScreen.main.traitCollection.userInterfaceStyle)
         }
-        view.setCheckmarkIndex(for: styleSettings.styleType.rawValue)
+        
+        view.setCheckmarkIndex(for: styleSettings.theme.rawValue)
         view.setIsUseSystemAppearence(state)
         view.reloadTable()
 
-        let style = styleFactory.get(styleType: styleSettings.styleType)
+        let style = styleFactory.get(theme: styleSettings.theme)
         view.updateNavBarStyle(style)
         view.animateUpdateRootViewLayoutSubviews()
     }
 }
-

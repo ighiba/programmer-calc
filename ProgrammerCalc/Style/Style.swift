@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum StyleType: Int, CaseIterable, Codable {
+enum Theme: Int, CaseIterable, Codable {
     case light = 0
     case dark = 1
     case oldschool = 2

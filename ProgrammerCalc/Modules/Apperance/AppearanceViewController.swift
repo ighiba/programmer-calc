@@ -64,7 +64,7 @@ class AppearanceViewController: StyledTableViewController, AppearanceInput {
                     stateChangeHandler: useSystemAppearanceDidChanged
                 )
             ],
-            StyleType.allCases.map { style in
+            Theme.allCases.map { style in
                 PreferenceCellModel(
                     id: style.stringValue,
                     label: style.localizedTitle,
@@ -155,7 +155,7 @@ extension AppearanceViewController {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
             tableView.cellForRow(at: checkmarkedIndexPath)?.accessoryType = .none
 
-            output.setNewStyle(by: indexPath.row)
+            output.setNewTheme(by: indexPath.row)
             checkmarkedIndexPath = indexPath
 
             tableView.deselectRow(at: indexPath, animated: true)

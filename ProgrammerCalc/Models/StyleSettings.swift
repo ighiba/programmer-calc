@@ -10,7 +10,7 @@ import Foundation
 
 protocol StyleSettingsProtocol {
     var isUsingSystemAppearance: Bool { get set }
-    var styleType: StyleType { get set}
+    var theme: Theme { get set}
 }
 
 final class StyleSettings: StyleSettingsProtocol {
@@ -20,11 +20,11 @@ final class StyleSettings: StyleSettingsProtocol {
     // MARK: - Properties
     
     var isUsingSystemAppearance: Bool
-    var styleType: StyleType
+    var theme: Theme
     
-    init(isUsingSystemAppearance: Bool = false, styleType: StyleType = .dark) {
+    init(isUsingSystemAppearance: Bool = false, theme: Theme = .dark) {
         self.isUsingSystemAppearance = isUsingSystemAppearance
-        self.styleType = styleType
+        self.theme = theme
     }
 }
 
@@ -37,6 +37,6 @@ extension StyleSettings: Storable {
     
     func set(_ data: StyleSettings) {
         isUsingSystemAppearance = data.isUsingSystemAppearance
-        styleType = data.styleType
+        theme = data.theme
     }
 }
