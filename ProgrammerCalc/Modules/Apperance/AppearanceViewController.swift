@@ -10,15 +10,15 @@ import UIKit
 
 protocol AppearanceInput: AnyObject {
     func reloadTable()
-    func setIsUseSystemAppearence(_ state: Bool)
-    func setCheckmarkIndex(for row: Int)
-    func updateInterfaceLayout(_ style: UIUserInterfaceStyle)
+    func setUseSystemAppearanceSwitch(isOn: Bool)
+    func setCheckmarkedTheme(atRow row: Int)
+    func updateLayout(interfaceStyle: UIUserInterfaceStyle)
     func updateNavBarStyle(_ style: Style)
-    func overrideUserInterfaceStyle(_ style: UIUserInterfaceStyle)
+    func overrideUserInterfaceStyle(_ interfaceStyle: UIUserInterfaceStyle)
     func animateUpdateRootViewLayoutSubviews()
 }
 
-class AppearanceViewController: StyledTableViewController, AppearanceInput {
+final class AppearanceViewController: StyledTableViewController, AppearanceInput {
     
     // MARK: - Properties
     
@@ -43,12 +43,13 @@ class AppearanceViewController: StyledTableViewController, AppearanceInput {
         
         title = NSLocalizedString("Appearance", comment: "")
 
-        output.obtainStyleSettings()
+        output.updateStyleSettings()
         reloadTable()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         AppDelegate.AppUtility.lockPortraitOrientation()
     }
         
@@ -61,7 +62,7 @@ class AppearanceViewController: StyledTableViewController, AppearanceInput {
                     id: "useSystemAppearance",
                     label: NSLocalizedString("Use system appearance", comment: ""),
                     cellType: .switcher,
-                    stateChangeHandler: useSystemAppearanceDidChanged
+                    stateChangeHandler: useSystemAppearanceSwitchDidChange
                 )
             ],
             Theme.allCases.map { style in
@@ -74,26 +75,26 @@ class AppearanceViewController: StyledTableViewController, AppearanceInput {
         ]
     }
     
-    func reloadTable() {
-        tableView.reloadData()
-    }
-    
-    func setIsUseSystemAppearence(_ state: Bool) {
-        preferenceList[0][0].state = state
-    }
-    
     private func countNumberOfSections() -> Int {
         let isUsingSystemAppearance = preferenceList[0][0].state ?? false
         let count = isUsingSystemAppearance ? 1 : preferenceList.count
         return count
     }
     
-    func setCheckmarkIndex(for row: Int) {
+    func reloadTable() {
+        tableView.reloadData()
+    }
+    
+    func setUseSystemAppearanceSwitch(isOn: Bool) {
+        preferenceList[0][0].state = isOn
+    }
+    
+    func setCheckmarkedTheme(atRow row: Int) {
         checkmarkedIndexPath = IndexPath(row: row, section: 1)
     }
     
-    func updateInterfaceLayout(_ style: UIUserInterfaceStyle) {
-        overrideUserInterfaceStyle(style)
+    func updateLayout(interfaceStyle: UIUserInterfaceStyle) {
+        overrideUserInterfaceStyle(interfaceStyle)
         view.window?.setNeedsLayout()
         view.window?.layoutIfNeeded()
     }
@@ -102,8 +103,8 @@ class AppearanceViewController: StyledTableViewController, AppearanceInput {
         navigationController?.navigationBar.tintColor = style.tintColor
     }
     
-    func overrideUserInterfaceStyle(_ style: UIUserInterfaceStyle) {
-        view.window?.overrideUserInterfaceStyle = style
+    func overrideUserInterfaceStyle(_ interfaceStyle: UIUserInterfaceStyle) {
+        view.window?.overrideUserInterfaceStyle = interfaceStyle
     }
 
     func animateUpdateRootViewLayoutSubviews() {
@@ -114,8 +115,8 @@ class AppearanceViewController: StyledTableViewController, AppearanceInput {
         }
     }
 
-    func useSystemAppearanceDidChanged(_ state: Bool) {
-        output.useSystemAppearance(state)
+    func useSystemAppearanceSwitchDidChange(_ state: Bool) {
+        output.useSystemAppearanceSwitchDidChange(isOn: state)
     }
 }
 
@@ -155,7 +156,7 @@ extension AppearanceViewController {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
             tableView.cellForRow(at: checkmarkedIndexPath)?.accessoryType = .none
 
-            output.setNewTheme(by: indexPath.row)
+            output.themeRowDidSelect(at: indexPath.row)
             checkmarkedIndexPath = indexPath
 
             tableView.deselectRow(at: indexPath, animated: true)

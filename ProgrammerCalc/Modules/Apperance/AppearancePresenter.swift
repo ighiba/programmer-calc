@@ -9,13 +9,13 @@
 import UIKit
 
 protocol AppearanceOutput: AnyObject {
-    func obtainStyleSettings()
-    func obtainCheckmarkIndex()
-    func setNewTheme(by row: Int)
-    func useSystemAppearance(_ state: Bool)
+    func updateStyleSettings()
+    func updateCheckmarkIndex()
+    func themeRowDidSelect(at row: Int)
+    func useSystemAppearanceSwitchDidChange(isOn: Bool)
 }
 
-class AppearancePresenter: AppearanceOutput {
+final class AppearancePresenter: AppearanceOutput {
     
     // MARK: - Properties
     
@@ -27,66 +27,81 @@ class AppearancePresenter: AppearanceOutput {
     
     // MARK: - Methods
 
-    func obtainStyleSettings() {
-        view.setCheckmarkIndex(for: styleSettings.theme.rawValue)
-        view.setIsUseSystemAppearence(styleSettings.isUsingSystemAppearance)
+    func updateStyleSettings() {
+        updateCheckmarkIndex()
+        updateUseSystemAppearanceSwitch()
     }
     
-    func obtainCheckmarkIndex() {
-        view.setCheckmarkIndex(for: styleSettings.theme.rawValue)
+    func updateCheckmarkIndex() {
+        let checkmarkedRow = styleSettings.theme.rawValue
+        view.setCheckmarkedTheme(atRow: checkmarkedRow)
     }
     
-    func setNewTheme(by row: Int) {
+    func updateUseSystemAppearanceSwitch() {
+        let isUsingSystemAppearance = styleSettings.isUsingSystemAppearance
+        view.setUseSystemAppearanceSwitch(isOn: isUsingSystemAppearance)
+    }
+    
+    func themeRowDidSelect(at row: Int) {
         guard let theme = Theme(rawValue: row) else { return }
         
         styleSettings.theme = theme
         storage.saveData(styleSettings)
+        
         updateStyle()
     }
     
-    func updateStyle() {
+    func useSystemAppearanceSwitchDidChange(isOn isUsingSystemAppearance: Bool) {
+        styleSettings.isUsingSystemAppearance = isUsingSystemAppearance
+        
+        if styleSettings.isUsingSystemAppearance {
+            let interfaceStyle = UIScreen.main.traitCollection.userInterfaceStyle
+            updateThemeSettings(forInterfaceStyle: interfaceStyle)
+        }
+        
+        storage.saveData(styleSettings)
+        
+        let style = styleFactory.get(theme: styleSettings.theme)
+        let checkmarkedRow = styleSettings.theme.rawValue
+        
+        view.setCheckmarkedTheme(atRow: checkmarkedRow)
+        view.setUseSystemAppearanceSwitch(isOn: isUsingSystemAppearance)
+        view.reloadTable()
+        view.updateNavBarStyle(style)
+        view.animateUpdateRootViewLayoutSubviews()
+    }
+    
+    private func updateStyle() {
         let interfaceStyle: UIUserInterfaceStyle
         if styleSettings.isUsingSystemAppearance {
             interfaceStyle = UIScreen.main.traitCollection.userInterfaceStyle
-            updateCurrentStyleBy(interfaceStyle)
+            updateThemeSettings(forInterfaceStyle: interfaceStyle)
         } else {
             interfaceStyle = styleSettings.theme == .light ? .light : .dark
         }
         
-        view.updateInterfaceLayout(interfaceStyle)
-
+        storage.saveData(styleSettings)
+        
         let style = styleFactory.get(theme: styleSettings.theme)
+        
+        view.updateLayout(interfaceStyle: interfaceStyle)
         view.updateNavBarStyle(style)
         view.animateUpdateRootViewLayoutSubviews()
     }
     
-    private func updateCurrentStyleBy(_ interface: UIUserInterfaceStyle) {
-        switch interface {
+    private func updateThemeSettings(forInterfaceStyle interfaceStyle: UIUserInterfaceStyle) {
+        let theme = obtainTheme(forInterfaceStyle: interfaceStyle)
+        styleSettings.theme = theme
+    }
+    
+    private func obtainTheme(forInterfaceStyle interfaceStyle: UIUserInterfaceStyle) -> Theme {
+        switch interfaceStyle {
         case .light, .unspecified:
-            styleSettings.theme = .light
+            return .light
         case .dark:
-            styleSettings.theme = .dark
+            return .dark
         @unknown default:
-            styleSettings.theme = .dark
+            return .dark
         }
-        
-        storage.saveData(styleSettings)
-    }
-    
-    func useSystemAppearance(_ state: Bool) {
-        styleSettings.isUsingSystemAppearance = state
-        storage.saveData(styleSettings)
-        
-        if styleSettings.isUsingSystemAppearance {
-            updateCurrentStyleBy(UIScreen.main.traitCollection.userInterfaceStyle)
-        }
-        
-        view.setCheckmarkIndex(for: styleSettings.theme.rawValue)
-        view.setIsUseSystemAppearence(state)
-        view.reloadTable()
-
-        let style = styleFactory.get(theme: styleSettings.theme)
-        view.updateNavBarStyle(style)
-        view.animateUpdateRootViewLayoutSubviews()
     }
 }
