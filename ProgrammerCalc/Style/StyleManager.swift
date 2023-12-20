@@ -21,14 +21,8 @@ class StyleManager {
     
     func updateStyle(for window: UIWindow?) {
         if styleSettings.isUsingSystemAppearance {
-            switch UIScreen.main.traitCollection.userInterfaceStyle {
-            case .light, .unspecified:
-                styleSettings.theme = .light
-            case .dark:
-                styleSettings.theme = .dark
-            @unknown default:
-                styleSettings.theme = .dark
-            }
+            let interfaceStyle = UIScreen.main.traitCollection.userInterfaceStyle
+            styleSettings.updateTheme(forInterfaceStyle: interfaceStyle)
             window?.overrideUserInterfaceStyle = .unspecified
         } else {
             window?.overrideUserInterfaceStyle = styleSettings.theme == .light ? .light : .dark

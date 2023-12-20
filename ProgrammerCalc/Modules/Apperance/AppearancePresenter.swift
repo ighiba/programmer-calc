@@ -56,7 +56,7 @@ final class AppearancePresenter: AppearanceOutput {
         
         if styleSettings.isUsingSystemAppearance {
             let interfaceStyle = UIScreen.main.traitCollection.userInterfaceStyle
-            updateThemeSettings(forInterfaceStyle: interfaceStyle)
+            styleSettings.updateTheme(forInterfaceStyle: interfaceStyle)
         }
         
         storage.saveData(styleSettings)
@@ -75,7 +75,7 @@ final class AppearancePresenter: AppearanceOutput {
         let interfaceStyle: UIUserInterfaceStyle
         if styleSettings.isUsingSystemAppearance {
             interfaceStyle = UIScreen.main.traitCollection.userInterfaceStyle
-            updateThemeSettings(forInterfaceStyle: interfaceStyle)
+            styleSettings.updateTheme(forInterfaceStyle: interfaceStyle)
         } else {
             interfaceStyle = styleSettings.theme == .light ? .light : .dark
         }
@@ -87,21 +87,5 @@ final class AppearancePresenter: AppearanceOutput {
         view.updateLayout(interfaceStyle: interfaceStyle)
         view.updateNavBarStyle(style)
         view.animateUpdateRootViewLayoutSubviews()
-    }
-    
-    private func updateThemeSettings(forInterfaceStyle interfaceStyle: UIUserInterfaceStyle) {
-        let theme = obtainTheme(forInterfaceStyle: interfaceStyle)
-        styleSettings.theme = theme
-    }
-    
-    private func obtainTheme(forInterfaceStyle interfaceStyle: UIUserInterfaceStyle) -> Theme {
-        switch interfaceStyle {
-        case .light, .unspecified:
-            return .light
-        case .dark:
-            return .dark
-        @unknown default:
-            return .dark
-        }
     }
 }

@@ -6,7 +6,7 @@
 //  Copyright © 2022 ighiba. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 protocol StyleSettingsProtocol {
     var isUsingSystemAppearance: Bool { get set }
@@ -17,14 +17,27 @@ final class StyleSettings: StyleSettingsProtocol {
 
     static let shared: StyleSettings = StyleSettings()
     
-    // MARK: - Properties
-    
     var isUsingSystemAppearance: Bool
     var theme: Theme
     
     init(isUsingSystemAppearance: Bool = false, theme: Theme = .dark) {
         self.isUsingSystemAppearance = isUsingSystemAppearance
         self.theme = theme
+    }
+    
+    func updateTheme(forInterfaceStyle interfaceStyle: UIUserInterfaceStyle) {
+        theme = obtainTheme(forInterfaceStyle: interfaceStyle)
+    }
+    
+    private func obtainTheme(forInterfaceStyle interfaceStyle: UIUserInterfaceStyle) -> Theme {
+        switch interfaceStyle {
+        case .light, .unspecified:
+            return .light
+        case .dark:
+            return .dark
+        @unknown default:
+            return .dark
+        }
     }
 }
 
