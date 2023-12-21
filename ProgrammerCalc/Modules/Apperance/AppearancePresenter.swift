@@ -77,7 +77,7 @@ final class AppearancePresenter: AppearanceOutput {
             interfaceStyle = UIScreen.main.traitCollection.userInterfaceStyle
             styleSettings.updateTheme(forInterfaceStyle: interfaceStyle)
         } else {
-            interfaceStyle = styleSettings.theme == .light ? .light : .dark
+            interfaceStyle = styleSettings.preferredInterfaceStyle
         }
         
         storage.saveData(styleSettings)

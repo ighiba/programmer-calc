@@ -17,6 +17,8 @@ final class StyleSettings: StyleSettingsProtocol {
 
     static let shared: StyleSettings = StyleSettings()
     
+    var preferredInterfaceStyle: UIUserInterfaceStyle { theme == .light ? .light : .dark }
+    
     var isUsingSystemAppearance: Bool
     var theme: Theme
     

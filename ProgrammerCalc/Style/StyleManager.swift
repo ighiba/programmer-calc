@@ -25,7 +25,7 @@ class StyleManager {
             styleSettings.updateTheme(forInterfaceStyle: interfaceStyle)
             window?.overrideUserInterfaceStyle = .unspecified
         } else {
-            window?.overrideUserInterfaceStyle = styleSettings.theme == .light ? .light : .dark
+            window?.overrideUserInterfaceStyle = styleSettings.preferredInterfaceStyle
         }
     }
 }
