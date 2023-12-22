@@ -59,7 +59,7 @@ final class ButtonsViewControllerPad: StyledViewController, ButtonsContainerCont
             buttonsStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -verticalMargin),
         ])
         
-        buttons.forEachButton { $0.setConstraints(spacingBetweenButtons: spacing) }
+        buttons.flattened().forEach { $0.setConstraints(spacingBetweenButtons: spacing) }
     }
     
     private func configureButtons() -> [[CalculatorButton]] {
@@ -134,25 +134,19 @@ final class ButtonsViewControllerPad: StyledViewController, ButtonsContainerCont
     }
     
     private func updateButtonsStyle(_ style: Style) {
-        buttons.forEachButton { button in
+        buttons.flattened().forEach { button in
             let buttonStyle = style.buttonStyle(for: button.buttonStyleType)
             button.updateStyle(buttonStyle: buttonStyle, borderColor: style.buttonBorderColor)
         }
     }
     
     func disableNumericButtons(withForbiddenDigits forbiddenDigits: Set<String>) {
-        buttons.forEachButton { button in
+        buttons.flattened().forEach { button in
             if button is NumericButton {
                 let buttonLabel = button.titleLabel?.text ?? ""
                 let shouldBeEnabled = !forbiddenDigits.contains(buttonLabel)
                 button.isEnabled = shouldBeEnabled
             }
         }
-    }
-}
-
-extension [[CalculatorButton]] {
-    func forEachButton(_ body: (CalculatorButton) -> Void) {
-        self.forEach { row in row.forEach { button in body(button) } }
     }
 }

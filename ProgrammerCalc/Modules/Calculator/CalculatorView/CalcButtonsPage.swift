@@ -60,7 +60,7 @@ class CalcButtonsPage: StyledView, CalcButtonPageProtocol {
         ]
         NSLayoutConstraint.activate(layoutConstraints!)
         
-        buttons.forEachButton { $0.setConstraints(spacingBetweenButtons: buttonsHorizontalSpacing) }
+        buttons.flattened().forEach { $0.setConstraints(spacingBetweenButtons: buttonsHorizontalSpacing) }
     }
     
     fileprivate func configureButtons() -> [[CalculatorButton]] {
@@ -88,14 +88,14 @@ class CalcButtonsPage: StyledView, CalcButtonPageProtocol {
     }
 
     private func updateButtonsStyle(_ style: Style) {
-        buttons.forEachButton { button in
+        buttons.flattened().forEach { button in
             let buttonStyle = style.buttonStyle(for: button.buttonStyleType)
             button.updateStyle(buttonStyle: buttonStyle, borderColor: style.buttonBorderColor)
         }
     }
     
     func disableNumericButtons(withForbiddenDigits forbiddenDigits: Set<String>) {
-        buttons.forEachButton { button in
+        buttons.flattened().forEach { button in
             if button is NumericButton {
                 let buttonLabel = button.titleLabel?.text ?? ""
                 let shouldBeEnabled = !forbiddenDigits.contains(buttonLabel)

@@ -35,3 +35,9 @@ extension Array {
         return self + Self(repeating: element, count: needToExpandCount)
     }
 }
+
+extension Array where Element: Collection {
+    func flattened() -> [Element.Element] {
+        return self.flatMap { $0 }
+    }
+}
