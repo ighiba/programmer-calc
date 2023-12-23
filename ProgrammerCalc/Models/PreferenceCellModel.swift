@@ -8,32 +8,72 @@
 
 import UIKit
 
-enum PreferenceCellType {
-    case switcher
-    case button
-    case checkmark
-    case standart
+// MARK: - Default
+
+class PreferenceCellModel: Identifiable {
+    
+    var id: String
+    var text: String
+    var icon: UIImage?
+
+    init(id: String, text: String, icon: UIImage? = nil) {
+        self.id = id
+        self.text = text
+        self.icon = icon
+    }
+    
+    func setupAccessoryView(forCell cell: PreferenceCell) {
+        cell.accessoryType = .none
+    }
 }
 
-final class PreferenceCellModel {
-    var id: String
-    var label: String
-    var cellType: PreferenceCellType
-    var cellIcon: UIImage?
-    var state: Bool?
-    var stateDidChanged: ((Bool) -> Void)?
+// MARK: - Switch
 
-    init(
-        id: String,
-        label: String,
-        cellType: PreferenceCellType,
-        cellIcon: UIImage? = nil,
-        stateChangeHandler: ((Bool) -> Void)? = nil
-    ) {
-        self.id = id
-        self.label = label
-        self.cellType = cellType
-        self.cellIcon = cellIcon
-        self.stateDidChanged = stateChangeHandler
+final class SwitchPreferenceCellModel: PreferenceCellModel {
+    
+    var isOn: Bool
+    var switchValueDidChange: ((Bool) -> Void)?
+    
+    init(id: String, text: String, icon: UIImage? = nil, isOn: Bool = false, switchValueDidChange: ((Bool) -> Void)? = nil) {
+        self.isOn = isOn
+        self.switchValueDidChange = switchValueDidChange
+        super.init(id: id, text: text, icon: icon)
+    }
+    
+    override func setupAccessoryView(forCell cell: PreferenceCell) {
+        let switcher = UISwitch()
+        switcher.addTarget(self, action: #selector(switcherValueChanged), for: .valueChanged)
+        switcher.isOn = isOn
+        cell.accessoryView = switcher
+        cell.selectionStyle = .none
+    }
+    
+    @objc func switcherValueChanged(_ sender: UISwitch) {
+        isOn = sender.isOn
+        switchValueDidChange?(sender.isOn)
+    }
+}
+
+// MARK: - Checkmark
+
+final class CheckmarkPreferenceCellModel: PreferenceCellModel {
+    
+    var isCheckmarked: Bool
+    
+    init(id: String, text: String, icon: UIImage? = nil, isCheckmarked: Bool = false) {
+        self.isCheckmarked = isCheckmarked
+        super.init(id: id, text: text, icon: icon)
+    }
+    
+    override func setupAccessoryView(forCell cell: PreferenceCell) {
+        cell.accessoryType = isCheckmarked ? .checkmark : .none
+    }
+}
+
+// MARK: - Push
+
+final class PushPreferenceCellModel: PreferenceCellModel {
+    override func setupAccessoryView(forCell cell: PreferenceCell) {
+        cell.accessoryType = .disclosureIndicator
     }
 }

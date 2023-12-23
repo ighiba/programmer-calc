@@ -12,7 +12,7 @@ class PreferenceCell: UITableViewCell {
 
     private let preferenceModel: PreferenceCellModel
 
-    init(_ preferenceModel: PreferenceCellModel) {
+    init(preferenceModel: PreferenceCellModel) {
         self.preferenceModel = preferenceModel
         super.init(style: .default, reuseIdentifier: preferenceModel.id)
         self.setupCell()
@@ -23,33 +23,9 @@ class PreferenceCell: UITableViewCell {
     }
     
     private func setupCell() {
-        configureAccessoryView(for: preferenceModel.cellType)
+        preferenceModel.setupAccessoryView(forCell: self)
     
-        textLabel?.text = preferenceModel.label
-        imageView?.image = preferenceModel.cellIcon
-    }
-    
-    private func configureAccessoryView(for cellType: PreferenceCellType) {
-        switch cellType {
-        case .switcher:
-            let switcher = UISwitch()
-            switcher.addTarget(self, action: #selector(switcherValueChanged), for: .valueChanged)
-            switcher.isOn = preferenceModel.state ?? true
-            accessoryView = switcher
-            selectionStyle = .none
-        case .checkmark:
-            accessoryType = (preferenceModel.state ?? false) ? .checkmark : .none
-        case .button:
-            accessoryType = .disclosureIndicator
-        case .standart:
-            accessoryType = .none
-        }
-    }
-}
-
-extension PreferenceCell {
-    @objc func switcherValueChanged(_ sender: UISwitch) {
-        preferenceModel.state = sender.isOn
-        preferenceModel.stateDidChanged?(sender.isOn)
+        textLabel?.text = preferenceModel.text
+        imageView?.image = preferenceModel.icon
     }
 }

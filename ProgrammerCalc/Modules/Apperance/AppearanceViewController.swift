@@ -8,6 +8,8 @@
 
 import UIKit
 
+private let useSystemAppearanceId = "useSystemAppearance"
+
 protocol AppearanceInput: AnyObject {
     func reloadTable()
     func setUseSystemAppearanceSwitch(isOn: Bool)
@@ -58,27 +60,26 @@ final class AppearanceViewController: StyledTableViewController, AppearanceInput
     private func configurePreferenceList() -> [[PreferenceCellModel]] {
         return [
             [
-                PreferenceCellModel(
-                    id: "useSystemAppearance",
-                    label: NSLocalizedString("Use system appearance", comment: ""),
-                    cellType: .switcher,
-                    stateChangeHandler: useSystemAppearanceSwitchDidChange
+                SwitchPreferenceCellModel(
+                    id: useSystemAppearanceId,
+                    text: NSLocalizedString("Use system appearance", comment: ""),
+                    switchValueDidChange: useSystemAppearanceSwitchValueDidChange
                 )
             ],
             Theme.allCases.map { style in
-                PreferenceCellModel(
+                CheckmarkPreferenceCellModel(
                     id: style.stringValue,
-                    label: style.localizedTitle,
-                    cellType: .checkmark
+                    text: style.localizedTitle
                 )
             }
         ]
     }
     
     private func countNumberOfSections() -> Int {
-        let isUsingSystemAppearance = preferenceList[0][0].state ?? false
-        let count = isUsingSystemAppearance ? 1 : preferenceList.count
-        return count
+        let preferenceModel = preferenceModel(withId: useSystemAppearanceId) as? SwitchPreferenceCellModel
+        let isUsingSystemAppearance = preferenceModel?.isOn ?? false
+        
+        return isUsingSystemAppearance ? 1 : preferenceList.count
     }
     
     func reloadTable() {
@@ -86,7 +87,11 @@ final class AppearanceViewController: StyledTableViewController, AppearanceInput
     }
     
     func setUseSystemAppearanceSwitch(isOn: Bool) {
-        preferenceList[0][0].state = isOn
+        guard let preferenceModel = preferenceModel(withId: useSystemAppearanceId) as? SwitchPreferenceCellModel else {
+            return
+        }
+        
+        preferenceModel.isOn = isOn
     }
     
     func setCheckmarkedTheme(atRow row: Int) {
@@ -115,8 +120,12 @@ final class AppearanceViewController: StyledTableViewController, AppearanceInput
         }
     }
 
-    func useSystemAppearanceSwitchDidChange(_ state: Bool) {
+    func useSystemAppearanceSwitchValueDidChange(_ state: Bool) {
         output.useSystemAppearanceSwitchDidChange(isOn: state)
+    }
+    
+    private func preferenceModel(withId id: PreferenceCellModel.ID) -> PreferenceCellModel? {
+        return preferenceList.flattened().first(where: { $0.id == id })
     }
 }
 
@@ -137,7 +146,7 @@ extension AppearanceViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let preferenceModel = preferenceList[indexPath.section][indexPath.row]
-        let cell = PreferenceCell(preferenceModel)
+        let cell = PreferenceCell(preferenceModel: preferenceModel)
         cell.accessoryType = checkmarkedIndexPath == indexPath ? .checkmark : .none
         return cell
     }

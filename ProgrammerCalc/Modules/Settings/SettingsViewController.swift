@@ -16,8 +16,8 @@ private let aboutId = "about"
 
 protocol SettingsInput: AnyObject {
     func reloadTable()
-    func setTappingSoundsSwitcherState(isOn: Bool)
-    func setHapticFeedbackSwitcherState(isOn: Bool)
+    func setTappingSoundsPreferenceModelSwitch(isOn: Bool)
+    func setHapticFeedbackPreferenceModelSwitch(isOn: Bool)
     func push(_ viewController: UIViewController)
 }
 
@@ -27,7 +27,7 @@ final class SettingsViewController: StyledTableViewController, SettingsInput, UI
     
     var output: SettingsOutput!
     
-    lazy var preferenceList = configurePreferenceList()
+    lazy var preferenceList: [[PreferenceCellModel]] = configurePreferenceList()
 
     // MARK: - Layout
 
@@ -65,41 +65,37 @@ final class SettingsViewController: StyledTableViewController, SettingsInput, UI
     private func configurePreferenceList() -> [[PreferenceCellModel]] {
         return [
             [
-                PreferenceCellModel(
+                PushPreferenceCellModel(
                     id: appearanceId,
-                    label: NSLocalizedString("Appearance", comment: ""),
-                    cellType: .button
+                    text: NSLocalizedString("Appearance", comment: "")
                 ),
-                PreferenceCellModel(
+                SwitchPreferenceCellModel(
                     id: tappingSoundsId,
-                    label:  NSLocalizedString("Tapping sounds", comment: ""),
-                    cellType: .switcher,
-                    stateChangeHandler: tappingSoundsSwitchStateDidChange
+                    text: NSLocalizedString("Tapping sounds", comment: ""),
+                    switchValueDidChange: tappingSoundsSwitchValueDidChange
                 ),
-                PreferenceCellModel(
+                SwitchPreferenceCellModel(
                     id: hapticFeedbackId,
-                    label: NSLocalizedString("Haptic feedback", comment: ""),
-                    cellType: .switcher,
-                    stateChangeHandler: hapticFeedbackSwitchStateDidChange
+                    text: NSLocalizedString("Haptic feedback", comment: ""),
+                    switchValueDidChange: hapticFeedbackSwitchValueDidChange
                 )
             ],
             [
-                PreferenceCellModel(
+                PushPreferenceCellModel(
                     id: aboutId,
-                    label: NSLocalizedString("About app", comment: ""),
-                    cellType: .standart
+                    text: NSLocalizedString("About app", comment: "")
                 )
             ]
         ]
     }
     
     private func setupNavigationBar() {
-        let doneItem = UIBarButtonItem(
+        let doneButton = UIBarButtonItem(
             barButtonSystemItem: .done,
             target: self,
             action: #selector(SettingsViewController.closeButtonTapped)
         )
-        navigationController?.navigationBar.topItem?.rightBarButtonItem = doneItem
+        navigationController?.navigationBar.topItem?.rightBarButtonItem = doneButton
         navigationController?.navigationBar.topItem?.title = NSLocalizedString("Settings", comment: "")
     }
     
@@ -107,32 +103,36 @@ final class SettingsViewController: StyledTableViewController, SettingsInput, UI
         tableView.reloadData()
     }
     
-    func setTappingSoundsSwitcherState(isOn: Bool) {
-        guard let settingsModel = preferenceList.flatMap({ $0 }).first(where: { $0.id == tappingSoundsId }) else {
+    func setTappingSoundsPreferenceModelSwitch(isOn: Bool) {
+        guard let tappingSoundsCellModel = preferenceModel(withId: tappingSoundsId) as? SwitchPreferenceCellModel else {
             return
         }
         
-        settingsModel.state = isOn
+        tappingSoundsCellModel.isOn = isOn
     }
     
-    func setHapticFeedbackSwitcherState(isOn: Bool) {
-        guard let settingsModel = preferenceList.flatMap({ $0 }).first(where: { $0.id == hapticFeedbackId }) else {
+    func setHapticFeedbackPreferenceModelSwitch(isOn: Bool) {
+        guard let hapticFeedbackCellModel = preferenceModel(withId: hapticFeedbackId) as? SwitchPreferenceCellModel else {
             return
         }
         
-        settingsModel.state = isOn
+        hapticFeedbackCellModel.isOn = isOn
     }
     
-    func tappingSoundsSwitchStateDidChange(_ isOn: Bool) {
+    func tappingSoundsSwitchValueDidChange(_ isOn: Bool) {
         output.updateTappingSounds(isOn)
     }
     
-    func hapticFeedbackSwitchStateDidChange(_ isOn: Bool) {
+    func hapticFeedbackSwitchValueDidChange(_ isOn: Bool) {
         output.updateHapticFeedback(isOn)
     }
     
     func push(_ viewController: UIViewController) {
         navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    private func preferenceModel(withId id: PreferenceCellModel.ID) -> PreferenceCellModel? {
+        return preferenceList.flattened().first(where: { $0.id == id })
     }
     
     // MARK: - Actions
@@ -154,7 +154,8 @@ extension SettingsViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return PreferenceCell(preferenceList[indexPath.section][indexPath.row])
+        let preferenceModel = preferenceList[indexPath.section][indexPath.row]
+        return PreferenceCell(preferenceModel: preferenceModel)
     }
 }
 

@@ -35,8 +35,8 @@ final class SettingsPresenter: SettingsOutput {
         let loadedSettings: Settings = storage.loadData()
         settings.set(loadedSettings)
         
-        view.setTappingSoundsSwitcherState(isOn: settings.isTappingSoundsEnabled)
-        view.setHapticFeedbackSwitcherState(isOn: settings.isHapticFeedbackEnabled)
+        view.setTappingSoundsPreferenceModelSwitch(isOn: settings.isTappingSoundsEnabled)
+        view.setHapticFeedbackPreferenceModelSwitch(isOn: settings.isHapticFeedbackEnabled)
     }
     
     func updateTappingSounds(_ isEnabled: Bool) {
