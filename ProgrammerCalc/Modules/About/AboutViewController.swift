@@ -16,10 +16,10 @@ private let contactUsIcon = UIImage(systemName: "envelope")
 protocol AboutInput: AnyObject {
     func reloadTable()
     func push(_ viewController: UIViewController)
-    func openContactFormWith(recipients: [String], subject: String, message: String)
+    func openContactForm(recipients: [String], subject: String, message: String)
 }
 
-class AboutViewController: StyledTableViewController, AboutInput, MFMailComposeViewControllerDelegate {
+final class AboutViewController: StyledTableViewController, AboutInput, MFMailComposeViewControllerDelegate {
     
     // MARK: - Properties
     
@@ -92,7 +92,7 @@ class AboutViewController: StyledTableViewController, AboutInput, MFMailComposeV
         navigationController?.pushViewController(viewController, animated: true)
     }
     
-    func openContactFormWith(recipients: [String], subject: String, message: String) {
+    func openContactForm(recipients: [String], subject: String, message: String) {
         if MFMailComposeViewController.canSendMail() {
             let mailController = MFMailComposeViewController()
             mailController.mailComposeDelegate = view as? MFMailComposeViewControllerDelegate

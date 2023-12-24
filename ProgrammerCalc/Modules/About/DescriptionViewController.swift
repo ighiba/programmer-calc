@@ -11,18 +11,21 @@ import UIKit
 private let margin: CGFloat = 20
 private let navBarHeight: CGFloat = 44
 
-class DescriptionViewController: StyledViewController {
+final class DescriptionViewController: StyledViewController {
 
     private let descriptionText = NSLocalizedString("DescriptionFullText", comment: "")
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupView()
     }
     
     // MARK: - Methods
     
     private func setupView() {
+        title = NSLocalizedString("Description", comment: "")
+        
         view.frame = UIScreen.main.bounds
         view.backgroundColor = .systemBackground
         
