@@ -76,18 +76,21 @@ class ModalViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupGestures()
         setupTargets()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         AppDelegate.AppUtility.lockPortraitOrientation()
         modalView.animateIn()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
         AppDelegate.AppUtility.unlockPortraitOrientation()
     }
     

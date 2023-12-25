@@ -35,7 +35,7 @@ final class DescriptionViewController: StyledViewController {
         descriptionLabel.sizeToFit()
     }
     
-    private func makeParagraphStyle() -> NSMutableParagraphStyle {
+    private func configureParagraphStyle() -> NSMutableParagraphStyle {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .justified
         paragraphStyle.firstLineHeadIndent = 5.0
@@ -53,7 +53,7 @@ final class DescriptionViewController: StyledViewController {
             height: UIScreen.main.bounds.height - margin * 2)
         )
 
-        let paragraphStyle = makeParagraphStyle()
+        let paragraphStyle = configureParagraphStyle()
 
         let attributedString = NSAttributedString(string: descriptionText, attributes: [.paragraphStyle: paragraphStyle])
         label.attributedText = attributedString

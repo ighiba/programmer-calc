@@ -18,9 +18,9 @@ final class AboutAppCell: UITableViewCell {
     
     init(iconName: String, appVersion: String) {
         super.init(style: .default, reuseIdentifier: "aboutAppCell")
-        setupView(iconName: iconName, appVersion: appVersion)
-        setupStyle()
-        setNeedsUpdateConstraints()
+        self.setupView(iconName: iconName, appVersion: appVersion)
+        self.setupStyle()
+        self.setNeedsUpdateConstraints()
     }
     
     required init?(coder: NSCoder) {

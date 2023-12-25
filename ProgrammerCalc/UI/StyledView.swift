@@ -11,6 +11,7 @@ import UIKit
 class StyledView: UIView, Styled {
     override func layoutSubviews() {
         super.layoutSubviews()
+        
         styleWillUpdate(with: style)
     }
     

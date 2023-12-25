@@ -11,6 +11,7 @@ import UIKit
 class StyledTableViewController: UITableViewController, Styled {
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
         styleWillUpdate(with: style)
     }
     
