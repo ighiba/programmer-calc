@@ -356,14 +356,9 @@
 		C0666EBD24F991B8004809EF /* CalculatorView */ = {
 			isa = PBXGroup;
 			children = (
+				C08407C92B3B0B08001D53F1 /* ButtonsView */,
 				C061B7C1250FF9FF000E2EB6 /* CalculatorLabel.swift */,
-				C082FB8E2A33C0FC00F3AA60 /* ButtonsViewControllerPad.swift */,
-				C082FB8C2A33C08A00F3AA60 /* ButtonsViewControllerPhone.swift */,
-				C0666EB924F9782F004809EF /* CalcButtonsPage.swift */,
 				C0E5FC7524BB9B8D00BA93CA /* CalculatorView.swift */,
-				C082FB8A2A33894500F3AA60 /* CalculatorViewController.swift */,
-				C0287F7127A31FD2001489FE /* BitButton.swift */,
-				C04D34C127921BE200ED9867 /* BitwiseKeypad.swift */,
 			);
 			path = CalculatorView;
 			sourceTree = "<group>";
@@ -372,13 +367,13 @@
 			isa = PBXGroup;
 			children = (
 				C061FCF02B1E50820094BF6A /* Array.swift */,
-				C09623162A04171B00E6C08F /* Int.swift */,
 				C061FD002B2202B70094BF6A /* Character.swift */,
 				C0F5CF4E270F394E0020CE14 /* Decimal.swift */,
+				C09623162A04171B00E6C08F /* Int.swift */,
 				C00616AB27065097007BEF89 /* String.swift */,
 				C0F3D944273B0A7300EA3333 /* UIApplication.swift */,
-				C09631D12727121D001DCD25 /* UIColor.swift */,
 				C052270E27978F6800B7E384 /* UIBarButtonItem.swift */,
+				C09631D12727121D001DCD25 /* UIColor.swift */,
 				C082FB922A34D22C00F3AA60 /* UIScreen.swift */,
 				C0211CD82A9938E100464A44 /* UIFont.swift */,
 				C061FCFE2B20FC7C0094BF6A /* UInt8.swift */,
@@ -447,6 +442,27 @@
 			path = ProgrammerCalcUITests;
 			sourceTree = "<group>";
 		};
+		C08407C82B3B0A82001D53F1 /* BitwiseKeypad */ = {
+			isa = PBXGroup;
+			children = (
+				C0287F7127A31FD2001489FE /* BitButton.swift */,
+				C04D34C127921BE200ED9867 /* BitwiseKeypad.swift */,
+				C0712FE827908B9700CF408A /* BitwiseKeypadController.swift */,
+			);
+			path = BitwiseKeypad;
+			sourceTree = "<group>";
+		};
+		C08407C92B3B0B08001D53F1 /* ButtonsView */ = {
+			isa = PBXGroup;
+			children = (
+				C082FB8E2A33C0FC00F3AA60 /* ButtonsViewControllerPad.swift */,
+				C082FB8C2A33C08A00F3AA60 /* ButtonsViewControllerPhone.swift */,
+				C0666EB924F9782F004809EF /* CalcButtonsPage.swift */,
+				C0666EB724F97774004809EF /* CalcButtonsViewController.swift */,
+			);
+			path = ButtonsView;
+			sourceTree = "<group>";
+		};
 		C0D5BA4C24C340120038A378 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -504,8 +520,8 @@
 			children = (
 				C061FD0C2B250BC30094BF6A /* CalculatorButtons */,
 				C0666EBD24F991B8004809EF /* CalculatorView */,
-				C0712FE827908B9700CF408A /* BitwiseKeypadController.swift */,
-				C0666EB724F97774004809EF /* CalcButtonsViewController.swift */,
+				C08407C82B3B0A82001D53F1 /* BitwiseKeypad */,
+				C082FB8A2A33894500F3AA60 /* CalculatorViewController.swift */,
 				C082FB862A33705E00F3AA60 /* CalculatorPresenter.swift */,
 				C082FB882A33722C00F3AA60 /* CalculatorModuleAssembly.swift */,
 			);
