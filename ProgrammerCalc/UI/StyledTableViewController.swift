@@ -20,7 +20,7 @@ class StyledTableViewController: UITableViewController, Styled {
     /// ```
     /// override func styleWillUpdate(with style: Style) {
     ///     super.styleWillUpdate(with: style)
-    ///     // Apply style to yout views here
+    ///     // Apply style to your views here
     /// }
     ///
     /// ```
