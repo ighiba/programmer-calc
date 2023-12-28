@@ -8,9 +8,9 @@
 
 import UIKit
 
-class CalcButtonsViewController: UIViewController {
+final class CalcButtonsViewController: UIViewController {
     
-    init(buttonsPage: CalcButtonsPage) {
+    init(buttonsPage: CalculatorButtonsPage) {
         super.init(nibName: nil, bundle: nil)
         self.view = buttonsPage
         self.view.isExclusiveTouch = true

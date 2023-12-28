@@ -18,7 +18,7 @@ final class ButtonsViewControllerPhone: UIPageViewController, ButtonsContainerCo
 
     // MARK: - Properties
     
-    let arrayButtonsStack: [CalcButtonsPage] = [CalcButtonsAdditional(), CalcButtonsMain()]
+    let arrayButtonsStack: [CalculatorButtonsPage] = [CalculatorButtonsAdditionalPage(), CalculatorButtonsMainPage()]
     let calcButtonsViewControllers: [CalcButtonsViewController]
     
     // MARK: - Init
