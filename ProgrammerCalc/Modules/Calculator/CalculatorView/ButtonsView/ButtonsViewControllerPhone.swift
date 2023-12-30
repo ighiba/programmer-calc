@@ -30,8 +30,7 @@ final class ButtonsViewControllerPhone: UIPageViewController, ButtonsContainerCo
         self.dataSource = self
         self.delegate = self
         self.delaysContentTouches = false
-        
-        //let pageControl = configurePageControl()
+        self.setupPageControl()
     }
     
     required init?(coder: NSCoder) {
@@ -46,12 +45,10 @@ final class ButtonsViewControllerPhone: UIPageViewController, ButtonsContainerCo
 
     // MARK: - Methods
     
-    private func configurePageControl() -> UIPageControl {
+    private func setupPageControl() {
         let pageControl = UIPageControl.appearance()
         pageControl.pageIndicatorTintColor = .systemGray4
         pageControl.currentPageIndicatorTintColor = .systemGray
-        
-        return pageControl
     }
     
     func disableNumericButtons(withForbiddenDigits forbiddenDigits: Set<String>) {
