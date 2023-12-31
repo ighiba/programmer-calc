@@ -1,5 +1,5 @@
 //
-//  AppSettings.swift
+//  Settings.swift
 //  ProgrammerCalc
 //
 //  Created by Ivan Ghiba on 06.08.2020.

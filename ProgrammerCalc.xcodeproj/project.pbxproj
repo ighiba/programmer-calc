@@ -463,16 +463,24 @@
 			path = ButtonsView;
 			sourceTree = "<group>";
 		};
+		C08407CA2B418B72001D53F1 /* AppSettings */ = {
+			isa = PBXGroup;
+			children = (
+				C077CF7024DC987B008E5F0F /* Settings.swift */,
+				C0287F7327A32250001489FE /* StyleSettings.swift */,
+			);
+			path = AppSettings;
+			sourceTree = "<group>";
+		};
 		C0D5BA4C24C340120038A378 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				C00616AD270666AD007BEF89 /* Storage */,
 				C065DB3824E3C89B0059B38D /* Math */,
 				C00563FD2B178325003CCC29 /* PCNumbers */,
+				C08407CA2B418B72001D53F1 /* AppSettings */,
 				C061FCFC2B1FB4B60094BF6A /* Calculator.swift */,
 				C065DB3D24E41E610059B38D /* CalculatorState.swift */,
-				C077CF7024DC987B008E5F0F /* Settings.swift */,
-				C0287F7327A32250001489FE /* StyleSettings.swift */,
 				C0635A7A24D9E2AA003855A9 /* ConversionSettings.swift */,
 				C0F5CF4A270E10870020CE14 /* WordSize.swift */,
 				C0E0FF492A44F6CE00E38DF9 /* PreferenceCellModel.swift */,
