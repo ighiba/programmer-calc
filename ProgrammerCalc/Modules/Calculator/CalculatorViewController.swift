@@ -117,7 +117,7 @@ final class CalculatorViewController: StyledViewController, CalculatorInput, UIA
             inputLabel.conversionSystemLabel.sizeToFit()
             outputLabel.conversionSystemLabel.sizeToFit()
             
-            phoneVC.setPageControl(isVisible: true)
+            phoneVC.setPageControl(isHidden: false)
         } else if willEnterLandscapeOrientation {
             calculatorView.hideNavigationBar()
             phoneVC.calcButtonsViewControllers.forEach { $0.hideWithAnimation() }
@@ -134,7 +134,7 @@ final class CalculatorViewController: StyledViewController, CalculatorInput, UIA
             
             output.didEnterPhoneLandscapeOrientation(isBitwiseKeypadActive: isBitwiseKeypadActive)
             
-            phoneVC.setPageControl(isVisible: false)
+            phoneVC.setPageControl(isHidden: true)
             calculatorView.frame = UIScreen.main.bounds
         }
     }
