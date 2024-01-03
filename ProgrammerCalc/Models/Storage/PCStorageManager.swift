@@ -1,5 +1,5 @@
 //
-//  PCalcStorage.swift
+//  PCStorageManager.swift
 //  ProgrammerCalc
 //
 //  Created by Ivan Ghiba on 23.01.2022.
@@ -8,12 +8,17 @@
 
 import Foundation
 
-class PCalcStorage {
+protocol StorageManager {
+    func loadAll()
+    func saveAll()
+}
+
+final class PCStorageManager: StorageManager {
     
     private let storage = CalculatorStorage()
     
     // Call this before CalculatorModuleAssembly.configureModule() in SceneDelegate willConnectTo
-    public func loadAll() {
+    func loadAll() {
         let wordSize: WordSize = storage.loadData()
         let settings: Settings = storage.loadData()
         let conversionSettings: ConversionSettings = storage.loadData()
@@ -27,7 +32,7 @@ class PCalcStorage {
         StyleSettings.shared.set(styleSettigns)
     }
     
-    public func saveAll() {
+    func saveAll() {
         let wordSize = WordSize.shared
         let settings = Settings.shared
         let conversionSettings = ConversionSettings.shared

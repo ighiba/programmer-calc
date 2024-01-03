@@ -19,10 +19,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     var savedShortCutItem: UIApplicationShortcutItem?
     
-    private let storage = PCalcStorage()
+    private let storageManager: StorageManager = PCStorageManager()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        storage.loadAll()
+        storageManager.loadAll()
 
         if let shortcutItem = connectionOptions.shortcutItem {
             savedShortCutItem = shortcutItem
@@ -59,7 +59,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
-        storage.saveAll()
+        storageManager.saveAll()
 
         let calculatorState = CalculatorState.shared
         let conversionSettings = ConversionSettings.shared

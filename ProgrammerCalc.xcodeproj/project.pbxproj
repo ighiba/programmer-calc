@@ -13,7 +13,7 @@
 		C00616AC27065097007BEF89 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00616AB27065097007BEF89 /* String.swift */; };
 		C0211CD92A9938E100464A44 /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0211CD82A9938E100464A44 /* UIFont.swift */; };
 		C021267A2ABC7F4F002B072C /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C02126792ABC7F4F002B072C /* Colors.xcassets */; };
-		C0249849279DDC88005EA12A /* PCalcStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0249848279DDC88005EA12A /* PCalcStorage.swift */; };
+		C0249849279DDC88005EA12A /* PCStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0249848279DDC88005EA12A /* PCStorageManager.swift */; };
 		C0287F7227A31FD2001489FE /* BitButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0287F7127A31FD2001489FE /* BitButton.swift */; };
 		C0287F7427A32250001489FE /* StyleSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0287F7327A32250001489FE /* StyleSettings.swift */; };
 		C04D34C227921BE200ED9867 /* BitwiseKeypad.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04D34C127921BE200ED9867 /* BitwiseKeypad.swift */; };
@@ -137,7 +137,7 @@
 		C00616AB27065097007BEF89 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		C0211CD82A9938E100464A44 /* UIFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		C02126792ABC7F4F002B072C /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
-		C0249848279DDC88005EA12A /* PCalcStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCalcStorage.swift; sourceTree = "<group>"; };
+		C0249848279DDC88005EA12A /* PCStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCStorageManager.swift; sourceTree = "<group>"; };
 		C0287F7127A31FD2001489FE /* BitButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitButton.swift; sourceTree = "<group>"; };
 		C0287F7327A32250001489FE /* StyleSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleSettings.swift; sourceTree = "<group>"; };
 		C04D34C127921BE200ED9867 /* BitwiseKeypad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitwiseKeypad.swift; sourceTree = "<group>"; };
@@ -290,7 +290,7 @@
 			children = (
 				C082FB822A3353F000F3AA60 /* Storable.swift */,
 				C082FB842A33540800F3AA60 /* CalculatorStorage.swift */,
-				C0249848279DDC88005EA12A /* PCalcStorage.swift */,
+				C0249848279DDC88005EA12A /* PCStorageManager.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -810,7 +810,7 @@
 				C097F43C2B193355009BF3D7 /* PCHexadecimal.swift in Sources */,
 				C06B7F092443B12B009642B9 /* SceneDelegate.swift in Sources */,
 				C0D842DA2AD889C800B85E9F /* ModalViewController.swift in Sources */,
-				C0249849279DDC88005EA12A /* PCalcStorage.swift in Sources */,
+				C0249849279DDC88005EA12A /* PCStorageManager.swift in Sources */,
 				C077CF7124DC987B008E5F0F /* Settings.swift in Sources */,
 				C082FB8F2A33C0FC00F3AA60 /* ButtonsViewControllerPad.swift in Sources */,
 				C061FCFF2B20FC7C0094BF6A /* UInt8.swift in Sources */,
