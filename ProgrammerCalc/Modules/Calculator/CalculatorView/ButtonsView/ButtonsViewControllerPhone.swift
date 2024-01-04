@@ -107,8 +107,4 @@ extension ButtonsViewControllerPhone {
     func setPageControl(isHidden: Bool) {
         view.subviews.compactMap({ $0 as? UIPageControl }).forEach({ $0.isHidden = isHidden })
     }
-    
-    func setPageControl(currentPage: Int) {
-        view.subviews.compactMap({ $0 as? UIPageControl }).forEach({ $0.currentPage = currentPage })
-    }
 }

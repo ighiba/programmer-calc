@@ -214,7 +214,6 @@ final class CalculatorViewController: StyledViewController, CalculatorInput, UIA
     func setNegateButton(isEnabled: Bool) {
         let negateButton = view.viewWithTag(negateButtonTag) as? NegateButton
         negateButton?.isEnabled = isEnabled
-        negateButton?.alpha = isEnabled ? 1.0 : 0.5
     }
     
     func disableNumericButtons(withForbiddenDigits forbiddenDigits: Set<String>) {

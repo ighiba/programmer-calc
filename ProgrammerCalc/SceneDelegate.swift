@@ -17,7 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     var window: UIWindow?
-    var savedShortCutItem: UIApplicationShortcutItem?
+    var savedShortсutItem: UIApplicationShortcutItem?
     
     private let storageManager: StorageManager = PCStorageManager()
 
@@ -25,7 +25,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         storageManager.loadAll()
 
         if let shortcutItem = connectionOptions.shortcutItem {
-            savedShortCutItem = shortcutItem
+            savedShortсutItem = shortcutItem
         }
 
         guard let windowScene = (scene as? UIWindowScene) else { return }
@@ -49,12 +49,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func windowScene(_ windowScene: UIWindowScene, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
-        savedShortCutItem = shortcutItem
+        savedShortсutItem = shortcutItem
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        if let savedShortCutItem {
-            handleShortCutItem(shortcutItem: savedShortCutItem)
+        if let savedShortсutItem {
+            handleShortсutItem(shortcutItem: savedShortсutItem)
         }
     }
 
@@ -107,7 +107,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
     
-    func handleShortCutItem(shortcutItem: UIApplicationShortcutItem) {
+    func handleShortсutItem(shortcutItem: UIApplicationShortcutItem) {
         copyInputFor(shortcutItem: shortcutItem)
     }
 }
