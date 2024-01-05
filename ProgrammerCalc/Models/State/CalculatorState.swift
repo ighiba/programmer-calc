@@ -1,5 +1,5 @@
 //
-//  CalcState.swift
+//  CalculatorState.swift
 //  ProgrammerCalc
 //
 //  Created by Ivan Ghiba on 12.08.2020.
