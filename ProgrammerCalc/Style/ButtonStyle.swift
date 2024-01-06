@@ -19,6 +19,7 @@ protocol ButtonStyleProtocol {
     var backgroundTintColor: UIColor { get }
     var textColor: UIColor { get }
     var textTintColor: UIColor { get }
+    var borderColor: UIColor { get }
 }
 
 class ButtonStyle: ButtonStyleProtocol {
@@ -26,12 +27,14 @@ class ButtonStyle: ButtonStyleProtocol {
     var backgroundTintColor: UIColor
     var textColor: UIColor  
     var textTintColor: UIColor
+    var borderColor: UIColor
     
-    init(backgroundColor: UIColor, backgroundTintColor: UIColor, textColor: UIColor, textTintColor: UIColor) {
+    init(backgroundColor: UIColor, backgroundTintColor: UIColor, textColor: UIColor, textTintColor: UIColor, borderColor: UIColor) {
         self.backgroundColor = backgroundColor
         self.backgroundTintColor = backgroundTintColor
         self.textColor = textColor
         self.textTintColor = textTintColor
+        self.borderColor = borderColor
     }
 }
 

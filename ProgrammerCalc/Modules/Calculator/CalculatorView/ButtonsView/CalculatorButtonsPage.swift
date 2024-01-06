@@ -81,7 +81,7 @@ class CalculatorButtonsPage: StyledView {
     private func updateButtonsStyle(_ style: Style) {
         buttons.flattened().forEach { button in
             let buttonStyle = style.buttonStyle(for: button.buttonStyleType)
-            button.updateStyle(buttonStyle: buttonStyle, borderColor: style.buttonBorderColor)
+            button.updateStyle(buttonStyle: buttonStyle)
         }
     }
     

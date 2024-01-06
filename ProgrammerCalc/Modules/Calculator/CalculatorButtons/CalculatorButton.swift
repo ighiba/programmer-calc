@@ -185,19 +185,14 @@ class CalculatorButton: UIButton {
         )
     }
     
-    func updateStyle(buttonStyle: ButtonStyleProtocol, borderColor: UIColor) {
+    func updateStyle(buttonStyle: ButtonStyleProtocol) {
         defaultBackgroundColor = buttonStyle.backgroundColor
         highlightedBackgroundColor = buttonStyle.backgroundTintColor
         
         backgroundColor = buttonStyle.backgroundColor
         setTitleColor(buttonStyle.textColor, for: .normal)
         setTitleColor(buttonStyle.textTintColor, for: .highlighted)
-
-        if borderColor != .clear {
-            layer.borderColor = buttonStyle.backgroundColor.darker(by: 0.98).cgColor
-        } else {
-            layer.borderColor = borderColor.cgColor
-        }
+        layer.borderColor = buttonStyle.borderColor.cgColor
     }
     
     func setConstraints(spacingBetweenButtons spacing: CGFloat) {
