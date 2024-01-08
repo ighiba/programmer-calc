@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PreferenceCell: UITableViewCell {
+final class PreferenceCell: UITableViewCell {
 
     private let preferenceModel: PreferenceCellModel
 

@@ -482,6 +482,15 @@
 			path = State;
 			sourceTree = "<group>";
 		};
+		C08407CC2B4C678E001D53F1 /* PreferenceCell */ = {
+			isa = PBXGroup;
+			children = (
+				C077CF6E24DC8DEE008E5F0F /* PreferenceCell.swift */,
+				C0E0FF492A44F6CE00E38DF9 /* PreferenceCellModel.swift */,
+			);
+			path = PreferenceCell;
+			sourceTree = "<group>";
+		};
 		C0D5BA4C24C340120038A378 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -491,7 +500,6 @@
 				C08407CB2B481E9A001D53F1 /* State */,
 				C08407CA2B418B72001D53F1 /* Settings */,
 				C061FCFC2B1FB4B60094BF6A /* Calculator.swift */,
-				C0E0FF492A44F6CE00E38DF9 /* PreferenceCellModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -597,7 +605,7 @@
 				C0E0FF552A45D8D900E38DF9 /* StyledTableViewController.swift */,
 				C0D842D92AD889C800B85E9F /* ModalViewController.swift */,
 				C0817787271D045E0068CF45 /* PopoverDoneButton.swift */,
-				C077CF6E24DC8DEE008E5F0F /* PreferenceCell.swift */,
+				C08407CC2B4C678E001D53F1 /* PreferenceCell */,
 			);
 			path = UI;
 			sourceTree = "<group>";
