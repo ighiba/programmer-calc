@@ -26,15 +26,6 @@ extension Decimal {
     
     var floatPart: Decimal { abs(self) - abs(self).rounded(.down) }
     
-    var fractPartDigitCount: Int { fractPart.count }
-    var fractPart: String {
-        let components = self.description.components(separatedBy: ".")
-        if components.count > 1 {
-            return components[1]
-        }
-        return ""
-    }
-    
     init(_ str: String, radix: Int) {
         self.init()
         var decimal = Decimal()
@@ -46,22 +37,6 @@ extension Decimal {
             multiplier -= 1
         }
         self = decimal
-    }
-    
-    func rounded(_ roundingMode: RoundingMode) -> Decimal {
-        return rounded(scale: 0, roundingMode: roundingMode)
-    }
-
-    func rounded(scale: Int16, roundingMode: RoundingMode) -> Decimal {
-        let roundingBehavior = NSDecimalNumberHandler(
-            roundingMode: roundingMode,
-            scale: scale,
-            raiseOnExactness: false,
-            raiseOnOverflow: false,
-            raiseOnUnderflow: false,
-            raiseOnDivideByZero: false
-        )
-        return NSDecimalNumber(decimal: self).rounding(accordingToBehavior: roundingBehavior).decimalValue
     }
     
     static func % (lhs: Decimal, rhs: Decimal) -> Decimal {
@@ -78,5 +53,21 @@ extension Decimal {
         }
 
         return result
+    }
+    
+    func rounded(_ roundingMode: RoundingMode) -> Decimal {
+        return rounded(scale: 0, roundingMode: roundingMode)
+    }
+
+    func rounded(scale: Int16, roundingMode: RoundingMode) -> Decimal {
+        let roundingBehavior = NSDecimalNumberHandler(
+            roundingMode: roundingMode,
+            scale: scale,
+            raiseOnExactness: false,
+            raiseOnOverflow: false,
+            raiseOnUnderflow: false,
+            raiseOnDivideByZero: false
+        )
+        return NSDecimalNumber(decimal: self).rounding(accordingToBehavior: roundingBehavior).decimalValue
     }
 }
