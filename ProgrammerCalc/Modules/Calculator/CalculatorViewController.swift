@@ -65,7 +65,7 @@ final class CalculatorViewController: StyledViewController, CalculatorInput, UIA
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if UIDevice.currentDeviceType == .iPad {
+        if UIDevice.current.deviceType == .iPad {
             AppDelegate.AppUtility.lockPortraitOrientation()
         } else {
             AppDelegate.AppUtility.unlockPortraitOrientation()

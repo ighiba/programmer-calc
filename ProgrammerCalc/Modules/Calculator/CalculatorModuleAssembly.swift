@@ -14,7 +14,7 @@ class CalculatorModuleAssembly {
         let presenter = CalculatorPresenter()
 
         // Layout choice for device type
-        switch UIDevice.currentDeviceType {
+        switch UIDevice.current.deviceType {
         case .iPhone:
             view.buttonsContainerController = ButtonsViewControllerPhone()
         case .iPad:

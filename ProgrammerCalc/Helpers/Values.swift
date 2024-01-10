@@ -9,7 +9,7 @@
 import UIKit
 
 var modalViewWidthMultiplier: CGFloat {
-    return UIDevice.currentDeviceType == .iPad ? 0.5 : 0.9
+    return UIDevice.current.deviceType == .iPad ? 0.5 : 0.9
 }
 
 var modalViewContainerWidth: CGFloat {

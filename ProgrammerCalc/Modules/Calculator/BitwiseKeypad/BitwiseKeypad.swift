@@ -14,11 +14,11 @@ final class BitwiseKeypad: UIView {
     
     weak var controllerDelegate: BitwiseKeypadControllerDelegate!
     
-    private let spacing: CGFloat = UIDevice.currentDeviceType == .iPad ? 20 : 10
-    private var fontSize: CGFloat { calculateFontSize(forDeviceType: UIDevice.currentDeviceType) }
+    private let spacing: CGFloat = UIDevice.current.deviceType == .iPad ? 20 : 10
+    private var fontSize: CGFloat { calculateFontSize(forDeviceType: UIDevice.current.deviceType) }
     private var bitIndexFontSize: CGFloat { fontSize / 3 }
     
-    private let keypadPortraitWidthMultiplier: CGFloat = UIDevice.currentDeviceType == .iPad ? 0.93 : 0.9
+    private let keypadPortraitWidthMultiplier: CGFloat = UIDevice.current.deviceType == .iPad ? 0.93 : 0.9
     private let keypadLandscapeWidthMultiplier: CGFloat = 0.9
     
     private var keypadStack: UIStackView!

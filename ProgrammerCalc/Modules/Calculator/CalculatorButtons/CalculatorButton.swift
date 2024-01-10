@@ -102,7 +102,7 @@ class CalculatorButton: UIButton {
     func calculateButtonWidth() -> CGFloat {
         let width = UIScreen.mainRealSize().width
         
-        switch UIDevice.currentDeviceType {
+        switch UIDevice.current.deviceType {
         case .iPad:
             return (width * 0.9 - 7 * Self.spacingWidth) / 8
         case .iPhone:

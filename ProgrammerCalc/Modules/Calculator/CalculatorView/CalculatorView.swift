@@ -14,7 +14,7 @@ final class CalculatorView: StyledView {
     
     private let verticalSpacing: CGFloat = 10
     private let horizontalSpacing: CGFloat = -5
-    private let navBarHeight: CGFloat = UIDevice.currentDeviceType == .iPad ? 50 : 44
+    private let navBarHeight: CGFloat = UIDevice.current.deviceType == .iPad ? 50 : 44
     
     var screenBounds: CGRect { CGRect(origin: .zero, size: UIScreen.mainRealSize()) }
     
