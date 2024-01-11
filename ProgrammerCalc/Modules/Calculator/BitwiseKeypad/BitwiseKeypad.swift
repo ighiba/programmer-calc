@@ -82,7 +82,7 @@ final class BitwiseKeypad: UIView {
     
     private func calculateFontSize(forDeviceType deviceType: DeviceType) -> CGFloat {
         let widthCoef: CGFloat = deviceType == .iPad ? 24 : 13.5
-        return UIScreen.mainRealSize().width / widthCoef
+        return UIScreen.main.portraitSize.width / widthCoef
     }
     
     private func configureKeypadStack() -> UIStackView {
@@ -122,7 +122,7 @@ final class BitwiseKeypad: UIView {
         stack.axis = .horizontal
         stack.distribution = .fillEqually
         
-        let halfByteStackWidth = (UIScreen.mainRealSize().width - 5 * spacing) / 4
+        let halfByteStackWidth = (UIScreen.main.portraitSize.width - 5 * spacing) / 4
         
         stack.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

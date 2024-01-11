@@ -16,7 +16,7 @@ final class CalculatorView: StyledView {
     private let horizontalSpacing: CGFloat = -5
     private let navBarHeight: CGFloat = UIDevice.current.deviceType == .iPad ? 50 : 44
     
-    var screenBounds: CGRect { CGRect(origin: .zero, size: UIScreen.mainRealSize()) }
+    var screenBounds: CGRect { CGRect(origin: .zero, size: UIScreen.main.portraitSize) }
     
     var verticalOffsetFromTop: CGFloat { screenBounds.height / 3 - 2 }
     
@@ -210,7 +210,7 @@ final class CalculatorView: StyledView {
     }()
     
     private lazy var navigationBar: UINavigationBar = {
-        let width = UIScreen.mainRealSize().width
+        let width = UIScreen.main.portraitSize.width
         let frame = CGRect(
             x: 0,
             y: 0,

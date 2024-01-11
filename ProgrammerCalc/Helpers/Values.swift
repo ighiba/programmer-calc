@@ -13,5 +13,5 @@ var modalViewWidthMultiplier: CGFloat {
 }
 
 var modalViewContainerWidth: CGFloat {
-    return UIScreen.mainRealSize().width * modalViewWidthMultiplier
+    return UIScreen.main.portraitSize.width * modalViewWidthMultiplier
 }
