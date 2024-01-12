@@ -27,34 +27,8 @@ extension String {
         self.init(stringLiteral: str)
     }
     
-    func replace(atPosition position: Int, with char: Character) -> String {
-        guard position >= 0 && position < self.count else { return self }
-        
-        var charArray = [Character](self)
-        charArray[position] = char
-        
-        return String(charArray)
-    }
-
     func removedAllSpaces() -> String {
         return self.replacingOccurrences(of: " ", with: "")
-    }
-    
-    func swap(first: Character, second: Character) -> String {
-        var resultStr = String()
-        
-        for char in self {
-            switch char {
-            case first:
-                resultStr.append(second)
-            case second:
-                resultStr.append(first)
-            default:
-                resultStr.append(char)
-            }
-        }
-        
-        return resultStr
     }
     
     func removedLeadingSpaces() -> String {
@@ -72,23 +46,6 @@ extension String {
         
         while str.count > 0 && characters.contains(str.first!) {
             str.removeFirst()
-            guard str != "" else { return str }
-        }
-        
-        return str
-    }
-    
-    /// Removes specified trailing character until a non-matching character is found and returns a new String.
-    func removedTrailing(character: Character) -> String {
-        return removedTrailing(characters: [character])
-    }
-    
-    /// Removes specified trailing characters until a non-matching character is found and returns a new String.
-    func removedTrailing(characters: [Character]) -> String {
-        var str = self
-        
-        while str.count > 0 && characters.contains(str.last!)  {
-            str.removeLast()
             guard str != "" else { return str }
         }
         

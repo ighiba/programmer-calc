@@ -41,17 +41,6 @@ class StringExtTests: XCTestCase {
         XCTAssertEqual(result, "0000111100001111", "Failed at removing spaces")
     }
     
-    func testSwap() throws {
-        // 1. given
-        let stringWithSpaces = "1000 1001"
-
-        // 2. when
-        let result = stringWithSpaces.swap(first: "1", second: "0")
-        
-        // 3. then
-        XCTAssertEqual(result, "0111 0110", "Failed swapping")
-    }
-    
     func testRemoveLeading() throws {
         // 1. given
         let stringWithSpaces = "0000000110001001"
@@ -61,16 +50,6 @@ class StringExtTests: XCTestCase {
         
         // 3. then
         XCTAssertEqual(result, "110001001", "Failed removing")
-    }
-    func testRemoveTrailing() throws {
-        // 1. given
-        let stringWithSpaces = "10001001.10011000"
-
-        // 2. when
-        let result = stringWithSpaces.removedTrailing(characters: ["0"])
-        
-        // 3. then
-        XCTAssertEqual(result, "10001001.10011", "Failed removing")
     }
     
     func testGetPartAfter() throws {
