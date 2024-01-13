@@ -91,7 +91,7 @@ extension String {
         case after = 1
     }
     
-    func getPart(_ partition: Partition, separator: Character) -> String {
+    func getComponent(_ partition: Partition, separator: Character) -> String {
         let components = self.components(separatedBy: "\(separator)")
         
         if components.count > partition.rawValue {

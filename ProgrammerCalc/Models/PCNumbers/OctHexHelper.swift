@@ -117,8 +117,8 @@ struct OctHexHelper {
         let isInputStringValid = stringValue.filter({ bitTable.isValidDigitCharacter($0) || $0 == "." }) == stringValue
         guard isInputStringValid else { return nil }
         
-        let intPartString = stringValue.getPart(.before, separator: ".")
-        let fractPartString = stringValue.getPart(.after, separator: ".")
+        let intPartString = stringValue.getComponent(.before, separator: ".")
+        let fractPartString = stringValue.getComponent(.after, separator: ".")
         
         let intPart = convertStringToBits(intPartString, usingBitTable: bitTable)
         let fractPart = convertStringToBits(fractPartString, usingBitTable: bitTable)
