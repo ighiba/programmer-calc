@@ -72,7 +72,6 @@
 		C082FB952A35DAF000F3AA60 /* Icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C082FB942A35DAF000F3AA60 /* Icons.xcassets */; };
 		C082FB972A35E6FF00F3AA60 /* Values.swift in Sources */ = {isa = PBXBuildFile; fileRef = C082FB962A35E6FF00F3AA60 /* Values.swift */; };
 		C0905E712A080843004180A7 /* PCDecimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0905E702A080843004180A7 /* PCDecimal.swift */; };
-		C09623172A04171B00E6C08F /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09623162A04171B00E6C08F /* Int.swift */; };
 		C096231D2A05650300E6C08F /* PCDecimalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C096231C2A05650300E6C08F /* PCDecimalTests.swift */; };
 		C09631C42725BA7C001DCD25 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C09631C62725BA7C001DCD25 /* Localizable.strings */; };
 		C09631CA2726FB12001DCD25 /* AppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631C92726FB12001DCD25 /* AppearanceViewController.swift */; };
@@ -202,7 +201,6 @@
 		C082FB942A35DAF000F3AA60 /* Icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icons.xcassets; sourceTree = "<group>"; };
 		C082FB962A35E6FF00F3AA60 /* Values.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Values.swift; sourceTree = "<group>"; };
 		C0905E702A080843004180A7 /* PCDecimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCDecimal.swift; sourceTree = "<group>"; };
-		C09623162A04171B00E6C08F /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
 		C096231C2A05650300E6C08F /* PCDecimalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCDecimalTests.swift; sourceTree = "<group>"; };
 		C09631C32725BA6E001DCD25 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		C09631C52725BA7C001DCD25 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -369,7 +367,6 @@
 				C061FCF02B1E50820094BF6A /* Array.swift */,
 				C061FD002B2202B70094BF6A /* Character.swift */,
 				C0F5CF4E270F394E0020CE14 /* Decimal.swift */,
-				C09623162A04171B00E6C08F /* Int.swift */,
 				C00616AB27065097007BEF89 /* String.swift */,
 				C0F3D944273B0A7300EA3333 /* UIApplication.swift */,
 				C052270E27978F6800B7E384 /* UIBarButtonItem.swift */,
@@ -794,7 +791,6 @@
 				C0E0FF4A2A44F6CE00E38DF9 /* PreferenceCellModel.swift in Sources */,
 				C0E0FF5A2A45EC5F00E38DF9 /* StyleManager.swift in Sources */,
 				C082FB8B2A33894500F3AA60 /* CalculatorViewController.swift in Sources */,
-				C09623172A04171B00E6C08F /* Int.swift in Sources */,
 				C061FD1A2B250DC60094BF6A /* ClearButton.swift in Sources */,
 				C00564012B192FB8003CCC29 /* PCOctal.swift in Sources */,
 				C070ED2424DB0EC900A04463 /* SettingsViewController.swift in Sources */,
