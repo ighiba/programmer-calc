@@ -8,6 +8,7 @@
 
 import UIKit
 
+private let labelFont: UIFont = .systemFont(ofSize: 18, weight: .semibold)
 private let popoverDoneButtonColor: UIColor = UIColor(named: "PopoverDoneButtonColor")!
 private let popoverDoneButtonColorPressed: UIColor = UIColor(named: "PopoverDoneButtonColorPressed")!
 
@@ -17,7 +18,11 @@ class PopoverDoneButton: UIButton {
     
     override open var isHighlighted: Bool {
         didSet {
-            changeButtonHighlightAnimated(isHighlighted: isHighlighted)
+            if isHighlighted {
+                backgroundColor = popoverDoneButtonColorPressed
+            } else {
+                transitionToDefaultBackgroundColor()
+            }
         }
     }
 
@@ -35,19 +40,20 @@ class PopoverDoneButton: UIButton {
         
         setTitle(NSLocalizedString("Done", comment: ""), for: .normal)
         setTitleColor(.white, for: .normal)
+        titleLabel?.font = labelFont
         
         backgroundColor = .systemGreen
         
         layer.cornerRadius = 16
     }
     
-    private func changeButtonHighlightAnimated(isHighlighted: Bool) {
-        if isHighlighted {
-            backgroundColor = popoverDoneButtonColorPressed
-        } else {
-            UIView.transition(with: self, duration: 0.3,options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction],animations: {
-                self.backgroundColor = popoverDoneButtonColor
-            }, completion: nil)
-        }
+    private func transitionToDefaultBackgroundColor(duration: TimeInterval = 0.3) {
+        UIView.transition(
+            with: self,
+            duration: duration,
+            options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction],
+            animations: { self.backgroundColor = popoverDoneButtonColor },
+            completion: nil
+        )
     }
 }
