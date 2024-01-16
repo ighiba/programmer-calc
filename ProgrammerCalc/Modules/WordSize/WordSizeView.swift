@@ -18,9 +18,9 @@ class WordSizeView: UIView, ModalView {
 
     init() {
         super.init(frame: UIScreen.main.bounds)
-        setupView()
-        setupLayout()
-        setupStyle()
+        self.setupView()
+        self.setupLayout()
+        self.setupStyle()
     }
 
     required init?(coder: NSCoder) {

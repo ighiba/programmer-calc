@@ -16,10 +16,9 @@ final class CalculatorLabel: UILabel {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-
-        setupView()
-        setupGestures()
-        setupNotifications()
+        self.setupView()
+        self.setupGestures()
+        self.setupNotifications()
     }
     
     required init?(coder: NSCoder) {

@@ -57,9 +57,8 @@ final class CalculatorView: StyledView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        setupView()
-        setupGestures()
+        self.setupView()
+        self.setupGestures()
     }
     
     required init?(coder: NSCoder) {

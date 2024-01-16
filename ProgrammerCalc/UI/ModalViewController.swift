@@ -109,8 +109,8 @@ class ModalViewController: UIViewController {
 
     private func isGestureNotInContainer(gesture: UIGestureRecognizer) -> Bool {
         modalView.container.updateConstraints()
-        let currentLocation: CGPoint = gesture.location(in: modalView.container)
-        let containerBounds: CGRect = modalView.container.bounds
+        let currentLocation = gesture.location(in: modalView.container)
+        let containerBounds = modalView.container.bounds
 
         return !containerBounds.contains(currentLocation)
     }
