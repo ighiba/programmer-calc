@@ -42,7 +42,7 @@ class PopoverDoneButton: UIButton {
         setTitleColor(.white, for: .normal)
         titleLabel?.font = labelFont
         
-        backgroundColor = .systemGreen
+        backgroundColor = popoverDoneButtonColor
         
         layer.cornerRadius = 16
     }

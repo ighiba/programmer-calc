@@ -1,5 +1,5 @@
 //
-//  StringExtTests.swift
+//  StringExtensionTests.swift
 //  ProgrammerCalcTests
 //
 //  Created by Ivan Ghiba on 30.10.2021.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import ProgrammerCalc
 
-class StringExtTests: XCTestCase {
+final class StringExtensionTests: XCTestCase {
 
     override func setUp() {
         super.setUp()

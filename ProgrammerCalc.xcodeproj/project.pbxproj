@@ -81,7 +81,7 @@
 		C09631D627277066001DCD25 /* ButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631D527277066001DCD25 /* ButtonStyle.swift */; };
 		C09631D82728E9DC001DCD25 /* StyledViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631D72728E9DC001DCD25 /* StyledViewController.swift */; };
 		C09631DC272C581C001DCD25 /* CalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DB272C581B001DCD25 /* CalculatorTests.swift */; };
-		C09631DE272D4FBE001DCD25 /* StringExtTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DD272D4FBE001DCD25 /* StringExtTests.swift */; };
+		C09631DE272D4FBE001DCD25 /* StringExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DD272D4FBE001DCD25 /* StringExtensionTests.swift */; };
 		C097F43C2B193355009BF3D7 /* PCHexadecimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C097F43B2B193355009BF3D7 /* PCHexadecimal.swift */; };
 		C0CC6DFF271F68AA00E59E64 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */; };
 		C0D842D62AD8669400B85E9F /* UITapGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D842D52AD8669400B85E9F /* UITapGestureRecognizer.swift */; };
@@ -212,7 +212,7 @@
 		C09631D527277066001DCD25 /* ButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyle.swift; sourceTree = "<group>"; };
 		C09631D72728E9DC001DCD25 /* StyledViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyledViewController.swift; sourceTree = "<group>"; };
 		C09631DB272C581B001DCD25 /* CalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorTests.swift; sourceTree = "<group>"; };
-		C09631DD272D4FBE001DCD25 /* StringExtTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtTests.swift; sourceTree = "<group>"; };
+		C09631DD272D4FBE001DCD25 /* StringExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensionTests.swift; sourceTree = "<group>"; };
 		C097F43B2B193355009BF3D7 /* PCHexadecimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCHexadecimal.swift; sourceTree = "<group>"; };
 		C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		C0D842D52AD8669400B85E9F /* UITapGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITapGestureRecognizer.swift; sourceTree = "<group>"; };
@@ -319,7 +319,7 @@
 				C061FCF22B1F802B0094BF6A /* PCBinaryTests.swift */,
 				C061FCF42B1F8AF90094BF6A /* PCOctalTests.swift */,
 				C061FCF62B1F8DD40094BF6A /* PCHexadecimalTests.swift */,
-				C09631DD272D4FBE001DCD25 /* StringExtTests.swift */,
+				C09631DD272D4FBE001DCD25 /* StringExtensionTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -841,7 +841,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C09631DC272C581C001DCD25 /* CalculatorTests.swift in Sources */,
-				C09631DE272D4FBE001DCD25 /* StringExtTests.swift in Sources */,
+				C09631DE272D4FBE001DCD25 /* StringExtensionTests.swift in Sources */,
 				C061FCF32B1F802B0094BF6A /* PCBinaryTests.swift in Sources */,
 				C061FCF52B1F8AF90094BF6A /* PCOctalTests.swift in Sources */,
 				C096231D2A05650300E6C08F /* PCDecimalTests.swift in Sources */,
@@ -1023,7 +1023,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 22;
 				DEVELOPMENT_TEAM = 586JQB45F3;
 				INFOPLIST_FILE = ProgrammerCalc/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Programmer's Calculator";
@@ -1052,7 +1052,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 22;
 				DEVELOPMENT_TEAM = 586JQB45F3;
 				INFOPLIST_FILE = ProgrammerCalc/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Programmer's Calculator";
