@@ -83,6 +83,7 @@
 		C09631DC272C581C001DCD25 /* CalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DB272C581B001DCD25 /* CalculatorTests.swift */; };
 		C09631DE272D4FBE001DCD25 /* StringExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09631DD272D4FBE001DCD25 /* StringExtensionTests.swift */; };
 		C097F43C2B193355009BF3D7 /* PCHexadecimal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C097F43B2B193355009BF3D7 /* PCHexadecimal.swift */; };
+		C0AA6ED92B59B33A00B5349A /* DecimalExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0AA6ED82B59B33A00B5349A /* DecimalExtensionTests.swift */; };
 		C0CC6DFF271F68AA00E59E64 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */; };
 		C0D842D62AD8669400B85E9F /* UITapGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D842D52AD8669400B85E9F /* UITapGestureRecognizer.swift */; };
 		C0D842D82AD866A500B85E9F /* UISwipeGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D842D72AD866A500B85E9F /* UISwipeGestureRecognizer.swift */; };
@@ -214,6 +215,7 @@
 		C09631DB272C581B001DCD25 /* CalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorTests.swift; sourceTree = "<group>"; };
 		C09631DD272D4FBE001DCD25 /* StringExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensionTests.swift; sourceTree = "<group>"; };
 		C097F43B2B193355009BF3D7 /* PCHexadecimal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCHexadecimal.swift; sourceTree = "<group>"; };
+		C0AA6ED82B59B33A00B5349A /* DecimalExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalExtensionTests.swift; sourceTree = "<group>"; };
 		C0CC6DFE271F68AA00E59E64 /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		C0D842D52AD8669400B85E9F /* UITapGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITapGestureRecognizer.swift; sourceTree = "<group>"; };
 		C0D842D72AD866A500B85E9F /* UISwipeGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UISwipeGestureRecognizer.swift; sourceTree = "<group>"; };
@@ -320,6 +322,7 @@
 				C061FCF42B1F8AF90094BF6A /* PCOctalTests.swift */,
 				C061FCF62B1F8DD40094BF6A /* PCHexadecimalTests.swift */,
 				C09631DD272D4FBE001DCD25 /* StringExtensionTests.swift */,
+				C0AA6ED82B59B33A00B5349A /* DecimalExtensionTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -845,6 +848,7 @@
 				C061FCF32B1F802B0094BF6A /* PCBinaryTests.swift in Sources */,
 				C061FCF52B1F8AF90094BF6A /* PCOctalTests.swift in Sources */,
 				C096231D2A05650300E6C08F /* PCDecimalTests.swift in Sources */,
+				C0AA6ED92B59B33A00B5349A /* DecimalExtensionTests.swift in Sources */,
 				C061FCFA2B1FA0720094BF6A /* CalculatorPresenterMock.swift in Sources */,
 				C061FCF72B1F8DD40094BF6A /* PCHexadecimalTests.swift in Sources */,
 			);

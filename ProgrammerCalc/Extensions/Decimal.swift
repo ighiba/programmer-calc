@@ -12,35 +12,8 @@ extension Decimal {
     
     typealias RoundingMode = NSDecimalNumber.RoundingMode
 
-    var intPart: UInt64 {
-        let roundingBehavior = NSDecimalNumberHandler(
-            roundingMode: .plain,
-            scale: 0,
-            raiseOnExactness: false,
-            raiseOnOverflow: false,
-            raiseOnUnderflow: false,
-            raiseOnDivideByZero: false
-        )
-        return NSDecimalNumber(decimal: self).rounding(accordingToBehavior: roundingBehavior).uint64Value
-    }
-    
+    var intPart: UInt64 { NSDecimalNumber(decimal: self.rounded(.down)).uint64Value }
     var floatPart: Decimal { abs(self) - abs(self).rounded(.down) }
-    
-    static func % (lhs: Decimal, rhs: Decimal) -> Decimal {
-        let result: Decimal
-
-        let dec = lhs / rhs
-        let decRounded = dec.rounded(.down)
-        
-        if dec > decRounded {
-            let roundingDifference = dec - decRounded
-            result = roundingDifference * rhs
-        } else {
-            result = 0
-        }
-
-        return result
-    }
     
     func rounded(_ roundingMode: RoundingMode) -> Decimal {
         return rounded(scale: 0, roundingMode: roundingMode)
@@ -56,5 +29,21 @@ extension Decimal {
             raiseOnDivideByZero: false
         )
         return NSDecimalNumber(decimal: self).rounding(accordingToBehavior: roundingBehavior).decimalValue
+    }
+    
+    static func % (lhs: Decimal, rhs: Decimal) -> Decimal {
+        let result: Decimal
+
+        let dec = lhs / rhs
+        let decRounded = dec.rounded(.down)
+        
+        if dec > decRounded {
+            let roundingDifference = dec - decRounded
+            result = roundingDifference * rhs
+        } else {
+            result = 0
+        }
+
+        return result
     }
 }
