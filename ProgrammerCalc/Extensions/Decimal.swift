@@ -26,19 +26,6 @@ extension Decimal {
     
     var floatPart: Decimal { abs(self) - abs(self).rounded(.down) }
     
-    init(_ str: String, radix: Int) {
-        self.init()
-        var decimal = Decimal()
-        var multiplier = str.count - 1
-        for bit in str {
-            let bitDecimal: Decimal = bit == "1" ? 1 : 0
-            let powDecimal = pow(Decimal(radix), multiplier)
-            decimal += bitDecimal * powDecimal
-            multiplier -= 1
-        }
-        self = decimal
-    }
-    
     static func % (lhs: Decimal, rhs: Decimal) -> Decimal {
         let result: Decimal
 
