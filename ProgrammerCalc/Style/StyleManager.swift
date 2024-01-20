@@ -12,7 +12,7 @@ class StyleManager {
     
     static let shared = StyleManager()
     
-    var currentStyle: Style { styleFactory.get(style: styleSettings.currentStyle) }
+    var currentStyle: Style { styleFactory.get(theme: styleSettings.theme) }
     
     private let styleSettings = StyleSettings.shared
     private let styleFactory = StyleFactory()
@@ -21,17 +21,11 @@ class StyleManager {
     
     func updateStyle(for window: UIWindow?) {
         if styleSettings.isUsingSystemAppearance {
-            switch UIScreen.main.traitCollection.userInterfaceStyle {
-            case .light, .unspecified:
-                styleSettings.currentStyle = .light
-            case .dark:
-                styleSettings.currentStyle = .dark
-            @unknown default:
-                styleSettings.currentStyle = .dark
-            }
+            let interfaceStyle = UIScreen.main.traitCollection.userInterfaceStyle
+            styleSettings.updateTheme(forInterfaceStyle: interfaceStyle)
             window?.overrideUserInterfaceStyle = .unspecified
         } else {
-            window?.overrideUserInterfaceStyle = styleSettings.currentStyle == .light ? .light : .dark
+            window?.overrideUserInterfaceStyle = styleSettings.preferredInterfaceStyle
         }
     }
 }

@@ -23,4 +23,3 @@ class ConversionModuleAssembly {
         return view
     }
 }
-

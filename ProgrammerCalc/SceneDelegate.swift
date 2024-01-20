@@ -16,21 +16,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         case copyOutput = "ru.ighiba.ProgrammerCalc.copyOutput"
     }
     
-    static let favoriteIdentifierInfoKey = "FavoriteIdentifier"
-    
     var window: UIWindow?
-    var savedShortCutItem: UIApplicationShortcutItem!
+    var savedShortсutItem: UIApplicationShortcutItem?
     
-    private let storage = PCalcStorage()
+    private let storageManager: StorageManager = PCStorageManager()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        storage.loadAll()
+        storageManager.loadAll()
 
         if let shortcutItem = connectionOptions.shortcutItem {
-            savedShortCutItem = shortcutItem
+            savedShortсutItem = shortcutItem
         }
 
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
 
@@ -50,26 +49,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func windowScene(_ windowScene: UIWindowScene, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
-        savedShortCutItem = shortcutItem
+        savedShortсutItem = shortcutItem
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        if savedShortCutItem != nil {
-            handleShortCutItem(shortcutItem: savedShortCutItem)
+        if let savedShortсutItem {
+            handleShortсutItem(shortcutItem: savedShortсutItem)
         }
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
-        storage.saveAll()
+        storageManager.saveAll()
 
-        let calcState = CalcState.shared
+        let calculatorState = CalculatorState.shared
         let conversionSettings = ConversionSettings.shared
         
-        let inputResult = calcState.lastLabelValues.main
-        let outputResult = calcState.lastLabelValues.converter
+        let inputResult = calculatorState.inputText
+        let outputResult = calculatorState.outputText
         
-        let inputSystem = conversionSettings.systemMain.title
-        let outputSystem = conversionSettings.systemConverter.title
+        let inputSystem = conversionSettings.inputSystem.shortTitle
+        let outputSystem = conversionSettings.outputSystem.shortTitle
         
         let application = UIApplication.shared
         
@@ -77,14 +76,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         application.shortcutItems = [
             UIApplicationShortcutItem(
-                type: "ru.ighiba.ProgrammerCalc.copyInput",
+                type: ActionType.copyInput.rawValue,
                 localizedTitle: NSLocalizedString("Copy last input", comment: "") + " (\(inputSystem))",
                 localizedSubtitle: inputResult,
                 icon: icon,
                 userInfo: nil
             ),
             UIApplicationShortcutItem(
-                type: "ru.ighiba.ProgrammerCalc.copyOutput",
+                type: ActionType.copyOutput.rawValue,
                 localizedTitle: NSLocalizedString("Copy last output", comment: "") + " (\(outputSystem))",
                 localizedSubtitle: outputResult,
                 icon: icon,
@@ -108,7 +107,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
     
-    func handleShortCutItem(shortcutItem: UIApplicationShortcutItem) {
+    func handleShortсutItem(shortcutItem: UIApplicationShortcutItem) {
         copyInputFor(shortcutItem: shortcutItem)
     }
 }

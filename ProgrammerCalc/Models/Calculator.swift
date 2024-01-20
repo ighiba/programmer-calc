@@ -2,258 +2,327 @@
 //  Calculator.swift
 //  ProgrammerCalc
 //
-//  Created by Ivan Ghiba on 04.05.2023.
+//  Created by Ivan Ghiba on 05.12.2023.
 //  Copyright © 2023 ighiba. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
-protocol CalculatorProtocol {
-    var currentValue: PCDecimal { get set }
-    var operation: Calculator.CalcOperation? { get set }
+typealias PCNumberInput = PCNumber & PCNumberDigits
+
+final class PCOperation {
+    var bufferValue: PCNumber
+    var binaryOperator: BinaryOperator
+    
+    init(bufferValue: PCNumber, binaryOperator: BinaryOperator) {
+        self.bufferValue = bufferValue
+        self.binaryOperator = binaryOperator
+    }
 }
 
-class Calculator: CalculatorProtocol {
-    
-    class CalcOperation {
-        var current: CalcMath.OperationType
-        var previousValue: PCDecimal?
-        
-        init(previousValue: PCDecimal, current: CalcMath.OperationType) {
-            self.previousValue = previousValue
-            self.current = current
-        }
-    }
+protocol Calculator {
+    var calculatorPresenterDelegate: CalculatorPresenterDelegate! { get set }
+    func load()
+    func reload()
+    func clearButtonDidPress()
+    func negateInputValue()
+    func removeLeastSignificantDigit()
+    func dotButtonDidPress()
+    func numericButtonDidPress(digit: NumericButton.Digit)
+    func complementButtonDidPress(complementOperator: ComplementOperator)
+    func unaryOperatorButtonDidPress(unaryOperator: UnaryOperator)
+    func binaryOperatorButtonDidPress(binaryOperator: BinaryOperator)
+    func calculateButtonDidPress()
+    func getInputValueBits() -> [Bit]
+    func bitButtonDidPress(bitIsOn: Bool, atIndex bitIndex: UInt8)
+}
+
+final class CalculatorImpl: Calculator {
     
     // MARK: - Properties
     
+    private var inputValue: PCNumberInput {
+        didSet {
+            calculatorState.lastValue = inputValue.pcDecimalValue.fixedOverflow(bitWidth: wordSize.bitWidth, isSigned: calculatorState.isSigned)
+        }
+    }
+    
     weak var calculatorPresenterDelegate: CalculatorPresenterDelegate!
     
-    private let converter: Converter = Converter()
-    private let calculationHandler: CalcMath = CalcMath()
-    private let labelFormatter: LabelFormatter = LabelFormatter()
-
-    let numberSystemFactory: NumberSystemFactory = NumberSystemFactory()
-    let operationFactory: OperationFactory = OperationFactory()
+    private var currentOperation: PCOperation?
+    private var isFractionalInputStarted: Bool = false
     
-    var operation: CalcOperation?
-    var shouldStartNewInput: Bool = true
+    private let wordSize: WordSize
+    private let calculatorState: CalculatorState
+    private let conversionSettings: ConversionSettings
     
-    var currentValue: PCDecimal {
-        didSet {
-            print("PCDecimal new value: \(currentValue.getDecimal())")
-            calcState.lastValue = currentValue
-        }
-    }
-
-    var hasPendingOperation: Bool {
-        if let operation = self.operation {
-            return operation.current != CalcMath.OperationType.none
-        }
-        return false
-    }
+    // MARK: - Init
     
-    private let conversionSettings: ConversionSettings = ConversionSettings.shared
-    private let calcState: CalcState = CalcState.shared
-    private let wordSize: WordSize = WordSize.shared
-    
-    private let errorGenerator = UINotificationFeedbackGenerator()
-    
-    // MARK: - Initialization
-    
-    init() {
-        currentValue = calcState.lastValue
+    init(wordSize: WordSize, calculatorState: CalculatorState, conversionSettings: ConversionSettings) {
+        self.inputValue = PCDecimal.zero
+        self.wordSize = wordSize
+        self.calculatorState = calculatorState
+        self.conversionSettings = conversionSettings
     }
     
     // MARK: - Methods
     
-    public func getOperation(with buttonText: String) -> CalcMath.OperationType {
-        return operationFactory.get(buttonLabel: buttonText)
+    func load() {
+        inputValue = convert(calculatorState.lastValue, to: conversionSettings.inputSystem)
+        
+        updateLabels(withInputValue: inputValue)
     }
     
-    public func setOperation(_ operationType: CalcMath.OperationType) {
-        operation = CalcOperation(previousValue: PCDecimal(value: currentValue.getDecimal()) , current: operationType)
+    func reload() {
+        inputValue = convert(inputValue, to: conversionSettings.inputSystem)
+        
+        updateLabels(withInputValue: inputValue)
     }
     
-    public func setOperation(with buttonText: String) {
-        let operationType = getOperation(with: buttonText)
-        setOperation(operationType)
+    func clearButtonDidPress() {
+        isFractionalInputStarted = false
+        currentOperation = nil
+        inputValue.reset()
+        
+        updateLabels(withInputValue: inputValue)
     }
     
-    public func calculate(shouldStartNewInput startNewInput: Bool = true) {
-        guard operation != nil else { return }
+    func negateInputValue() {
+        inputValue = convert(-inputValue.pcDecimalValue, to: conversionSettings.inputSystem)
+
+        updateLabels(withInputValue: inputValue)
+    }
+    
+    func removeLeastSignificantDigit() {
+        let hasFractionalDigits = !inputValue.fractDigits.isEmpty
+        
+        if isFractionalInputStarted {
+            isFractionalInputStarted = false
+        } else if hasFractionalDigits {
+            inputValue.removeLeastSignificantFractionalDigit()
+        } else {
+            inputValue.removeLeastSignificantIntegerDigit()
+        }
+
+        updateLabels(withInputValue: inputValue)
+    }
+    
+    func dotButtonDidPress() {
+        guard !isFractionalInputStarted && inputValue.fractDigits.isEmpty else { return }
+        
+        isFractionalInputStarted = true
+    
+        let bitWidth = wordSize.bitWidth
+        let inputText = inputValue.formattedInput(bitWidth: bitWidth) + "."
+        
+        calculatorPresenterDelegate.setInputLabelText(inputText)
+    }
+    
+    func numericButtonDidPress(digit: NumericButton.Digit) {
+        let bitWidth = wordSize.bitWidth
+        let fractionalWidth = conversionSettings.fractionalWidth
+        let isSigned = calculatorState.isSigned
+        
+        let isIntegerInput = !(isFractionalInputStarted || !inputValue.fractDigits.isEmpty)
+        if isIntegerInput {
+            inputValue.appendIntegerDigits(digit.digitsToAppend, bitWidth: bitWidth, isSigned: isSigned)
+        } else {
+            inputValue.appendFractionalDigits(digit.digitsToAppend, fractionalWidth: fractionalWidth)
+            isFractionalInputStarted = false
+        }
+        
+        updateLabels(withInputValue: inputValue)
+    }
+    
+    func complementButtonDidPress(complementOperator: ComplementOperator) {
+        let result = calculateComplementOperation(inputValue, complementOperator: complementOperator)
+        
+        currentOperation = nil
+        inputValue = convert(result, to: conversionSettings.inputSystem)
+        
+        updateLabels(withInputValue: inputValue)
+    }
+    
+    func unaryOperatorButtonDidPress(unaryOperator: UnaryOperator) {
+        let result = calculateUnaryOperation(inputValue, unaryOperator: unaryOperator)
+        
+        currentOperation = nil
+        inputValue = convert(result, to: conversionSettings.inputSystem)
+        
+        updateLabels(withInputValue: inputValue)
+    }
+    
+    func binaryOperatorButtonDidPress(binaryOperator: BinaryOperator) {
+        if let pendingOperation = currentOperation {
+            do {
+                let newBufferValue = try calculateBinaryOperation(lhs: pendingOperation.bufferValue, rhs: inputValue, binaryOperator: pendingOperation.binaryOperator)
+                
+                currentOperation?.bufferValue = newBufferValue
+                currentOperation?.binaryOperator = binaryOperator
+                
+                inputValue.reset()
+                
+                updateLabels(withInputValue: newBufferValue)
+            } catch(let error) {
+                handleCalculationError(error)
+            }
+        } else {
+            currentOperation = PCOperation(bufferValue: inputValue, binaryOperator: binaryOperator)
+            inputValue.reset()
+        }
+    }
+    
+    func calculateButtonDidPress() {
+        guard let pendingOperation = currentOperation else { return }
         
         do {
-            var result = try calculateCurrentValue()
-            result.fixOverflow(bitWidth: wordSize.intValue, processSigned: calcState.processSigned)
-            operation?.previousValue = PCDecimal(value: result.getDecimal())
-            shouldStartNewInput = startNewInput
-            currentValue = result
-        } catch MathErrors.divByZero {
-            resetCalculation()
-            currentValue = PCDecimal(value: 0.0)
-            setErrorInLabels(.divByZero)
-            showErrorInLabels(.divByZero)
-        } catch {
-  
+            let calculatedValue = try calculateBinaryOperation(lhs: pendingOperation.bufferValue, rhs: inputValue, binaryOperator: pendingOperation.binaryOperator)
+            
+            currentOperation = nil
+            inputValue = convert(calculatedValue, to: conversionSettings.inputSystem)
+            
+            updateLabels(withInputValue: inputValue)
+        } catch(let error) {
+            handleCalculationError(error)
         }
     }
     
-    private func showErrorInLabels(_ error: MathErrors) {
-        calculatorPresenterDelegate.showErrorInLabels(error)
-    }
-    
-    private func setErrorInLabels(_ error: MathErrors) {
-        calculatorPresenterDelegate.setErrorInLabels(error)
-    }
-    
-    func calculateCurrentValue() throws -> PCDecimal {
-        guard let currentOperation = operation?.current else {
-            return currentValue
-        }
-
-        // Unary operations
-        switch currentOperation {
+    private func calculateComplementOperation(_ pcNumber: PCNumber, complementOperator: ComplementOperator) -> PCNumberInput {
+        let bitWidth = wordSize.bitWidth
+        let isSigned = calculatorState.isSigned
+        
+        let decimal = pcNumber.pcDecimalValue.fixedOverflow(bitWidth: bitWidth, isSigned: isSigned)
+        
+        switch complementOperator {
         case .oneS:
-            return ~currentValue
+            return ~decimal
         case .twoS:
-            return ~currentValue + 1
+            return ~decimal + 1
+        }
+    }
+    
+    private func calculateUnaryOperation(_ pcNumber: PCNumber, unaryOperator: UnaryOperator) -> PCNumberInput {
+        let bitWidth = wordSize.bitWidth
+        let isSigned = calculatorState.isSigned
+        
+        let decimal = pcNumber.pcDecimalValue.fixedOverflow(bitWidth: bitWidth, isSigned: isSigned)
+
+        switch unaryOperator {
         case .shiftLeft:
-            return currentValue << 1
+            return decimal << 1
         case .shiftRight:
-            return currentValue >> 1
-        default:
-            break
+            return decimal >> 1
         }
+    }
+    
+    private func calculateBinaryOperation(lhs: PCNumber, rhs: PCNumber, binaryOperator: BinaryOperator) throws -> PCNumberInput {
+        let bitWidth = wordSize.bitWidth
+        let isSigned = calculatorState.isSigned
         
-        guard let previousValue = operation?.previousValue else {
-            return currentValue
-        }
+        let lhsDecimal = lhs.pcDecimalValue.fixedOverflow(bitWidth: bitWidth, isSigned: isSigned)
+        let rhsDecimal = rhs.pcDecimalValue.fixedOverflow(bitWidth: bitWidth, isSigned: isSigned)
         
-        // Binary operations
-        switch currentOperation {
+        switch binaryOperator {
         case .add:
-            return previousValue + currentValue
+            return lhsDecimal + rhsDecimal
         case .sub:
-            return previousValue - currentValue
+            return lhsDecimal - rhsDecimal
         case .mul:
-            return previousValue * currentValue
+            return lhsDecimal * rhsDecimal
         case .div:
-            if currentValue != .zero {
-                return previousValue / currentValue
-            } else {
-                throw MathErrors.divByZero
-            }
+            guard rhsDecimal != 0 else { throw MathError.divByZero }
+            return lhsDecimal / rhsDecimal
         case .shiftLeftBy:
-            return previousValue << currentValue
+            return lhsDecimal << rhsDecimal
         case .shiftRightBy:
-            return previousValue >> currentValue
+            return lhsDecimal >> rhsDecimal
         case .and:
-            return previousValue & currentValue
+            return lhsDecimal & rhsDecimal
         case .or:
-            return previousValue | currentValue
+            return lhsDecimal | rhsDecimal
         case .xor:
-            return previousValue ^ currentValue
+            return lhsDecimal ^ rhsDecimal
         case .nor:
-            return ~(previousValue ^ currentValue)
-        default:
-            return currentValue
+            return ~(lhsDecimal ^ rhsDecimal)
         }
     }
     
-    public func negateCurrentValue() {
-        currentValue = -currentValue
-    }
-    
-    public func resetCurrentValue() {
-        currentValue.updateValue(0.0)
-    }
-    
-    public func updateCurrentValue(_ value: NumberSystemProtocol) {
-        guard let decSystemValue = converter.convertValue(value: value, to: .dec, format: true) as? DecimalSystem else {
-            return
-        }
-        currentValue.updateValue(decSystemValue.decimalValue)
-    }
-    
-    public func getMainLabelValue() -> NumberSystemProtocol? {
-        return converter.convertValue(value: currentValue, to: conversionSettings.systemMain, format: true)
-    }
-    
-    public func getConvertedLabelValue() -> NumberSystemProtocol? {
-        return converter.convertValue(value: currentValue, to: conversionSettings.systemConverter, format: true)
-    }
-    
-    public func resetCalculation() {
-        operation = nil
-        shouldStartNewInput = true
-    }
-    
-    public func mainLabelUpdate() {
-        let mainLabelValue = getMainLabelValue()?.value ?? "0"
-        let formattedText = labelFormatter.processStrInputToFormat(inputStr: mainLabelValue, for: conversionSettings.systemMain)
-        calculatorPresenterDelegate.setMainLabelText(formattedText)
-    }
-    
-    public func converterLabelUpdate() {
-        let converterLabelValue = getConvertedLabelValue()?.value ?? "0"
-        var formattedText = labelFormatter.processStrInputToFormat(inputStr: converterLabelValue, for: conversionSettings.systemConverter)
-        let mainLabelLastDigitIsDot = calculatorPresenterDelegate.getMainLabelText(deleteSpaces: true).last == "."
+    private func handleCalculationError(_ error: Error) {
+        currentOperation = nil
+        inputValue.reset()
         
-        if mainLabelLastDigitIsDot && !formattedText.contains(".")  {
-            formattedText.append(".")
-        }
-        calculatorPresenterDelegate.setConverterLabelText(formattedText)
+        calculatorPresenterDelegate.setInputLabelText(error.localizedDescription)
+        calculatorPresenterDelegate.setOutputLabelText("NaN")
     }
     
-    public func mainLabelRemoveTrailing() {
-        var mainLabelText = calculatorPresenterDelegate.getMainLabelText(deleteSpaces: false)
+    func getInputValueBits() -> [Bit] {
+        let decimal = inputValue.pcDecimalValue.fixedOverflow(bitWidth: wordSize.bitWidth, isSigned: calculatorState.isSigned)
+        let binary = PCBinary(pcDecimal: decimal)
         
-        if mainLabelText.count > 1 {
-            mainLabelText.removeLast()
-            if mainLabelText == "-" {
-                mainLabelText = "0"
-                calculatorPresenterDelegate.updateClearButton(hasInput: false)
-            } else if mainLabelText.last == " " {
-                mainLabelText.removeLast()
-            }
-        } else {
-            mainLabelText = "0"
-            calculatorPresenterDelegate.updateClearButton(hasInput: false)
-        }
-
-        if let numValue = numberSystemFactory.get(strValue: mainLabelText, currentSystem: conversionSettings.systemMain) {
-            updateCurrentValue(numValue)
-        }
-        
-        if mainLabelText.contains(".") {
-            calculatorPresenterDelegate.setMainLabelText(mainLabelText)
-        } else {
-            mainLabelUpdate()
-        }
-        converterLabelUpdate()
+        return binary.intPart.bits
     }
     
-    public func mainLabelAdd(digit: String) {
-        let labelText = calculatorPresenterDelegate.getMainLabelText(deleteSpaces: false)
-        var newValue: String
+    func bitButtonDidPress(bitIsOn: Bool, atIndex bitIndex: UInt8) {
+        let bit: UInt8 = bitIsOn ? 1 : 0
         
-        if calculatorPresenterDelegate.mainLabelHasError || shouldStartNewInput {
-            newValue = digit == "." ? "0." : digit
-            self.shouldStartNewInput = false
-            calculatorPresenterDelegate.resetErrorInLabels()
-        } else {
-            newValue = labelFormatter.addDigitToMainLabel(labelText: labelText, digit: digit, currentValue: currentValue)
-        }
+        let decimal = inputValue.pcDecimalValue.fixedOverflow(bitWidth: wordSize.bitWidth, isSigned: calculatorState.isSigned)
+        var binary = PCBinary(pcDecimal: decimal)
+        binary.switchBit(bit, atIndex: bitIndex)
         
-        let formattedText = labelFormatter.processStrInputToFormat(inputStr: newValue, for: conversionSettings.systemMain)
-        if let newNumber = numberSystemFactory.get(strValue: formattedText, currentSystem: conversionSettings.systemMain) {
-            updateCurrentValue(newNumber)
-            calculatorPresenterDelegate.setMainLabelText(formattedText)
-        }
+        inputValue = convert(binary, to: conversionSettings.inputSystem)
+        
+        updateLabels(withInputValue: inputValue)
     }
 
-    public func fixOverflowForCurrentValue() {
-        currentValue.fixOverflow(bitWidth: wordSize.intValue, processSigned: calcState.processSigned)
+    private func updateLabels(withInputValue inputValue: PCNumberInput) {
+        let outputValue = convert(inputValue, to: conversionSettings.outputSystem)
+        
+        let bitWidth = wordSize.bitWidth
+        let fractionalWidth = conversionSettings.fractionalWidth
+        
+        let inputText = inputValue.formattedInput(bitWidth: bitWidth)
+        let outputText = outputValue.formattedOutput(bitWidth: bitWidth, fractionalWidth: fractionalWidth)
+        
+        calculatorPresenterDelegate.setInputLabelText(inputText)
+        calculatorPresenterDelegate.setOutputLabelText(outputText)
+        
+        calculatorState.inputText = inputText
+        calculatorState.outputText = outputText
+    }
+    
+    private func convert<T: PCNumber>(_ pcNumber: T, to conversionSystem: ConversionSystem) -> PCNumberInput {
+        let bitWidth = wordSize.bitWidth
+        let isSigned = calculatorState.isSigned
+        
+        return conversionSystem.pcNumberInputType.init(pcDecimal: pcNumber.pcDecimalValue, bitWidth: bitWidth, isSigned: isSigned)
+    }
+}
+
+extension ConversionSystem {
+    var pcNumberInputType: PCNumberInput.Type {
+        switch self {
+        case .bin:
+            return PCBinary.self
+        case .oct:
+            return PCOctal.self
+        case .dec:
+            return PCDecimal.self
+        case .hex:
+            return PCHexadecimal.self
+        }
+    }
+}
+
+extension PCNumberDigits {
+    mutating func appendIntegerDigits(_ digits: [Digit], bitWidth: UInt8, isSigned: Bool) {
+        for digit in digits {
+            appendIntegerDigit(digit, bitWidth: bitWidth, isSigned: isSigned)
+        }
+    }
+    
+    mutating func appendFractionalDigits(_ digits: [Digit], fractionalWidth: UInt8) {
+        for digit in digits {
+            appendFractionalDigit(digit, fractionalWidth: fractionalWidth)
+        }
     }
 }

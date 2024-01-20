@@ -8,13 +8,21 @@
 
 import UIKit
 
-class ConversionViewController: ModalViewController, ConversionInput {
+protocol ConversionInput: AnyObject {
+    func inputPickerSelectRow(atIndex index: Int)
+    func outputPickerSelectRow(atIndex index: Int)
+    func setFractionalWidthLabelText(_ text: String)
+    func setFractionalWidthSliderValue(_ value: Float)
+    func hapticImpact()
+}
+
+final class ConversionViewController: ModalViewController, ConversionInput {
 
     var output: ConversionOutput!
     
     private let conversionView: ConversionView
     
-    private var sliderValueOld: Float = 2.0
+    private var sliderOldValue: Float = 2.0
 
     private let hapticGenerator = UIImpactFeedbackGenerator(style: .medium)
     
@@ -29,36 +37,39 @@ class ConversionViewController: ModalViewController, ConversionInput {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         output.obtainConversionSettings()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
         saveConversionSettings()
     }
     
     override func setupTargets() {
         super.setupTargets()
-        conversionView.slider.addTarget(self, action: #selector(sliderValueDidChange), for: .valueChanged)
+        
+        conversionView.fractionalWidthSlider.addTarget(self, action: #selector(sliderValueDidChange), for: .valueChanged)
     }
     
     // MARK: - Methods
     
-    func mainPickerSelectRow(_ row: Int) {
-        conversionView.numberSystemsPicker.selectRow(row, inComponent: 0, animated: false)
+    func inputPickerSelectRow(atIndex index: Int) {
+        conversionView.conversionSystemsPicker.selectRow(index, inComponent: 0, animated: false)
     }
     
-    func converterPickerSelectRow(_ row: Int) {
-        conversionView.numberSystemsPicker.selectRow(row, inComponent: 1, animated: false)
+    func outputPickerSelectRow(atIndex index: Int) {
+        conversionView.conversionSystemsPicker.selectRow(index, inComponent: 1, animated: false)
     }
     
-    func setLabelValueText(_ text: String) {
-        conversionView.sliderValueLabel.text = text
+    func setFractionalWidthLabelText(_ text: String) {
+        conversionView.fractionalWidthLabel.text = text
     }
     
-    func setSliderValue(_ value: Float) {
-        conversionView.slider.value = value
-        sliderValueOld = conversionView.slider.value
+    func setFractionalWidthSliderValue(_ value: Float) {
+        conversionView.fractionalWidthSlider.value = value
+        sliderOldValue = conversionView.fractionalWidthSlider.value
     }
     
     func hapticImpact() {
@@ -67,19 +78,19 @@ class ConversionViewController: ModalViewController, ConversionInput {
     }
     
     private func saveConversionSettings() {
-        let mainSystemSelectedRow = conversionView.numberSystemsPicker.selectedRow(inComponent: 0)
-        let converterSystemSelectedRow = conversionView.numberSystemsPicker.selectedRow(inComponent: 1)
-        let sliderValue = conversionView.slider.value.rounded()
-        output.saveConversionSettings(mainRow: mainSystemSelectedRow, converterRow: converterSystemSelectedRow, sliderValue: sliderValue)
+        let inputPickerSelectedRow = conversionView.conversionSystemsPicker.selectedRow(inComponent: 0)
+        let outputPickerSelectedRow = conversionView.conversionSystemsPicker.selectedRow(inComponent: 1)
+        let sliderValue = conversionView.fractionalWidthSlider.value.rounded()
+        output.saveConversionSettings(inputPickerSelectedRow: inputPickerSelectedRow, outputPickerSelectedRow: outputPickerSelectedRow, sliderValue: sliderValue)
     }
     
     // MARK: - Actions
 
     @objc func sliderValueDidChange(_ sender: UISlider) {
-        let sliderValueNew = sender.value.rounded()
-        if sliderValueOld != sliderValueNew {
-            output.sliderValueDidChanged(sliderValueNew)
-            sliderValueOld = sliderValueNew
+        let sliderNewValue = sender.value.rounded()
+        if sliderOldValue != sliderNewValue {
+            output.sliderValueDidChange(sliderNewValue)
+            sliderOldValue = sliderNewValue
         }
     }
 }

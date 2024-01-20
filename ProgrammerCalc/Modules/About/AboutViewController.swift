@@ -13,7 +13,13 @@ private let descriptionIcon = UIImage(systemName: "doc.plaintext")
 private let rateAppIcon = UIImage(systemName: "star.square")
 private let contactUsIcon = UIImage(systemName: "envelope")
 
-class AboutViewController: StyledTableViewController, AboutInput, MFMailComposeViewControllerDelegate {
+protocol AboutInput: AnyObject {
+    func reloadTable()
+    func push(_ viewController: UIViewController)
+    func openContactForm(recipients: [String], subject: String, message: String)
+}
+
+final class AboutViewController: StyledTableViewController, AboutInput, MFMailComposeViewControllerDelegate {
     
     // MARK: - Properties
     
@@ -42,11 +48,13 @@ class AboutViewController: StyledTableViewController, AboutInput, MFMailComposeV
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         AppDelegate.AppUtility.lockPortraitOrientation()
     }
 
     override func styleWillUpdate(with style: Style) {
         super.styleWillUpdate(with: style)
+        
         for row in 0 ..< preferenceList.count {
             let indexPath = IndexPath(row: row, section: 1)
             let cell = tableView.cellForRow(at: indexPath)
@@ -58,23 +66,20 @@ class AboutViewController: StyledTableViewController, AboutInput, MFMailComposeV
     
     private func configurePreferenceList() -> [PreferenceCellModel] {
         return [
-            PreferenceCellModel(
+            PushPreferenceCellModel(
                 id: "description",
-                label: NSLocalizedString("Description", comment: ""),
-                cellType: .standart,
-                cellIcon: descriptionIcon
+                text: NSLocalizedString("Description", comment: ""),
+                icon: descriptionIcon
             ),
             PreferenceCellModel(
                 id: "rateApp",
-                label: NSLocalizedString("Rate app", comment: ""),
-                cellType: .standart,
-                cellIcon: rateAppIcon
+                text: NSLocalizedString("Rate app", comment: ""),
+                icon: rateAppIcon
             ),
             PreferenceCellModel(
                 id: "contactUs",
-                label: NSLocalizedString("Contact us", comment: ""),
-                cellType: .standart,
-                cellIcon: contactUsIcon
+                text: NSLocalizedString("Contact us", comment: ""),
+                icon: contactUsIcon
             )
         ]
     }
@@ -87,7 +92,7 @@ class AboutViewController: StyledTableViewController, AboutInput, MFMailComposeV
         navigationController?.pushViewController(viewController, animated: true)
     }
     
-    func openContactFormWith(recipients: [String], subject: String, message: String) {
+    func openContactForm(recipients: [String], subject: String, message: String) {
         if MFMailComposeViewController.canSendMail() {
             let mailController = MFMailComposeViewController()
             mailController.mailComposeDelegate = view as? MFMailComposeViewControllerDelegate
@@ -99,7 +104,7 @@ class AboutViewController: StyledTableViewController, AboutInput, MFMailComposeV
             present(mailController, animated: true, completion: nil)
         } else {
             let alert = UIAlertController(
-                title:  NSLocalizedString("Error", comment: "Error alert title"),
+                title: NSLocalizedString("Error", comment: "Error alert title"),
                 message: NSLocalizedString("Mail services are not available", comment: ""),
                 preferredStyle: .alert
             )
@@ -138,7 +143,7 @@ extension AboutViewController {
             return AboutAppCell(iconName: "icon-ios-about.png", appVersion: appVersion)
         } else {
             let preferenceModel = preferenceList[indexPath.row]
-            let cell = PreferenceCell(preferenceModel)
+            let cell = PreferenceCell(preferenceModel: preferenceModel)
             cell.imageView?.tintColor = output.obtainTintColor()
             return cell
         }

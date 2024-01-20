@@ -18,7 +18,7 @@ protocol SettingsOutput: AnyObject {
     func openAbout()
 }
 
-class SettingsPresenter: SettingsOutput {
+final class SettingsPresenter: SettingsOutput {
     
     // MARK: - Properties
     
@@ -33,19 +33,19 @@ class SettingsPresenter: SettingsOutput {
     
     func obtainSettings() {
         let loadedSettings: Settings = storage.loadData()
-        settings.setSettings(loadedSettings)
+        settings.set(loadedSettings)
         
-        view.setTappingSoundsSwitcherState(isOn: settings.tappingSounds)
-        view.setHapticFeedbackSwitcherState(isOn: settings.hapticFeedback)
+        view.setTappingSoundsPreferenceModelSwitch(isOn: settings.isTappingSoundsEnabled)
+        view.setHapticFeedbackPreferenceModelSwitch(isOn: settings.isHapticFeedbackEnabled)
     }
     
-    func updateTappingSounds(_ state: Bool) {
-        settings.tappingSounds = state
+    func updateTappingSounds(_ isEnabled: Bool) {
+        settings.isTappingSoundsEnabled = isEnabled
         saveSettings()
     }
     
-    func updateHapticFeedback(_ state: Bool) {
-        settings.hapticFeedback = state
+    func updateHapticFeedback(_ isEnabled: Bool) {
+        settings.isHapticFeedbackEnabled = isEnabled
         saveSettings()
     }
     

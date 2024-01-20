@@ -8,43 +8,17 @@
 
 import UIKit
 
-protocol UpdatableLabel: UILabel {
-    var updateHandler: ((UpdatableLabel) -> Void)? { get set }
-}
-
-protocol CalculatorLabelDelegate {
-    var hasError: Bool { get }
-    func getText(deleteSpaces: Bool) -> String
-    func setText(_ text: String)
-    func setError(_ error: MathErrors)
-    func showErrorInLabel(_ errorMessage: String)
-}
-
-class CalculatorLabel: UILabel, UpdatableLabel, CalculatorLabelDelegate {
-
-    // MARK: - Properties
-    
-    var updateHandler: ((UpdatableLabel) -> Void)?
-
-    lazy var infoSubLabel: UILabel = getSubLabel()
+final class CalculatorLabel: UILabel {
     
     override var canBecomeFirstResponder: Bool { true }
     
-    override var text: String? {
-        didSet {
-            updateHandler?(self)
-        }
-    }
-    
-    var error: MathErrors?
-    var hasError: Bool { error != nil }
-    
-    // MARK: - Initialization
+    // MARK: - Init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        isUserInteractionEnabled = true
-        addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(showMenu)))
+        self.setupView()
+        self.setupGestures()
+        self.setupNotifications()
     }
     
     required init?(coder: NSCoder) {
@@ -53,42 +27,69 @@ class CalculatorLabel: UILabel, UpdatableLabel, CalculatorLabelDelegate {
     
     // MARK: - Methods
     
+    private func setupView() {
+        layer.backgroundColor = UIColor.clear.cgColor
+        
+        addSubview(conversionSystemLabel)
+    }
+    
+    private func setupGestures() {
+        isUserInteractionEnabled = true
+        addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(showMenu)))
+    }
+    
+    private func setupNotifications() {
+        NotificationCenter.default.addObserver(forName: UIMenuController.willHideMenuNotification, object: nil, queue: .main) { [weak self] _ in
+            if self?.layer.backgroundColor != UIColor.clear.cgColor {
+                self?.disableHighlighting()
+            }
+        }
+    }
+    
+    func addSwipeRightGesture(target: Any?, action: Selector?) {
+        let swipeRight = UISwipeGestureRecognizer(target: target, action: action)
+        swipeRight.direction = .right
+        addGestureRecognizer(swipeRight)
+    }
+    
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         return action == #selector(UIResponderStandardEditActions.copy)
     }
     
     override func copy(_ sender: Any?) {
-        let board = UIPasteboard.general
-        var textToBoard: String? = ""
-        for error in MathErrors.allCases {
-            if text == error.localizedDescription {
-                textToBoard = text
-                break
-            } else {
-                textToBoard = text?.removedAllSpaces()
-            }
-        }
-        
-        board.string = textToBoard
-        hideLabelMenu()
+        UIPasteboard.general.string = text
         resignFirstResponder()
-        undoHighlightLabel()
     }
     
-    func addInfoLabel() {
-        addSubview(infoSubLabel)
-        infoSubLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            infoSubLabel.topAnchor.constraint(equalTo: bottomAnchor),
-            infoSubLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5)
-        ])
+    private func enableHighlighting() {
+        layer.cornerRadius = 0
+        layer.masksToBounds = false
+        layer.backgroundColor = UIColor.lightGray.cgColor.copy(alpha: 0)
+        
+        UIView.animate(withDuration: 0.18, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
+            self?.layer.cornerRadius = 15
+            self?.layer.masksToBounds = true
+            self?.layer.backgroundColor = UIColor.lightGray.cgColor.copy(alpha: 0.3)
+        }, completion: nil)
     }
     
-    func setInfoLabelValue(_ newValue: ConversionSystem) {
-        infoSubLabel.text = newValue.title
+    private func disableHighlighting() {
+        resignFirstResponder()
+        
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
+            self?.layer.cornerRadius = 0
+            self?.layer.masksToBounds = false
+            self?.layer.backgroundColor = UIColor.clear.cgColor
+        }, completion: nil)
     }
     
-    private func getSubLabel() -> UILabel {
+    func setText(_ text: String) {
+        self.text = text
+    }
+    
+    // MARK: - Views
+    
+    lazy var conversionSystemLabel: UILabel = {
         let label = UILabel()
         
         label.frame = CGRect(x: 0, y: 0, width: 44, height: 14.5)
@@ -96,75 +97,13 @@ class CalculatorLabel: UILabel, UpdatableLabel, CalculatorLabelDelegate {
         label.backgroundColor = .clear
         label.textColor = .systemGray
         
-        label.font = .infoLabelFont
+        label.font = .conversionSystemLabelFont
         label.textAlignment = .center
         
         label.sizeToFit()
         
         return label
-    }
-    
-    func highlightLabel() {
-        layer.cornerRadius = 0
-        layer.masksToBounds = false
-        layer.backgroundColor = UIColor.lightGray.cgColor.copy(alpha: 0)
-        
-        UIView.animate(withDuration: 0.18, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
-            self?.layer.backgroundColor = UIColor.lightGray.cgColor.copy(alpha: 0.3)
-            self?.layer.cornerRadius = 15
-            self?.layer.masksToBounds = true
-        }, completion: nil)
-
-    }
-    
-    func undoHighlightLabel() {
-        resignFirstResponder()
-        
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: { [weak self] in
-            self?.layer.backgroundColor = UIColor.lightGray.cgColor.copy(alpha: 0)
-            self?.layer.cornerRadius = 0
-            self?.layer.masksToBounds = false
-        }, completion: nil)
-    }
-    
-    func hideLabelMenu() {
-        let menu = UIMenuController.shared
-        menu.hideMenu(from: self)
-        undoHighlightLabel()
-    }
-    
-    func getText(deleteSpaces: Bool = false) -> String {
-        if deleteSpaces {
-            return text?.removedAllSpaces() ?? "0"
-        } else {
-            return text ?? "0"
-        }
-    }
-    
-    func setText(_ text: String) {
-        self.text = text
-    }
-    
-    func setError(_ error: MathErrors) {
-        self.error = error
-    }
-    
-    func resetError() {
-        error = nil
-    }
-
-    func showErrorInLabel(_ errorMessage: String = "Error") {
-        guard errorMessage == "Error" else {
-            text = errorMessage
-            return
-        }
-        
-        if let error = self.error {
-            text = error.localizedDescription!
-        } else {
-            text = errorMessage
-        }
-    }
+    }()
 }
 
 // MARK: - Actions
@@ -172,15 +111,18 @@ class CalculatorLabel: UILabel, UpdatableLabel, CalculatorLabelDelegate {
 extension CalculatorLabel {
     @objc func showMenu(_ sender: AnyObject?) {
         becomeFirstResponder()
+        
         let menu = UIMenuController.shared
         if !menu.isMenuVisible {
             let settings = Settings.shared
-            if settings.hapticFeedback {
+            if settings.isHapticFeedbackEnabled {
                 let generator = UIImpactFeedbackGenerator(style: .medium)
                 generator.prepare()
                 generator.impactOccurred()
             }
-            highlightLabel()
+            
+            enableHighlighting()
+            
             menu.showMenu(from: self, rect: bounds)
         }
     }

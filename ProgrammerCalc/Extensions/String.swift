@@ -11,52 +11,38 @@ import Foundation
 extension String {
     
     init(_ decimal: Decimal, radix: Int) {
-        var dec = decimal.round(scale: 0, roundingModeMode: .down)
+        var dec = decimal.rounded(.down)
 
         var str = String()
         while dec > 0 {
-            let reminder = dec % Decimal(radix)
-            str.insert(contentsOf: "\(reminder)", at: str.startIndex)
-            dec = (dec / Decimal(radix))
-            dec = dec.round(scale: 0, roundingModeMode: .down)
+            let remainder = dec % Decimal(radix)
+            str.insert(contentsOf: "\(remainder)", at: str.startIndex)
+            dec = (dec / Decimal(radix)).rounded(.down)
+        }
+        
+        if str.isEmpty {
+            str = "0"
         }
 
         self.init(stringLiteral: str)
     }
     
-    func replace(atPosition position: Int, with char: Character) -> String {
-        guard position >= 0 && position < self.count else { return self }
-        
-        var charArray = [Character](self)
-        charArray[position] = char
-        
-        return String(charArray)
-    }
-
     func removedAllSpaces() -> String {
         return self.replacingOccurrences(of: " ", with: "")
     }
     
-    func swap(first: Character, second: Character) -> String {
-        var resultStr = String()
-        
-        for char in self {
-            switch char {
-            case first:
-                resultStr.append(second)
-            case second:
-                resultStr.append(first)
-            default:
-                resultStr.append(char)
-            }
-        }
-        
-        return resultStr
+    func removedLeadingSpaces() -> String {
+        return removedLeading(character: " ")
     }
     
-    /// Removes leading given chars in str until str.last != character
+    /// Removes specified leading character until a non-matching character is found and returns a new String.
+    func removedLeading(character: Character) -> String {
+        return removedLeading(characters: [character])
+    }
+    
+    /// Removes specified leading characters until a non-matching character is found and returns a new String.
     func removedLeading(characters: [Character]) -> String {
-        var str = self.removedAllSpaces()
+        var str = self
         
         while str.count > 0 && characters.contains(str.first!) {
             str.removeFirst()
@@ -66,16 +52,35 @@ extension String {
         return str
     }
     
-    /// Removes trailing given chars in str until str.last != character
-    func removedTrailing(characters: [Character]) -> String {
-        var str = self.removedAllSpaces()
+    func adjusted(toLenght targetLenght: Int, repeatingCharacter character: Character) -> String {
+        guard self.count != targetLenght else { return self }
         
-        while str.count > 0 && characters.contains(str.last!)  {
-            str.removeLast()
-            guard str != "" else { return str }
+        if self.count > targetLenght {
+            return contracted(toLenght: targetLenght)
+        } else {
+            return expanded(toLenght: targetLenght, repeatingCharacter: character)
         }
+    }
+    
+    func contracted(toLenght targetLenght: Int) -> String {
+        guard self.count > targetLenght else { return self }
         
-        return str
+        let endIndex = self.index(self.startIndex, offsetBy: targetLenght)
+        let range = self.startIndex..<endIndex
+        
+        return String(self[range])
+    }
+    
+    func expanded(toLenght targetLenght: Int, repeatingCharacter character: Character) -> String {
+        guard self.count < targetLenght else { return self }
+        
+        let needToExpandCount = targetLenght - self.count
+        
+        return self + String(repeating: character, count: needToExpandCount)
+    }
+    
+    func reversedString() -> String {
+        return String(self.reversed())
     }
 }
 
@@ -86,7 +91,7 @@ extension String {
         case after = 1
     }
     
-    func getPart(_ partition: Partition, separator: Character) -> String {
+    func getComponent(_ partition: Partition, separator: Character) -> String {
         let components = self.components(separatedBy: "\(separator)")
         
         if components.count > partition.rawValue {

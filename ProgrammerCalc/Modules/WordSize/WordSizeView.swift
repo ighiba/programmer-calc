@@ -18,9 +18,9 @@ class WordSizeView: UIView, ModalView {
 
     init() {
         super.init(frame: UIScreen.main.bounds)
-        setupView()
-        setupLayout()
-        setupStyle()
+        self.setupView()
+        self.setupLayout()
+        self.setupStyle()
     }
 
     required init?(coder: NSCoder) {
@@ -30,7 +30,7 @@ class WordSizeView: UIView, ModalView {
     // MARK: - Methods
 
     private func setupView() {
-        let blurredBackgroundView = makeBlurredBackgroundView()
+        let blurredBackgroundView = configureBlurredBackgroundView()
         insertSubview(blurredBackgroundView, at: 0)
         container.addSubview(containerStack)
         addSubview(container)

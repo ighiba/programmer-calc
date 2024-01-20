@@ -8,23 +8,15 @@
 
 import Foundation
 
-protocol ConversionInput: AnyObject {
-    func mainPickerSelectRow(_ row: Int)
-    func converterPickerSelectRow(_ row: Int)
-    func setLabelValueText(_ text: String)
-    func setSliderValue(_ value: Float)
-    func hapticImpact()
-}
-
 protocol ConversionOutput: AnyObject {
     var delegate: CalculatorPresenterDelegate! { get set }
     var updateHandler: (() -> Void)? { get set }
     func obtainConversionSettings()
-    func saveConversionSettings(mainRow: Int, converterRow: Int, sliderValue: Float)
-    func sliderValueDidChanged(_ sliderValue: Float)
+    func saveConversionSettings(inputPickerSelectedRow: Int, outputPickerSelectedRow: Int, sliderValue: Float)
+    func sliderValueDidChange(_ sliderValue: Float)
 }
 
-class ConversionPresenter: ConversionOutput {
+final class ConversionPresenter: ConversionOutput {
     
     // MARK: - Properties
     
@@ -41,43 +33,42 @@ class ConversionPresenter: ConversionOutput {
     // MARK: - Methods
     
     func obtainConversionSettings() {
-        let mainRow: Int = ConversionSystem.allCases.firstIndex(of: conversionSettings.systemMain) ?? 1 // default decimal for main
-        let converterRow: Int = ConversionSystem.allCases.firstIndex(of: conversionSettings.systemConverter) ?? 0 // default binary for converter
-        view.mainPickerSelectRow(mainRow)
-        view.converterPickerSelectRow(converterRow)
-        view.setLabelValueText("\(Int(conversionSettings.numbersAfterPoint))")
-        view.setSliderValue(Float(conversionSettings.numbersAfterPoint) / 4)
+        let inputSystemRowIndex = conversionSettings.inputSystem.rawValue
+        let outputSystemRowIndex = conversionSettings.outputSystem.rawValue
+        let sliderValueText = "\(conversionSettings.fractionalWidth)"
+        let sliderValue = Float(conversionSettings.fractionalWidth) / 4
+        
+        view.inputPickerSelectRow(atIndex: inputSystemRowIndex)
+        view.outputPickerSelectRow(atIndex: outputSystemRowIndex)
+        view.setFractionalWidthLabelText(sliderValueText)
+        view.setFractionalWidthSliderValue(sliderValue)
     }
     
-    func saveConversionSettings(mainRow: Int, converterRow: Int, sliderValue: Float) {
-        let mainSystemNew = ConversionSystem(rawValue: mainRow)!
-        let converterSystemNew = ConversionSystem(rawValue: converterRow)!
-        
-        let newConversionSettings = ConversionSettings(
-            systMain: mainSystemNew,
-            systConverter: converterSystemNew,
-            number: Int(sliderValue) * 4
-        )
-        
-        let mainSystemOld = conversionSettings.systemMain
-        
-        storage.saveData(newConversionSettings)
-        conversionSettings.setConversionSettings(newConversionSettings)
-
-        if mainSystemOld != mainSystemNew {
-            delegate!.clearLabels()
-        } else {
-            delegate!.updateAllLayout()
+    func saveConversionSettings(inputPickerSelectedRow: Int, outputPickerSelectedRow: Int, sliderValue: Float) {
+        guard let inputSystemNew = ConversionSystem(rawValue: inputPickerSelectedRow),
+              let outputSystemNew = ConversionSystem(rawValue: outputPickerSelectedRow)
+        else {
+            return
         }
         
+        let newConversionSettings = ConversionSettings(
+            inputSystem: inputSystemNew,
+            outputSystem: outputSystemNew,
+            fractionalWidth: UInt8(sliderValue * 4)
+        )
+        
+        storage.saveData(newConversionSettings)
+        conversionSettings.set(newConversionSettings)
+
         updateHandler?()
     }
     
-    func sliderValueDidChanged(_ sliderValue: Float) {
-        if settings.hapticFeedback {
+    func sliderValueDidChange(_ sliderValue: Float) {
+        if settings.isHapticFeedbackEnabled {
             view.hapticImpact()
         }
-        let textValue = "\(Int(sliderValue) * 4)"
-        view.setLabelValueText(textValue)
+        
+        let text = "\(Int(sliderValue) * 4)"
+        view.setFractionalWidthLabelText(text)
     }
 }

@@ -8,23 +8,45 @@
 
 import UIKit
 
+enum ButtonStyleType {
+    case misc
+    case numeric
+    case action
+}
+
 protocol ButtonStyleProtocol {
-    var frameColor: UIColor { get }
-    var frameTint: UIColor { get }
+    var backgroundColor: UIColor { get }
+    var backgroundTintColor: UIColor { get }
     var textColor: UIColor { get }
-    var textTint: UIColor { get }
+    var textTintColor: UIColor { get }
+    var borderColor: UIColor { get }
 }
 
 class ButtonStyle: ButtonStyleProtocol {
-    var frameColor: UIColor
-    var frameTint: UIColor
-    var textColor: UIColor
-    var textTint: UIColor
+    var backgroundColor: UIColor
+    var backgroundTintColor: UIColor
+    var textColor: UIColor  
+    var textTintColor: UIColor
+    var borderColor: UIColor
     
-    init(frameColor: UIColor, frameTint: UIColor, textColor: UIColor, textTint: UIColor) {
-        self.frameColor = frameColor
-        self.frameTint = frameTint
+    init(backgroundColor: UIColor, backgroundTintColor: UIColor, textColor: UIColor, textTintColor: UIColor, borderColor: UIColor) {
+        self.backgroundColor = backgroundColor
+        self.backgroundTintColor = backgroundTintColor
         self.textColor = textColor
-        self.textTint = textTint
+        self.textTintColor = textTintColor
+        self.borderColor = borderColor
+    }
+}
+
+extension Style {
+    func buttonStyle(for buttonStyleType: ButtonStyleType) -> ButtonStyleProtocol {
+        switch buttonStyleType {
+        case .misc:
+            return miscButtonStyle
+        case .numeric:
+            return numericButtonStyle
+        case .action:
+            return actionButtonStyle
+        }
     }
 }

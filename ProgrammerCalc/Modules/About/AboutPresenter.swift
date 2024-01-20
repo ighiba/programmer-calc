@@ -9,12 +9,6 @@
 import UIKit
 import StoreKit
 
-protocol AboutInput: AnyObject {
-    func reloadTable()
-    func push(_ viewController: UIViewController)
-    func openContactFormWith(recipients: [String], subject: String, message: String)
-}
-
 protocol AboutOutput: AnyObject {
     func obtainTintColor() -> UIColor
     func openDescription()
@@ -22,7 +16,7 @@ protocol AboutOutput: AnyObject {
     func openContactForm()
 }
 
-class AboutPresenter: AboutOutput {
+final class AboutPresenter: AboutOutput {
     
     // MARK: - Properties
     
@@ -38,13 +32,12 @@ class AboutPresenter: AboutOutput {
     
     func openDescription() {
         let descriptionView = DescriptionViewController()
-        descriptionView.title = NSLocalizedString("Description", comment: "")
         view.push(descriptionView)
     }
     
     func openRateAppForm() {
         if #available(iOS 14.0, *) {
-            if let scene = UIApplication.shared.connectedScenes.first(where: {$0.activationState == .foregroundActive} ) as? UIWindowScene {
+            if let scene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
                 SKStoreReviewController.requestReview(in: scene)
             }
         } else {
@@ -62,6 +55,6 @@ class AboutPresenter: AboutOutput {
         let subject = "Programmer's Calculator support"
         let message = "Model - \(model), OS - \(systemVersion), App version - \(appVersion)(\(buildNumber))"
         
-        view.openContactFormWith(recipients: recipients, subject: subject, message: message)
+        view.openContactForm(recipients: recipients, subject: subject, message: message)
     }
 }

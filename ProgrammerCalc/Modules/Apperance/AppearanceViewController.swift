@@ -8,17 +8,19 @@
 
 import UIKit
 
+private let useSystemAppearanceId = "useSystemAppearance"
+
 protocol AppearanceInput: AnyObject {
     func reloadTable()
-    func setIsUseSystemAppearence(_ state: Bool)
-    func setCheckmarkIndex(for row: Int)
-    func updateInterfaceLayout(_ style: UIUserInterfaceStyle)
+    func setUseSystemAppearanceSwitch(isOn: Bool)
+    func setCheckmarkedTheme(atRow row: Int)
+    func updateLayout(interfaceStyle: UIUserInterfaceStyle)
     func updateNavBarStyle(_ style: Style)
-    func overrideUserInterfaceStyle(_ style: UIUserInterfaceStyle)
+    func overrideUserInterfaceStyle(_ interfaceStyle: UIUserInterfaceStyle)
     func animateUpdateRootViewLayoutSubviews()
 }
 
-class AppearanceViewController: StyledTableViewController, AppearanceInput {
+final class AppearanceViewController: StyledTableViewController, AppearanceInput {
     
     // MARK: - Properties
     
@@ -43,12 +45,13 @@ class AppearanceViewController: StyledTableViewController, AppearanceInput {
         
         title = NSLocalizedString("Appearance", comment: "")
 
-        output.obtainStyleSettings()
+        output.updateStyleSettings()
         reloadTable()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         AppDelegate.AppUtility.lockPortraitOrientation()
     }
         
@@ -57,43 +60,46 @@ class AppearanceViewController: StyledTableViewController, AppearanceInput {
     private func configurePreferenceList() -> [[PreferenceCellModel]] {
         return [
             [
-                PreferenceCellModel(
-                    id: "useSystemAppearance",
-                    label: NSLocalizedString("Use system appearance", comment: ""),
-                    cellType: .switcher,
-                    stateChangeHandler: useSystemAppearanceDidChanged
+                SwitchPreferenceCellModel(
+                    id: useSystemAppearanceId,
+                    text: NSLocalizedString("Use system appearance", comment: ""),
+                    switchValueDidChange: useSystemAppearanceSwitchValueDidChange
                 )
             ],
-            StyleType.allCases.map { style in
-                PreferenceCellModel(
+            Theme.allCases.map { style in
+                CheckmarkPreferenceCellModel(
                     id: style.stringValue,
-                    label: style.localizedTitle,
-                    cellType: .checkmark
+                    text: style.localizedTitle
                 )
             }
         ]
+    }
+    
+    private func countNumberOfSections() -> Int {
+        let preferenceModel = preferenceModel(withId: useSystemAppearanceId) as? SwitchPreferenceCellModel
+        let isUsingSystemAppearance = preferenceModel?.isOn ?? false
+        
+        return isUsingSystemAppearance ? 1 : preferenceList.count
     }
     
     func reloadTable() {
         tableView.reloadData()
     }
     
-    func setIsUseSystemAppearence(_ state: Bool) {
-        preferenceList[0][0].state = state
+    func setUseSystemAppearanceSwitch(isOn: Bool) {
+        guard let preferenceModel = preferenceModel(withId: useSystemAppearanceId) as? SwitchPreferenceCellModel else {
+            return
+        }
+        
+        preferenceModel.isOn = isOn
     }
     
-    private func countNumberOfSections() -> Int {
-        let isUsingSystemAppearance = preferenceList[0][0].state ?? false
-        let count = isUsingSystemAppearance ? 1 : preferenceList.count
-        return count
-    }
-    
-    func setCheckmarkIndex(for row: Int) {
+    func setCheckmarkedTheme(atRow row: Int) {
         checkmarkedIndexPath = IndexPath(row: row, section: 1)
     }
     
-    func updateInterfaceLayout(_ style: UIUserInterfaceStyle) {
-        overrideUserInterfaceStyle(style)
+    func updateLayout(interfaceStyle: UIUserInterfaceStyle) {
+        overrideUserInterfaceStyle(interfaceStyle)
         view.window?.setNeedsLayout()
         view.window?.layoutIfNeeded()
     }
@@ -102,8 +108,8 @@ class AppearanceViewController: StyledTableViewController, AppearanceInput {
         navigationController?.navigationBar.tintColor = style.tintColor
     }
     
-    func overrideUserInterfaceStyle(_ style: UIUserInterfaceStyle) {
-        view.window?.overrideUserInterfaceStyle = style
+    func overrideUserInterfaceStyle(_ interfaceStyle: UIUserInterfaceStyle) {
+        view.window?.overrideUserInterfaceStyle = interfaceStyle
     }
 
     func animateUpdateRootViewLayoutSubviews() {
@@ -114,8 +120,12 @@ class AppearanceViewController: StyledTableViewController, AppearanceInput {
         }
     }
 
-    func useSystemAppearanceDidChanged(_ state: Bool) {
-        output.useSystemAppearance(state)
+    func useSystemAppearanceSwitchValueDidChange(_ state: Bool) {
+        output.useSystemAppearanceSwitchDidChange(isOn: state)
+    }
+    
+    private func preferenceModel(withId id: PreferenceCellModel.ID) -> PreferenceCellModel? {
+        return preferenceList.flattened().first(where: { $0.id == id })
     }
 }
 
@@ -136,7 +146,7 @@ extension AppearanceViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let preferenceModel = preferenceList[indexPath.section][indexPath.row]
-        let cell = PreferenceCell(preferenceModel)
+        let cell = PreferenceCell(preferenceModel: preferenceModel)
         cell.accessoryType = checkmarkedIndexPath == indexPath ? .checkmark : .none
         return cell
     }
@@ -155,7 +165,7 @@ extension AppearanceViewController {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
             tableView.cellForRow(at: checkmarkedIndexPath)?.accessoryType = .none
 
-            output.setNewStyle(by: indexPath.row)
+            output.themeRowDidSelect(at: indexPath.row)
             checkmarkedIndexPath = indexPath
 
             tableView.deselectRow(at: indexPath, animated: true)

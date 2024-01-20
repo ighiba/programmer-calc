@@ -18,16 +18,29 @@ final class AboutAppCell: UITableViewCell {
     
     init(iconName: String, appVersion: String) {
         super.init(style: .default, reuseIdentifier: "aboutAppCell")
-        setupView(iconName: iconName, appVersion: appVersion)
-        setupStyle()
-        setNeedsUpdateConstraints()
+        self.setupView(iconName: iconName, appVersion: appVersion)
+        self.setupLayout()
+        self.setupStyle()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func updateConstraints() {
+    private func setupView(iconName: String, appVersion: String) {
+        selectionStyle = .none
+        
+        appIcon.image = UIImage(named: iconName)
+        appIcon.layer.cornerRadius = 18
+        appIcon.layer.masksToBounds = true
+
+        versionLabel.text = "Programmer's Calculator \(appVersion)"
+        
+        addSubview(appIcon)
+        addSubview(versionLabel)
+    }
+    
+    private func setupLayout() {
         appIcon.translatesAutoresizingMaskIntoConstraints = false
         versionLabel.translatesAutoresizingMaskIntoConstraints = false
         
@@ -42,21 +55,6 @@ final class AboutAppCell: UITableViewCell {
             versionLabel.widthAnchor.constraint(equalToConstant: versionLabel.intrinsicContentSize.width),
             versionLabel.heightAnchor.constraint(equalToConstant: versionLabel.intrinsicContentSize.height),
         ])
-        
-        super.updateConstraints()
-    }
-    
-    private func setupView(iconName: String, appVersion: String) {
-        selectionStyle = .none
-        
-        appIcon.image = UIImage(named: iconName)
-        appIcon.layer.cornerRadius = 18
-        appIcon.layer.masksToBounds = true
-
-        versionLabel.text = "Programmer's Calculator \(appVersion)"
-        
-        addSubview(appIcon)
-        addSubview(versionLabel)
     }
     
     private func setupStyle() {

@@ -11,18 +11,21 @@ import UIKit
 private let margin: CGFloat = 20
 private let navBarHeight: CGFloat = 44
 
-class DescriptionViewController: StyledViewController {
+final class DescriptionViewController: StyledViewController {
 
     private let descriptionText = NSLocalizedString("DescriptionFullText", comment: "")
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupView()
     }
     
     // MARK: - Methods
     
     private func setupView() {
+        title = NSLocalizedString("Description", comment: "")
+        
         view.frame = UIScreen.main.bounds
         view.backgroundColor = .systemBackground
         
@@ -32,7 +35,7 @@ class DescriptionViewController: StyledViewController {
         descriptionLabel.sizeToFit()
     }
     
-    private func makeParagraphStyle() -> NSMutableParagraphStyle {
+    private func configureParagraphStyle() -> NSMutableParagraphStyle {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .justified
         paragraphStyle.firstLineHeadIndent = 5.0
@@ -50,7 +53,7 @@ class DescriptionViewController: StyledViewController {
             height: UIScreen.main.bounds.height - margin * 2)
         )
 
-        let paragraphStyle = makeParagraphStyle()
+        let paragraphStyle = configureParagraphStyle()
 
         let attributedString = NSAttributedString(string: descriptionText, attributes: [.paragraphStyle: paragraphStyle])
         label.attributedText = attributedString

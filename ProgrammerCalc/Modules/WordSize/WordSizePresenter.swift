@@ -33,7 +33,7 @@ class WordSizePresenter: WordSizeOutput {
     
     func didSelectRow(at index: Int) {
         if let newValue = WordSizeType(rawValue: index) {
-            currentWordSize.setWordSizeValue(newValue)
+            currentWordSize.value = newValue
             storage.saveData(currentWordSize)
         }
     }

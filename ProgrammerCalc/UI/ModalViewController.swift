@@ -16,7 +16,7 @@ protocol ModalView: UIView {
 }
 
 extension ModalView {
-    func makeBlurredBackgroundView() -> UIView {
+    func configureBlurredBackgroundView() -> UIView {
         let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = bounds
@@ -76,18 +76,21 @@ class ModalViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupGestures()
         setupTargets()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         AppDelegate.AppUtility.lockPortraitOrientation()
         modalView.animateIn()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
         AppDelegate.AppUtility.unlockPortraitOrientation()
     }
     
@@ -106,8 +109,8 @@ class ModalViewController: UIViewController {
 
     private func isGestureNotInContainer(gesture: UIGestureRecognizer) -> Bool {
         modalView.container.updateConstraints()
-        let currentLocation: CGPoint = gesture.location(in: modalView.container)
-        let containerBounds: CGRect = modalView.container.bounds
+        let currentLocation = gesture.location(in: modalView.container)
+        let containerBounds = modalView.container.bounds
 
         return !containerBounds.contains(currentLocation)
     }

@@ -14,8 +14,8 @@ enum DeviceType {
 }
 
 extension UIDevice {
-    static var currentDeviceType: DeviceType {
-        switch UIDevice.current.userInterfaceIdiom {
+    var deviceType: DeviceType {
+        switch self.userInterfaceIdiom {
         case .pad:
             return .iPad
         default:

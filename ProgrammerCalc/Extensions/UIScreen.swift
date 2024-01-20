@@ -9,10 +9,10 @@
 import UIKit
 
 extension UIScreen {
-    /// Real screen size, doesn't depends on device orientation
-    class func mainRealSize() -> CGSize {
-        let screenWidth = UIScreen.main.bounds.width
-        let screenHeight = UIScreen.main.bounds.height
+    /// Screen size in portrait orientation. Device orientation change doesn't affect it.
+    var portraitSize: CGSize {
+        let screenWidth = bounds.width
+        let screenHeight = bounds.height
         let width = screenWidth < screenHeight ? screenWidth : screenHeight
         let height = screenWidth > screenHeight ? screenWidth : screenHeight
         return CGSize(width: width, height: height)
