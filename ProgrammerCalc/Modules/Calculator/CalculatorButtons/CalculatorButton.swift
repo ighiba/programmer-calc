@@ -167,19 +167,23 @@ class CalculatorButton: UIButton {
     }
     
     private func transitionToHighlightedBackgroundColor(duration: TimeInterval = 0.1) {
+        let options: UIView.AnimationOptions = [.curveEaseIn, .beginFromCurrentState, .allowUserInteraction]
+        
         UIView.transition(
             with: self,
             duration: duration,
-            options: [.curveEaseIn, .beginFromCurrentState, .allowUserInteraction],
+            options: options,
             animations: { self.backgroundColor = self.highlightedBackgroundColor },
             completion: nil)
     }
     
     private func transitionToDefaultBackgroundColor(duration: TimeInterval = 0.7) {
+        let options: UIView.AnimationOptions = [.curveEaseIn, .beginFromCurrentState, .allowUserInteraction]
+        
         UIView.transition(
             with: self,
             duration: duration,
-            options: [.curveEaseOut, .beginFromCurrentState, .allowUserInteraction],
+            options: options,
             animations: { self.backgroundColor = self.defaultBackgroundColor },
             completion: nil
         )
