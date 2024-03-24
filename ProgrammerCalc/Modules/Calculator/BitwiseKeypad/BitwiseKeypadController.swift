@@ -51,7 +51,7 @@ final class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDe
     }
     
     override func loadView() {
-        bitwiseKeypadView.configureView(controllerDelegate: self)
+        bitwiseKeypadView.setupView(controllerDelegate: self)
         view = bitwiseKeypadView
     }
     
