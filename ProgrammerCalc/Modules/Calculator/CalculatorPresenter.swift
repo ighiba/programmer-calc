@@ -33,17 +33,26 @@ protocol CalculatorOutput: AnyObject {
     func showSettings()
 }
 
-class CalculatorPresenter: CalculatorOutput {
+final class CalculatorPresenter: CalculatorOutput {
     
     // MARK: - Properties
     
     weak var input: CalculatorInput!
     
-    var calculator: Calculator!
+    private let calculator: Calculator
     
-    var wordSize: WordSize!
-    var calculatorState: CalculatorState!
-    var conversionSettings: ConversionSettings!
+    private let wordSize: WordSize
+    private let calculatorState: CalculatorState
+    private let conversionSettings: ConversionSettings
+    
+    // MARK: - Init
+    
+    init(calculator: Calculator, wordSize: WordSize, calculatorState: CalculatorState, conversionSettings: ConversionSettings) {
+        self.calculator = calculator
+        self.wordSize = wordSize
+        self.calculatorState = calculatorState
+        self.conversionSettings = conversionSettings
+    }
     
     // MARK: - Methods
     
