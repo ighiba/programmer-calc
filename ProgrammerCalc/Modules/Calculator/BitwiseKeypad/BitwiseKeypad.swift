@@ -29,12 +29,14 @@ final class BitwiseKeypad: UIView {
     
     // MARK: - Layout
     
-    func setupView(controllerDelegate delegate: BitwiseKeypadControllerDelegate) {
+    func configureView(controllerDelegate delegate: BitwiseKeypadControllerDelegate) -> Self {
         controllerDelegate = delegate
         keypadStack = configureKeypadStack()
         
         addSubview(keypadStack)
         applyStyle(controllerDelegate.currentStyle)
+        
+        return self
     }
     
     func applyStyle(_ style: Style) {
