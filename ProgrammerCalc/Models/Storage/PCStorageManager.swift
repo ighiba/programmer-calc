@@ -15,34 +15,34 @@ protocol StorageManager {
 
 final class PCStorageManager: StorageManager {
     
+    private let wordSize: WordSize = .shared
+    private let calculatorState: CalculatorState = .shared
+    private let conversionSettings: ConversionSettings = .shared
+    private let settings: Settings = .shared
+    private let styleSettings: StyleSettings = .shared
+    
     private let storage = CalculatorStorage()
     
     // Call this before CalculatorModuleAssembly.configureModule() in SceneDelegate willConnectTo
     func loadAll() {
-        let wordSize: WordSize = storage.loadData()
-        let settings: Settings = storage.loadData()
-        let conversionSettings: ConversionSettings = storage.loadData()
-        let calcState: CalculatorState = storage.loadData()
-        let styleSettigns: StyleSettings = storage.loadData()
-
-        WordSize.shared.set(wordSize)
-        Settings.shared.set(settings)
-        ConversionSettings.shared.set(conversionSettings)
-        CalculatorState.shared.set(calcState)
-        StyleSettings.shared.set(styleSettigns)
+        let wordSizeData: WordSize = storage.loadData()
+        let calculatorStateData: CalculatorState = storage.loadData()
+        let conversionSettingsData: ConversionSettings = storage.loadData()
+        let settingsData: Settings = storage.loadData()
+        let styleSettingsData: StyleSettings = storage.loadData()
+        
+        wordSize.set(wordSizeData)
+        calculatorState.set(calculatorStateData)
+        conversionSettings.set(conversionSettingsData)
+        settings.set(settingsData)
+        styleSettings.set(styleSettingsData)
     }
     
     func saveAll() {
-        let wordSize = WordSize.shared
-        let settings = Settings.shared
-        let conversionSettings = ConversionSettings.shared
-        let calcState = CalculatorState.shared
-        let styleSettings = StyleSettings.shared
-
         storage.saveData(wordSize)
-        storage.saveData(settings)
+        storage.saveData(calculatorState)
         storage.saveData(conversionSettings)
-        storage.saveData(calcState)
+        storage.saveData(settings)
         storage.saveData(styleSettings)
     }
 }
