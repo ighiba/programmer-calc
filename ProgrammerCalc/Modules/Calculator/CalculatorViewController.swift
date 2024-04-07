@@ -39,7 +39,7 @@ final class CalculatorViewController: StyledViewController, CalculatorInput, UIA
     private lazy var inputLabel = calculatorView.inputLabel
     private lazy var outputLabel = calculatorView.outputLabel
 
-    var buttonsContainerController: ButtonsContainerControllerProtocol!
+    private var buttonsContainerController: ButtonsContainerControllerProtocol!
     private var bitwiseKeypad: BitwiseKeypadController?
     
     private var isAllowedLandscape: Bool = false
@@ -47,12 +47,23 @@ final class CalculatorViewController: StyledViewController, CalculatorInput, UIA
     private let settings = Settings.shared
     private let generator = UIImpactFeedbackGenerator(style: .light)
     
+    // MARK: - Init
+    
+    init(deviceType: DeviceType) {
+        super.init(nibName: nil, bundle: nil)
+        self.buttonsContainerController = self.configureButtonsContainerController(forDeviceType: deviceType)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - View lifecycle
+    
     override func loadView() {
         view = calculatorView
     }
     
-    // MARK: - viewDidLoad
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -146,6 +157,15 @@ final class CalculatorViewController: StyledViewController, CalculatorInput, UIA
     }
     
     // MARK: - Methods
+    
+    private func configureButtonsContainerController(forDeviceType deviceType: DeviceType) -> ButtonsContainerControllerProtocol {
+        switch deviceType {
+        case .iPhone:
+            return ButtonsViewControllerPhone()
+        case .iPad:
+            return ButtonsViewControllerPad()
+        }
+    }
     
     private func setupViews() {
         NSLayoutConstraint.deactivate(calculatorView.landscape!)

@@ -10,16 +10,6 @@ import UIKit
 
 class CalculatorModuleAssembly {
     class func configureModule() -> UIViewController {
-        let view = CalculatorViewController()
-        
-        // Layout choice for device type
-        switch UIDevice.current.deviceType {
-        case .iPhone:
-            view.buttonsContainerController = ButtonsViewControllerPhone()
-        case .iPad:
-            view.buttonsContainerController = ButtonsViewControllerPad()
-        }
-        
         let wordSize = WordSize.shared
         let calculatorState = CalculatorState.shared
         let conversionSettings = ConversionSettings.shared
@@ -28,6 +18,8 @@ class CalculatorModuleAssembly {
 
         let presenter = CalculatorPresenter(calculator: calculator, wordSize: wordSize, calculatorState: calculatorState, conversionSettings: conversionSettings)
         calculator.calculatorPresenterDelegate = presenter
+        
+        let view = CalculatorViewController(deviceType: UIDevice.current.deviceType)
         
         view.output = presenter
         presenter.input = view
