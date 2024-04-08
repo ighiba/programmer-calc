@@ -37,12 +37,6 @@ final class ButtonsViewControllerPhone: UIPageViewController, ButtonsContainerCo
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        calcButtonsViewControllers.forEach { $0.view.layoutSubviews() }
-    }
-
     // MARK: - Methods
     
     private func setupPageControl() {
