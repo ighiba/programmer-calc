@@ -14,23 +14,24 @@ private let buttonsHorizontalSpacing: CGFloat = CalculatorButton.spacingWidth
 class CalculatorButtonsPage: StyledView {
     
     // MARK: - Properties
+    
+    var layoutConstraints: [NSLayoutConstraint]?
 
     lazy var buttons: [[CalculatorButton]] = configureButtons()
     lazy var buttonsStackView: UIStackView = configureButtonsStackView(buttons: buttons)
-    
-    var layoutConstraints: [NSLayoutConstraint]?
     
     // MARK: - Init
     
     init() {
         super.init(frame: .zero)
-        self.addSubview(buttonsStackView)
-        self.setupLayout()
+        self.setupView()
     }
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Methods
     
     override func styleWillUpdate(with style: Style) {
         super.styleWillUpdate(with: style)
@@ -38,9 +39,19 @@ class CalculatorButtonsPage: StyledView {
         updateButtonsStyle(style)
     }
     
-    // MARK: - Methods
+    func disableNumericButtons(withForbiddenDigits forbiddenDigits: Set<String>) {
+        buttons.flattened().forEach { button in
+            if button is NumericButton {
+                let buttonLabel = button.titleLabel?.text ?? ""
+                let shouldBeEnabled = !forbiddenDigits.contains(buttonLabel)
+                button.isEnabled = shouldBeEnabled
+            }
+        }
+    }
     
-    private func setupLayout() {
+    private func setupView() {
+        addSubview(buttonsStackView)
+        
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
         
         layoutConstraints = [
@@ -60,38 +71,27 @@ class CalculatorButtonsPage: StyledView {
     
     private func configureButtonsStackView(buttons: [[CalculatorButton]]) -> UIStackView {
         guard !buttons.isEmpty else { return UIStackView() }
-        let buttonsStackRows = buttons.map { buttonsRow in
-            let buttonsRowStack = UIStackView(arrangedSubviews: buttonsRow)
-            buttonsRowStack.axis = .horizontal
-            buttonsRowStack.alignment = .fill
-            buttonsRowStack.distribution = .equalSpacing
-            buttonsRowStack.isExclusiveTouch = true
-            return buttonsRowStack
-        }
         
-        let buttonStackView = UIStackView(arrangedSubviews: buttonsStackRows)
-        buttonStackView.axis = .vertical
-        buttonStackView.alignment = .fill
-        buttonStackView.distribution = .equalSpacing
-        buttonStackView.isExclusiveTouch = true
+        let buttonsStackRows = buttons.map { configureStackView(arrangedSubviews: $0, axis: .horizontal) }
         
-        return buttonStackView
+        return configureStackView(arrangedSubviews: buttonsStackRows, axis: .vertical)
+    }
+    
+    private func configureStackView(arrangedSubviews: [UIView], axis: NSLayoutConstraint.Axis) -> UIStackView {
+        let stackView = UIStackView(arrangedSubviews: arrangedSubviews)
+        
+        stackView.axis = axis
+        stackView.alignment = .fill
+        stackView.distribution = .equalSpacing
+        stackView.isExclusiveTouch = true
+        
+        return stackView
     }
 
     private func updateButtonsStyle(_ style: Style) {
         buttons.flattened().forEach { button in
             let buttonStyle = style.buttonStyle(for: button.buttonStyleType)
             button.updateStyle(buttonStyle: buttonStyle)
-        }
-    }
-    
-    func disableNumericButtons(withForbiddenDigits forbiddenDigits: Set<String>) {
-        buttons.flattened().forEach { button in
-            if button is NumericButton {
-                let buttonLabel = button.titleLabel?.text ?? ""
-                let shouldBeEnabled = !forbiddenDigits.contains(buttonLabel)
-                button.isEnabled = shouldBeEnabled
-            }
         }
     }
 }
