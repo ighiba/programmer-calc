@@ -9,7 +9,6 @@
 import Foundation
 
 protocol ConversionOutput: AnyObject {
-    var updateHandler: (() -> Void)? { get set }
     func updateView()
     func saveConversionSettings(inputPickerSelectedRow: Int, outputPickerSelectedRow: Int, sliderValue: Float)
     func sliderValueDidChange(_ sliderValue: Float)
@@ -21,18 +20,19 @@ final class ConversionPresenter: ConversionOutput {
     
     weak var view: ConversionInput!
     
-    var updateHandler: (() -> Void)?
-    
     private let conversionSettings: ConversionSettings
     private let settings: Settings
     private let storage: CalculatorStorage
     
+    private var conversionSettingsDidUpdate: (() -> Void)?
+    
     // MARK: - Init
     
-    init(conversionSettings: ConversionSettings, settings: Settings, storage: CalculatorStorage) {
+    init(conversionSettings: ConversionSettings, settings: Settings, storage: CalculatorStorage, conversionSettingsDidUpdate: (() -> Void)? = nil) {
         self.conversionSettings = conversionSettings
         self.settings = settings
         self.storage = storage
+        self.conversionSettingsDidUpdate = conversionSettingsDidUpdate
     }
     
     // MARK: - Methods
@@ -65,7 +65,7 @@ final class ConversionPresenter: ConversionOutput {
         storage.saveData(newConversionSettings)
         conversionSettings.set(newConversionSettings)
 
-        updateHandler?()
+        conversionSettingsDidUpdate?()
     }
     
     func sliderValueDidChange(_ sliderValue: Float) {

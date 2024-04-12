@@ -133,16 +133,14 @@ final class CalculatorPresenter: CalculatorOutput {
     }
     
     func showConversion() {
-        guard let conversionView = ConversionModuleAssembly.configureModule() as? ConversionViewController else { return }
-        
-        conversionView.modalPresentationStyle = .overFullScreen
-        conversionView.presenter.updateHandler = { [weak self] in
+        let conversionView = ConversionModuleAssembly.configureModule(conversionSettingsDidUpdate: { [weak self] in
             self?.calculator.reload()
             self?.updateConversionSystemTitles()
             self?.updateNumericButtonsIsEnabled()
             self?.updateLabelsDisplayMode()
             self?.updateBitwiseKeypad()
-        }
+        })
+        conversionView.modalPresentationStyle = .overFullScreen
         
         input.presentViewController(conversionView, animated: false)
     }
