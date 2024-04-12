@@ -9,7 +9,6 @@
 import Foundation
 
 protocol ConversionOutput: AnyObject {
-    var delegate: CalculatorPresenterDelegate! { get set }
     var updateHandler: (() -> Void)? { get set }
     func obtainConversionSettings()
     func saveConversionSettings(inputPickerSelectedRow: Int, outputPickerSelectedRow: Int, sliderValue: Float)
@@ -22,7 +21,6 @@ final class ConversionPresenter: ConversionOutput {
     
     weak var view: ConversionInput!
     
-    weak var delegate: CalculatorPresenterDelegate!
     var updateHandler: (() -> Void)?
 
     var storage: CalculatorStorage!

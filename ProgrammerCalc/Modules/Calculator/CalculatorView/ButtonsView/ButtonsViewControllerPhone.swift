@@ -86,19 +86,19 @@ extension ButtonsViewControllerPhone: UIPageViewControllerDataSource, UIPageView
 // MARK: - UIPageViewController
 
 extension ButtonsViewControllerPhone {
-    
+
     var delaysContentTouches: Bool {
         get {
             var isAllowed = true
-            view.subviews.compactMap({ $0 as? UIScrollView }).forEach({ isAllowed = $0.delaysContentTouches })
+            view.subviews.compactMap({ $0 as? UIScrollView }).lazy.forEach({ isAllowed = $0.delaysContentTouches })
             return isAllowed
         }
         set {
-            view.subviews.compactMap({ $0 as? UIScrollView }).forEach({ $0.delaysContentTouches = newValue })
+            view.subviews.compactMap({ $0 as? UIScrollView }).lazy.forEach({ $0.delaysContentTouches = newValue })
         }
     }
     
     func setPageControl(isHidden: Bool) {
-        view.subviews.compactMap({ $0 as? UIPageControl }).forEach({ $0.isHidden = isHidden })
+        view.subviews.compactMap({ $0 as? UIPageControl }).lazy.forEach({ $0.isHidden = isHidden })
     }
 }
