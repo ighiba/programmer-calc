@@ -10,15 +10,15 @@ import UIKit
 
 class ConversionModuleAssembly {
     class func configureModule() -> UIViewController {
+        let conversionSettings = ConversionSettings.shared
+        let settings = Settings.shared
+        let storage = CalculatorStorage()
+        
+        let presenter = ConversionPresenter(conversionSettings: conversionSettings, settings: settings, storage: storage)
         let view = ConversionViewController()
-        let presenter = ConversionPresenter()
         
         view.output = presenter
         presenter.view = view
-        
-        presenter.storage = CalculatorStorage()
-        presenter.conversionSettings = ConversionSettings.shared
-        presenter.settings = Settings.shared
         
         return view
     }

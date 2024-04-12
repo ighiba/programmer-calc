@@ -38,7 +38,7 @@ final class ConversionViewController: ModalViewController, ConversionInput {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        output.obtainConversionSettings()
+        output.updateView()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

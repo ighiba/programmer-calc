@@ -10,7 +10,7 @@ import Foundation
 
 protocol ConversionOutput: AnyObject {
     var updateHandler: (() -> Void)? { get set }
-    func obtainConversionSettings()
+    func updateView()
     func saveConversionSettings(inputPickerSelectedRow: Int, outputPickerSelectedRow: Int, sliderValue: Float)
     func sliderValueDidChange(_ sliderValue: Float)
 }
@@ -22,15 +22,22 @@ final class ConversionPresenter: ConversionOutput {
     weak var view: ConversionInput!
     
     var updateHandler: (() -> Void)?
-
-    var storage: CalculatorStorage!
     
-    var conversionSettings: ConversionSettings!
-    var settings: Settings!
+    private let conversionSettings: ConversionSettings
+    private let settings: Settings
+    private let storage: CalculatorStorage
+    
+    // MARK: - Init
+    
+    init(conversionSettings: ConversionSettings, settings: Settings, storage: CalculatorStorage) {
+        self.conversionSettings = conversionSettings
+        self.settings = settings
+        self.storage = storage
+    }
     
     // MARK: - Methods
     
-    func obtainConversionSettings() {
+    func updateView() {
         let inputSystemRowIndex = conversionSettings.inputSystem.rawValue
         let outputSystemRowIndex = conversionSettings.outputSystem.rawValue
         let sliderValueText = "\(conversionSettings.fractionalWidth)"
