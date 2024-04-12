@@ -17,7 +17,7 @@ class ConversionModuleAssembly {
         let presenter = ConversionPresenter(conversionSettings: conversionSettings, settings: settings, storage: storage)
         let view = ConversionViewController()
         
-        view.output = presenter
+        view.presenter = presenter
         presenter.view = view
         
         return view

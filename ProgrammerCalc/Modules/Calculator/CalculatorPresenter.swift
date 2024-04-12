@@ -136,7 +136,7 @@ final class CalculatorPresenter: CalculatorOutput {
         guard let conversionView = ConversionModuleAssembly.configureModule() as? ConversionViewController else { return }
         
         conversionView.modalPresentationStyle = .overFullScreen
-        conversionView.output.updateHandler = { [weak self] in
+        conversionView.presenter.updateHandler = { [weak self] in
             self?.calculator.reload()
             self?.updateConversionSystemTitles()
             self?.updateNumericButtonsIsEnabled()
