@@ -12,6 +12,16 @@ final class ConversionPicker: UIPickerView {
     private var rowWidth: CGFloat { modalViewContainerWidth / 2 - 35 }
     private let rowHeight: CGFloat = 45
     private let titleLabelHeight: CGFloat = 30
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.dataSource = self
+        self.delegate = self
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 
 // MARK: - DataSource
@@ -47,7 +57,7 @@ extension ConversionPicker: UIPickerViewDelegate {
         let label = UILabel(frame: labelFrame)
         
         label.text = self.pickerView(self, titleForRow: row, forComponent: component)
-        label.font = UIFont.systemFont(ofSize: 22, weight: .light)
+        label.font = .systemFont(ofSize: 22, weight: .light)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
         label.textAlignment = .center
