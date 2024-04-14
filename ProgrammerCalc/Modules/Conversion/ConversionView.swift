@@ -15,7 +15,6 @@ final class ConversionView: UIView, ModalView {
     private let margin: CGFloat = 18
     private let verticalSpacing: CGFloat = 10
     private let sliderHeight: CGFloat = 50
-    private let arrowSymbolWidth: CGFloat = 30
     private let labelStackHeight: CGFloat = 35
     private let doneButtonHeight: CGFloat = PopoverDoneButton.defaultHeight
     private let containerCornerRadius: CGFloat = 24
@@ -27,13 +26,12 @@ final class ConversionView: UIView, ModalView {
     // MARK: - Views
     
     lazy var container = UIView(withCornerRadius: containerCornerRadius)
-    lazy var conversionSystemsPicker = ConversionPicker()
+    lazy var conversionSystemsPicker = ConversionPicker(withArrowSymbol: true)
     lazy var doneButton: UIButton = PopoverDoneButton()
     lazy var fractionalLabelsStack = configureFractionalLabelsStack()
     lazy var fractionalWidthLabel = configureFractionalWidthLabel()
     lazy var fractionalWidthSlider = configureFractionalWidthSlider()
     private lazy var fractionalWidthTitle = configureFractionalWidthTitleLabel(withText: fractionalTitleString)
-    private lazy var arrowSymbol = configureArrowSymbol(withSideValue: arrowSymbolWidth)
     private lazy var titleLabel = configureTitleLabel(withText: titleString)
     private lazy var contentStack = configureContentStack()
     
@@ -58,11 +56,8 @@ final class ConversionView: UIView, ModalView {
         addSubview(container)
         container.addSubview(contentStack)
         
-        conversionSystemsPicker.addSubview(arrowSymbol)
-        
         container.translatesAutoresizingMaskIntoConstraints = false
         contentStack.translatesAutoresizingMaskIntoConstraints = false
-        arrowSymbol.translatesAutoresizingMaskIntoConstraints = false
         fractionalLabelsStack.translatesAutoresizingMaskIntoConstraints = false
         fractionalWidthSlider.translatesAutoresizingMaskIntoConstraints = false
         doneButton.translatesAutoresizingMaskIntoConstraints = false
@@ -77,11 +72,6 @@ final class ConversionView: UIView, ModalView {
             contentStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -margin),
             contentStack.topAnchor.constraint(equalTo: container.topAnchor, constant: margin),
             contentStack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -margin),
-            
-            arrowSymbol.centerXAnchor.constraint(equalTo: conversionSystemsPicker.centerXAnchor),
-            arrowSymbol.centerYAnchor.constraint(equalTo: conversionSystemsPicker.centerYAnchor),
-            arrowSymbol.widthAnchor.constraint(equalToConstant: arrowSymbolWidth),
-            arrowSymbol.heightAnchor.constraint(equalToConstant: arrowSymbolWidth),
             
             fractionalLabelsStack.heightAnchor.constraint(equalToConstant: labelStackHeight),
             fractionalWidthTitle.widthAnchor.constraint(equalTo: fractionalLabelsStack.widthAnchor, multiplier: 0.9),
@@ -103,9 +93,6 @@ final class ConversionView: UIView, ModalView {
 
         conversionSystemsPicker.backgroundColor = .systemGray6
         
-        arrowSymbol.textColor = .label
-        arrowSymbol.font = UIFont(name: "HelveticaNeue-Thin", size: 22.0)
-        
         fractionalWidthTitle.textColor = .label
         fractionalWidthTitle.font = UIFont.systemFont(ofSize: 18, weight: .light)
         
@@ -122,13 +109,6 @@ final class ConversionView: UIView, ModalView {
         stack.axis = .horizontal
         stack.alignment = .fill
         return stack
-    }
-    
-    private func configureArrowSymbol(withSideValue sideValue: CGFloat) -> UILabel {
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: sideValue, height: sideValue))
-        label.text = "→"
-        label.textAlignment = .center
-        return label
     }
     
     private func configureTitleLabel(withText text: String) -> UILabel {
