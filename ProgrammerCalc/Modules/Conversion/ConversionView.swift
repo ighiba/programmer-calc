@@ -15,23 +15,22 @@ final class ConversionView: UIView, ModalView {
     private let margin: CGFloat = 18
     private let verticalSpacing: CGFloat = 10
     private let sliderHeight: CGFloat = 50
-    private let labelStackHeight: CGFloat = 35
     private let doneButtonHeight: CGFloat = PopoverDoneButton.defaultHeight
     private let containerCornerRadius: CGFloat = 24
     private let containerMinimalHeight: CGFloat = 400
+    private let fractionalWidthLabelHeight: CGFloat = 35
+    private var fractionalWidthLabelMaximumWidth: CGFloat { modalViewContainerWidth - (2 * margin) }
     
     private let titleString = NSLocalizedString("Conversion settings", comment: "")
-    private let fractionalTitleString = NSLocalizedString("Max number of digits after point: ", comment: "")
+    private let fractionalWidthFormat = NSLocalizedString("Max number of digits after point:  %d", comment: "")
     
     // MARK: - Views
     
     lazy var container = UIView(withCornerRadius: containerCornerRadius)
     lazy var conversionSystemsPicker = ConversionPicker(withArrowSymbol: true)
     lazy var doneButton: UIButton = PopoverDoneButton()
-    lazy var fractionalLabelsStack = configureFractionalLabelsStack()
-    lazy var fractionalWidthLabel = configureFractionalWidthLabel()
     lazy var fractionalWidthSlider = configureFractionalWidthSlider()
-    private lazy var fractionalWidthTitle = configureFractionalWidthTitleLabel(withText: fractionalTitleString)
+    private lazy var fractionalWidthLabel = configureFractionalWidthLabel(withText: fractionalWidthFormat)
     private lazy var titleLabel = configureTitleLabel(withText: titleString)
     private lazy var contentStack = configureContentStack()
     
@@ -49,6 +48,14 @@ final class ConversionView: UIView, ModalView {
     
     // MARK: - Methods
     
+    func setFractionalWidthLabel(value: Int) {
+        fractionalWidthLabel.text = makeFractionalWidthLabelText(withValue: value)
+    }
+    
+    private func makeFractionalWidthLabelText(withValue value: Int) -> String {
+        return String(format: fractionalWidthFormat, value)
+    }
+    
     private func setupViews() {
         let blurredBackgroundView = configureBlurredBackgroundView()
         insertSubview(blurredBackgroundView, at: 0)
@@ -58,7 +65,7 @@ final class ConversionView: UIView, ModalView {
         
         container.translatesAutoresizingMaskIntoConstraints = false
         contentStack.translatesAutoresizingMaskIntoConstraints = false
-        fractionalLabelsStack.translatesAutoresizingMaskIntoConstraints = false
+        fractionalWidthLabel.translatesAutoresizingMaskIntoConstraints = false
         fractionalWidthSlider.translatesAutoresizingMaskIntoConstraints = false
         doneButton.translatesAutoresizingMaskIntoConstraints = false
         
@@ -73,10 +80,7 @@ final class ConversionView: UIView, ModalView {
             contentStack.topAnchor.constraint(equalTo: container.topAnchor, constant: margin),
             contentStack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -margin),
             
-            fractionalLabelsStack.heightAnchor.constraint(equalToConstant: labelStackHeight),
-            fractionalWidthTitle.widthAnchor.constraint(equalTo: fractionalLabelsStack.widthAnchor, multiplier: 0.9),
-            fractionalWidthLabel.widthAnchor.constraint(equalTo: fractionalLabelsStack.widthAnchor, multiplier: 0.1),
-            
+            fractionalWidthLabel.heightAnchor.constraint(equalToConstant: fractionalWidthLabelHeight),
             fractionalWidthSlider.heightAnchor.constraint(equalToConstant: sliderHeight),
             
             doneButton.heightAnchor.constraint(equalToConstant: doneButtonHeight)
@@ -85,52 +89,29 @@ final class ConversionView: UIView, ModalView {
     
     private func setupStyle() {
         backgroundColor = .clear
-        
         container.backgroundColor = .systemGray6
-
-        titleLabel.textColor = .label
-        titleLabel.font = .systemFont(ofSize: 24, weight: .bold)
-
         conversionSystemsPicker.backgroundColor = .systemGray6
-        
-        fractionalWidthTitle.textColor = .label
-        fractionalWidthTitle.font = UIFont.systemFont(ofSize: 18, weight: .light)
-        
+        titleLabel.textColor = .label
         fractionalWidthLabel.textColor = .label
-        fractionalWidthLabel.font = UIFont.systemFont(ofSize: 22, weight: .semibold)
-        
         fractionalWidthSlider.tintColor = .systemGreen
     }
     
     // MARK: - Views Configuration
     
-    private func configureFractionalLabelsStack() -> UIStackView {
-        let stack = UIStackView(arrangedSubviews: [fractionalWidthTitle, fractionalWidthLabel])
-        stack.axis = .horizontal
-        stack.alignment = .fill
-        return stack
+    private func configureFractionalWidthLabel(withText text: String) -> UILabel {
+        let label = UILabel()
+        label.text = makeFractionalWidthLabelText(withValue: 16)
+        label.font = .systemFont(ofSize: 21, weight: .light)
+        label.adjustFontSize(forWidth: fractionalWidthLabelMaximumWidth)
+        label.textAlignment = .left
+        return label
     }
-    
+
     private func configureTitleLabel(withText text: String) -> UILabel {
         let label = UILabel()
         label.text = text
+        label.font = .systemFont(ofSize: 24, weight: .bold)
         label.textAlignment = .center
-        return label
-    }
-    
-    private func configureFractionalWidthTitleLabel(withText text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.15
-        return label
-    }
-    
-    private func configureFractionalWidthLabel() -> UILabel {
-        let label = UILabel()
-        label.text = "8"
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.75
         return label
     }
     
@@ -146,7 +127,7 @@ final class ConversionView: UIView, ModalView {
         let stack = UIStackView(arrangedSubviews: [
             titleLabel,
             conversionSystemsPicker,
-            fractionalLabelsStack,
+            fractionalWidthLabel,
             fractionalWidthSlider,
             doneButton
         ])
@@ -161,5 +142,23 @@ extension UIView {
     convenience init(withCornerRadius cornerRadius: CGFloat) {
         self.init()
         self.layer.cornerRadius = cornerRadius
+    }
+}
+
+extension UILabel {
+    func adjustFontSize(forWidth maxWidth: CGFloat) {
+        guard let text = self.text, let currentFont = self.font else { return }
+        
+        var textWidth = text.size(withAttributes: [.font : currentFont]).width
+
+        guard textWidth > maxWidth else { return }
+        
+        var resultFontSize = currentFont.pointSize
+        while textWidth > maxWidth, resultFontSize > 1 {
+            resultFontSize -= 1
+            textWidth = text.size(withAttributes: [.font : currentFont.withSize(resultFontSize)]).width
+        }
+        
+        self.font = currentFont.withSize(resultFontSize)
     }
 }

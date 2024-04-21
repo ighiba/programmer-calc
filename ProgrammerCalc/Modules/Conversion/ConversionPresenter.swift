@@ -40,12 +40,12 @@ final class ConversionPresenter: ConversionOutput {
     func updateView() {
         let inputSystemRowIndex = conversionSettings.inputSystem.rawValue
         let outputSystemRowIndex = conversionSettings.outputSystem.rawValue
-        let sliderValueText = "\(conversionSettings.fractionalWidth)"
+        let fractionalWidth = Int(conversionSettings.fractionalWidth)
         let sliderValue = Float(conversionSettings.fractionalWidth) / 4
         
         view.inputPickerSelectRow(atIndex: inputSystemRowIndex)
         view.outputPickerSelectRow(atIndex: outputSystemRowIndex)
-        view.setFractionalWidthLabelText(sliderValueText)
+        view.setFractionalWidthLabelValue(fractionalWidth)
         view.setFractionalWidthSliderValue(sliderValue)
     }
     
@@ -73,7 +73,7 @@ final class ConversionPresenter: ConversionOutput {
             view.hapticImpact()
         }
         
-        let text = "\(Int(sliderValue) * 4)"
-        view.setFractionalWidthLabelText(text)
+        let value = Int(sliderValue) * 4
+        view.setFractionalWidthLabelValue(value)
     }
 }

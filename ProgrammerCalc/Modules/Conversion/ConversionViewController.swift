@@ -11,7 +11,7 @@ import UIKit
 protocol ConversionInput: AnyObject {
     func inputPickerSelectRow(atIndex index: Int)
     func outputPickerSelectRow(atIndex index: Int)
-    func setFractionalWidthLabelText(_ text: String)
+    func setFractionalWidthLabelValue(_ value: Int)
     func setFractionalWidthSliderValue(_ value: Float)
     func hapticImpact()
 }
@@ -37,9 +37,9 @@ final class ConversionViewController: ModalViewController, ConversionInput {
     }
     
     // MARK: - Methods
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
         presenter.updateView()
     }
@@ -64,8 +64,8 @@ final class ConversionViewController: ModalViewController, ConversionInput {
         conversionView.conversionSystemsPicker.selectRow(index, inComponent: 1, animated: false)
     }
     
-    func setFractionalWidthLabelText(_ text: String) {
-        conversionView.fractionalWidthLabel.text = text
+    func setFractionalWidthLabelValue(_ value: Int) {
+        conversionView.setFractionalWidthLabel(value: value)
     }
     
     func setFractionalWidthSliderValue(_ value: Float) {
