@@ -9,16 +9,17 @@
 import UIKit
 
 class ConversionModuleAssembly {
-    class func configureModule() -> UIViewController {
+    class func configureModule(conversionSettingsDidUpdate: (() -> Void)? = nil) -> UIViewController {
         let view = ConversionViewController()
-        let presenter = ConversionPresenter()
+        let presenter = ConversionPresenter(
+            conversionSettings: .shared,
+            settings: .shared,
+            storage: CalculatorStorage(),
+            conversionSettingsDidUpdate: conversionSettingsDidUpdate
+        )
         
-        view.output = presenter
+        view.presenter = presenter
         presenter.view = view
-        
-        presenter.storage = CalculatorStorage()
-        presenter.conversionSettings = ConversionSettings.shared
-        presenter.settings = Settings.shared
         
         return view
     }

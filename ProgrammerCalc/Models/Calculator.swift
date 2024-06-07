@@ -27,13 +27,13 @@ protocol Calculator {
     func clearButtonDidPress()
     func negateInputValue()
     func removeLeastSignificantDigit()
+    func getInputValueBits() -> [Bit]
     func dotButtonDidPress()
     func numericButtonDidPress(digit: NumericButton.Digit)
     func complementButtonDidPress(complementOperator: ComplementOperator)
     func unaryOperatorButtonDidPress(unaryOperator: UnaryOperator)
     func binaryOperatorButtonDidPress(binaryOperator: BinaryOperator)
     func calculateButtonDidPress()
-    func getInputValueBits() -> [Bit]
     func bitButtonDidPress(bitIsOn: Bool, atIndex bitIndex: UInt8)
 }
 
@@ -41,16 +41,15 @@ final class CalculatorImpl: Calculator {
     
     // MARK: - Properties
     
+    weak var calculatorPresenterDelegate: CalculatorPresenterDelegate!
+    
+    private var currentOperation: PCOperation?
+    private var isFractionalInputStarted: Bool = false
     private var inputValue: PCNumberInput {
         didSet {
             calculatorState.lastValue = inputValue.pcDecimalValue.fixedOverflow(bitWidth: wordSize.bitWidth, isSigned: calculatorState.isSigned)
         }
     }
-    
-    weak var calculatorPresenterDelegate: CalculatorPresenterDelegate!
-    
-    private var currentOperation: PCOperation?
-    private var isFractionalInputStarted: Bool = false
     
     private let wordSize: WordSize
     private let calculatorState: CalculatorState
@@ -105,6 +104,13 @@ final class CalculatorImpl: Calculator {
         }
 
         updateLabels(withInputValue: inputValue)
+    }
+    
+    func getInputValueBits() -> [Bit] {
+        let decimal = inputValue.pcDecimalValue.fixedOverflow(bitWidth: wordSize.bitWidth, isSigned: calculatorState.isSigned)
+        let binary = PCBinary(pcDecimal: decimal)
+        
+        return binary.intPart.bits
     }
     
     func dotButtonDidPress() {
@@ -187,6 +193,18 @@ final class CalculatorImpl: Calculator {
         }
     }
     
+    func bitButtonDidPress(bitIsOn: Bool, atIndex bitIndex: UInt8) {
+        let bit: UInt8 = bitIsOn ? 1 : 0
+        
+        let decimal = inputValue.pcDecimalValue.fixedOverflow(bitWidth: wordSize.bitWidth, isSigned: calculatorState.isSigned)
+        var binary = PCBinary(pcDecimal: decimal)
+        binary.switchBit(bit, atIndex: bitIndex)
+        
+        inputValue = convert(binary, to: conversionSettings.inputSystem)
+        
+        updateLabels(withInputValue: inputValue)
+    }
+    
     private func calculateComplementOperation(_ pcNumber: PCNumber, complementOperator: ComplementOperator) -> PCNumberInput {
         let bitWidth = wordSize.bitWidth
         let isSigned = calculatorState.isSigned
@@ -255,25 +273,6 @@ final class CalculatorImpl: Calculator {
         calculatorPresenterDelegate.setOutputLabelText("NaN")
     }
     
-    func getInputValueBits() -> [Bit] {
-        let decimal = inputValue.pcDecimalValue.fixedOverflow(bitWidth: wordSize.bitWidth, isSigned: calculatorState.isSigned)
-        let binary = PCBinary(pcDecimal: decimal)
-        
-        return binary.intPart.bits
-    }
-    
-    func bitButtonDidPress(bitIsOn: Bool, atIndex bitIndex: UInt8) {
-        let bit: UInt8 = bitIsOn ? 1 : 0
-        
-        let decimal = inputValue.pcDecimalValue.fixedOverflow(bitWidth: wordSize.bitWidth, isSigned: calculatorState.isSigned)
-        var binary = PCBinary(pcDecimal: decimal)
-        binary.switchBit(bit, atIndex: bitIndex)
-        
-        inputValue = convert(binary, to: conversionSettings.inputSystem)
-        
-        updateLabels(withInputValue: inputValue)
-    }
-
     private func updateLabels(withInputValue inputValue: PCNumberInput) {
         let outputValue = convert(inputValue, to: conversionSettings.outputSystem)
         

@@ -11,34 +11,37 @@ import UIKit
 protocol ConversionInput: AnyObject {
     func inputPickerSelectRow(atIndex index: Int)
     func outputPickerSelectRow(atIndex index: Int)
-    func setFractionalWidthLabelText(_ text: String)
+    func setFractionalWidthLabelValue(_ value: Int)
     func setFractionalWidthSliderValue(_ value: Float)
     func hapticImpact()
 }
 
 final class ConversionViewController: ModalViewController, ConversionInput {
 
-    var output: ConversionOutput!
+    var presenter: ConversionOutput!
     
-    private let conversionView: ConversionView
+    private let conversionView = ConversionView()
     
     private var sliderOldValue: Float = 2.0
 
     private let hapticGenerator = UIImpactFeedbackGenerator(style: .medium)
     
+    // MARK: - Init
+    
     init() {
-        self.conversionView = ConversionView()
         super.init(modalView: conversionView)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    
+    // MARK: - Methods
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        output.obtainConversionSettings()
+        presenter.updateView()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -53,8 +56,6 @@ final class ConversionViewController: ModalViewController, ConversionInput {
         conversionView.fractionalWidthSlider.addTarget(self, action: #selector(sliderValueDidChange), for: .valueChanged)
     }
     
-    // MARK: - Methods
-    
     func inputPickerSelectRow(atIndex index: Int) {
         conversionView.conversionSystemsPicker.selectRow(index, inComponent: 0, animated: false)
     }
@@ -63,8 +64,8 @@ final class ConversionViewController: ModalViewController, ConversionInput {
         conversionView.conversionSystemsPicker.selectRow(index, inComponent: 1, animated: false)
     }
     
-    func setFractionalWidthLabelText(_ text: String) {
-        conversionView.fractionalWidthLabel.text = text
+    func setFractionalWidthLabelValue(_ value: Int) {
+        conversionView.setFractionalWidthLabel(value: value)
     }
     
     func setFractionalWidthSliderValue(_ value: Float) {
@@ -81,15 +82,17 @@ final class ConversionViewController: ModalViewController, ConversionInput {
         let inputPickerSelectedRow = conversionView.conversionSystemsPicker.selectedRow(inComponent: 0)
         let outputPickerSelectedRow = conversionView.conversionSystemsPicker.selectedRow(inComponent: 1)
         let sliderValue = conversionView.fractionalWidthSlider.value.rounded()
-        output.saveConversionSettings(inputPickerSelectedRow: inputPickerSelectedRow, outputPickerSelectedRow: outputPickerSelectedRow, sliderValue: sliderValue)
+        presenter.saveConversionSettings(inputPickerSelectedRow: inputPickerSelectedRow, outputPickerSelectedRow: outputPickerSelectedRow, sliderValue: sliderValue)
     }
-    
-    // MARK: - Actions
+}
 
+// MARK: - Actions
+
+extension ConversionViewController {
     @objc func sliderValueDidChange(_ sender: UISlider) {
         let sliderNewValue = sender.value.rounded()
         if sliderOldValue != sliderNewValue {
-            output.sliderValueDidChange(sliderNewValue)
+            presenter.sliderValueDidChange(sliderNewValue)
             sliderOldValue = sliderNewValue
         }
     }

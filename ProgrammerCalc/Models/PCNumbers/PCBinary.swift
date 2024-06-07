@@ -191,17 +191,3 @@ struct PCBinary: PCNumber, PCNumberDigits, PCNumberBinaryRepresentatable {
         return PCBinary(intPart: resultIntPart, fractPart: resultFractPart)
     }
 }
-
-// MARK: - BitArray
-
-struct UInt1: ExpressibleByIntegerLiteral {
-    
-    typealias IntegerLiteralType = UInt8
-
-    private var value: Bool = false
-    
-    init(integerLiteral value: IntegerLiteralType) {
-        precondition(value == 0 || value == 1, "integer overflow: '\(value)' as '\(Self.self)'")
-        self.value = value == 1
-    }
-}

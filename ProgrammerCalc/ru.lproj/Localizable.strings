@@ -23,7 +23,7 @@
 "Tapping sounds" = "Звуки нажатия";
 "Haptic feedback" = "Тактильность";
 "Conversion settings" = "Настройки конвертации";
-"Max number of digits after point: " = "Максимум цифр после запятой: ";
+"Max number of digits after point:  %d" = "Максимум цифр после запятой: %d";
 "Change word size" = "Изменить длину слова";
 "Done" = "Готово";
 "Description" = "Описание";

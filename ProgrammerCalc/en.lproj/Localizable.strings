@@ -23,7 +23,7 @@
 "Tapping sounds" = "Tapping sounds";
 "Haptic feedback" = "Haptic feedback";
 "Conversion settings" = "Conversion settings";
-"Max number of digits after point: " = "Max number of digits after point: ";
+"Max number of digits after point:  %d" = "Max number of digits after point:  %d";
 "Change word size" = "Change word size";
 "Done" = "Done";
 "Description" = "Description";

@@ -29,10 +29,11 @@ final class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDe
     
     private let styleFactory: StyleFactory = StyleFactory()
     
-    private let calculatorState: CalculatorState = CalculatorState.shared
-    private let wordSize: WordSize = WordSize.shared
+    private let calculatorState: CalculatorState = .shared
+    private let wordSize: WordSize = .shared
+    private let settings: Settings = .shared
+    private let styleSettings: StyleSettings = .shared
     
-    private let settings = Settings.shared
     private let hapticFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
     
     private let bitButtonDidPressHandler: (_ bitIsOn: Bool, _ bitIndex: UInt8) -> Void
@@ -51,8 +52,7 @@ final class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDe
     }
     
     override func loadView() {
-        bitwiseKeypadView.configureView(controllerDelegate: self)
-        view = bitwiseKeypadView
+        view = bitwiseKeypadView.configureView(controllerDelegate: self)
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -83,7 +83,7 @@ final class BitwiseKeypadController: UIViewController, BitwiseKeypadControllerDe
     }
 
     private func getCurrentStyle() -> Style {
-        let theme = StyleSettings.shared.theme
+        let theme = styleSettings.theme
         return styleFactory.get(theme: theme)
     }
     

@@ -33,17 +33,26 @@ protocol CalculatorOutput: AnyObject {
     func showSettings()
 }
 
-class CalculatorPresenter: CalculatorOutput {
+final class CalculatorPresenter: CalculatorOutput {
     
     // MARK: - Properties
     
     weak var input: CalculatorInput!
     
-    var calculator: Calculator!
+    private let calculator: Calculator
     
-    var wordSize: WordSize!
-    var calculatorState: CalculatorState!
-    var conversionSettings: ConversionSettings!
+    private let wordSize: WordSize
+    private let calculatorState: CalculatorState
+    private let conversionSettings: ConversionSettings
+    
+    // MARK: - Init
+    
+    init(calculator: Calculator, wordSize: WordSize, calculatorState: CalculatorState, conversionSettings: ConversionSettings) {
+        self.calculator = calculator
+        self.wordSize = wordSize
+        self.calculatorState = calculatorState
+        self.conversionSettings = conversionSettings
+    }
     
     // MARK: - Methods
     
@@ -124,17 +133,14 @@ class CalculatorPresenter: CalculatorOutput {
     }
     
     func showConversion() {
-        guard let conversionView = ConversionModuleAssembly.configureModule() as? ConversionViewController else { return }
-        
-        conversionView.modalPresentationStyle = .overFullScreen
-        conversionView.output.delegate = self
-        conversionView.output.updateHandler = { [weak self] in
+        let conversionView = ConversionModuleAssembly.configureModule(conversionSettingsDidUpdate: { [weak self] in
             self?.calculator.reload()
             self?.updateConversionSystemTitles()
             self?.updateNumericButtonsIsEnabled()
             self?.updateLabelsDisplayMode()
             self?.updateBitwiseKeypad()
-        }
+        })
+        conversionView.modalPresentationStyle = .overFullScreen
         
         input.presentViewController(conversionView, animated: false)
     }
